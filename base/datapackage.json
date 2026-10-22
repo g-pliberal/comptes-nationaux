@@ -20,6 +20,7 @@
     {"name": "fichiers", "path": "tables/fichiers.csv", "schema": "schemas/fichiers.json"},
     {"name": "calculs", "path": "tables/calculs.csv", "schema": "schemas/calculs.json"},
     {"name": "chiffres-eurostat", "path": "tables/chiffres/eurostat.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-insee", "path": "tables/chiffres/insee.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-tiers", "path": "tables/chiffres/tiers.csv", "schema": "schemas/chiffres.json"},
     {"name": "corrections", "path": "tables/corrections.csv", "schema": "schemas/corrections.json"}
   ]

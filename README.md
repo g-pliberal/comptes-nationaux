@@ -8,9 +8,9 @@ Chaque chiffre est enregistré avec sa fiche d'identité et sa source, et chaque
 
 | Dossier | Contenu |
 |---|---|
-| [base/](base/) | la base des chiffres : tables, schémas, copies archivées des sources |
+| [base/](base/) | la base des chiffres : tables, schémas, copies archivées des sources ; pour l'instant, les comptes des administrations publiques de l'Insee et d'Eurostat |
+| [controles/](controles/) | le [rapport de cohérence](controles/coherence.md) des sources : sommes, soldes, ratios, écarts entre sources |
 | [outils/](outils/) | archivage des sources, import, contrôle et construction de la base |
-| [verifications/](verifications/) | vérifications de chiffres publiés par des tiers |
 | [reports/](reports/), [research_notes/](research_notes/) | recherche documentaire de départ sur les sources des comptes publics |
 
 ## Vérifier
@@ -18,8 +18,10 @@ Chaque chiffre est enregistré avec sa fiche d'identité et sa source, et chaque
 Python 3 suffit, sans aucune bibliothèque à installer.
 
 ```sh
-python3 outils/valider.py     # contrôle les tables, les références et l'intégrité des copies archivées
-python3 outils/construire.py  # construit la base SQLite interrogeable
+python3 outils/valider.py              # contrôle les tables, les références et l'intégrité des copies archivées,
+                                       # et relit chaque chiffre publié dans sa copie archivée
+python3 outils/controler_coherence.py  # refait le rapport de cohérence des sources
+python3 outils/construire.py           # construit la base SQLite interrogeable
 ```
 
 Les mêmes contrôles tournent sur GitHub à chaque modification.

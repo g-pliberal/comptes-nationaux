@@ -12,7 +12,7 @@ import math
 import re
 import sys
 
-from commun import BASE, empreinte, identifiant, lire, lire_jsonstat, paquet, ressources_chiffres
+from commun import BASE, empreinte, identifiant, lire, lire_jsonstat, lire_xlsx, paquet, ressources_chiffres
 
 
 def erreur_de_type(type_, texte):
@@ -112,11 +112,34 @@ def controler_chiffres(tables, erreurs):
     return len(chiffres)
 
 
+def valeur_archivee(fichier, emplacement, copies):
+    """(valeur, indicateur) lus dans la copie archivée à l'emplacement indiqué, None si introuvable,
+    ou « sans lecteur » pour un format que le contrôle ne sait pas encore lire."""
+    chemin = BASE / fichier["chemin"]
+    if fichier["chemin"].endswith(".json"):
+        if fichier["id"] not in copies:
+            dims, valeurs, _ = lire_jsonstat(chemin)
+            copies[fichier["id"]] = (dims, valeurs)
+        dims, valeurs = copies[fichier["id"]]
+        coordonnees = dict(p.split("=", 1) for p in emplacement.split(";"))
+        return valeurs.get(tuple(coordonnees.get(d) for d in dims))
+    if fichier["chemin"].endswith(".xlsx"):
+        trouve = re.match(r"feuille=([^;]+);cellule=([A-Z]+[0-9]+)", emplacement)
+        if trouve is None:
+            return None
+        feuille, cellule = trouve.groups()
+        if (fichier["id"], feuille) not in copies:
+            copies[(fichier["id"], feuille)] = lire_xlsx(chemin, feuille)[1]
+        valeur = copies[(fichier["id"], feuille)].get(cellule)
+        return (valeur, "") if isinstance(valeur, float) else None
+    return "sans lecteur"
+
+
 def controler_valeurs(tables, erreurs):
     """Relit chaque chiffre publié dans sa copie archivée, à son emplacement, et compare.
 
     Renvoie le nombre de chiffres relus et celui des chiffres dont la copie n'a pas encore de lecteur
-    automatique (formats autres que JSON-stat)."""
+    automatique."""
     fichiers = {f["id"]: f for f in tables["fichiers"]}
     copies, relus, sans_lecteur = {}, 0, 0
     for r in ressources_chiffres():
@@ -124,15 +147,10 @@ def controler_valeurs(tables, erreurs):
             fichier = fichiers.get(ligne["fichier_id"])
             if ligne["nature"] != "publie" or fichier is None or not (BASE / fichier["chemin"]).exists():
                 continue
-            if not fichier["chemin"].endswith(".json"):
+            archive = valeur_archivee(fichier, ligne["emplacement"], copies)
+            if archive == "sans lecteur":
                 sans_lecteur += 1
                 continue
-            if fichier["id"] not in copies:
-                dims, valeurs, _ = lire_jsonstat(BASE / fichier["chemin"])
-                copies[fichier["id"]] = (dims, valeurs)
-            dims, valeurs = copies[fichier["id"]]
-            coordonnees = dict(p.split("=", 1) for p in ligne["emplacement"].split(";"))
-            archive = valeurs.get(tuple(coordonnees.get(d) for d in dims))
             lieu = f"{r['path']}, ligne {n}"
             if archive is None:
                 erreurs.append(f"{lieu} : emplacement {ligne['emplacement']} introuvable dans {fichier['chemin']}")

@@ -14,9 +14,9 @@ jobs:
           python-version: "3.12"
       - name: Contrôler la base
         run: python3 outils/valider.py
+      - name: Vérifier que le rapport de cohérence est à jour
+        run: |
+          python3 outils/controler_coherence.py
+          git diff --exit-code -- controles
       - name: Construire la base
         run: python3 outils/construire.py
-      - name: Refaire les vérifications à partir des copies archivées
-        run: |
-          python3 verifications/lustig-2026-10-18/verifier.py
-          git diff --exit-code -- verifications

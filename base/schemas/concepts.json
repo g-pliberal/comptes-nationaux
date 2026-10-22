@@ -5,7 +5,7 @@
     {"name": "libelle", "type": "string", "constraints": {"required": true}},
     {"name": "norme_id", "type": "string", "constraints": {"required": true}},
     {"name": "code_norme", "type": "string", "constraints": {"required": true}},
-    {"name": "sens", "type": "string", "constraints": {"required": true, "enum": ["depense", "recette", "solde", "agregat"]}},
+    {"name": "sens", "type": "string", "constraints": {"required": true, "enum": ["depense", "recette", "solde", "agregat", "stock"]}},
     {"name": "definition", "type": "string"}
   ],
   "primaryKey": ["id"],

@@ -1,7 +1,53 @@
 id,libelle,norme_id,code_norme,sens,definition
+INSEE_APU.DEP_ACTIFS_NON_FINANCIERS,Acquisitions moins cessions d'actifs non financiers,INSEE_APU,P.51g + P.52 + P.53 + NP,depense,
+INSEE_APU.DEP_CREDITS_IMPOT,Crédits d'impôt enregistrés en dépenses,INSEE_APU,"partie de D.3, D.6, D.7 et D.9",depense,"Crédits d'impôt restituables, que la comptabilité nationale enregistre en dépenses même lorsqu'ils réduisent l'impôt dû."
+INSEE_APU.DEP_FONCTIONNEMENT,Dépenses de fonctionnement,INSEE_APU,P.2 + D.1 + D.29 + D.4 hors D.41 + D.5,depense,
+INSEE_APU.DEP_HORS_ELEMENTS_IMPUTES,Dépenses hors éléments imputés,INSEE_APU,TE − D.122 − production pour emploi final propre − crédits d'impôt,depense,"Dépenses sans les flux sans contrepartie monétaire effective : cotisations imputées, production pour emploi final propre, crédits d'impôt."
+INSEE_APU.DEP_PRESTATIONS_TRANSFERTS,Prestations et autres transferts,INSEE_APU,D.62 + D.632 + D.3 + D.73 + D.7 hors D.73 + D.9 hors D.995,depense,
+INSEE_APU.DEP_PRODUCTION_COMPTE_PROPRE,Capitalisation de la production pour emploi final propre,INSEE_APU,partie de P.51g,depense,
+INSEE_APU.REC_AUTRES_TRANSFERTS,Autres transferts reçus,INSEE_APU,D.73 hors D.733 + D.7 hors D.73 + D.9 hors D.91 et D.995,recette,
+INSEE_APU.REC_CREDITS_IMPOT,Crédits d'impôt enregistrés en recettes,INSEE_APU,partie de D.51,recette,"Contrepartie, en recettes d'impôt sur le revenu, des crédits d'impôt enregistrés en dépenses."
+INSEE_APU.REC_HORS_ELEMENTS_IMPUTES,Recettes hors éléments imputés,INSEE_APU,TR − D.612 − P.12 − crédits d'impôt,recette,
+INSEE_APU.REC_IMPOTS_COTISATIONS,Impôts et cotisations sociales,INSEE_APU,D.2 + D.5 + D.91 + D.733 + D.61 + D.995,recette,
+INSEE_APU.REC_PAIEMENTS_PARTIELS,Paiements partiels des ménages,INSEE_APU,partie de P.13,recette,
+INSEE_APU.REC_PRODUCTION,Recettes de production,INSEE_APU,P.11 + P.12 + paiements partiels + D.39,recette,
+INSEE_APU.REC_REVENUS_PROPRIETE,Revenus de la propriété,INSEE_APU,D.4,recette,
+PDE.GD,Dette publique au sens de Maastricht,PDE,GD,stock,"Dette brute des administrations publiques, consolidée, en valeur nominale : numéraire et dépôts, titres de créance, crédits."
 SEC2010.B1GQ,Produit intérieur brut aux prix du marché,SEC2010,B1GQ,agregat,
-SEC2010.B9,Capacité (+) ou besoin (−) de financement,SEC2010,B.9,solde,Solde des recettes et des dépenses : le déficit public au sens des règles européennes.
-SEC2010.D41,Intérêts versés,SEC2010,D.41,depense,
+SEC2010.B8G,Épargne brute,SEC2010,B.8g,solde,
+SEC2010.B9,Capacité (+) ou besoin (−) de financement,SEC2010,B.9,solde,Solde des recettes et des dépenses : le déficit public au sens des règles européennes. L'Insee le note B9NF (compte non financier).
+SEC2010.D122PAY,Cotisations sociales imputées à la charge des employeurs,SEC2010,D.122,depense,
+SEC2010.D1PAY,Rémunération des salariés,SEC2010,D.1,depense,
+SEC2010.D29PAY,"Autres impôts sur la production, versés",SEC2010,D.29,depense,
+SEC2010.D2REC,Impôts sur la production et les importations,SEC2010,D.2,recette,
+SEC2010.D39REC,"Autres subventions sur la production, reçues",SEC2010,D.39,recette,
+SEC2010.D3PAY,Subventions,SEC2010,D.3,depense,
+SEC2010.D41GPAY,"Intérêts versés, hors correction au titre des services d'intermédiation financière indirectement mesurés",SEC2010,D.41G,depense,
+SEC2010.D41GREC,"Intérêts reçus, hors correction au titre des services d'intermédiation financière indirectement mesurés",SEC2010,D.41G,recette,
+SEC2010.D41PAY,Intérêts versés,SEC2010,D.41,depense,
+SEC2010.D41REC,Intérêts reçus,SEC2010,D.41,recette,
+SEC2010.D4_HORS_D41PAY,"Revenus de la propriété autres que les intérêts, versés",SEC2010,D.4 hors D.41,depense,
+SEC2010.D4_HORS_D41REC,"Revenus de la propriété autres que les intérêts, reçus",SEC2010,D.4 hors D.41,recette,
+SEC2010.D5PAY,"Impôts courants sur le revenu et le patrimoine, versés",SEC2010,D.5,depense,
+SEC2010.D5REC,Impôts courants sur le revenu et le patrimoine,SEC2010,D.5,recette,
+SEC2010.D612REC,"Cotisations sociales imputées, reçues",SEC2010,D.612,recette,
+SEC2010.D61REC,Cotisations sociales nettes,SEC2010,D.61,recette,
+SEC2010.D62PAY,Prestations sociales autres que transferts sociaux en nature,SEC2010,D.62,depense,
+SEC2010.D632PAY,Transferts sociaux en nature de produits marchands,SEC2010,D.632,depense,
+SEC2010.D733REC,"Transferts de recettes fiscales, reçus",SEC2010,D.733,recette,
+SEC2010.D73PAY,"Transferts courants entre administrations publiques, versés",SEC2010,D.73,depense,
+SEC2010.D73_HORS_D733REC,"Transferts courants entre administrations publiques reçus, hors transferts de recettes fiscales",SEC2010,D.73 hors D.733,recette,
+SEC2010.D7_HORS_D73PAY,"Autres transferts courants, versés",SEC2010,D.7 hors D.73,depense,
+SEC2010.D7_HORS_D73REC,"Autres transferts courants, reçus",SEC2010,D.7 hors D.73,recette,
+SEC2010.D91REC,Impôts en capital,SEC2010,D.91,recette,
+SEC2010.D995REC,"Impôts et cotisations dus non recouvrables, nets",SEC2010,D.995,recette,Montant négatif qui corrige les impôts et cotisations enregistrés mais qui ne seront pas recouvrés.
+SEC2010.D9_HORS_D91_D995REC,"Transferts en capital reçus, hors impôts en capital",SEC2010,D.9 hors D.91 et D.995,recette,
+SEC2010.D9_HORS_D995PAY,Transferts en capital à payer,SEC2010,D.9 hors D.995,depense,
+SEC2010.P11,Production des branches marchandes et ventes résiduelles,SEC2010,P.11,recette,
+SEC2010.P12,Production pour emploi final propre,SEC2010,P.12,recette,
+SEC2010.P2,Consommation intermédiaire,SEC2010,P.2,depense,
+SEC2010.P51G,Formation brute de capital fixe,SEC2010,P.51g,depense,
+SEC2010.P52_P53_NP,Autres acquisitions moins cessions d'actifs non financiers,SEC2010,"P.52, P.53, NP",depense,
 SEC2010.TE,Dépenses totales,SEC2010,TE,depense,Total des dépenses des administrations publiques au sens du SEC 2010.
 SEC2010.TR,Recettes totales,SEC2010,TR,recette,Total des recettes des administrations publiques au sens du SEC 2010.
 SOCX.PUBLIC,Dépenses sociales publiques,SOCX,ES10,depense,"Prestations et dépenses sociales financées par les administrations publiques, au sens de l'OCDE."

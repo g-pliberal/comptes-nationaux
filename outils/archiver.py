@@ -13,7 +13,7 @@ import json
 import sys
 import urllib.request
 
-from commun import AGENT, BASE, aujourdhui, champs, ecrire, lire, maintenant
+from commun import AGENT, BASE, aujourdhui, champs, date_xlsx, ecrire, lire, maintenant
 
 
 def main():
@@ -37,12 +37,16 @@ def main():
         print(f"déjà archivé : {deja['id']}")
         return
 
-    extension = "json" if "json" in type_contenu else "csv" if "csv" in type_contenu else "bin"
+    extension = ("json" if "json" in type_contenu else "xlsx" if "spreadsheetml" in type_contenu
+                 else "csv" if "csv" in type_contenu else "bin")
     date = aujourdhui()
     chemin = f"archives/{args.source_id}/{date}-{sha256[:8]}.{extension}"
     (BASE / chemin).parent.mkdir(parents=True, exist_ok=True)
     (BASE / chemin).write_bytes(contenu)
-    mis_a_jour = json.loads(contenu).get("updated", "") if extension == "json" else ""
+    # Date de mise à jour annoncée par la source : champ « updated » du JSON-stat d'Eurostat,
+    # date de modification inscrite dans le classeur pour un fichier xlsx.
+    mis_a_jour = {"json": lambda: json.loads(contenu).get("updated", ""),
+                  "xlsx": lambda: date_xlsx(BASE / chemin)}.get(extension, lambda: "")()
 
     identifiant = f"{args.source_id}@{date}-{sha256[:8]}"
     fichiers.append({"id": identifiant, "source_id": args.source_id, "url": args.url,

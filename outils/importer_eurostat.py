@@ -4,21 +4,23 @@
     python3 outils/importer_eurostat.py <fichier_id>
 
 Chaque valeur devient une ligne de tables/chiffres/eurostat.csv, avec sa fiche d'identité.
-Une valeur déjà enregistrée à l'identique est ignorée. Une valeur différente pour le même
-identifiant arrête l'import : une même version d'un chiffre ne peut pas avoir deux valeurs.
+Voir commun.fusionner pour le traitement des valeurs déjà enregistrées.
 """
 
 import sys
 
-from commun import BASE, aujourdhui, champs, ecrire, identifiant, lire, lire_jsonstat
+from commun import BASE, aujourdhui, champs, ecrire, fusionner, identifiant, lire, lire_jsonstat
 
 CIBLE = "tables/chiffres/eurostat.csv"
 
 # Correspondance entre les codes d'Eurostat et ceux de la base.
-CONCEPTS = {"TE": "SEC2010.TE", "TR": "SEC2010.TR", "B9": "SEC2010.B9", "D41PAY": "SEC2010.D41",
+CONCEPTS = {"TE": "SEC2010.TE", "TR": "SEC2010.TR", "B9": "SEC2010.B9", "D41PAY": "SEC2010.D41PAY",
             "B1GQ": "SEC2010.B1GQ"}
-UNITES = {"MIO_EUR": "MIO_EUR", "CP_MEUR": "MIO_EUR", "PC_GDP": "PC_PIB", "PC_TOT": "PC_DEPENSE"}
-DECIMALES = {"MIO_EUR": 1, "PC_PIB": 1, "PC_DEPENSE": 1}
+# Pour Eurostat, « MIO_NAC » (monnaie nationale) convertit les francs en euros au taux fixe, comme l'Insee ;
+# « MIO_EUR » les convertit en écus au taux de change de chaque année, jusqu'en 1998.
+UNITES = {"MIO_NAC": "MIO_EUR", "CP_MNAC": "MIO_EUR", "MIO_EUR": "MIO_ECU_EUR", "CP_MEUR": "MIO_ECU_EUR",
+          "PC_GDP": "PC_PIB", "PC_TOT": "PC_DEPENSE"}
+DECIMALES = {"MIO_EUR": 1, "MIO_ECU_EUR": 1, "PC_PIB": 1, "PC_DEPENSE": 1}
 CONSOLIDATION = {"gov_10a_main": "consolide", "gov_10a_exp": "consolide", "nama_10_gdp": "sans_objet"}
 
 
@@ -60,20 +62,10 @@ def main():
     fichier = next((f for f in lire("tables/fichiers.csv") if f["id"] == sys.argv[1]), None)
     if fichier is None:
         sys.exit(f"copie archivée inconnue : {sys.argv[1]}")
-
     existants = {l["id"]: l for l in lire(CIBLE)}
-    nouveaux, conflits = 0, []
-    for ligne in lignes_du_fichier(fichier):
-        ancien = existants.get(ligne["id"])
-        if ancien is None:
-            existants[ligne["id"]] = ligne
-            nouveaux += 1
-        elif (float(ancien["valeur"]), ancien["statut"]) != (float(ligne["valeur"]), ligne["statut"]):
-            conflits.append(f"{ligne['id']} : {ancien['valeur']} déjà enregistré, {ligne['valeur']} dans {fichier['id']}")
-    if conflits:
-        sys.exit("Import interrompu, valeurs contradictoires pour une même version :\n" + "\n".join(conflits))
+    ajoutes, inchanges = fusionner(existants, lignes_du_fichier(fichier), fichier["id"])
     ecrire(CIBLE, champs("chiffres-eurostat"), existants.values())
-    print(f"{fichier['id']} : {nouveaux} chiffres ajoutés ; {CIBLE} en compte {len(existants)}")
+    print(f"{fichier['id']} : {ajoutes} chiffres ajoutés, {inchanges} déjà enregistrés ; {CIBLE} en compte {len(existants)}")
 
 
 if __name__ == "__main__":

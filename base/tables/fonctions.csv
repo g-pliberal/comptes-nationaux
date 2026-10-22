@@ -2,18 +2,15 @@ id,libelle,norme_id,parent_id
 GF01,Services généraux des administrations publiques,COFOG1999,
 GF0107,Opérations concernant la dette publique,COFOG1999,GF01
 GF02,Défense,COFOG1999,
-GF02+GF03+GF09,"Défense, ordre et sécurité publics, enseignement",COFOG1999,
 GF03,Ordre et sécurité publics,COFOG1999,
 GF04,Affaires économiques,COFOG1999,
 GF0405,Transports,COFOG1999,GF04
 GF05,Protection de l'environnement,COFOG1999,
 GF06,Logements et équipements collectifs,COFOG1999,
 GF07,Santé,COFOG1999,
-GF07+GF10,Santé et protection sociale,COFOG1999,
 GF08,"Loisirs, culture et culte",COFOG1999,
 GF09,Enseignement,COFOG1999,
 GF10,Protection sociale,COFOG1999,
 GF1001,Maladie et invalidité,COFOG1999,GF10
 GF1002,Vieillesse,COFOG1999,GF10
-GF1002+GF1003,Vieillesse et survivants,COFOG1999,
 GF1003,Survivants,COFOG1999,GF10
