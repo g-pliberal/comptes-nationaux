@@ -14,3 +14,5 @@ S13132,Organismes divers d'administration locale,SEC2010,S1313,Subdivision publi
 S1314,Administrations de sécurité sociale,SEC2010,S13,"Régimes obligatoires de sécurité sociale, assurance chômage, retraites complémentaires, hôpitaux publics et organismes qui en dépendent."
 S13141,Régimes d'assurance sociale,SEC2010,S1314,Subdivision publiée par l'Insee.
 S13142,Organismes dépendant des assurances sociales,SEC2010,S1314,Subdivision publiée par l'Insee. Comprend les hôpitaux publics.
+S13_S212,Administrations publiques et institutions de l'Union européenne,SEC2010,,Réunion des administrations publiques (S13) et des institutions et organes de l'Union européenne (S212) : l'ensemble des bénéficiaires des prélèvements obligatoires.
+S212,Institutions et organes de l'Union européenne,SEC2010,,Sous-secteur du reste du monde. Bénéficiaire d'impôts comme les droits de douane.

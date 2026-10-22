@@ -13,6 +13,8 @@ La base est faite de tables en texte (CSV) décrites par des schémas, au format
 | Insee, tableau 3.101 | dette publique au sens de Maastricht par sous-secteur, en milliards d'euros et en % du PIB | 1978-2025 |
 | Insee, tableaux 3.301 à 3.306 | dépenses par fonction (classification COFOG : 10 divisions et 69 groupes), croisées avec leur nature (rémunérations, consommations intermédiaires, prestations, investissement…), pour l'ensemble des administrations publiques et chacun de leurs sous-secteurs | 1995-2024 (depuis 2009 pour l'État et ses organismes) |
 | Insee, tableau 3.307 | part de chaque sous-secteur dans la dépense consolidée de l'ensemble des administrations publiques, par fonction | 2009-2024 |
+| Insee, tableau 3.217 | principaux impôts, un par un (TVA, accises sur l'énergie, taxe foncière, CSG, impôt sur le revenu, impôt sur les sociétés, droits de succession…), rangés dans leur catégorie du SEC 2010, et le passage de l'ensemble des impôts et cotisations aux prélèvements obligatoires | 1995-2025 |
+| Insee, tableau 3.216 | prélèvements obligatoires par bénéficiaire : État, organismes divers d'administration centrale, administrations locales, sécurité sociale, Union européenne | 1959-2025 (depuis 1978 pour l'État et ses organismes) |
 | Eurostat, `gov_10a_main`, `gov_10a_exp`, `nama_10_gdp` | dépenses, recettes, solde et intérêts des administrations publiques ; dépenses par fonction (COFOG) ; PIB | 1995-2025 (dépenses par fonction jusqu'en 2024) ; PIB depuis 1975 |
 
 Les tableaux de l'Insee font foi pour la France : Eurostat reprend les comptes que l'Insee lui transmet, et le [rapport de cohérence](../controles/coherence.md) montre où les deux concordent et où ils s'écartent.
@@ -65,6 +67,7 @@ Selon la source :
 - **Version.** Pour Eurostat, la date de mise à jour du jeu de données. Pour l'Insee, la date de dernière modification que le classeur porte en lui-même, à défaut sa date de création.
 - **Statut.** Eurostat le donne par un indicateur attaché à chaque valeur, conservé dans `drapeau_source`. L'Insee le donne par le calendrier de ses comptes annuels : la dernière année publiée est provisoire, l'avant-dernière semi-définitive, les précédentes définitives.
 - **Décimales.** Le nombre de décimales de la valeur enregistrée dans le fichier source, sans les zéros finaux, que le fichier ne conserve pas. Une valeur nulle est exacte : elle prend la précision de sa ligne.
+- **Impôts.** Un impôt du tableau 3.217 de l'Insee est un concept de la norme `INSEE_PO` (par exemple `INSEE_PO.CSG`), dont la fiche dit dans quelle catégorie du SEC 2010 l'Insee le range ; les catégories elles-mêmes sont des concepts du SEC 2010 (`SEC2010.D211REC` pour la TVA). Le périmètre de ce tableau est l'ensemble des bénéficiaires des prélèvements obligatoires, `S13_S212` : les administrations publiques et les institutions de l'Union européenne. Une ligne qui ne vise qu'un bénéficiaire porte le sien : `S212` pour les droits de douane versés à l'Union, `S13131` pour les droits de mutation des collectivités locales.
 - **Unités.** Avant 1999, les montants en francs sont convertis en euros au taux fixe de 6,55957 francs pour un euro (unités `EUR`, `MIO_EUR`, `MD_EUR`) : c'est la convention de l'Insee, et celle d'Eurostat pour ses montants en monnaie nationale. Eurostat publie aussi des montants convertis en écus au taux de change de chaque année (unité `MIO_ECU_EUR`). Les deux séries se confondent à partir de 1999 ; avant, elles ne se comparent pas.
 
 ## Les règles d'enregistrement
@@ -104,7 +107,8 @@ Le [rapport de cohérence](../controles/coherence.md) vérifie ce que disent les
 
 - les sommes comptables : un total contre la somme de ses composantes ;
 - les ventilations par fonction : l'ensemble contre la somme des fonctions, chaque fonction contre celle de ses groupes ;
-- l'additivité des sous-secteurs, pour les soldes et pour les parts de la dépense consolidée de l'ensemble ;
+- l'additivité des sous-secteurs, pour les soldes, les prélèvements obligatoires et les parts de la dépense consolidée de l'ensemble ;
+- les passerelles entre tableaux qui présentent autrement les mêmes grandeurs, comme les impôts du tableau 3.217 et les recettes du compte des administrations publiques (tableau 3.201) ;
 - les ratios, recalculés à partir de leur dénominateur ;
 - les écarts entre sources pour une même grandeur, en distinguant ceux qui touchent un chiffre encore révisable (provisoire, semi-définitif, estimé ou prévu).
 
@@ -138,6 +142,13 @@ FROM v_dernieres_versions v JOIN fonctions f ON f.id = v.fonction_id
 WHERE v.source_id = 'insee.t3301' AND v.concept_id = 'SEC2010.TE' AND v.periode = '2024'
   AND f.parent_id IS NULL
 ORDER BY v.valeur DESC;
+```
+
+Ou ce qu'a rapporté la CSG chaque année, en milliards d'euros :
+
+```sql
+SELECT periode, valeur, statut FROM v_dernieres_versions
+WHERE concept_id = 'INSEE_PO.CSG' AND unite_id = 'MD_EUR' ORDER BY periode;
 ```
 
 Le fichier `empreintes.csv` donne une empreinte du contenu de chaque table : une base reconstruite par n'importe qui à partir de la même version du dépôt doit donner les mêmes empreintes.

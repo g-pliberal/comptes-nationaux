@@ -38,6 +38,8 @@
     {"name": "chiffres-insee-t3212", "path": "tables/chiffres/insee/t3212.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3213", "path": "tables/chiffres/insee/t3213.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3214", "path": "tables/chiffres/insee/t3214.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-insee-t3216", "path": "tables/chiffres/insee/t3216.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-insee-t3217", "path": "tables/chiffres/insee/t3217.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3301", "path": "tables/chiffres/insee/t3301.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3302", "path": "tables/chiffres/insee/t3302.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3303", "path": "tables/chiffres/insee/t3303.csv", "schema": "schemas/chiffres.json"},

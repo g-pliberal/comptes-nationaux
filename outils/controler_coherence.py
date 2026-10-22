@@ -8,9 +8,11 @@ vérifie ce que disent les sources elles-mêmes :
 1. les sommes comptables (un total égale la somme de ses composantes) ;
 2. les ventilations par fonction (l'ensemble égale la somme des fonctions, chaque fonction celle de ses
    groupes) ;
-3. l'additivité des sous-secteurs, pour les soldes et pour les dépenses consolidées de l'ensemble ;
-4. les ratios, qu'on doit retrouver à partir de leur dénominateur ;
-5. les écarts entre sources pour une même grandeur.
+3. l'additivité des sous-secteurs, pour les soldes, les prélèvements obligatoires et les dépenses
+   consolidées de l'ensemble ;
+4. les passerelles entre tableaux qui présentent autrement les mêmes grandeurs ;
+5. les ratios, qu'on doit retrouver à partir de leur dénominateur ;
+6. les écarts entre sources pour une même grandeur.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu. Une incohérence trouvée ici n'est pas une
@@ -26,8 +28,9 @@ from commun import RACINE, lire, ressources_chiffres
 
 RAPPORT = RACINE / "controles" / "coherence.md"
 
-# Identités comptables : total = somme signée des composantes. Les premières sont celles des tableaux 3.201
-# à 3.214 de l'Insee, la dernière celle de ses tableaux de dépenses par fonction, 3.301 à 3.306.
+# Identités comptables : total = somme signée des composantes. Viennent d'abord celles des tableaux 3.201
+# à 3.214 de l'Insee, puis celle de ses tableaux de dépenses par fonction (3.301 à 3.306), enfin celles de
+# ses tableaux de prélèvements obligatoires (3.216 et 3.217).
 IDENTITES = [
     ("INSEE_APU.DEP_FONCTIONNEMENT", ["SEC2010.P2", "SEC2010.D1PAY", "SEC2010.D29PAY", "SEC2010.D4_HORS_D41PAY", "SEC2010.D5PAY"]),
     ("INSEE_APU.DEP_PRESTATIONS_TRANSFERTS", ["SEC2010.D62PAY", "SEC2010.D632PAY", "SEC2010.D3PAY", "SEC2010.D73PAY",
@@ -48,12 +51,57 @@ IDENTITES = [
     ("SEC2010.B9", ["SEC2010.TR", "-SEC2010.TE"]),
     ("SEC2010.TE", ["SEC2010.D1PAY", "SEC2010.P2", "SEC2010.D29_D5_D8PAY", "SEC2010.D3PAY", "SEC2010.D4PAY", "SEC2010.D62PAY",
                     "SEC2010.D632PAY", "SEC2010.D7PAY", "SEC2010.D9_HORS_D995PAY", "INSEE_APU.DEP_ACTIFS_NON_FINANCIERS"]),
+    ("INSEE_PO.IMPOTS_ET_COTISATIONS", ["SEC2010.D211REC", "SEC2010.D212REC", "SEC2010.D214REC", "SEC2010.D291REC",
+                                        "SEC2010.D292REC", "SEC2010.D51REC", "SEC2010.D59REC", "SEC2010.D91REC",
+                                        "SEC2010.D61REC"]),
+    ("SEC2010.D61REC", ["INSEE_PO.COTISATIONS_EFFECTIVES", "SEC2010.D612REC"]),
+    ("INSEE_PO.AJUSTEMENT_COTISATIONS_IMPUTEES", ["-SEC2010.D612REC"]),
+    ("INSEE_PO.AJUSTEMENT_CREDITS_IMPOT", ["INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES", "INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_RESTITUES"]),
+    ("INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES", ["INSEE_PO.CI_IRPP_IMPUTES", "INSEE_PO.CI_IS_IMPUTES"]),
+    ("INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_RESTITUES", ["INSEE_PO.CI_IRPP_RESTITUES", "INSEE_PO.CI_IS_RESTITUES"]),
+    ("INSEE_PO.PO", ["INSEE_PO.IMPOTS_ET_COTISATIONS", "SEC2010.D995REC", "INSEE_PO.AJUSTEMENT_COTISATIONS_IMPUTEES",
+                     "INSEE_PO.AJUSTEMENT_CREDITS_IMPOT"]),
+    ("INSEE_PO.PO", ["INSEE_PO.PO_IMPOTS", "INSEE_PO.PO_COTISATIONS"]),
+    ("INSEE_PO.TAXE_FONCIERE", ["INSEE_PO.TAXE_FONCIERE_MENAGES", "INSEE_PO.TAXE_FONCIERE_HORS_MENAGES"]),
+    ("INSEE_PO.DMTG", ["INSEE_PO.DMTG_DONATIONS", "INSEE_PO.DMTG_SUCCESSIONS"]),
 ]
 
-# Ensembles et leurs parties. S'additionnent : les soldes, et les parts des sous-secteurs dans la dépense
-# consolidée de l'ensemble des administrations publiques (consolidation « consolide_apu »).
+# Ensembles et leurs parties. S'additionnent : les soldes et les prélèvements obligatoires (concepts
+# ADDITIFS), et les parts des sous-secteurs dans la dépense consolidée de l'ensemble des administrations
+# publiques (consolidation « consolide_apu »).
 DECOMPOSITIONS = [("S13", ["S1311", "S1313", "S1314"]), ("S1311", ["S13111", "S13112"]), ("S1313", ["S13131", "S13132"]),
-                  ("S1314", ["S13141", "S13142"]), ("S13131", ["S131311", "S131312", "S131313", "S131314"])]
+                  ("S1314", ["S13141", "S13142"]), ("S13131", ["S131311", "S131312", "S131313", "S131314"]),
+                  ("S13_S212", ["S13", "S212"]), ("S13_S212", ["S1311", "S1313", "S1314", "S212"])]
+ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO"}
+
+# Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
+# de droite), chaque terme étant (source, périmètre, concept, signe), en montant, pour l'ensemble des fonctions.
+_IMPOTS_PRODUCTION_3217 = [("insee.t3217", "S13_S212", f"SEC2010.{c}REC", 1) for c in ("D211", "D212", "D214", "D291", "D292")]
+PASSERELLES = [
+    ("Cotisations sociales : tableau 3.217 contre tableau 3.201",
+     [("insee.t3217", "S13_S212", "SEC2010.D61REC", 1)], [("insee.t3201", "S13", "SEC2010.D61REC", 1)]),
+    ("Cotisations sociales imputées : tableau 3.217 contre tableau 3.201",
+     [("insee.t3217", "S13_S212", "SEC2010.D612REC", 1)], [("insee.t3201", "S13", "SEC2010.D612REC", 1)]),
+    ("Impôts et cotisations dus non recouvrables : tableau 3.217 contre tableau 3.201",
+     [("insee.t3217", "S13_S212", "SEC2010.D995REC", 1)], [("insee.t3201", "S13", "SEC2010.D995REC", 1)]),
+    ("Impôts en capital : tableau 3.217 contre tableau 3.201",
+     [("insee.t3217", "S13_S212", "SEC2010.D91REC", 1)], [("insee.t3201", "S13", "SEC2010.D91REC", 1)]),
+    ("Impôts courants sur le revenu et le patrimoine : D.51 + D.59 du tableau 3.217 contre D.5 du tableau 3.201",
+     [("insee.t3217", "S13_S212", "SEC2010.D51REC", 1), ("insee.t3217", "S13_S212", "SEC2010.D59REC", 1)],
+     [("insee.t3201", "S13", "SEC2010.D5REC", 1)]),
+    ("Impôts sur la production et les importations reçus par les administrations publiques : D.211 + D.212 + D.214 + "
+     "D.291 + D.292 du tableau 3.217, moins les impôts de l'Union européenne du tableau 3.216, contre D.2 du tableau 3.201",
+     _IMPOTS_PRODUCTION_3217 + [("insee.t3216", "S212", "INSEE_PO.PO", -1)], [("insee.t3201", "S13", "SEC2010.D2REC", 1)]),
+    ("Même passerelle, avec les impôts de l'Union européenne du tableau 3.217",
+     _IMPOTS_PRODUCTION_3217 + [("insee.t3217", "S212", "INSEE_PO.PO", -1)], [("insee.t3201", "S13", "SEC2010.D2REC", 1)]),
+    ("Crédits d'impôt retranchés des prélèvements obligatoires (3.217) contre crédits d'impôt enregistrés en recettes "
+     "(3.201), de signe opposé",
+     [("insee.t3217", "S13_S212", "INSEE_PO.AJUSTEMENT_CREDITS_IMPOT", 1)],
+     [("insee.t3201", "S13", "INSEE_APU.REC_CREDITS_IMPOT", -1)]),
+    ("Prélèvements obligatoires des administrations publiques : impôts nationaux du tableau 3.217 contre somme des "
+     "sous-secteurs du tableau 3.216",
+     [("insee.t3217", "S13", "INSEE_PO.PO", 1)], [("insee.t3216", p, "INSEE_PO.PO", 1) for p in ("S1311", "S1313", "S1314")]),
+]
 
 # Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes.
 FAMILLES = {"EUR": ("euros", 1), "MIO_EUR": ("euros", 1e6), "MD_EUR": ("euros", 1e9),
@@ -161,9 +209,9 @@ def additivite(derniers):
     for k, l in derniers.items():
         if valeur(l)[2] != "euros":
             continue
-        if k[3] == "SEC2010.B9":
+        if k[3] in ADDITIFS:
             # Les tableaux 3.201 à 3.214 de l'Insee publient un sous-secteur chacun : on les réunit.
-            famille = "insee.t3201 à t3214" if k[0].startswith("insee.t32") else k[0]
+            famille = "insee.t3201 à t3214" if re.fullmatch(r"insee\.t32(0[1-9]|1[0-4])", k[0]) else k[0]
         elif k[0] in apu and (l["consolidation"] == "consolide_apu" or k[2] == "S13"):
             famille = k[0]
         else:
@@ -179,6 +227,30 @@ def additivite(derniers):
                     tableaux = sorted({valeurs[p][2] for p in [ensemble] + parties})
                     ecarts.append((famille, concept, fonction, periode, ensemble, parties, tableaux, ecart))
     return controles, ecarts
+
+
+def passerelles(derniers):
+    """Chaque passerelle, pour chaque année où figurent tous ses termes : (libellé, année, gauche, droite, marge,
+    révisable)."""
+    def terme(source, perimetre, concept, annee):
+        return montant(derniers, (source, "FR", perimetre, concept, "", "", "", annee))
+
+    resultats = []
+    for libelle, gauche, droite in PASSERELLES:
+        annees = sorted({k[7] for k in derniers if k[0] == gauche[0][0] and k[2] == gauche[0][1] and k[3] == gauche[0][2]})
+        for annee in annees:
+            termes = [(s, terme(source, perimetre, concept, annee), (source, perimetre, concept))
+                      for cote in (gauche, droite) for source, perimetre, concept, s in cote]
+            if any(t is None for _, t, _ in termes):
+                continue
+            g = sum(s * t[0] for s, t, _ in termes[:len(gauche)])
+            d = sum(s * t[0] for s, t, _ in termes[len(gauche):])
+            statuts = {derniers[(source, "FR", perimetre, concept, "", "", u, annee)]["statut"]
+                       for _, _, (source, perimetre, concept) in termes for u in ("MD_EUR", "MIO_EUR", "EUR")
+                       if (source, "FR", perimetre, concept, "", "", u, annee) in derniers}
+            resultats.append({"libelle": libelle, "annee": annee, "ecart": g - d, "revisable": bool(statuts & REVISABLES),
+                              "juste": not depasse(g - d, sum(t[1] for _, t, _ in termes))})
+    return resultats
 
 
 def ratios(derniers):
@@ -346,8 +418,8 @@ def partie_ventilations(derniers):
 def partie_additivite(derniers):
     n, ecarts = additivite(derniers)
     lignes = ["## 3. Additivité des sous-secteurs", "",
-              "Le solde d'un ensemble, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques "
-              "(tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.", "",
+              "Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble "
+              "des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.", "",
               f"{n} additions vérifiées : {n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
     for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart in ecarts:
@@ -367,9 +439,33 @@ def partie_additivite(derniers):
     return lignes
 
 
+def partie_passerelles(derniers):
+    resultats = passerelles(derniers)
+    lignes = ["## 4. Passerelles entre tableaux", "",
+              "Des tableaux différents présentent autrement les mêmes grandeurs. Chaque passerelle vérifie qu'ils "
+              "concordent, à l'arrondi près, pour chaque année où figurent tous ses termes.", "",
+              "| Passerelle | Années vérifiées | Années en écart | dont hors chiffres révisables | "
+              "Plus grand écart (gauche − droite) |", "|---|---|---|---|---|"]
+    par_passerelle = collections.defaultdict(list)
+    for r in resultats:
+        par_passerelle[r["libelle"]].append(r)
+    for libelle, _, _ in PASSERELLES:
+        liste = par_passerelle.get(libelle)
+        if not liste:
+            continue
+        ecarts = [r for r in liste if not r["juste"]]
+        fermes = [r["annee"] for r in ecarts if not r["revisable"]]
+        plus = plus_grand(ecarts, lambda x: x["ecart"]) if ecarts else None
+        texte = f"{ecart_lisible(plus['ecart'], 'euros')} en {plus['annee']}" if plus else "aucun"
+        lignes.append(f"| {libelle} | {plage([r['annee'] for r in liste])} | "
+                      f"{plage([r['annee'] for r in ecarts]) if ecarts else 'aucune'} | "
+                      f"{plage(fermes) if fermes else 'aucune'} | {texte} |")
+    return lignes + [""]
+
+
 def partie_ratios(derniers):
     resultats = ratios(derniers)
-    lignes = ["## 4. Ratios", "",
+    lignes = ["## 5. Ratios", "",
               "Chaque ratio est recalculé : le même chiffre en montant, divisé par son dénominateur. Il est retrouvé "
               "si l'écart ne dépasse pas ce que permettent les arrondis du ratio, du montant et du dénominateur.", "",
               "| Dénominateur | Ratios | Retrouvés | Non retrouvés |", "|---|---|---|---|"]
@@ -422,7 +518,7 @@ def partie_ratios(derniers):
 
 def partie_concordances(derniers):
     paires = concordances(derniers)
-    lignes = ["## 5. Écarts entre sources pour une même grandeur", "",
+    lignes = ["## 6. Écarts entre sources pour une même grandeur", "",
               "Même concept, même périmètre, même fonction, même consolidation, même année, montants convertis dans la "
               "même unité. Les montants d'Eurostat convertis en écus avant 1999 ne sont pas comparés : ce sont les mêmes "
               "données que ses montants en euros, converties autrement.", "",
@@ -493,7 +589,8 @@ def ecrire_rapport(derniers):
               "demi-unité de la dernière décimale de chaque valeur en jeu. Une incohérence signalée ici est un constat "
               "sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.", ""]
     lignes += partie_sources(derniers) + partie_sommes(derniers) + partie_ventilations(derniers)
-    lignes += partie_additivite(derniers) + partie_ratios(derniers) + partie_concordances(derniers)
+    lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)
+    lignes += partie_concordances(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

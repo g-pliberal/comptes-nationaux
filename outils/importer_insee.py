@@ -10,7 +10,10 @@ Tableaux pris en charge :
 - 3.101 : dette au sens de Maastricht par sous-secteur, et PIB utilisé pour le ratio ;
 - 3.301 à 3.306 : dépenses par fonction (COFOG, jusqu'aux 69 groupes) et par opération, pour
   l'ensemble des administrations publiques et chacun de leurs sous-secteurs ;
-- 3.307 : répartition par sous-secteur des dépenses consolidées de l'ensemble, par fonction.
+- 3.307 : répartition par sous-secteur des dépenses consolidées de l'ensemble, par fonction ;
+- 3.216 : prélèvements obligatoires par sous-secteur et pour l'Union européenne ;
+- 3.217 : principaux impôts par catégorie, et passage de l'ensemble des impôts et cotisations aux
+  prélèvements obligatoires.
 
 Chaque libellé ou code de ligne doit avoir une correspondance ci-dessous ou dans les tables de la base :
 une ligne inconnue arrête l'import, pour que rien ne soit écarté en silence. La version d'un chiffre est
@@ -97,6 +100,134 @@ PERIMETRES_33XX = {"3301": "S13", "3302": "S1311", "3303": "S13111", "3304": "S1
 OPERATIONS_33XX = {"OTE": "SEC2010.TE", "D1": "SEC2010.D1PAY", "P2": "SEC2010.P2", "OED": "SEC2010.D29_D5_D8PAY",
                    "D3": "SEC2010.D3PAY", "D4": "SEC2010.D4PAY", "D62": "SEC2010.D62PAY", "D632": "SEC2010.D632PAY",
                    "D7": "SEC2010.D7PAY", "D9": "SEC2010.D9_HORS_D995PAY", "P5L": "INSEE_APU.DEP_ACTIFS_NON_FINANCIERS"}
+
+# Tableaux 3.216 et 3.217 : libellé de l'Insee → (concept, périmètre, unité) ; un périmètre ou une unité vide
+# vaut celui du tableau. Une ligne dont le libellé ne suffit pas (« dont … », « - Impôts », « en % du PIB »,
+# détail des crédits d'impôt) se désigne avec la ligne qu'elle détaille : « ligne détaillée / ligne ».
+LIGNES_3216 = {
+    "S13 et S212 - Prélèvements obligatoires": ("INSEE_PO.PO", "S13_S212", ""),
+    "S1311 - Administration publique centrale": ("INSEE_PO.PO", "S1311", ""),
+    "S13111 - État": ("INSEE_PO.PO", "S13111", ""),
+    "S13111 - État / - Impôts (*)": ("INSEE_PO.PO_IMPOTS", "S13111", ""),
+    "S13111 - État / - Cotisations sociales (**)": ("INSEE_PO.PO_COTISATIONS", "S13111", ""),
+    "S13112 - Organismes divers d'administration centrale": ("INSEE_PO.PO", "S13112", ""),
+    "S1313 - Administrations publiques locales": ("INSEE_PO.PO", "S1313", ""),
+    "S1314 - Administrations de sécurité sociale": ("INSEE_PO.PO", "S1314", ""),
+    "S1314 - Administrations de sécurité sociale / - Impôts (*)": ("INSEE_PO.PO_IMPOTS", "S1314", ""),
+    "S1314 - Administrations de sécurité sociale / - Cotisations sociales (**)": ("INSEE_PO.PO_COTISATIONS", "S1314", ""),
+    "S212 - Institutions et organes de l'Union européenne": ("INSEE_PO.PO", "S212", ""),
+}
+_3217 = {
+    "SEC2010": {
+        "Taxe sur la valeur ajoutée (TVA) (D211)": "D211REC",
+        "Impôts et droits sur les importations (D212)": "D212REC",
+        "Impôts sur les produits (D214)": "D214REC",
+        "Impôts sur les salaires et la main d'œuvre (D291)": "D291REC",
+        "Impôts divers sur la production (D292)": "D292REC",
+        "Impôts courants sur le revenu (D51)": "D51REC",
+        "Autres impôts courants (D59)": "D59REC",
+        "Impôts en capital (D91r)": "D91REC",
+        "Cotisations sociales": "D61REC",
+        "Cotisations sociales imputées": "D612REC",
+        "Impôts et cotisations susceptibles de ne pas être collectés": "D995REC",
+        "Impôts et cotisations sociales susceptibles de ne pas être collectés (II)": "D995REC",
+    },
+    "INSEE_PO": {
+        "Accises sur les produits énergétiques (TICPE)": "TICPE",
+        "Accises sur l'électricité (TICFE)": "TICFE",
+        "Accises sur le gaz naturel (TICGN)": "TICGN",
+        "Autres taxes sur l'énergie": "AUTRES_TAXES_ENERGIE",
+        "Accises sur les tabacs": "ACCISES_TABACS",
+        "Accises sur les alcools et autres boissons": "ACCISES_ALCOOLS",
+        "Droits d'enregistrement (sur transactions immobilières et autres)": "DROITS_ENREGISTREMENT",
+        "Taxe sur les conventions d'assurances": "TSCA",
+        "Taxe de solidarité additionnelle (sur complémentaires santé)": "TSA",
+        "Autres taxes sur contrats d'assurance": "AUTRES_TAXES_ASSURANCE",
+        "Prélèvements sur les jeux, casinos, paris sportifs et hippiques (**)": "PRELEVEMENTS_JEUX",
+        "Taxes sur services de logement et sur constructions": "TAXES_LOGEMENT_CONSTRUCTION",
+        "Taxe sur les certificats d'immatriculation des véhicules": "CERTIFICATS_IMMATRICULATION",
+        "Taxe additionnelle sur véhicules (malus auto)": "MALUS_AUTO",
+        "Taxes sur services de transport": "TAXES_TRANSPORT",
+        "Taxe sur les transactions financières": "TTF",
+        "Taxes sur ventes de produits pharmaceutiques": "TAXES_PHARMACIE",
+        "Taxes sur services numériques et télécommunications": "TAXES_NUMERIQUE_TELECOM",
+        "Taxes sur spectacles et divertissements": "TAXES_SPECTACLES",
+        "Taxe de séjour": "TAXE_SEJOUR",
+        "Taxe générale sur les activités polluantes": "TGAP",
+        "Taxe générale sur les activités polluantes / dont part classée en impôts sur la production": "TGAP_PART_PRODUCTION",
+        "Redevances des agences de l'eau": "AGENCES_EAU",
+        "Redevances des agences de l'eau / dont part classée en impôts sur la production": "AGENCES_EAU_PART_PRODUCTION",
+        "Octroi de mer des départements d'outre-mer": "OCTROI_DE_MER",
+        "Octroi de mer des départements d'outre-mer / dont part classée en impôts sur importations":
+            "OCTROI_DE_MER_PART_IMPORTATIONS",
+        "Taxe sur les salaires": "TAXE_SALAIRES",
+        "Versement mobilité": "VERSEMENT_MOBILITE",
+        "Contributions pour la formation professionnelle et l'apprentissage": "FORMATION_APPRENTISSAGE",
+        "Forfait social": "FORFAIT_SOCIAL",
+        "Contribution au fonds national d'aide au logement (FNAL)": "FNAL",
+        "Contribution de solidarité pour l'autonomie (CNSA)": "CSA",
+        "Participation des employeurs à l'effort de construction": "PEEC",
+        "Cotisations au régime de garantie des salaires (AGS)": "AGS",
+        "Contribution patronale sur stock-options": "STOCK_OPTIONS",
+        "Taxe foncière": "TAXE_FONCIERE",
+        "Taxe foncière / dont taxe foncière payée par les ménages (*)": "TAXE_FONCIERE_MENAGES",
+        "Taxe foncière / dont taxe foncière hors ménages": "TAXE_FONCIERE_HORS_MENAGES",
+        "Cotisation foncière des entreprises": "CFE",
+        "Impositions forfaitaires sur les entreprises de réseaux": "IFER",
+        "Cotisation sur la valeur ajoutée des entreprises": "CVAE",
+        "Taxe professionnelle (TP)": "TAXE_PROFESSIONNELLE",
+        "Contribution sociale de solidarité des sociétés": "C3S",
+        "Contributions des banques aux mécanismes de garantie des dépôts et de résolution bancaire": "CONTRIBUTIONS_BANCAIRES",
+        "Taxes pour organismes consulaires (Commerce et Industrie, Métiers et Artisanat, Agriculture)": "TAXES_CONSULAIRES",
+        "Taxe sur les surfaces commerciales": "TASCOM",
+        "Taxes sur véhicules des entreprises": "TAXES_VEHICULES_ENTREPRISES",
+        "Taxes sur les bureaux (création et surfaces)": "TAXES_BUREAUX",
+        "Taxe GEMAPI (milieux aquatiques et prévention des inondations)": "GEMAPI",
+        "Autres taxes adossées aux impôts fonciers locaux (dont Taxe spéciale d'équipement)": "TAXES_ADOSSEES_FONCIER",
+        "Quotas carbone (taxe sur émissions de gaz à effet de serre)": "QUOTAS_CARBONE",
+        "Contributions des producteurs d'électricité": "CONTRIBUTIONS_PRODUCTEURS_ELECTRICITE",
+        "Contribution sociale généralisée (CSG) (**)": "CSG",
+        "Contribution au remboursement de la dette sociale (CRDS) (**)": "CRDS",
+        "Prélèvement de solidarité et autres contributions sociales": "PRELEVEMENT_SOLIDARITE",
+        "Prélèvements sur les revenus de capitaux mobiliers": "PRELEVEMENTS_CAPITAUX_MOBILIERS",
+        "Impôt sur le revenu des personnes physiques (IRPP), avant crédits d'impôt": "IRPP",
+        "Crédits d'impôt sur l'IRPP : utilisés en déduction de l'impôt dû": "CI_IRPP_IMPUTES",
+        "Crédits d'impôt sur l'IRPP : au-delà de l'impôt dû, payés par l'administration": "CI_IRPP_RESTITUES",
+        "Impôt sur les sociétés (IS), avant crédits d'impôt": "IS",
+        "Crédits d'impôt sur l'IS : utilisés en déduction de l'impôt dû": "CI_IS_IMPUTES",
+        "Crédits d'impôt sur l'IS : au-delà de l'impôt dû, payés par l'administration": "CI_IS_RESTITUES",
+        "Contribution sociale sur les bénéfices des sociétés": "CSB",
+        "Remises pharmaceutiques": "REMISES_PHARMACEUTIQUES",
+        "Contribution exceptionnelle sur les bénéfices des grandes entreprises": "CONTRIBUTION_EXCEPTIONNELLE_GRANDES_ENTREPRISES",
+        "Contribution différentielle sur les hauts revenus": "CDHR",
+        "Taxe d'habitation": "TAXE_HABITATION",
+        "Impôt sur la fortune (IFI, ex ISF)": "IFI_ISF",
+        "Contribution à l'audiovisuel public": "AUDIOVISUEL_PUBLIC",
+        "Taxe sur les véhicules (vignette auto des ménages)": "VIGNETTE",
+        "Droits de mutation à titre gratuit": "DMTG",
+        "Droits de mutation à titre gratuit / dont sur donations": "DMTG_DONATIONS",
+        "Droits de mutation à titre gratuit / dont sur successions": "DMTG_SUCCESSIONS",
+        "Taxations exceptionnelles sur la réserve de capitalisation des assurances": "TAXATION_RESERVE_CAPITALISATION",
+        "Cotisations sociales effectives": "COTISATIONS_EFFECTIVES",
+        "Ensemble des impôts et cotisations sociales (I)": "IMPOTS_ET_COTISATIONS",
+        "Cotisations sociales imputées (III)": "AJUSTEMENT_COTISATIONS_IMPUTEES",
+        "Crédits d'impôt (IV)": "AJUSTEMENT_CREDITS_IMPOT",
+        "Crédits d'impôt (IV) / Utilisés en déduction de l'impôt dû": "AJUSTEMENT_CREDITS_IMPOT_IMPUTES",
+        "Crédits d'impôt (IV) / Au-delà de l'impôt dû, payés par l'administration": "AJUSTEMENT_CREDITS_IMPOT_RESTITUES",
+        "Prélèvements obligatoires = (I)+(II)+(III)+(IV)": "PO",
+    },
+}
+LIGNES_3217 = {libelle: (f"{norme}.{code}", "", "") for norme, lignes in _3217.items() for libelle, code in lignes.items()}
+LIGNES_3217.update({
+    "Droits d'importation au profit de l'Union Européenne": ("SEC2010.D2121REC", "S212", ""),
+    "Droits d'enregistrement (sur transactions immobilières et autres) / dont DMTO en ressources des collectivités "
+    "locales": ("INSEE_PO.DMTO", "S13131", ""),
+    "Contributions des banques aux mécanismes de garantie des dépôts et de résolution bancaire / dont contribution au "
+    "fonds de résolution unique (impôt de l’Union européenne)": ("INSEE_PO.FRU", "S212", ""),
+    "Prélèvements obligatoires = (I)+(II)+(III)+(IV) / en % du PIB": ("INSEE_PO.PO", "", "PC_PIB"),
+    "Prélèvements obligatoires = (I)+(II)+(III)+(IV) / dont impôts nationaux": ("INSEE_PO.PO", "S13", ""),
+    "Prélèvements obligatoires = (I)+(II)+(III)+(IV) / dont impôts de l’Union européenne": ("INSEE_PO.PO", "S212", ""),
+})
 
 
 def libelle(cellules, colonne, n):
@@ -218,6 +349,40 @@ def tableau_cofog(numero, cellules, annees):
                    "annee": annees[colonne], "ratio": False}
 
 
+def tableau_prelevements(numero, cellules, annees):
+    """Tableaux 3.216 et 3.217 : une ligne par bénéficiaire ou par impôt. Le retrait du libellé dit quelle ligne
+    en détaille une autre ; le périmètre du tableau 3.217 est l'ensemble des bénéficiaires des prélèvements
+    obligatoires, administrations publiques et institutions de l'Union européenne."""
+    if not any(libelle(cellules, "B", position(ref)[0]) in ("Milliards d'euros", "En milliards d'euros") for ref in cellules):
+        sys.exit(f"tableau {numero} : unité des montants introuvable")
+    connues = LIGNES_3216 if numero == "3216" else LIGNES_3217
+    unite, pile = "MD_EUR", []  # pile : (retrait, libellé) des lignes qui en contiennent d'autres
+    for n in sorted({position(ref)[0] for ref in cellules}):
+        brut = str(cellules.get(f"B{n}", ""))
+        texte, retrait = " ".join(brut.split()), len(brut) - len(brut.lstrip())
+        if not texte:
+            continue
+        if texte.startswith(("En milliards d'euros", "En % du produit intérieur brut")):
+            unite = "MD_EUR" if texte.startswith("En milliards") else "PC_PIB"
+        while pile and pile[-1][0] >= retrait:
+            pile.pop()
+        detaillee = pile[-1][1] if pile else ""
+        pile.append((retrait, texte))
+        valeurs = valeurs_de_la_ligne(cellules, n, annees)
+        if not valeurs:
+            continue
+        # Une ligne partielle se lit toujours avec la ligne qu'elle détaille ; une autre, par son libellé s'il suffit.
+        partielle = texte.startswith(("dont ", "- ", "en % du PIB"))
+        cle = texte if not partielle and texte in connues else f"{detaillee} / {texte}"
+        if cle not in connues:
+            sys.exit(f"tableau {numero}, ligne {n} : libellé sans correspondance (« {cle} »)")
+        concept, perimetre, unite_ligne = connues[cle]
+        for colonne, valeur in valeurs.items():
+            yield {"perimetre_id": perimetre or "S13_S212", "concept_id": concept, "unite_id": unite_ligne or unite,
+                   "consolidation": "sans_objet", "valeur": valeur, "cellule": f"{colonne}{n}", "libelle": texte,
+                   "annee": annees[colonne], "ratio": False}
+
+
 def statut(annee, derniere):
     return {derniere: "provisoire", derniere - 1: "semi_definitif"}.get(annee, "definitif")
 
@@ -240,6 +405,8 @@ def lignes_du_fichier(fichier):
         brutes = tableau_dette_ou_deficit(numero, cellules, annees)
     elif numero in PERIMETRES_33XX or numero == "3307":
         brutes = tableau_cofog(numero, cellules, annees)
+    elif numero in ("3216", "3217"):
+        brutes = tableau_prelevements(numero, cellules, annees)
     else:
         sys.exit(f"tableau {numero} non pris en charge")
     brutes, lignes = list(brutes), []

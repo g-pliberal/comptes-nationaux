@@ -8,8 +8,8 @@ Chaque chiffre est enregistré avec sa fiche d'identité et sa source, et chaque
 
 | Dossier | Contenu |
 |---|---|
-| [base/](base/) | la base des chiffres : tables, schémas, copies archivées des sources ; pour l'instant, les comptes des administrations publiques de l'Insee et d'Eurostat, dont les dépenses par fonction |
-| [controles/](controles/) | le [rapport de cohérence](controles/coherence.md) des sources : sommes, soldes, ratios, écarts entre sources |
+| [base/](base/) | la base des chiffres : tables, schémas, copies archivées des sources ; pour l'instant, les comptes des administrations publiques de l'Insee et d'Eurostat, dont les dépenses par fonction et les recettes impôt par impôt |
+| [controles/](controles/) | le [rapport de cohérence](controles/coherence.md) des sources : sommes, ventilations, soldes, passerelles entre tableaux, ratios, écarts entre sources |
 | [outils/](outils/) | archivage des sources, import, contrôle et construction de la base |
 | [reports/](reports/), [research_notes/](research_notes/) | recherche documentaire de départ sur les sources des comptes publics |
 

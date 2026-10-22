@@ -29,6 +29,8 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3212 | Tableau 3.212 : Dépenses et recettes des administrations de sécurité sociale (S1314) | 2026-08-10 | 2352 |
 | insee.t3213 | Tableau 3.213 : Dépenses et recettes des régimes d'assurance sociale (S13141) | 2026-08-10 | 627 |
 | insee.t3214 | Tableau 3.214 : Dépenses et recettes des organismes dépendant des assurances sociales - hôpitaux (S13142) | 2026-08-10 | 625 |
+| insee.t3216 | Tableau 3.216 : Prélèvements obligatoires par sous-secteurs des administrations publiques et pour l'Union européenne | 2026-05-10 | 1290 |
+| insee.t3217 | Tableau 3.217 : Principaux impôts par catégorie | 2026-05-10 | 2655 |
 | insee.t3301 | Tableau 3.301 : Dépenses des administrations publiques (S13) ventilées par fonction | 2025-11-28 | 21256 |
 | insee.t3302 | Tableau 3.302 : Dépenses de l'administration publique centrale (S1311) ventilées par fonction | 2025-11-28 | 19998 |
 | insee.t3303 | Tableau 3.303 : Dépenses de l'État (S13111) ventilées par fonction | 2025-11-28 | 9956 |
@@ -41,7 +43,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.
 
-5882 sommes vérifiées avec toutes leurs composantes : 5874 justes, 8 en écart.
+6264 sommes vérifiées avec toutes leurs composantes : 6254 justes, 10 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
 |---|---|---|---|---|---|---|---|
@@ -53,8 +55,10 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | insee.t3208 | S131312 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,9480 | 6,9460 | +2,0 M€ |
 | insee.t3208 | S131312 | ensemble | 2024 | SEC2010.B9 | −5,6560 | −5,8130 | +157,0 M€ |
 | insee.t3210 | S131314 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 | 5,0550 | +16,0 M€ |
+| insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 | −16,3100 | −574,0 M€ |
+| insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 | −17,1280 | −578,0 M€ |
 
-11046 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
+11058 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
 
 ## 2. Ventilations par fonction
 
@@ -66,9 +70,9 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des dix divisi
 
 ## 3. Additivité des sous-secteurs
 
-Le solde d'un ensemble, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.
+Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.
 
-1520 additions vérifiées : 1499 justes, 21 en écart.
+1655 additions vérifiées : 1634 justes, 21 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
@@ -76,7 +80,23 @@ Le solde d'un ensemble, ou sa dépense consolidée au niveau de l'ensemble des a
 | insee.t3106 | SEC2010.B9 | S1311 | S13111 + S13112 | ensemble | 19 années entre 1959 et 1977 | +6 502,0 M€ en 1974 |
 | insee.t3212, insee.t3213, insee.t3214 | SEC2010.B9 | S1314 | S13141 + S13142 | ensemble | 2019 | +8,0 M€ en 2019 |
 
-## 4. Ratios
+## 4. Passerelles entre tableaux
+
+Des tableaux différents présentent autrement les mêmes grandeurs. Chaque passerelle vérifie qu'ils concordent, à l'arrondi près, pour chaque année où figurent tous ses termes.
+
+| Passerelle | Années vérifiées | Années en écart | dont hors chiffres révisables | Plus grand écart (gauche − droite) |
+|---|---|---|---|---|
+| Cotisations sociales : tableau 3.217 contre tableau 3.201 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Cotisations sociales imputées : tableau 3.217 contre tableau 3.201 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Impôts et cotisations dus non recouvrables : tableau 3.217 contre tableau 3.201 | 31 années entre 1995 et 2025 | 2022 | 2022 | +2,0 M€ en 2022 |
+| Impôts en capital : tableau 3.217 contre tableau 3.201 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Impôts courants sur le revenu et le patrimoine : D.51 + D.59 du tableau 3.217 contre D.5 du tableau 3.201 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Impôts sur la production et les importations reçus par les administrations publiques : D.211 + D.212 + D.214 + D.291 + D.292 du tableau 3.217, moins les impôts de l'Union européenne du tableau 3.216, contre D.2 du tableau 3.201 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Même passerelle, avec les impôts de l'Union européenne du tableau 3.217 | 31 années entre 1995 et 2025 | 23 années entre 1995 et 2018 | 23 années entre 1995 et 2018 | +734,9 M€ en 1995 |
+| Crédits d'impôt retranchés des prélèvements obligatoires (3.217) contre crédits d'impôt enregistrés en recettes (3.201), de signe opposé | 31 années entre 1995 et 2025 | 2017, 2018 et 2021 | 2017, 2018 et 2021 | −85,0 M€ en 2017 |
+| Prélèvements obligatoires des administrations publiques : impôts nationaux du tableau 3.217 contre somme des sous-secteurs du tableau 3.216 | 31 années entre 1995 et 2025 | 24 années entre 1995 et 2018 | 24 années entre 1995 et 2018 | +734,9 M€ en 1995 |
+
+## 5. Ratios
 
 Chaque ratio est recalculé : le même chiffre en montant, divisé par son dénominateur. Il est retrouvé si l'écart ne dépasse pas ce que permettent les arrondis du ratio, du montant et du dénominateur.
 
@@ -84,7 +104,7 @@ Chaque ratio est recalculé : le même chiffre en montant, divisé par son déno
 |---|---|---|---|
 | le PIB indiqué par la source, dans le même tableau | 730 | 597 | 133 |
 | la dépense totale du même périmètre, chez la même source | 300 | 300 | 0 |
-| non indiqué par la source : chaque série de PIB enregistrée pour l'année est essayée | 826 | 821 | 5 |
+| non indiqué par la source : chaque série de PIB enregistrée pour l'année est essayée | 1497 | 1492 | 5 |
 
 Ratios non retrouvés :
 
@@ -111,7 +131,7 @@ Ratios non retrouvés :
   Avec le PIB de eurostat.nama_10_gdp, 2 sont retrouvés.
   Avec le PIB de insee.t3106, 2 sont retrouvés.
 
-## 5. Écarts entre sources pour une même grandeur
+## 6. Écarts entre sources pour une même grandeur
 
 Même concept, même périmètre, même fonction, même consolidation, même année, montants convertis dans la même unité. Les montants d'Eurostat convertis en écus avant 1999 ne sont pas comparés : ce sont les mêmes données que ses montants en euros, converties autrement.
 
@@ -149,6 +169,7 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3204 | insee.t3304 | 128 | 17 | 2 | −2,4 M€ en 2020 | +3 073,7 M€ en 2024 |
 | insee.t3205 | insee.t3305 | 240 | 18 | 2 | −0,6 M€ en 2002 | +738,0 M€ en 2024 |
 | insee.t3212 | insee.t3306 | 240 | 19 | 5 | −39,4 M€ en 2019 | +1 304,3 M€ en 2024 |
+| insee.t3216 | insee.t3217 | 93 | 24 | 24 | +734,9 M€ en 1995 | +734,9 M€ en 1995 |
 | insee.t3301 | insee.t3307 | 1248 | 408 | 408 | −20 301,0 M€ en 2009 | −20 301,0 M€ en 2009 |
 
 Détail des grandeurs en écart :
@@ -222,4 +243,5 @@ Détail des grandeurs en écart :
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.D9_HORS_D995PAY | ensemble | 2019, 2020 et 2024 | 2019 et 2020 | −1 181,0 M€ en 2024 |
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +464,6 M€ en 2024 |
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.TE | ensemble | 5 années entre 2019 et 2024 | 2019, 2020 et 2022 | −1 139,0 M€ en 2024 |
+| insee.t3216 | insee.t3217 | FR S212 INSEE_PO.PO | ensemble | 24 années entre 1995 et 2018 | 24 années entre 1995 et 2018 | +734,9 M€ en 1995 |
 | insee.t3301 | insee.t3307 | FR S13 SEC2010.TE | ensemble, 9 divisions et 41 groupes | 10 années entre 2009 et 2018 | 10 années entre 2009 et 2018 | −20 301,0 M€ en 2009 (ensemble) |
