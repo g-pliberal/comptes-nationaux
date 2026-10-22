@@ -1,0 +1,8 @@
+id,libelle,norme_id,parent_id,definition
+S1,Économie totale,SEC2010,,Ensemble des unités résidentes.
+S13,Administrations publiques,SEC2010,S1,"Administrations et unités publiques non marchandes qu'elles contrôlent, c'est-à-dire dont les ventes couvrent moins de la moitié des coûts."
+S1311,Administration centrale,SEC2010,S13,État et organismes divers d'administration centrale (ODAC).
+S13111,État,SEC2010,S1311,Subdivision publiée par l'Insee ; Eurostat ne la publie pas.
+S13112,Organismes divers d'administration centrale,SEC2010,S1311,Subdivision publiée par l'Insee ; Eurostat ne la publie pas.
+S1313,Administrations publiques locales,SEC2010,S13,"Collectivités territoriales, groupements et organismes divers d'administration locale."
+S1314,Administrations de sécurité sociale,SEC2010,S13,"Régimes obligatoires de sécurité sociale, assurance chômage, retraites complémentaires, hôpitaux publics et organismes qui en dépendent."

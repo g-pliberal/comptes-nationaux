@@ -1,0 +1,15 @@
+{
+  "description": "Périmètres couverts par un chiffre : secteurs et sous-secteurs institutionnels, ou périmètres propres à une autre norme.",
+  "fields": [
+    {"name": "id", "type": "string", "constraints": {"required": true, "pattern": "[A-Z0-9_]+"}},
+    {"name": "libelle", "type": "string", "constraints": {"required": true}},
+    {"name": "norme_id", "type": "string", "constraints": {"required": true}},
+    {"name": "parent_id", "type": "string", "description": "Périmètre qui contient celui-ci."},
+    {"name": "definition", "type": "string"}
+  ],
+  "primaryKey": ["id"],
+  "foreignKeys": [
+    {"fields": ["norme_id"], "reference": {"resource": "normes", "fields": ["id"]}},
+    {"fields": ["parent_id"], "reference": {"resource": "", "fields": ["id"]}}
+  ]
+}

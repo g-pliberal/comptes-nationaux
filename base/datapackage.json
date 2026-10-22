@@ -1,0 +1,26 @@
+{
+  "name": "comptes-publics-france",
+  "title": "Comptes publics de la France : chiffres sourcés et vérifiables",
+  "description": "Chaque chiffre est enregistré avec sa fiche d'identité complète (ce qui est mesuré, norme, périmètre, unité, période, version, source et emplacement exact). Format : Frictionless Data Package (https://specs.frictionlessdata.io/data-package/).",
+  "licenses": [
+    {
+      "name": "etalab-2.0",
+      "title": "Licence Ouverte 2.0",
+      "path": "https://www.etalab.gouv.fr/licence-ouverte-open-licence/"
+    }
+  ],
+  "resources": [
+    {"name": "normes", "path": "tables/normes.csv", "schema": "schemas/normes.json"},
+    {"name": "perimetres", "path": "tables/perimetres.csv", "schema": "schemas/perimetres.json"},
+    {"name": "concepts", "path": "tables/concepts.csv", "schema": "schemas/concepts.json"},
+    {"name": "fonctions", "path": "tables/fonctions.csv", "schema": "schemas/fonctions.json"},
+    {"name": "unites", "path": "tables/unites.csv", "schema": "schemas/unites.json"},
+    {"name": "traitements", "path": "tables/traitements.csv", "schema": "schemas/traitements.json"},
+    {"name": "sources", "path": "tables/sources.csv", "schema": "schemas/sources.json"},
+    {"name": "fichiers", "path": "tables/fichiers.csv", "schema": "schemas/fichiers.json"},
+    {"name": "calculs", "path": "tables/calculs.csv", "schema": "schemas/calculs.json"},
+    {"name": "chiffres-eurostat", "path": "tables/chiffres/eurostat.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-tiers", "path": "tables/chiffres/tiers.csv", "schema": "schemas/chiffres.json"},
+    {"name": "corrections", "path": "tables/corrections.csv", "schema": "schemas/corrections.json"}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Producteurs et publications d'où viennent les chiffres : statistiques officielles, documents publics, articles, communications.",
+  "fields": [
+    {"name": "id", "type": "string", "constraints": {"required": true, "pattern": "[a-z0-9_.-]+"}},
+    {"name": "producteur", "type": "string", "constraints": {"required": true}},
+    {"name": "titre", "type": "string", "constraints": {"required": true}},
+    {"name": "type", "type": "string", "constraints": {"required": true, "enum": ["statistique_officielle", "document_public", "article", "communication"]}},
+    {"name": "url", "type": "string", "constraints": {"required": true}},
+    {"name": "licence", "type": "string", "constraints": {"required": true}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["id"]
+}

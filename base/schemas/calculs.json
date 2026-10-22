@@ -1,0 +1,11 @@
+{
+  "description": "Recettes de nos propres calculs : formule, chiffres d'entrée et script. Tout chiffre de nature « calcule » en a une.",
+  "fields": [
+    {"name": "id", "type": "string", "constraints": {"required": true, "pattern": "[a-z0-9_.-]+"}},
+    {"name": "formule", "type": "string", "constraints": {"required": true}},
+    {"name": "entrees", "type": "string", "description": "Identifiants des chiffres utilisés, séparés par « ; ».", "constraints": {"required": true}},
+    {"name": "script", "type": "string", "description": "Chemin du script dans le dépôt.", "constraints": {"required": true}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["id"]
+}

@@ -1,0 +1,9 @@
+{
+  "description": "Unités dans lesquelles les chiffres sont exprimés, telles que publiées par la source.",
+  "fields": [
+    {"name": "id", "type": "string", "constraints": {"required": true, "pattern": "[A-Z_]+"}},
+    {"name": "libelle", "type": "string", "constraints": {"required": true}},
+    {"name": "type", "type": "string", "constraints": {"required": true, "enum": ["montant", "ratio"]}}
+  ],
+  "primaryKey": ["id"]
+}

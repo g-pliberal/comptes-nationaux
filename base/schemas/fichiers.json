@@ -1,0 +1,17 @@
+{
+  "description": "Copies archivées des fichiers sources, telles que téléchargées. Une copie n'est jamais modifiée : son empreinte le prouve.",
+  "fields": [
+    {"name": "id", "type": "string", "constraints": {"required": true, "pattern": "[a-z0-9_.-]+@[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-f]{8}"}},
+    {"name": "source_id", "type": "string", "constraints": {"required": true}},
+    {"name": "url", "type": "string", "description": "Requête exacte qui a produit le fichier.", "constraints": {"required": true}},
+    {"name": "telecharge_le", "type": "datetime", "constraints": {"required": true}},
+    {"name": "mis_a_jour_source", "type": "string", "description": "Date de mise à jour annoncée par la source, telle qu'elle l'écrit."},
+    {"name": "sha256", "type": "string", "constraints": {"required": true, "pattern": "[0-9a-f]{64}"}},
+    {"name": "octets", "type": "integer", "constraints": {"required": true}},
+    {"name": "chemin", "type": "string", "description": "Emplacement de la copie, relatif au dossier base/.", "constraints": {"required": true}}
+  ],
+  "primaryKey": ["id"],
+  "foreignKeys": [
+    {"fields": ["source_id"], "reference": {"resource": "sources", "fields": ["id"]}}
+  ]
+}

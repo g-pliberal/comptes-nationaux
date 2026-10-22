@@ -1,0 +1,7 @@
+id,libelle,norme_id,code_norme,sens,definition
+SEC2010.B1GQ,Produit intérieur brut aux prix du marché,SEC2010,B1GQ,agregat,
+SEC2010.B9,Capacité (+) ou besoin (−) de financement,SEC2010,B.9,solde,Solde des recettes et des dépenses : le déficit public au sens des règles européennes.
+SEC2010.D41,Intérêts versés,SEC2010,D.41,depense,
+SEC2010.TE,Dépenses totales,SEC2010,TE,depense,Total des dépenses des administrations publiques au sens du SEC 2010.
+SEC2010.TR,Recettes totales,SEC2010,TR,recette,Total des recettes des administrations publiques au sens du SEC 2010.
+SOCX.PUBLIC,Dépenses sociales publiques,SOCX,ES10,depense,"Prestations et dépenses sociales financées par les administrations publiques, au sens de l'OCDE."

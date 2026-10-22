@@ -1,0 +1,10 @@
+{
+  "description": "Normes et méthodes de référence (comptabilité nationale, classifications, manuels).",
+  "fields": [
+    {"name": "id", "type": "string", "constraints": {"required": true, "pattern": "[A-Z][A-Z0-9_]*"}},
+    {"name": "libelle", "type": "string", "constraints": {"required": true}},
+    {"name": "reference", "type": "string", "description": "Texte qui fixe la norme : règlement, manuel, édition."},
+    {"name": "url", "type": "string"}
+  ],
+  "primaryKey": ["id"]
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Journal des corrections d'erreurs d'enregistrement. Une révision publiée par une source n'est pas une correction : c'est une nouvelle version, enregistrée comme un nouveau chiffre.",
+  "fields": [
+    {"name": "id", "type": "string", "constraints": {"required": true}},
+    {"name": "chiffre_id", "type": "string", "constraints": {"required": true}},
+    {"name": "date", "type": "date", "constraints": {"required": true}},
+    {"name": "champ", "type": "string", "constraints": {"required": true}},
+    {"name": "ancienne_valeur", "type": "string"},
+    {"name": "nouvelle_valeur", "type": "string"},
+    {"name": "raison", "type": "string", "constraints": {"required": true}}
+  ],
+  "primaryKey": ["id"]
+}

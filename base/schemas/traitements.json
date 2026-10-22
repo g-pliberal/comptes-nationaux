@@ -1,0 +1,9 @@
+{
+  "description": "Traitements particuliers appliqués à un chiffre par rapport à la définition de son concept (exclusions, retraitements).",
+  "fields": [
+    {"name": "id", "type": "string", "constraints": {"required": true, "pattern": "[a-z0-9_]+"}},
+    {"name": "libelle", "type": "string", "constraints": {"required": true}},
+    {"name": "description", "type": "string", "constraints": {"required": true}}
+  ],
+  "primaryKey": ["id"]
+}

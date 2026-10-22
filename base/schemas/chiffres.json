@@ -1,0 +1,37 @@
+{
+  "description": "Un chiffre par ligne, avec sa fiche d'identité complète. On ajoute, on n'efface jamais : une nouvelle version d'un chiffre est une nouvelle ligne.",
+  "fields": [
+    {"name": "id", "type": "string", "description": "Identifiant permanent, composé des champs source_id, zone, perimetre_id, concept_id, fonction_id, traitements, unite_id, periode et version, séparés par « : » (« - » pour un champ vide).", "constraints": {"required": true}},
+    {"name": "source_id", "type": "string", "constraints": {"required": true}},
+    {"name": "fichier_id", "type": "string", "description": "Copie archivée d'où le chiffre est tiré, s'il y en a une."},
+    {"name": "emplacement", "type": "string", "description": "Où trouver le chiffre dans la source : coordonnées, tableau, page.", "constraints": {"required": true}},
+    {"name": "zone", "type": "string", "description": "Code du pays ou de la zone (FR, EU27_2020…).", "constraints": {"required": true, "pattern": "[A-Z0-9_]+"}},
+    {"name": "perimetre_id", "type": "string", "constraints": {"required": true}},
+    {"name": "concept_id", "type": "string", "constraints": {"required": true}},
+    {"name": "fonction_id", "type": "string", "description": "Fonction COFOG, vide pour l'ensemble des fonctions."},
+    {"name": "traitements", "type": "string", "description": "Traitements particuliers, séparés par « ; »."},
+    {"name": "unite_id", "type": "string", "constraints": {"required": true}},
+    {"name": "periode", "type": "string", "description": "Année (2025), trimestre (2025-T2) ou mois (2025-08).", "constraints": {"required": true, "pattern": "[0-9]{4}(-T[1-4]|-[0-9]{2})?"}},
+    {"name": "valeur", "type": "number", "constraints": {"required": true}},
+    {"name": "decimales", "type": "integer", "description": "Nombre de décimales publiées par la source.", "constraints": {"required": true}},
+    {"name": "statut", "type": "string", "constraints": {"required": true, "enum": ["prevision", "estimation", "provisoire", "semi_definitif", "definitif", "non_precise"]}},
+    {"name": "drapeau_source", "type": "string", "description": "Indicateur de qualité tel que publié par la source."},
+    {"name": "version", "type": "date", "description": "Date de publication de la version d'où vient le chiffre.", "constraints": {"required": true}},
+    {"name": "consolidation", "type": "string", "constraints": {"required": true, "enum": ["consolide", "non_consolide", "sans_objet", "non_precise"]}},
+    {"name": "denominateur_id", "type": "string", "description": "Pour un ratio, identifiant du chiffre qui sert de dénominateur, s'il est connu."},
+    {"name": "nature", "type": "string", "description": "publie : par la source elle-même ; cite : repris par un tiers ; calcule : calculé ici.", "constraints": {"required": true, "enum": ["publie", "cite", "calcule"]}},
+    {"name": "calcul_id", "type": "string"},
+    {"name": "saisi_le", "type": "date", "constraints": {"required": true}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["id"],
+  "foreignKeys": [
+    {"fields": ["source_id"], "reference": {"resource": "sources", "fields": ["id"]}},
+    {"fields": ["fichier_id"], "reference": {"resource": "fichiers", "fields": ["id"]}},
+    {"fields": ["perimetre_id"], "reference": {"resource": "perimetres", "fields": ["id"]}},
+    {"fields": ["concept_id"], "reference": {"resource": "concepts", "fields": ["id"]}},
+    {"fields": ["fonction_id"], "reference": {"resource": "fonctions", "fields": ["id"]}},
+    {"fields": ["unite_id"], "reference": {"resource": "unites", "fields": ["id"]}},
+    {"fields": ["calcul_id"], "reference": {"resource": "calculs", "fields": ["id"]}}
+  ]
+}

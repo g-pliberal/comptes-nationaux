@@ -1,0 +1,6 @@
+id,libelle,type
+EUR,euros,montant
+MD_EUR,milliards d'euros,montant
+MIO_EUR,millions d'euros,montant
+PC_DEPENSE,% de la dépense totale du même périmètre,ratio
+PC_PIB,% du PIB,ratio
