@@ -7,21 +7,23 @@ Tableaux pris en charge :
 - 3.201 à 3.214 : dépenses et recettes par nature, pour l'ensemble des administrations publiques et
   chacun de leurs sous-secteurs, jusqu'aux communes, départements, régions et syndicats ;
 - 3.106 : déficit au sens de Maastricht par sous-secteur, et PIB utilisé pour le ratio ;
-- 3.101 : dette au sens de Maastricht par sous-secteur, et PIB utilisé pour le ratio.
+- 3.101 : dette au sens de Maastricht par sous-secteur, et PIB utilisé pour le ratio ;
+- 3.301 à 3.306 : dépenses par fonction (COFOG, jusqu'aux 69 groupes) et par opération, pour
+  l'ensemble des administrations publiques et chacun de leurs sous-secteurs ;
+- 3.307 : répartition par sous-secteur des dépenses consolidées de l'ensemble, par fonction.
 
-Chaque libellé de ligne doit avoir une correspondance ci-dessous : une ligne inconnue arrête l'import,
-pour que rien ne soit écarté en silence. La version d'un chiffre est la date de modification que
-l'Insee inscrit dans le classeur. Son statut suit le calendrier des comptes annuels de l'Insee : la
-dernière année publiée est provisoire, l'avant-dernière semi-définitive, les précédentes définitives.
+Chaque libellé ou code de ligne doit avoir une correspondance ci-dessous ou dans les tables de la base :
+une ligne inconnue arrête l'import, pour que rien ne soit écarté en silence. La version d'un chiffre est
+la date de modification que l'Insee inscrit dans le classeur, à défaut sa date de création. Son statut
+suit le calendrier des comptes annuels de l'Insee : la dernière année publiée est provisoire,
+l'avant-dernière semi-définitive, les précédentes définitives.
 """
 
 import re
 import sys
 
-from commun import (BASE, aujourdhui, champs, ecrire, feuilles_xlsx, fusionner, identifiant, lire, lire_xlsx,
-                    nombre, position)
-
-CIBLE = "tables/chiffres/insee.csv"
+from commun import (BASE, aujourdhui, champs_chiffres, ecrire, feuilles_xlsx, fusionner, identifiant, lire,
+                    lire_xlsx, nombre, position, table_des_chiffres)
 
 PERIMETRES_32XX = {"3201": "S13", "3202": "S1311", "3203": "S13111", "3204": "S13112", "3205": "S1313",
                    "3206": "S13131", "3207": "S131311", "3208": "S131312", "3209": "S131313",
@@ -86,16 +88,30 @@ LIGNES_32XX = {
 
 SECTEURS = {"S13", "S1311", "S13111", "S13112", "S1313", "S1314"}
 
+# Mentions d'une valeur que l'Insee ne diffuse pas, en minuscules.
+NON_DISPONIBLE = {"", "nd", "n.d."}
+
+PERIMETRES_33XX = {"3301": "S13", "3302": "S1311", "3303": "S13111", "3304": "S13112", "3305": "S1313", "3306": "S1314"}
+
+# Opérations des tableaux 3.301 à 3.306 (code de l'Insee en colonne A) → concept de la base.
+OPERATIONS_33XX = {"OTE": "SEC2010.TE", "D1": "SEC2010.D1PAY", "P2": "SEC2010.P2", "OED": "SEC2010.D29_D5_D8PAY",
+                   "D3": "SEC2010.D3PAY", "D4": "SEC2010.D4PAY", "D62": "SEC2010.D62PAY", "D632": "SEC2010.D632PAY",
+                   "D7": "SEC2010.D7PAY", "D9": "SEC2010.D9_HORS_D995PAY", "P5L": "INSEE_APU.DEP_ACTIFS_NON_FINANCIERS"}
+
 
 def libelle(cellules, colonne, n):
     return " ".join(str(cellules.get(f"{colonne}{n}", "")).split())
+
+
+def en_texte(valeur):
+    return str(int(valeur)) if isinstance(valeur, float) and valeur.is_integer() else str(valeur).strip()
 
 
 def entete_des_annees(cellules):
     """Colonne → année, d'après la première ligne qui contient une suite d'années."""
     lignes = {}
     for ref, valeur in cellules.items():
-        texte = str(int(valeur)) if isinstance(valeur, float) and valeur.is_integer() else str(valeur).strip()
+        texte = en_texte(valeur)
         if re.fullmatch(r"(19|20)[0-9]{2}", texte):
             n, colonne = position(ref)
             lignes.setdefault(n, {})[colonne] = texte
@@ -104,11 +120,23 @@ def entete_des_annees(cellules):
 
 
 def valeurs_de_la_ligne(cellules, n, annees):
-    """Valeurs numériques d'une ligne, par colonne ; vide pour une ligne d'en-tête qui répète les années."""
-    valeurs = {colonne: cellules[f"{colonne}{n}"] for colonne in annees if isinstance(cellules.get(f"{colonne}{n}"), float)}
-    if valeurs and all(v.is_integer() and str(int(v)) == annees[colonne] for colonne, v in valeurs.items()):
+    """Valeurs numériques d'une ligne, par colonne ; aucune pour une ligne d'en-tête qui répète les années.
+
+    Une cellule vide ou marquée non disponible (« nd », « N.D. ») n'est pas un chiffre ; tout autre texte
+    arrête l'import."""
+    contenu = {colonne: cellules[f"{colonne}{n}"] for colonne in annees if f"{colonne}{n}" in cellules}
+    if contenu and all(en_texte(v) == annees[colonne] for colonne, v in contenu.items()):
         return {}
-    return valeurs
+    for colonne, v in contenu.items():
+        if not isinstance(v, float) and en_texte(v).lower() not in NON_DISPONIBLE:
+            sys.exit(f"cellule {colonne}{n} : « {v} » n'est ni un nombre ni une mention de valeur non disponible")
+    return {colonne: v for colonne, v in contenu.items() if isinstance(v, float)}
+
+
+def non_disponibles(cellules, annees):
+    """Nombre de cellules marquées non disponibles dans les colonnes des années, pour le compte rendu de l'import."""
+    return sum(1 for ref, v in cellules.items()
+               if position(ref)[1] in annees and not isinstance(v, float) and en_texte(v).lower() in NON_DISPONIBLE - {""})
 
 
 def tableau_32xx(numero, cellules, annees):
@@ -159,15 +187,47 @@ def tableau_dette_ou_deficit(numero, cellules, annees):
             yield {**ligne, "valeur": valeur, "cellule": f"{colonne}{n}", "libelle": texte, "annee": annees[colonne]}
 
 
+def tableau_cofog(numero, cellules, annees):
+    """Tableaux 3.301 à 3.307 : une ligne par opération (3.307 : par sous-secteur) et par fonction COFOG,
+    codes en colonnes A et C."""
+    if libelle(cellules, "A", 2) != "Unité : Milliard d'euros":
+        sys.exit(f"tableau {numero} : unité inattendue (« {libelle(cellules, 'A', 2)} »)")
+    fonctions = {f["id"] for f in lire("tables/fonctions.csv")}
+    for n in sorted({position(ref)[0] for ref in cellules}):
+        code, fonction = libelle(cellules, "A", n), libelle(cellules, "C", n)
+        valeurs = valeurs_de_la_ligne(cellules, n, annees)
+        if not valeurs:
+            continue
+        if fonction != "_Z" and fonction not in fonctions:
+            sys.exit(f"tableau {numero}, ligne {n} : fonction sans correspondance (« {fonction} »)")
+        if numero == "3307":
+            # Part de chaque sous-secteur dans la dépense consolidée de l'ensemble des administrations publiques :
+            # sans les flux internes au sous-secteur, ni ceux avec les autres sous-secteurs.
+            if code not in SECTEURS:
+                sys.exit(f"tableau {numero}, ligne {n} : sous-secteur sans correspondance (« {code} »)")
+            ligne = {"perimetre_id": code, "concept_id": "SEC2010.TE",
+                     "consolidation": "consolide" if code == "S13" else "consolide_apu"}
+        else:
+            if code not in OPERATIONS_33XX:
+                sys.exit(f"tableau {numero}, ligne {n} : opération sans correspondance (« {code} »)")
+            ligne = {"perimetre_id": PERIMETRES_33XX[numero], "concept_id": OPERATIONS_33XX[code],
+                     "consolidation": "consolide"}
+        for colonne, valeur in valeurs.items():
+            yield {**ligne, "fonction_id": "" if fonction == "_Z" else fonction, "unite_id": "MD_EUR",
+                   "valeur": valeur, "cellule": f"{colonne}{n}", "libelle": f"{code}/{fonction}",
+                   "annee": annees[colonne], "ratio": False}
+
+
 def statut(annee, derniere):
     return {derniere: "provisoire", derniere - 1: "semi_definitif"}.get(annee, "definitif")
 
 
 def lignes_du_fichier(fichier):
+    """Les chiffres d'une copie archivée, et le nombre de cellules qui y sont marquées non disponibles."""
     numero = fichier["source_id"].removeprefix("insee.t")
     version = fichier["mis_a_jour_source"][:10]
     if not version:
-        sys.exit(f"{fichier['id']} : date de modification du classeur absente, version inconnue")
+        sys.exit(f"{fichier['id']} : date du classeur absente, version inconnue")
     chemin = BASE / fichier["chemin"]
     # La feuille de données est la première qui n'est pas une feuille de métadonnées (tableau 3.101).
     nom = next(f for f in feuilles_xlsx(chemin) if f.strip().lower() != "métadonnées")
@@ -178,24 +238,26 @@ def lignes_du_fichier(fichier):
         brutes = tableau_32xx(numero, cellules, annees)
     elif numero in ("3101", "3106"):
         brutes = tableau_dette_ou_deficit(numero, cellules, annees)
+    elif numero in PERIMETRES_33XX or numero == "3307":
+        brutes = tableau_cofog(numero, cellules, annees)
     else:
         sys.exit(f"tableau {numero} non pris en charge")
-    brutes = list(brutes)
+    brutes, lignes = list(brutes), []
     # Un zéro est exact : il prend la précision de sa ligne, celle de la valeur la plus précise de la ligne.
     precision = {}
     for brute in brutes:
         n = position(brute["cellule"])[0]
         precision[n] = max(precision.get(n, 0), nombre(brute["valeur"])[1])
     for brute in brutes:
-        texte, decimales = nombre(brute["valeur"])
-        if float(texte) == 0:
+        valeur, decimales = nombre(brute["valeur"])
+        if float(valeur) == 0:
             decimales = precision[position(brute["cellule"])[0]]
         ligne = {
             "source_id": fichier["source_id"], "fichier_id": fichier["id"],
             "emplacement": f"feuille={nom};cellule={brute['cellule']};ligne={brute['libelle']};annee={brute['annee']}",
             "zone": "FR", "perimetre_id": brute["perimetre_id"], "concept_id": brute["concept_id"],
-            "fonction_id": "", "traitements": "", "unite_id": brute["unite_id"], "periode": brute["annee"],
-            "valeur": texte, "decimales": decimales, "statut": statut(int(brute["annee"]), derniere),
+            "fonction_id": brute.get("fonction_id", ""), "traitements": "", "unite_id": brute["unite_id"],
+            "periode": brute["annee"], "valeur": valeur, "decimales": decimales, "statut": statut(int(brute["annee"]), derniere),
             "drapeau_source": "", "version": version, "consolidation": brute["consolidation"],
             "denominateur_id": "", "nature": "publie", "calcul_id": "", "saisi_le": aujourdhui(), "notes": "",
         }
@@ -203,7 +265,8 @@ def lignes_du_fichier(fichier):
             ligne["denominateur_id"] = identifiant({**ligne, "perimetre_id": "S1", "concept_id": "SEC2010.B1GQ",
                                                     "unite_id": "MD_EUR"})
         ligne["id"] = identifiant(ligne)
-        yield ligne
+        lignes.append(ligne)
+    return lignes, non_disponibles(cellules, annees)
 
 
 def resoudre_denominateurs(existants):
@@ -223,11 +286,14 @@ def main():
     fichier = next((f for f in lire("tables/fichiers.csv") if f["id"] == sys.argv[1]), None)
     if fichier is None:
         sys.exit(f"copie archivée inconnue : {sys.argv[1]}")
-    existants = {l["id"]: l for l in lire(CIBLE)}
-    ajoutes, inchanges = fusionner(existants, lignes_du_fichier(fichier), fichier["id"])
+    cible = table_des_chiffres(fichier["source_id"])
+    existants = {l["id"]: l for l in lire(cible)}
+    lignes, nd = lignes_du_fichier(fichier)
+    ajoutes, inchanges = fusionner(existants, lignes, fichier["id"])
     resoudre_denominateurs(existants)
-    ecrire(CIBLE, champs("chiffres-insee"), existants.values())
-    print(f"{fichier['id']} : {ajoutes} chiffres ajoutés, {inchanges} déjà enregistrés ; {CIBLE} en compte {len(existants)}")
+    ecrire(cible, champs_chiffres(), existants.values())
+    print(f"{fichier['id']} : {ajoutes} chiffres ajoutés, {inchanges} déjà enregistrés"
+          + (f", {nd} cellules marquées non disponibles" if nd else "") + f" ; {cible} en compte {len(existants)}")
 
 
 if __name__ == "__main__":

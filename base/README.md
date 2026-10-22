@@ -11,6 +11,8 @@ La base est faite de tables en texte (CSV) décrites par des schémas, au format
 | Insee, tableaux 3.201 à 3.214 des comptes nationaux annuels | dépenses et recettes par nature, au sens du SEC 2010, des administrations publiques et de chacun de leurs sous-secteurs : État, organismes divers d'administration centrale, collectivités locales (communes, départements, régions, syndicats), organismes divers d'administration locale, sécurité sociale (régimes d'assurance sociale, hôpitaux) | 1959-2025 pour l'ensemble des administrations publiques ; depuis 1978 pour l'administration centrale, l'État, ses organismes, les administrations locales et la sécurité sociale ; depuis 2013 pour les collectivités locales, les organismes locaux, les régimes d'assurance sociale et les hôpitaux ; depuis 2019 pour les communes, départements, régions et syndicats |
 | Insee, tableau 3.106 | déficit public au sens de Maastricht par sous-secteur, en milliards d'euros et en % du PIB | 1949-2025 (depuis 1959 pour l'État et ses organismes) |
 | Insee, tableau 3.101 | dette publique au sens de Maastricht par sous-secteur, en milliards d'euros et en % du PIB | 1978-2025 |
+| Insee, tableaux 3.301 à 3.306 | dépenses par fonction (classification COFOG : 10 divisions et 69 groupes), croisées avec leur nature (rémunérations, consommations intermédiaires, prestations, investissement…), pour l'ensemble des administrations publiques et chacun de leurs sous-secteurs | 1995-2024 (depuis 2009 pour l'État et ses organismes) |
+| Insee, tableau 3.307 | part de chaque sous-secteur dans la dépense consolidée de l'ensemble des administrations publiques, par fonction | 2009-2024 |
 | Eurostat, `gov_10a_main`, `gov_10a_exp`, `nama_10_gdp` | dépenses, recettes, solde et intérêts des administrations publiques ; dépenses par fonction (COFOG) ; PIB | 1995-2025 (dépenses par fonction jusqu'en 2024) ; PIB depuis 1975 |
 
 Les tableaux de l'Insee font foi pour la France : Eurostat reprend les comptes que l'Insee lui transmet, et le [rapport de cohérence](../controles/coherence.md) montre où les deux concordent et où ils s'écartent.
@@ -19,7 +21,7 @@ Les tableaux de l'Insee font foi pour la France : Eurostat reprend les comptes q
 
 | Table | Contenu |
 |---|---|
-| `tables/chiffres/*.csv` | les chiffres, un par ligne, avec leur fiche d'identité ; un fichier par famille de sources |
+| `tables/chiffres/<producteur>/<tableau>.csv` | les chiffres, un par ligne, avec leur fiche d'identité ; un fichier par source (un tableau de l'Insee, un jeu de données d'Eurostat), et `tiers.csv` pour les chiffres cités par un tiers |
 | `tables/sources.csv` | producteurs et publications : statistiques officielles, documents publics, articles, communications |
 | `tables/fichiers.csv` | copies archivées des fichiers sources : requête exacte, date, empreinte SHA-256 |
 | `tables/concepts.csv` | ce qui est mesuré, défini dans une norme (par exemple la dépense totale au sens du SEC 2010) |
@@ -45,7 +47,7 @@ Les tableaux de l'Insee font foi pour la France : Eurostat reprend les comptes q
 | `periode` | l'année, le trimestre ou le mois |
 | `statut` | prévision, estimation, provisoire, semi-définitif, définitif, ou non précisé par la source |
 | `version` | la date de la version de la source d'où vient le chiffre |
-| `consolidation` | avec ou sans les flux entre administrations, ou sans objet (un solde, le PIB) |
+| `consolidation` | avec ou sans les flux entre administrations : `consolide` (sans les flux internes au périmètre), `consolide_apu` (part du périmètre dans la dépense consolidée de l'ensemble des administrations publiques : sans ses flux internes, ni ceux avec les autres sous-secteurs), `non_consolide`, ou `sans_objet` (un solde, le PIB) |
 | `denominateur_id` | pour un ratio, l'identifiant du chiffre qui lui sert de dénominateur, quand la source l'indique |
 | `source_id`, `fichier_id`, `emplacement` | la source, la copie archivée et l'endroit exact |
 | `nature` | `publie` par la source elle-même, `cite` par un tiers, ou `calcule` ici |
@@ -60,7 +62,7 @@ se lit : selon le tableau 3.201 de l'Insee, dépense totale au sens du SEC 2010 
 
 Selon la source :
 
-- **Version.** Pour Eurostat, la date de mise à jour du jeu de données. Pour l'Insee, la date de dernière modification que le classeur porte en lui-même.
+- **Version.** Pour Eurostat, la date de mise à jour du jeu de données. Pour l'Insee, la date de dernière modification que le classeur porte en lui-même, à défaut sa date de création.
 - **Statut.** Eurostat le donne par un indicateur attaché à chaque valeur, conservé dans `drapeau_source`. L'Insee le donne par le calendrier de ses comptes annuels : la dernière année publiée est provisoire, l'avant-dernière semi-définitive, les précédentes définitives.
 - **Décimales.** Le nombre de décimales de la valeur enregistrée dans le fichier source, sans les zéros finaux, que le fichier ne conserve pas. Une valeur nulle est exacte : elle prend la précision de sa ligne.
 - **Unités.** Avant 1999, les montants en francs sont convertis en euros au taux fixe de 6,55957 francs pour un euro (unités `EUR`, `MIO_EUR`, `MD_EUR`) : c'est la convention de l'Insee, et celle d'Eurostat pour ses montants en monnaie nationale. Eurostat publie aussi des montants convertis en écus au taux de change de chaque année (unité `MIO_ECU_EUR`). Les deux séries se confondent à partir de 1999 ; avant, elles ne se comparent pas.
@@ -71,7 +73,7 @@ Selon la source :
 2. Un chiffre publié par une source renvoie à une copie archivée ; un chiffre cité renvoie à l'endroit exact chez celui qui le cite ; un chiffre calculé renvoie à sa recette dans `calculs.csv`.
 3. Une erreur d'enregistrement se corrige dans la ligne et s'inscrit dans `corrections.csv`, avec sa date et sa raison.
 4. Rien n'entre dans la base sans passer le contrôle `python3 outils/valider.py`. Il vérifie les schémas, les références, la concordance de chaque identifiant avec sa fiche et l'intégrité des copies archivées. Il relit aussi chaque chiffre publié dans sa copie archivée et refuse toute valeur différente.
-5. Un importateur ne laisse rien de côté en silence : une ligne ou un code de la source sans correspondance dans la base arrête l'import.
+5. Un importateur ne laisse rien de côté en silence : une ligne, un code ou un texte de la source sans correspondance dans la base arrête l'import. Seules les cellules vides ou marquées non disponibles (« nd », « N.D. ») ne deviennent pas des chiffres, et l'import dit combien il en a rencontré.
 
 Ces règles appliquent la [charte d'indépendance](../CHARTE.md).
 
@@ -100,12 +102,13 @@ python3 outils/controler_coherence.py   # écrit controles/coherence.md
 
 Le [rapport de cohérence](../controles/coherence.md) vérifie ce que disent les sources elles-mêmes :
 
-- les sommes comptables des tableaux de l'Insee ;
-- l'addition des soldes des sous-secteurs ;
+- les sommes comptables : un total contre la somme de ses composantes ;
+- les ventilations par fonction : l'ensemble contre la somme des fonctions, chaque fonction contre celle de ses groupes ;
+- l'additivité des sous-secteurs, pour les soldes et pour les parts de la dépense consolidée de l'ensemble ;
 - les ratios, recalculés à partir de leur dénominateur ;
-- les écarts entre sources pour une même grandeur.
+- les écarts entre sources pour une même grandeur, en distinguant ceux qui touchent un chiffre encore révisable (provisoire, semi-définitif, estimé ou prévu).
 
-Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication. Une incohérence signalée est un constat sur la source : elle est publiée telle quelle, jamais corrigée dans la base. Le contrôle sur GitHub refuse une modification de la base dont le rapport n'a pas été mis à jour.
+Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication. Quand une source ne diffuse pas toutes les parties d'une somme, le rapport le dit et vérifie si les parties diffusées suffisent à retrouver le total. Une incohérence signalée est un constat sur la source : elle est publiée telle quelle, jamais corrigée dans la base. Le contrôle sur GitHub refuse une modification de la base dont le rapport n'a pas été mis à jour.
 
 ## Interroger la base
 
@@ -125,6 +128,16 @@ SELECT source_id, unite_id, valeur, statut, version
 FROM v_dernieres_versions
 WHERE zone = 'FR' AND perimetre_id = 'S13' AND concept_id = 'SEC2010.TE'
   AND fonction_id IS NULL AND traitements IS NULL AND periode = '2025';
+```
+
+Ou la dépense publique de 2024 par grande fonction, selon le tableau 3.301 de l'Insee :
+
+```sql
+SELECT f.libelle, v.valeur
+FROM v_dernieres_versions v JOIN fonctions f ON f.id = v.fonction_id
+WHERE v.source_id = 'insee.t3301' AND v.concept_id = 'SEC2010.TE' AND v.periode = '2024'
+  AND f.parent_id IS NULL
+ORDER BY v.valeur DESC;
 ```
 
 Le fichier `empreintes.csv` donne une empreinte du contenu de chaque table : une base reconstruite par n'importe qui à partir de la même version du dépôt doit donner les mêmes empreintes.

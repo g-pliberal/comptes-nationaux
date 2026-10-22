@@ -5,10 +5,12 @@
 
 Le contrôle de la base (valider.py) garantit que chaque chiffre est celui de sa source. Celui-ci
 vérifie ce que disent les sources elles-mêmes :
-1. les sommes comptables des tableaux de l'Insee (un total égale la somme de ses composantes) ;
-2. les soldes des sous-secteurs, qui s'additionnent ;
-3. les ratios, qu'on doit retrouver à partir de leur dénominateur ;
-4. les écarts entre sources pour une même grandeur.
+1. les sommes comptables (un total égale la somme de ses composantes) ;
+2. les ventilations par fonction (l'ensemble égale la somme des fonctions, chaque fonction celle de ses
+   groupes) ;
+3. l'additivité des sous-secteurs, pour les soldes et pour les dépenses consolidées de l'ensemble ;
+4. les ratios, qu'on doit retrouver à partir de leur dénominateur ;
+5. les écarts entre sources pour une même grandeur.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu. Une incohérence trouvée ici n'est pas une
@@ -18,12 +20,14 @@ d'exécution, pour qu'un rapport à jour ne change pas.
 
 import collections
 import math
+import re
 
 from commun import RACINE, lire, ressources_chiffres
 
 RAPPORT = RACINE / "controles" / "coherence.md"
 
-# Identités des tableaux 3.201 à 3.214 de l'Insee : total = somme signée des composantes.
+# Identités comptables : total = somme signée des composantes. Les premières sont celles des tableaux 3.201
+# à 3.214 de l'Insee, la dernière celle de ses tableaux de dépenses par fonction, 3.301 à 3.306.
 IDENTITES = [
     ("INSEE_APU.DEP_FONCTIONNEMENT", ["SEC2010.P2", "SEC2010.D1PAY", "SEC2010.D29PAY", "SEC2010.D4_HORS_D41PAY", "SEC2010.D5PAY"]),
     ("INSEE_APU.DEP_PRESTATIONS_TRANSFERTS", ["SEC2010.D62PAY", "SEC2010.D632PAY", "SEC2010.D3PAY", "SEC2010.D73PAY",
@@ -42,9 +46,12 @@ IDENTITES = [
                     "INSEE_APU.REC_AUTRES_TRANSFERTS"]),
     ("INSEE_APU.REC_HORS_ELEMENTS_IMPUTES", ["SEC2010.TR", "-SEC2010.D612REC", "-SEC2010.P12", "-INSEE_APU.REC_CREDITS_IMPOT"]),
     ("SEC2010.B9", ["SEC2010.TR", "-SEC2010.TE"]),
+    ("SEC2010.TE", ["SEC2010.D1PAY", "SEC2010.P2", "SEC2010.D29_D5_D8PAY", "SEC2010.D3PAY", "SEC2010.D4PAY", "SEC2010.D62PAY",
+                    "SEC2010.D632PAY", "SEC2010.D7PAY", "SEC2010.D9_HORS_D995PAY", "INSEE_APU.DEP_ACTIFS_NON_FINANCIERS"]),
 ]
 
-# Soldes : celui d'un ensemble égale la somme de ceux de ses parties.
+# Ensembles et leurs parties. S'additionnent : les soldes, et les parts des sous-secteurs dans la dépense
+# consolidée de l'ensemble des administrations publiques (consolidation « consolide_apu »).
 DECOMPOSITIONS = [("S13", ["S1311", "S1313", "S1314"]), ("S1311", ["S13111", "S13112"]), ("S1313", ["S13131", "S13132"]),
                   ("S1314", ["S13141", "S13142"]), ("S13131", ["S131311", "S131312", "S131313", "S131314"])]
 
@@ -55,6 +62,10 @@ NOMS_RATIOS = {"PC_PIB": "% du PIB", "PC_DEPENSE": "% de la dépense totale"}
 REGLES = {"indique": "le PIB indiqué par la source, dans le même tableau",
           "depense": "la dépense totale du même périmètre, chez la même source",
           "libre": "non indiqué par la source : chaque série de PIB enregistrée pour l'année est essayée"}
+# Deux chiffres consolidés différemment ne mesurent pas la même chose ; « sans objet » se compare à tout.
+CONSOLIDATIONS_EXCLUSIVES = {"consolide", "consolide_apu", "non_consolide"}
+# Statuts d'un chiffre que sa source peut encore réviser.
+REVISABLES = {"provisoire", "semi_definitif", "estimation", "prevision"}
 
 
 def charger():
@@ -91,39 +102,82 @@ def montant(derniers, cle):
 
 # --- Les contrôles -------------------------------------------------------------------------------------
 
+def comparer(total, parties):
+    """Contrôle d'une somme : total et parties sont des lignes de la base ; une partie est (signe, ligne)."""
+    t, pt, _ = valeur(total)
+    somme = sum(s * valeur(l)[0] for s, l in parties)
+    return {"valeur": t, "somme": somme, "juste": not depasse(t - somme, pt + sum(valeur(l)[1] for _, l in parties))}
+
+
 def sommes(derniers):
-    controles, ecarts = 0, []
-    groupes = sorted({(k[0], k[1], k[2], k[7]) for k in derniers if k[0].startswith("insee.t32") and k[6] == "MD_EUR"})
-    for source, zone, perimetre, periode in groupes:
-        cherche = lambda concept: derniers.get((source, zone, perimetre, concept, "", "", "MD_EUR", periode))
+    """Identités comptables, pour chaque source, périmètre, fonction et année. Une identité ne s'applique qu'à
+    une source qui publie, pour ce périmètre, le total et chacune des composantes ; quand certaines manquent
+    pour une fonction ou une année, la somme est dite partielle."""
+    groupes, publies = collections.defaultdict(dict), collections.defaultdict(set)
+    for k, l in derniers.items():
+        if valeur(l)[2] == "euros":
+            groupes[k[:3] + k[4:]][k[3]] = l
+            publies[(k[0], k[2])].add(k[3])
+    resultats = []
+    for (source, zone, perimetre, fonction, traitements, unite, periode), concepts in sorted(groupes.items()):
         for total, composantes in IDENTITES:
-            parties = [(-1 if c.startswith("-") else 1, cherche(c.lstrip("-"))) for c in composantes]
-            if cherche(total) is None or any(l is None for _, l in parties):
+            noms = {c.lstrip("-") for c in composantes}
+            parties = [(-1 if c.startswith("-") else 1, concepts[c.lstrip("-")]) for c in composantes if c.lstrip("-") in concepts]
+            if total not in concepts or not parties or not noms <= publies[(source, perimetre)]:
                 continue
-            controles += 1
-            t, pt, _ = valeur(cherche(total))
-            somme = sum(s * valeur(l)[0] for s, l in parties)
-            if depasse(t - somme, pt + sum(valeur(l)[1] for _, l in parties)):
-                ecarts.append((source, perimetre, periode, total, t, somme))
-    return controles, ecarts
+            resultats.append({"source": source, "perimetre": perimetre, "fonction": fonction, "periode": periode,
+                              "total": total, "complet": len(parties) == len(composantes),
+                              **comparer(concepts[total], parties)})
+    return resultats
 
 
-def soldes(derniers):
-    # Les tableaux 3.201 à 3.214 publient un sous-secteur chacun : on les réunit par année.
+def ventilations(derniers):
+    """L'ensemble des fonctions égale la somme des divisions de la COFOG, chaque division la somme de ses groupes."""
+    enfants = collections.defaultdict(list)
+    for f in lire("tables/fonctions.csv"):
+        if re.fullmatch(r"GF[0-9]{2}", f["id"]) or re.fullmatch(r"GF[0-9]{4}", f["id"]):
+            enfants[f["parent_id"]].append(f["id"])
+    groupes = collections.defaultdict(dict)
+    for k, l in derniers.items():
+        if l["unite_id"] in FAMILLES:
+            groupes[k[:4] + k[5:]][k[4]] = l
+    resultats = []
+    for (source, zone, perimetre, concept, traitements, unite, periode), par_fonction in sorted(groupes.items()):
+        for parent, fils in sorted(enfants.items()):
+            presents = [f for f in fils if f in par_fonction]
+            if parent not in par_fonction or not presents:
+                continue  # pas de ventilation publiée
+            resultats.append({"source": source, "perimetre": perimetre, "concept": concept, "fonction": parent,
+                              "periode": periode, "complet": len(presents) == len(fils),
+                              **comparer(par_fonction[parent], [(1, par_fonction[f]) for f in presents])})
+    return resultats
+
+
+def additivite(derniers):
+    """Le solde d'un ensemble, ou sa part de la dépense consolidée de l'ensemble des administrations publiques,
+    égale la somme de ceux de ses parties."""
+    apu = {k[0] for k, l in derniers.items() if l["consolidation"] == "consolide_apu"}
     par_annee = collections.defaultdict(dict)
     for k, l in derniers.items():
-        if k[3] == "SEC2010.B9" and k[6] == "MD_EUR" and k[0].startswith("insee."):
+        if valeur(l)[2] != "euros":
+            continue
+        if k[3] == "SEC2010.B9":
+            # Les tableaux 3.201 à 3.214 de l'Insee publient un sous-secteur chacun : on les réunit.
             famille = "insee.t3201 à t3214" if k[0].startswith("insee.t32") else k[0]
-            par_annee[(famille, k[7])][k[2]] = valeur(l)[:2] + (k[0],)
+        elif k[0] in apu and (l["consolidation"] == "consolide_apu" or k[2] == "S13"):
+            famille = k[0]
+        else:
+            continue
+        par_annee[(famille, k[3], k[4], k[6], k[7])][k[2]] = valeur(l)[:2] + (k[0],)
     controles, ecarts = 0, []
-    for (famille, periode), valeurs in sorted(par_annee.items()):
+    for (famille, concept, fonction, unite, periode), valeurs in sorted(par_annee.items()):
         for ensemble, parties in DECOMPOSITIONS:
             if ensemble in valeurs and all(p in valeurs for p in parties):
                 controles += 1
                 ecart = valeurs[ensemble][0] - sum(valeurs[p][0] for p in parties)
                 if depasse(ecart, valeurs[ensemble][1] + sum(valeurs[p][1] for p in parties)):
                     tableaux = sorted({valeurs[p][2] for p in [ensemble] + parties})
-                    ecarts.append((famille, periode, ensemble, parties, tableaux, ecart))
+                    ecarts.append((famille, concept, fonction, periode, ensemble, parties, tableaux, ecart))
     return controles, ecarts
 
 
@@ -165,20 +219,20 @@ def concordances(derniers):
     for k, l in derniers.items():
         v, precision, unite = valeur(l)
         if unite != "écus puis euros":
-            groupes[k[1:6] + (unite,)][k[7]][k[0]] = (v, precision, l["consolidation"])
+            groupes[k[1:6] + (unite,)][k[7]][k[0]] = (v, precision, l["consolidation"], l["statut"])
     paires = collections.defaultdict(lambda: {"comparaisons": 0, "ecarts": []})
     for grandeur, annees in groupes.items():
         for annee, sources in annees.items():
             noms = sorted(sources)
             for i, a in enumerate(noms):
                 for b in noms[i + 1:]:
-                    (va, pa, ca), (vb, pb, cb) = sources[a], sources[b]
-                    if {ca, cb} == {"consolide", "non_consolide"}:
+                    (va, pa, ca, sa), (vb, pb, cb, sb) = sources[a], sources[b]
+                    if ca != cb and {ca, cb} <= CONSOLIDATIONS_EXCLUSIVES:
                         continue  # pas la même grandeur
                     p = paires[(a, b, grandeur)]
                     p["comparaisons"] += 1
                     if depasse(va - vb, pa + pb):
-                        p["ecarts"].append((annee, va - vb))
+                        p["ecarts"].append((annee, va - vb, sa in REVISABLES or sb in REVISABLES))
     return paires
 
 
@@ -203,6 +257,10 @@ def plage(annees):
     return f"{len(annees)} années entre {annees[0]} et {annees[-1]}"
 
 
+def plus_grand(liste, cle=lambda e: e):
+    return max(liste, key=lambda e: abs(cle(e)))
+
+
 def partie_sources(derniers):
     titres = {s["id"]: s["titre"] for s in lire("tables/sources.csv")}
     versions = collections.defaultdict(str)
@@ -216,42 +274,102 @@ def partie_sources(derniers):
     return lignes + [""]
 
 
+def partielles(resultats, quoi):
+    """Paragraphe sur les sommes dont des parties ne sont pas diffusées."""
+    partiels = [r for r in resultats if not r["complet"]]
+    if not partiels:
+        return []
+    ok = sum(r["juste"] for r in partiels)
+    texte = (f"{len(partiels)} {quoi} ont des parties que la source ne diffuse pas (cellule vide ou marquée non "
+             f"disponible). ")
+    if ok == len(partiels):
+        return [texte + "Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les "
+                "parties absentes y sont nulles ou négligeables.", ""]
+    lignes = [texte + f"Pour {ok} d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : "
+              f"les parties absentes y sont nulles ou négligeables. Pour les {len(partiels) - ok} autres, elles ne "
+              "suffisent pas : des parties absentes ne sont pas nulles.", "",
+              "| Source | Périmètre | Total | Fonction | Années | Plus grand reste (total − parties diffusées) |",
+              "|---|---|---|---|---|---|"]
+    regroupes = collections.defaultdict(list)
+    for r in partiels:
+        if not r["juste"]:
+            regroupes[(r["source"], r["perimetre"], r.get("total") or r["concept"], r["fonction"])].append(r)
+    for (source, perimetre, total, fonction), liste in sorted(regroupes.items()):
+        r = plus_grand(liste, lambda x: x["valeur"] - x["somme"])
+        lignes.append(f"| {source} | {perimetre} | {total} | {fonction or 'ensemble'} | "
+                      f"{plage([x['periode'] for x in liste])} | {ecart_lisible(r['valeur'] - r['somme'], 'euros')} "
+                      f"en {r['periode']} |")
+    return lignes + [""]
+
+
 def partie_sommes(derniers):
-    n, ecarts = sommes(derniers)
-    lignes = ["## 1. Sommes comptables des tableaux de l'Insee", "",
-              f"{n} sommes vérifiées (un total contre la somme de ses composantes) : {n - len(ecarts)} justes, "
+    resultats = sommes(derniers)
+    complets = [r for r in resultats if r["complet"]]
+    ecarts = [r for r in complets if not r["juste"]]
+    lignes = ["## 1. Sommes comptables", "",
+              "Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.", "",
+              f"{len(complets)} sommes vérifiées avec toutes leurs composantes : {len(complets) - len(ecarts)} justes, "
               f"{len(ecarts)} en écart.", ""]
     if ecarts:
-        lignes += ["| Source | Périmètre | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |",
-                   "|---|---|---|---|---|---|---|"]
-        lignes += [f"| {s} | {p} | {a} | {t} | {fr(v / 1e9, 4)} | {fr(somme / 1e9, 4)} | {ecart_lisible(v - somme, 'euros')} |"
-                   for s, p, a, t, v, somme in ecarts]
+        lignes += ["| Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |",
+                   "|---|---|---|---|---|---|---|---|"]
+        lignes += [f"| {r['source']} | {r['perimetre']} | {r['fonction'] or 'ensemble'} | {r['periode']} | {r['total']} | "
+                   f"{fr(r['valeur'] / 1e9, 4)} | {fr(r['somme'] / 1e9, 4)} | {ecart_lisible(r['valeur'] - r['somme'], 'euros')} |"
+                   for r in ecarts]
         lignes.append("")
-    return lignes
+    return lignes + partielles(resultats, "sommes")
 
 
-def partie_soldes(derniers):
-    n, ecarts = soldes(derniers)
-    lignes = ["## 2. Soldes des sous-secteurs", "",
-              f"{n} additions vérifiées (le solde d'un ensemble contre la somme des soldes de ses parties) : "
-              f"{n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
+def partie_ventilations(derniers):
+    resultats = ventilations(derniers)
+    complets = [r for r in resultats if r["complet"]]
+    ecarts = [r for r in complets if not r["juste"]]
+    lignes = ["## 2. Ventilations par fonction", "",
+              "Pour une même grandeur, l'ensemble des fonctions contre la somme des dix divisions de la COFOG, et "
+              "chaque division contre la somme de ses groupes.", "",
+              f"{len(complets)} ventilations vérifiées avec toutes leurs parties : {len(complets) - len(ecarts)} justes, "
+              f"{len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
-    for famille, annee, ensemble, parties, tableaux, ecart in ecarts:
-        regroupes[(famille, ensemble, tuple(parties))].append((annee, ecart, tableaux))
+    for r in ecarts:
+        regroupes[(r["source"], r["perimetre"], r["concept"], r["fonction"])].append((r["periode"], r["valeur"] - r["somme"]))
     if regroupes:
-        lignes += ["| Tableaux | Ensemble | Parties | Années en écart | Plus grand écart |", "|---|---|---|---|---|"]
-        for (famille, ensemble, parties), liste in sorted(regroupes.items()):
-            annee, ecart, _ = max(liste, key=lambda e: abs(e[1]))
-            tableaux = ", ".join(sorted({t for _, _, ts in liste for t in ts}))
-            lignes.append(f"| {tableaux} | {ensemble} | {' + '.join(parties)} | {plage([a for a, _, _ in liste])} | "
-                          f"{ecart_lisible(ecart, 'euros')} en {annee} |")
+        lignes += ["| Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |",
+                   "|---|---|---|---|---|---|"]
+        for (source, perimetre, concept, parent), liste in sorted(regroupes.items()):
+            annee, ecart = plus_grand(liste, lambda e: e[1])
+            lignes.append(f"| {source} | {perimetre} | {concept} | {parent or 'ensemble'} | "
+                          f"{plage([a for a, _ in liste])} | {ecart_lisible(ecart, 'euros')} en {annee} |")
+        lignes.append("")
+    return lignes + partielles(resultats, "ventilations")
+
+
+def partie_additivite(derniers):
+    n, ecarts = additivite(derniers)
+    lignes = ["## 3. Additivité des sous-secteurs", "",
+              "Le solde d'un ensemble, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques "
+              "(tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.", "",
+              f"{n} additions vérifiées : {n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
+    regroupes = collections.defaultdict(list)
+    for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart in ecarts:
+        regroupes[(famille, concept, ensemble, tuple(parties))].append((annee, ecart, tableaux, fonction))
+    if regroupes:
+        lignes += ["| Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |",
+                   "|---|---|---|---|---|---|---|"]
+        for (famille, concept, ensemble, parties), liste in sorted(regroupes.items()):
+            annee, ecart, _, fonction = plus_grand(liste, lambda e: e[1])
+            tableaux = ", ".join(sorted({t for _, _, ts, _ in liste for t in ts}))
+            fonctions = sorted({f or "ensemble" for _, _, _, f in liste})
+            lignes.append(f"| {tableaux} | {concept} | {ensemble} | {' + '.join(parties)} | "
+                          f"{', '.join(fonctions) if len(fonctions) <= 3 else f'{len(fonctions)} fonctions'} | "
+                          f"{plage([a for a, _, _, _ in liste])} | {ecart_lisible(ecart, 'euros')} en {annee}"
+                          f"{'' if fonction == '' else f' ({fonction})'} |")
         lignes.append("")
     return lignes
 
 
 def partie_ratios(derniers):
     resultats = ratios(derniers)
-    lignes = ["## 3. Ratios", "",
+    lignes = ["## 4. Ratios", "",
               "Chaque ratio est recalculé : le même chiffre en montant, divisé par son dénominateur. Il est retrouvé "
               "si l'écart ne dépasse pas ce que permettent les arrondis du ratio, du montant et du dénominateur.", "",
               "| Dénominateur | Ratios | Retrouvés | Non retrouvés |", "|---|---|---|---|"]
@@ -304,34 +422,68 @@ def partie_ratios(derniers):
 
 def partie_concordances(derniers):
     paires = concordances(derniers)
-    lignes = ["## 4. Écarts entre sources pour une même grandeur", "",
-              "Même concept, même périmètre, même fonction, même année, montants convertis dans la même unité. "
-              "Les montants d'Eurostat convertis en écus avant 1999 ne sont pas comparés : ce sont les mêmes données "
-              "que ses montants en euros, converties autrement.", "",
-              "| Source A | Source B | Comparaisons | Écarts | Plus grand écart (A − B) |", "|---|---|---|---|---|"]
+    lignes = ["## 5. Écarts entre sources pour une même grandeur", "",
+              "Même concept, même périmètre, même fonction, même consolidation, même année, montants convertis dans la "
+              "même unité. Les montants d'Eurostat convertis en écus avant 1999 ne sont pas comparés : ce sont les mêmes "
+              "données que ses montants en euros, converties autrement.", "",
+              "Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou prévu peut encore être "
+              "révisé : un écart qui en touche un peut venir d'une révision entre deux versions. Les écarts « hors "
+              "chiffres révisables » sont ceux où aucune des deux sources ne présente son chiffre ainsi.", "",
+              "| Source A | Source B | Comparaisons | Écarts | dont hors chiffres révisables | "
+              "Plus grand écart hors chiffres révisables (A − B) | Plus grand écart (A − B) |",
+              "|---|---|---|---|---|---|---|"]
     resume = collections.defaultdict(lambda: {"comparaisons": 0, "ecarts": collections.defaultdict(list)})
     for (a, b, grandeur), p in paires.items():
         resume[(a, b)]["comparaisons"] += p["comparaisons"]
         resume[(a, b)]["ecarts"][grandeur[5]] += p["ecarts"]
-    for (a, b), r in sorted(resume.items()):
-        n = sum(len(liste) for liste in r["ecarts"].values())
-        textes = []
-        for unite, liste in sorted(r["ecarts"].items()):
+
+    def textes(ecarts_par_unite, filtre):
+        resultat = []
+        for unite, liste in sorted(ecarts_par_unite.items()):
+            liste = [e for e in liste if filtre(e)]
             if liste:
-                annee, ecart = max(liste, key=lambda e: abs(e[1]))
-                textes.append(f"{ecart_lisible(ecart, unite)} en {annee}")
-        lignes.append(f"| {a} | {b} | {r['comparaisons']} | {n} | {' ; '.join(textes) or 'aucun'} |")
+                annee, ecart, _ = plus_grand(liste, lambda e: e[1])
+                resultat.append(f"{ecart_lisible(ecart, unite)} en {annee}")
+        return " ; ".join(resultat) or "aucun"
+
+    for (a, b), r in sorted(resume.items()):
+        tous = [e for liste in r["ecarts"].values() for e in liste]
+        fermes = [e for e in tous if not e[2]]
+        lignes.append(f"| {a} | {b} | {r['comparaisons']} | {len(tous)} | {len(fermes)} | "
+                      f"{textes(r['ecarts'], lambda e: not e[2])} | {textes(r['ecarts'], lambda e: True)} |")
     lignes += ["", "Détail des grandeurs en écart :", "",
-               "| Source A | Source B | Grandeur | Années en écart | Plus grand écart (A − B) |", "|---|---|---|---|---|"]
-    for (a, b, grandeur), p in sorted(paires.items()):
-        if p["ecarts"]:
-            zone, perimetre, concept, fonction, traitements, unite = grandeur
-            annee, ecart = max(p["ecarts"], key=lambda e: abs(e[1]))
-            libelle = " ".join(x for x in (zone, perimetre, concept, fonction, traitements) if x)
-            libelle += f", en {NOMS_RATIOS[unite]}" if unite in NOMS_RATIOS else ""
-            lignes.append(f"| {a} | {b} | {libelle} | {plage([e[0] for e in p['ecarts']])} | "
-                          f"{ecart_lisible(ecart, unite)} en {annee} |")
+               "| Source A | Source B | Grandeur | Fonctions en écart | Années en écart | dont hors chiffres révisables | "
+               "Plus grand écart (A − B) |", "|---|---|---|---|---|---|---|"]
+    details = collections.defaultdict(list)
+    for (a, b, grandeur), p in paires.items():
+        zone, perimetre, concept, fonction, traitements, unite = grandeur
+        details[(a, b, zone, perimetre, concept, traitements, unite)] += [(fonction,) + e for e in p["ecarts"]]
+    for (a, b, zone, perimetre, concept, traitements, unite), liste in sorted(details.items()):
+        if not liste:
+            continue
+        fonction, annee, ecart, _ = plus_grand(liste, lambda e: e[2])
+        fonctions = {e[0] for e in liste}
+        fermes = [e[1] for e in liste if not e[3]]
+        libelle = " ".join(x for x in (zone, perimetre, concept, traitements) if x)
+        libelle += f", en {NOMS_RATIOS[unite]}" if unite in NOMS_RATIOS else ""
+        ou = f" ({fonction or 'ensemble'})" if len(fonctions) > 1 else ""
+        lignes.append(f"| {a} | {b} | {libelle} | {liste_de_fonctions(fonctions)} | {plage([e[1] for e in liste])} | "
+                      f"{plage(fermes) if fermes else 'aucune'} | {ecart_lisible(ecart, unite)} en {annee}{ou} |")
     return lignes + [""]
+
+
+def liste_de_fonctions(fonctions):
+    """« ensemble », « GF01 et GF04 », ou « ensemble, 10 divisions et 42 groupes »."""
+    if fonctions == {""}:
+        return "ensemble"
+    nommees = sorted(fonctions - {""})
+    if len(nommees) <= 3:
+        noms = (["ensemble"] if "" in fonctions else []) + nommees
+        return noms[0] if len(noms) == 1 else ", ".join(noms[:-1]) + " et " + noms[-1]
+    divisions = sum(1 for f in nommees if len(f) == 4)
+    parties = (["ensemble"] if "" in fonctions else []) + [f"{n} {nom}{'s' if n > 1 else ''}" for n, nom in
+                                                            ((divisions, "division"), (len(nommees) - divisions, "groupe")) if n]
+    return parties[0] if len(parties) == 1 else ", ".join(parties[:-1]) + " et " + parties[-1]
 
 
 def ecrire_rapport(derniers):
@@ -340,8 +492,8 @@ def ecrire_rapport(derniers):
               "Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la "
               "demi-unité de la dernière décimale de chaque valeur en jeu. Une incohérence signalée ici est un constat "
               "sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.", ""]
-    lignes += partie_sources(derniers) + partie_sommes(derniers) + partie_soldes(derniers)
-    lignes += partie_ratios(derniers) + partie_concordances(derniers)
+    lignes += partie_sources(derniers) + partie_sommes(derniers) + partie_ventilations(derniers)
+    lignes += partie_additivite(derniers) + partie_ratios(derniers) + partie_concordances(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

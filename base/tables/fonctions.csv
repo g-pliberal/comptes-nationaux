@@ -1,16 +1,80 @@
 id,libelle,norme_id,parent_id
 GF01,Services généraux des administrations publiques,COFOG1999,
+GF0101,"Fonctionnement des organes exécutifs et législatifs, affaires financières et fiscales, affaires étrangères",COFOG1999,GF01
+GF0102,Aide économique extérieure,COFOG1999,GF01
+GF0103,Services généraux,COFOG1999,GF01
+GF0104,Recherche fondamentale,COFOG1999,GF01
+GF0105,R & D concernant les services généraux des administrations publiques,COFOG1999,GF01
+GF0106,Services généraux des administrations publiques n.c.a.,COFOG1999,GF01
 GF0107,Opérations concernant la dette publique,COFOG1999,GF01
+GF0108,Transferts de caractère général entre administrations publiques,COFOG1999,GF01
 GF02,Défense,COFOG1999,
+GF0201,Défense militaire,COFOG1999,GF02
+GF0202,Défense civile,COFOG1999,GF02
+GF0203,Aide militaire à des pays étrangers,COFOG1999,GF02
+GF0204,R-D concernant la défense,COFOG1999,GF02
+GF0205,Défense n.c.a.,COFOG1999,GF02
 GF03,Ordre et sécurité publics,COFOG1999,
+GF0301,Services de police,COFOG1999,GF03
+GF0302,Services de protection civile,COFOG1999,GF03
+GF0303,Tribunaux,COFOG1999,GF03
+GF0304,Administration pénitentiaire,COFOG1999,GF03
+GF0305,R-D concernant l'ordre et la sécurité publics,COFOG1999,GF03
+GF0306,Ordre et sécurité publics n.c.a.,COFOG1999,GF03
 GF04,Affaires économiques,COFOG1999,
+GF0401,"Tutelle de l'économie générale, des échanges et de l'emploi",COFOG1999,GF04
+GF0402,"Agriculture, sylviculture, pêche et chasse",COFOG1999,GF04
+GF0403,Combustibles et énergie,COFOG1999,GF04
+GF0404,"Industries extractives et manufacturières, construction",COFOG1999,GF04
 GF0405,Transports,COFOG1999,GF04
+GF0406,Communications,COFOG1999,GF04
+GF0407,Autres branches d'activité,COFOG1999,GF04
+GF0408,R-D concernant les affaires économiques,COFOG1999,GF04
+GF0409,Affaires économiques n.c.a.,COFOG1999,GF04
 GF05,Protection de l'environnement,COFOG1999,
+GF0501,Gestion des déchets,COFOG1999,GF05
+GF0502,Gestion des eaux usées,COFOG1999,GF05
+GF0503,Lutte contre la pollution,COFOG1999,GF05
+GF0504,Préservation de la diversité biologique et protection de la nature,COFOG1999,GF05
+GF0505,R-D dans le domaine de la protection de l'environnement,COFOG1999,GF05
+GF0506,Protection de l'environnement n.c.a.,COFOG1999,GF05
 GF06,Logements et équipements collectifs,COFOG1999,
+GF0601,Logements,COFOG1999,GF06
+GF0602,Équipements collectifs,COFOG1999,GF06
+GF0603,Alimentation en eau,COFOG1999,GF06
+GF0604,Éclairage public,COFOG1999,GF06
+GF0605,R-D dans le domaine du logement et des équipements collectifs,COFOG1999,GF06
+GF0606,Logement et équipements collectifs n.c.a.,COFOG1999,GF06
 GF07,Santé,COFOG1999,
+GF0701,"Produits, appareils et matériels médicaux",COFOG1999,GF07
+GF0702,Services ambulatoires,COFOG1999,GF07
+GF0703,Services hospitaliers,COFOG1999,GF07
+GF0704,Services de santé publique,COFOG1999,GF07
+GF0705,R-D dans le domaine de la santé,COFOG1999,GF07
+GF0706,Santé n.c.a.,COFOG1999,GF07
 GF08,"Loisirs, culture et culte",COFOG1999,
+GF0801,Services récréatifs et sportifs,COFOG1999,GF08
+GF0802,Services culturels,COFOG1999,GF08
+GF0803,"Services de radiodiffusion, de télévision et d'édition",COFOG1999,GF08
+GF0804,Culte et autres services communautaires,COFOG1999,GF08
+GF0805,"R-D dans le domaine des loisirs, de la culture et du culte",COFOG1999,GF08
+GF0806,"Loisirs, culture et culte n.c.a.",COFOG1999,GF08
 GF09,Enseignement,COFOG1999,
+GF0901,Enseignement préélémentaire et primaire,COFOG1999,GF09
+GF0902,Enseignement secondaire,COFOG1999,GF09
+GF0903,Enseignement postsecondaire non supérieur,COFOG1999,GF09
+GF0904,Enseignement supérieur,COFOG1999,GF09
+GF0905,Enseignement non défini par niveau,COFOG1999,GF09
+GF0906,Services annexes à l'enseignement,COFOG1999,GF09
+GF0907,R-D dans le domaine de l'enseignement,COFOG1999,GF09
+GF0908,Enseignement n.c.a.,COFOG1999,GF09
 GF10,Protection sociale,COFOG1999,
 GF1001,Maladie et invalidité,COFOG1999,GF10
 GF1002,Vieillesse,COFOG1999,GF10
 GF1003,Survivants,COFOG1999,GF10
+GF1004,Famille et enfants,COFOG1999,GF10
+GF1005,Chômage,COFOG1999,GF10
+GF1006,Logement,COFOG1999,GF10
+GF1007,Exclusion sociale n.c.a.,COFOG1999,GF10
+GF1008,R-D dans le domaine de la protection sociale,COFOG1999,GF10
+GF1009,Protection sociale n.c.a.,COFOG1999,GF10

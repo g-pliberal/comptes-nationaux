@@ -3,15 +3,15 @@
 
     python3 outils/importer_eurostat.py <fichier_id>
 
-Chaque valeur devient une ligne de tables/chiffres/eurostat.csv, avec sa fiche d'identité.
+Chaque valeur devient une ligne de la table de sa source (tables/chiffres/eurostat/<jeu>.csv),
+avec sa fiche d'identité.
 Voir commun.fusionner pour le traitement des valeurs déjà enregistrées.
 """
 
 import sys
 
-from commun import BASE, aujourdhui, champs, ecrire, fusionner, identifiant, lire, lire_jsonstat
-
-CIBLE = "tables/chiffres/eurostat.csv"
+from commun import (BASE, aujourdhui, champs_chiffres, ecrire, fusionner, identifiant, lire, lire_jsonstat,
+                    table_des_chiffres)
 
 # Correspondance entre les codes d'Eurostat et ceux de la base.
 CONCEPTS = {"TE": "SEC2010.TE", "TR": "SEC2010.TR", "B9": "SEC2010.B9", "D41PAY": "SEC2010.D41PAY",
@@ -62,10 +62,11 @@ def main():
     fichier = next((f for f in lire("tables/fichiers.csv") if f["id"] == sys.argv[1]), None)
     if fichier is None:
         sys.exit(f"copie archivée inconnue : {sys.argv[1]}")
-    existants = {l["id"]: l for l in lire(CIBLE)}
+    cible = table_des_chiffres(fichier["source_id"])
+    existants = {l["id"]: l for l in lire(cible)}
     ajoutes, inchanges = fusionner(existants, lignes_du_fichier(fichier), fichier["id"])
-    ecrire(CIBLE, champs("chiffres-eurostat"), existants.values())
-    print(f"{fichier['id']} : {ajoutes} chiffres ajoutés, {inchanges} déjà enregistrés ; {CIBLE} en compte {len(existants)}")
+    ecrire(cible, champs_chiffres(), existants.values())
+    print(f"{fichier['id']} : {ajoutes} chiffres ajoutés, {inchanges} déjà enregistrés ; {cible} en compte {len(existants)}")
 
 
 if __name__ == "__main__":

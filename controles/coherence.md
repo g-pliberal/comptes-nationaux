@@ -29,32 +29,54 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3212 | Tableau 3.212 : Dépenses et recettes des administrations de sécurité sociale (S1314) | 2026-08-10 | 2352 |
 | insee.t3213 | Tableau 3.213 : Dépenses et recettes des régimes d'assurance sociale (S13141) | 2026-08-10 | 627 |
 | insee.t3214 | Tableau 3.214 : Dépenses et recettes des organismes dépendant des assurances sociales - hôpitaux (S13142) | 2026-08-10 | 625 |
+| insee.t3301 | Tableau 3.301 : Dépenses des administrations publiques (S13) ventilées par fonction | 2025-11-28 | 21256 |
+| insee.t3302 | Tableau 3.302 : Dépenses de l'administration publique centrale (S1311) ventilées par fonction | 2025-11-28 | 19998 |
+| insee.t3303 | Tableau 3.303 : Dépenses de l'État (S13111) ventilées par fonction | 2025-11-28 | 9956 |
+| insee.t3304 | Tableau 3.304 : Dépenses des organismes divers d'administration centrale (S13112) ventilées par fonction | 2025-11-28 | 8494 |
+| insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
+| insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
+| insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
 
-## 1. Sommes comptables des tableaux de l'Insee
+## 1. Sommes comptables
 
-4598 sommes vérifiées (un total contre la somme de ses composantes) : 4590 justes, 8 en écart.
+Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.
 
-| Source | Périmètre | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
+5882 sommes vérifiées avec toutes leurs composantes : 5874 justes, 8 en écart.
+
+| Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
+|---|---|---|---|---|---|---|---|
+| insee.t3207 | S131311 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 36,3688 | 36,2870 | +81,8 M€ |
+| insee.t3207 | S131311 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 31,1743 | 31,0840 | +90,3 M€ |
+| insee.t3207 | S131311 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 32,5278 | 32,4602 | +67,6 M€ |
+| insee.t3207 | S131311 | ensemble | 2024 | SEC2010.B9 | −2,8229 | −2,8219 | −1,0 M€ |
+| insee.t3208 | S131312 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,8290 | 6,8270 | +2,0 M€ |
+| insee.t3208 | S131312 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,9480 | 6,9460 | +2,0 M€ |
+| insee.t3208 | S131312 | ensemble | 2024 | SEC2010.B9 | −5,6560 | −5,8130 | +157,0 M€ |
+| insee.t3210 | S131314 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 | 5,0550 | +16,0 M€ |
+
+11046 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
+
+## 2. Ventilations par fonction
+
+Pour une même grandeur, l'ensemble des fonctions contre la somme des dix divisions de la COFOG, et chaque division contre la somme de ses groupes.
+
+8870 ventilations vérifiées avec toutes leurs parties : 8870 justes, 0 en écart.
+
+6954 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
+
+## 3. Additivité des sous-secteurs
+
+Le solde d'un ensemble, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.
+
+1520 additions vérifiées : 1499 justes, 21 en écart.
+
+| Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
-| insee.t3207 | S131311 | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 36,3688 | 36,2870 | +81,8 M€ |
-| insee.t3207 | S131311 | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 31,1743 | 31,0840 | +90,3 M€ |
-| insee.t3207 | S131311 | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 32,5278 | 32,4602 | +67,6 M€ |
-| insee.t3207 | S131311 | 2024 | SEC2010.B9 | −2,8229 | −2,8219 | −1,0 M€ |
-| insee.t3208 | S131312 | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,8290 | 6,8270 | +2,0 M€ |
-| insee.t3208 | S131312 | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,9480 | 6,9460 | +2,0 M€ |
-| insee.t3208 | S131312 | 2024 | SEC2010.B9 | −5,6560 | −5,8130 | +157,0 M€ |
-| insee.t3210 | S131314 | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 | 5,0550 | +16,0 M€ |
+| eurostat.gov_10a_main | SEC2010.B9 | S13 | S1311 + S1313 + S1314 | ensemble | 2011 | −0,4 M€ en 2011 |
+| insee.t3106 | SEC2010.B9 | S1311 | S13111 + S13112 | ensemble | 19 années entre 1959 et 1977 | +6 502,0 M€ en 1974 |
+| insee.t3212, insee.t3213, insee.t3214 | SEC2010.B9 | S1314 | S13141 + S13142 | ensemble | 2019 | +8,0 M€ en 2019 |
 
-## 2. Soldes des sous-secteurs
-
-273 additions vérifiées (le solde d'un ensemble contre la somme des soldes de ses parties) : 253 justes, 20 en écart.
-
-| Tableaux | Ensemble | Parties | Années en écart | Plus grand écart |
-|---|---|---|---|---|
-| insee.t3106 | S1311 | S13111 + S13112 | 19 années entre 1959 et 1977 | +6 502,0 M€ en 1974 |
-| insee.t3212, insee.t3213, insee.t3214 | S1314 | S13141 + S13142 | 2019 | +8,0 M€ en 2019 |
-
-## 3. Ratios
+## 4. Ratios
 
 Chaque ratio est recalculé : le même chiffre en montant, divisé par son dénominateur. Il est retrouvé si l'écart ne dépasse pas ce que permettent les arrondis du ratio, du montant et du dénominateur.
 
@@ -89,41 +111,115 @@ Ratios non retrouvés :
   Avec le PIB de eurostat.nama_10_gdp, 2 sont retrouvés.
   Avec le PIB de insee.t3106, 2 sont retrouvés.
 
-## 4. Écarts entre sources pour une même grandeur
+## 5. Écarts entre sources pour une même grandeur
 
-Même concept, même périmètre, même fonction, même année, montants convertis dans la même unité. Les montants d'Eurostat convertis en écus avant 1999 ne sont pas comparés : ce sont les mêmes données que ses montants en euros, converties autrement.
+Même concept, même périmètre, même fonction, même consolidation, même année, montants convertis dans la même unité. Les montants d'Eurostat convertis en écus avant 1999 ne sont pas comparés : ce sont les mêmes données que ses montants en euros, converties autrement.
 
-| Source A | Source B | Comparaisons | Écarts | Plus grand écart (A − B) |
-|---|---|---|---|---|
-| eurostat.gov_10a_exp | eurostat.gov_10a_main | 60 | 19 | +0,3 point de PIB en 2024 ; −914,4 M€ en 2024 |
-| eurostat.gov_10a_exp | insee.t3201 | 30 | 20 | −878,3 M€ en 2023 |
-| eurostat.gov_10a_main | insee.t3106 | 248 | 1 | +0,9 M€ en 2011 |
-| eurostat.gov_10a_main | insee.t3201 | 124 | 5 | +119,0 M€ en 2024 |
-| eurostat.gov_10a_main | insee.t3202 | 124 | 0 | aucun |
-| eurostat.gov_10a_main | insee.t3205 | 124 | 0 | aucun |
-| eurostat.gov_10a_main | insee.t3212 | 124 | 6 | +39,0 M€ en 2019 |
-| eurostat.nama_10_gdp | insee.t3101 | 48 | 42 | −9 571,2 M€ en 1990 |
-| eurostat.nama_10_gdp | insee.t3106 | 51 | 0 | aucun |
-| insee.t3101 | insee.t3106 | 48 | 42 | +9 571,2 M€ en 1990 |
-| insee.t3106 | insee.t3201 | 67 | 0 | aucun |
-| insee.t3106 | insee.t3202 | 48 | 0 | aucun |
-| insee.t3106 | insee.t3203 | 48 | 0 | aucun |
-| insee.t3106 | insee.t3204 | 48 | 0 | aucun |
-| insee.t3106 | insee.t3205 | 48 | 0 | aucun |
-| insee.t3106 | insee.t3212 | 48 | 0 | aucun |
+Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou prévu peut encore être révisé : un écart qui en touche un peut venir d'une révision entre deux versions. Les écarts « hors chiffres révisables » sont ceux où aucune des deux sources ne présente son chiffre ainsi.
+
+| Source A | Source B | Comparaisons | Écarts | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (A − B) | Plus grand écart (A − B) |
+|---|---|---|---|---|---|---|
+| eurostat.gov_10a_exp | eurostat.gov_10a_main | 60 | 19 | 16 | +3,2 M€ en 2019 | +0,3 point de PIB en 2024 ; −914,4 M€ en 2024 |
+| eurostat.gov_10a_exp | insee.t3201 | 30 | 20 | 18 | −42,4 M€ en 2021 | −878,3 M€ en 2023 |
+| eurostat.gov_10a_exp | insee.t3301 | 330 | 5 | 5 | +0,9 M€ en 2020 | +0,9 M€ en 2020 |
+| eurostat.gov_10a_exp | insee.t3307 | 176 | 100 | 100 | −20 300,8 M€ en 2009 | −20 300,8 M€ en 2009 |
+| eurostat.gov_10a_main | insee.t3106 | 248 | 1 | 1 | +0,9 M€ en 2011 | +0,9 M€ en 2011 |
+| eurostat.gov_10a_main | insee.t3201 | 124 | 5 | 3 | −43,0 M€ en 2021 | +119,0 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3202 | 124 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | insee.t3205 | 124 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | insee.t3212 | 124 | 6 | 6 | +39,0 M€ en 2019 | +39,0 M€ en 2019 |
+| eurostat.gov_10a_main | insee.t3301 | 30 | 15 | 13 | −3,3 M€ en 2019 | +914,2 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3302 | 30 | 6 | 4 | −0,6 M€ en 2015 | +954,2 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3305 | 30 | 4 | 2 | −0,6 M€ en 2002 | +738,0 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3306 | 30 | 3 | 1 | +0,7 M€ en 2022 | −1 139,0 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3307 | 16 | 16 | 14 | −20 301,7 M€ en 2009 | −20 301,7 M€ en 2009 |
+| eurostat.nama_10_gdp | insee.t3101 | 48 | 42 | 42 | −9 571,2 M€ en 1990 | −9 571,2 M€ en 1990 |
+| eurostat.nama_10_gdp | insee.t3106 | 51 | 0 | 0 | aucun | aucun |
+| insee.t3101 | insee.t3106 | 48 | 42 | 42 | +9 571,2 M€ en 1990 | +9 571,2 M€ en 1990 |
+| insee.t3106 | insee.t3201 | 67 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t3202 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t3203 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t3204 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t3205 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t3212 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3201 | insee.t3301 | 240 | 35 | 19 | +43,1 M€ en 2021 | −2 012,0 M€ en 2024 |
+| insee.t3201 | insee.t3307 | 16 | 16 | 14 | −20 301,8 M€ en 2009 | −20 301,8 M€ en 2009 |
+| insee.t3202 | insee.t3302 | 240 | 20 | 5 | −0,6 M€ en 2016 | +1 029,5 M€ en 2024 |
+| insee.t3203 | insee.t3303 | 128 | 21 | 6 | −2,0 M€ en 2021 | +698,0 M€ en 2023 |
+| insee.t3204 | insee.t3304 | 128 | 17 | 2 | −2,4 M€ en 2020 | +3 073,7 M€ en 2024 |
+| insee.t3205 | insee.t3305 | 240 | 18 | 2 | −0,6 M€ en 2002 | +738,0 M€ en 2024 |
+| insee.t3212 | insee.t3306 | 240 | 19 | 5 | −39,4 M€ en 2019 | +1 304,3 M€ en 2024 |
+| insee.t3301 | insee.t3307 | 1248 | 408 | 408 | −20 301,0 M€ en 2009 | −20 301,0 M€ en 2009 |
 
 Détail des grandeurs en écart :
 
-| Source A | Source B | Grandeur | Années en écart | Plus grand écart (A − B) |
-|---|---|---|---|---|
-| eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE, en % du PIB | 2024 | +0,3 point de PIB en 2024 |
-| eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE | 18 années entre 1995 et 2024 | −914,4 M€ en 2024 |
-| eurostat.gov_10a_exp | insee.t3201 | FR S13 SEC2010.TE | 20 années entre 1995 et 2024 | −878,3 M€ en 2023 |
-| eurostat.gov_10a_main | insee.t3106 | FR S1314 SEC2010.B9 | 2011 | +0,9 M€ en 2011 |
-| eurostat.gov_10a_main | insee.t3201 | FR S13 SEC2010.TE | 2013, 2021 et 2024 | +119,0 M€ en 2024 |
-| eurostat.gov_10a_main | insee.t3201 | FR S13 SEC2010.TR | 2021 et 2024 | +119,0 M€ en 2024 |
-| eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.B9 | 2011 | +0,4 M€ en 2011 |
-| eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.TE | 2019 et 2020 | +39,0 M€ en 2019 |
-| eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.TR | 2011, 2019 et 2020 | +39,0 M€ en 2019 |
-| eurostat.nama_10_gdp | insee.t3101 | FR S1 SEC2010.B1GQ | 42 années entre 1978 et 2019 | −9 571,2 M€ en 1990 |
-| insee.t3101 | insee.t3106 | FR S1 SEC2010.B1GQ | 42 années entre 1978 et 2019 | +9 571,2 M€ en 1990 |
+| Source A | Source B | Grandeur | Fonctions en écart | Années en écart | dont hors chiffres révisables | Plus grand écart (A − B) |
+|---|---|---|---|---|---|---|
+| eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE, en % du PIB | ensemble | 2024 | aucune | +0,3 point de PIB en 2024 |
+| eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE | ensemble | 18 années entre 1995 et 2024 | 16 années entre 1995 et 2022 | −914,4 M€ en 2024 |
+| eurostat.gov_10a_exp | insee.t3201 | FR S13 SEC2010.TE | ensemble | 20 années entre 1995 et 2024 | 18 années entre 1995 et 2022 | −878,3 M€ en 2023 |
+| eurostat.gov_10a_exp | insee.t3301 | FR S13 SEC2010.TE | ensemble, GF01, GF04 et GF05 | 2012, 2018, 2020 et 2021 | 2012, 2018, 2020 et 2021 | +0,9 M€ en 2020 (GF01) |
+| eurostat.gov_10a_exp | insee.t3307 | FR S13 SEC2010.TE | ensemble et 9 divisions | 10 années entre 2009 et 2018 | 10 années entre 2009 et 2018 | −20 300,8 M€ en 2009 (ensemble) |
+| eurostat.gov_10a_main | insee.t3106 | FR S1314 SEC2010.B9 | ensemble | 2011 | 2011 | +0,9 M€ en 2011 |
+| eurostat.gov_10a_main | insee.t3201 | FR S13 SEC2010.TE | ensemble | 2013, 2021 et 2024 | 2013 et 2021 | +119,0 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3201 | FR S13 SEC2010.TR | ensemble | 2021 et 2024 | 2021 | +119,0 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.B9 | ensemble | 2011 | 2011 | +0,4 M€ en 2011 |
+| eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.TE | ensemble | 2019 et 2020 | 2019 et 2020 | +39,0 M€ en 2019 |
+| eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.TR | ensemble | 2011, 2019 et 2020 | 2011, 2019 et 2020 | +39,0 M€ en 2019 |
+| eurostat.gov_10a_main | insee.t3301 | FR S13 SEC2010.TE | ensemble | 15 années entre 1995 et 2024 | 13 années entre 1995 et 2022 | +914,2 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3302 | FR S1311 SEC2010.TE | ensemble | 6 années entre 1996 et 2024 | 1996, 2008, 2015 et 2016 | +954,2 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3305 | FR S1313 SEC2010.TE | ensemble | 2002, 2013, 2023 et 2024 | 2002 et 2013 | +738,0 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3306 | FR S1314 SEC2010.TE | ensemble | 2022, 2023 et 2024 | 2022 | −1 139,0 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3307 | FR S13 SEC2010.TE | ensemble | 16 années entre 2009 et 2024 | 14 années entre 2009 et 2022 | −20 301,7 M€ en 2009 |
+| eurostat.nama_10_gdp | insee.t3101 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | −9 571,2 M€ en 1990 |
+| insee.t3101 | insee.t3106 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | +9 571,2 M€ en 1990 |
+| insee.t3201 | insee.t3301 | FR S13 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | +487,9 M€ en 2024 |
+| insee.t3201 | insee.t3301 | FR S13 SEC2010.D1PAY | ensemble | 2011, 2023 et 2024 | 2011 | +889,0 M€ en 2024 |
+| insee.t3201 | insee.t3301 | FR S13 SEC2010.D3PAY | ensemble | 2001, 2023 et 2024 | 2001 | +552,0 M€ en 2023 |
+| insee.t3201 | insee.t3301 | FR S13 SEC2010.D62PAY | ensemble | 2023 et 2024 | aucune | +1 807,3 M€ en 2024 |
+| insee.t3201 | insee.t3301 | FR S13 SEC2010.D632PAY | ensemble | 2023 et 2024 | aucune | −1 949,3 M€ en 2024 |
+| insee.t3201 | insee.t3301 | FR S13 SEC2010.D9_HORS_D995PAY | ensemble | 6 années entre 2010 et 2024 | 2010, 2013, 2019 et 2021 | −2 012,0 M€ en 2024 |
+| insee.t3201 | insee.t3301 | FR S13 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +1 340,5 M€ en 2024 |
+| insee.t3201 | insee.t3301 | FR S13 SEC2010.TE | ensemble | 15 années entre 1995 et 2024 | 13 années entre 1995 et 2022 | +877,8 M€ en 2023 |
+| insee.t3201 | insee.t3307 | FR S13 SEC2010.TE | ensemble | 16 années entre 2009 et 2024 | 14 années entre 2009 et 2022 | −20 301,8 M€ en 2009 |
+| insee.t3202 | insee.t3302 | FR S1311 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | −207,2 M€ en 2023 |
+| insee.t3202 | insee.t3302 | FR S1311 SEC2010.D1PAY | ensemble | 2023 et 2024 | aucune | +1 029,5 M€ en 2024 |
+| insee.t3202 | insee.t3302 | FR S1311 SEC2010.D3PAY | ensemble | 2023 et 2024 | aucune | +549,0 M€ en 2023 |
+| insee.t3202 | insee.t3302 | FR S1311 SEC2010.D62PAY | ensemble | 2023 | aucune | +79,0 M€ en 2023 |
+| insee.t3202 | insee.t3302 | FR S1311 SEC2010.D632PAY | ensemble | 2023 et 2024 | aucune | −375,0 M€ en 2024 |
+| insee.t3202 | insee.t3302 | FR S1311 SEC2010.D9_HORS_D995PAY | ensemble | 2023 et 2024 | aucune | −585,0 M€ en 2024 |
+| insee.t3202 | insee.t3302 | FR S1311 SEC2010.P2 | ensemble | 2022, 2023 et 2024 | 2022 | +773,0 M€ en 2024 |
+| insee.t3202 | insee.t3302 | FR S1311 SEC2010.TE | ensemble | 6 années entre 1996 et 2024 | 1996, 2008, 2015 et 2016 | +954,2 M€ en 2024 |
+| insee.t3203 | insee.t3303 | FR S13111 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | −83,0 M€ en 2024 |
+| insee.t3203 | insee.t3303 | FR S13111 SEC2010.D1PAY | ensemble | 2024 | aucune | +4,4 M€ en 2024 |
+| insee.t3203 | insee.t3303 | FR S13111 SEC2010.D3PAY | ensemble | 2023 et 2024 | aucune | +386,0 M€ en 2023 |
+| insee.t3203 | insee.t3303 | FR S13111 SEC2010.D62PAY | ensemble | 2023 et 2024 | aucune | +176,0 M€ en 2024 |
+| insee.t3203 | insee.t3303 | FR S13111 SEC2010.D632PAY | ensemble | 2023 et 2024 | aucune | −374,0 M€ en 2024 |
+| insee.t3203 | insee.t3303 | FR S13111 SEC2010.D9_HORS_D995PAY | ensemble | 2018, 2023 et 2024 | 2018 | −441,0 M€ en 2024 |
+| insee.t3203 | insee.t3303 | FR S13111 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +26,1 M€ en 2024 |
+| insee.t3203 | insee.t3303 | FR S13111 SEC2010.TE | ensemble | 7 années entre 2014 et 2024 | 5 années entre 2014 et 2021 | +698,0 M€ en 2023 |
+| insee.t3204 | insee.t3304 | FR S13112 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | −286,0 M€ en 2023 |
+| insee.t3204 | insee.t3304 | FR S13112 SEC2010.D1PAY | ensemble | 2023 et 2024 | aucune | +1 025,1 M€ en 2024 |
+| insee.t3204 | insee.t3304 | FR S13112 SEC2010.D3PAY | ensemble | 2023 et 2024 | aucune | +163,0 M€ en 2023 |
+| insee.t3204 | insee.t3304 | FR S13112 SEC2010.D62PAY | ensemble | 2023 et 2024 | aucune | −175,0 M€ en 2024 |
+| insee.t3204 | insee.t3304 | FR S13112 SEC2010.D632PAY | ensemble | 2023 | aucune | +184,0 M€ en 2023 |
+| insee.t3204 | insee.t3304 | FR S13112 SEC2010.D9_HORS_D995PAY | ensemble | 2023 et 2024 | aucune | +170,0 M€ en 2024 |
+| insee.t3204 | insee.t3304 | FR S13112 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +746,9 M€ en 2024 |
+| insee.t3204 | insee.t3304 | FR S13112 SEC2010.TE | ensemble | 2018, 2020, 2023 et 2024 | 2018 et 2020 | +3 073,7 M€ en 2024 |
+| insee.t3205 | insee.t3305 | FR S1313 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | +592,5 M€ en 2024 |
+| insee.t3205 | insee.t3305 | FR S1313 SEC2010.D1PAY | ensemble | 2023 et 2024 | aucune | +24,0 M€ en 2023 |
+| insee.t3205 | insee.t3305 | FR S1313 SEC2010.D3PAY | ensemble | 2023 et 2024 | aucune | −10,0 M€ en 2024 |
+| insee.t3205 | insee.t3305 | FR S1313 SEC2010.D62PAY | ensemble | 2023 et 2024 | aucune | +502,0 M€ en 2024 |
+| insee.t3205 | insee.t3305 | FR S1313 SEC2010.D632PAY | ensemble | 2023 et 2024 | aucune | −525,0 M€ en 2024 |
+| insee.t3205 | insee.t3305 | FR S1313 SEC2010.D9_HORS_D995PAY | ensemble | 2023 et 2024 | aucune | −331,0 M€ en 2024 |
+| insee.t3205 | insee.t3305 | FR S1313 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | −316,2 M€ en 2023 |
+| insee.t3205 | insee.t3305 | FR S1313 SEC2010.TE | ensemble | 2002, 2013, 2023 et 2024 | 2002 et 2013 | +738,0 M€ en 2024 |
+| insee.t3212 | insee.t3306 | FR S1314 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | −162,8 M€ en 2024 |
+| insee.t3212 | insee.t3306 | FR S1314 SEC2010.D1PAY | ensemble | 2023 et 2024 | aucune | −156,3 M€ en 2024 |
+| insee.t3212 | insee.t3306 | FR S1314 SEC2010.D3PAY | ensemble | 2024 | aucune | +166,0 M€ en 2024 |
+| insee.t3212 | insee.t3306 | FR S1314 SEC2010.D62PAY | ensemble | 2023 et 2024 | aucune | +1 304,3 M€ en 2024 |
+| insee.t3212 | insee.t3306 | FR S1314 SEC2010.D632PAY | ensemble | 2023 et 2024 | aucune | −1 049,3 M€ en 2024 |
+| insee.t3212 | insee.t3306 | FR S1314 SEC2010.D9_HORS_D995PAY | ensemble | 2019, 2020 et 2024 | 2019 et 2020 | −1 181,0 M€ en 2024 |
+| insee.t3212 | insee.t3306 | FR S1314 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +464,6 M€ en 2024 |
+| insee.t3212 | insee.t3306 | FR S1314 SEC2010.TE | ensemble | 5 années entre 2019 et 2024 | 2019, 2020 et 2022 | −1 139,0 M€ en 2024 |
+| insee.t3301 | insee.t3307 | FR S13 SEC2010.TE | ensemble, 9 divisions et 41 groupes | 10 années entre 2009 et 2018 | 10 années entre 2009 et 2018 | −20 301,0 M€ en 2009 (ensemble) |

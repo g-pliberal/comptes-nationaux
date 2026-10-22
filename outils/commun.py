@@ -14,6 +14,7 @@ import zipfile
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 BASE = RACINE / "base"
 PAQUET = BASE / "datapackage.json"
+SCHEMA_CHIFFRES = "schemas/chiffres.json"
 
 # Certains serveurs (dont celui de l'OCDE) refusent l'agent par défaut de Python.
 AGENT = "comptes-nationaux (+https://github.com/g-pliberal/comptes-nationaux)"
@@ -53,8 +54,39 @@ def champs(nom):
 
 
 def ressources_chiffres():
-    """Les tables de chiffres : une par famille de sources, toutes au même schéma."""
-    return [r for r in paquet()["resources"] if r["schema_chemin"] == "schemas/chiffres.json"]
+    """Les tables de chiffres : une par source, toutes au même schéma."""
+    return [r for r in paquet()["resources"] if r["schema_chemin"] == SCHEMA_CHIFFRES]
+
+
+def champs_chiffres():
+    return [c["name"] for c in json.loads((BASE / SCHEMA_CHIFFRES).read_text(encoding="utf-8"))["fields"]]
+
+
+def table_des_chiffres(source_id):
+    """Chemin de la table des chiffres d'une source (« insee.t3201 » → tables/chiffres/insee/t3201.csv),
+    déclarée dans le paquet de données à sa première écriture."""
+    producteur, nom = source_id.split(".", 1)
+    chemin = f"tables/chiffres/{producteur}/{nom}.csv"
+    description = json.loads(PAQUET.read_text(encoding="utf-8"))
+    if not any(r["path"] == chemin for r in description["resources"]):
+        description["resources"].append({"name": f"chiffres-{producteur}-{nom}", "path": chemin, "schema": SCHEMA_CHIFFRES})
+        ecrire_paquet(description)
+    return chemin
+
+
+def ecrire_paquet(description):
+    """Réécrit datapackage.json, une table par ligne : les tables de référence, celles des chiffres par ordre
+    alphabétique, puis le journal des corrections."""
+    def rang(element):
+        i, r = element
+        if r["schema"] == SCHEMA_CHIFFRES:
+            return 1, r["name"]
+        return (2 if r["name"] == "corrections" else 0), f"{i:04d}"
+    ressources = [r for _, r in sorted(enumerate(description["resources"]), key=rang)]
+    entete = json.dumps({k: v for k, v in description.items() if k != "resources"}, ensure_ascii=False, indent=2)
+    texte = (entete[:-2] + ',\n  "resources": [\n' + ",\n".join("    " + json.dumps(r, ensure_ascii=False) for r in ressources)
+             + "\n  ]\n}\n")
+    PAQUET.write_text(texte, encoding="utf-8")
 
 
 def ressource(nom):
@@ -145,11 +177,15 @@ def feuilles_xlsx(chemin):
 
 
 def date_xlsx(chemin):
-    """Date de dernière modification inscrite par le producteur dans les propriétés du classeur."""
+    """Date de dernière modification inscrite par le producteur dans les propriétés du classeur, à défaut
+    date de création (les classeurs générés par programme n'ont souvent que celle-ci)."""
     with zipfile.ZipFile(chemin) as classeur:
         proprietes = ET.fromstring(classeur.read("docProps/core.xml"))
-    modifie = proprietes.find("dcterms:modified", _XLSX)
-    return modifie.text if modifie is not None else ""
+    for propriete in ("dcterms:modified", "dcterms:created"):
+        date = proprietes.find(propriete, _XLSX)
+        if date is not None and date.text:
+            return date.text
+    return ""
 
 
 def position(reference):

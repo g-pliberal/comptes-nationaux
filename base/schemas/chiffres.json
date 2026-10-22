@@ -17,7 +17,7 @@
     {"name": "statut", "type": "string", "constraints": {"required": true, "enum": ["prevision", "estimation", "provisoire", "semi_definitif", "definitif", "non_precise"]}},
     {"name": "drapeau_source", "type": "string", "description": "Indicateur de qualité tel que publié par la source."},
     {"name": "version", "type": "date", "description": "Date de publication de la version d'où vient le chiffre.", "constraints": {"required": true}},
-    {"name": "consolidation", "type": "string", "constraints": {"required": true, "enum": ["consolide", "non_consolide", "sans_objet", "non_precise"]}},
+    {"name": "consolidation", "type": "string", "constraints": {"required": true, "enum": ["consolide", "consolide_apu", "non_consolide", "sans_objet", "non_precise"]}},
     {"name": "denominateur_id", "type": "string", "description": "Pour un ratio, identifiant du chiffre qui sert de dénominateur, s'il est connu."},
     {"name": "nature", "type": "string", "description": "publie : par la source elle-même ; cite : repris par un tiers ; calcule : calculé ici.", "constraints": {"required": true, "enum": ["publie", "cite", "calcule"]}},
     {"name": "calcul_id", "type": "string"},
