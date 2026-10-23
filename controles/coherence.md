@@ -41,6 +41,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
+| ofgl.annexe-2a | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2A : budgets principaux des collectivités locales, par niveau de collectivité | 2026-08-17 | 3922 |
 | senat.pjl06-051 | Projet de loi de financement de la sécurité sociale pour 2007, texte n° 51 (2006-2007) transmis au Sénat le 6 novembre 2006 | 2006-11-06 | 42 |
 | senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1602 |
 | senat.pjl07-067 | Projet de loi de financement de la sécurité sociale pour 2008, texte n° 67 (2007-2008) transmis au Sénat le 6 novembre 2007 | 2007-11-06 | 39 |
@@ -88,7 +89,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-9095 sommes vérifiées avec toutes leurs composantes : 9076 justes, 19 en écart.
+10625 sommes vérifiées avec toutes leurs composantes : 10598 justes, 27 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
@@ -103,6 +104,14 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | insee.t3210 | S131314 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 Md€ | 5,0550 Md€ | +16,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 Md€ | −16,3100 Md€ | −574,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 Md€ | −17,1280 Md€ | −578,0 M€ |
+| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2017 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 181,6835 Md€ | 181,6835 Md€ | +5 € |
+| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2017 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 214,5300 Md€ | 214,5300 Md€ | +4 € |
+| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2017 | COMPTES_LOCAUX.CONCOURS_ETAT | 38,9382 Md€ | 38,9382 Md€ | +3 € |
+| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2018 | COMPTES_LOCAUX.IMPOTS_TAXES | 142,8837 Md€ | 142,8837 Md€ | +2 € |
+| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2018 | COMPTES_LOCAUX.DEP_INVESTISSEMENT | 56,2728 Md€ | 56,2728 Md€ | +3 € |
+| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2019 | COMPTES_LOCAUX.IMPOTS_TAXES | 147,5381 Md€ | 147,5381 Md€ | +2 € |
+| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2019 | COMPTES_LOCAUX.EPARGNE_BRUTE | 37,6705 Md€ | 37,6705 Md€ | −2 € |
+| ofgl.annexe-2a | GFP_CU_BP | ensemble | 2023 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 2,0916 Md€ | 2,0916 Md€ | +3 € |
 | senat.pjl13-759 | ETAT_LF | ensemble | 2013 | LOLF.COMPTES_COMMERCE_SOLDE | 0,1368 Md€ | 0,2654 Md€ | −128,6 M€ |
 | senat.pjl15-128 | SECU_LFSS | ensemble | 2014 | COMPTES_SECU.ACTIF_CIRCULANT | 69,7000 Md€ | 69,3000 Md€ | +400,0 M€ |
 | senat.pjl15-128 | SECU_LFSS | ensemble | 2014 | COMPTES_SECU.PASSIF_FINANCIER | 179,9000 Md€ | 177,0000 Md€ | +2 900,0 M€ |
@@ -134,15 +143,45 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 
 ## 3. Additivité des sous-secteurs
 
-Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité.
+Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexe 2A des rapports de l'OFGL).
 
-2096 additions vérifiées : 2072 justes, 24 en écart.
+3678 additions vérifiées : 3621 justes, 57 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
 | eurostat.gov_10a_main | SEC2010.B9 | S13 | S1311 + S1313 + S1314 | ensemble | 2011 | −0,4 M€ en 2011 |
 | insee.t3106 | SEC2010.B9 | S1311 | S13111 + S13112 | ensemble | 19 années entre 1959 et 1977 | +6 502,0 M€ en 1974 |
 | insee.t3212, insee.t3213, insee.t3214 | SEC2010.B9 | S1314 | S13141 + S13142 | ensemble | 2019 | +8,0 M€ en 2019 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2018 et 2019 | +3 € en 2018 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.AUTRES_IMPOTS_TAXES | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2020 | +3 € en 2020 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.AUTRES_REC_INVESTISSEMENT | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2020 | +3 € en 2020 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEPENSES_INTERVENTION | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEPENSES_INTERVENTION | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEP_INVESTISSEMENT | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2019 | +3 € en 2019 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEP_TOTALES | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEP_TOTALES | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.DETTE | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2017 | +3 € en 2017 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.EPARGNE_NETTE | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2017 et 2018 | +3 € en 2017 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.FCTVA | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2017 | +3 € en 2017 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.FRAIS_PERSONNEL | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2017 | +3 € en 2017 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_LOCAUX | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_LOCAUX | GFP_BP | GFP_METROPOLES_BP + GFP_CU_BP + GFP_CA_BP + GFP_CC_BP | ensemble | 2022 | +3 € en 2022 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_LOCAUX | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_TAXES | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_TAXES | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.PEREQUATIONS_COMPENSATIONS | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2020 | +3 € en 2020 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.REC_FONCTIONNEMENT | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.REC_FONCTIONNEMENT | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2022 et 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | GFP_BP | GFP_METROPOLES_BP + GFP_CU_BP + GFP_CA_BP + GFP_CC_BP | ensemble | 2023 | +3 € en 2023 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | GFP_BP | GFP_METROPOLES_BP + GFP_CU_BP + GFP_CA_BP + GFP_CC_BP | ensemble | 2020 | +3 € en 2020 |
 | senat.pjl13-117 | COMPTES_SECU.REPORT_A_NOUVEAU | SECU_LFSS | REGIME_GENERAL_HORS_FSV + AUTRES_REGIMES_BASE + CADES | ensemble | 2011 | +9 800,0 M€ en 2011 |
 | senat.pjl17-063 | COMPTES_SECU.ENCOURS_BANCAIRE | SECU_LFSS | REGIME_GENERAL_HORS_FSV + AUTRES_REGIMES_BASE + FSV + CADES + FRR | ensemble | 2015 | +900,0 M€ en 2015 |
 | senat.tas22-018 | COMPTES_SECU.RESULTAT_COMPTABLE | REGIME_GENERAL | REGIME_GENERAL_HORS_FSV + FSV | ensemble | 2021 | −200,0 M€ en 2021 |

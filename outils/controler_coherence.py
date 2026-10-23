@@ -9,7 +9,7 @@ vérifie ce que disent les sources elles-mêmes :
 2. les ventilations par fonction (l'ensemble égale la somme des fonctions, chaque fonction celle de ses
    groupes ; pour le budget de l'État, chaque mission celle de ses programmes) ;
 3. l'additivité des sous-secteurs, pour les soldes, les prélèvements obligatoires et les dépenses
-   consolidées de l'ensemble ;
+   consolidées de l'ensemble, et celle des niveaux de collectivités locales, pour tous leurs montants ;
 4. les passerelles entre tableaux qui présentent autrement les mêmes grandeurs ;
 5. les ratios, qu'on doit retrouver à partir de leur dénominateur ;
 6. les écarts entre sources pour une même grandeur.
@@ -244,6 +244,28 @@ IDENTITES += [_facultatives("COMPTES_SECU.", t, c) if f else (f"COMPTES_SECU.{t}
                                                                                   for x in c])
               for t, c, f in _BILAN_SECU]
 
+# Comptes des collectivités locales (agrégats de la DGCL, annexe 2A des rapports de l'OFGL) : chaque agrégat est la somme
+# de ses composantes, chaque solde la différence de ses termes.
+_LOCAUX = [("DEP_FONCTIONNEMENT", ["ACHATS_CHARGES_EXTERNES", "FRAIS_PERSONNEL", "CHARGES_FINANCIERES",
+                                   "DEPENSES_INTERVENTION", "AUTRES_DEP_FONCTIONNEMENT"]),
+           ("REC_FONCTIONNEMENT", ["IMPOTS_TAXES", "CONCOURS_ETAT", "SUBVENTIONS_PARTICIPATIONS_RECUES",
+                                   "VENTES_BIENS_SERVICES", "AUTRES_REC_FONCTIONNEMENT"]),
+           ("IMPOTS_TAXES", ["IMPOTS_LOCAUX", "AUTRES_IMPOTS_TAXES"]),
+           ("CONCOURS_ETAT", ["DGF", "AUTRES_DOTATIONS", "PEREQUATIONS_COMPENSATIONS"]),
+           ("EPARGNE_BRUTE", ["REC_FONCTIONNEMENT", "-DEP_FONCTIONNEMENT"]),
+           ("EPARGNE_NETTE", ["EPARGNE_BRUTE", "-REMBOURSEMENTS_DETTE"]),
+           ("DEP_INVESTISSEMENT", ["DEPENSES_EQUIPEMENT", "SUBVENTIONS_EQUIPEMENT_VERSEES", "AUTRES_DEP_INVESTISSEMENT"]),
+           ("REC_INVESTISSEMENT", ["FCTVA", "DOTATIONS_SUBVENTIONS_INVESTISSEMENT", "AUTRES_REC_INVESTISSEMENT"]),
+           ("DEP_TOTALES_HORS_REMBOURSEMENTS", ["DEP_FONCTIONNEMENT", "DEP_INVESTISSEMENT"]),
+           ("REC_TOTALES_HORS_EMPRUNTS", ["REC_FONCTIONNEMENT", "REC_INVESTISSEMENT"]),
+           ("CAPACITE_BESOIN_FINANCEMENT", ["REC_TOTALES_HORS_EMPRUNTS", "-DEP_TOTALES_HORS_REMBOURSEMENTS"]),
+           ("FLUX_NET_DETTE", ["EMPRUNTS", "-REMBOURSEMENTS_DETTE"]),
+           ("DEP_TOTALES", ["DEP_TOTALES_HORS_REMBOURSEMENTS", "REMBOURSEMENTS_DETTE"]),
+           ("REC_TOTALES", ["REC_TOTALES_HORS_EMPRUNTS", "EMPRUNTS"]),
+           ("VARIATION_FONDS_ROULEMENT", ["REC_TOTALES", "-DEP_TOTALES"])]
+IDENTITES += [(f"COMPTES_LOCAUX.{t}", [("-" if c.startswith("-") else "") + "COMPTES_LOCAUX." + c.lstrip("-") for c in cs])
+              for t, cs in _LOCAUX]
+
 IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique (1) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_DROITS_CONSTATES", "rubrique (2) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_NON_BUDGETAIRES", "rubrique (3) du tableau 3.107"),
@@ -264,6 +286,15 @@ ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO", "COMPTES_SECU.RESULTAT_COMPTABLE"}
 DECOMPOSITIONS_PAR_CONCEPT = {f"COMPTES_SECU.{c}": [("SECU_LFSS", ["?REGIME_GENERAL_HORS_FSV", "?ACOSS", "?ROBSS",
                                                                    "?AUTRES_REGIMES_BASE", "?FSV", "?CADES", "?FRR"])]
                               for t, cs, _ in _BILAN_SECU[:8] for c in [t] + cs}
+# Comptes des collectivités locales, que la source ne consolide pas entre niveaux : chaque montant d'un niveau contre la
+# somme de ceux des niveaux qui le composent, celui des groupements à fiscalité propre contre la somme de leurs types.
+_NIVEAUX_LOCAUX = [("SECTEUR_COMMUNAL_BP", ["COMMUNES_BP", "GFP_BP"]),
+                   ("COLLECTIVITES_TERRITORIALES_GFP_BP", ["SECTEUR_COMMUNAL_BP", "DEPARTEMENTS_BP", "REGIONS_CTU_BP"]),
+                   ("COLLECTIVITES_TERRITORIALES_GFP_BP", ["COMMUNES_BP", "GFP_BP", "DEPARTEMENTS_BP", "REGIONS_CTU_BP"]),
+                   ("COLLECTIVITES_LOCALES_BP", ["COLLECTIVITES_TERRITORIALES_GFP_BP", "SYNDICATS_BP"]),
+                   ("GFP_BP", ["GFP_METROPOLES_BP", "GFP_CU_BP", "GFP_CA_BP", "GFP_CC_BP"])]
+DECOMPOSITIONS_PAR_CONCEPT.update({c["id"]: _NIVEAUX_LOCAUX for c in lire("tables/concepts.csv")
+                                   if c["norme_id"] == "COMPTES_LOCAUX"})
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
 # de droite), chaque terme étant (source, périmètre, concept, signe) et, au besoin, (modèle de période, traitement),
@@ -471,7 +502,8 @@ def ventilations(derniers):
 def additivite(derniers):
     """Le solde d'un ensemble, ou sa part de la dépense consolidée de l'ensemble des administrations publiques,
     égale la somme de ceux de ses parties ; de même, un poste de la situation patrimoniale de la sécurité sociale
-    égale la somme de ses lignes par entité."""
+    égale la somme de ses lignes par entité, et un montant d'un niveau de collectivités locales la somme de ceux des
+    niveaux qui le composent."""
     apu = {k[0] for k, l in derniers.items() if l["consolidation"] == "consolide_apu"}
     par_annee = collections.defaultdict(dict)
     for k, l in derniers.items():
@@ -600,7 +632,8 @@ def fr(x, decimales, signe=False):
 
 def ecart_lisible(ecart, unite):
     if unite == "euros":
-        return f"{fr(ecart / 1e6, 1, True)} M€"
+        # Un écart de moins de 50 000 euros s'écrirait « 0,0 M€ » : il s'écrit en euros.
+        return f"{fr(ecart / 1e6, 1, True)} M€" if abs(ecart) >= 5e4 else f"{fr(ecart, 0, True)} €"
     nom = {"PC_PIB": "de PIB", "PC_PIB_POTENTIEL": "de PIB potentiel", "PC_DEPENSE": "de dépense"}.get(unite, unite)
     return f"{fr(ecart, 1, True)} point{'s' if abs(ecart) >= 2 else ''} {nom}"
 
@@ -716,7 +749,10 @@ def partie_additivite(derniers):
               "des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour "
               "la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité "
               "vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation "
-              "patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité.", "",
+              "patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les "
+              "collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un "
+              "niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre "
+              "contre la somme de leurs types (annexe 2A des rapports de l'OFGL).", "",
               f"{n} additions vérifiées : {n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
     for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart in ecarts:

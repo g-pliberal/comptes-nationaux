@@ -50,6 +50,7 @@
     {"name": "chiffres-insee-t3305", "path": "tables/chiffres/insee/t3305.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3306", "path": "tables/chiffres/insee/t3306.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3307", "path": "tables/chiffres/insee/t3307.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-ofgl-annexe-2a", "path": "tables/chiffres/ofgl/annexe-2a.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-senat-pjl06-051", "path": "tables/chiffres/senat/pjl06-051.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-senat-pjl06-389", "path": "tables/chiffres/senat/pjl06-389.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-senat-pjl07-067", "path": "tables/chiffres/senat/pjl07-067.csv", "schema": "schemas/chiffres.json"},
