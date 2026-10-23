@@ -59,7 +59,7 @@ WHERE c.version = (
 """
 
 
-# Les comptes de chaque collectivité, lus dans les copies archivées. Pour que la base reste maniable (quatorze millions
+# Les comptes de chaque collectivité, lus dans les copies archivées. Pour que la base reste maniable (dix-sept millions
 # de lignes), une ligne de compte ne porte que le numéro de sa copie (`lot`, la ligne de fichiers_collectivites qui
 # l'inscrit) et celui de son concept (`concept`, la ligne de concepts) ; la vue v_comptes_collectivites rétablit les
 # libellés.
@@ -68,10 +68,13 @@ COMPTES = [("lot", "INTEGER"), ("siren", "TEXT"), ("concept", "INTEGER"), ("mont
 COLLECTIVITES = [("lot", "INTEGER"), ("siren", "TEXT"), ("insee", "TEXT"), ("insee_2025", "TEXT"), ("nom", "TEXT"),
                  ("categorie", "TEXT"), ("nature_juridique", "TEXT"), ("mode_financement", "TEXT"),
                  ("departement", "TEXT"), ("region", "TEXT"), ("epci", "TEXT"), ("population", "INTEGER")]
-# Champ de l'export de data.ofgl.fr → colonne de la table collectivites.
+# Champ de l'export de data.ofgl.fr → colonne de la table collectivites ; la catégorie d'un syndicat (SIVU, SIVOM, syndicat
+# mixte, pôle, maison départementale des personnes handicapées) y tient lieu de nature juridique.
 CHAMPS_COLLECTIVITES = {"siren": "siren", "insee": "insee", "com_code": "insee_2025", "lbudg": "nom", "categ": "categorie",
-                        "nat_juridique": "nature_juridique", "mode_financement": "mode_financement",
-                        "dep_code": "departement", "reg_code": "region", "epci_code": "epci", "ptot": "population"}
+                        "nat_juridique": "nature_juridique", "categorie_synd": "nature_juridique",
+                        "mode_financement": "mode_financement", "dep_code": "departement",
+                        "dep_current_code": "departement", "reg_code": "region", "epci_code": "epci",
+                        "ptot": "population"}
 
 
 def lignes_collectivites(lots, concepts):

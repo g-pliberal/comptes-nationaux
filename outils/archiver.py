@@ -10,11 +10,13 @@ sa taille restent celles du contenu reçu, que le contrôle retrouve en la déco
 coupée avant la fin du téléchargement est réessayée ; une erreur renvoyée par le serveur ne l'est pas.
 Pour un export de data.ofgl.fr, la date de modification du jeu de données est lue avant son premier
 fichier et après chacun : si elle change, l'archivage s'arrête, et les fichiers déjà inscrits gardent
-la date sous laquelle ils ont été téléchargés.
+la date sous laquelle ils ont été téléchargés. Plusieurs archivages peuvent tourner en même temps :
+chacun inscrit ses copies dans la table des fichiers à son tour.
 """
 
 import argparse
 import bz2
+import fcntl
 import gzip
 import hashlib
 import http.client
@@ -62,7 +64,14 @@ def date_ofgl(url):
 
 
 def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser):
-    """Inscrit une copie dans la table des fichiers ; renvoie son identifiant."""
+    """Inscrit une copie dans la table des fichiers ; renvoie son identifiant. La table reste verrouillée de sa
+    lecture à son écriture, pour qu'un autre archivage n'y efface pas cette inscription."""
+    with (BASE / "tables" / "fichiers.csv").open("a") as verrou:
+        fcntl.flock(verrou, fcntl.LOCK_EX)
+        return inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser)
+
+
+def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser):
     sha256 = hashlib.sha256(contenu).hexdigest()
     fichiers = lire("tables/fichiers.csv")
     deja = next((f for f in fichiers if f["sha256"] == sha256 and f["source_id"] == source_id), None)

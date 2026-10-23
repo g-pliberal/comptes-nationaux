@@ -15,8 +15,9 @@ vérifie ce que disent les sources elles-mêmes :
    consolidation des comptes des collectivités locales laisse inchangées ;
 5. les ratios, qu'on doit retrouver à partir de leur dénominateur ;
 6. les écarts entre sources pour une même grandeur ;
-7. les comptes de chaque collectivité : montant consolidé, identités comptables de chacune, et somme des
-   collectivités contre les totaux publiés.
+7. les comptes de chaque collectivité : montant consolidé, identités comptables de chacune, comptes d'une même
+   collectivité dans deux jeux de données, somme des collectivités contre les totaux publiés, et chaque
+   département et chaque région contre sa fiche de la DGCL.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -285,8 +286,22 @@ _LOCAUX += [("DEP_INVESTISSEMENT_REMBOURSEMENTS_COMPRIS", ["DEP_INVESTISSEMENT",
             ("DEP_TOTALES", ["DEP_FONCTIONNEMENT", "DEP_INVESTISSEMENT_REMBOURSEMENTS_COMPRIS"]),
             ("REC_TOTALES", ["REC_FONCTIONNEMENT", "REC_INVESTISSEMENT_EMPRUNTS_COMPRIS"]),
             ("ANNUITE_DETTE_CHARGES_FINANCIERES", ["REMBOURSEMENTS_DETTE", "CHARGES_FINANCIERES"])]
-IDENTITES += [(f"COMPTES_LOCAUX.{t}", [("-" if c.startswith("-") else "") + "COMPTES_LOCAUX." + c.lstrip("-") for c in cs])
-              for t, cs in _LOCAUX]
+# Ceux des départements et des régions donnent aussi les droits de mutation après péréquation, qui ajoutent aux droits
+# perçus les attributions des fonds de péréquation et en retirent les prélèvements, et l'épargne brute avant travaux en
+# régie, qui ajoute ces travaux à l'épargne brute ; une collectivité sans attribution, prélèvement ou travaux en régie
+# n'en a pas de ligne (« ? » : peut manquer).
+_LOCAUX += [("DMTO_APRES_PEREQUATION", ["DMTO", "?ATTRIBUTIONS_PEREQUATION_DMTO", "?-PRELEVEMENTS_PEREQUATION_DMTO"]),
+            ("EPARGNE_BRUTE_AVANT_TRAVAUX_REGIE", ["EPARGNE_BRUTE", "?TRAVAUX_REGIE"])]
+
+
+def _local(composante):
+    """Le concept d'une composante, sa marque (« ? ») et son signe gardés."""
+    marque = composante[0] if composante[0] in "?!" else ""
+    terme = composante[len(marque):]
+    return marque + ("-" if terme.startswith("-") else "") + "COMPTES_LOCAUX." + terme.lstrip("-")
+
+
+IDENTITES += [(f"COMPTES_LOCAUX.{t}", [_local(c) for c in cs]) for t, cs in _LOCAUX]
 
 IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique (1) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_DROITS_CONSTATES", "rubrique (2) du tableau 3.107"),
@@ -715,22 +730,50 @@ def concordances(derniers):
 
 
 # Comptes de chaque collectivité (data.ofgl.fr) : le niveau des annexes de l'OFGL auquel se compare la somme des
-# collectivités de chaque jeu de données ; les quatre montants de chaque ligne, avec l'annexe et le suffixe de périmètre
-# du total auquel se compare leur somme.
-NIVEAUX_COLLECTIVITES = {"ofgl.base-gfp-consolidee": "GFP", "ofgl.base-communes-consolidee": "COMMUNES"}
+# collectivités de chaque jeu de données, et les catégories de collectivités qu'il compte (toutes si rien) : les annexes
+# comptent la métropole de Lyon (« ML ») avec les groupements à fiscalité propre et la Ville de Paris (« PARIS ») avec
+# les communes, que le jeu des départements donne aussi ; les quatre montants de chaque ligne, avec l'annexe et le
+# suffixe de périmètre du total auquel se compare leur somme.
+NIVEAUX_COLLECTIVITES = {"ofgl.base-gfp-consolidee": ("GFP", None), "ofgl.base-communes-consolidee": ("COMMUNES", None),
+                         "ofgl.base-departements-consolidee": ("DEPARTEMENTS", {"DEPT"}),
+                         "ofgl.base-regions-consolidee": ("REGIONS_CTU", None),
+                         "ofgl.base-syndicats-consolidee": ("SYNDICATS", None)}
 BUDGETS = [("budget principal", "ofgl.annexe-2a", "_BP"), ("budgets annexes", "ofgl.annexe-2b", "_BA"),
            ("flux croisés", None, None), ("consolidé", "ofgl.annexe-2c", "_BP_BA")]
 # Grandeurs des annexes que les comptes de chaque collectivité ne donnent qu'en parties : la trésorerie nette est la
 # différence des dépôts au Trésor et des crédits de trésorerie.
 EN_PARTIES = {"COMPTES_LOCAUX.TRESORERIE_NETTE": [(1, "COMPTES_LOCAUX.DEPOTS_TRESOR"),
                                                   (-1, "COMPTES_LOCAUX.CREDITS_TRESORERIE")]}
+# Chaque département et chaque région contre sa fiche dans les publications de la DGCL, qui donnent leurs budgets
+# principaux : la publication et le périmètre de chaque collectivité, d'après son code de département ou de région, sauf
+# celles qui ont leur propre fiche et celles que le portail ne code pas ainsi (« 67A » pour le Bas-Rhin, le Haut-Rhin et
+# la Collectivité européenne d'Alsace).
+FICHES_DGCL = {"ofgl.base-departements-consolidee": ("dgcl.finances-departements", "DEP_{dep_code}_BP"),
+               "ofgl.base-regions-consolidee": ("dgcl.finances-regions", "REG_{reg_code}_BP")}
+PERIMETRES_DGCL = {"226700011": "DEP_67_BP", "226800019": "DEP_68_BP", "200094332": "CEA_BP",
+                   "200046977": "METROPOLE_LYON_BP", "217500016": "VILLE_DE_PARIS_BP",
+                   "200076958": "COLLECTIVITE_DE_CORSE_BP", "200055507": "CTU_MARTINIQUE_BP",
+                   "200052678": "CTU_GUYANE_BP"}
 
 
-def collectivites(derniers):
+def listes_collectivites():
+    """{(source, exercice): {siren: fiche}} : la liste la plus récente des collectivités de chaque exercice."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    retenues = {}
+    for i in lire("tables/fichiers_collectivites.csv"):
+        cle = (i["source_id"], i["exercice"])
+        if i["contenu"] == "collectivites" and (cle not in retenues or i["version"] > retenues[cle]["version"]):
+            retenues[cle] = i
+    return {cle: ofgl.collectivites(fichiers[i["fichier_id"]])[0] for cle, i in sorted(retenues.items())}
+
+
+def collectivites(derniers, listes):
     """Pour chaque jeu des comptes de chaque collectivité et chaque exercice, dans sa version la plus récente : les lignes
     dont le montant consolidé n'est pas le budget principal plus les budgets annexes moins les flux croisés ; les
-    identités comptables de chaque collectivité, pour chacun des quatre montants ; la somme des collectivités contre les
-    totaux des annexes 2A (budgets principaux), 2B (budgets annexes) et 2C (consolidés) des rapports de l'OFGL."""
+    identités comptables de chaque collectivité, pour chacun des quatre montants ; les comptes d'une collectivité que
+    deux jeux donnent ; la somme des collectivités contre les totaux des annexes 2A (budgets principaux), 2B (budgets
+    annexes) et 2C (consolidés) des rapports de l'OFGL ; le budget principal de chaque département et de chaque région
+    contre sa fiche de la DGCL."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
     retenus = {}
@@ -738,20 +781,45 @@ def collectivites(derniers):
         cle = (i["source_id"], i["exercice"])
         if i["contenu"] == "montants" and (cle not in retenus or i["version"] > retenus[cle]["version"]):
             retenus[cle] = i
+    presences = collections.defaultdict(list)  # (exercice, siren) → jeux dont la liste porte la collectivité
+    for (source, exercice), fiches in listes.items():
+        for siren in fiches:
+            presences[(exercice, siren)].append(source)
+    doubles = {cle: jeux for cle, jeux in presences.items() if len(jeux) > 1}
     identites = [(t, c) for t, c in IDENTITES if t.startswith("COMPTES_LOCAUX.")]
-    exercices, sommes_controlees = [], []
+    exercices, sommes_controlees, fiches_controlees, comptes_doubles = [], [], [], {}
     controles = collections.defaultdict(lambda: [0, 0, None])  # (source, total, budget) → [vérifiées, en écart, pire]
     for (source, exercice), inscrit in sorted(retenus.items()):
+        niveau, categories = NIVEAUX_COLLECTIVITES[source]
+        fiches = listes.get((source, exercice))  # sans liste, ni catégories ni codes : pas de somme triée ni de fiche
         par_siren, lignes_en_ecart = collections.defaultdict(dict), 0
         sommes = collections.defaultdict(lambda: [0.0] * 8)  # quatre montants, puis leurs marges d'arrondi
         for siren, agregat, *montants in ofgl.montants(fichiers[inscrit["fichier_id"]], agregats, marges=True):
             concept = agregats[agregat]["concept_id"]
             par_siren[siren][concept] = montants
             lignes_en_ecart += depasse(montants[0] + montants[1] - montants[2] - montants[3], sum(montants[4:]))
-            for k in range(8):
-                sommes[concept][k] += montants[k]
+            if categories is None or fiches is not None and fiches.get(siren, {}).get("categ") in categories:
+                for k in range(8):
+                    sommes[concept][k] += montants[k]
         exercices.append((source, exercice, inscrit["version"], inscrit["statut"], len(par_siren), int(inscrit["lignes"]),
                           lignes_en_ecart))
+        comptes_doubles.update({(source, exercice, s): par_siren[s] for s in par_siren if (exercice, s) in doubles})
+        if source in FICHES_DGCL and fiches is not None:
+            # Un agrégat que le jeu publie pour d'autres collectivités de l'exercice, mais pas pour celle-ci, y vaut zéro.
+            publication, modele = FICHES_DGCL[source]
+            publies = sorted(set().union(*par_siren.values()))
+            for siren, montants in par_siren.items():
+                if siren not in fiches:
+                    continue
+                perimetre = PERIMETRES_DGCL.get(siren) or modele.format(**fiches[siren])
+                for concept in publies:
+                    m = montants.get(concept, [0.0] * 8)
+                    publie = derniers.get((publication, "FR", perimetre, concept, "", "", "MIO_EUR", exercice))
+                    if publie is not None:
+                        v, marge, _ = valeur(publie)
+                        fiches_controlees.append((source, concept, exercice, siren, m[0] - v,
+                                                  not depasse(m[0] - v, marge + m[4]),
+                                                  inscrit["statut"] == "provisoire" or publie["statut"] in REVISABLES))
         for siren, montants in par_siren.items():
             for total, composantes in identites:
                 obligatoires = [c for c in composantes if c[0] not in "?!"]
@@ -768,7 +836,6 @@ def collectivites(derniers):
                         entree[1] += 1
                         if entree[2] is None or abs(ecart) > abs(entree[2][0]):
                             entree[2] = (ecart, siren, exercice)
-        niveau = NIVEAUX_COLLECTIVITES[source]
         for concept, parties in EN_PARTIES.items():
             if concept not in sommes and all(c in sommes for _, c in parties):
                 sommes[concept] = ([sum(s * sommes[c][k] for s, c in parties) for k in range(4)]
@@ -783,7 +850,21 @@ def collectivites(derniers):
                 sommes_controlees.append((source, budget, concept, exercice, ecart,
                                           not depasse(ecart, marge + somme[4 + k]),
                                           inscrit["statut"] == "provisoire" or publie["statut"] in REVISABLES))
-    return exercices, controles, sommes_controlees
+    # Une collectivité que deux jeux donnent, comme la métropole de Lyon et la Ville de Paris : pour chaque agrégat
+    # qu'ils ont en commun, les quatre montants de l'un contre ceux de l'autre.
+    # (exercice, siren, deux jeux, montants comparés, écarts [(concept, montant, écart)], agrégats du seul premier jeu,
+    # agrégats du seul second)
+    memes = []
+    for (exercice, siren), jeux in sorted(doubles.items()):
+        for ja, jb in itertools.combinations(sorted(jeux), 2):
+            a, b = comptes_doubles.get((ja, exercice, siren)), comptes_doubles.get((jb, exercice, siren))
+            if a is None or b is None:
+                continue
+            communs = sorted(set(a) & set(b))
+            ecarts = [(c, BUDGETS[k][0], a[c][k] - b[c][k]) for c in communs for k in range(4)
+                      if depasse(a[c][k] - b[c][k], a[c][4 + k] + b[c][4 + k])]
+            memes.append((exercice, siren, (ja, jb), 4 * len(communs), ecarts, set(a) - set(b), set(b) - set(a)))
+    return exercices, controles, sommes_controlees, memes, fiches_controlees
 
 
 # --- Le rapport ----------------------------------------------------------------------------------------
@@ -1078,24 +1159,14 @@ def partie_concordances(derniers):
     return lignes + [""]
 
 
-def noms_collectivites(cles):
-    """{(source, exercice, siren): nom} pour les collectivités demandées, d'après la liste la plus récente de l'exercice."""
-    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
-    listes = {}
-    for i in lire("tables/fichiers_collectivites.csv"):
-        cle = (i["source_id"], i["exercice"])
-        if i["contenu"] == "collectivites" and (cle not in listes or i["version"] > listes[cle]["version"]):
-            listes[cle] = i
-    noms = {}
-    for source, exercice in sorted({(s, e) for s, e, _ in cles}):
-        if (source, exercice) in listes:
-            fiches, _ = ofgl.collectivites(fichiers[listes[(source, exercice)]["fichier_id"]])
-            noms.update({(source, exercice, s): f["lbudg"] for s, f in fiches.items()})
-    return {c: noms.get(c, "") for c in cles}
+def nom(listes, source, exercice, siren):
+    """Le libellé d'une collectivité dans la liste la plus récente de l'exercice."""
+    return listes.get((source, exercice), {}).get(siren, {}).get("lbudg", "")
 
 
 def partie_collectivites(derniers):
-    exercices, controles, sommes = collectivites(derniers)
+    listes = listes_collectivites()
+    exercices, controles, sommes, memes, fiches = collectivites(derniers, listes)
     if not exercices:
         return []
     lignes = ["## 7. Comptes de chaque collectivité", "",
@@ -1107,7 +1178,10 @@ def partie_collectivites(derniers):
               "dix chiffres significatifs). Pour chaque "
               "collectivité, les identités comptables de la section 1 s'appliquent à chacun des quatre montants. La "
               "somme des collectivités se compare aux totaux des annexes des rapports de l'OFGL : 2A pour les budgets "
-              "principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés.", "",
+              "principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés ; celle des départements sans la "
+              "métropole de Lyon ni la Ville de Paris, que les annexes comptent avec les groupements à fiscalité propre "
+              "et avec les communes. Le budget principal de chaque département et de chaque région se compare aussi à sa "
+              "fiche dans les publications de la DGCL.", "",
               "| Jeu de données | Exercices | Collectivités au dernier exercice | Lignes | "
               "Lignes dont le consolidé n'est pas BP + BA − flux |", "|---|---|---|---|---|"]
     par_source = collections.defaultdict(list)
@@ -1122,14 +1196,14 @@ def partie_collectivites(derniers):
                f"{fr(faux, 0)} en écart.", ""]
     en_ecart = [(k, v) for k, v in sorted(controles.items()) if v[1]]
     if en_ecart:
-        noms = noms_collectivites([(k[0], v[2][2], v[2][1]) for k, v in en_ecart])
         lignes += ["| Jeu de données | Total | Parties | Montant | En écart | Plus grand écart |",
                    "|---|---|---|---|---|---|"]
         for (source, total, parties, budget), (verifiees, nombre, (ecart, siren, exercice)) in en_ecart:
             lignes.append(f"| {source} | {total} | {parties_lisibles(list(parties))} | {budget} | "
                           f"{fr(nombre, 0)} sur {fr(verifiees, 0)} | {ecart_lisible(ecart, 'euros')} : "
-                          f"{noms[(source, exercice, siren)]} ({siren}), {exercice} |")
+                          f"{nom(listes, source, exercice, siren)} ({siren}), {exercice} |")
         lignes.append("")
+    lignes += partie_memes_collectivites(listes, memes)
     justes = sum(1 for s in sommes if s[5])
     lignes += [f"Somme des collectivités contre les totaux des annexes : {fr(len(sommes), 0)} comparaisons, "
                f"{fr(justes, 0)} justes, {fr(len(sommes) - justes, 0)} en écart. Le dernier exercice d'un jeu est "
@@ -1166,6 +1240,68 @@ def partie_collectivites(derniers):
             e = plus_grand(liste, lambda x: x[4])
             lignes.append(f"| {source} | {budget} | {concept} | {plage([x[3] for x in liste])} | "
                           f"{ecart_lisible(e[4], 'euros')} en {e[3]} |")
+        lignes.append("")
+    return lignes + partie_fiches_dgcl(listes, fiches)
+
+
+def concepts_lisibles(concepts):
+    """Une liste de concepts, sans le préfixe de leur norme quand c'est celle des comptes locaux."""
+    noms = [c.removeprefix("COMPTES_LOCAUX.") for c in concepts]
+    return ", ".join(noms) if noms else "aucun"
+
+
+def partie_memes_collectivites(listes, memes):
+    """Les collectivités que deux jeux donnent : leurs comptes dans l'un contre leurs comptes dans l'autre."""
+    if not memes:
+        return []
+    comparees, en_ecart = sum(m[3] for m in memes), sum(len(m[4]) for m in memes)
+    lignes = [f"Collectivités que deux jeux de données donnent : {fr(comparees, 0)} montants comparés de l'un à l'autre, "
+              f"{fr(comparees - en_ecart, 0)} égaux, {fr(en_ecart, 0)} en écart. Les agrégats qu'un seul des deux jeux "
+              "publie, désignés par leur concept de la norme COMPTES_LOCAUX, ne se comparent pas.", "",
+              "| Collectivité | Premier jeu | Second jeu | Exercices | Montants comparés | En écart | "
+              "Agrégats du seul premier jeu | Agrégats du seul second |", "|---|---|---|---|---|---|---|---|"]
+    regroupes = collections.defaultdict(list)
+    for m in memes:
+        regroupes[(m[1], m[2])].append(m)
+    for (siren, (ja, jb)), liste in sorted(regroupes.items()):
+        dernier = max(m[0] for m in liste)
+        seuls = [sorted(set().union(*(m[k] for m in liste))) for k in (5, 6)]
+        lignes.append(f"| {nom(listes, ja, dernier, siren)} ({siren}) | {ja} | {jb} | {plage([m[0] for m in liste])} | "
+                      f"{fr(sum(m[3] for m in liste), 0)} | {fr(sum(len(m[4]) for m in liste), 0)} | "
+                      f"{concepts_lisibles(seuls[0])} | {concepts_lisibles(seuls[1])} |")
+    lignes.append("")
+    ecarts = [(m[1], m[2], m[0], *e) for m in memes for e in m[4]]
+    if ecarts:
+        lignes += ["| Collectivité | Exercice | Grandeur | Montant | Écart (premier jeu − second) |", "|---|---|---|---|---|"]
+        for siren, (ja, _), exercice, concept, budget, ecart in sorted(ecarts):
+            lignes.append(f"| {nom(listes, ja, exercice, siren)} ({siren}) | {exercice} | {concept} | {budget} | "
+                          f"{ecart_lisible(ecart, 'euros')} |")
+        lignes.append("")
+    return lignes
+
+
+def partie_fiches_dgcl(listes, fiches):
+    """Le budget principal de chaque département et de chaque région contre sa fiche de la DGCL."""
+    if not fiches:
+        return []
+    justes = sum(1 for f in fiches if f[5])
+    lignes = [f"Budget principal de chaque département et de chaque région contre sa fiche dans les publications de la "
+              f"DGCL (« Les finances des départements », « Les finances des régions ») : {fr(len(fiches), 0)} "
+              f"comparaisons, {fr(justes, 0)} justes, {fr(len(fiches) - justes, 0)} en écart.", ""]
+    regroupes = collections.defaultdict(list)
+    for f in fiches:
+        regroupes[(f[0], f[1])].append(f)
+    en_ecart = {cle: [f for f in liste if not f[5]] for cle, liste in sorted(regroupes.items())}
+    if any(en_ecart.values()):
+        lignes += ["| Jeu de données | Grandeur | Comparaisons | En écart | Années en écart | "
+                   "Plus grand écart (OFGL − DGCL) |", "|---|---|---|---|---|---|"]
+        for (source, concept), fausses in en_ecart.items():
+            if fausses:
+                _, _, exercice, siren, ecart, _, _ = plus_grand(fausses, lambda f: f[4])
+                lignes.append(f"| {source} | {concept} | {fr(len(regroupes[(source, concept)]), 0)} | "
+                              f"{fr(len(fausses), 0)} | {plage([f[2] for f in fausses])} | "
+                              f"{ecart_lisible(ecart, 'euros')} : {nom(listes, source, exercice, siren)} ({siren}), "
+                              f"{exercice} |")
         lignes.append("")
     return lignes
 

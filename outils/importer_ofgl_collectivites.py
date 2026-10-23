@@ -35,6 +35,11 @@ JEUX = {
                                                               "mode_financement", "dep_code", "reg_code", "ptot"]),
     "ofgl.base-communes-consolidee": ("ofgl-base-communes-consolidee", ["siren", "insee", "com_code", "lbudg", "categ",
                                                                         "dep_code", "reg_code", "epci_code", "ptot"]),
+    "ofgl.base-departements-consolidee": ("ofgl-base-departements-consolidee", ["siren", "lbudg", "categ", "dep_code",
+                                                                                "reg_code", "ptot"]),
+    "ofgl.base-regions-consolidee": ("ofgl-base-regions-consolidee", ["siren", "lbudg", "categ", "reg_code", "ptot"]),
+    "ofgl.base-syndicats-consolidee": ("ofgl-base-syndicats-consolidee", ["siren", "lbudg", "categ", "categorie_synd",
+                                                                          "dep_current_code", "reg_code"]),
 }
 MONTANTS = ["siren", "agregat", "montant_bp", "montant_ba", "montant_flux", "montant"]
 INVENTAIRE = ["exer", "lignes"]
