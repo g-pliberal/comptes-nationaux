@@ -17,6 +17,8 @@ La base est faite de tables en texte (CSV) décrites par des schémas, au format
 | Insee, tableau 3.216 | prélèvements obligatoires par bénéficiaire : État, organismes divers d'administration centrale, administrations locales, sécurité sociale, Union européenne | 1959-2025 (depuis 1978 pour l'État et ses organismes) |
 | Insee, tableau 3.107 | passage du résultat d'exécution des lois de finances (le solde du budget de l'État) au déficit de l'État au sens de Maastricht, correction par correction | 2009-2025 |
 | Insee, tableau 3.108 | passage du résultat comptable du régime général de la sécurité sociale au déficit de l'ensemble des administrations de sécurité sociale : corrections, puis soldes de la CADES, du Fonds de réserve pour les retraites, des autres régimes et des organismes dépendants | 2009-2025 |
+| Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte publié par le Sénat | budget de l'État exécuté, à l'euro près : résultat budgétaire ; recettes et dépenses du budget général, des budgets annexes et des comptes spéciaux ; autorisations d'engagement consommées et dépenses par mission et par programme | 2025 |
+| Insee, situation mensuelle du budget de l'État | dépenses, recettes, solde des comptes spéciaux et solde général d'exécution, cumulés depuis janvier, chaque mois | janvier 2009 à août 2026 |
 | Eurostat, `gov_10a_main`, `gov_10a_exp`, `nama_10_gdp` | dépenses, recettes, solde et intérêts des administrations publiques ; dépenses par fonction (COFOG) ; PIB | 1995-2025 (dépenses par fonction jusqu'en 2024) ; PIB depuis 1975 |
 
 Les tableaux de l'Insee font foi pour la France : Eurostat reprend les comptes que l'Insee lui transmet, et le [rapport de cohérence](../controles/coherence.md) montre où les deux concordent et où ils s'écartent.
@@ -45,8 +47,8 @@ Les tableaux de l'Insee font foi pour la France : Eurostat reprend les comptes q
 |---|---|
 | `concept_id` | ce qui est mesuré, avec sa norme |
 | `perimetre_id`, `zone` | qui est couvert, dans quel pays |
-| `fonction_id` | la fonction COFOG, vide pour l'ensemble |
-| `traitements` | les retraitements appliqués, vides s'il n'y en a pas |
+| `fonction_id` | la fonction de la dépense : COFOG, ou mission et programme du budget de l'État ; vide pour l'ensemble |
+| `traitements` | les retraitements appliqués, vides s'il n'y en a pas (par exemple `cumul_depuis_janvier` pour un montant cumulé depuis le début de l'année) |
 | `unite_id`, `decimales` | l'unité, et le nombre de décimales de la valeur telle qu'elle figure dans la source |
 | `periode` | l'année, le trimestre ou le mois |
 | `statut` | prévision, estimation, provisoire, semi-définitif, définitif, ou non précisé par la source |
@@ -66,10 +68,11 @@ se lit : selon le tableau 3.201 de l'Insee, dépense totale au sens du SEC 2010 
 
 Selon la source :
 
-- **Version.** Pour Eurostat, la date de mise à jour du jeu de données. Pour l'Insee, la date de dernière modification que le classeur porte en lui-même, à défaut sa date de création.
+- **Version.** Pour Eurostat, la date de mise à jour du jeu de données. Pour l'Insee, la date de dernière modification que le classeur porte en lui-même, à défaut sa date de création ; pour une série de sa Banque de données macro-économiques, la date de dernière mise à jour de la série. Pour un texte publié par le Sénat, la date qu'il porte : enregistrement, transmission ou adoption.
 - **Statut.** Eurostat le donne par un indicateur attaché à chaque valeur, conservé dans `drapeau_source`. L'Insee le donne par le calendrier de ses comptes annuels : la dernière année publiée est provisoire, l'avant-dernière semi-définitive, les précédentes définitives.
 - **Décimales.** Le nombre de décimales de la valeur enregistrée dans le fichier source, sans les zéros finaux, que le fichier ne conserve pas. Une valeur nulle est exacte : elle prend la précision de sa ligne.
 - **Impôts.** Un impôt du tableau 3.217 de l'Insee est un concept de la norme `INSEE_PO` (par exemple `INSEE_PO.CSG`), dont la fiche dit dans quelle catégorie du SEC 2010 l'Insee le range ; les catégories elles-mêmes sont des concepts du SEC 2010 (`SEC2010.D211REC` pour la TVA). Le périmètre de ce tableau est l'ensemble des bénéficiaires des prélèvements obligatoires, `S13_S212` : les administrations publiques et les institutions de l'Union européenne. Une ligne qui ne vise qu'un bénéficiaire porte le sien : `S212` pour les droits de douane versés à l'Union, `S13131` pour les droits de mutation des collectivités locales.
+- **Budget de l'État.** Les chiffres du budget relèvent de la norme `LOLF` et du périmètre `ETAT_LF`. Les missions et les programmes sont des fonctions de cette norme, sous un identifiant formé de leur libellé : `LOLF.DEFENSE` pour la mission Défense, `LOLF.DEFENSE.EQUIPEMENT_DES_FORCES` pour l'un de ses programmes. La situation mensuelle budgétaire présente le budget général autrement que la loi : les prélèvements sur recettes y sont comptés en dépenses. Ses concepts sont donc distincts, et des passerelles du rapport de cohérence vérifient chaque année le raccord.
 - **Passages entre comptabilités.** Le résultat d'exécution des lois de finances relève de la comptabilité budgétaire de l'État (norme `LOLF`, périmètre `ETAT_LF`, le champ des lois de finances) ; le résultat comptable du régime général, de celle des organismes de sécurité sociale (norme `COMPTES_SECU`, périmètre `REGIME_GENERAL`). Les corrections qui mènent de ces soldes au déficit au sens de Maastricht sont des concepts de la norme `INSEE_PASSAGES`, rangés dans la rubrique de l'Insee où elles figurent.
 - **Unités.** Avant 1999, les montants en francs sont convertis en euros au taux fixe de 6,55957 francs pour un euro (unités `EUR`, `MIO_EUR`, `MD_EUR`) : c'est la convention de l'Insee, et celle d'Eurostat pour ses montants en monnaie nationale. Eurostat publie aussi des montants convertis en écus au taux de change de chaque année (unité `MIO_ECU_EUR`). Les deux séries se confondent à partir de 1999 ; avant, elles ne se comparent pas.
 
@@ -92,6 +95,8 @@ D'une statistique officielle :
 python3 outils/archiver.py <source_id> "<url>"     # archive le fichier et l'inscrit dans fichiers.csv
 python3 outils/importer_insee.py <fichier_id>      # tableaux des comptes nationaux de l'Insee (classeurs xlsx)
 python3 outils/importer_eurostat.py <fichier_id>   # jeux de données d'Eurostat (JSON-stat)
+python3 outils/importer_insee_bdm.py <fichier_id>  # séries de la Banque de données macro-économiques de l'Insee (SDMX)
+python3 outils/importer_lois_resultats.py <fichier_id>  # lois relatives aux résultats de la gestion (texte du Sénat)
 python3 outils/valider.py
 python3 outils/controler_coherence.py              # met à jour le rapport de cohérence
 ```
@@ -144,6 +149,15 @@ SELECT f.libelle, v.valeur
 FROM v_dernieres_versions v JOIN fonctions f ON f.id = v.fonction_id
 WHERE v.source_id = 'insee.t3301' AND v.concept_id = 'SEC2010.TE' AND v.periode = '2024'
   AND f.parent_id IS NULL
+ORDER BY v.valeur DESC;
+```
+
+Ou les dépenses de l'État en 2025 par mission, en milliards d'euros :
+
+```sql
+SELECT f.libelle, round(v.valeur / 1e9, 1) AS milliards
+FROM v_dernieres_versions v JOIN fonctions f ON f.id = v.fonction_id
+WHERE v.concept_id = 'LOLF.BG_DEPENSES_BRUTES' AND v.periode = '2025' AND f.parent_id IS NULL
 ORDER BY v.valeur DESC;
 ```
 

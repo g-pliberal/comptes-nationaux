@@ -13,7 +13,7 @@ import json
 import sys
 import urllib.request
 
-from commun import AGENT, BASE, aujourdhui, champs, date_xlsx, ecrire, lire, maintenant
+from commun import AGENT, BASE, aujourdhui, champs, date_html, date_xlsx, ecrire, lire, lire_sdmx, maintenant, texte_html
 
 
 def main():
@@ -38,15 +38,20 @@ def main():
         return
 
     extension = ("json" if "json" in type_contenu else "xlsx" if "spreadsheetml" in type_contenu
-                 else "csv" if "csv" in type_contenu else "bin")
+                 else "csv" if "csv" in type_contenu else "html" if "html" in type_contenu
+                 else "xml" if "xml" in type_contenu else "bin")
     date = aujourdhui()
     chemin = f"archives/{args.source_id}/{date}-{sha256[:8]}.{extension}"
     (BASE / chemin).parent.mkdir(parents=True, exist_ok=True)
     (BASE / chemin).write_bytes(contenu)
-    # Date de mise à jour annoncée par la source : champ « updated » du JSON-stat d'Eurostat,
-    # date de modification inscrite dans le classeur pour un fichier xlsx.
+    # Date de mise à jour annoncée par la source : champ « updated » du JSON-stat d'Eurostat, date de
+    # modification inscrite dans le classeur pour un fichier xlsx, date d'enregistrement, de transmission ou
+    # d'adoption d'un texte publié par le Sénat, dernière mise à jour des séries SDMX de l'Insee.
     mis_a_jour = {"json": lambda: json.loads(contenu).get("updated", ""),
-                  "xlsx": lambda: date_xlsx(BASE / chemin)}.get(extension, lambda: "")()
+                  "xlsx": lambda: date_xlsx(BASE / chemin),
+                  "html": lambda: date_html(texte_html(contenu.decode("utf-8"))),
+                  "xml": lambda: max(a.get("LAST_UPDATE", "") for a, _ in lire_sdmx(BASE / chemin).values())
+                  }.get(extension, lambda: "")()
 
     identifiant = f"{args.source_id}@{date}-{sha256[:8]}"
     fichiers.append({"id": identifiant, "source_id": args.source_id, "url": args.url,

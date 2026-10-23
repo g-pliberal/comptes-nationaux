@@ -12,7 +12,8 @@ import math
 import re
 import sys
 
-from commun import BASE, empreinte, identifiant, lire, lire_jsonstat, lire_xlsx, paquet, ressources_chiffres
+from commun import (BASE, empreinte, identifiant, lire, lire_jsonstat, lire_sdmx, lire_tableaux_html, lire_xlsx,
+                    nombre_texte, paquet, ressources_chiffres)
 
 
 def erreur_de_type(type_, texte):
@@ -132,6 +133,29 @@ def valeur_archivee(fichier, emplacement, copies):
             copies[(fichier["id"], feuille)] = lire_xlsx(chemin, feuille)[1]
         valeur = copies[(fichier["id"], feuille)].get(cellule)
         return (valeur, "") if isinstance(valeur, float) else None
+    if fichier["chemin"].endswith(".html"):
+        trouve = re.match(r"tableau=([0-9]+);ligne=([0-9]+);colonne=([0-9]+)", emplacement)
+        if trouve is None:
+            return None
+        if fichier["id"] not in copies:
+            copies[fichier["id"]] = lire_tableaux_html(chemin)
+        t, r, c = (int(x) for x in trouve.groups())
+        try:
+            nombre = nombre_texte(copies[fichier["id"]][t][r][c])
+        except IndexError:
+            return None
+        return (float(nombre[0]), "") if nombre else None
+    if fichier["chemin"].endswith(".xml"):
+        trouve = re.match(r"idbank=([0-9]+);periode=([0-9T-]+)", emplacement)
+        if trouve is None:
+            return None
+        if fichier["id"] not in copies:
+            copies[fichier["id"]] = lire_sdmx(chemin)
+        serie = copies[fichier["id"]].get(trouve.group(1))
+        observation = serie[1].get(trouve.group(2)) if serie else None
+        if observation is None or nombre_texte(observation.get("OBS_VALUE", "")) is None:
+            return None
+        return float(observation["OBS_VALUE"]), observation.get("OBS_QUAL", "")
     return "sans lecteur"
 
 

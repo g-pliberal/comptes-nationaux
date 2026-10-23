@@ -22,6 +22,7 @@
     {"name": "chiffres-eurostat-gov_10a_exp", "path": "tables/chiffres/eurostat/gov_10a_exp.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-eurostat-gov_10a_main", "path": "tables/chiffres/eurostat/gov_10a_main.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-eurostat-nama_10_gdp", "path": "tables/chiffres/eurostat/nama_10_gdp.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-insee-bdm-comptes-etat", "path": "tables/chiffres/insee/bdm-comptes-etat.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3101", "path": "tables/chiffres/insee/t3101.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3106", "path": "tables/chiffres/insee/t3106.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3107", "path": "tables/chiffres/insee/t3107.csv", "schema": "schemas/chiffres.json"},
@@ -49,6 +50,7 @@
     {"name": "chiffres-insee-t3305", "path": "tables/chiffres/insee/t3305.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3306", "path": "tables/chiffres/insee/t3306.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3307", "path": "tables/chiffres/insee/t3307.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-senat-pjl25-726", "path": "tables/chiffres/senat/pjl25-726.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-tiers", "path": "tables/chiffres/tiers.csv", "schema": "schemas/chiffres.json"},
     {"name": "corrections", "path": "tables/corrections.csv", "schema": "schemas/corrections.json"}
   ]

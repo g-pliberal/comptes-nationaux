@@ -1,2 +1,3 @@
 id,libelle,description
+cumul_depuis_janvier,Cumul depuis le début de l'année,Montant cumulé du 1er janvier à la fin du mois indiqué par la période.
 hors_credits_impot,Hors crédits d'impôt,Dépense diminuée des crédits d'impôt que la comptabilité nationale enregistre en dépenses : convention de présentation du gouvernement dans les lois de finances.

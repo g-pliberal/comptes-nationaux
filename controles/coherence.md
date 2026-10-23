@@ -13,6 +13,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | eurostat.gov_10a_exp | Dépenses des administrations publiques par fonction (COFOG) | 2026-10-21 | 1290 |
 | eurostat.gov_10a_main | Recettes, dépenses et principaux agrégats des administrations publiques | 2026-10-21 | 1488 |
 | eurostat.nama_10_gdp | PIB et principaux agrégats | 2026-10-21 | 102 |
+| insee.bdm-comptes-etat | Situation mensuelle du budget de l'État : dépenses, recettes, solde des comptes spéciaux et solde général d'exécution, cumulés depuis le début de l'année (Banque de données macro-économiques, jeu COMPTES-ETAT) | 2026-10-06 | 848 |
 | insee.t3101 | Tableau 3.101 : Dette des administrations publiques (S13) au sens de Maastricht et sa répartition par sous-secteur | 2026-07-28 | 624 |
 | insee.t3106 | Tableau 3.106 : Déficit des administrations publiques (S13) au sens de Maastricht | 2026-08-10 | 961 |
 | insee.t3107 | Tableau 3.107 : Passage du résultat d'exécution des lois de finances au déficit de l'État (S13111) au sens de Maastricht | 2026-05-27 | 587 |
@@ -40,15 +41,17 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
+| senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 638 |
 
 ## 1. Sommes comptables
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.
 
-6317 sommes vérifiées avec toutes leurs composantes : 6307 justes, 10 en écart.
+6549 sommes vérifiées avec toutes leurs composantes : 6538 justes, 11 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
 |---|---|---|---|---|---|---|---|
+| insee.bdm-comptes-etat | ETAT_LF | ensemble | 2019-04 | LOLF.RESULTAT_EXECUTION | −67,2150 | −65,5960 | −1 619,0 M€ |
 | insee.t3207 | S131311 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 36,3688 | 36,2870 | +81,8 M€ |
 | insee.t3207 | S131311 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 31,1743 | 31,0840 | +90,3 M€ |
 | insee.t3207 | S131311 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 32,5278 | 32,4602 | +67,6 M€ |
@@ -69,11 +72,11 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 ## 2. Ventilations par fonction
 
-Pour une même grandeur, l'ensemble des fonctions contre la somme des dix divisions de la COFOG, et chaque division contre la somme de ses groupes.
+Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG ou des missions du budget de l'État, chaque division contre la somme de ses groupes, chaque mission contre celle de ses programmes.
 
-8870 ventilations vérifiées avec toutes leurs parties : 8870 justes, 0 en écart.
+15122 ventilations vérifiées avec toutes leurs parties : 15122 justes, 0 en écart.
 
-6954 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
+834 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
 
 ## 3. Additivité des sous-secteurs
 
@@ -102,6 +105,12 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Même passerelle, avec les impôts de l'Union européenne du tableau 3.217 | 31 années entre 1995 et 2025 | 23 années entre 1995 et 2018 | 23 années entre 1995 et 2018 | +734,9 M€ en 1995 |
 | Crédits d'impôt retranchés des prélèvements obligatoires (3.217) contre crédits d'impôt enregistrés en recettes (3.201), de signe opposé | 31 années entre 1995 et 2025 | 2017, 2018 et 2021 | 2017, 2018 et 2021 | −85,0 M€ en 2017 |
 | Prélèvements obligatoires des administrations publiques : impôts nationaux du tableau 3.217 contre somme des sous-secteurs du tableau 3.216 | 31 années entre 1995 et 2025 | 24 années entre 1995 et 2018 | 24 années entre 1995 et 2018 | +734,9 M€ en 1995 |
+| Solde général d'exécution à fin décembre (situation mensuelle) contre soldes du budget général et des comptes spéciaux de la loi relative aux résultats de la gestion | 2025 | aucune | aucune | aucun |
+| Dépenses du budget général à fin décembre (situation mensuelle) contre dépenses nettes plus prélèvements sur recettes de la loi relative aux résultats de la gestion | 2025 | aucune | aucune | aucun |
+| Recettes du budget général à fin décembre (situation mensuelle) contre recettes nettes plus prélèvements sur recettes de la loi relative aux résultats de la gestion | 2025 | aucune | aucune | aucun |
+| Solde général d'exécution à fin décembre (situation mensuelle) contre résultat d'exécution des lois de finances du tableau 3.107 | 17 années entre 2009 et 2025 | 2014, 2016 et 2019 | 2014, 2016 et 2019 | +121,0 M€ en 2016 |
+| Solde du budget général à fin décembre (situation mensuelle : recettes moins dépenses) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2016 | 2016 | +101,0 M€ en 2016 |
+| Solde des comptes spéciaux à fin décembre (situation mensuelle) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2017 | 2017 | +64,0 M€ en 2017 |
 | Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) et (3), dans le tableau 3.107 | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
 
 ## 5. Ratios
@@ -174,6 +183,7 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3106 | insee.t3205 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3212 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3107 | insee.t3203 | 17 | 1 | 1 | +59,2 M€ en 2016 | +59,2 M€ en 2016 |
+| insee.t3107 | senat.pjl25-726 | 2 | 0 | 0 | aucun | aucun |
 | insee.t3108 | insee.t3212 | 17 | 0 | 0 | aucun | aucun |
 | insee.t3108 | insee.t3214 | 13 | 6 | 6 | +271,0 M€ en 2018 | +271,0 M€ en 2018 |
 | insee.t3201 | insee.t3301 | 240 | 35 | 19 | +43,1 M€ en 2021 | −2 012,0 M€ en 2024 |

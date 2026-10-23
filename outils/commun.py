@@ -3,6 +3,7 @@
 import csv
 import datetime
 import hashlib
+import html
 import json
 import math
 import pathlib
@@ -10,6 +11,7 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
+from html.parser import HTMLParser
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 BASE = RACINE / "base"
@@ -199,6 +201,115 @@ def nombre(valeur):
     texte = repr(round(float(valeur), 9))
     texte = texte[:-2] if texte.endswith(".0") else texte
     return texte, len(texte.split(".")[1]) if "." in texte else 0
+
+
+# --- Pages HTML (textes de loi publiés par le Sénat) et séries SDMX de l'Insee ---------------------------
+
+class _Tableaux(HTMLParser):
+    """Les tableaux d'une page, numérotés dans l'ordre où ils s'ouvrent ; un tableau imbriqué a son propre numéro.
+    Chaque cellule garde ses paragraphes, sa hauteur (rowspan) et sa largeur (colspan)."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.tableaux, self.ouverts, self.cellule = [], [], None
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "table":
+            self.ouverts.append([])
+            self.tableaux.append(self.ouverts[-1])
+        elif tag == "tr" and self.ouverts:
+            self.ouverts[-1].append([])
+        elif tag in ("td", "th") and self.ouverts:
+            a = {k.lower(): v for k, v in attrs}
+            self.cellule = {"paragraphes": [[]], "hauteur": int(a.get("rowspan") or 1), "largeur": int(a.get("colspan") or 1)}
+        elif tag in ("p", "br") and self.cellule is not None:
+            self.cellule["paragraphes"].append([])
+
+    def handle_endtag(self, tag):
+        if tag in ("td", "th") and self.cellule is not None and self.ouverts:
+            if not self.ouverts[-1]:
+                self.ouverts[-1].append([])
+            paragraphes = [" ".join("".join(p).split()) for p in self.cellule["paragraphes"]]
+            self.cellule["paragraphes"] = [p for p in paragraphes if p] if self.cellule["hauteur"] == 1 else \
+                [p for i, p in enumerate(paragraphes) if p or i > 0]
+            self.ouverts[-1][-1].append(self.cellule)
+            self.cellule = None
+        elif tag == "table" and self.ouverts:
+            self.ouverts.pop()
+
+    def handle_data(self, data):
+        if self.cellule is not None:
+            self.cellule["paragraphes"][-1].append(data)
+
+
+def _grille(lignes):
+    """Place les cellules d'un tableau sur sa grille, fusions comprises. Une cellule fusionnée sur n lignes qui
+    contient n paragraphes donne un paragraphe à chacune de ces lignes ; sinon, son texte va à sa case de départ."""
+    grille, occupees = {}, set()
+    for r, ligne in enumerate(lignes):
+        c = 0
+        for cellule in ligne:
+            while (r, c) in occupees:
+                c += 1
+            h, l, paragraphes = cellule["hauteur"], cellule["largeur"], cellule["paragraphes"]
+            for dr in range(h):
+                for dc in range(l):
+                    occupees.add((r + dr, c + dc))
+            if h > 1 and len(paragraphes) == h:
+                for dr, texte in enumerate(paragraphes):
+                    grille[(r + dr, c)] = texte
+            else:
+                grille[(r, c)] = " ".join(paragraphes)
+            c += l
+    largeur = max((c for _, c in occupees), default=-1) + 1
+    hauteur = max((r for r, _ in occupees), default=-1) + 1
+    return [[grille.get((r, c), "") for c in range(largeur)] for r in range(max(hauteur, len(lignes)))]
+
+
+def lire_tableaux_html(chemin):
+    """Tableaux d'une page HTML, chacun sous forme de grille : liste de lignes, chacune liste des textes de ses
+    colonnes."""
+    lecteur = _Tableaux()
+    lecteur.feed(pathlib.Path(chemin).read_text(encoding="utf-8"))
+    return [_grille(t) for t in lecteur.tableaux]
+
+
+def texte_html(contenu):
+    """Le texte d'une page HTML, sans balises ni entités."""
+    return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", contenu)).split())
+
+
+def nombre_texte(texte):
+    """« -3 377 967 838,47 » → (« -3377967838.47 », 2) ; None si le texte n'est pas un nombre."""
+    t = re.sub(r"[\s\u00a0\u202f]", "", texte).replace("−", "-").replace("–", "-").replace(",", ".")
+    if not re.fullmatch(r"-?[0-9]+(\.[0-9]+)?", t):
+        return None
+    return t, len(t.split(".")[1]) if "." in t else 0
+
+
+MOIS = {m: i for i, m in enumerate(["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre",
+                                     "octobre", "novembre", "décembre"], start=1)}
+
+
+def date_html(texte):
+    """Date qu'un texte publié par le Sénat porte lui-même : enregistrement, transmission ou adoption."""
+    trouve = re.search(r"(?:Enregistré à la Présidence du Sénat|transmis au Sénat|adopté par le Sénat) le "
+                       r"([0-9]{1,2})(?:er)? (" + "|".join(MOIS) + r") ([0-9]{4})", texte)
+    if trouve is None:
+        return ""
+    jour, mois, annee = trouve.groups()
+    return f"{annee}-{MOIS[mois]:02d}-{int(jour):02d}"
+
+
+def lire_sdmx(chemin):
+    """Série SDMX 2.1 de l'Insee (StructureSpecificData) : {idbank: (attributs de la série, {période: attributs de
+    l'observation})}."""
+    series = {}
+    for serie in ET.parse(chemin).getroot().iter():
+        if serie.tag.split("}")[-1] == "Series":
+            observations = {o.get("TIME_PERIOD"): dict(o.attrib) for o in serie if o.tag.split("}")[-1] == "Obs"}
+            series[serie.get("IDBANK")] = (dict(serie.attrib), observations)
+    return series
 
 
 # --- Fusion des chiffres importés ----------------------------------------------------------------------

@@ -164,7 +164,50 @@ INSEE_PO.TSCA,Taxe sur les conventions d'assurances,INSEE_PO,partie de D.214,rec
 INSEE_PO.TTF,Taxe sur les transactions financières,INSEE_PO,partie de D.214,recette,
 INSEE_PO.VERSEMENT_MOBILITE,Versement mobilité,INSEE_PO,partie de D.291,recette,
 INSEE_PO.VIGNETTE,Taxe sur les véhicules (vignette auto des ménages),INSEE_PO,partie de D.59,recette,
-LOLF.RESULTAT_EXECUTION,"Résultat d'exécution des lois de finances, hors opérations avec le FMI",LOLF,RE,solde,"Solde de la comptabilité budgétaire de l'État, voté par le Parlement : il enregistre les encaissements et décaissements de l'année (comptabilité de caisse)."
+LOLF.BA_DEPENSES,"Dépenses des budgets annexes, y compris fonds de concours",LOLF,budgets annexes,depense,
+LOLF.BA_DEPENSES_HORS_FDC,"Dépenses d'un budget annexe, hors fonds de concours",LOLF,budgets annexes,depense,
+LOLF.BA_FDC_DEPENSES,"Fonds de concours des budgets annexes, en dépenses",LOLF,budgets annexes,depense,
+LOLF.BA_FDC_RECETTES,"Fonds de concours des budgets annexes, en recettes",LOLF,budgets annexes,recette,
+LOLF.BA_FDC_SOLDE,Solde des fonds de concours des budgets annexes,LOLF,budgets annexes,solde,
+LOLF.BA_RECETTES,"Recettes des budgets annexes, y compris fonds de concours",LOLF,budgets annexes,recette,
+LOLF.BA_RECETTES_HORS_FDC,"Recettes d'un budget annexe, hors fonds de concours",LOLF,budgets annexes,recette,
+LOLF.BA_SOLDE_HORS_FDC,"Solde d'un budget annexe, hors fonds de concours",LOLF,budgets annexes,solde,
+LOLF.BG_AE_ANNULATIONS,Annulations d'autorisations d'engagement non consommées et non reportées par la loi relative aux résultats de la gestion,LOLF,annulations d'autorisations d'engagement,depense,
+LOLF.BG_AE_CONSOMMEES,Autorisations d'engagement consommées sur le budget général,LOLF,autorisations d'engagement,depense,"Engagements juridiques pris dans l'année, que les crédits de paiement des années suivantes pourront couvrir."
+LOLF.BG_AE_OUVERTURES,Ouvertures d'autorisations d'engagement complémentaires par la loi relative aux résultats de la gestion,LOLF,ouvertures d'autorisations d'engagement,depense,
+LOLF.BG_CP_ANNULATIONS,Annulations de crédits de paiement non consommés et non reportés par la loi relative aux résultats de la gestion,LOLF,annulations de crédits,depense,
+LOLF.BG_CP_OUVERTURES,Ouvertures de crédits de paiement complémentaires par la loi relative aux résultats de la gestion,LOLF,ouvertures de crédits,depense,
+LOLF.BG_DEPENSES_BRUTES,"Dépenses brutes du budget général, y compris fonds de concours",LOLF,crédits de paiement consommés,depense,"Crédits de paiement consommés, par mission et par programme ; la mission « Remboursements et dégrèvements » en fait partie."
+LOLF.BG_DEPENSES_BRUTES_HORS_FDC,"Dépenses brutes du budget général, hors fonds de concours",LOLF,dépenses brutes,depense,
+LOLF.BG_DEPENSES_NETTES,"Dépenses nettes du budget général, y compris fonds de concours",LOLF,(j) = (h) + (i),depense,
+LOLF.BG_DEPENSES_NETTES_HORS_FDC,"Dépenses nettes du budget général, hors fonds de concours",LOLF,(h),depense,
+LOLF.BG_DEPENSES_Y_COMPRIS_PSR,"Dépenses du budget général, prélèvements sur recettes compris",LOLF,présentation de la situation mensuelle budgétaire,depense,Dépenses du budget général telles que la situation mensuelle budgétaire les présente : les prélèvements sur recettes au profit des collectivités territoriales et de l'Union européenne y sont comptés en dépenses (voir les passerelles du rapport de cohérence).
+LOLF.BG_FONDS_DE_CONCOURS_DEPENSES,"Fonds de concours, en dépenses du budget général",LOLF,(i),depense,
+LOLF.BG_FONDS_DE_CONCOURS_RECETTES,"Fonds de concours, en recettes du budget général",LOLF,(f),recette,
+LOLF.BG_PRELEVEMENTS_SUR_RECETTES,Prélèvements sur recettes au profit des collectivités territoriales et de l'Union européenne,LOLF,(d),recette,
+LOLF.BG_RECETTES_AVANT_PSR,"Recettes du budget général, avant prélèvements sur recettes",LOLF,présentation de la situation mensuelle budgétaire,recette,"Recettes du budget général telles que la situation mensuelle budgétaire les présente, avant prélèvements sur recettes (voir les passerelles du rapport de cohérence)."
+LOLF.BG_RECETTES_FISCALES_BRUTES,Recettes fiscales brutes du budget général,LOLF,recettes fiscales brutes,recette,
+LOLF.BG_RECETTES_FISCALES_NETTES,Recettes fiscales nettes du budget général,LOLF,(a),recette,
+LOLF.BG_RECETTES_NETTES,"Recettes nettes du budget général, y compris fonds de concours",LOLF,(g) = (e) + (f),recette,
+LOLF.BG_RECETTES_NETTES_HORS_FDC,"Recettes nettes du budget général, hors fonds de concours",LOLF,(c) = (a) + (b),recette,
+LOLF.BG_RECETTES_NETTES_HORS_PSR,"Recettes nettes du budget général, hors prélèvements sur recettes et hors fonds de concours",LOLF,(e) = (c) - (d),recette,
+LOLF.BG_RECETTES_NON_FISCALES,Recettes non fiscales du budget général,LOLF,(b),recette,
+LOLF.BG_REMBOURSEMENTS_DEGREVEMENTS,Remboursements et dégrèvements d'impôts d'État,LOLF,remboursements et dégrèvements,depense,Déduits à la fois des recettes fiscales brutes et des dépenses brutes du budget général.
+LOLF.CAS_DEPENSES,Dépenses des comptes d'affectation spéciale,LOLF,comptes spéciaux,depense,
+LOLF.CAS_RECETTES,Recettes des comptes d'affectation spéciale,LOLF,comptes spéciaux,recette,
+LOLF.CAS_SOLDE,Solde des comptes d'affectation spéciale,LOLF,comptes spéciaux,solde,
+LOLF.CCF_DEPENSES,Dépenses des comptes de concours financiers,LOLF,comptes spéciaux,depense,
+LOLF.CCF_RECETTES,Recettes des comptes de concours financiers,LOLF,comptes spéciaux,recette,
+LOLF.CCF_SOLDE,Solde des comptes de concours financiers,LOLF,comptes spéciaux,solde,
+LOLF.COMPTES_COMMERCE_SOLDE,Solde des comptes de commerce,LOLF,comptes spéciaux,solde,
+LOLF.COMPTES_COMMERCE_SOLDE_EN_DEPENSES,"Solde des comptes de commerce, compté en diminution des dépenses des comptes spéciaux",LOLF,comptes spéciaux,solde,"Le solde, de signe opposé, dans la colonne des dépenses."
+LOLF.CS_DEPENSES,"Dépenses des comptes spéciaux, hors opérations avec le FMI",LOLF,comptes spéciaux,depense,
+LOLF.CS_RECETTES,"Recettes des comptes spéciaux, hors opérations avec le FMI",LOLF,comptes spéciaux,recette,
+LOLF.OPERATIONS_MONETAIRES_SOLDE,"Solde des comptes d'opérations monétaires, hors opérations avec le FMI",LOLF,comptes spéciaux,solde,
+LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_DEPENSES,"Solde des comptes d'opérations monétaires, hors opérations avec le FMI, compté en diminution des dépenses des comptes spéciaux",LOLF,comptes spéciaux,solde,"Le solde, de signe opposé, dans la colonne des dépenses."
+LOLF.RESULTAT_BUDGETAIRE,"Résultat budgétaire de l'État, hors opérations avec le FMI",LOLF,résultat budgétaire,solde,"Solde du budget général, des budgets annexes et des comptes spéciaux, en comptabilité de caisse, arrêté par l'article 1er de la loi relative aux résultats de la gestion."
+LOLF.RESULTAT_EXECUTION,"Résultat d'exécution des lois de finances, hors opérations avec le FMI",LOLF,RE,solde,"Solde du budget général et des comptes spéciaux, hors opérations avec le FMI, en comptabilité de caisse ; les budgets annexes n'y entrent pas (Insee, tableau 3.107 ; situation mensuelle budgétaire, « solde général d'exécution »)."
+LOLF.SOLDE_BUDGETS_ANNEXES,"Solde des budgets annexes, y compris fonds de concours",LOLF,budgets annexes,solde,
 LOLF.SOLDE_BUDGET_GENERAL,Solde d'exécution du budget général,LOLF,solde du budget général,solde,"Différence entre les recettes et les dépenses du budget général, négative quand les dépenses dépassent les recettes."
 LOLF.SOLDE_COMPTES_SPECIAUX,"Solde des comptes spéciaux, hors opérations avec le FMI",LOLF,solde des comptes spéciaux,solde,"Comptes tenus en dehors du budget général pour des opérations particulières : comptes d'affectation spéciale (participations financières de l'État, pensions des fonctionnaires…), comptes de concours financiers (prêts à des États étrangers…), comptes de commerce et comptes d'opérations monétaires."
 PDE.GD,Dette publique au sens de Maastricht,PDE,GD,stock,"Dette brute des administrations publiques, consolidée, en valeur nominale : numéraire et dépôts, titres de créance, crédits."

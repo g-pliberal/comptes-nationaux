@@ -7,7 +7,7 @@ Le contrôle de la base (valider.py) garantit que chaque chiffre est celui de sa
 vérifie ce que disent les sources elles-mêmes :
 1. les sommes comptables (un total égale la somme de ses composantes) ;
 2. les ventilations par fonction (l'ensemble égale la somme des fonctions, chaque fonction celle de ses
-   groupes) ;
+   groupes ; pour le budget de l'État, chaque mission celle de ses programmes) ;
 3. l'additivité des sous-secteurs, pour les soldes, les prélèvements obligatoires et les dépenses
    consolidées de l'ensemble ;
 4. les passerelles entre tableaux qui présentent autrement les mêmes grandeurs ;
@@ -21,6 +21,7 @@ d'exécution, pour qu'un rapport à jour ne change pas.
 """
 
 import collections
+import itertools
 import math
 import re
 
@@ -74,6 +75,31 @@ def _rubrique(total, code_norme):
     return total, sorted(c["id"] for c in lire("tables/concepts.csv") if c["code_norme"] == code_norme and c["id"] != total)
 
 
+# Budget de l'État : article 1er de la loi relative aux résultats de la gestion, et situation mensuelle budgétaire.
+IDENTITES += [
+    ("LOLF.BG_RECETTES_FISCALES_NETTES", ["LOLF.BG_RECETTES_FISCALES_BRUTES", "-LOLF.BG_REMBOURSEMENTS_DEGREVEMENTS"]),
+    ("LOLF.BG_RECETTES_NETTES_HORS_FDC", ["LOLF.BG_RECETTES_FISCALES_NETTES", "LOLF.BG_RECETTES_NON_FISCALES"]),
+    ("LOLF.BG_RECETTES_NETTES_HORS_PSR", ["LOLF.BG_RECETTES_NETTES_HORS_FDC", "-LOLF.BG_PRELEVEMENTS_SUR_RECETTES"]),
+    ("LOLF.BG_RECETTES_NETTES", ["LOLF.BG_RECETTES_NETTES_HORS_PSR", "LOLF.BG_FONDS_DE_CONCOURS_RECETTES"]),
+    ("LOLF.BG_DEPENSES_NETTES_HORS_FDC", ["LOLF.BG_DEPENSES_BRUTES_HORS_FDC", "-LOLF.BG_REMBOURSEMENTS_DEGREVEMENTS"]),
+    ("LOLF.BG_DEPENSES_NETTES", ["LOLF.BG_DEPENSES_NETTES_HORS_FDC", "LOLF.BG_FONDS_DE_CONCOURS_DEPENSES"]),
+    ("LOLF.BG_DEPENSES_BRUTES", ["LOLF.BG_DEPENSES_BRUTES_HORS_FDC", "LOLF.BG_FONDS_DE_CONCOURS_DEPENSES"]),
+    ("LOLF.SOLDE_BUDGET_GENERAL", ["LOLF.BG_RECETTES_NETTES", "-LOLF.BG_DEPENSES_NETTES"]),
+    ("LOLF.BA_SOLDE_HORS_FDC", ["LOLF.BA_RECETTES_HORS_FDC", "-LOLF.BA_DEPENSES_HORS_FDC"]),
+    ("LOLF.BA_FDC_SOLDE", ["LOLF.BA_FDC_RECETTES", "-LOLF.BA_FDC_DEPENSES"]),
+    ("LOLF.SOLDE_BUDGETS_ANNEXES", ["LOLF.BA_RECETTES", "-LOLF.BA_DEPENSES"]),
+    ("LOLF.CAS_SOLDE", ["LOLF.CAS_RECETTES", "-LOLF.CAS_DEPENSES"]),
+    ("LOLF.CCF_SOLDE", ["LOLF.CCF_RECETTES", "-LOLF.CCF_DEPENSES"]),
+    ("LOLF.COMPTES_COMMERCE_SOLDE", ["-LOLF.COMPTES_COMMERCE_SOLDE_EN_DEPENSES"]),
+    ("LOLF.OPERATIONS_MONETAIRES_SOLDE", ["-LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_DEPENSES"]),
+    ("LOLF.CS_DEPENSES", ["LOLF.CAS_DEPENSES", "LOLF.CCF_DEPENSES", "LOLF.COMPTES_COMMERCE_SOLDE_EN_DEPENSES",
+                          "LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_DEPENSES"]),
+    ("LOLF.CS_RECETTES", ["LOLF.CAS_RECETTES", "LOLF.CCF_RECETTES"]),
+    ("LOLF.SOLDE_COMPTES_SPECIAUX", ["LOLF.CS_RECETTES", "-LOLF.CS_DEPENSES"]),
+    ("LOLF.RESULTAT_BUDGETAIRE", ["LOLF.SOLDE_BUDGET_GENERAL", "LOLF.SOLDE_BUDGETS_ANNEXES", "LOLF.SOLDE_COMPTES_SPECIAUX"]),
+    ("LOLF.RESULTAT_EXECUTION", ["LOLF.BG_RECETTES_AVANT_PSR", "-LOLF.BG_DEPENSES_Y_COMPRIS_PSR",
+                                 "LOLF.SOLDE_COMPTES_SPECIAUX"]),
+]
 IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique (1) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_DROITS_CONSTATES", "rubrique (2) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_NON_BUDGETAIRES", "rubrique (3) du tableau 3.107"),
@@ -90,7 +116,12 @@ DECOMPOSITIONS = [("S13", ["S1311", "S1313", "S1314"]), ("S1311", ["S13111", "S1
 ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO"}
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
-# de droite), chaque terme étant (source, périmètre, concept, signe), en montant, pour l'ensemble des fonctions.
+# de droite), chaque terme étant (source, périmètre, concept, signe) et, au besoin, (modèle de période, traitement),
+# en montant, pour l'ensemble des fonctions. Une source terminée par « * » désigne toute source qui commence ainsi :
+# les termes d'un même préfixe viennent d'une même source, l'une après l'autre s'il y en a plusieurs.
+_LOI = "senat.pjl*"  # textes des lois relatives aux résultats de la gestion publiés par le Sénat
+_DECEMBRE = ("{annee}-12", "cumul_depuis_janvier")  # situation mensuelle budgétaire, cumul à fin décembre
+_SMB = "insee.bdm-comptes-etat"
 _IMPOTS_PRODUCTION_3217 = [("insee.t3217", "S13_S212", f"SEC2010.{c}REC", 1) for c in ("D211", "D212", "D214", "D291", "D292")]
 PASSERELLES = [
     ("Cotisations sociales : tableau 3.217 contre tableau 3.201",
@@ -116,6 +147,28 @@ PASSERELLES = [
     ("Prélèvements obligatoires des administrations publiques : impôts nationaux du tableau 3.217 contre somme des "
      "sous-secteurs du tableau 3.216",
      [("insee.t3217", "S13", "INSEE_PO.PO", 1)], [("insee.t3216", p, "INSEE_PO.PO", 1) for p in ("S1311", "S1313", "S1314")]),
+    ("Solde général d'exécution à fin décembre (situation mensuelle) contre soldes du budget général et des comptes "
+     "spéciaux de la loi relative aux résultats de la gestion",
+     [(_SMB, "ETAT_LF", "LOLF.RESULTAT_EXECUTION", 1, *_DECEMBRE)],
+     [(_LOI, "ETAT_LF", "LOLF.SOLDE_BUDGET_GENERAL", 1), (_LOI, "ETAT_LF", "LOLF.SOLDE_COMPTES_SPECIAUX", 1)]),
+    ("Dépenses du budget général à fin décembre (situation mensuelle) contre dépenses nettes plus prélèvements sur "
+     "recettes de la loi relative aux résultats de la gestion",
+     [(_SMB, "ETAT_LF", "LOLF.BG_DEPENSES_Y_COMPRIS_PSR", 1, *_DECEMBRE)],
+     [(_LOI, "ETAT_LF", "LOLF.BG_DEPENSES_NETTES", 1), (_LOI, "ETAT_LF", "LOLF.BG_PRELEVEMENTS_SUR_RECETTES", 1)]),
+    ("Recettes du budget général à fin décembre (situation mensuelle) contre recettes nettes plus prélèvements sur "
+     "recettes de la loi relative aux résultats de la gestion",
+     [(_SMB, "ETAT_LF", "LOLF.BG_RECETTES_AVANT_PSR", 1, *_DECEMBRE)],
+     [(_LOI, "ETAT_LF", "LOLF.BG_RECETTES_NETTES", 1), (_LOI, "ETAT_LF", "LOLF.BG_PRELEVEMENTS_SUR_RECETTES", 1)]),
+    ("Solde général d'exécution à fin décembre (situation mensuelle) contre résultat d'exécution des lois de finances "
+     "du tableau 3.107",
+     [(_SMB, "ETAT_LF", "LOLF.RESULTAT_EXECUTION", 1, *_DECEMBRE)], [("insee.t3107", "ETAT_LF", "LOLF.RESULTAT_EXECUTION", 1)]),
+    ("Solde du budget général à fin décembre (situation mensuelle : recettes moins dépenses) contre tableau 3.107",
+     [(_SMB, "ETAT_LF", "LOLF.BG_RECETTES_AVANT_PSR", 1, *_DECEMBRE),
+      (_SMB, "ETAT_LF", "LOLF.BG_DEPENSES_Y_COMPRIS_PSR", -1, *_DECEMBRE)],
+     [("insee.t3107", "ETAT_LF", "LOLF.SOLDE_BUDGET_GENERAL", 1)]),
+    ("Solde des comptes spéciaux à fin décembre (situation mensuelle) contre tableau 3.107",
+     [(_SMB, "ETAT_LF", "LOLF.SOLDE_COMPTES_SPECIAUX", 1, *_DECEMBRE)],
+     [("insee.t3107", "ETAT_LF", "LOLF.SOLDE_COMPTES_SPECIAUX", 1)]),
     ("Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) "
      "et (3), dans le tableau 3.107",
      [("insee.t3107", "S13111", "SEC2010.B9", 1)],
@@ -201,18 +254,24 @@ def sommes(derniers):
 
 
 def ventilations(derniers):
-    """L'ensemble des fonctions égale la somme des divisions de la COFOG, chaque division la somme de ses groupes."""
+    """Un ensemble contre la somme de ses parties, selon la hiérarchie de la table des fonctions : l'ensemble des
+    fonctions contre les divisions de la COFOG ou les missions du budget de l'État, chaque division contre ses groupes,
+    chaque mission contre ses programmes. Les parties d'un ensemble sont celles que la source publie, pour cette
+    grandeur, au moins une année ; s'il en manque une année, la ventilation est partielle."""
     enfants = collections.defaultdict(list)
     for f in lire("tables/fonctions.csv"):
-        if re.fullmatch(r"GF[0-9]{2}", f["id"]) or re.fullmatch(r"GF[0-9]{4}", f["id"]):
+        if "+" not in f["id"]:
             enfants[f["parent_id"]].append(f["id"])
-    groupes = collections.defaultdict(dict)
+    groupes, publiees = collections.defaultdict(dict), collections.defaultdict(set)
     for k, l in derniers.items():
         if l["unite_id"] in FAMILLES:
             groupes[k[:4] + k[5:]][k[4]] = l
+            publiees[k[:4] + k[5:7]].add(k[4])
     resultats = []
-    for (source, zone, perimetre, concept, traitements, unite, periode), par_fonction in sorted(groupes.items()):
+    for cle, par_fonction in sorted(groupes.items()):
+        source, zone, perimetre, concept, traitements, unite, periode = cle
         for parent, fils in sorted(enfants.items()):
+            fils = [f for f in fils if f in publiees[cle[:6]]]
             presents = [f for f in fils if f in par_fonction]
             if parent not in par_fonction or not presents:
                 continue  # pas de ventilation publiée
@@ -251,26 +310,38 @@ def additivite(derniers):
 
 
 def passerelles(derniers):
-    """Chaque passerelle, pour chaque année où figurent tous ses termes : (libellé, année, gauche, droite, marge,
-    révisable)."""
-    def terme(source, perimetre, concept, annee):
-        return montant(derniers, (source, "FR", perimetre, concept, "", "", "", annee))
+    """Chaque passerelle, pour chaque année où figurent tous ses termes : écart entre les deux côtés, marge des
+    arrondis, et si l'un des chiffres est encore révisable."""
+    index = collections.defaultdict(dict)  # (périmètre, concept, traitement, période) → {source: ligne}, en montant
+    for k, l in derniers.items():
+        if k[1] == "FR" and k[4] == "" and valeur(l)[2] == "euros":
+            index[(k[2], k[3], k[5], k[7])][k[0]] = l
+    annees = sorted({k[7][:4] for k in derniers})
+
+    def lignes(terme, annee):
+        source, perimetre, concept = terme[:3]
+        modele, traitement = terme[4:6] if len(terme) > 4 else ("{annee}", "")
+        trouvees = index.get((perimetre, concept, traitement, modele.format(annee=annee)), {})
+        return {s: l for s, l in trouvees.items() if (s.startswith(source[:-1]) if source.endswith("*") else s == source)}
 
     resultats = []
     for libelle, gauche, droite in PASSERELLES:
-        annees = sorted({k[7] for k in derniers if k[0] == gauche[0][0] and k[2] == gauche[0][1] and k[3] == gauche[0][2]})
+        termes = gauche + droite
         for annee in annees:
-            termes = [(s, terme(source, perimetre, concept, annee), (source, perimetre, concept))
-                      for cote in (gauche, droite) for source, perimetre, concept, s in cote]
-            if any(t is None for _, t, _ in termes):
+            candidats = [lignes(t, annee) for t in termes]
+            if not all(candidats):
                 continue
-            g = sum(s * t[0] for s, t, _ in termes[:len(gauche)])
-            d = sum(s * t[0] for s, t, _ in termes[len(gauche):])
-            statuts = {derniers[(source, "FR", perimetre, concept, "", "", u, annee)]["statut"]
-                       for _, _, (source, perimetre, concept) in termes for u in ("MD_EUR", "MIO_EUR", "EUR")
-                       if (source, "FR", perimetre, concept, "", "", u, annee) in derniers}
-            resultats.append({"libelle": libelle, "annee": annee, "ecart": g - d, "revisable": bool(statuts & REVISABLES),
-                              "juste": not depasse(g - d, sum(t[1] for _, t, _ in termes))})
+            # Les termes d'un même préfixe viennent d'une même source : une évaluation par source commune.
+            prefixes = sorted({t[0] for t in termes if t[0].endswith("*")})
+            communes = [sorted(set.intersection(*(set(c) for t, c in zip(termes, candidats) if t[0] == p))) for p in prefixes]
+            for choix in itertools.product(*communes):
+                retenue = dict(zip(prefixes, choix))
+                choisies = [c[retenue.get(t[0], t[0])] for t, c in zip(termes, candidats)]
+                ecarts = [t[3] * valeur(l)[0] * (1 if i < len(gauche) else -1) for i, (t, l) in enumerate(zip(termes, choisies))]
+                marge = sum(valeur(l)[1] for l in choisies)
+                resultats.append({"libelle": libelle, "annee": annee, "ecart": sum(ecarts),
+                                  "revisable": any(l["statut"] in REVISABLES for l in choisies),
+                                  "juste": not depasse(sum(ecarts), marge)})
     return resultats
 
 
@@ -418,8 +489,9 @@ def partie_ventilations(derniers):
     complets = [r for r in resultats if r["complet"]]
     ecarts = [r for r in complets if not r["juste"]]
     lignes = ["## 2. Ventilations par fonction", "",
-              "Pour une même grandeur, l'ensemble des fonctions contre la somme des dix divisions de la COFOG, et "
-              "chaque division contre la somme de ses groupes.", "",
+              "Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG ou des missions "
+              "du budget de l'État, chaque division contre la somme de ses groupes, chaque mission contre celle de ses "
+              "programmes.", "",
               f"{len(complets)} ventilations vérifiées avec toutes leurs parties : {len(complets) - len(ecarts)} justes, "
               f"{len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
