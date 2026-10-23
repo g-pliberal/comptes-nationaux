@@ -87,7 +87,7 @@ Selon la source :
 
 ## Les règles d'enregistrement
 
-1. On ajoute, on n'efface jamais : une nouvelle version d'un chiffre est une nouvelle ligne. Un chiffre qu'une nouvelle version de la source reprend à l'identique n'est pas enregistré une seconde fois : il garde sa version d'origine. Un import qui trouverait, pour un même identifiant, une valeur différente de celle déjà enregistrée s'arrête.
+1. On ajoute, on n'efface jamais : une nouvelle version d'un chiffre est une nouvelle ligne. Un chiffre qu'une nouvelle version de la source reprend à l'identique n'est pas enregistré une seconde fois : il garde sa version d'origine. Importer de nouveau un fichier n'ajoute rien. Un import qui trouverait, pour un même identifiant, une valeur différente de celle déjà enregistrée s'arrête.
 2. Un chiffre publié par une source renvoie à une copie archivée ; un chiffre cité renvoie à l'endroit exact chez celui qui le cite ; un chiffre calculé renvoie à sa recette dans `calculs.csv`.
 3. Une erreur d'enregistrement se corrige dans la ligne et s'inscrit dans `corrections.csv`, avec sa date et sa raison.
 4. Rien n'entre dans la base sans passer le contrôle `python3 outils/valider.py`. Il vérifie les schémas, les références, la concordance de chaque identifiant avec sa fiche et l'intégrité des copies archivées. Il relit aussi chaque chiffre publié dans sa copie archivée et refuse toute valeur différente.

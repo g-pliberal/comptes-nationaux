@@ -408,14 +408,14 @@ def fusionner(existants, nouveaux, origine):
     """Ajoute à `existants` (identifiant → ligne) les chiffres nouveaux d'une copie archivée.
 
     Une valeur déjà enregistrée à l'identique est ignorée, de même qu'une valeur qu'une version plus
-    récente de la source reprend sans changement : seule la version où elle apparaît est enregistrée.
+    récente de la source reprend sans changement : seule la version où elle apparaît est enregistrée. La
+    comparaison se fait avec la version qui précède, pour qu'importer de nouveau un fichier n'ajoute rien.
     Deux valeurs différentes pour un même identifiant arrêtent l'import.
     Renvoie (nombre de chiffres ajoutés, nombre de chiffres inchangés)."""
     cle = lambda l: tuple(l[c] for c in COMPOSANTES_ID[:-1])
-    dernieres = {}
+    versions = {}  # clé sans la version → lignes enregistrées
     for l in existants.values():
-        if cle(l) not in dernieres or l["version"] > dernieres[cle(l)]["version"]:
-            dernieres[cle(l)] = l
+        versions.setdefault(cle(l), []).append(l)
     ajoutes, inchanges, conflits = 0, 0, []
     for l in nouveaux:
         ancien = existants.get(l["id"])
@@ -426,12 +426,13 @@ def fusionner(existants, nouveaux, origine):
                 conflits.append(f"{l['id']} : {ancien['valeur']} ({ancien['statut']}) déjà enregistré, "
                                 f"{l['valeur']} ({l['statut']}) dans {origine}")
             continue
-        precedent = dernieres.get(cle(l))
-        if precedent is not None and precedent["version"] < l["version"] and meme_valeur(precedent, l):
+        anterieures = [v for v in versions.get(cle(l), []) if v["version"] < l["version"]]
+        precedent = max(anterieures, key=lambda v: v["version"]) if anterieures else None
+        if precedent is not None and meme_valeur(precedent, l):
             inchanges += 1
             continue
         existants[l["id"]] = l
-        dernieres[cle(l)] = l
+        versions.setdefault(cle(l), []).append(l)
         ajoutes += 1
     if conflits:
         sys.exit("Import interrompu, valeurs contradictoires pour une même version :\n" + "\n".join(conflits))
