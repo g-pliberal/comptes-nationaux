@@ -41,32 +41,32 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
-| senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1051 |
-| senat.pjl07-429 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2007, texte n° 429 (2007-2008) transmis au Sénat le 1er juillet 2008 | 2008-07-01 | 769 |
-| senat.pjl08-502 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2008, texte n° 502 (2008-2009) transmis au Sénat le 30 juin 2009 | 2009-06-30 | 675 |
-| senat.pjl09-585 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2009, texte n° 585 (2009-2010) transmis au Sénat le 29 juin 2010 | 2010-06-29 | 664 |
-| senat.pjl10-672 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2010, texte n° 672 (2010-2011) transmis au Sénat le 28 juin 2011 | 2011-06-28 | 685 |
-| senat.pjl11-655 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2011, texte n° 655 (2011-2012) transmis au Sénat le 10 juillet 2012 | 2012-07-10 | 632 |
-| senat.pjl12-799 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2012, texte n° 799 (2012-2013) transmis au Sénat le 23 juillet 2013 en nouvelle lecture | 2013-07-23 | 652 |
-| senat.pjl13-759 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2013, texte n° 759 (2013-2014) transmis au Sénat le 21 juillet 2014 en nouvelle lecture | 2014-07-21 | 627 |
-| senat.pjl14-642 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2014, texte n° 642 (2014-2015) transmis au Sénat le 16 juillet 2015 en nouvelle lecture | 2015-07-16 | 668 |
-| senat.pjl15-785 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2015, texte n° 785 (2015-2016) transmis au Sénat le 12 juillet 2016 en nouvelle lecture | 2016-07-12 | 602 |
-| senat.pjl16-643 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2016, texte n° 643 (2016-2017) transmis au Sénat le 18 juillet 2017 | 2017-07-18 | 604 |
-| senat.pjl17-595 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2017, texte n° 595 (2017-2018) transmis au Sénat le 21 juin 2018 | 2018-06-21 | 593 |
-| senat.pjl18-686 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2018, texte n° 686 (2018-2019) transmis au Sénat le 18 juillet 2019 en nouvelle lecture | 2019-07-18 | 606 |
-| senat.pjl19-505 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2019, texte n° 505 (2019-2020) transmis au Sénat le 11 juin 2020 | 2020-06-11 | 614 |
-| senat.pjl20-784 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2020, texte n° 784 (2020-2021) transmis au Sénat le 21 juillet 2021 en nouvelle lecture | 2021-07-21 | 626 |
-| senat.pjl22-683 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2021, texte n° 683 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 667 |
-| senat.pjl22-684 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2022, texte n° 684 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 671 |
-| senat.pjl24-032 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2023, texte n° 32 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 653 |
-| senat.pjl24-718 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2024, texte n° 718 (2024-2025) transmis au Sénat le 10 juin 2025 | 2025-06-10 | 641 |
-| senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 638 |
+| senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1432 |
+| senat.pjl07-429 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2007, texte n° 429 (2007-2008) transmis au Sénat le 1er juillet 2008 | 2008-07-01 | 1074 |
+| senat.pjl08-502 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2008, texte n° 502 (2008-2009) transmis au Sénat le 30 juin 2009 | 2009-06-30 | 988 |
+| senat.pjl09-585 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2009, texte n° 585 (2009-2010) transmis au Sénat le 29 juin 2010 | 2010-06-29 | 941 |
+| senat.pjl10-672 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2010, texte n° 672 (2010-2011) transmis au Sénat le 28 juin 2011 | 2011-06-28 | 963 |
+| senat.pjl11-655 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2011, texte n° 655 (2011-2012) transmis au Sénat le 10 juillet 2012 | 2012-07-10 | 959 |
+| senat.pjl12-799 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2012, texte n° 799 (2012-2013) transmis au Sénat le 23 juillet 2013 en nouvelle lecture | 2013-07-23 | 987 |
+| senat.pjl13-759 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2013, texte n° 759 (2013-2014) transmis au Sénat le 21 juillet 2014 en nouvelle lecture | 2014-07-21 | 977 |
+| senat.pjl14-642 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2014, texte n° 642 (2014-2015) transmis au Sénat le 16 juillet 2015 en nouvelle lecture | 2015-07-16 | 1025 |
+| senat.pjl15-785 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2015, texte n° 785 (2015-2016) transmis au Sénat le 12 juillet 2016 en nouvelle lecture | 2016-07-12 | 935 |
+| senat.pjl16-643 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2016, texte n° 643 (2016-2017) transmis au Sénat le 18 juillet 2017 | 2017-07-18 | 931 |
+| senat.pjl17-595 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2017, texte n° 595 (2017-2018) transmis au Sénat le 21 juin 2018 | 2018-06-21 | 907 |
+| senat.pjl18-686 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2018, texte n° 686 (2018-2019) transmis au Sénat le 18 juillet 2019 en nouvelle lecture | 2019-07-18 | 910 |
+| senat.pjl19-505 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2019, texte n° 505 (2019-2020) transmis au Sénat le 11 juin 2020 | 2020-06-11 | 921 |
+| senat.pjl20-784 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2020, texte n° 784 (2020-2021) transmis au Sénat le 21 juillet 2021 en nouvelle lecture | 2021-07-21 | 919 |
+| senat.pjl22-683 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2021, texte n° 683 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 945 |
+| senat.pjl22-684 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2022, texte n° 684 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 952 |
+| senat.pjl24-032 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2023, texte n° 32 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 923 |
+| senat.pjl24-718 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2024, texte n° 718 (2024-2025) transmis au Sénat le 10 juin 2025 | 2025-06-10 | 914 |
+| senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 904 |
 
 ## 1. Sommes comptables
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.
 
-6858 sommes vérifiées avec toutes leurs composantes : 6847 justes, 11 en écart.
+6953 sommes vérifiées avec toutes leurs composantes : 6939 justes, 14 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
 |---|---|---|---|---|---|---|---|
@@ -81,6 +81,9 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | insee.t3210 | S131314 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 | 5,0550 | +16,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 | −16,3100 | −574,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 | −17,1280 | −578,0 M€ |
+| senat.pjl13-759 | ETAT_LF | ensemble | 2013 | LOLF.COMPTES_COMMERCE_SOLDE | 0,1368 | 0,2654 | −128,6 M€ |
+| senat.pjl19-505 | ETAT_LF | ensemble | 2019 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 23,3199 | 24,5853 | −1 265,4 M€ |
+| senat.pjl25-726 | ETAT_LF | ensemble | 2025 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 16,0862 | 16,0902 | −4,0 M€ |
 
 11107 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour 11102 d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables. Pour les 5 autres, elles ne suffisent pas : des parties absentes ne sont pas nulles.
 
@@ -91,9 +94,14 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 ## 2. Ventilations par fonction
 
-Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG ou des missions du budget de l'État, chaque division contre la somme de ses groupes, chaque mission contre celle de ses programmes.
+Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes.
 
-17821 ventilations vérifiées avec toutes leurs parties : 17821 justes, 0 en écart.
+19609 ventilations vérifiées avec toutes leurs parties : 19607 justes, 2 en écart.
+
+| Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
+|---|---|---|---|---|---|
+| senat.pjl16-643 | ETAT_LF | LOLF.BA_DEPENSES | ensemble | 2016 | +0,6 M€ en 2016 |
+| senat.pjl16-643 | ETAT_LF | LOLF.BA_RECETTES | ensemble | 2016 | +0,6 M€ en 2016 |
 
 834 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
 

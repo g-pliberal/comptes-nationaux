@@ -328,8 +328,10 @@ def texte_html(contenu):
 
 
 def nombre_texte(texte):
-    """« -3 377 967 838,47 » → (« -3377967838.47 », 2) ; None si le texte n'est pas un nombre."""
+    """« -3 377 967 838,47 » → (« -3377967838.47 », 2) ; None si le texte n'est pas un nombre. Un astérisque
+    d'appel de note, avant ou après le nombre, n'en fait pas partie."""
     t = re.sub(r"[\s\u00a0\u202f]", "", texte).replace("−", "-").replace("–", "-").replace(",", ".")
+    t = re.sub(r"^\(?\*\)?|\(?\*\)?$", "", t)
     if not re.fullmatch(r"-?[0-9]+(\.[0-9]+)?", t):
         return None
     return t, len(t.split(".")[1]) if "." in t else 0

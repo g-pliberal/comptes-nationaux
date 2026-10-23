@@ -9,10 +9,15 @@ Tableaux pris en charge :
 - l'article 1er : résultat budgétaire de l'État, recettes et dépenses du budget général, des budgets annexes
   et des comptes spéciaux ;
 - l'article 4 : autorisations d'engagement consommées et dépenses du budget général, par mission et par
-  programme, avec les ouvertures et annulations de crédits que la loi y ajoute.
+  programme, avec les ouvertures et annulations de crédits que la loi y ajoute ;
+- les articles 5 et 6 : les mêmes grandeurs pour chaque budget annexe et chaque compte spécial, compte par
+  compte et programme par programme, avec les recettes, les majorations de découvert et les soldes des comptes
+  spéciaux au 31 décembre, ainsi que les articles qui arrêtent à part les comptes spéciaux clos dans l'année
+  (voir lignes_articles_5_6).
 
-Les missions et les programmes sont les « fonctions » de la norme LOLF : l'import les inscrit dans la table
-des fonctions à leur première apparition, sous un identifiant formé de leur libellé. Dans l'article 4, une
+Les missions, les budgets annexes, les comptes spéciaux et leurs programmes sont les « fonctions » de la norme
+LOLF : l'import les inscrit dans la table des fonctions à leur première apparition, sous un identifiant formé de
+leur libellé. Dans l'article 4, une
 mission est une ligne en gras, un programme une ligne maigre ou précédée d'un tiret ; un tableau sans gras
 distingue ses programmes par le seul tiret. Un en-tête que le tableau répète après un saut de page du texte
 imprimé est ignoré. Chaque libellé de ligne et de colonne doit avoir une correspondance
@@ -22,6 +27,8 @@ les montants exécutés sont définitifs, comme le texte les qualifie, les ajust
 de statut.
 """
 
+import collections
+import difflib
 import re
 import sys
 import unicodedata
@@ -120,6 +127,7 @@ ARTICLE_4 = {
     "Ouvertures de crédits complémentaires": "LOLF.BG_CP_OUVERTURES",
     "Annulations de crédits non consommés et non reportés": "LOLF.BG_CP_ANNULATIONS",
 }
+NOTE_ASTERISQUE = "Le montant porte un astérisque d’appel de note : la note sous le tableau le précise."
 # Libellés fautifs de l'un des deux tableaux de l'article 4, que l'autre donne correctement : (source, libellé) →
 # libellé correct. L'emplacement du chiffre garde le libellé de la page.
 LIBELLES_CORRIGES = {
@@ -127,15 +135,74 @@ LIBELLES_CORRIGES = {
         "- Conduite et pilotage des politiques économiques et financières",
     ("senat.pjl24-032", "- Haute Cour. . . . . . . . . . . . . . . . . . . . . . . .u"): "- Haute Cour",
 }
+# Articles 5 et 6 : budgets annexes et comptes spéciaux, compte par compte. Intitulé de colonne → mesure ; le concept
+# d'un chiffre est « LOLF.<catégorie>_<mesure> ».
+MESURES = {
+    "Autorisations d’engagement consommées": "AE_CONSOMMEES",
+    "Autorisations d’engagement engagées": "AE_CONSOMMEES",
+    "Autorisations d’engagement": "AE_CONSOMMEES",
+    "Ouvertures d’autorisations d’engagement complémentaires": "AE_OUVERTURES",
+    "Annulations d’autorisations d’engagement non consommées et non reportées": "AE_ANNULATIONS",
+    "Annulations d’autorisations d’engagement non engagées et non reportées": "AE_ANNULATIONS",
+    "Dépenses": "DEPENSES",
+    "Recettes": "RECETTES",
+    "Ouvertures de crédits complémentaires": "CP_OUVERTURES",
+    "Annulations de crédits non consommés et non reportés": "CP_ANNULATIONS",
+    "Annulations des crédits non consommés et non reportés": "CP_ANNULATIONS",
+    "Annulations des crédits non consommés et non reportes": "CP_ANNULATIONS",
+    "Majorations du découvert": "MAJORATIONS_DECOUVERT",
+    "Débiteurs": "SOLDES_DEBITEURS",
+    "Débiteur": "SOLDES_DEBITEURS",
+    "Créditeurs": "SOLDES_CREDITEURS",
+    "Créditeur": "SOLDES_CREDITEURS",
+}
+# Rubriques des comptes spéciaux → catégorie. Les comptes de commerce et d'opérations monétaires n'ont pas de programmes.
+CATEGORIES = {"Comptes d’affectation spéciale": "CAS", "Comptes de concours financiers": "CCF",
+              "Comptes de commerce": "COMPTES_COMMERCE", "Comptes d’opérations monétaires": "OPERATIONS_MONETAIRES",
+              "Compte de commerce": "COMPTES_COMMERCE"}  # au singulier dans le tableau d'un compte clos
+SANS_PROGRAMMES = {"COMPTES_COMMERCE", "OPERATIONS_MONETAIRES"}
+# Lignes d'un budget annexe qui ne sont pas des programmes mais des composantes de son total → libellé retenu.
+COMPOSANTES_BUDGET_ANNEXE = {"Augmentation du fonds de roulement": "Augmentation du fonds de roulement",
+                             "Augmentation du fonds de roulement (ligne d’équilibre)": "Augmentation du fonds de roulement",
+                             "Fonds de concours": "Fonds de concours"}
+# Regroupements des textes jusqu'aux comptes de 2010 : comptes dotés de crédits, comptes dotés de découverts. Le total
+# général d'un tableau porte sur les catégories qu'il présente.
+GROUPES = {"crédits": "CS_A_CREDITS", "découvert": "CS_A_DECOUVERT"}
+TOTAUX_GENERAUX = {frozenset({"CAS", "CCF"}): "CS_A_CREDITS", frozenset({"COMPTES_COMMERCE", "OPERATIONS_MONETAIRES"}): "CS_A_DECOUVERT",
+                   frozenset(CATEGORIES.values()): "CS_ENSEMBLE"}
+# Mesures de chaque catégorie : les comptes à crédits (budgets annexes, comptes d'affectation spéciale, de concours
+# financiers) ont des autorisations d'engagement et des crédits, les comptes à découvert (de commerce, d'opérations
+# monétaires) des découverts. Une mesure hors de sa catégorie arrête l'import.
+MESURES_A_CREDITS = {"AE_CONSOMMEES", "AE_OUVERTURES", "AE_ANNULATIONS", "DEPENSES", "RECETTES", "CP_OUVERTURES",
+                     "CP_ANNULATIONS", "SOLDES_DEBITEURS", "SOLDES_CREDITEURS"}
+MESURES_A_DECOUVERT = {"DEPENSES", "RECETTES", "MAJORATIONS_DECOUVERT", "SOLDES_DEBITEURS", "SOLDES_CREDITEURS"}
+# Intitulés de colonne que le texte contredit : (source, catégorie, intitulé) → (intitulé retenu, explication).
+NOTE_2022 = ("Le texte présente les comptes de commerce et d’opérations monétaires sous l’en-tête des comptes dotés de "
+             "crédits (« Annulations de crédits non consommés et non reportés »), dans la page du Sénat comme dans le "
+             "texte imprimé. Ces comptes sont dotés de découverts et non de crédits, et l’article 6 dit que les "
+             "découverts autorisés sont modifiés comme l’indiquent ses tableaux : le montant est une majoration du "
+             "découvert, comme les autres années.")
+COLONNES_CONTREDITES = {
+    ("senat.pjl22-684", "COMPTES_COMMERCE", "Annulations de crédits non consommés et non reportés"):
+        ("Majorations du découvert", NOTE_2022),
+    ("senat.pjl22-684", "OPERATIONS_MONETAIRES", "Annulations de crédits non consommés et non reportés"):
+        ("Majorations du découvert", NOTE_2022),
+}
+# Le texte de 2006 présente les budgets annexes de l'article 5 hors fonds de concours, les suivants fonds de concours
+# compris : les identifiants partagés avec l'article 1er et les ventilations le vérifient.
+BUDGETS_ANNEXES_HORS_FDC = {"senat.pjl06-389"}
+MESURES_AJUSTEMENTS = {"AE_OUVERTURES", "AE_ANNULATIONS", "CP_OUVERTURES", "CP_ANNULATIONS", "MAJORATIONS_DECOUVERT"}
+MESURES_SOLDES = {"SOLDES_DEBITEURS", "SOLDES_CREDITEURS"}
+
 AJUSTEMENTS = {"LOLF.BG_AE_OUVERTURES", "LOLF.BG_AE_ANNULATIONS", "LOLF.BG_CP_OUVERTURES", "LOLF.BG_CP_ANNULATIONS"}
 SOLDES = {c for lignes in ARTICLE_1.values() for colonne, c in lignes.items() if colonne == "Soldes"} | {"LOLF.BA_SOLDE_HORS_FDC"}
 
 # Unité annoncée en tête de tableau, « (En euros) » par exemple.
 UNITES = {"en euros": "EUR", "en millions d’euros": "MIO_EUR"}
-# Unités annoncées que les montants du tableau contredisent : (source, intitulé de sa première colonne de montants)
-# → (unité des montants, explication portée par chacun d'eux).
+# Unités annoncées que les montants du tableau contredisent : (source, intitulé de sa première colonne de montants,
+# unité annoncée) → (unité des montants, explication portée par chacun d'eux).
 UNITES_CONTREDITES = {
-    ("senat.pjl24-032", "Autorisations d’engagement consommées"): (
+    ("senat.pjl24-032", "Autorisations d’engagement consommées", "en millions d’euros"): (
         "EUR", "Le tableau annonce des millions d’euros, dans la page du Sénat comme dans le texte imprimé, mais ses "
                "montants sont en euros : ils ont des centimes, et leur total (590 784 984 819,29) est du même ordre "
                "que celui des dépenses du tableau suivant, annoncé en euros (591 887 384 714,81)."),
@@ -194,7 +261,8 @@ def unite(tableau, entete, noms, forme, source_id):
         {unite_annoncee(forme["legende"])} - {None}
     if len(annoncees) != 1 or next(iter(annoncees)) not in UNITES:
         sys.exit(f"tableau « {noms.get(1)} » : unité annoncée inconnue ou absente ({annoncees or 'aucune'})")
-    return UNITES_CONTREDITES.get((source_id, noms.get(1)), (UNITES[next(iter(annoncees))], ""))
+    annoncee = next(iter(annoncees))
+    return UNITES_CONTREDITES.get((source_id, noms.get(1), annoncee), (UNITES[annoncee], ""))
 
 
 def montants(tableau, entete, noms, largeurs):
@@ -203,6 +271,8 @@ def montants(tableau, entete, noms, largeurs):
     for r in range(entete, len(tableau)):
         for c, x in enumerate(tableau[r]):
             nombre = nombre_texte(x) if c > 0 else None
+            if c > 0 and not nombre and re.search(r"[0-9]", x):
+                sys.exit(f"tableau « {noms.get(1)} », ligne {r} : montant illisible (« {x} »)")
             if not nombre:
                 continue
             if len({noms.get(c + dc) for dc in range(largeurs.get((r, c), 1))}) > 1:
@@ -322,6 +392,280 @@ def lignes_article_4(tableaux, formes, source_id, recolle):
                    "nombre": nombre, "unite": unite_, "note": note}
 
 
+def est_entete(cellules):
+    """Une ligne d'en-tête : tous ses textes sont la désignation, l'unité ou des intitulés de colonne."""
+    textes = [propre(c) for c in cellules if propre(c)]
+    return bool(textes) and all(t in MESURES or unite_annoncee(t) or t.startswith(
+        ("Désignation", "des comptes spéciaux", "des budgets annexes", "Ajustements de la loi", "Opérations de l’année",
+         "Soldes au 31 décembre", "Solde au 31 décembre")) for t in textes)
+
+
+def famille(tableau, forme):
+    """BA (budgets annexes), CS (comptes spéciaux) ou CLOS (compte spécial clos, arrêté par un article à part)."""
+    designation = next(propre(c) for l in tableau[:4] for c in l if propre(c).startswith("Désignation"))
+    legende = forme["legende"]
+    if "compte spécial" in designation or re.search(r"\b(?:du|sur le) compte spécial\b", legende):
+        return "CLOS"
+    for texte in (designation, legende):
+        if "budgets annexes" in texte:
+            return "BA"
+        if re.search(r"comptes spécia", texte):
+            return "CS"
+    sys.exit(f"tableau « {designation} » : budgets annexes ou comptes spéciaux ?")
+
+
+def segments_de_comptes(tableaux, formes, source_id):
+    """Les tableaux des articles 5 et 6, découpés en segments : chacun sous son bloc d'en-tête, car une même grille
+    en réunit parfois deux. Un tableau sans désignation, dont l'en-tête ne porte que des intitulés de colonne de ces
+    articles, prolonge le tableau de comptes qui le précède. Un tableau à montants sans en-tête qui suit un tableau de
+    comptes, sans texte entre eux, le prolonge aussi, sur les mêmes colonnes : la page de 2008 coupe ainsi en trois,
+    sans en répéter l'en-tête, le tableau des autorisations d'engagement des comptes spéciaux. Un autre tableau à
+    montants entre deux tableaux de comptes arrête l'import. Les tableaux d'un compte spécial clos dans l'année, que
+    le texte arrête à part, forment la famille CLOS."""
+    segments, precedente, lus, ignores = [], None, [], []
+    for i, t in enumerate(tableaux):
+        if not t:
+            continue
+        suite, a_montants = None, any(nombre_texte(x) for l in t for x in l[1:])
+        if any(propre(c).startswith("Désignation") and "missions" not in propre(c) for l in t[:4] for c in l):
+            fam = famille(t, formes[i])
+        elif precedente and est_entete(t[0]) and any(propre(c) in MESURES for l in t[:4] if est_entete(l) for c in l):
+            fam = precedente
+        elif a_montants and segments and segments[-1]["i"] == i - 1 and not formes[i]["legende"] and not est_entete(t[0]):
+            suite, fam = segments[-1], precedente
+            if len(t[0]) != len(suite["t"][0]):
+                sys.exit(f"tableau {i} : suite sans en-tête du tableau {i - 1}, sur {len(t[0])} colonnes au lieu de "
+                         f"{len(suite['t'][0])}")
+        else:
+            if a_montants:
+                ignores.append(i)
+            continue
+        precedente = fam
+        lus.append(i)
+        bloc, unite_tableau = [], suite and suite["unite"]
+        courant = {**suite, "i": i, "t": t, "forme": formes[i], "lignes": []} if suite else None
+        for r, ligne in enumerate(t):
+            if est_entete(ligne):
+                if courant is not None:
+                    segments.append(courant)
+                    courant, bloc = None, []
+                bloc.append(r)
+            elif any(propre(c) for c in ligne):
+                if courant is None:
+                    if not bloc:
+                        sys.exit(f"tableau {i}, ligne {r} : montants sans en-tête")
+                    noms = colonnes(t[bloc[0]:bloc[-1] + 1], bloc[-1] - bloc[0] + 1,
+                                    {(rr - bloc[0], c): l for (rr, c), l in formes[i]["largeurs"].items()})
+                    mesures = {MESURES[n] for n in noms.values() if n in MESURES}
+                    genre = "AE" if any(m.startswith("AE_") for m in mesures) else \
+                        "SOLDES" if mesures & MESURES_SOLDES else "OPERATIONS"
+                    # L'unité annoncée en tête du tableau vaut pour tous ses segments.
+                    entete_ = t[bloc[0]:bloc[-1] + 1]
+                    if bloc[0] > 0 and not any(unite_annoncee(c) for l in entete_ for c in l) and unite_tableau:
+                        unite_ = unite_tableau
+                    else:
+                        unite_ = unite(entete_, len(entete_), noms, formes[i] if bloc[0] == 0 else
+                                       {**formes[i], "legende": ""}, source_id)
+                    unite_tableau = unite_tableau or unite_
+                    courant = {"famille": fam, "genre": genre, "i": i, "t": t, "forme": formes[i], "noms": noms,
+                               "unite": unite_, "lignes": []}
+                courant["lignes"].append(r)
+        if courant is not None:
+            segments.append(courant)
+    entre = [i for i in ignores if lus and lus[0] < i < lus[-1]]
+    if entre:
+        sys.exit(f"tableaux {entre} : montants entre deux tableaux de comptes, ni en-tête ni suite d'un tableau")
+    return segments
+
+
+def structure_des_comptes(segs, fam, recolle, source_id):
+    """Les lignes d'un tableau de comptes (segments d'une même famille et d'un même genre), avec leur rôle : rubrique
+    de catégorie, total, composante d'un budget annexe, ou ligne de compte ou de programme, à départager ensuite."""
+    lignes, categorie = [], "BA" if fam == "BA" else None
+    for seg in segs:
+        t = seg["t"]
+        for r in seg["lignes"]:
+            brut = propre(t[r][0])
+            chiffres = any(nombre_texte(x) for x in t[r][1:])
+            if not brut:
+                if chiffres:
+                    sys.exit(f"tableau {seg['i']}, ligne {r} : montants sans libellé")
+                continue
+            cle_ = cle(brut)
+            groupe = re.fullmatch(r"(?i)(?:[ab]\.?\s*-?\s*)?comptes à (crédits|découvert)", cle_)
+            total = re.fullmatch(r"(?i)tota(?:l|ux)(?: (?:des?|du) | )?(.*)", cle_)
+            if fam in ("CS", "CLOS") and cle_ in CATEGORIES:
+                categorie = CATEGORIES[cle_]
+                lignes.append({"seg": seg, "r": r, "role": "rubrique", "cible": categorie})
+            elif groupe:
+                if chiffres:
+                    sys.exit(f"tableau {seg['i']}, ligne {r} : montants sur la rubrique « {brut} »")
+            elif total:
+                reste = total.group(1).lower()
+                cibles = {k.lower(): v for k, v in CATEGORIES.items()}
+                if reste in cibles:
+                    cible = cibles[reste]
+                elif reste == "budgets annexes" and fam == "BA":
+                    cible = "BA"
+                elif re.fullmatch(r"comptes à (crédits|découvert)", reste):
+                    cible = GROUPES[reste.split()[-1]]
+                elif reste in ("", "général", "comptes spéciaux"):
+                    cible = "BA" if fam == "BA" else None  # total général, fixé d'après les rubriques présentes
+                else:
+                    sys.exit(f"tableau {seg['i']}, ligne {r} : total inattendu (« {brut} »)")
+                lignes.append({"seg": seg, "r": r, "role": "total", "cible": cible})
+            elif categorie is None or re.match(r"(?i)tota", cle_):
+                sys.exit(f"tableau {seg['i']}, ligne {r} : compte hors rubrique ou total inconnu (« {brut} »)")
+            elif fam == "BA" and cle_ in COMPOSANTES_BUDGET_ANNEXE:
+                lignes.append({"seg": seg, "r": r, "role": "composante", "categorie": categorie, "brut": brut,
+                               "net": COMPOSANTES_BUDGET_ANNEXE[cle_]})
+            else:
+                lignes.append({"seg": seg, "r": r, "role": "ligne", "categorie": categorie, "brut": brut,
+                               "tiret": brut.startswith(("-", "+")), "gras": (r, 0) in seg["forme"]["gras"],
+                               "net": recolle(re.sub(r"^(?:[-+]+|\d+\.\s*-)\s*", "",
+                                                     LIBELLES_CORRIGES.get((source_id, brut), brut)))})
+    presentes = frozenset(l["cible"] for l in lignes if l["role"] == "rubrique")
+    for l in lignes:
+        if l["role"] == "total" and l["cible"] is None:
+            if fam == "CLOS" and len(presentes) == 1:
+                l["cible"] = next(iter(presentes))
+            elif presentes in TOTAUX_GENERAUX:
+                l["cible"] = TOTAUX_GENERAUX[presentes]
+            else:
+                sys.exit(f"tableau {l['seg']['i']}, ligne {l['r']} : total général de {sorted(presentes)}")
+    return lignes
+
+
+def proches(a, b):
+    return difflib.SequenceMatcher(None, a.lower(), b.lower()).ratio() >= 0.85
+
+
+def apparier(a, b, quoi):
+    """Les lignes de deux tableaux qui se correspondent, alignées dans l'ordre : (ligne de a, ligne de b) ; une ligne
+    que l'autre tableau ne présente pas reste seule. Deux lignes appariées doivent avoir des libellés presque
+    identiques ; un remplacement de plusieurs lignes par un autre nombre de lignes arrête l'import."""
+    cles = lambda lignes: [(l["categorie"], code_lolf(l["net"])) for l in lignes]
+    paires = []
+    for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, cles(a), cles(b), autojunk=False).get_opcodes():
+        if op == "equal" or op == "replace" and i2 - i1 == j2 - j1:
+            for x, y in zip(a[i1:i2], b[j1:j2]):
+                if x["categorie"] != y["categorie"] or not proches(x["net"], y["net"]):
+                    sys.exit(f"{quoi} : « {x['brut']} » d'un côté, « {y['brut']} » de l'autre")
+                paires.append((x, y))
+        elif op == "replace":
+            sys.exit(f"{quoi} : {[l['brut'] for l in a[i1:i2]]} d'un côté, {[l['brut'] for l in b[j1:j2]]} de l'autre")
+        else:
+            paires += [(x,) for x in a[i1:i2]] + [(y,) for y in b[j1:j2]]
+    return paires
+
+
+def lignes_articles_5_6(tableaux, formes, source_id, recolle):
+    """Budgets annexes (article 5) et comptes spéciaux (article 6), compte par compte et programme par programme.
+    Les segments d'une même famille (budgets annexes ou comptes spéciaux) et d'un même genre (autorisations
+    d'engagement, opérations de l'année, soldes au 31 décembre) forment un seul tableau, dont les rubriques donnent la
+    catégorie des comptes.
+
+    Les budgets annexes, comptes d'affectation spéciale et comptes de concours financiers ont des programmes ; leurs
+    tableaux des autorisations d'engagement et des opérations présentent les mêmes lignes, que l'on départage
+    ensemble : une ligne précédée d'un tiret dans l'un ou l'autre est un programme ; sinon, une ligne en gras dans l'un
+    ou l'autre est un compte, de même qu'une ligne maigre quand les programmes de sa catégorie portent un tiret ; le
+    reste, ce sont des programmes. Une même ligne y prend le libellé du tableau des opérations, à condition que les deux
+    libellés soient presque identiques ; une ligne que l'un des deux tableaux ne présente pas y reste seule.
+    L'augmentation du fonds de roulement et les fonds de concours d'un budget annexe en sont des composantes, à côté de
+    ses programmes. Les comptes de commerce et d'opérations monétaires n'ont pas de programmes, ni le tableau des
+    soldes, dont chaque compte prend de même le libellé du tableau des opérations."""
+    tables = {}
+    for seg in segments_de_comptes(tableaux, formes, source_id):
+        tables.setdefault((seg["famille"], seg["genre"]), []).append(seg)
+    structures = {cle_: structure_des_comptes(segs, cle_[0], recolle, source_id) for cle_, segs in tables.items()}
+    for fam in ("BA", "CS", "CLOS"):
+        ae, operations = structures.get((fam, "AE"), []), structures.get((fam, "OPERATIONS"), [])
+        a = [l for l in ae if l["role"] == "ligne"]
+        b = [l for l in operations if l["role"] == "ligne" and l["categorie"] not in SANS_PROGRAMMES]
+        tirets = {l["categorie"] for l in a + b if l["tiret"]}
+        for paire in apparier(a, b, f"{fam}, autorisations d'engagement et opérations"):
+            if any(l["tiret"] for l in paire):
+                if any(l["tiret"] and l["gras"] for l in paire):
+                    sys.exit(f"{fam} : ligne en gras précédée d'un tiret (« {paire[0]['brut']} »)")
+                role = "programme"
+            else:
+                role = "compte" if any(l["gras"] for l in paire) or paire[0]["categorie"] in tirets else "programme"
+            for l in paire:
+                l["role"], l["net"] = role, paire[-1]["net"]
+    for (fam, genre), lignes in structures.items():
+        for l in lignes:
+            if l["role"] == "ligne":
+                l["role"] = "compte"  # comptes de commerce et d'opérations monétaires, soldes
+        compte = None
+        for l in lignes:
+            if l["role"] in ("rubrique", "total"):
+                compte = None
+            elif l["role"] == "compte":
+                compte, l["fonction"] = l["net"], (l["net"], "")
+            elif compte is None:
+                sys.exit(f"tableau {l['seg']['i']}, ligne {l['r']} : {l['role']} hors compte (« {l['brut']} »)")
+            else:
+                l["fonction"] = (l["net"], compte)
+    for fam in ("BA", "CS", "CLOS"):
+        comptes_op = [l for l in structures.get((fam, "OPERATIONS"), []) if l["role"] == "compte"]
+        comptes_so = [l for l in structures.get((fam, "SOLDES"), []) if l["role"] == "compte"]
+        for paire in apparier(comptes_so, comptes_op, f"{fam}, soldes et opérations"):
+            if len(paire) == 2:
+                paire[0]["net"], paire[0]["fonction"] = paire[1]["net"], (paire[1]["net"], "")
+    # Les comptes clos dans l'année sont des comptes de leur catégorie ; les totaux de l'article 6 ne portent alors
+    # que sur les comptes qui se poursuivent (« hors comptes clos »), ceux des tableaux des comptes clos sur ces seuls
+    # comptes. Le rapport de cohérence ne peut pas rapprocher ces totaux de leurs comptes, qui portent le concept de
+    # leur catégorie : chacun doit égaler la somme des comptes de son tableau qu'il couvre.
+    clos = {l["categorie"] for (fam, genre), lignes in structures.items() if fam == "CLOS" for l in lignes
+            if l["role"] in ("compte", "programme")}
+    touches = clos | ({"CS_A_CREDITS"} if clos & {"CAS", "CCF"} else set()) | \
+        ({"CS_A_DECOUVERT"} if clos & SANS_PROGRAMMES else set()) | ({"CS_ENSEMBLE"} if clos else set())
+    composition = {v: k for k, v in TOTAUX_GENERAUX.items()}
+    sommes, a_verifier = collections.defaultdict(float), []
+    for (fam, genre), lignes in structures.items():
+        for l in lignes:
+            seg, r = l["seg"], l["r"]
+            t, noms, largeurs = seg["t"], seg["noms"], seg["forme"]["largeurs"]
+            for c, x in enumerate(t[r]):
+                nombre = nombre_texte(x) if c > 0 else None
+                if c > 0 and not nombre and re.search(r"[0-9]", x):
+                    sys.exit(f"tableau {seg['i']}, ligne {r} : montant illisible (« {x} »)")
+                if not nombre:
+                    continue
+                if len({noms.get(c + dc) for dc in range(largeurs.get((r, c), 1))}) > 1:
+                    sys.exit(f"tableau {seg['i']}, ligne {r} : case à cheval sur deux colonnes")
+                if noms.get(c) not in MESURES:
+                    sys.exit(f"tableau {seg['i']}, ligne {r} : colonne « {noms.get(c)} » sans correspondance")
+                if l["role"] in ("rubrique", "total"):
+                    categorie, fonction = l["cible"], ""
+                else:
+                    categorie, fonction = l["categorie"], l["fonction"]
+                intitule, note_colonne = COLONNES_CONTREDITES.get((source_id, categorie, noms[c]), (noms[c], ""))
+                mesure = MESURES[intitule]
+                if mesure not in (MESURES_A_DECOUVERT if categorie in SANS_PROGRAMMES | {"CS_A_DECOUVERT"} else
+                                  MESURES_A_CREDITS):
+                    if float(nombre[0]) == 0:
+                        continue  # un zéro dans une colonne étrangère à la catégorie n'en est pas un chiffre
+                    sys.exit(f"tableau {seg['i']}, ligne {r} : « {noms[c]} » pour la catégorie {categorie}")
+                concept = f"LOLF.{categorie}_{mesure}"
+                if categorie == "BA" and source_id in BUDGETS_ANNEXES_HORS_FDC and mesure in ("DEPENSES", "RECETTES"):
+                    concept += "_HORS_FDC"
+                if l["role"] in ("rubrique", "total") and (fam == "CLOS" or categorie in touches):
+                    concept += "_COMPTES_CLOS" if fam == "CLOS" else "_HORS_COMPTES_CLOS"
+                    a_verifier.append((seg["i"], r, fam, genre, categorie, mesure, float(nombre[0])))
+                elif l["role"] == "compte":
+                    sommes[(fam, genre, categorie, mesure)] += float(nombre[0])
+                unite_, note = seg["unite"]
+                note = " ".join(n for n in (note, note_colonne, NOTE_ASTERISQUE if "*" in x else "") if n)
+                yield {"tableau": seg["i"], "ligne": r, "colonne": c, "libelle": propre(t[r][0]), "intitule": noms[c],
+                       "concept": concept, "fonction": fonction, "nombre": nombre, "unite": unite_, "note": note,
+                       "ajustement": mesure in MESURES_AJUSTEMENTS, "solde": mesure in MESURES_SOLDES}
+    for i, r, fam, genre, categorie, mesure, valeur in a_verifier:
+        somme = sum(sommes[(fam, genre, c, mesure)] for c in composition.get(categorie, {categorie}))
+        if abs(valeur - somme) > 0.005:
+            sys.exit(f"tableau {i}, ligne {r} : total {valeur:.2f}, somme des comptes qu'il couvre {somme:.2f}")
+
+
 def lignes_du_fichier(fichier, fonctions):
     """Les chiffres d'une copie archivée ; `fonctions` (identifiant → ligne) reçoit les missions et programmes."""
     chemin = BASE / fichier["chemin"]
@@ -341,7 +685,8 @@ def lignes_du_fichier(fichier, fonctions):
     tableaux, formes = lire_tableaux_html(chemin, mise_en_forme=True)
     i, tableau = article_1(tableaux)
     for brute in list(lignes_article_1(i, tableau, formes[i], fichier["source_id"])) + \
-            list(lignes_article_4(tableaux, formes, fichier["source_id"], recolle)):
+            list(lignes_article_4(tableaux, formes, fichier["source_id"], recolle)) + \
+            list(lignes_articles_5_6(tableaux, formes, fichier["source_id"], recolle)):
         fonction = ""
         if brute["fonction"]:
             libelle, mission = brute["fonction"]
@@ -357,9 +702,9 @@ def lignes_du_fichier(fichier, fonctions):
                            f"libelle={brute['libelle']};colonne_libelle={brute['intitule']}",
             "zone": "FR", "perimetre_id": "ETAT_LF", "concept_id": concept, "fonction_id": fonction, "traitements": "",
             "unite_id": brute["unite"], "periode": annee, "valeur": brute["nombre"][0],
-            "decimales": brute["nombre"][1], "statut": "non_precise" if concept in AJUSTEMENTS else "definitif",
+            "decimales": brute["nombre"][1], "statut": "non_precise" if concept in AJUSTEMENTS or brute.get("ajustement") else "definitif",
             "drapeau_source": "", "version": fichier["mis_a_jour_source"][:10],
-            "consolidation": "sans_objet" if concept in SOLDES else "non_consolide",
+            "consolidation": "sans_objet" if concept in SOLDES or brute.get("solde") else "non_consolide",
             "denominateur_id": "", "nature": "publie", "calcul_id": "", "saisi_le": aujourdhui(), "notes": brute["note"],
         }
         ligne["id"] = identifiant(ligne)

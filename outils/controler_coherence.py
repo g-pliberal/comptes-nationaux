@@ -108,6 +108,38 @@ IDENTITES += [
     ("LOLF.RESULTAT_EXECUTION", ["LOLF.BG_RECETTES_AVANT_PSR", "-LOLF.BG_DEPENSES_Y_COMPRIS_PSR",
                                  "LOLF.SOLDE_COMPTES_SPECIAUX"]),
 ]
+# Budgets annexes et comptes spéciaux, compte par compte (articles 5 et 6) : les regroupements de catégories, et le
+# solde des comptes de commerce de l'article 1er. Dans ces tableaux, une case vide vaut « rien » (les comptes
+# d'affectation spéciale n'ont pas de solde débiteur) : chaque regroupement s'écrit aussi avec chaque partie de ses
+# catégories, et la règle des identités prolongées ne garde que la plus complète que la source publie.
+def _regroupement(total, composantes):
+    return [(total, list(parties)) for n in range(1, len(composantes) + 1)
+            for parties in itertools.combinations(composantes, n)]
+
+
+_A_CREDITS = ["AE_CONSOMMEES", "AE_OUVERTURES", "AE_ANNULATIONS", "DEPENSES", "RECETTES", "CP_OUVERTURES", "CP_ANNULATIONS",
+              "SOLDES_DEBITEURS", "SOLDES_CREDITEURS"]
+_A_DECOUVERT = ["DEPENSES", "RECETTES", "MAJORATIONS_DECOUVERT", "SOLDES_DEBITEURS", "SOLDES_CREDITEURS"]
+for _m in _A_CREDITS:
+    IDENTITES += _regroupement(f"LOLF.CS_A_CREDITS_{_m}", [f"LOLF.CAS_{_m}", f"LOLF.CCF_{_m}"])
+for _m in _A_DECOUVERT:
+    IDENTITES += _regroupement(f"LOLF.CS_A_DECOUVERT_{_m}", [f"LOLF.COMPTES_COMMERCE_{_m}", f"LOLF.OPERATIONS_MONETAIRES_{_m}"])
+for _m in ("SOLDES_DEBITEURS", "SOLDES_CREDITEURS"):
+    IDENTITES += _regroupement(f"LOLF.CS_ENSEMBLE_{_m}", [f"LOLF.CS_A_CREDITS_{_m}", f"LOLF.CS_A_DECOUVERT_{_m}"])
+    IDENTITES += _regroupement(f"LOLF.CS_ENSEMBLE_{_m}", [f"LOLF.CAS_{_m}", f"LOLF.CCF_{_m}", f"LOLF.COMPTES_COMMERCE_{_m}",
+                                                          f"LOLF.OPERATIONS_MONETAIRES_{_m}"])
+IDENTITES += [("LOLF.COMPTES_COMMERCE_SOLDE", ["LOLF.COMPTES_COMMERCE_RECETTES", "-LOLF.COMPTES_COMMERCE_DEPENSES"])]
+# Années où un compte spécial est clos et arrêté à part : les totaux de l'article 6 (hors comptes clos) et ceux des
+# comptes clos se rapprochent de l'article 1er.
+_CLOS = "_COMPTES_CLOS"
+_HORS = "_HORS_COMPTES_CLOS"
+IDENTITES += [(f"LOLF.{c}_{m}{_HORS}", [f"LOLF.{c}_{m}", f"-LOLF.{c}_{m}{_CLOS}"])
+              for c in ("CAS", "CCF") for m in ("DEPENSES", "RECETTES")]  # l'article 1er ne donne que ces totaux
+IDENTITES += [(f"LOLF.CS_A_CREDITS_{m}{_HORS}", [f"LOLF.CAS_{m}", f"LOLF.CCF_{m}", f"-LOLF.CS_A_CREDITS_{m}{_CLOS}"])
+              for m in ("DEPENSES", "RECETTES")]
+IDENTITES += [("LOLF.COMPTES_COMMERCE_SOLDE", [f"LOLF.COMPTES_COMMERCE_RECETTES{_HORS}", f"-LOLF.COMPTES_COMMERCE_DEPENSES{_HORS}",
+                                              f"LOLF.COMPTES_COMMERCE_RECETTES{_CLOS}", f"-LOLF.COMPTES_COMMERCE_DEPENSES{_CLOS}"])]
+
 IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique (1) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_DROITS_CONSTATES", "rubrique (2) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_NON_BUDGETAIRES", "rubrique (3) du tableau 3.107"),
@@ -270,9 +302,10 @@ def sommes(derniers):
 
 def ventilations(derniers):
     """Un ensemble contre la somme de ses parties, selon la hiérarchie de la table des fonctions : l'ensemble des
-    fonctions contre les divisions de la COFOG ou les missions du budget de l'État, chaque division contre ses groupes,
-    chaque mission contre ses programmes. Les parties d'un ensemble sont celles que la source publie, pour cette
-    grandeur, au moins une année ; s'il en manque une année, la ventilation est partielle."""
+    fonctions contre les divisions de la COFOG, les missions du budget général de l'État ou ses comptes (budgets
+    annexes, comptes spéciaux), chaque division contre ses groupes, chaque mission ou compte contre ses programmes.
+    Les parties d'un ensemble sont celles que la source publie, pour cette grandeur, au moins une année ; s'il en
+    manque une année, la ventilation est partielle."""
     enfants = collections.defaultdict(list)
     for f in lire("tables/fonctions.csv"):
         if "+" not in f["id"]:
@@ -504,9 +537,9 @@ def partie_ventilations(derniers):
     complets = [r for r in resultats if r["complet"]]
     ecarts = [r for r in complets if not r["juste"]]
     lignes = ["## 2. Ventilations par fonction", "",
-              "Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG ou des missions "
-              "du budget de l'État, chaque division contre la somme de ses groupes, chaque mission contre celle de ses "
-              "programmes.", "",
+              "Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions "
+              "du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), chaque division contre "
+              "la somme de ses groupes, chaque mission ou compte contre celle de ses programmes.", "",
               f"{len(complets)} ventilations vérifiées avec toutes leurs parties : {len(complets) - len(ecarts)} justes, "
               f"{len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)

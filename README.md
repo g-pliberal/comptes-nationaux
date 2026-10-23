@@ -8,7 +8,7 @@ Chaque chiffre est enregistré avec sa fiche d'identité et sa source, et chaque
 
 | Dossier | Contenu |
 |---|---|
-| [base/](base/) | la base des chiffres : tables, schémas, copies archivées des sources ; pour l'instant, les comptes des administrations publiques de l'Insee et d'Eurostat, dont les dépenses par fonction, les recettes impôt par impôt et le passage du budget de l'État et des comptes de la sécurité sociale au déficit au sens de Maastricht ; le budget de l'État exécuté depuis 2006, par mission et par programme, tel que l'arrêtent les lois d'approbation des comptes |
+| [base/](base/) | la base des chiffres : tables, schémas, copies archivées des sources ; pour l'instant, les comptes des administrations publiques de l'Insee et d'Eurostat, dont les dépenses par fonction, les recettes impôt par impôt et le passage du budget de l'État et des comptes de la sécurité sociale au déficit au sens de Maastricht ; le budget de l'État exécuté depuis 2006, par mission et par programme, et chacun de ses budgets annexes et comptes spéciaux, tel que l'arrêtent les lois d'approbation des comptes |
 | [controles/](controles/) | le [rapport de cohérence](controles/coherence.md) des sources : sommes, ventilations, soldes, passerelles entre tableaux, ratios, écarts entre sources |
 | [outils/](outils/) | archivage des sources, import, contrôle et construction de la base |
 | [reports/](reports/), [research_notes/](research_notes/) | recherche documentaire de départ sur les sources des comptes publics |
