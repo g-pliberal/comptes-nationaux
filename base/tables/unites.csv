@@ -3,6 +3,7 @@ EUR,"euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un 
 MD_EUR,"milliards d'euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
 MIO_ECU_EUR,"millions d'écus jusqu'en 1998, puis d'euros (conversion au taux de change de chaque année)",montant
 MIO_EUR,"millions d'euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
+NOMBRE,nombre,nombre
 PC_DEPENSE,% de la dépense totale du même périmètre,ratio
 PC_EVOLUTION,% d'évolution sur un an,ratio
 PC_PIB,% du PIB,ratio

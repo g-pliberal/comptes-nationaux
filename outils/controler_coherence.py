@@ -9,14 +9,16 @@ vérifie ce que disent les sources elles-mêmes :
 2. les ventilations par fonction (l'ensemble égale la somme des fonctions, chaque fonction celle de ses
    groupes ; pour le budget de l'État, chaque mission celle de ses programmes) ;
 3. l'additivité des sous-secteurs, pour les soldes, les prélèvements obligatoires et les dépenses
-   consolidées de l'ensemble, et celle des niveaux de collectivités locales, pour tous leurs montants ;
-4. les passerelles entre tableaux qui présentent autrement les mêmes grandeurs ;
+   consolidées de l'ensemble, et celle des niveaux de collectivités locales, pour tous leurs montants et
+   leurs nombres de budgets ;
+4. les passerelles entre tableaux qui présentent autrement les mêmes grandeurs, dont les grandeurs que la
+   consolidation des comptes des collectivités locales laisse inchangées ;
 5. les ratios, qu'on doit retrouver à partir de leur dénominateur ;
 6. les écarts entre sources pour une même grandeur.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
-ses montants. Une incohérence trouvée ici n'est pas une
+ses montants ; un nombre (de budgets) n'est pas arrondi. Une incohérence trouvée ici n'est pas une
 erreur de la base : c'est un constat sur la source, publié tel quel. Le rapport ne contient aucune date
 d'exécution, pour qu'un rapport à jour ne change pas.
 """
@@ -296,13 +298,20 @@ ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO", "COMPTES_SECU.RESULTAT_COMPTABLE"}
 DECOMPOSITIONS_PAR_CONCEPT = {f"COMPTES_SECU.{c}": [("SECU_LFSS", ["?REGIME_GENERAL_HORS_FSV", "?ACOSS", "?ROBSS",
                                                                    "?AUTRES_REGIMES_BASE", "?FSV", "?CADES", "?FRR"])]
                               for t, cs, _ in _BILAN_SECU[:8] for c in [t] + cs}
-# Comptes des collectivités locales, que la source ne consolide pas entre niveaux : chaque montant d'un niveau contre la
-# somme de ceux des niveaux qui le composent, celui des groupements à fiscalité propre contre la somme de leurs types.
-_NIVEAUX_LOCAUX = [("SECTEUR_COMMUNAL_BP", ["COMMUNES_BP", "GFP_BP"]),
-                   ("COLLECTIVITES_TERRITORIALES_GFP_BP", ["SECTEUR_COMMUNAL_BP", "DEPARTEMENTS_BP", "REGIONS_CTU_BP"]),
-                   ("COLLECTIVITES_TERRITORIALES_GFP_BP", ["COMMUNES_BP", "GFP_BP", "DEPARTEMENTS_BP", "REGIONS_CTU_BP"]),
-                   ("COLLECTIVITES_LOCALES_BP", ["COLLECTIVITES_TERRITORIALES_GFP_BP", "SYNDICATS_BP"]),
-                   ("GFP_BP", ["GFP_METROPOLES_BP", "GFP_CU_BP", "GFP_CA_BP", "GFP_CC_BP"])]
+# Comptes des collectivités locales, que la source ne consolide pas entre niveaux, budgets principaux (annexe 2A) comme
+# budgets annexes (2B) : chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, celui des
+# groupements à fiscalité propre contre la somme de leurs types ; le nombre de budgets de l'ensemble des collectivités
+# contre la somme de ceux des cinq niveaux, que la feuille « Poids des budgets annexes » donne sans les niveaux
+# intermédiaires (« ! » : ne s'applique pas si la source publie ce périmètre). Les budgets principaux et annexes
+# consolidés (2C, 2D) ne s'additionnent pas d'un niveau à l'autre : les flux croisés entre niveaux en sont retirés.
+_NIVEAUX = [("SECTEUR_COMMUNAL", ["COMMUNES", "GFP"]),
+            ("COLLECTIVITES_TERRITORIALES_GFP", ["SECTEUR_COMMUNAL", "DEPARTEMENTS", "REGIONS_CTU"]),
+            ("COLLECTIVITES_TERRITORIALES_GFP", ["COMMUNES", "GFP", "DEPARTEMENTS", "REGIONS_CTU"]),
+            ("COLLECTIVITES_LOCALES", ["COLLECTIVITES_TERRITORIALES_GFP", "SYNDICATS"]),
+            ("COLLECTIVITES_LOCALES", ["COMMUNES", "GFP", "DEPARTEMENTS", "REGIONS_CTU", "SYNDICATS",
+                                       "!COLLECTIVITES_TERRITORIALES_GFP"])]
+_NIVEAUX_LOCAUX = [(f"{t}_{b}", [f"{p}_{b}" for p in ps]) for b in ("BP", "BA") for t, ps in _NIVEAUX]
+_NIVEAUX_LOCAUX += [("GFP_BP", ["GFP_METROPOLES_BP", "GFP_CU_BP", "GFP_CA_BP", "GFP_CC_BP"])]
 # Les totaux des publications de la DGCL par collectivité : chacun contre la somme des collectivités que la table des
 # périmètres range sous lui (« ? » : une collectivité n'existe pas toutes les années, comme la Collectivité européenne
 # d'Alsace, créée en 2021), puis contre celle des totaux qu'il réunit.
@@ -398,12 +407,39 @@ PASSERELLES = [
                                                                            "NON_BUDGETAIRES")]),
 ]
 
+# Comptes consolidés des collectivités locales : la consolidation retire chaque flux croisé, entre les budgets d'un niveau
+# (annexe 2C) ou entre niveaux (2D), des recettes comme des dépenses de la même section ; elle laisse donc inchangées la
+# variation du fonds de roulement et l'épargne brute, comme la dette et la trésorerie. Pas la capacité de financement ni
+# les emprunts : un prêt d'un budget à un autre est une dépense d'investissement du prêteur et un emprunt de l'autre.
+_INVARIANTS_LOCAUX = {"VARIATION_FONDS_ROULEMENT": "variation du fonds de roulement", "EPARGNE_BRUTE": "épargne brute",
+                      "DETTE": "dette au 31 décembre", "TRESORERIE_NETTE": "trésorerie nette au 31 décembre"}
+_NIVEAUX_CONSOLIDES = {"COMMUNES": "communes", "GFP": "groupements à fiscalité propre", "DEPARTEMENTS": "départements",
+                       "REGIONS_CTU": "régions et CTU", "SYNDICATS": "syndicats"}
+for _code, _nom in _INVARIANTS_LOCAUX.items():
+    _c = f"COMPTES_LOCAUX.{_code}"
+    PASSERELLES += [(f"Collectivités locales, {_nom} : {_n}, budgets principaux et annexes consolidés (annexe 2C de "
+                     f"l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B)",
+                     [("ofgl.annexe-2c", f"{_p}_BP_BA", _c, 1)],
+                     [("ofgl.annexe-2a", f"{_p}_BP", _c, 1), ("ofgl.annexe-2b", f"{_p}_BA", _c, 1)])
+                    for _p, _n in _NIVEAUX_CONSOLIDES.items()]
+    PASSERELLES += [(f"Collectivités locales, {_nom} : bloc communal consolidé (annexe 2D) contre communes plus "
+                     "groupements à fiscalité propre consolidés (2C)",
+                     [("ofgl.annexe-2d", "SECTEUR_COMMUNAL_BP_BA", _c, 1)],
+                     [("ofgl.annexe-2c", f"{_p}_BP_BA", _c, 1) for _p in ("COMMUNES", "GFP")]),
+                    (f"Collectivités locales, {_nom} : ensemble des collectivités consolidé (annexe 2D) contre ses cinq "
+                     "niveaux consolidés (2C)",
+                     [("ofgl.annexe-2d", "COLLECTIVITES_LOCALES_BP_BA", _c, 1)],
+                     [("ofgl.annexe-2c", f"{_p}_BP_BA", _c, 1) for _p in _NIVEAUX_CONSOLIDES])]
+
 # Ratios qui s'additionnent chez une même source pour une même année : leur dénominateur est le même.
 RATIOS_ADDITIFS = {"PC_PIB", "PC_PIB_POTENTIEL"}
 # Sources dont les montants ne sont exacts qu'à une unité près de leur dernière décimale, et non à une demi-unité :
 # l'OFGL arrondit ou tronque selon les cas ses montants à l'euro, comme le montre leur comparaison aux montants au
-# centime des publications de la DGCL.
-A_UNE_UNITE_PRES = {"ofgl.annexe-2a"}
+# centime des publications de la DGCL ; dans ses tableaux des budgets annexes, un total s'écarte de 4 € de la somme de
+# ses cinq composantes, quand l'arrondi à l'euro le plus proche en permet au plus 3.
+A_UNE_UNITE_PRES = {"ofgl.annexe-2a", "ofgl.annexe-2b", "ofgl.annexe-2c", "ofgl.annexe-2d"}
+# Unités de dénombrement : un nombre n'est pas arrondi, il ne laisse aucune marge.
+DENOMBREMENTS = {u["id"] for u in lire("tables/unites.csv") if u["type"] == "nombre"}
 # Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes.
 FAMILLES = {"EUR": ("euros", 1), "MIO_EUR": ("euros", 1e6), "MD_EUR": ("euros", 1e9),
             "MIO_ECU_EUR": ("écus puis euros", 1e6)}
@@ -431,15 +467,24 @@ def charger():
 
 def valeur(ligne):
     """(valeur dans l'unité de base de sa famille, demi-unité de sa dernière décimale, ou unité entière pour une source
-    qui tronque, famille d'unités)."""
+    qui tronque, ou rien pour un nombre, famille d'unités)."""
     nom, echelle = FAMILLES.get(ligne["unite_id"], (ligne["unite_id"], 1))
-    marge = (1 if ligne["source_id"] in A_UNE_UNITE_PRES else 0.5) * 10 ** -int(ligne["decimales"]) * echelle
+    marge = (0 if ligne["unite_id"] in DENOMBREMENTS else 1 if ligne["source_id"] in A_UNE_UNITE_PRES else 0.5) \
+        * 10 ** -int(ligne["decimales"]) * echelle
     return float(ligne["valeur"]) * echelle, marge, nom
 
 
 def depasse(ecart, marge):
     """Vrai si l'écart dépasse la marge des arrondis, au-delà des imprécisions du calcul en virgule flottante."""
     return abs(ecart) > marge * (1 + 1e-9) + 1e-9
+
+
+def retenu(ligne, deja):
+    """Vrai si `ligne` remplace `deja` : une source peut donner une même grandeur dans deux unités d'une même famille,
+    dans deux tableaux (l'annexe 2A de l'OFGL donne l'ensemble des groupements à fiscalité propre en milliards d'euros,
+    et dans le tableau de leurs types, pour la dernière année de chaque rapport, en millions) ; on retient sa version la
+    plus récente, puis la plus précise."""
+    return deja is None or (ligne["version"], -valeur(ligne)[1]) > (deja["version"], -valeur(deja)[1])
 
 
 def montant(derniers, cle):
@@ -534,11 +579,11 @@ def additivite(derniers):
     """Le solde d'un ensemble, ou sa part de la dépense consolidée de l'ensemble des administrations publiques,
     égale la somme de ceux de ses parties ; de même, un poste de la situation patrimoniale de la sécurité sociale
     égale la somme de ses lignes par entité, et un montant d'un niveau de collectivités locales la somme de ceux des
-    niveaux qui le composent."""
+    niveaux qui le composent, en montant comme en nombre de budgets."""
     apu = {k[0] for k, l in derniers.items() if l["consolidation"] == "consolide_apu"}
     par_annee = collections.defaultdict(dict)
     for k, l in derniers.items():
-        if valeur(l)[2] != "euros":
+        if valeur(l)[2] != "euros" and k[6] not in DENOMBREMENTS:
             continue
         if k[3] in ADDITIFS:
             # Les tableaux 3.201 à 3.214 de l'Insee publient un sous-secteur chacun : on les réunit.
@@ -553,13 +598,16 @@ def additivite(derniers):
     controles, ecarts = 0, []
     for (famille, concept, fonction, unite, periode), valeurs in sorted(par_annee.items()):
         for ensemble, parties in DECOMPOSITIONS_PAR_CONCEPT.get(concept, DECOMPOSITIONS):
-            parties = [p for p in parties if p[0] != "?"] + [p[1:] for p in parties if p[0] == "?" and p[1:] in valeurs]
+            if any(p[1:] in valeurs for p in parties if p[0] == "!"):
+                continue
+            parties = [p for p in parties if p[0] not in "?!"] + [p[1:] for p in parties if p[0] == "?" and p[1:] in valeurs]
             if ensemble in valeurs and parties and all(p in valeurs for p in parties):
                 controles += 1
                 ecart = valeurs[ensemble][0] - sum(valeurs[p][0] for p in parties)
                 if depasse(ecart, valeurs[ensemble][1] + sum(valeurs[p][1] for p in parties)):
                     tableaux = sorted({valeurs[p][2] for p in [ensemble] + parties})
-                    ecarts.append((famille, concept, fonction, periode, ensemble, parties, tableaux, ecart))
+                    ecarts.append((famille, concept, fonction, periode, ensemble, parties, tableaux, ecart,
+                                   unite if unite in DENOMBREMENTS else "euros"))
     return controles, ecarts
 
 
@@ -568,7 +616,7 @@ def passerelles(derniers):
     arrondis, et si l'un des chiffres est encore révisable."""
     index = collections.defaultdict(dict)  # (périmètre, concept, traitement, période) → {source: ligne}, en montant
     for k, l in derniers.items():
-        if k[1] == "FR" and k[4] == "" and valeur(l)[2] == "euros":
+        if k[1] == "FR" and k[4] == "" and valeur(l)[2] == "euros" and retenu(l, index[(k[2], k[3], k[5], k[7])].get(k[0])):
             index[(k[2], k[3], k[5], k[7])][k[0]] = l
     annees = sorted({k[7][:4] for k in derniers})
 
@@ -634,9 +682,11 @@ def ratios(derniers):
 def concordances(derniers):
     """Compare, pour une même grandeur dans la même famille d'unités, les valeurs de sources différentes."""
     groupes = collections.defaultdict(lambda: collections.defaultdict(dict))
+    retenues = {}
     for k, l in derniers.items():
         v, precision, unite = valeur(l)
-        if unite != "écus puis euros":
+        if unite != "écus puis euros" and retenu(l, retenues.get(k[:6] + (unite, k[7]))):
+            retenues[k[:6] + (unite, k[7])] = l
             groupes[k[1:6] + (unite,)][k[7]][k[0]] = (v, precision, l["consolidation"], l["statut"])
     paires = collections.defaultdict(lambda: {"comparaisons": 0, "ecarts": []})
     for grandeur, annees in groupes.items():
@@ -662,6 +712,8 @@ def fr(x, decimales, signe=False):
 
 
 def ecart_lisible(ecart, unite):
+    if unite in DENOMBREMENTS:
+        return fr(ecart, 0, True)
     if unite == "euros":
         # Un écart de moins de 50 000 euros s'écrirait « 0,0 M€ » : il s'écrit en euros.
         return f"{fr(ecart / 1e6, 1, True)} M€" if abs(ecart) >= 5e4 else f"{fr(ecart, 0, True)} €"
@@ -783,22 +835,23 @@ def partie_additivite(derniers):
               "patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les "
               "collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un "
               "niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre "
-              "contre la somme de leurs types (annexe 2A des rapports de l'OFGL), chaque total des publications de la "
-              "DGCL contre la somme de ses départements ou de ses régions.", "",
+              "contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets "
+              "annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, "
+              "chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions.", "",
               f"{n} additions vérifiées : {n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
-    for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart in ecarts:
-        regroupes[(famille, concept, ensemble, tuple(parties))].append((annee, ecart, tableaux, fonction))
+    for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart, unite in ecarts:
+        regroupes[(famille, concept, ensemble, tuple(parties), unite)].append((annee, ecart, tableaux, fonction))
     if regroupes:
         lignes += ["| Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |",
                    "|---|---|---|---|---|---|---|"]
-        for (famille, concept, ensemble, parties), liste in sorted(regroupes.items()):
+        for (famille, concept, ensemble, parties, unite), liste in sorted(regroupes.items()):
             annee, ecart, _, fonction = plus_grand(liste, lambda e: e[1])
             tableaux = ", ".join(sorted({t for _, _, ts, _ in liste for t in ts}))
             fonctions = sorted({f or "ensemble" for _, _, _, f in liste})
             lignes.append(f"| {tableaux} | {concept} | {ensemble} | {parties_lisibles(parties)} | "
                           f"{', '.join(fonctions) if len(fonctions) <= 3 else f'{len(fonctions)} fonctions'} | "
-                          f"{plage([a for a, _, _, _ in liste])} | {ecart_lisible(ecart, 'euros')} en {annee}"
+                          f"{plage([a for a, _, _, _ in liste])} | {ecart_lisible(ecart, unite)} en {annee}"
                           f"{'' if fonction == '' else f' ({fonction})'} |")
         lignes.append("")
     return lignes
@@ -813,7 +866,10 @@ def partie_passerelles(derniers):
     resultats = passerelles(derniers)
     lignes = ["## 4. Passerelles entre tableaux", "",
               "Des tableaux différents présentent autrement les mêmes grandeurs. Chaque passerelle vérifie qu'ils "
-              "concordent, à l'arrondi près, pour chaque année où figurent tous ses termes.", "",
+              "concordent, à l'arrondi près, pour chaque année où figurent tous ses termes. Pour les collectivités "
+              "locales, la consolidation des budgets principaux et annexes retire chaque flux croisé des recettes comme "
+              "des dépenses de la même section : la variation du fonds de roulement, l'épargne brute, la dette et la "
+              "trésorerie d'un ensemble consolidé égalent la somme de celles de ses parties.", "",
               "| Passerelle | Années vérifiées | Années en écart | dont hors chiffres révisables | "
               "Plus grand écart (gauche − droite) |", "|---|---|---|---|---|"]
     par_passerelle = collections.defaultdict(list)
@@ -957,7 +1013,8 @@ def ecrire_rapport(derniers):
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
               "Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la "
               "demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour l'OFGL, qui arrondit "
-              "ou tronque selon les cas ses montants à l'euro. Une incohérence signalée ici est un constat "
+              "ou tronque selon les cas ses montants à l'euro ; un nombre de budgets n'est pas arrondi et doit être "
+              "exact. Une incohérence signalée ici est un constat "
               "sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.", ""]
     lignes += partie_sources(derniers) + partie_sommes(derniers) + partie_ventilations(derniers)
     lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)

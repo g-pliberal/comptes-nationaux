@@ -3,7 +3,7 @@
   "fields": [
     {"name": "id", "type": "string", "constraints": {"required": true, "pattern": "[A-Z_]+"}},
     {"name": "libelle", "type": "string", "constraints": {"required": true}},
-    {"name": "type", "type": "string", "constraints": {"required": true, "enum": ["montant", "ratio"]}}
+    {"name": "type", "type": "string", "constraints": {"required": true, "enum": ["montant", "ratio", "nombre"]}}
   ],
   "primaryKey": ["id"]
 }

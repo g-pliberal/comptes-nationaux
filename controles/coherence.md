@@ -2,7 +2,7 @@
 
 Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.
 
-Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour l'OFGL, qui arrondit ou tronque selon les cas ses montants à l'euro. Une incohérence signalée ici est un constat sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.
+Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour l'OFGL, qui arrondit ou tronque selon les cas ses montants à l'euro ; un nombre de budgets n'est pas arrondi et doit être exact. Une incohérence signalée ici est un constat sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.
 
 ## Les sources contrôlées
 
@@ -44,6 +44,9 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
 | ofgl.annexe-2a | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2A : budgets principaux des collectivités locales, par niveau de collectivité | 2026-08-17 | 3922 |
+| ofgl.annexe-2b | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2B : budgets annexes des collectivités locales, par niveau de collectivité | 2026-08-17 | 2444 |
+| ofgl.annexe-2c | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2C : budgets principaux et annexes consolidés de chaque niveau de collectivité | 2026-04-28 | 1415 |
+| ofgl.annexe-2d | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2D : niveaux consolidés, bloc communal et ensemble des collectivités locales | 2026-04-29 | 566 |
 | senat.pjl06-051 | Projet de loi de financement de la sécurité sociale pour 2007, texte n° 51 (2006-2007) transmis au Sénat le 6 novembre 2006 | 2006-11-06 | 42 |
 | senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1602 |
 | senat.pjl07-067 | Projet de loi de financement de la sécurité sociale pour 2008, texte n° 67 (2007-2008) transmis au Sénat le 6 novembre 2007 | 2007-11-06 | 39 |
@@ -91,7 +94,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-18930 sommes vérifiées avec toutes leurs composantes : 18868 justes, 62 en écart.
+20550 sommes vérifiées avec toutes leurs composantes : 20488 justes, 62 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
@@ -180,9 +183,9 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 
 ## 3. Additivité des sous-secteurs
 
-Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexe 2A des rapports de l'OFGL), chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions.
+Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions.
 
-5363 additions vérifiées : 5320 justes, 43 en écart.
+6525 additions vérifiées : 6482 justes, 43 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
@@ -214,7 +217,7 @@ Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolid
 
 ## 4. Passerelles entre tableaux
 
-Des tableaux différents présentent autrement les mêmes grandeurs. Chaque passerelle vérifie qu'ils concordent, à l'arrondi près, pour chaque année où figurent tous ses termes.
+Des tableaux différents présentent autrement les mêmes grandeurs. Chaque passerelle vérifie qu'ils concordent, à l'arrondi près, pour chaque année où figurent tous ses termes. Pour les collectivités locales, la consolidation des budgets principaux et annexes retire chaque flux croisé des recettes comme des dépenses de la même section : la variation du fonds de roulement, l'épargne brute, la dette et la trésorerie d'un ensemble consolidé égalent la somme de celles de ses parties.
 
 | Passerelle | Années vérifiées | Années en écart | dont hors chiffres révisables | Plus grand écart (gauche − droite) |
 |---|---|---|---|---|
@@ -238,6 +241,34 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Résultat comptable du régime général, Fonds de solidarité vieillesse compris (tableau 3.108), contre soldes du régime général et du FSV approuvés par la loi de financement de la sécurité sociale | 13 années entre 2009 et 2021 | 2021 | 2021 | +4 800,0 M€ en 2021 |
 | Dette amortie par la CADES, qu'approuve la loi de financement de la sécurité sociale, contre son résultat de l'exercice dans la situation patrimoniale (annexe A) | 16 années entre 2010 et 2025 | aucune | aucune | aucun |
 | Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) et (3), dans le tableau 3.107 | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, variation du fonds de roulement : communes, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2018 et 2023 | 2018 et 2023 | −0,2 M€ en 2023 |
+| Collectivités locales, variation du fonds de roulement : groupements à fiscalité propre, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2018 et 2023 | 2018 et 2023 | −0,6 M€ en 2018 |
+| Collectivités locales, variation du fonds de roulement : départements, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, variation du fonds de roulement : régions et CTU, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, variation du fonds de roulement : syndicats, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2018 | 2018 | +0,5 M€ en 2018 |
+| Collectivités locales, variation du fonds de roulement : bloc communal consolidé (annexe 2D) contre communes plus groupements à fiscalité propre consolidés (2C) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, variation du fonds de roulement : ensemble des collectivités consolidé (annexe 2D) contre ses cinq niveaux consolidés (2C) | 9 années entre 2017 et 2025 | 7 années entre 2017 et 2023 | 7 années entre 2017 et 2023 | +30,2 M€ en 2022 |
+| Collectivités locales, épargne brute : communes, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2018 et 2023 | 2018 et 2023 | −0,1 M€ en 2023 |
+| Collectivités locales, épargne brute : groupements à fiscalité propre, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2018 et 2023 | 2018 et 2023 | +0,1 M€ en 2023 |
+| Collectivités locales, épargne brute : départements, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, épargne brute : régions et CTU, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, épargne brute : syndicats, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2018 | 2018 | +16 440 € en 2018 |
+| Collectivités locales, épargne brute : bloc communal consolidé (annexe 2D) contre communes plus groupements à fiscalité propre consolidés (2C) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, épargne brute : ensemble des collectivités consolidé (annexe 2D) contre ses cinq niveaux consolidés (2C) | 9 années entre 2017 et 2025 | 7 années entre 2017 et 2023 | 7 années entre 2017 et 2023 | +30,2 M€ en 2022 |
+| Collectivités locales, dette au 31 décembre : communes, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2023 | 2023 | −0,1 M€ en 2023 |
+| Collectivités locales, dette au 31 décembre : groupements à fiscalité propre, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2023 | 2023 | +0,1 M€ en 2023 |
+| Collectivités locales, dette au 31 décembre : départements, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, dette au 31 décembre : régions et CTU, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, dette au 31 décembre : syndicats, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, dette au 31 décembre : bloc communal consolidé (annexe 2D) contre communes plus groupements à fiscalité propre consolidés (2C) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, dette au 31 décembre : ensemble des collectivités consolidé (annexe 2D) contre ses cinq niveaux consolidés (2C) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, trésorerie nette au 31 décembre : communes, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 2022, 2023, 2024 et 2025 | 2023 | 2023 | −0,1 M€ en 2023 |
+| Collectivités locales, trésorerie nette au 31 décembre : groupements à fiscalité propre, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 2022, 2023, 2024 et 2025 | 2023 | 2023 | +0,1 M€ en 2023 |
+| Collectivités locales, trésorerie nette au 31 décembre : départements, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 2022, 2023, 2024 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, trésorerie nette au 31 décembre : régions et CTU, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 2022, 2023, 2024 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, trésorerie nette au 31 décembre : syndicats, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 2022, 2023, 2024 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, trésorerie nette au 31 décembre : bloc communal consolidé (annexe 2D) contre communes plus groupements à fiscalité propre consolidés (2C) | 2022, 2023, 2024 et 2025 | aucune | aucune | aucun |
+| Collectivités locales, trésorerie nette au 31 décembre : ensemble des collectivités consolidé (annexe 2D) contre ses cinq niveaux consolidés (2C) | 2022, 2023, 2024 et 2025 | aucune | aucune | aucun |
 
 ## 5. Ratios
 
@@ -288,7 +319,9 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 |---|---|---|---|---|---|---|
 | dgcl.finances-departements | dgcl.finances-regions | 540 | 0 | 0 | aucun | aucun |
 | dgcl.finances-departements | ofgl.annexe-2a | 170 | 8 | 8 | +715,5 M€ en 2022 | +715,5 M€ en 2022 |
+| dgcl.finances-departements | ofgl.annexe-2b | 10 | 9 | 0 | aucun | −703,9 M€ en 2022 |
 | dgcl.finances-regions | ofgl.annexe-2a | 165 | 7 | 7 | +9 933 € en 2023 | +9 933 € en 2023 |
+| dgcl.finances-regions | ofgl.annexe-2b | 10 | 5 | 0 | aucun | +144,4 M€ en 2024 |
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | 60 | 19 | 16 | +3,2 M€ en 2019 | +0,3 point de PIB en 2024 ; −914,4 M€ en 2024 |
 | eurostat.gov_10a_exp | insee.t3201 | 30 | 20 | 18 | −42,4 M€ en 2021 | −878,3 M€ en 2023 |
 | eurostat.gov_10a_exp | insee.t3301 | 330 | 5 | 5 | +0,9 M€ en 2020 | +0,9 M€ en 2020 |
@@ -396,6 +429,7 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3217 | senat.pjl24-718 | 1 | 1 | 0 | aucun | −0,1 point de PIB en 2024 |
 | insee.t3217 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3301 | insee.t3307 | 1248 | 408 | 408 | −20 301,0 M€ en 2009 | −20 301,0 M€ en 2009 |
+| ofgl.annexe-2a | ofgl.annexe-2b | 108 | 86 | 0 | aucun | −703,9 M€ en 2022 |
 | senat.pjl06-389 | senat.pjl07-429 | 127 | 10 | 10 | +3 761,0 M€ en 2006 | +3 761,0 M€ en 2006 |
 | senat.pjl11-073 | senat.pjl12-103 | 66 | 6 | 6 | −1 000,0 M€ en 2010 | −1 000,0 M€ en 2010 |
 | senat.pjl12-103 | senat.pjl13-117 | 69 | 1 | 1 | +9 800,0 M€ en 2011 | +9 800,0 M€ en 2011 |
@@ -488,6 +522,8 @@ Détail des grandeurs en écart :
 | dgcl.finances-departements | ofgl.annexe-2a | FR DEPARTEMENTS_BP COMPTES_LOCAUX.EMPRUNTS | ensemble | 2020 et 2022 | 2020 et 2022 | +15,8 M€ en 2020 |
 | dgcl.finances-departements | ofgl.annexe-2a | FR DEPARTEMENTS_BP COMPTES_LOCAUX.EPARGNE_NETTE | ensemble | 2020 et 2022 | 2020 et 2022 | −15,8 M€ en 2020 |
 | dgcl.finances-departements | ofgl.annexe-2a | FR DEPARTEMENTS_BP COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | ensemble | 2020 et 2022 | 2020 et 2022 | +15,8 M€ en 2020 |
+| dgcl.finances-departements | ofgl.annexe-2b | FR DEPARTEMENTS_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | −703,9 M€ en 2022 |
+| dgcl.finances-departements | ofgl.annexe-2b | FR DEPARTEMENTS_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 2021, 2022, 2023 et 2024 | aucune | +0,9 M€ en 2022 |
 | dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | ensemble | 2023 | 2023 | −14 € en 2023 |
 | dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.AUTRES_REC_INVESTISSEMENT | ensemble | 2023 | 2023 | +9 933 € en 2023 |
 | dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.EPARGNE_BRUTE | ensemble | 2023 | 2023 | −15 € en 2023 |
@@ -495,6 +531,8 @@ Détail des grandeurs en écart :
 | dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.REC_FONCTIONNEMENT | ensemble | 2023 | 2023 | −14 € en 2023 |
 | dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.REC_INVESTISSEMENT | ensemble | 2023 | 2023 | +9 932 € en 2023 |
 | dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | ensemble | 2023 | 2023 | +9 919 € en 2023 |
+| dgcl.finances-regions | ofgl.annexe-2b | FR REGIONS_CTU_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 2023 et 2024 | aucune | +144,4 M€ en 2024 |
+| dgcl.finances-regions | ofgl.annexe-2b | FR REGIONS_CTU_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 2020, 2023 et 2024 | aucune | +4,5 M€ en 2024 |
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE, en % du PIB | ensemble | 2024 | aucune | +0,3 point de PIB en 2024 |
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE | ensemble | 18 années entre 1995 et 2024 | 16 années entre 1995 et 2022 | −914,4 M€ en 2024 |
 | eurostat.gov_10a_exp | insee.t3201 | FR S13 SEC2010.TE | ensemble | 20 années entre 1995 et 2024 | 18 années entre 1995 et 2022 | −878,3 M€ en 2023 |
@@ -595,6 +633,24 @@ Détail des grandeurs en écart :
 | insee.t3217 | senat.pjl24-032 | FR S13_S212 INSEE_PO.PO, en % du PIB | ensemble | 2023 | aucune | −0,3 point de PIB en 2023 |
 | insee.t3217 | senat.pjl24-718 | FR S13_S212 INSEE_PO.PO, en % du PIB | ensemble | 2024 | aucune | −0,1 point de PIB en 2024 |
 | insee.t3301 | insee.t3307 | FR S13 SEC2010.TE | ensemble, 9 divisions et 41 groupes | 10 années entre 2009 et 2018 | 10 années entre 2009 et 2018 | −20 301,0 M€ en 2009 (ensemble) |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR COLLECTIVITES_LOCALES_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 6 années entre 2020 et 2025 | aucune | −651,3 M€ en 2022 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR COLLECTIVITES_LOCALES_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | +359,5 M€ en 2020 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR COLLECTIVITES_LOCALES_BP COMPTES_LOCAUX.DEP_TOTALES | ensemble | 6 années entre 2020 et 2025 | aucune | −637,7 M€ en 2022 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR COMMUNES_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 6 années entre 2020 et 2025 | aucune | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR COMMUNES_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | +9,7 M€ en 2024 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR COMMUNES_BP COMPTES_LOCAUX.DEP_TOTALES | ensemble | 6 années entre 2020 et 2025 | aucune | −47,4 M€ en 2025 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR DEPARTEMENTS_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | −703,9 M€ en 2022 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR DEPARTEMENTS_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 2021, 2022, 2023 et 2024 | aucune | +0,9 M€ en 2022 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR DEPARTEMENTS_BP COMPTES_LOCAUX.DEP_TOTALES | ensemble | 5 années entre 2020 et 2024 | aucune | −703,0 M€ en 2022 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR GFP_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | +140,1 M€ en 2021 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR GFP_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | +361,7 M€ en 2020 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR GFP_BP COMPTES_LOCAUX.DEP_TOTALES | ensemble | 5 années entre 2020 et 2024 | aucune | +473,2 M€ en 2020 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR REGIONS_CTU_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 2023 et 2024 | aucune | +144,4 M€ en 2024 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR REGIONS_CTU_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 2020, 2023 et 2024 | aucune | +4,5 M€ en 2024 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR REGIONS_CTU_BP COMPTES_LOCAUX.DEP_TOTALES | ensemble | 2020, 2023 et 2024 | aucune | +148,9 M€ en 2024 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR SYNDICATS_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | +145,4 M€ en 2024 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR SYNDICATS_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | −1,9 M€ en 2024 |
+| ofgl.annexe-2a | ofgl.annexe-2b | FR SYNDICATS_BP COMPTES_LOCAUX.DEP_TOTALES | ensemble | 5 années entre 2020 et 2024 | aucune | +143,8 M€ en 2024 |
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.ACTIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 760,0 M€ en 2006 |
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.AUTRES_TRESORERIE_PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
