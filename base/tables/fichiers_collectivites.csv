@@ -2,6 +2,7 @@ fichier_id,source_id,contenu,exercice,version,statut,lignes,collectivites
 ofgl.base-communes-consolidee@2026-10-23-08504550,ofgl.base-communes-consolidee,collectivites,2024,2026-07-28,definitif,34932,34932
 ofgl.base-communes-consolidee@2026-10-23-1395d417,ofgl.base-communes-consolidee,collectivites,2025,2026-07-28,provisoire,34778,34778
 ofgl.base-communes-consolidee@2026-10-23-1f1b968e,ofgl.base-communes-consolidee,montants,2024,2026-07-28,definitif,1698438,34932
+ofgl.base-communes-consolidee@2026-10-23-72dd733d,ofgl.base-communes-consolidee,montants,2023,2026-07-28,definitif,1694822,34945
 ofgl.base-communes-consolidee@2026-10-23-b549a0c4,ofgl.base-communes-consolidee,montants,2025,2026-07-28,provisoire,1689271,34778
 ofgl.base-communes-consolidee@2026-10-23-beffff11,ofgl.base-communes-consolidee,inventaire,,2026-07-28,,8,
 ofgl.base-gfp-consolidee@2026-10-23-05c2a3ab,ofgl.base-gfp-consolidee,montants,2019,2026-07-22,definitif,62717,1272
