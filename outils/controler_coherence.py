@@ -64,14 +64,29 @@ IDENTITES = [
     ("INSEE_PO.PO", ["INSEE_PO.PO_IMPOTS", "INSEE_PO.PO_COTISATIONS"]),
     ("INSEE_PO.TAXE_FONCIERE", ["INSEE_PO.TAXE_FONCIERE_MENAGES", "INSEE_PO.TAXE_FONCIERE_HORS_MENAGES"]),
     ("INSEE_PO.DMTG", ["INSEE_PO.DMTG_DONATIONS", "INSEE_PO.DMTG_SUCCESSIONS"]),
+    ("LOLF.RESULTAT_EXECUTION", ["LOLF.SOLDE_BUDGET_GENERAL", "LOLF.SOLDE_COMPTES_SPECIAUX"]),
+    ("SEC2010.B9", ["COMPTES_SECU.RESULTAT_COMPTABLE", "INSEE_PASSAGES.SECU_CORRECTIONS"]),
 ]
+
+
+def _rubrique(total, code_norme):
+    """Identité d'un tableau de passage : une rubrique égale la somme des corrections que la table des concepts y range."""
+    return total, sorted(c["id"] for c in lire("tables/concepts.csv") if c["code_norme"] == code_norme and c["id"] != total)
+
+
+IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique (1) du tableau 3.107"),
+              _rubrique("INSEE_PASSAGES.ETAT_DROITS_CONSTATES", "rubrique (2) du tableau 3.107"),
+              _rubrique("INSEE_PASSAGES.ETAT_NON_BUDGETAIRES", "rubrique (3) du tableau 3.107"),
+              _rubrique("INSEE_PASSAGES.SECU_CORRECTIONS", "rubrique (1) du tableau 3.108")]
 
 # Ensembles et leurs parties. S'additionnent : les soldes et les prélèvements obligatoires (concepts
 # ADDITIFS), et les parts des sous-secteurs dans la dépense consolidée de l'ensemble des administrations
 # publiques (consolidation « consolide_apu »).
 DECOMPOSITIONS = [("S13", ["S1311", "S1313", "S1314"]), ("S1311", ["S13111", "S13112"]), ("S1313", ["S13131", "S13132"]),
                   ("S1314", ["S13141", "S13142"]), ("S13131", ["S131311", "S131312", "S131313", "S131314"]),
-                  ("S13_S212", ["S13", "S212"]), ("S13_S212", ["S1311", "S1313", "S1314", "S212"])]
+                  ("S13_S212", ["S13", "S212"]), ("S13_S212", ["S1311", "S1313", "S1314", "S212"]),
+                  ("S1314", ["REGIME_GENERAL", "S1314_HORS_RG"]),
+                  ("S1314_HORS_RG", ["CADES", "FRR", "AUTRES_REGIMES_SECU", "S13142"])]
 ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO"}
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
@@ -101,6 +116,12 @@ PASSERELLES = [
     ("Prélèvements obligatoires des administrations publiques : impôts nationaux du tableau 3.217 contre somme des "
      "sous-secteurs du tableau 3.216",
      [("insee.t3217", "S13", "INSEE_PO.PO", 1)], [("insee.t3216", p, "INSEE_PO.PO", 1) for p in ("S1311", "S1313", "S1314")]),
+    ("Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) "
+     "et (3), dans le tableau 3.107",
+     [("insee.t3107", "S13111", "SEC2010.B9", 1)],
+     [("insee.t3107", "ETAT_LF", "LOLF.RESULTAT_EXECUTION", 1)]
+     + [("insee.t3107", "S13111", f"INSEE_PASSAGES.ETAT_{c}", 1) for c in ("OPERATIONS_FINANCIERES", "DROITS_CONSTATES",
+                                                                           "NON_BUDGETAIRES")]),
 ]
 
 # Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes.

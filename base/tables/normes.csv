@@ -1,8 +1,11 @@
 id,libelle,reference,url
 COFOG1999,Classification des fonctions des administrations publiques (COFOG),"Nations unies, 1999 ; manuel d'Eurostat sur les statistiques COFOG, édition 2019",
+COMPTES_SECU,Comptabilité générale des organismes de sécurité sociale,Plan comptable unique des organismes de sécurité sociale ; comptes présentés à la Commission des comptes de la sécurité sociale,https://www.securite-sociale.fr/la-secu-en-detail/comptes-de-la-securite-sociale
 GFSM2014,Manuel de statistiques de finances publiques du FMI,"FMI, 2014",
 INSEE_APU,Présentation des comptes des administrations publiques par l'Insee,"Insee, Les comptes de la Nation, tableaux 3.201 à 3.214 (base 2020)",
+INSEE_PASSAGES,"Passages des soldes de comptabilité publique au déficit au sens de Maastricht, présentation de l'Insee","Insee, Les comptes de la Nation, tableaux 3.107 et 3.108 (base 2020)",https://www.insee.fr/fr/statistiques/8988843?sommaire=8988934
 INSEE_PO,"Prélèvements obligatoires et principaux impôts, présentation de l'Insee","Insee, Les comptes de la Nation, tableaux 3.216 et 3.217 (base 2020)",https://www.insee.fr/fr/statistiques/8988845?sommaire=8988934
+LOLF,Comptabilité budgétaire de l'État,Loi organique n° 2001-692 du 1er août 2001 relative aux lois de finances,https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000394028
 PDE,Procédure concernant les déficits excessifs,Règlement (CE) n° 479/2009 du Conseil du 25 mai 2009,https://eur-lex.europa.eu/eli/reg/2009/479/oj
 SEC2010,Système européen des comptes (SEC 2010),Règlement (UE) n° 549/2013 du 21 mai 2013 ; manuel d'Eurostat sur le déficit et la dette publics,https://eur-lex.europa.eu/eli/reg/2013/549/oj
 SOCX,Base de données des dépenses sociales de l'OCDE (SOCX),"OCDE, manuel de la base SOCX",

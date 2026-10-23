@@ -24,6 +24,8 @@
     {"name": "chiffres-eurostat-nama_10_gdp", "path": "tables/chiffres/eurostat/nama_10_gdp.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3101", "path": "tables/chiffres/insee/t3101.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3106", "path": "tables/chiffres/insee/t3106.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-insee-t3107", "path": "tables/chiffres/insee/t3107.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-insee-t3108", "path": "tables/chiffres/insee/t3108.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3201", "path": "tables/chiffres/insee/t3201.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3202", "path": "tables/chiffres/insee/t3202.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3203", "path": "tables/chiffres/insee/t3203.csv", "schema": "schemas/chiffres.json"},

@@ -15,6 +15,8 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | eurostat.nama_10_gdp | PIB et principaux agrégats | 2026-10-21 | 102 |
 | insee.t3101 | Tableau 3.101 : Dette des administrations publiques (S13) au sens de Maastricht et sa répartition par sous-secteur | 2026-07-28 | 624 |
 | insee.t3106 | Tableau 3.106 : Déficit des administrations publiques (S13) au sens de Maastricht | 2026-08-10 | 961 |
+| insee.t3107 | Tableau 3.107 : Passage du résultat d'exécution des lois de finances au déficit de l'État (S13111) au sens de Maastricht | 2026-05-27 | 587 |
+| insee.t3108 | Tableau 3.108 : Passage du résultat comptable du régime général au déficit des administrations de sécurité sociale (S1314) au sens de Maastricht | 2026-08-26 | 313 |
 | insee.t3201 | Tableau 3.201 : Dépenses et recettes des administrations publiques (S13) | 2026-08-10 | 3283 |
 | insee.t3202 | Tableau 3.202 : Dépenses et recettes de l'administration publique centrale (S1311) | 2026-05-19 | 2352 |
 | insee.t3203 | Tableau 3.203 : Dépenses et recettes de l'État (S13111) | 2026-05-19 | 2352 |
@@ -43,7 +45,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.
 
-6264 sommes vérifiées avec toutes leurs composantes : 6254 justes, 10 en écart.
+6317 sommes vérifiées avec toutes leurs composantes : 6307 justes, 10 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
 |---|---|---|---|---|---|---|---|
@@ -58,7 +60,12 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 | −16,3100 | −574,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 | −17,1280 | −578,0 M€ |
 
-11058 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
+11107 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour 11102 d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables. Pour les 5 autres, elles ne suffisent pas : des parties absentes ne sont pas nulles.
+
+| Source | Périmètre | Total | Fonction | Années | Plus grand reste (total − parties diffusées) |
+|---|---|---|---|---|---|
+| insee.t3107 | S13111 | INSEE_PASSAGES.ETAT_DROITS_CONSTATES | ensemble | 2023 | −1 300,0 M€ en 2023 |
+| insee.t3107 | S13111 | INSEE_PASSAGES.ETAT_NON_BUDGETAIRES | ensemble | 2019, 2020, 2021 et 2024 | −2 600,0 M€ en 2021 |
 
 ## 2. Ventilations par fonction
 
@@ -72,7 +79,7 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des dix divisi
 
 Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.
 
-1655 additions vérifiées : 1634 justes, 21 en écart.
+1689 additions vérifiées : 1668 justes, 21 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
@@ -95,6 +102,7 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Même passerelle, avec les impôts de l'Union européenne du tableau 3.217 | 31 années entre 1995 et 2025 | 23 années entre 1995 et 2018 | 23 années entre 1995 et 2018 | +734,9 M€ en 1995 |
 | Crédits d'impôt retranchés des prélèvements obligatoires (3.217) contre crédits d'impôt enregistrés en recettes (3.201), de signe opposé | 31 années entre 1995 et 2025 | 2017, 2018 et 2021 | 2017, 2018 et 2021 | −85,0 M€ en 2017 |
 | Prélèvements obligatoires des administrations publiques : impôts nationaux du tableau 3.217 contre somme des sous-secteurs du tableau 3.216 | 31 années entre 1995 et 2025 | 24 années entre 1995 et 2018 | 24 années entre 1995 et 2018 | +734,9 M€ en 1995 |
+| Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) et (3), dans le tableau 3.107 | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
 
 ## 5. Ratios
 
@@ -144,6 +152,7 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | eurostat.gov_10a_exp | insee.t3301 | 330 | 5 | 5 | +0,9 M€ en 2020 | +0,9 M€ en 2020 |
 | eurostat.gov_10a_exp | insee.t3307 | 176 | 100 | 100 | −20 300,8 M€ en 2009 | −20 300,8 M€ en 2009 |
 | eurostat.gov_10a_main | insee.t3106 | 248 | 1 | 1 | +0,9 M€ en 2011 | +0,9 M€ en 2011 |
+| eurostat.gov_10a_main | insee.t3108 | 17 | 0 | 0 | aucun | aucun |
 | eurostat.gov_10a_main | insee.t3201 | 124 | 5 | 3 | −43,0 M€ en 2021 | +119,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3202 | 124 | 0 | 0 | aucun | aucun |
 | eurostat.gov_10a_main | insee.t3205 | 124 | 0 | 0 | aucun | aucun |
@@ -156,12 +165,17 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | eurostat.nama_10_gdp | insee.t3101 | 48 | 42 | 42 | −9 571,2 M€ en 1990 | −9 571,2 M€ en 1990 |
 | eurostat.nama_10_gdp | insee.t3106 | 51 | 0 | 0 | aucun | aucun |
 | insee.t3101 | insee.t3106 | 48 | 42 | 42 | +9 571,2 M€ en 1990 | +9 571,2 M€ en 1990 |
+| insee.t3106 | insee.t3107 | 17 | 1 | 1 | −59,0 M€ en 2016 | −59,0 M€ en 2016 |
+| insee.t3106 | insee.t3108 | 17 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3201 | 67 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3202 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3203 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3204 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3205 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3212 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3107 | insee.t3203 | 17 | 1 | 1 | +59,2 M€ en 2016 | +59,2 M€ en 2016 |
+| insee.t3108 | insee.t3212 | 17 | 0 | 0 | aucun | aucun |
+| insee.t3108 | insee.t3214 | 13 | 6 | 6 | +271,0 M€ en 2018 | +271,0 M€ en 2018 |
 | insee.t3201 | insee.t3301 | 240 | 35 | 19 | +43,1 M€ en 2021 | −2 012,0 M€ en 2024 |
 | insee.t3201 | insee.t3307 | 16 | 16 | 14 | −20 301,8 M€ en 2009 | −20 301,8 M€ en 2009 |
 | insee.t3202 | insee.t3302 | 240 | 20 | 5 | −0,6 M€ en 2016 | +1 029,5 M€ en 2024 |
@@ -194,6 +208,9 @@ Détail des grandeurs en écart :
 | eurostat.gov_10a_main | insee.t3307 | FR S13 SEC2010.TE | ensemble | 16 années entre 2009 et 2024 | 14 années entre 2009 et 2022 | −20 301,7 M€ en 2009 |
 | eurostat.nama_10_gdp | insee.t3101 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | −9 571,2 M€ en 1990 |
 | insee.t3101 | insee.t3106 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | +9 571,2 M€ en 1990 |
+| insee.t3106 | insee.t3107 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | −59,0 M€ en 2016 |
+| insee.t3107 | insee.t3203 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | +59,2 M€ en 2016 |
+| insee.t3108 | insee.t3214 | FR S13142 SEC2010.B9 | ensemble | 6 années entre 2013 et 2018 | 6 années entre 2013 et 2018 | +271,0 M€ en 2018 |
 | insee.t3201 | insee.t3301 | FR S13 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | +487,9 M€ en 2024 |
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.D1PAY | ensemble | 2011, 2023 et 2024 | 2011 | +889,0 M€ en 2024 |
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.D3PAY | ensemble | 2001, 2023 et 2024 | 2001 | +552,0 M€ en 2023 |

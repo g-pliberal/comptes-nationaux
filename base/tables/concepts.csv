@@ -1,4 +1,5 @@
 id,libelle,norme_id,code_norme,sens,definition
+COMPTES_SECU.RESULTAT_COMPTABLE,Résultat comptable,COMPTES_SECU,RC,solde,"Résultat au sens de la comptabilité publique, semblable à celui d'une comptabilité générale d'entreprise (Insee)."
 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS,Acquisitions moins cessions d'actifs non financiers,INSEE_APU,P.51g + P.52 + P.53 + NP,depense,
 INSEE_APU.DEP_CREDITS_IMPOT,Crédits d'impôt enregistrés en dépenses,INSEE_APU,"partie de D.3, D.6, D.7 et D.9",depense,"Crédits d'impôt restituables, que la comptabilité nationale enregistre en dépenses même lorsqu'ils réduisent l'impôt dû."
 INSEE_APU.DEP_FONCTIONNEMENT,Dépenses de fonctionnement,INSEE_APU,P.2 + D.1 + D.29 + D.4 hors D.41 + D.5,depense,
@@ -12,6 +13,72 @@ INSEE_APU.REC_IMPOTS_COTISATIONS,Impôts et cotisations sociales,INSEE_APU,D.2 +
 INSEE_APU.REC_PAIEMENTS_PARTIELS,Paiements partiels des ménages,INSEE_APU,partie de P.13,recette,
 INSEE_APU.REC_PRODUCTION,Recettes de production,INSEE_APU,P.11 + P.12 + paiements partiels + D.39,recette,
 INSEE_APU.REC_REVENUS_PROPRIETE,Revenus de la propriété,INSEE_APU,D.4,recette,
+INSEE_PASSAGES.ETAT_AUTRES_OPERATIONS_FINANCIERES,Autres opérations financières,INSEE_PASSAGES,rubrique (1) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_AMENDES_CONTENTIEUX,Amendes en attente de confirmation et contentieux fiscaux,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_AUTRES,Autres corrections de droits constatés,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_BANQUES_MULTILATERALES,Décalage comptable des versements aux banques multilatérales de développement,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_BDF_GRECE,Étalement du versement de la Banque de France pour le désendettement de la Grèce,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_BOUCLIER_ELECTRICITE,Bouclier tarifaire sur l'électricité : compensation des fournisseurs,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_BOUCLIER_GAZ,Bouclier tarifaire sur le gaz : compensation des fournisseurs,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_BUDGETS_RECTIFICATIFS_UE,Décalage sur le paiement des budgets rectificatifs de l'Union européenne,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_CHARGES_A_PAYER,Décalage comptable des charges à payer sur achats de l'État,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_CONTRIBUTION_DIVIDENDES,Décalage comptable lié aux remboursements de la contribution additionnelle de 3 % sur les dividendes,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_CREDITS_IMPOT,Décalage entre la reconnaissance et la liquidation des crédits d'impôt,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_DETTE_ETAT_SECU,Règlement de la dette de l'État envers la sécurité sociale,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_EXONERATIONS_COTISATIONS,Décalage comptable sur les exonérations de cotisations sociales,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_FONDS_SOLIDARITE_ACTIVITE_PARTIELLE,Décalage comptable sur les dépenses du fonds de solidarité et les allocations d'activité partielle,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_FRANCE_RELANCE,"Recettes de financement européen de France Relance, hors financement des dépenses des administrations de sécurité sociale",INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_FREQUENCES_HERTZIENNES,Décalage comptable lié aux ventes de fréquences hertziennes,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,"Depuis la base 2014, les ventes de licences hertziennes sont étalées en loyers sur la durée d'utilisation des fréquences (Insee)."
+INSEE_PASSAGES.ETAT_DC_IMPOTS,"Impôts : IRPP, ISF, TVA, TIPP, TTF et dégrèvements d'impôts locaux",INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,"Inclut aussi, en 2022, la contribution sur la rente infra-marginale, la contribution exceptionnelle de solidarité, la contribution à l'audiovisuel public et le traitement en recette des charges de service public de l'énergie (Insee)."
+INSEE_PASSAGES.ETAT_DC_MATERIEL_MILITAIRE,Décalage entre livraisons et paiements de matériel militaire,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_NON_RECOUVREMENT,Décalage comptable sur le non-recouvrement des impôts,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,"Depuis la base 2014, estimation du taux de recouvrement des impôts (Insee)."
+INSEE_PASSAGES.ETAT_DC_PRIMES_EPARGNE,Décalage comptable sur la compensation des primes d'épargne,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_PRIMES_PGE,Étalement des primes des prêts garantis par l'État,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_SERVICE_PUBLIC_ENERGIE,Décalage comptable des charges de service public de l'énergie (solde),INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,"Depuis 2016, la compensation des charges de service public de l'électricité (CSPE) est budgétisée, donc intégrée au compte du budget général de l'État (Insee)."
+INSEE_PASSAGES.ETAT_DC_SFEF,Étalement des versements de la SFEF,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,SFEF : Société de financement de l'économie française.
+INSEE_PASSAGES.ETAT_DC_SOULTES_RETRAITES,Étalement des versements de soultes liées aux retraites,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_TRANSFERTS_ODAC,Décalage sur des transferts vers les organismes divers d'administration centrale,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_TRANSFERT_AMENDES,Décalage sur le transfert du produit des amendes vers les collectivités locales,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_DC_TRANSFERT_CVAE,Décalage sur le transfert de la CVAE vers les collectivités locales,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,CVAE : cotisation sur la valeur ajoutée des entreprises.
+INSEE_PASSAGES.ETAT_DROITS_CONSTATES,Corrections de droits constatés,INSEE_PASSAGES,rubrique (2) du tableau 3.107,solde,"Écarts entre les dates de paiement de certaines dépenses ou recettes et les dates de leur fait générateur, retenues par le SEC 2010 (Insee)."
+INSEE_PASSAGES.ETAT_NB_AIR_FRANCE,Conversion du prêt accordé à Air France en instrument de capital,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_ARENH,Bouclier tarifaire sur l'électricité : relèvement du plafond de l'ARENH,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,Élément du bouclier tarifaire sur l'électricité en 2022 (Insee). ARENH : accès régulé à l'électricité nucléaire historique.
+INSEE_PASSAGES.ETAT_NB_AUTRES,Autres opérations non budgétaires,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_BENEFICES_REINVESTIS,Bénéfices réinvestis d'investissement direct étranger,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_BPIFRANCE_FII,Dotations non consommables vers Bpifrance Participations (FII),INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_BUDGETS_ANNEXES,Besoin ou capacité de financement des budgets annexes,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_COMMERCE_EXTERIEUR,Reprise de trésorerie pour le soutien au commerce extérieur,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_CREDIT_BAIL,Crédit-bail,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_CSPE_ZNI,CSPE dans les zones non interconnectées (ZNI),INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_DETTE_SNCF_RESEAU,Reprise de dette de SNCF Réseau,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_DIVIDENDES_TITRES,Dividendes reçus sous forme de titres,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_DROITS_ENREGISTREMENT,Droits d'enregistrement,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_DROITS_TABACS,Affectation de droits sur les tabacs au règlement de la dette de l'État envers la sécurité sociale,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_EPFR,Reprise de la dette de l'EPFR (défaisance du Crédit lyonnais),INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,EPFR : Établissement public de financement et de restructuration.
+INSEE_PASSAGES.ETAT_NB_ERAP,Transferts de titres de l'ERAP vers l'État,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,ERAP : Entreprise de recherches et d'activités pétrolières.
+INSEE_PASSAGES.ETAT_NB_FONDS,Besoin de financement des fonds inclus dans l'État en comptabilité nationale,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_INTERETS_COURUS,"Différence entre intérêts courus et intérêts échus dans l'année, et étalement des primes et décotes",INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_LGV_TOURS_BORDEAUX,Prise en compte des coûts de construction de la LGV Tours-Bordeaux,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,Coûts de construction de la ligne à grande vitesse Tours-Bordeaux comptés dans le déficit de l'État : l'ouvrage a formellement été concédé en 2011 à un opérateur privé par SNCF Réseau (Insee).
+INSEE_PASSAGES.ETAT_NB_PIA_CONSOMMABLES,"Dotations consommables du programme d'investissements d'avenir (PIA), vers les fonds de la Caisse des dépôts",INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_PIA_NON_CONSOMMABLES,Dotations non consommables du programme d'investissements d'avenir (PIA),INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_PPP,Consolidation des partenariats public-privé (PPP),INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NB_REMISES_DETTES,Remises de dettes aux États étrangers,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_NON_BUDGETAIRES,Opérations non budgétaires affectant le besoin de financement,INSEE_PASSAGES,rubrique (3) du tableau 3.107,solde,"Opérations comprises dans le compte de l'État en comptabilité nationale, sans équivalent budgétaire : par exemple des dividendes reçus sous forme de titres, recette au sens du SEC 2010 sans encaissement (Insee)."
+INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES,Opérations budgétaires traitées en opérations financières,INSEE_PASSAGES,rubrique (1) du tableau 3.107,solde,"Retraitement d'opérations qui, bien qu'elles entraînent des mouvements de trésorerie, ne sont pas des dépenses ou des recettes publiques au sens du SEC 2010 : l'accord ou le remboursement d'un prêt, l'achat ou la cession d'actions sont des opérations financières, sans effet sur le déficit au sens de Maastricht (Insee)."
+INSEE_PASSAGES.ETAT_PARTICIPATIONS_NETTES,"Prises de participations, nettes des cessions",INSEE_PASSAGES,rubrique (1) du tableau 3.107,solde,
+INSEE_PASSAGES.ETAT_PRETS_NETS,"Prêts accordés par l'État, nets des remboursements",INSEE_PASSAGES,rubrique (1) du tableau 3.107,solde,
+INSEE_PASSAGES.SECU_AUTRES,Autres corrections réalisées en comptabilité nationale,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,
+INSEE_PASSAGES.SECU_COMPTE_RESULTAT_NON_REPRIS,Opérations du compte de résultat non reprises en comptabilité nationale,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,Principalement les dotations nettes aux provisions et aux amortissements comptables (Insee).
+INSEE_PASSAGES.SECU_CORRECTIONS,Corrections réalisées en comptabilité nationale,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,"Opérations traitées différemment en comptabilité publique, pour le résultat comptable, et en comptabilité nationale, pour le déficit au sens de Maastricht (Insee)."
+INSEE_PASSAGES.SECU_DROITS_CONSTATES,Autres corrections de droits constatés,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,"Décalages entre les dates d'enregistrement en comptabilité publique et en comptabilité nationale, neutres en moyenne sur plusieurs années (Insee)."
+INSEE_PASSAGES.SECU_FCAATA,Gestion du FCAATA isolée de la CNAM jusqu'en 2011,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,"Fonds de cessation anticipée d'activité des travailleurs de l'amiante, isolé dans une unité propre en comptabilité nationale ; neutre sur l'ensemble des administrations de sécurité sociale (Insee)."
+INSEE_PASSAGES.SECU_INDEPENDANTS_COVID,Correction liée aux impôts et cotisations des indépendants dus au titre de 2020 et suspendus lors de la première vague de covid-19,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,"Régularisation payée en 2021 au titre des revenus de 2020, estimée et comptée en recette de 2020 (Insee)."
+INSEE_PASSAGES.SECU_NON_RECOUVREMENT,Ajustement lié à l'estimation des impôts et cotisations susceptibles de ne pas être recouvrés,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,
+INSEE_PASSAGES.SECU_OPERATIONS_BILAN,Opérations du bilan traitées en dépense ou en recette en comptabilité nationale,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,"Opérations sur immobilisations corporelles et incorporelles, comptées dans le déficit en comptabilité nationale même quand elles n'entrent pas dans le résultat de la comptabilité publique (Insee)."
+INSEE_PASSAGES.SECU_PRODUIT_SOULTE_IEG_FRR,Produit de la soulte IEG gérée par le FRR au profit de la CNAV,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,"Intérêts des fonds de la soulte prêtés par la CNAV au Fonds de réserve pour les retraites, comptés en revenus de la CNAV en comptabilité nationale ; neutre sur l'ensemble des administrations de sécurité sociale (Insee)."
+INSEE_PASSAGES.SECU_RECONCILIATION_TRANSFERTS,Opérations de réconciliation des transferts entre administrations publiques,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,Harmonisation des transferts entre administrations ; neutre sur l'ensemble de la sécurité sociale (Insee).
+INSEE_PASSAGES.SECU_RESERVES_FSV,Mises en réserve de l'ex-section II du FSV,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,"Recettes de contributions sociales enregistrées de 2011 à 2017 en réserves au bilan du FSV, que la comptabilité nationale classe en impôts des périodes au titre desquelles elles étaient dues (Insee)."
+INSEE_PASSAGES.SECU_SOULTE_IEG,Étalement du versement de la soulte IEG de 2005,INSEE_PASSAGES,rubrique (1) du tableau 3.108,solde,"Soulte de 3 milliards d'euros reçue en 2005 en échange de la reprise des engagements de retraite des industries électriques et gazières, étalée en comptabilité nationale (Insee)."
 INSEE_PO.ACCISES_ALCOOLS,Accises sur les alcools et autres boissons,INSEE_PO,partie de D.214,recette,
 INSEE_PO.ACCISES_TABACS,Accises sur les tabacs,INSEE_PO,partie de D.214,recette,
 INSEE_PO.AGENCES_EAU,Redevances des agences de l'eau,INSEE_PO,partie de D.214 et de D.29,recette,
@@ -97,6 +164,9 @@ INSEE_PO.TSCA,Taxe sur les conventions d'assurances,INSEE_PO,partie de D.214,rec
 INSEE_PO.TTF,Taxe sur les transactions financières,INSEE_PO,partie de D.214,recette,
 INSEE_PO.VERSEMENT_MOBILITE,Versement mobilité,INSEE_PO,partie de D.291,recette,
 INSEE_PO.VIGNETTE,Taxe sur les véhicules (vignette auto des ménages),INSEE_PO,partie de D.59,recette,
+LOLF.RESULTAT_EXECUTION,"Résultat d'exécution des lois de finances, hors opérations avec le FMI",LOLF,RE,solde,"Solde de la comptabilité budgétaire de l'État, voté par le Parlement : il enregistre les encaissements et décaissements de l'année (comptabilité de caisse)."
+LOLF.SOLDE_BUDGET_GENERAL,Solde d'exécution du budget général,LOLF,solde du budget général,solde,"Différence entre les recettes et les dépenses du budget général, négative quand les dépenses dépassent les recettes."
+LOLF.SOLDE_COMPTES_SPECIAUX,"Solde des comptes spéciaux, hors opérations avec le FMI",LOLF,solde des comptes spéciaux,solde,"Comptes tenus en dehors du budget général pour des opérations particulières : comptes d'affectation spéciale (participations financières de l'État, pensions des fonctionnaires…), comptes de concours financiers (prêts à des États étrangers…), comptes de commerce et comptes d'opérations monétaires."
 PDE.GD,Dette publique au sens de Maastricht,PDE,GD,stock,"Dette brute des administrations publiques, consolidée, en valeur nominale : numéraire et dépôts, titres de créance, crédits."
 SEC2010.B1GQ,Produit intérieur brut aux prix du marché,SEC2010,B1GQ,agregat,
 SEC2010.B8G,Épargne brute,SEC2010,B.8g,solde,
