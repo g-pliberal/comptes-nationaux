@@ -41,51 +41,52 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
-| senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1432 |
-| senat.pjl07-429 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2007, texte n° 429 (2007-2008) transmis au Sénat le 1er juillet 2008 | 2008-07-01 | 1074 |
-| senat.pjl08-502 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2008, texte n° 502 (2008-2009) transmis au Sénat le 30 juin 2009 | 2009-06-30 | 988 |
-| senat.pjl09-585 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2009, texte n° 585 (2009-2010) transmis au Sénat le 29 juin 2010 | 2010-06-29 | 941 |
-| senat.pjl10-672 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2010, texte n° 672 (2010-2011) transmis au Sénat le 28 juin 2011 | 2011-06-28 | 963 |
-| senat.pjl11-655 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2011, texte n° 655 (2011-2012) transmis au Sénat le 10 juillet 2012 | 2012-07-10 | 959 |
-| senat.pjl12-799 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2012, texte n° 799 (2012-2013) transmis au Sénat le 23 juillet 2013 en nouvelle lecture | 2013-07-23 | 987 |
-| senat.pjl13-759 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2013, texte n° 759 (2013-2014) transmis au Sénat le 21 juillet 2014 en nouvelle lecture | 2014-07-21 | 977 |
-| senat.pjl14-642 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2014, texte n° 642 (2014-2015) transmis au Sénat le 16 juillet 2015 en nouvelle lecture | 2015-07-16 | 1025 |
-| senat.pjl15-785 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2015, texte n° 785 (2015-2016) transmis au Sénat le 12 juillet 2016 en nouvelle lecture | 2016-07-12 | 935 |
-| senat.pjl16-643 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2016, texte n° 643 (2016-2017) transmis au Sénat le 18 juillet 2017 | 2017-07-18 | 931 |
-| senat.pjl17-595 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2017, texte n° 595 (2017-2018) transmis au Sénat le 21 juin 2018 | 2018-06-21 | 907 |
-| senat.pjl18-686 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2018, texte n° 686 (2018-2019) transmis au Sénat le 18 juillet 2019 en nouvelle lecture | 2019-07-18 | 910 |
-| senat.pjl19-505 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2019, texte n° 505 (2019-2020) transmis au Sénat le 11 juin 2020 | 2020-06-11 | 921 |
-| senat.pjl20-784 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2020, texte n° 784 (2020-2021) transmis au Sénat le 21 juillet 2021 en nouvelle lecture | 2021-07-21 | 919 |
-| senat.pjl22-683 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2021, texte n° 683 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 945 |
-| senat.pjl22-684 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2022, texte n° 684 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 952 |
-| senat.pjl24-032 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2023, texte n° 32 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 923 |
-| senat.pjl24-718 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2024, texte n° 718 (2024-2025) transmis au Sénat le 10 juin 2025 | 2025-06-10 | 914 |
-| senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 904 |
+| senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1602 |
+| senat.pjl07-429 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2007, texte n° 429 (2007-2008) transmis au Sénat le 1er juillet 2008 | 2008-07-01 | 1341 |
+| senat.pjl08-502 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2008, texte n° 502 (2008-2009) transmis au Sénat le 30 juin 2009 | 2009-06-30 | 1123 |
+| senat.pjl09-585 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2009, texte n° 585 (2009-2010) transmis au Sénat le 29 juin 2010 | 2010-06-29 | 1075 |
+| senat.pjl10-672 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2010, texte n° 672 (2010-2011) transmis au Sénat le 28 juin 2011 | 2011-06-28 | 1096 |
+| senat.pjl11-655 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2011, texte n° 655 (2011-2012) transmis au Sénat le 10 juillet 2012 | 2012-07-10 | 1094 |
+| senat.pjl12-799 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2012, texte n° 799 (2012-2013) transmis au Sénat le 23 juillet 2013 en nouvelle lecture | 2013-07-23 | 1128 |
+| senat.pjl13-759 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2013, texte n° 759 (2013-2014) transmis au Sénat le 21 juillet 2014 en nouvelle lecture | 2014-07-21 | 1111 |
+| senat.pjl14-642 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2014, texte n° 642 (2014-2015) transmis au Sénat le 16 juillet 2015 en nouvelle lecture | 2015-07-16 | 1168 |
+| senat.pjl15-785 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2015, texte n° 785 (2015-2016) transmis au Sénat le 12 juillet 2016 en nouvelle lecture | 2016-07-12 | 1073 |
+| senat.pjl16-643 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2016, texte n° 643 (2016-2017) transmis au Sénat le 18 juillet 2017 | 2017-07-18 | 1075 |
+| senat.pjl17-595 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2017, texte n° 595 (2017-2018) transmis au Sénat le 21 juin 2018 | 2018-06-21 | 1047 |
+| senat.pjl18-686 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2018, texte n° 686 (2018-2019) transmis au Sénat le 18 juillet 2019 en nouvelle lecture | 2019-07-18 | 1052 |
+| senat.pjl19-505 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2019, texte n° 505 (2019-2020) transmis au Sénat le 11 juin 2020 | 2020-06-11 | 1061 |
+| senat.pjl20-784 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2020, texte n° 784 (2020-2021) transmis au Sénat le 21 juillet 2021 en nouvelle lecture | 2021-07-21 | 1061 |
+| senat.pjl22-683 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2021, texte n° 683 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 1090 |
+| senat.pjl22-684 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2022, texte n° 684 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 1098 |
+| senat.pjl24-032 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2023, texte n° 32 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 1075 |
+| senat.pjl24-718 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2024, texte n° 718 (2024-2025) transmis au Sénat le 10 juin 2025 | 2025-06-10 | 1066 |
+| senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 1053 |
 
 ## 1. Sommes comptables
 
-Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.
+Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-6953 sommes vérifiées avec toutes leurs composantes : 6939 justes, 14 en écart.
+8447 sommes vérifiées avec toutes leurs composantes : 8432 justes, 15 en écart.
 
-| Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
+| Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
-| insee.bdm-comptes-etat | ETAT_LF | ensemble | 2019-04 | LOLF.RESULTAT_EXECUTION | −67,2150 | −65,5960 | −1 619,0 M€ |
-| insee.t3207 | S131311 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 36,3688 | 36,2870 | +81,8 M€ |
-| insee.t3207 | S131311 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 31,1743 | 31,0840 | +90,3 M€ |
-| insee.t3207 | S131311 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 32,5278 | 32,4602 | +67,6 M€ |
-| insee.t3207 | S131311 | ensemble | 2024 | SEC2010.B9 | −2,8229 | −2,8219 | −1,0 M€ |
-| insee.t3208 | S131312 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,8290 | 6,8270 | +2,0 M€ |
-| insee.t3208 | S131312 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,9480 | 6,9460 | +2,0 M€ |
-| insee.t3208 | S131312 | ensemble | 2024 | SEC2010.B9 | −5,6560 | −5,8130 | +157,0 M€ |
-| insee.t3210 | S131314 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 | 5,0550 | +16,0 M€ |
-| insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 | −16,3100 | −574,0 M€ |
-| insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 | −17,1280 | −578,0 M€ |
-| senat.pjl13-759 | ETAT_LF | ensemble | 2013 | LOLF.COMPTES_COMMERCE_SOLDE | 0,1368 | 0,2654 | −128,6 M€ |
-| senat.pjl19-505 | ETAT_LF | ensemble | 2019 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 23,3199 | 24,5853 | −1 265,4 M€ |
-| senat.pjl25-726 | ETAT_LF | ensemble | 2025 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 16,0862 | 16,0902 | −4,0 M€ |
+| insee.bdm-comptes-etat | ETAT_LF | ensemble | 2019-04 | LOLF.RESULTAT_EXECUTION | −67,2150 Md€ | −65,5960 Md€ | −1 619,0 M€ |
+| insee.t3207 | S131311 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 36,3688 Md€ | 36,2870 Md€ | +81,8 M€ |
+| insee.t3207 | S131311 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 31,1743 Md€ | 31,0840 Md€ | +90,3 M€ |
+| insee.t3207 | S131311 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 32,5278 Md€ | 32,4602 Md€ | +67,6 M€ |
+| insee.t3207 | S131311 | ensemble | 2024 | SEC2010.B9 | −2,8229 Md€ | −2,8219 Md€ | −1,0 M€ |
+| insee.t3208 | S131312 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,8290 Md€ | 6,8270 Md€ | +2,0 M€ |
+| insee.t3208 | S131312 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 6,9480 Md€ | 6,9460 Md€ | +2,0 M€ |
+| insee.t3208 | S131312 | ensemble | 2024 | SEC2010.B9 | −5,6560 Md€ | −5,8130 Md€ | +157,0 M€ |
+| insee.t3210 | S131314 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 Md€ | 5,0550 Md€ | +16,0 M€ |
+| insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 Md€ | −16,3100 Md€ | −574,0 M€ |
+| insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 Md€ | −17,1280 Md€ | −578,0 M€ |
+| senat.pjl13-759 | ETAT_LF | ensemble | 2013 | LOLF.COMPTES_COMMERCE_SOLDE | 0,1368 Md€ | 0,2654 Md€ | −128,6 M€ |
+| senat.pjl19-505 | ETAT_LF | ensemble | 2019 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 23,3199 Md€ | 24,5853 Md€ | −1 265,4 M€ |
+| senat.pjl25-726 | ETAT_CGE | ensemble | 2025 | COMPTES_ETAT.SITUATION_NETTE | −2 115,8890 Md€ | −1 986,4230 Md€ | −129 466,0 M€ |
+| senat.pjl25-726 | ETAT_LF | ensemble | 2025 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 16,0862 Md€ | 16,0902 Md€ | −4,0 M€ |
 
-11107 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour 11102 d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables. Pour les 5 autres, elles ne suffisent pas : des parties absentes ne sont pas nulles.
+11116 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour 11111 d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables. Pour les 5 autres, elles ne suffisent pas : des parties absentes ne sont pas nulles.
 
 | Source | Périmètre | Total | Fonction | Années | Plus grand reste (total − parties diffusées) |
 |---|---|---|---|---|---|
@@ -139,6 +140,7 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Solde général d'exécution à fin décembre (situation mensuelle) contre résultat d'exécution des lois de finances du tableau 3.107 | 17 années entre 2009 et 2025 | 2014, 2016 et 2019 | 2014, 2016 et 2019 | +121,0 M€ en 2016 |
 | Solde du budget général à fin décembre (situation mensuelle : recettes moins dépenses) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2016 | 2016 | +101,0 M€ en 2016 |
 | Solde des comptes spéciaux à fin décembre (situation mensuelle) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2017 | 2017 | +64,0 M€ en 2017 |
+| Déficit à financer du tableau de financement contre résultat budgétaire de l'État, de signe opposé, dans le projet de loi d'approbation des comptes | 12 années entre 2014 et 2025 | 2014 | 2014 | −11 955,0 M€ en 2014 |
 | Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) et (3), dans le tableau 3.107 | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
 
 ## 5. Ratios
@@ -149,7 +151,7 @@ Chaque ratio est recalculé : le même chiffre en montant, divisé par son déno
 |---|---|---|---|
 | le PIB indiqué par la source, dans le même tableau | 730 | 597 | 133 |
 | la dépense totale du même périmètre, chez la même source | 300 | 300 | 0 |
-| non indiqué par la source : chaque série de PIB enregistrée pour l'année est essayée | 1497 | 1492 | 5 |
+| non indiqué par la source : chaque série de PIB enregistrée pour l'année est essayée | 1500 | 1493 | 7 |
 
 Ratios non retrouvés :
 
@@ -175,6 +177,10 @@ Ratios non retrouvés :
 - **insee.t3101, PDE.GD, S1314, en % du PIB** : 2 ratios ne sont pas retrouvés avec le PIB indiqué, celui de insee.t3101, pour 2007 et 2009.
   Avec le PIB de eurostat.nama_10_gdp, 2 sont retrouvés.
   Avec le PIB de insee.t3106, 2 sont retrouvés.
+- **senat.pjl24-032, SEC2010.TE, S13, en % du PIB** : 1 ratio n’est retrouvé avec aucune des séries de PIB enregistrées, pour 2023.
+  En 2023, aucune série enregistrée ne le retrouve ; il faudrait un PIB compris entre 2 799,118 et 2 805,826 Md€ (PIB enregistrés : eurostat.nama_10_gdp 2 833,826 Md€ ; insee.t3101 2 833,826 Md€ ; insee.t3106 2 833,826 Md€).
+- **senat.pjl24-718, SEC2010.TE, S13, en % du PIB** : 1 ratio n’est retrouvé avec aucune des séries de PIB enregistrées, pour 2024.
+  En 2024, aucune série enregistrée ne le retrouve ; il faudrait un PIB compris entre 2 922,054 et 2 929,016 Md€ (PIB enregistrés : eurostat.nama_10_gdp 2 935,236 Md€ ; insee.t3101 2 935,236 Md€ ; insee.t3106 2 935,236 Md€).
 
 ## 6. Écarts entre sources pour une même grandeur
 
@@ -199,9 +205,26 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | eurostat.gov_10a_main | insee.t3305 | 30 | 4 | 2 | −0,6 M€ en 2002 | +738,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3306 | 30 | 3 | 1 | +0,7 M€ en 2022 | −1 139,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3307 | 16 | 16 | 14 | −20 301,7 M€ en 2009 | −20 301,7 M€ en 2009 |
+| eurostat.gov_10a_main | senat.pjl12-799 | 1 | 1 | 0 | aucun | −0,4 point de PIB en 2012 |
+| eurostat.gov_10a_main | senat.pjl13-759 | 1 | 1 | 0 | aucun | −0,6 point de PIB en 2013 |
+| eurostat.gov_10a_main | senat.pjl14-642 | 1 | 1 | 0 | aucun | −0,6 point de PIB en 2014 |
+| eurostat.gov_10a_main | senat.pjl15-785 | 1 | 1 | 0 | aucun | −0,3 point de PIB en 2015 |
+| eurostat.gov_10a_main | senat.pjl16-643 | 1 | 1 | 0 | aucun | −0,4 point de PIB en 2016 |
+| eurostat.gov_10a_main | senat.pjl17-595 | 1 | 1 | 0 | aucun | −0,8 point de PIB en 2017 |
+| eurostat.gov_10a_main | senat.pjl18-686 | 1 | 1 | 0 | aucun | +0,2 point de PIB en 2018 |
+| eurostat.gov_10a_main | senat.pjl19-505 | 1 | 1 | 0 | aucun | +0,6 point de PIB en 2019 |
+| eurostat.gov_10a_main | senat.pjl20-784 | 1 | 1 | 0 | aucun | +0,3 point de PIB en 2020 |
+| eurostat.gov_10a_main | senat.pjl22-683 | 1 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | senat.pjl22-684 | 1 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | senat.pjl24-032 | 1 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | senat.pjl24-718 | 1 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
 | eurostat.nama_10_gdp | insee.t3101 | 48 | 42 | 42 | −9 571,2 M€ en 1990 | −9 571,2 M€ en 1990 |
 | eurostat.nama_10_gdp | insee.t3106 | 51 | 0 | 0 | aucun | aucun |
 | insee.t3101 | insee.t3106 | 48 | 42 | 42 | +9 571,2 M€ en 1990 | +9 571,2 M€ en 1990 |
+| insee.t3101 | senat.pjl24-032 | 1 | 1 | 0 | aucun | −1,1 point de PIB en 2023 |
+| insee.t3101 | senat.pjl24-718 | 1 | 1 | 0 | aucun | −0,4 point de PIB en 2024 |
+| insee.t3101 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3107 | 17 | 1 | 1 | −59,0 M€ en 2016 | −59,0 M€ en 2016 |
 | insee.t3106 | insee.t3108 | 17 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3201 | 67 | 0 | 0 | aucun | aucun |
@@ -210,6 +233,20 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3106 | insee.t3204 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3205 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3212 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl12-799 | 1 | 1 | 0 | aucun | −0,4 point de PIB en 2012 |
+| insee.t3106 | senat.pjl13-759 | 1 | 1 | 0 | aucun | −0,6 point de PIB en 2013 |
+| insee.t3106 | senat.pjl14-642 | 1 | 1 | 0 | aucun | −0,6 point de PIB en 2014 |
+| insee.t3106 | senat.pjl15-785 | 1 | 1 | 0 | aucun | −0,3 point de PIB en 2015 |
+| insee.t3106 | senat.pjl16-643 | 1 | 1 | 0 | aucun | −0,4 point de PIB en 2016 |
+| insee.t3106 | senat.pjl17-595 | 1 | 1 | 0 | aucun | −0,8 point de PIB en 2017 |
+| insee.t3106 | senat.pjl18-686 | 1 | 1 | 0 | aucun | +0,2 point de PIB en 2018 |
+| insee.t3106 | senat.pjl19-505 | 1 | 1 | 0 | aucun | +0,6 point de PIB en 2019 |
+| insee.t3106 | senat.pjl20-784 | 1 | 1 | 0 | aucun | +0,3 point de PIB en 2020 |
+| insee.t3106 | senat.pjl22-683 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl22-684 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl24-032 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl24-718 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3107 | insee.t3203 | 17 | 1 | 1 | +59,2 M€ en 2016 | +59,2 M€ en 2016 |
 | insee.t3107 | senat.pjl09-585 | 3 | 0 | 0 | aucun | aucun |
 | insee.t3107 | senat.pjl10-672 | 3 | 0 | 0 | aucun | aucun |
@@ -238,7 +275,14 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3205 | insee.t3305 | 240 | 18 | 2 | −0,6 M€ en 2002 | +738,0 M€ en 2024 |
 | insee.t3212 | insee.t3306 | 240 | 19 | 5 | −39,4 M€ en 2019 | +1 304,3 M€ en 2024 |
 | insee.t3216 | insee.t3217 | 93 | 24 | 24 | +734,9 M€ en 1995 | +734,9 M€ en 1995 |
+| insee.t3216 | senat.pjl24-032 | 1 | 1 | 0 | aucun | −0,3 point de PIB en 2023 |
+| insee.t3216 | senat.pjl24-718 | 1 | 1 | 0 | aucun | −0,1 point de PIB en 2024 |
+| insee.t3216 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3217 | senat.pjl24-032 | 1 | 1 | 0 | aucun | −0,3 point de PIB en 2023 |
+| insee.t3217 | senat.pjl24-718 | 1 | 1 | 0 | aucun | −0,1 point de PIB en 2024 |
+| insee.t3217 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3301 | insee.t3307 | 1248 | 408 | 408 | −20 301,0 M€ en 2009 | −20 301,0 M€ en 2009 |
+| senat.pjl06-389 | senat.pjl07-429 | 127 | 10 | 10 | +3 761,0 M€ en 2006 | +3 761,0 M€ en 2006 |
 
 Détail des grandeurs en écart :
 
@@ -260,9 +304,29 @@ Détail des grandeurs en écart :
 | eurostat.gov_10a_main | insee.t3305 | FR S1313 SEC2010.TE | ensemble | 2002, 2013, 2023 et 2024 | 2002 et 2013 | +738,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3306 | FR S1314 SEC2010.TE | ensemble | 2022, 2023 et 2024 | 2022 | −1 139,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3307 | FR S13 SEC2010.TE | ensemble | 16 années entre 2009 et 2024 | 14 années entre 2009 et 2022 | −20 301,7 M€ en 2009 |
+| eurostat.gov_10a_main | senat.pjl12-799 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2012 | aucune | −0,4 point de PIB en 2012 |
+| eurostat.gov_10a_main | senat.pjl13-759 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2013 | aucune | −0,6 point de PIB en 2013 |
+| eurostat.gov_10a_main | senat.pjl14-642 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2014 | aucune | −0,6 point de PIB en 2014 |
+| eurostat.gov_10a_main | senat.pjl15-785 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2015 | aucune | −0,3 point de PIB en 2015 |
+| eurostat.gov_10a_main | senat.pjl16-643 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2016 | aucune | −0,4 point de PIB en 2016 |
+| eurostat.gov_10a_main | senat.pjl17-595 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2017 | aucune | −0,8 point de PIB en 2017 |
+| eurostat.gov_10a_main | senat.pjl18-686 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2018 | aucune | +0,2 point de PIB en 2018 |
+| eurostat.gov_10a_main | senat.pjl19-505 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2019 | aucune | +0,6 point de PIB en 2019 |
+| eurostat.gov_10a_main | senat.pjl20-784 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2020 | aucune | +0,3 point de PIB en 2020 |
 | eurostat.nama_10_gdp | insee.t3101 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | −9 571,2 M€ en 1990 |
 | insee.t3101 | insee.t3106 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | +9 571,2 M€ en 1990 |
+| insee.t3101 | senat.pjl24-032 | FR S13 PDE.GD, en % du PIB | ensemble | 2023 | aucune | −1,1 point de PIB en 2023 |
+| insee.t3101 | senat.pjl24-718 | FR S13 PDE.GD, en % du PIB | ensemble | 2024 | aucune | −0,4 point de PIB en 2024 |
 | insee.t3106 | insee.t3107 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | −59,0 M€ en 2016 |
+| insee.t3106 | senat.pjl12-799 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2012 | aucune | −0,4 point de PIB en 2012 |
+| insee.t3106 | senat.pjl13-759 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2013 | aucune | −0,6 point de PIB en 2013 |
+| insee.t3106 | senat.pjl14-642 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2014 | aucune | −0,6 point de PIB en 2014 |
+| insee.t3106 | senat.pjl15-785 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2015 | aucune | −0,3 point de PIB en 2015 |
+| insee.t3106 | senat.pjl16-643 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2016 | aucune | −0,4 point de PIB en 2016 |
+| insee.t3106 | senat.pjl17-595 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2017 | aucune | −0,8 point de PIB en 2017 |
+| insee.t3106 | senat.pjl18-686 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2018 | aucune | +0,2 point de PIB en 2018 |
+| insee.t3106 | senat.pjl19-505 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2019 | aucune | +0,6 point de PIB en 2019 |
+| insee.t3106 | senat.pjl20-784 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2020 | aucune | +0,3 point de PIB en 2020 |
 | insee.t3107 | insee.t3203 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | +59,2 M€ en 2016 |
 | insee.t3107 | senat.pjl24-718 | FR ETAT_LF LOLF.SOLDE_COMPTES_SPECIAUX | ensemble | 2024 | aucune | −50,0 M€ en 2024 |
 | insee.t3108 | insee.t3214 | FR S13142 SEC2010.B9 | ensemble | 6 années entre 2013 et 2018 | 6 années entre 2013 et 2018 | +271,0 M€ en 2018 |
@@ -316,4 +380,13 @@ Détail des grandeurs en écart :
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +464,6 M€ en 2024 |
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.TE | ensemble | 5 années entre 2019 et 2024 | 2019, 2020 et 2022 | −1 139,0 M€ en 2024 |
 | insee.t3216 | insee.t3217 | FR S212 INSEE_PO.PO | ensemble | 24 années entre 1995 et 2018 | 24 années entre 1995 et 2018 | +734,9 M€ en 1995 |
+| insee.t3216 | senat.pjl24-032 | FR S13_S212 INSEE_PO.PO, en % du PIB | ensemble | 2023 | aucune | −0,3 point de PIB en 2023 |
+| insee.t3216 | senat.pjl24-718 | FR S13_S212 INSEE_PO.PO, en % du PIB | ensemble | 2024 | aucune | −0,1 point de PIB en 2024 |
+| insee.t3217 | senat.pjl24-032 | FR S13_S212 INSEE_PO.PO, en % du PIB | ensemble | 2023 | aucune | −0,3 point de PIB en 2023 |
+| insee.t3217 | senat.pjl24-718 | FR S13_S212 INSEE_PO.PO, en % du PIB | ensemble | 2024 | aucune | −0,1 point de PIB en 2024 |
 | insee.t3301 | insee.t3307 | FR S13 SEC2010.TE | ensemble, 9 divisions et 41 groupes | 10 années entre 2009 et 2018 | 10 années entre 2009 et 2018 | −20 301,0 M€ en 2009 (ensemble) |
+| senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.ACTIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 760,0 M€ en 2006 |
+| senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.AUTRES_TRESORERIE_PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
+| senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
+| senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.TRESORERIE_ACTIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
+| senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.TRESORERIE_PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |

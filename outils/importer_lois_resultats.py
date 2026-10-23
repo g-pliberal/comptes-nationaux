@@ -13,7 +13,13 @@ Tableaux pris en charge :
 - les articles 5 et 6 : les mêmes grandeurs pour chaque budget annexe et chaque compte spécial, compte par
   compte et programme par programme, avec les recettes, les majorations de découvert et les soldes des comptes
   spéciaux au 31 décembre, ainsi que les articles qui arrêtent à part les comptes spéciaux clos dans l'année
-  (voir lignes_articles_5_6).
+  (voir lignes_articles_5_6) ;
+- l'article 2 : le tableau de financement de l'État, en milliards d'euros ;
+- l'article 3 : le compte de résultat et le bilan de l'État, en millions d'euros, en droits constatés ;
+- l'article liminaire, depuis les comptes de 2012 : soldes structurel et effectif de l'ensemble des
+  administrations publiques et, depuis ceux de 2023, d'autres grandeurs de la programmation des finances
+  publiques. Les colonnes de prévision et d'écart n'en sont pas lues.
+Un tableau à montants qu'aucun de ces articles ne lit arrête l'import.
 
 Les missions, les budgets annexes, les comptes spéciaux et leurs programmes sont les « fonctions » de la norme
 LOLF : l'import les inscrit dans la table des fonctions à leur première apparition, sous un identifiant formé de
@@ -198,7 +204,7 @@ AJUSTEMENTS = {"LOLF.BG_AE_OUVERTURES", "LOLF.BG_AE_ANNULATIONS", "LOLF.BG_CP_OU
 SOLDES = {c for lignes in ARTICLE_1.values() for colonne, c in lignes.items() if colonne == "Soldes"} | {"LOLF.BA_SOLDE_HORS_FDC"}
 
 # Unité annoncée en tête de tableau, « (En euros) » par exemple.
-UNITES = {"en euros": "EUR", "en millions d’euros": "MIO_EUR"}
+UNITES = {"en euros": "EUR", "en millions d’euros": "MIO_EUR", "en milliards d’euros": "MD_EUR"}
 # Unités annoncées que les montants du tableau contredisent : (source, intitulé de sa première colonne de montants,
 # unité annoncée) → (unité des montants, explication portée par chacun d'eux).
 UNITES_CONTREDITES = {
@@ -208,6 +214,262 @@ UNITES_CONTREDITES = {
                "que celui des dépenses du tableau suivant, annoncé en euros (591 887 384 714,81)."),
 }
 
+
+# Articles liminaire, 2 et 3. Un libellé s'y reconnaît à sa forme (voir forme) : sans majuscules ni accents, sans
+# appel de note, numéro de ligne en chiffres romains ni « total » en tête, les années remplacées par « n ».
+
+# Article liminaire, depuis les comptes de 2012 : soldes structurel et effectif de l'ensemble des administrations
+# publiques et, depuis ceux de 2023, d'autres grandeurs de la programmation des finances publiques. Libellé →
+# (concept, périmètre, unité quand le libellé l'annonce, consolidation, traitements).
+LIMINAIRE = {
+    "Solde structurel": ("PFP.SOLDE_STRUCTUREL", "S13", None, "sans_objet", ""),
+    "Solde structurel (en points de produit intérieur brut potentiel)":
+        ("PFP.SOLDE_STRUCTUREL", "S13", "PC_PIB_POTENTIEL", "sans_objet", ""),
+    "Solde conjoncturel": ("PFP.SOLDE_CONJONCTUREL", "S13", None, "sans_objet", ""),
+    "Mesures ponctuelles et temporaires": ("PFP.MESURES_PONCTUELLES_TEMPORAIRES", "S13", None, "sans_objet", ""),
+    "Mesures temporaires et ponctuelles": ("PFP.MESURES_PONCTUELLES_TEMPORAIRES", "S13", None, "sans_objet", ""),
+    "Solde des mesures ponctuelles et temporaires (en points de produit intérieur brut potentiel)":
+        ("PFP.MESURES_PONCTUELLES_TEMPORAIRES", "S13", "PC_PIB_POTENTIEL", "sans_objet", ""),
+    "Solde effectif (1 + 2 + 3)": ("SEC2010.B9", "S13", None, "sans_objet", ""),
+    "Solde effectif (1+2+3)": ("SEC2010.B9", "S13", None, "sans_objet", ""),
+    "Dette au sens de Maastricht": ("PDE.GD", "S13", None, "consolide", ""),
+    "Taux de prélèvements obligatoires (y compris Union européenne, nets des crédits d’impôt)":
+        ("INSEE_PO.PO", "S13_S212", None, "sans_objet", ""),
+    "Dépense publique (hors crédits d’impôt)": ("SEC2010.TE", "S13", None, "consolide", "hors_credits_impot"),
+    "Dépense publique (hors crédits d’impôt, en milliards d’euros)":
+        ("SEC2010.TE", "S13", "MD_EUR", "consolide", "hors_credits_impot"),
+    "Dépense publique ((hors crédits d’impôt, en milliards d’euros)":  # sic, comptes de 2024
+        ("SEC2010.TE", "S13", "MD_EUR", "consolide", "hors_credits_impot"),
+    "Évolution de la dépense publique (hors crédits d’impôt en volume ( %))":
+        ("SEC2010.TE", "S13", "PC_EVOLUTION", "consolide", "hors_credits_impot;volume_champ_constant"),
+    "Évolution de la dépense publique hors CI en volume ( %)":
+        ("SEC2010.TE", "S13", "PC_EVOLUTION", "consolide", "hors_credits_impot;volume_champ_constant"),
+    "Évolution de la dépense publique hors crédits d’impôt en volume (en %)":
+        ("SEC2010.TE", "S13", "PC_EVOLUTION", "consolide", "hors_credits_impot;volume_champ_constant"),
+    "Principales dépenses d’investissement (en milliards d’euros)":
+        ("PFP.PRINCIPALES_DEPENSES_INVESTISSEMENT", "S13", "MD_EUR", "non_precise", ""),
+}
+UNITES_LIMINAIRE = {"en points de produit intérieur brut": "PC_PIB", "en points de produit intérieur brut - pib": "PC_PIB",
+                    "en % du pib sauf mention contraire": "PC_PIB", "en % du pib, sauf mention contraire": "PC_PIB"}
+# Colonnes d'exécution autres que la première, qui mesurent les soldes selon une autre méthode : (source, intitulé
+# de la colonne) → traitement. Les colonnes de prévision (loi de finances de l'année, loi de programmation) et
+# d'écart ne sont pas lues : ces prévisions ont pour source les lois qui les ont votées.
+METRIQUES = {
+    ("senat.pjl14-642", "Exécution 2014 : Métrique de la loi de programmation des finances publiques 2012-2017"):
+        "metrique_lpfp_2012_2017",
+    ("senat.pjl16-643", "Exécution 2016 (**)"): "croissance_potentielle_lpfp_2014_2019",
+}
+COLONNES_PREVISION = ("prevision", "soldes prevus", "ecart", "loi de finances", "loi de programmation", "n-n")
+# L'article liminaire reprend les comptes nationaux de l'année, que l'Insee publie au printemps suivant et qui restent
+# provisoires jusqu'au printemps d'après, donc à la date du texte ; ses soldes structurel et conjoncturel et ses
+# mesures ponctuelles et temporaires sont des estimations, qui dépendent du PIB potentiel retenu.
+ESTIMATIONS_LIMINAIRE = {"PFP.SOLDE_STRUCTUREL", "PFP.SOLDE_CONJONCTUREL", "PFP.MESURES_PONCTUELLES_TEMPORAIRES"}
+
+# Article 2 : tableau de financement, en milliards d'euros. (Rubrique, libellé) → concept ; une ligne « dont » est
+# une partie de la ligne qui la précède.
+FINANCEMENT = {
+    ("besoin", "Amortissement de la dette à long terme"): "LOLF.AMORTISSEMENT_DETTE_LT",
+    ("besoin", "Amortissement de la dette à long terme (y compris rachats de titres d’échéance 2009 avant leur maturité)"):
+        "LOLF.AMORTISSEMENT_DETTE_LT",
+    ("besoin", "Dont amortissement de la dette à long terme"): "LOLF.AMORTISSEMENT_DETTE_LT",
+    ("besoin", "Amortissement de la dette à moyen terme"): "LOLF.AMORTISSEMENT_DETTE_MT",
+    ("besoin", "Amortissement de la dette à moyen terme (y compris rachats de titres d’échéance 2009 avant leur maturité)"):
+        "LOLF.AMORTISSEMENT_DETTE_MT",
+    ("besoin", "Dont amortissement de la dette à moyen terme"): "LOLF.AMORTISSEMENT_DETTE_MT",
+    ("besoin", "Amortissement de la dette à moyen et long termes"): "LOLF.AMORTISSEMENT_DETTE_MLT",
+    ("besoin", "Dont amortissement nominal de la dette à moyen et long termes"): "LOLF.AMORTISSEMENT_DETTE_NOMINAL",
+    ("besoin", "Dont remboursement du nominal à valeur faciale"): "LOLF.AMORTISSEMENT_DETTE_NOMINAL",
+    ("besoin", "Dont suppléments d’indexation versés à l’échéance (titres indexés)"): "LOLF.SUPPLEMENTS_INDEXATION",
+    ("besoin", "Amortissement de dettes reprises par l’État"): "LOLF.AMORTISSEMENT_DETTES_REPRISES",
+    ("besoin", "Amortissement SNCF Réseau"): "LOLF.AMORTISSEMENT_SNCF_RESEAU",
+    ("besoin", "Amortissement des autres dettes"): "LOLF.AMORTISSEMENT_AUTRES_DETTES",
+    ("besoin", "Engagements de l’État"): "LOLF.ENGAGEMENTS_ETAT",
+    ("besoin", "Impact en trésorerie du solde de la gestion 2006"): "LOLF.IMPACT_TRESORERIE_SOLDE_GESTION",
+    ("besoin", "Déficit à financer"): "LOLF.DEFICIT_A_FINANCER",
+    ("besoin", "Déficit budgétaire"): "LOLF.DEFICIT_A_FINANCER",  # comptes de 2015
+    ("besoin", "Dont déficit budgétaire"): "LOLF.DEFICIT_A_FINANCER_DEFICIT_BUDGETAIRE",
+    ("besoin", "Dont dotation budgétaire du deuxième programme d’investissements d’avenir"):
+        "LOLF.DEFICIT_A_FINANCER_DOTATION_PIA",
+    ("besoin", "Variation des dépôts de garantie"): "LOLF.VARIATION_DEPOTS_GARANTIE",
+    ("besoin", "Variation d’autres besoins de trésorerie"): "LOLF.VARIATION_AUTRES_BESOINS_TRESORERIE",
+    ("besoin", "Autres besoins de trésorerie"): "LOLF.AUTRES_BESOINS_TRESORERIE",
+    ("besoin", "Total du besoin de financement"): "LOLF.BESOIN_FINANCEMENT",
+    ("besoin", "Total"): "LOLF.BESOIN_FINANCEMENT",
+    ("ressources", "Émissions à moyen et long termes (obligations assimilables du Trésor et bons du Trésor à taux fixe et "
+                   "intérêts annuels), nettes des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émissions à moyen et long terme (obligations assimilables du Trésor et bons du Trésor à taux fixe et "
+                   "intérêts annuels), nettes des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émissions à moyen et long terme (obligations assimilables du Trésor et bons du Trésor à taux fixe et "
+                   "intérêts annuels), nettes des rachats en nominal"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émissions de dette à moyen et long termes, nettes des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émission de dette à moyen et long termes, nettes des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émission de dette à moyen et long terme, nettes des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Annulation de titres de l’État par la Caisse de la dette publique"): "LOLF.ANNULATION_TITRES_CDP",
+    ("ressources", "Ressources affectées à la Caisse de la dette publique et consacrées au désendettement"):
+        "LOLF.RESSOURCES_CDP",
+    ("ressources", "Variation nette des bons du Trésor à taux fixe et intérêts précomptés"):
+        "LOLF.VARIATION_TITRES_COURT_TERME",
+    ("ressources", "Variation des bons du Trésor à taux fixe et intérêts précomptés"): "LOLF.VARIATION_TITRES_COURT_TERME",
+    ("ressources", "Variation nette de l’encours des titres d’État à court terme"): "LOLF.VARIATION_TITRES_COURT_TERME",
+    ("ressources", "Variation des dépôts des correspondants"): "LOLF.VARIATION_DEPOTS_CORRESPONDANTS",
+    ("ressources", "Variation des dépôts des correspondants (EPIC, EPA, collectivités territoriales)"):
+        "LOLF.VARIATION_DEPOTS_CORRESPONDANTS",
+    ("ressources", "Variation des dépôts des correspondants (EPIC, EPA, collectivités territoriales) et assimilés"):
+        "LOLF.VARIATION_DEPOTS_CORRESPONDANTS",
+    ("ressources", "Variation des correspondants"): "LOLF.VARIATION_DEPOTS_CORRESPONDANTS",
+    ("ressources", "Variation d’avances de trésorerie"): "LOLF.VARIATION_AVANCES_TRESORERIE",
+    ("ressources", "Variation du compte du Trésor et divers"): "LOLF.VARIATION_COMPTE_TRESOR",
+    ("ressources", "Variation du compte du Trésor"): "LOLF.VARIATION_COMPTE_TRESOR",
+    ("ressources", "Variation du solde du compte du Trésor"): "LOLF.VARIATION_COMPTE_TRESOR",
+    ("ressources", "Variation du solde du compte du Trésor et assimilé"): "LOLF.VARIATION_COMPTE_TRESOR",
+    ("ressources", "Variation des disponibilités du Trésor à la Banque de France et des placements de trésorerie de "
+                   "l’État"): "LOLF.VARIATION_DISPONIBILITES_TRESOR",
+    ("ressources", "Autres ressources de trésorerie"): "LOLF.AUTRES_RESSOURCES_TRESORERIE",
+    ("ressources", "Autres ressources nettes de trésorerie"): "LOLF.AUTRES_RESSOURCES_TRESORERIE",
+    ("ressources", "Total des ressources de financement"): "LOLF.RESSOURCES_FINANCEMENT",
+    ("ressources", "Total"): "LOLF.RESSOURCES_FINANCEMENT",
+}
+RUBRIQUES_FINANCEMENT = {"Besoin de financement": "besoin", "Ressources de financement": "ressources"}
+SOLDES_FINANCEMENT = {"LOLF.IMPACT_TRESORERIE_SOLDE_GESTION", "LOLF.DEFICIT_A_FINANCER",
+                      "LOLF.DEFICIT_A_FINANCER_DEFICIT_BUDGETAIRE", "LOLF.DEFICIT_A_FINANCER_DOTATION_PIA"}
+
+# Article 3 : compte de résultat (tableaux des charges nettes, des produits régaliens nets et de détermination du
+# solde des opérations de l'exercice) et bilan, en millions d'euros. Libellé → concept, ou rubrique → concept pour
+# les libellés que plusieurs rubriques emploient.
+RUBRIQUES_RESULTAT = {"Charges de fonctionnement nettes": "fonctionnement", "Charges d’intervention nettes": "intervention",
+                      "Charges financières nettes": "financier", "Produits régaliens nets": "regalien",
+                      "Tableau des produits régaliens nets": "regalien", "Solde des opérations de l’exercice": "solde",
+                      "Tableau de détermination du solde des opérations de l’exercice": "solde",
+                      "Charges nettes": "charges", "Tableau des charges nettes": "charges"}
+_E = "COMPTES_ETAT."
+RESULTAT = {
+    "Charges de personnel": _E + "CHARGES_PERSONNEL",
+    "Achats, variations de stocks et prestations externes": _E + "ACHATS_PRESTATIONS_EXTERNES",
+    "Dotations aux amortissements, aux provisions et aux dépréciations": {"fonctionnement": _E + "DOTATIONS_FONCTIONNEMENT",
+                                                                          "financier": _E + "DOTATIONS_FINANCIERES"},
+    "Autres charges de fonctionnement": _E + "AUTRES_CHARGES_FONCTIONNEMENT",
+    "Total des charges de fonctionnement direct": _E + "CHARGES_FONCTIONNEMENT_DIRECT",
+    "Subventions pour charges de service public": _E + "SUBVENTIONS_CHARGES_SERVICE_PUBLIC",
+    "Dotations aux provisions": _E + "DOTATIONS_FONCTIONNEMENT_INDIRECT",
+    "Autres charges de fonctionnement indirect": _E + "AUTRES_CHARGES_FONCTIONNEMENT_INDIRECT",
+    "Total des charges de fonctionnement indirect": _E + "CHARGES_FONCTIONNEMENT_INDIRECT",
+    "Total des charges de fonctionnement": _E + "CHARGES_FONCTIONNEMENT",
+    "Ventes de produits et prestations de service": _E + "VENTES_PRESTATIONS",
+    "Ventes de produits et prestations de services": _E + "VENTES_PRESTATIONS",
+    "Production stockée et immobilisée": _E + "PRODUCTION_STOCKEE_IMMOBILISEE",
+    "Production stockée immobilisée": _E + "PRODUCTION_STOCKEE_IMMOBILISEE",
+    "Reprises sur provisions et sur dépréciations": {"fonctionnement": _E + "REPRISES_FONCTIONNEMENT",
+                                                     "intervention": _E + "REPRISES_INTERVENTION",
+                                                     "financier": _E + "REPRISES_FINANCIERES"},
+    "Autres produits de fonctionnement": _E + "AUTRES_PRODUITS_FONCTIONNEMENT",
+    "Total des produits de fonctionnement": _E + "PRODUITS_FONCTIONNEMENT",
+    "Charges de fonctionnement nettes": _E + "CHARGES_FONCTIONNEMENT_NETTES",
+    "Transferts aux ménages": _E + "TRANSFERTS_MENAGES",
+    "Transferts aux entreprises": _E + "TRANSFERTS_ENTREPRISES",
+    "Transferts aux collectivités territoriales": _E + "TRANSFERTS_COLLECTIVITES_TERRITORIALES",
+    "Transferts aux autres collectivités": _E + "TRANSFERTS_AUTRES_COLLECTIVITES",
+    "Charges résultant de la mise en jeu de garanties": _E + "CHARGES_GARANTIES",
+    "Dotations aux provisions et aux dépréciations": _E + "DOTATIONS_INTERVENTION",
+    "Total des charges d’intervention": _E + "CHARGES_INTERVENTION",
+    "Contributions reçues de tiers": _E + "CONTRIBUTIONS_TIERS",
+    "Total des produits d’intervention": _E + "PRODUITS_INTERVENTION",
+    "Charges d’intervention nettes": _E + "CHARGES_INTERVENTION_NETTES",
+    "Intérêts": _E + "INTERETS",
+    "Pertes de change liées aux opérations financières": _E + "PERTES_CHANGE",
+    "Autres charges financières": _E + "AUTRES_CHARGES_FINANCIERES",
+    "Total des charges financières": _E + "CHARGES_FINANCIERES",
+    "Produits des créances de l’actif immobilisé": _E + "PRODUITS_CREANCES_ACTIF_IMMOBILISE",
+    "Produits des immobilisations financières": _E + "PRODUITS_IMMOBILISATIONS_FINANCIERES",
+    "Gains de change liés aux opérations financières": _E + "GAINS_CHANGE",
+    "Gains de change liés aux opérations financière": _E + "GAINS_CHANGE",  # sic, comptes de 2007
+    "Autres intérêts et produits assimilés": _E + "AUTRES_INTERETS_PRODUITS",
+    "Total des produits financiers": _E + "PRODUITS_FINANCIERS",
+    "Charges financières nettes": _E + "CHARGES_FINANCIERES_NETTES",
+    "Charges nettes": _E + "CHARGES_NETTES",
+    "Impôt sur le revenu": _E + "IMPOT_REVENU",
+    "Impôt sur les sociétés": _E + "IMPOT_SOCIETES",
+    "Taxe sur les salaires": _E + "TAXE_SALAIRES",
+    "Taxe intérieure sur les produits pétroliers": _E + "TICPE",
+    "Taxe intérieure de consommation sur les produits énergétiques": _E + "TICPE",
+    "Taxe sur la valeur ajoutée": _E + "TVA",
+    "Enregistrement, timbre, autres contributions et taxes indirectes": _E + "ENREGISTREMENT_TIMBRE",
+    "Autres produits de nature fiscale et assimilés": _E + "AUTRES_PRODUITS_FISCAUX",
+    "Produits fiscaux nets": _E + "PRODUITS_FISCAUX_NETS",
+    "Amendes, prélèvements divers et autres pénalités": _E + "AMENDES",
+    "Autres produits régaliens nets": _E + "AUTRES_PRODUITS_REGALIENS_NETS",
+    "Ressource propre de l’Union européenne basée sur le produit national brut": _E + "RESSOURCE_PROPRE_UE_RNB",
+    "Ressource propre de l’Union européenne basée sur le revenu national brut": _E + "RESSOURCE_PROPRE_UE_RNB",
+    "Ressources propres de l’Union européenne basée sur le revenu national brut": _E + "RESSOURCE_PROPRE_UE_RNB",
+    "Ressource propre de l’Union européenne basée sur la taxe sur la valeur ajoutée": _E + "RESSOURCE_PROPRE_UE_TVA",
+    "Ressources propres de l’Union européenne basée sur la taxe sur la valeur ajoutée": _E + "RESSOURCE_PROPRE_UE_TVA",
+    "Ressources propres de l’Union européenne basées sur le produit national brut et la taxe sur la valeur ajoutée":
+        _E + "RESSOURCES_PROPRES_UE",
+    "Ressources propres de l’Union européenne basées sur le revenu national brut et la taxe sur la valeur ajoutée":
+        _E + "RESSOURCES_PROPRES_UE",
+    "Ressources propres du budget de l’Union européenne basées sur le produit national brut et la taxe sur la valeur "
+    "ajoutée": _E + "RESSOURCES_PROPRES_UE",
+    "Ressources propres du budget de l’Union européenne basées sur le revenu national brut et la taxe sur la valeur "
+    "ajoutée": _E + "RESSOURCES_PROPRES_UE",
+    "Ressources propres de l’Union européenne": _E + "RESSOURCES_PROPRES_UE",
+    "Ressources propres du budget de l’Union européenne": _E + "RESSOURCES_PROPRES_UE",
+    "Prélèvement sur les recettes de l’État au profit de l’Union européenne": _E + "RESSOURCES_PROPRES_UE",
+    "Produits régaliens nets": _E + "PRODUITS_REGALIENS_NETS",
+    "Solde des opérations de l’exercice": _E + "SOLDE_OPERATIONS_EXERCICE",
+}
+# Bilan : (côté, libellé) → concept du montant net ; le brut et les amortissements et dépréciations d'une ligne de
+# l'actif ont le même concept, suivi de _BRUT ou _AMORTISSEMENTS. Le côté change après le total de l'actif, puis après
+# celui du passif.
+BILAN = {
+    ("actif", "Immobilisations incorporelles"): _E + "IMMOBILISATIONS_INCORPORELLES",
+    ("actif", "Immobilisations corporelles"): _E + "IMMOBILISATIONS_CORPORELLES",
+    ("actif", "Immobilisations financières"): _E + "IMMOBILISATIONS_FINANCIERES",
+    ("actif", "Total actif immobilisé"): _E + "ACTIF_IMMOBILISE",
+    ("actif", "Stocks"): _E + "STOCKS",
+    ("actif", "Créances"): _E + "CREANCES",
+    ("actif", "Redevables"): _E + "CREANCES_REDEVABLES",
+    ("actif", "Redevable s"): _E + "CREANCES_REDEVABLES",  # sic, comptes de 2006
+    ("actif", "Clients"): _E + "CREANCES_CLIENTS",
+    ("actif", "Autres créances"): _E + "AUTRES_CREANCES",
+    ("actif", "Charges constatées d’avance"): _E + "CHARGES_CONSTATEES_AVANCE",
+    ("actif", "Total actif circulant (hors trésorerie)"): _E + "ACTIF_CIRCULANT",
+    ("actif", "Disponibilités"): _E + "DISPONIBILITES",
+    ("actif", "Fonds bancaires et fonds en caisse"): _E + "FONDS_BANCAIRES_CAISSE",
+    ("actif", "Valeurs escomptées, en cours d’encaissement et de décaissement"): _E + "VALEURS_ESCOMPTEES",
+    ("actif", "Autres composantes de trésorerie"): _E + "AUTRES_COMPOSANTES_TRESORERIE",
+    ("actif", "Équivalents de trésorerie"): _E + "EQUIVALENTS_TRESORERIE",
+    ("actif", "Valeurs mobilières de placement"): _E + "VALEURS_MOBILIERES_PLACEMENT",
+    ("actif", "Total trésorerie"): _E + "TRESORERIE_ACTIF",
+    ("actif", "Comptes de régularisation"): _E + "COMPTES_REGULARISATION_ACTIF",
+    ("actif", "Total actif"): _E + "ACTIF",
+    ("passif", "Titres négociables"): _E + "TITRES_NEGOCIABLES",
+    ("passif", "Titres non négociables"): _E + "TITRES_NON_NEGOCIABLES",
+    ("passif", "Autres emprunts"): _E + "AUTRES_EMPRUNTS",
+    ("passif", "Dettes financières et autres emprunts"): _E + "DETTES_FINANCIERES_AUTRES_EMPRUNTS",
+    ("passif", "Total dettes financières"): _E + "DETTES_FINANCIERES",
+    ("passif", "Dettes de fonctionnement"): _E + "DETTES_FONCTIONNEMENT",
+    ("passif", "Dettes d’intervention"): _E + "DETTES_INTERVENTION",
+    ("passif", "Produits constatés d’avance"): _E + "PRODUITS_CONSTATES_AVANCE",
+    ("passif", "Autres dettes non financières"): _E + "AUTRES_DETTES_NON_FINANCIERES",
+    ("passif", "Total dettes non financières"): _E + "DETTES_NON_FINANCIERES",
+    ("passif", "Provisions pour risques"): _E + "PROVISIONS_RISQUES",
+    ("passif", "Provisions pour charges"): _E + "PROVISIONS_CHARGES",
+    ("passif", "Total provisions pour risques et charges"): _E + "PROVISIONS_RISQUES_CHARGES",
+    ("passif", "Autres passifs (hors trésorerie)"): _E + "AUTRES_PASSIFS",
+    ("passif", "Correspondants du Trésor et personnes habilitées"): _E + "CORRESPONDANTS_TRESOR",
+    ("passif", "Autres"): _E + "AUTRES_TRESORERIE_PASSIF",
+    ("passif", "Total trésorerie"): _E + "TRESORERIE_PASSIF",
+    ("passif", "Comptes de régularisation"): _E + "COMPTES_REGULARISATION_PASSIF",
+    ("passif", "Total passif (hors situation nette)"): _E + "PASSIF",
+    ("situation", "Report des exercices antérieurs"): _E + "REPORT_EXERCICES_ANTERIEURS",
+    ("situation", "Solde des opérations d’exercices antérieurs en attente d’affectation"):
+        _E + "SOLDE_EXERCICES_ANTERIEURS_ATTENTE",
+    ("situation", "Écarts de réévaluation et d’intégration"): _E + "ECARTS_REEVALUATION_INTEGRATION",
+    ("situation", "Solde des opérations de l’exercice"): _E + "SOLDE_EXERCICE_BILAN",
+    ("situation", "Situation nette"): _E + "SITUATION_NETTE",
+}
+RUBRIQUES_BILAN = {"Actif immobilisé", "Actif circulant (hors trésorerie)", "Trésorerie", "Dettes financières",
+                   "Dettes non financières (hors trésorerie)", "Provisions pour risques et charges"}
+MESURES_BILAN = {"brut": "_BRUT", "net": ""}  # et toute colonne qui commence par « amortissement » : _AMORTISSEMENTS
 
 # Année des comptes : la seule que le texte désigne par « budget de l'année » ou « comptes de l'année ».
 ANNEE = r"(?:budget|comptes) de l[’'] ?année ([0-9]{4})"
@@ -666,6 +928,330 @@ def lignes_articles_5_6(tableaux, formes, source_id, recolle):
             sys.exit(f"tableau {i}, ligne {r} : total {valeur:.2f}, somme des comptes qu'il couvre {somme:.2f}")
 
 
+def forme(libelle):
+    """Forme d'un libellé des articles liminaire, 2 et 3 qui sert à le reconnaître : « TOTAL DES CHARGES FINANCIÈRES
+    NETTES (XI = IX - X) » se reconnaît comme « Charges financières nettes »."""
+    t = unicodedata.normalize("NFKD", propre(libelle).replace("’", "'").lower()).encode("ascii", "ignore").decode()
+    t = re.sub(r"\([ivx]+(?:\s*[=+-]\s*[ivx]+)*\)|\(\d\)|\(\*+\)|\*", " ", t)
+    t = re.sub(r"\b(?:19|20)[0-9]{2}\b", "n", t)
+    t = re.sub(r"\(\s+", "(", re.sub(r"\s+\)", ")", re.sub(r"[\s.:]+", " ", t))).strip(" ,")
+    return re.sub(r"^total(?: des| du| de la| de l'| d')? ", "", t)
+
+
+def par_forme(dictionnaire):
+    """Le même dictionnaire, ses libellés remplacés par leur forme ; deux libellés de même forme doivent y
+    désigner la même chose."""
+    formes = {}
+    for cle_, valeur in dictionnaire.items():
+        f = (cle_[0], forme(cle_[1])) if isinstance(cle_, tuple) else forme(cle_)
+        if formes.setdefault(f, valeur) != valeur:
+            sys.exit(f"libellés de même forme qui diffèrent : {cle_}")
+    return formes
+
+
+LIMINAIRE_ = par_forme(LIMINAIRE)
+FINANCEMENT_ = par_forme(FINANCEMENT)
+RUBRIQUES_FINANCEMENT_ = par_forme(RUBRIQUES_FINANCEMENT)
+RESULTAT_ = par_forme(RESULTAT)
+RUBRIQUES_RESULTAT_ = par_forme(RUBRIQUES_RESULTAT)
+BILAN_ = par_forme(BILAN)
+RUBRIQUES_BILAN_ = {forme(r) for r in RUBRIQUES_BILAN}
+APPEL = r"\([0-9]\)|\(\*+\)|\*+"
+
+
+def textes(ligne):
+    """Les textes d'une ligne qui ne sont pas des montants."""
+    return [propre(x) for x in ligne if propre(x) and not nombre_texte(x)]
+
+
+def montants_de(ligne):
+    """{colonne : nombre} des montants d'une ligne, hors première colonne."""
+    return {c: n for c, x in enumerate(ligne) if c > 0 and (n := nombre_texte(x))}
+
+
+def notes_du_tableau(tableau):
+    """{appel : texte} des notes d'un tableau : les lignes qui commencent par un appel (« (1) », « * », « (**) »),
+    une ligne pouvant en réunir plusieurs."""
+    notes = {}
+    for ligne in tableau:
+        texte = " ".join(textes(ligne))
+        if re.match(APPEL, texte) and not montants_de(ligne):
+            for appel, contenu in re.findall(rf"({APPEL})\s*(.+?)(?=\s+(?:\([0-9]\)|\(\*+\))\s|$)", texte):
+                notes[appel] = contenu
+    return notes
+
+
+def note_des_appels(appels, notes):
+    """La note de chaque appel, celle du tableau ou, s'il n'y en a pas, un renvoi au texte."""
+    return " ".join(dict.fromkeys(notes.get(a) or f"Appel de note {a} : la note se trouve dans le texte, hors du tableau."
+                                  for a in appels))
+
+
+def entetes(tableau, lignes, largeurs):
+    """Intitulés de chaque colonne : les textes des lignes d'en-tête qui la couvrent, de haut en bas, unités exceptées."""
+    noms = collections.defaultdict(list)
+    for r in lignes:
+        for c, texte in enumerate(tableau[r]):
+            if c > 0 and propre(texte) and unite_annoncee(propre(texte).rstrip(" *")) is None:
+                for dc in range(largeurs.get((r, c), 1)):
+                    noms[c + dc].append(propre(texte))
+    return noms
+
+
+def unites_annoncees(tableau, forme_):
+    """Les unités qu'un tableau annonce dans ses lignes ou, à défaut, dans sa légende."""
+    return {unite_annoncee(propre(x).rstrip(" *")) for l in tableau for x in l} - {None} or \
+        {unite_annoncee(forme_["legende"])} - {None}
+
+
+def genre_de_tableau(tableau):
+    """liminaire, financement, bilan ou resultat ; None si le tableau n'est d'aucun de ces genres."""
+    formes = {forme(t) for l in tableau for t in textes(l)}
+    if any(f.startswith("solde structurel") for f in formes):
+        return "liminaire"
+    if "besoin de financement" in formes:
+        return "financement"
+    if any(f in ("actif immobilise", "actif") for f in formes):
+        return "bilan"
+    if formes & set(RESULTAT_):
+        return "resultat"
+    return None
+
+
+def lignes_article_liminaire(i, tableau, forme_, annee, source_id):
+    """Les lignes d'en-tête précèdent la première ligne de grandeur. La première colonne d'exécution porte la mesure
+    principale ; les autres doivent figurer dans METRIQUES. Les appels de note des libellés, qui se confondent avec le
+    numéro des composantes du solde effectif, ne sont pas suivis ; ceux des intitulés de colonne et des montants le
+    sont. Statut : voir ESTIMATIONS_LIMINAIRE."""
+    debut = next((r for r, l in enumerate(tableau) if l and forme(l[0]) in LIMINAIRE_), None)
+    if debut is None:
+        sys.exit(f"article liminaire, tableau {i} : aucune grandeur reconnue")
+    annoncees = unites_annoncees(tableau[:debut], forme_)
+    if len(annoncees) != 1 or next(iter(annoncees)) not in UNITES_LIMINAIRE:
+        sys.exit(f"article liminaire : unité annoncée inconnue ou absente ({annoncees or 'aucune'})")
+    unite_tableau = UNITES_LIMINAIRE[next(iter(annoncees))]
+    appels_unite = [a for l in tableau[:debut] for x in l if unite_annoncee(propre(x).rstrip(" *"))
+                    for a in re.findall(APPEL, propre(x).split(")")[-1])]
+    noms = entetes(tableau, range(debut), forme_["largeurs"])
+    notes = notes_du_tableau(tableau[debut:])
+    executions = [c for c in sorted(noms) if any(forme(n).startswith("execution") for n in noms[c])]
+    for c in sorted(noms):
+        if c not in executions and not any(forme(n).startswith(COLONNES_PREVISION) for n in noms[c]):
+            sys.exit(f"article liminaire : colonne « {' '.join(noms[c])} » inconnue")
+    if not executions or not any(re.search(rf"\b{annee}\b", " ".join(noms[c])) for c in executions[:1]):
+        sys.exit(f"article liminaire : pas de colonne d'exécution de {annee}")
+    for r in range(debut, len(tableau)):
+        ligne, libelle = tableau[r], propre(tableau[r][0])
+        if forme(libelle) not in LIMINAIRE_:
+            if montants_de(ligne):
+                sys.exit(f"article liminaire, ligne {r} : grandeur inconnue (« {libelle} »)")
+            continue
+        concept, perimetre, unite_ligne, consolidation, traitements = LIMINAIRE_[forme(libelle)]
+        if set(montants_de(ligne)) - set(noms):
+            sys.exit(f"article liminaire, ligne {r} : montant dans une colonne sans intitulé")
+        for c in executions:
+            nombre = nombre_texte(ligne[c]) if c < len(ligne) else None
+            if not nombre:
+                if c < len(ligne) and re.search(r"[0-9]", ligne[c]):
+                    sys.exit(f"article liminaire, ligne {r} : montant illisible (« {ligne[c]} »)")
+                continue
+            intitule = " ".join(noms[c])
+            metrique = ""
+            if c != executions[0]:
+                metrique = METRIQUES.get((source_id, intitule))
+                if metrique is None:
+                    sys.exit(f"article liminaire : colonne d'exécution « {intitule} » sans métrique connue")
+            appels = [a for n in noms[c] for a in re.findall(APPEL, n)] + re.findall(APPEL, ligne[c]) + appels_unite
+            yield {"tableau": i, "ligne": r, "colonne": c, "libelle": libelle, "intitule": intitule, "concept": concept,
+                   "fonction": "", "nombre": nombre, "unite": unite_ligne or unite_tableau,
+                   "note": note_des_appels(appels, notes), "perimetre": perimetre, "consolidation": consolidation,
+                   "traitements": ";".join(t for t in (traitements, metrique) if t),
+                   "statut": "estimation" if concept in ESTIMATIONS_LIMINAIRE or "*" in ligne[c] and
+                   notes.get("*", "").startswith("Estimation") else "provisoire"}
+
+
+def lignes_article_2(i, tableau, forme_, annee, source_id):
+    """La colonne lue est celle de l'exécution de l'année ; celle de la loi de finances de l'année, que présentent les
+    textes jusqu'aux comptes de 2007, ne l'est pas. Une ligne sans montant est une rubrique ou une ligne vide."""
+    annoncees = unites_annoncees(tableau, forme_)
+    if annoncees != {"en milliards d’euros"}:
+        sys.exit(f"tableau de financement : unité annoncée inconnue ou absente ({annoncees or 'aucune'})")
+    colonnes_ = {c for l in tableau for c, x in enumerate(l) if c > 0 and forme(x).startswith("execution")}
+    if len(colonnes_) != 1:
+        sys.exit(f"tableau de financement : {len(colonnes_)} colonne(s) d'exécution")
+    execution = colonnes_.pop()
+    intitule = next(propre(l[execution]) for l in tableau if forme(l[execution]).startswith("execution"))
+    if intitule != f"Exécution {annee}":
+        sys.exit(f"tableau de financement : colonne « {intitule} »")
+    for c in {c for l in tableau for c, x in enumerate(l) if c > 0 and c != execution and propre(x)}:
+        intitules = [x for l in tableau if c < len(l) for x in [l[c]] if propre(x) and not nombre_texte(x)]
+        if not intitules or not all(forme(x).startswith("loi de finances de l'annee") for x in intitules):
+            sys.exit("tableau de financement : colonne autre que l'exécution et la loi de finances de l'année")
+    notes, rubrique = notes_du_tableau(tableau), None
+    for r, ligne in enumerate(tableau):
+        libelle = propre(ligne[0])
+        if forme(libelle) in RUBRIQUES_FINANCEMENT_ and not nombre_texte(ligne[execution]):
+            rubrique = RUBRIQUES_FINANCEMENT_[forme(libelle)]
+            continue
+        nombre = nombre_texte(ligne[execution])
+        if not nombre:
+            if re.search(r"[0-9]", ligne[execution]) and not forme(ligne[execution]).startswith("execution"):
+                sys.exit(f"tableau de financement, ligne {r} : montant illisible (« {ligne[execution]} »)")
+            if libelle and (rubrique, forme(libelle)) not in FINANCEMENT_ and not re.match(APPEL, libelle) and \
+                    unite_annoncee(libelle) is None:
+                sys.exit(f"tableau de financement, ligne {r} : libellé inconnu (« {libelle} »)")
+            continue
+        concept = FINANCEMENT_.get((rubrique, forme(libelle)))
+        if concept is None:
+            sys.exit(f"tableau de financement, ligne {r} : libellé inconnu (« {libelle} », rubrique {rubrique})")
+        appels = re.findall(APPEL, libelle) + re.findall(APPEL, ligne[execution])
+        yield {"tableau": i, "ligne": r, "colonne": execution, "libelle": libelle, "intitule": intitule,
+               "concept": concept, "fonction": "", "nombre": nombre, "unite": "MD_EUR",
+               "note": note_des_appels(appels, notes), "consolidation": "sans_objet" if concept in SOLDES_FINANCEMENT
+               else "non_consolide", "statut": "definitif"}
+
+
+def lignes_compte_de_resultat(tableaux, formes, annee):
+    """Les tableaux du compte de résultat se lisent à la suite, une rubrique valant jusqu'à la suivante : une ligne
+    sans montant qui porte son nom, la légende du tableau, ou le premier de deux libellés d'une même ligne. Une ligne
+    d'années indique celle de chaque colonne ; à défaut, les montants sont ceux de l'année des comptes."""
+    rubrique = None
+    for i, tableau in tableaux:
+        if unites_annoncees(tableau, formes[i]) != {"en millions d’euros"}:
+            sys.exit(f"compte de résultat, tableau {i} : unité annoncée inconnue ou absente")
+        rubrique = RUBRIQUES_RESULTAT_.get(forme(formes[i]["legende"]), rubrique)
+        notes, annees = notes_du_tableau(tableau), {}
+        for r, ligne in enumerate(tableau):
+            libelles, montants_ = textes(ligne), montants_de(ligne)
+            # Ligne des années, qui peut aussi porter le nom d'une rubrique (comptes de 2023 et 2024).
+            if montants_ and all(re.fullmatch(r"(?:19|20)[0-9]{2}(?:\s*\([0-9]\))?", propre(ligne[c])) for c in montants_) \
+                    and all(forme(t) in RUBRIQUES_RESULTAT_ for t in libelles):
+                annees = {c: n[0] for c, n in montants_.items()}
+                rubrique = RUBRIQUES_RESULTAT_[forme(libelles[0])] if libelles else rubrique
+                continue
+            if not montants_:
+                for t in libelles:
+                    if forme(t) in RUBRIQUES_RESULTAT_:
+                        rubrique = RUBRIQUES_RESULTAT_[forme(t)]
+                    elif forme(t) not in RESULTAT_ and unite_annoncee(t) is None and not re.match(APPEL, t):
+                        sys.exit(f"compte de résultat, tableau {i}, ligne {r} : libellé inconnu (« {t} »)")
+                continue
+            if len(libelles) == 2 and forme(libelles[0]) in RUBRIQUES_RESULTAT_:
+                rubrique, libelles = RUBRIQUES_RESULTAT_[forme(libelles[0])], libelles[1:]
+            if len(libelles) != 1:
+                sys.exit(f"compte de résultat, tableau {i}, ligne {r} : libellés {libelles}")
+            libelle = libelles[0]
+            f = forme(libelle)
+            # Une rubrique et le premier libellé de ses lignes, réunis dans une même case (comptes de 2021).
+            tete = next((x for x in RUBRIQUES_RESULTAT_ if f.startswith(x + " ") and f[len(x) + 1:] in RESULTAT_), None)
+            if tete:
+                rubrique, f = RUBRIQUES_RESULTAT_[tete], f[len(tete) + 1:]
+            concept = RESULTAT_.get(f)
+            if isinstance(concept, dict):
+                concept = concept.get(rubrique)
+            if concept is None:
+                sys.exit(f"compte de résultat, tableau {i}, ligne {r} : libellé inconnu (« {libelle} », rubrique {rubrique})")
+            for c, nombre in montants_.items():
+                if annees and c not in annees or not annees and len(montants_) > 1:
+                    sys.exit(f"compte de résultat, tableau {i}, ligne {r} : colonne {c} sans année")
+                periode = annees.get(c, annee)
+                if not annee - 1 <= int(periode) <= annee:
+                    sys.exit(f"compte de résultat, tableau {i} : année {periode} dans les comptes de {annee}")
+                appels = re.findall(APPEL, libelle) + re.findall(APPEL, ligne[c])
+                yield {"tableau": i, "ligne": r, "colonne": c, "libelle": libelle, "intitule": str(periode),
+                       "concept": concept, "fonction": "", "nombre": nombre, "unite": "MIO_EUR",
+                       "note": note_des_appels(appels, notes), "perimetre": "ETAT_CGE", "periode": str(periode),
+                       "consolidation": "sans_objet" if concept == _E + "SOLDE_OPERATIONS_EXERCICE" else "non_consolide",
+                       "statut": "definitif"}
+
+
+def colonne_de_bilan(textes_):
+    """(période, suffixe du concept, note) d'une colonne du bilan, d'après ses intitulés : sa date, puis le brut, les
+    amortissements et dépréciations, ou le net. Le bilan au 1er janvier d'une année est celui de la fin de la
+    précédente."""
+    dates, mesures = [], []
+    for t in textes_:
+        fin = re.fullmatch(r"31 décembre ((?:19|20)[0-9]{2})|31/12/((?:19|20)[0-9]{2})", t)
+        debut = re.fullmatch(r"1 ?er janvier ((?:19|20)[0-9]{2})", t)
+        if fin:
+            dates.append((fin.group(1) or fin.group(2), ""))
+        elif debut:
+            dates.append((str(int(debut.group(1)) - 1), f"Bilan au 1er janvier {debut.group(1)}."))
+        else:
+            mesures.append(forme(t))
+    mesure = " ".join(mesures)
+    suffixe = "_AMORTISSEMENTS" if mesure.startswith("amortissement") else MESURES_BILAN.get(mesure)
+    if len(dates) != 1 or suffixe is None:
+        sys.exit(f"bilan : colonne « {' '.join(textes_)} »")
+    return dates[0][0], suffixe, dates[0][1]
+
+
+def lignes_bilan(i, tableau, forme_, annee):
+    """Les lignes d'en-tête précèdent la première rubrique. Le brut et les amortissements ne se lisent qu'à l'actif."""
+    if unites_annoncees(tableau, forme_) != {"en millions d’euros"}:
+        sys.exit("bilan : unité annoncée inconnue ou absente")
+    debut = next(r for r, l in enumerate(tableau) if l and forme(l[0]) in RUBRIQUES_BILAN_)
+    noms = entetes(tableau, range(debut), forme_["largeurs"])
+    chiffrees = {c for l in tableau[debut:] for c in montants_de(l)}
+    # Une date d'en-tête unique, que la page place au-dessus d'une seule colonne, vaut pour toutes.
+    dates = {t for c in chiffrees for t in noms[c] if re.search(r"(?:19|20)[0-9]{2}", t)}
+    if len(dates) == 1:
+        noms = {c: [*dates] + [t for t in noms[c] if t not in dates] for c in chiffrees}
+    colonnes_ = {c: colonne_de_bilan(noms[c]) for c in chiffrees}
+    if any(not annee - 2 <= int(p) <= annee for p, _, _ in colonnes_.values()):
+        sys.exit(f"bilan : date hors des comptes de {annee} et des deux années précédentes")
+    if not any(p == str(annee) and s == "" for p, s, _ in colonnes_.values()):
+        sys.exit(f"bilan : pas de colonne du net au 31 décembre {annee}")
+    notes, cote = notes_du_tableau(tableau), "actif"
+    for r in range(debut, len(tableau)):
+        ligne, libelle = tableau[r], propre(tableau[r][0])
+        concept = BILAN_.get((cote, forme(libelle)))
+        montants_ = montants_de(ligne)
+        if not montants_:
+            if libelle and concept is None and forme(libelle) not in RUBRIQUES_BILAN_ and not re.match(APPEL, libelle):
+                sys.exit(f"bilan, ligne {r} : libellé inconnu (« {libelle} »)")
+            continue
+        if concept is None:
+            sys.exit(f"bilan, ligne {r} : libellé inconnu (« {libelle} », côté {cote})")
+        for c, nombre in montants_.items():
+            if c not in colonnes_:
+                sys.exit(f"bilan, ligne {r} : montant hors colonne")
+            periode, suffixe, note_date = colonnes_[c]
+            if suffixe and cote != "actif":
+                sys.exit(f"bilan, ligne {r} : brut ou amortissements hors de l'actif")
+            appels = re.findall(APPEL, libelle) + re.findall(APPEL, ligne[c])
+            yield {"tableau": i, "ligne": r, "colonne": c, "libelle": libelle, "intitule": " ".join(noms[c]),
+                   "concept": concept + suffixe, "fonction": "", "nombre": nombre, "unite": "MIO_EUR",
+                   "note": " ".join(n for n in (note_date, note_des_appels(appels, notes)) if n), "perimetre": "ETAT_CGE",
+                   "periode": periode, "consolidation": "sans_objet", "statut": "definitif"}
+        cote = {_E + "ACTIF": "passif", _E + "PASSIF": "situation"}.get(concept, cote)
+
+
+def lignes_articles_liminaire_2_3(tableaux, formes, lus, annee, source_id):
+    """Les tableaux à montants que les articles 1er, 4, 5 et 6 ne lisent pas : article liminaire, tableau de
+    financement, compte de résultat et bilan. Un tableau à montants d'aucun de ces genres arrête l'import ; chaque
+    genre a son tableau, sauf le compte de résultat, qui en a souvent plusieurs, et l'article liminaire, qui n'existe que
+    depuis les comptes de 2012."""
+    par_genre = collections.defaultdict(list)
+    for i, t in enumerate(tableaux):
+        if i in lus or not any(montants_de(l) for l in t):
+            continue
+        genre = genre_de_tableau(t)
+        if genre is None:
+            sys.exit(f"tableau {i} : montants d'un tableau qu'aucun article ne lit")
+        par_genre[genre].append((i, t))
+    attendus = {"financement", "resultat", "bilan"} | ({"liminaire"} if int(annee) >= 2012 else set())
+    if set(par_genre) != attendus or any(len(v) > 1 for g, v in par_genre.items() if g != "resultat"):
+        sys.exit(f"articles liminaire, 2 et 3 : tableaux {dict((g, [i for i, _ in v]) for g, v in par_genre.items())}")
+    for i, t in par_genre.get("liminaire", []):
+        yield from lignes_article_liminaire(i, t, formes[i], int(annee), source_id)
+    for i, t in par_genre["financement"]:
+        yield from lignes_article_2(i, t, formes[i], int(annee), source_id)
+    yield from lignes_compte_de_resultat(par_genre["resultat"], formes, int(annee))
+    for i, t in par_genre["bilan"]:
+        yield from lignes_bilan(i, t, formes[i], int(annee))
+
+
 def lignes_du_fichier(fichier, fonctions):
     """Les chiffres d'une copie archivée ; `fonctions` (identifiant → ligne) reçoit les missions et programmes."""
     chemin = BASE / fichier["chemin"]
@@ -684,9 +1270,12 @@ def lignes_du_fichier(fichier, fonctions):
                                      else m.group(0), libelle)
     tableaux, formes = lire_tableaux_html(chemin, mise_en_forme=True)
     i, tableau = article_1(tableaux)
-    for brute in list(lignes_article_1(i, tableau, formes[i], fichier["source_id"])) + \
-            list(lignes_article_4(tableaux, formes, fichier["source_id"], recolle)) + \
-            list(lignes_articles_5_6(tableaux, formes, fichier["source_id"], recolle)):
+    brutes = list(lignes_article_1(i, tableau, formes[i], fichier["source_id"])) + \
+        list(lignes_article_4(tableaux, formes, fichier["source_id"], recolle)) + \
+        list(lignes_articles_5_6(tableaux, formes, fichier["source_id"], recolle))
+    lus = {b["tableau"] for b in brutes}
+    brutes += list(lignes_articles_liminaire_2_3(tableaux, formes, lus, annee, fichier["source_id"]))
+    for brute in brutes:
         fonction = ""
         if brute["fonction"]:
             libelle, mission = brute["fonction"]
@@ -700,11 +1289,14 @@ def lignes_du_fichier(fichier, fonctions):
             "source_id": fichier["source_id"], "fichier_id": fichier["id"],
             "emplacement": f"tableau={brute['tableau']};ligne={brute['ligne']};colonne={brute['colonne']};"
                            f"libelle={brute['libelle']};colonne_libelle={brute['intitule']}",
-            "zone": "FR", "perimetre_id": "ETAT_LF", "concept_id": concept, "fonction_id": fonction, "traitements": "",
-            "unite_id": brute["unite"], "periode": annee, "valeur": brute["nombre"][0],
-            "decimales": brute["nombre"][1], "statut": "non_precise" if concept in AJUSTEMENTS or brute.get("ajustement") else "definitif",
+            "zone": "FR", "perimetre_id": brute.get("perimetre", "ETAT_LF"), "concept_id": concept,
+            "fonction_id": fonction, "traitements": brute.get("traitements", ""), "unite_id": brute["unite"],
+            "periode": brute.get("periode", annee), "valeur": brute["nombre"][0], "decimales": brute["nombre"][1],
+            "statut": brute.get("statut") or ("non_precise" if concept in AJUSTEMENTS or brute.get("ajustement")
+                                              else "definitif"),
             "drapeau_source": "", "version": fichier["mis_a_jour_source"][:10],
-            "consolidation": "sans_objet" if concept in SOLDES or brute.get("solde") else "non_consolide",
+            "consolidation": brute.get("consolidation") or ("sans_objet" if concept in SOLDES or brute.get("solde")
+                                                            else "non_consolide"),
             "denominateur_id": "", "nature": "publie", "calcul_id": "", "saisi_le": aujourdhui(), "notes": brute["note"],
         }
         ligne["id"] = identifiant(ligne)

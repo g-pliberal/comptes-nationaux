@@ -1,4 +1,141 @@
 id,libelle,norme_id,code_norme,sens,definition
+COMPTES_ETAT.ACHATS_PRESTATIONS_EXTERNES,"Achats, variations de stocks et prestations externes",COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,
+COMPTES_ETAT.ACTIF,Actif (I),COMPTES_ETAT,bilan : actif,stock,Total de l'actif. Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.ACTIF_AMORTISSEMENTS,Actif (I) : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.ACTIF_BRUT,Actif (I) : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.ACTIF_CIRCULANT,Actif circulant (hors trésorerie),COMPTES_ETAT,bilan : actif,stock,"Total de l'actif circulant, hors trésorerie. Montant net : brut moins amortissements et dépréciations."
+COMPTES_ETAT.ACTIF_CIRCULANT_AMORTISSEMENTS,Actif circulant (hors trésorerie) : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.ACTIF_CIRCULANT_BRUT,Actif circulant (hors trésorerie) : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.ACTIF_IMMOBILISE,Actif immobilisé,COMPTES_ETAT,bilan : actif,stock,Total de l'actif immobilisé. Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.ACTIF_IMMOBILISE_AMORTISSEMENTS,Actif immobilisé : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.ACTIF_IMMOBILISE_BRUT,Actif immobilisé : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.AMENDES,"Amendes, prélèvements divers et autres pénalités",COMPTES_ETAT,compte de résultat : produits régaliens,recette,
+COMPTES_ETAT.AUTRES_CHARGES_FINANCIERES,Autres charges financières,COMPTES_ETAT,compte de résultat : charges financières,depense,
+COMPTES_ETAT.AUTRES_CHARGES_FONCTIONNEMENT,Autres charges de fonctionnement direct,COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,Ligne « Autres charges de fonctionnement » des charges de fonctionnement direct.
+COMPTES_ETAT.AUTRES_CHARGES_FONCTIONNEMENT_INDIRECT,Autres charges de fonctionnement indirect,COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,Ligne des textes depuis les comptes de 2015.
+COMPTES_ETAT.AUTRES_COMPOSANTES_TRESORERIE,Autres composantes de trésorerie,COMPTES_ETAT,bilan : actif,stock,Trésorerie de l'actif. Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.AUTRES_COMPOSANTES_TRESORERIE_AMORTISSEMENTS,Autres composantes de trésorerie : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.AUTRES_COMPOSANTES_TRESORERIE_BRUT,Autres composantes de trésorerie : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.AUTRES_CREANCES,Autres créances,COMPTES_ETAT,bilan : actif,stock,Partie des créances. Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.AUTRES_CREANCES_AMORTISSEMENTS,Autres créances : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.AUTRES_CREANCES_BRUT,Autres créances : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.AUTRES_DETTES_NON_FINANCIERES,Autres dettes non financières,COMPTES_ETAT,bilan : passif,stock,Dette non financière.
+COMPTES_ETAT.AUTRES_EMPRUNTS,Autres emprunts,COMPTES_ETAT,bilan : passif,stock,"Dette financière, ligne des textes jusqu'aux comptes de 2009 ; ceux depuis 2010 présentent à la même place les dettes financières et autres emprunts."
+COMPTES_ETAT.AUTRES_INTERETS_PRODUITS,Autres intérêts et produits assimilés,COMPTES_ETAT,compte de résultat : charges financières,recette,Produit financier.
+COMPTES_ETAT.AUTRES_PASSIFS,Autres passifs (hors trésorerie),COMPTES_ETAT,bilan : passif,stock,
+COMPTES_ETAT.AUTRES_PRODUITS_FISCAUX,Autres produits de nature fiscale et assimilés,COMPTES_ETAT,compte de résultat : produits régaliens,recette,Produit fiscal net.
+COMPTES_ETAT.AUTRES_PRODUITS_FONCTIONNEMENT,Autres produits de fonctionnement,COMPTES_ETAT,compte de résultat : charges de fonctionnement,recette,
+COMPTES_ETAT.AUTRES_PRODUITS_REGALIENS_NETS,Autres produits régaliens nets (XIV),COMPTES_ETAT,compte de résultat : produits régaliens,recette,
+COMPTES_ETAT.AUTRES_TRESORERIE_PASSIF,Autres éléments de trésorerie du passif,COMPTES_ETAT,bilan : passif,stock,Ligne « Autres » de la trésorerie du passif.
+COMPTES_ETAT.CHARGES_CONSTATEES_AVANCE,Charges constatées d'avance,COMPTES_ETAT,bilan : actif,stock,Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.CHARGES_CONSTATEES_AVANCE_AMORTISSEMENTS,Charges constatées d'avance : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.CHARGES_CONSTATEES_AVANCE_BRUT,Charges constatées d'avance : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.CHARGES_FINANCIERES,Charges financières (IX),COMPTES_ETAT,compte de résultat : charges financières,depense,
+COMPTES_ETAT.CHARGES_FINANCIERES_NETTES,Charges financières nettes (XI = IX - X),COMPTES_ETAT,compte de résultat : charges financières,depense,"Charges financières, moins les produits financiers."
+COMPTES_ETAT.CHARGES_FONCTIONNEMENT,Charges de fonctionnement (III = I + II),COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,
+COMPTES_ETAT.CHARGES_FONCTIONNEMENT_DIRECT,Charges de fonctionnement direct (I),COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,
+COMPTES_ETAT.CHARGES_FONCTIONNEMENT_INDIRECT,Charges de fonctionnement indirect (II),COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,
+COMPTES_ETAT.CHARGES_FONCTIONNEMENT_NETTES,Charges de fonctionnement nettes (V = III - IV),COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,"Charges de fonctionnement, moins les produits de fonctionnement."
+COMPTES_ETAT.CHARGES_GARANTIES,Charges résultant de la mise en jeu de garanties,COMPTES_ETAT,compte de résultat : charges d'intervention,depense,
+COMPTES_ETAT.CHARGES_INTERVENTION,Charges d'intervention (VI),COMPTES_ETAT,compte de résultat : charges d'intervention,depense,
+COMPTES_ETAT.CHARGES_INTERVENTION_NETTES,Charges d'intervention nettes (VIII = VI - VII),COMPTES_ETAT,compte de résultat : charges d'intervention,depense,"Charges d'intervention, moins les produits d'intervention."
+COMPTES_ETAT.CHARGES_NETTES,Charges nettes (XII = V + VIII + XI),COMPTES_ETAT,compte de résultat : charges nettes,depense,"Charges nettes de fonctionnement, d'intervention et financières."
+COMPTES_ETAT.CHARGES_PERSONNEL,Charges de personnel,COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,
+COMPTES_ETAT.COMPTES_REGULARISATION_ACTIF,Comptes de régularisation de l'actif,COMPTES_ETAT,bilan : actif,stock,Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.COMPTES_REGULARISATION_ACTIF_BRUT,Comptes de régularisation de l'actif : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.COMPTES_REGULARISATION_PASSIF,Comptes de régularisation du passif,COMPTES_ETAT,bilan : passif,stock,
+COMPTES_ETAT.CONTRIBUTIONS_TIERS,Contributions reçues de tiers,COMPTES_ETAT,compte de résultat : charges d'intervention,recette,Produit d'intervention.
+COMPTES_ETAT.CORRESPONDANTS_TRESOR,Correspondants du Trésor et personnes habilitées,COMPTES_ETAT,bilan : passif,stock,"Trésorerie du passif : fonds que des tiers, collectivités territoriales et établissements publics notamment, déposent au Trésor."
+COMPTES_ETAT.CREANCES,Créances,COMPTES_ETAT,bilan : actif,stock,"Total des créances : redevables, clients et autres créances. Montant net : brut moins amortissements et dépréciations."
+COMPTES_ETAT.CREANCES_AMORTISSEMENTS,Créances : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.CREANCES_BRUT,Créances : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.CREANCES_CLIENTS,Créances sur les clients,COMPTES_ETAT,bilan : actif,stock,Partie des créances. Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.CREANCES_CLIENTS_AMORTISSEMENTS,Créances sur les clients : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.CREANCES_CLIENTS_BRUT,Créances sur les clients : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.CREANCES_REDEVABLES,Créances sur les redevables,COMPTES_ETAT,bilan : actif,stock,Partie des créances. Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.CREANCES_REDEVABLES_AMORTISSEMENTS,Créances sur les redevables : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.CREANCES_REDEVABLES_BRUT,Créances sur les redevables : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.DETTES_FINANCIERES,Dettes financières,COMPTES_ETAT,bilan : passif,stock,Total des dettes financières.
+COMPTES_ETAT.DETTES_FINANCIERES_AUTRES_EMPRUNTS,Dettes financières et autres emprunts,COMPTES_ETAT,bilan : passif,stock,"Dette financière, ligne des textes depuis les comptes de 2010 ; ceux jusqu'à 2009 présentent à la même place les autres emprunts."
+COMPTES_ETAT.DETTES_FONCTIONNEMENT,Dettes de fonctionnement,COMPTES_ETAT,bilan : passif,stock,Dette non financière.
+COMPTES_ETAT.DETTES_INTERVENTION,Dettes d'intervention,COMPTES_ETAT,bilan : passif,stock,Dette non financière.
+COMPTES_ETAT.DETTES_NON_FINANCIERES,Dettes non financières (hors trésorerie),COMPTES_ETAT,bilan : passif,stock,"Total des dettes non financières, hors trésorerie."
+COMPTES_ETAT.DISPONIBILITES,Disponibilités,COMPTES_ETAT,bilan : actif,stock,"Trésorerie de l'actif, ligne du texte des comptes de 2006. Montant net : brut moins amortissements et dépréciations."
+COMPTES_ETAT.DISPONIBILITES_BRUT,Disponibilités : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.DOTATIONS_FINANCIERES,"Dotations aux amortissements, aux provisions et aux dépréciations, en charges financières",COMPTES_ETAT,compte de résultat : charges financières,depense,
+COMPTES_ETAT.DOTATIONS_FONCTIONNEMENT,"Dotations aux amortissements, aux provisions et aux dépréciations, en charges de fonctionnement direct",COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,
+COMPTES_ETAT.DOTATIONS_FONCTIONNEMENT_INDIRECT,"Dotations aux provisions, en charges de fonctionnement indirect",COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,
+COMPTES_ETAT.DOTATIONS_INTERVENTION,"Dotations aux provisions et aux dépréciations, en charges d'intervention",COMPTES_ETAT,compte de résultat : charges d'intervention,depense,
+COMPTES_ETAT.ECARTS_REEVALUATION_INTEGRATION,Écarts de réévaluation et d'intégration,COMPTES_ETAT,bilan : situation nette,stock,
+COMPTES_ETAT.ENREGISTREMENT_TIMBRE,"Enregistrement, timbre, autres contributions et taxes indirectes",COMPTES_ETAT,compte de résultat : produits régaliens,recette,Produit fiscal net.
+COMPTES_ETAT.EQUIVALENTS_TRESORERIE,Équivalents de trésorerie,COMPTES_ETAT,bilan : actif,stock,"Trésorerie de l'actif, ligne des textes jusqu'aux comptes de 2014. Montant net : brut moins amortissements et dépréciations."
+COMPTES_ETAT.EQUIVALENTS_TRESORERIE_AMORTISSEMENTS,Équivalents de trésorerie : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.EQUIVALENTS_TRESORERIE_BRUT,Équivalents de trésorerie : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.FONDS_BANCAIRES_CAISSE,Fonds bancaires et fonds en caisse,COMPTES_ETAT,bilan : actif,stock,"Trésorerie de l'actif, ligne des textes depuis les comptes de 2007. Montant net : brut moins amortissements et dépréciations."
+COMPTES_ETAT.FONDS_BANCAIRES_CAISSE_AMORTISSEMENTS,Fonds bancaires et fonds en caisse : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.FONDS_BANCAIRES_CAISSE_BRUT,Fonds bancaires et fonds en caisse : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.GAINS_CHANGE,Gains de change liés aux opérations financières,COMPTES_ETAT,compte de résultat : charges financières,recette,
+COMPTES_ETAT.IMMOBILISATIONS_CORPORELLES,Immobilisations corporelles,COMPTES_ETAT,bilan : actif,stock,Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.IMMOBILISATIONS_CORPORELLES_AMORTISSEMENTS,Immobilisations corporelles : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.IMMOBILISATIONS_CORPORELLES_BRUT,Immobilisations corporelles : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.IMMOBILISATIONS_FINANCIERES,Immobilisations financières,COMPTES_ETAT,bilan : actif,stock,Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.IMMOBILISATIONS_FINANCIERES_AMORTISSEMENTS,Immobilisations financières : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.IMMOBILISATIONS_FINANCIERES_BRUT,Immobilisations financières : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.IMMOBILISATIONS_INCORPORELLES,Immobilisations incorporelles,COMPTES_ETAT,bilan : actif,stock,Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.IMMOBILISATIONS_INCORPORELLES_AMORTISSEMENTS,Immobilisations incorporelles : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.IMMOBILISATIONS_INCORPORELLES_BRUT,Immobilisations incorporelles : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.IMPOT_REVENU,Impôt sur le revenu,COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Produit fiscal net, en droits constatés."
+COMPTES_ETAT.IMPOT_SOCIETES,Impôt sur les sociétés,COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Produit fiscal net, en droits constatés."
+COMPTES_ETAT.INTERETS,Intérêts,COMPTES_ETAT,compte de résultat : charges financières,depense,Charges financières : intérêts de la dette et des autres emprunts de l'État.
+COMPTES_ETAT.PASSIF,Passif hors situation nette (II),COMPTES_ETAT,bilan : passif,stock,"Total du passif, hors situation nette."
+COMPTES_ETAT.PERTES_CHANGE,Pertes de change liées aux opérations financières,COMPTES_ETAT,compte de résultat : charges financières,depense,
+COMPTES_ETAT.PRODUCTION_STOCKEE_IMMOBILISEE,Production stockée et immobilisée,COMPTES_ETAT,compte de résultat : charges de fonctionnement,recette,Produit de fonctionnement.
+COMPTES_ETAT.PRODUITS_CONSTATES_AVANCE,Produits constatés d'avance,COMPTES_ETAT,bilan : passif,stock,Dette non financière.
+COMPTES_ETAT.PRODUITS_CREANCES_ACTIF_IMMOBILISE,Produits des créances de l'actif immobilisé,COMPTES_ETAT,compte de résultat : charges financières,recette,"Produit financier, ligne des textes jusqu'aux comptes de 2009 ; ceux depuis 2010 présentent à la même place les produits des immobilisations financières."
+COMPTES_ETAT.PRODUITS_FINANCIERS,Produits financiers (X),COMPTES_ETAT,compte de résultat : charges financières,recette,
+COMPTES_ETAT.PRODUITS_FISCAUX_NETS,Produits fiscaux nets (XIII),COMPTES_ETAT,compte de résultat : produits régaliens,recette,
+COMPTES_ETAT.PRODUITS_FONCTIONNEMENT,Produits de fonctionnement (IV),COMPTES_ETAT,compte de résultat : charges de fonctionnement,recette,
+COMPTES_ETAT.PRODUITS_IMMOBILISATIONS_FINANCIERES,Produits des immobilisations financières,COMPTES_ETAT,compte de résultat : charges financières,recette,"Produit financier, ligne des textes depuis les comptes de 2010 ; ceux jusqu'à 2009 présentent à la même place les produits des créances de l'actif immobilisé."
+COMPTES_ETAT.PRODUITS_INTERVENTION,Produits d'intervention (VII),COMPTES_ETAT,compte de résultat : charges d'intervention,recette,
+COMPTES_ETAT.PRODUITS_REGALIENS_NETS,Produits régaliens nets (XVI),COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Produits fiscaux nets et autres produits régaliens nets, diminués des ressources propres de l'Union européenne ; les textes écrivent XVI = XIII + XIV - XV, mais présentent XV en montant négatif."
+COMPTES_ETAT.PROVISIONS_CHARGES,Provisions pour charges,COMPTES_ETAT,bilan : passif,stock,
+COMPTES_ETAT.PROVISIONS_RISQUES,Provisions pour risques,COMPTES_ETAT,bilan : passif,stock,
+COMPTES_ETAT.PROVISIONS_RISQUES_CHARGES,Provisions pour risques et charges,COMPTES_ETAT,bilan : passif,stock,Total des provisions pour risques et charges.
+COMPTES_ETAT.REPORT_EXERCICES_ANTERIEURS,Report des exercices antérieurs,COMPTES_ETAT,bilan : situation nette,stock,
+COMPTES_ETAT.REPRISES_FINANCIERES,"Reprises sur provisions et sur dépréciations, en produits financiers",COMPTES_ETAT,compte de résultat : charges financières,recette,
+COMPTES_ETAT.REPRISES_FONCTIONNEMENT,"Reprises sur provisions et sur dépréciations, en produits de fonctionnement",COMPTES_ETAT,compte de résultat : charges de fonctionnement,recette,
+COMPTES_ETAT.REPRISES_INTERVENTION,"Reprises sur provisions et sur dépréciations, en produits d'intervention",COMPTES_ETAT,compte de résultat : charges d'intervention,recette,
+COMPTES_ETAT.RESSOURCES_PROPRES_UE,Ressources propres de l'Union européenne (XV),COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Montant négatif, déduit des produits régaliens : la contribution de l'État au budget de l'Union européenne, que le texte des comptes de 2025 intitule « prélèvement sur les recettes de l'État au profit de l'Union européenne »."
+COMPTES_ETAT.RESSOURCE_PROPRE_UE_RNB,Ressource propre de l'Union européenne basée sur le revenu national brut,COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Montant négatif, déduit des produits régaliens. Les textes jusqu'aux comptes de 2008 la disent basée sur le produit national brut ; ceux depuis 2021 ne détaillent plus les ressources propres de l'Union."
+COMPTES_ETAT.RESSOURCE_PROPRE_UE_TVA,Ressource propre de l'Union européenne basée sur la taxe sur la valeur ajoutée,COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Montant négatif, déduit des produits régaliens ; ligne des textes jusqu'aux comptes de 2020."
+COMPTES_ETAT.SITUATION_NETTE,Situation nette (III = I - II),COMPTES_ETAT,bilan : situation nette,stock,Actif moins passif hors situation nette.
+COMPTES_ETAT.SOLDE_EXERCICES_ANTERIEURS_ATTENTE,Solde des opérations d'exercices antérieurs en attente d'affectation,COMPTES_ETAT,bilan : situation nette,stock,Ligne des textes depuis les comptes de 2022.
+COMPTES_ETAT.SOLDE_EXERCICE_BILAN,"Solde des opérations de l'exercice, au bilan",COMPTES_ETAT,bilan : situation nette,stock,Ligne de la situation nette. Le texte des comptes de 2006 présente le bilan après affectation du résultat comptable.
+COMPTES_ETAT.SOLDE_OPERATIONS_EXERCICE,Solde des opérations de l'exercice (XVI - XII),COMPTES_ETAT,compte de résultat : solde des opérations de l'exercice,solde,Résultat comptable de l'État : produits régaliens nets moins charges nettes.
+COMPTES_ETAT.STOCKS,Stocks,COMPTES_ETAT,bilan : actif,stock,Montant net : brut moins amortissements et dépréciations.
+COMPTES_ETAT.STOCKS_AMORTISSEMENTS,Stocks : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.STOCKS_BRUT,Stocks : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.SUBVENTIONS_CHARGES_SERVICE_PUBLIC,Subventions pour charges de service public,COMPTES_ETAT,compte de résultat : charges de fonctionnement,depense,Charges de fonctionnement indirect : subventions de l'État à ses opérateurs pour leurs charges de service public.
+COMPTES_ETAT.TAXE_SALAIRES,Taxe sur les salaires,COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Produit fiscal net, ligne des textes jusqu'aux comptes de 2009."
+COMPTES_ETAT.TICPE,Taxe intérieure de consommation sur les produits énergétiques,COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Produit fiscal net. Les textes jusqu'aux comptes de 2013, sauf celui de 2012, l'appellent taxe intérieure sur les produits pétroliers, son ancien nom ; celui de 2013 le précise en note."
+COMPTES_ETAT.TITRES_NEGOCIABLES,Titres négociables,COMPTES_ETAT,bilan : passif,stock,Dette financière : titres de la dette négociable de l'État.
+COMPTES_ETAT.TITRES_NON_NEGOCIABLES,Titres non négociables,COMPTES_ETAT,bilan : passif,stock,Dette financière.
+COMPTES_ETAT.TRANSFERTS_AUTRES_COLLECTIVITES,Transferts aux autres collectivités,COMPTES_ETAT,compte de résultat : charges d'intervention,depense,
+COMPTES_ETAT.TRANSFERTS_COLLECTIVITES_TERRITORIALES,Transferts aux collectivités territoriales,COMPTES_ETAT,compte de résultat : charges d'intervention,depense,
+COMPTES_ETAT.TRANSFERTS_ENTREPRISES,Transferts aux entreprises,COMPTES_ETAT,compte de résultat : charges d'intervention,depense,
+COMPTES_ETAT.TRANSFERTS_MENAGES,Transferts aux ménages,COMPTES_ETAT,compte de résultat : charges d'intervention,depense,
+COMPTES_ETAT.TRESORERIE_ACTIF,Trésorerie de l'actif,COMPTES_ETAT,bilan : actif,stock,"Total de la trésorerie, à l'actif. Montant net : brut moins amortissements et dépréciations."
+COMPTES_ETAT.TRESORERIE_ACTIF_AMORTISSEMENTS,Trésorerie de l'actif : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.TRESORERIE_ACTIF_BRUT,Trésorerie de l'actif : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.TRESORERIE_PASSIF,Trésorerie du passif,COMPTES_ETAT,bilan : passif,stock,"Total de la trésorerie, au passif."
+COMPTES_ETAT.TVA,Taxe sur la valeur ajoutée,COMPTES_ETAT,compte de résultat : produits régaliens,recette,"Produit fiscal net, en droits constatés."
+COMPTES_ETAT.VALEURS_ESCOMPTEES,"Valeurs escomptées, en cours d'encaissement et de décaissement",COMPTES_ETAT,bilan : actif,stock,"Trésorerie de l'actif, ligne des textes depuis les comptes de 2007. Montant net : brut moins amortissements et dépréciations."
+COMPTES_ETAT.VALEURS_ESCOMPTEES_AMORTISSEMENTS,"Valeurs escomptées, en cours d'encaissement et de décaissement : amortissements et dépréciations",COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.VALEURS_ESCOMPTEES_BRUT,"Valeurs escomptées, en cours d'encaissement et de décaissement : montant brut",COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT,Valeurs mobilières de placement,COMPTES_ETAT,bilan : actif,stock,"Trésorerie de l'actif, ligne des textes depuis les comptes de 2015. Montant net : brut moins amortissements et dépréciations."
+COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT_AMORTISSEMENTS,Valeurs mobilières de placement : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
+COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT_BRUT,Valeurs mobilières de placement : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
+COMPTES_ETAT.VENTES_PRESTATIONS,Ventes de produits et prestations de service,COMPTES_ETAT,compte de résultat : charges de fonctionnement,recette,Produit de fonctionnement.
 COMPTES_SECU.RESULTAT_COMPTABLE,Résultat comptable,COMPTES_SECU,RC,solde,"Résultat au sens de la comptabilité publique, semblable à celui d'une comptabilité générale d'entreprise (Insee)."
 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS,Acquisitions moins cessions d'actifs non financiers,INSEE_APU,P.51g + P.52 + P.53 + NP,depense,
 INSEE_APU.DEP_CREDITS_IMPOT,Crédits d'impôt enregistrés en dépenses,INSEE_APU,"partie de D.3, D.6, D.7 et D.9",depense,"Crédits d'impôt restituables, que la comptabilité nationale enregistre en dépenses même lorsqu'ils réduisent l'impôt dû."
@@ -164,6 +301,16 @@ INSEE_PO.TSCA,Taxe sur les conventions d'assurances,INSEE_PO,partie de D.214,rec
 INSEE_PO.TTF,Taxe sur les transactions financières,INSEE_PO,partie de D.214,recette,
 INSEE_PO.VERSEMENT_MOBILITE,Versement mobilité,INSEE_PO,partie de D.291,recette,
 INSEE_PO.VIGNETTE,Taxe sur les véhicules (vignette auto des ménages),INSEE_PO,partie de D.59,recette,
+LOLF.AMORTISSEMENT_AUTRES_DETTES,Amortissement des autres dettes,LOLF,tableau de financement,depense,"Besoin de financement, ligne des textes depuis les comptes de 2014."
+LOLF.AMORTISSEMENT_DETTES_REPRISES,Amortissement de dettes reprises par l'État,LOLF,tableau de financement,depense,"Besoin de financement, ligne des textes jusqu'aux comptes de 2013."
+LOLF.AMORTISSEMENT_DETTE_LT,Amortissement de la dette à long terme,LOLF,tableau de financement,depense,Besoin de financement. Les textes de 2009 à 2012 précisent : y compris les rachats de titres de l'échéance de l'année avant leur maturité ; ceux de 2014 et 2015 la présentent comme une partie de l'amortissement de la dette à moyen et long termes.
+LOLF.AMORTISSEMENT_DETTE_MLT,Amortissement de la dette à moyen et long termes,LOLF,tableau de financement,depense,"Besoin de financement, ligne des textes depuis les comptes de 2014, qui en détaillent les parties."
+LOLF.AMORTISSEMENT_DETTE_MT,Amortissement de la dette à moyen terme,LOLF,tableau de financement,depense,Besoin de financement. Les textes de 2009 à 2012 précisent : y compris les rachats de titres de l'échéance de l'année avant leur maturité ; ceux de 2014 et 2015 la présentent comme une partie de l'amortissement de la dette à moyen et long termes.
+LOLF.AMORTISSEMENT_DETTE_NOMINAL,Amortissement de la dette à moyen et long termes : remboursement du nominal à valeur faciale,LOLF,tableau de financement,depense,Partie de l'amortissement de la dette à moyen et long termes ; le texte des comptes de 2016 l'intitule « amortissement nominal de la dette à moyen et long termes ».
+LOLF.AMORTISSEMENT_SNCF_RESEAU,Amortissement SNCF Réseau,LOLF,tableau de financement,depense,"Besoin de financement, ligne des textes depuis les comptes de 2020."
+LOLF.ANNULATION_TITRES_CDP,Annulation de titres de l'État par la Caisse de la dette publique,LOLF,tableau de financement,recette,"Ressource de financement, ligne des textes jusqu'aux comptes de 2009."
+LOLF.AUTRES_BESOINS_TRESORERIE,Autres besoins de trésorerie,LOLF,tableau de financement,depense,"Besoin de financement, ligne des textes depuis les comptes de 2014."
+LOLF.AUTRES_RESSOURCES_TRESORERIE,Autres ressources de trésorerie,LOLF,tableau de financement,recette,"Ressource de financement, ligne des textes depuis les comptes de 2007 ; celui de 2014 l'intitule « autres ressources nettes de trésorerie »."
 LOLF.BA_AE_ANNULATIONS,"Annulations d'autorisations d'engagement non consommées et non reportées sur les budgets annexes, par la loi d'approbation des comptes de l'année",LOLF,budgets annexes,depense,"Ajustement des autorisations de l'année que la loi d'approbation des comptes arrête ; un montant présenté pour un compte ou un programme, ou pour le total de la catégorie. Les textes jusqu'aux comptes de 2012 les disent « non engagées et non reportées »."
 LOLF.BA_AE_CONSOMMEES,Autorisations d'engagement consommées sur les budgets annexes,LOLF,budgets annexes,depense,Engagements juridiques pris dans l'année ; les textes jusqu'aux comptes de 2012 les disent « engagées ».
 LOLF.BA_AE_OUVERTURES,"Ouvertures d'autorisations d'engagement complémentaires sur les budgets annexes, par la loi d'approbation des comptes de l'année",LOLF,budgets annexes,depense,"Ajustement des autorisations de l'année que la loi d'approbation des comptes arrête ; un montant présenté pour un compte ou un programme, ou pour le total de la catégorie."
@@ -177,6 +324,7 @@ LOLF.BA_FDC_SOLDE,Solde des fonds de concours des budgets annexes,LOLF,budgets a
 LOLF.BA_RECETTES,"Recettes des budgets annexes, y compris fonds de concours",LOLF,budgets annexes,recette,"Total de l'article 1er, ou montant d'un budget annexe (article 5)."
 LOLF.BA_RECETTES_HORS_FDC,"Recettes d'un budget annexe, hors fonds de concours",LOLF,budgets annexes,recette,
 LOLF.BA_SOLDE_HORS_FDC,"Solde d'un budget annexe, hors fonds de concours",LOLF,budgets annexes,solde,
+LOLF.BESOIN_FINANCEMENT,Besoin de financement de l'État,LOLF,tableau de financement,depense,"Total du besoin de financement du tableau de financement, que la loi d'approbation des comptes arrête ; il égale le total des ressources de financement."
 LOLF.BG_AE_ANNULATIONS,"Annulations d'autorisations d'engagement non consommées et non reportées, par la loi d'approbation des comptes de l'année",LOLF,annulations d'autorisations d'engagement,depense,Les textes jusqu'aux comptes de 2012 les disent « non engagées et non reportées ».
 LOLF.BG_AE_CONSOMMEES,Autorisations d'engagement consommées sur le budget général,LOLF,autorisations d'engagement,depense,"Engagements juridiques pris dans l'année, que les crédits de paiement des années suivantes pourront couvrir. Les textes jusqu'aux comptes de 2012 les disent « engagées »."
 LOLF.BG_AE_OUVERTURES,"Ouvertures d'autorisations d'engagement complémentaires, par la loi d'approbation des comptes de l'année",LOLF,ouvertures d'autorisations d'engagement,depense,
@@ -283,6 +431,12 @@ LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS_HORS_COMPTES_CLOS,"Soldes créditeurs au 31 d
 LOLF.CS_ENSEMBLE_SOLDES_DEBITEURS,"Soldes débiteurs au 31 décembre de l'ensemble des comptes spéciaux, y compris les opérations avec le FMI",LOLF,comptes spéciaux,stock,"Soldes arrêtés au 31 décembre de l'année et reportés à la gestion suivante, compte par compte, ou leur total ; un solde débiteur est une créance de l'État (prêt ou avance à recouvrer, découvert)."
 LOLF.CS_ENSEMBLE_SOLDES_DEBITEURS_HORS_COMPTES_CLOS,"Soldes débiteurs au 31 décembre de l'ensemble des comptes spéciaux, y compris les opérations avec le FMI, hors comptes clos dans l'année",LOLF,comptes spéciaux,stock,Total de l'article 6 qui ne porte que sur les comptes dont les opérations se poursuivent l'année suivante ; les comptes clos dans l'année sont arrêtés par un article à part.
 LOLF.CS_RECETTES,"Recettes des comptes spéciaux, hors opérations avec le FMI",LOLF,comptes spéciaux,recette,
+LOLF.DEFICIT_A_FINANCER,Déficit à financer,LOLF,tableau de financement,solde,"Besoin de financement, ligne des textes depuis les comptes de 2014, compté positivement ; le texte des comptes de 2015 l'intitule « Déficit budgétaire »."
+LOLF.DEFICIT_A_FINANCER_DEFICIT_BUDGETAIRE,Déficit à financer : déficit budgétaire,LOLF,tableau de financement,solde,"Partie du déficit à financer, que détaille le seul texte des comptes de 2014."
+LOLF.DEFICIT_A_FINANCER_DOTATION_PIA,Déficit à financer : dotation budgétaire du deuxième programme d'investissements d'avenir,LOLF,tableau de financement,solde,"Partie du déficit à financer, que détaille le seul texte des comptes de 2014 ; montant négatif."
+LOLF.EMISSIONS_DETTE_MLT,"Émissions de dette à moyen et long termes, nettes des rachats",LOLF,tableau de financement,recette,"Ressource de financement. Les textes jusqu'aux comptes de 2013 précisent : obligations assimilables du Trésor et bons du Trésor à taux fixe et intérêts annuels ; celui de 2009, nettes des rachats en nominal."
+LOLF.ENGAGEMENTS_ETAT,Engagements de l'État,LOLF,tableau de financement,depense,"Besoin de financement, ligne du texte des comptes de 2006."
+LOLF.IMPACT_TRESORERIE_SOLDE_GESTION,Impact en trésorerie du solde de la gestion,LOLF,tableau de financement,solde,"Besoin de financement, ligne des textes jusqu'aux comptes de 2013 : le solde de l'année tel qu'il s'est dénoué en trésorerie. Le texte de 2006 précise qu'il ne rend compte que des opérations dénouées bancairement sur le compte unique du Trésor entre le 1er janvier et le 31 décembre, quelle que soit leur loi de finances de rattachement."
 LOLF.OPERATIONS_MONETAIRES_DEPENSES,"Dépenses des comptes d'opérations monétaires, y compris les opérations avec le FMI",LOLF,comptes spéciaux,depense,
 LOLF.OPERATIONS_MONETAIRES_MAJORATIONS_DECOUVERT,"Majorations du découvert autorisé des comptes d'opérations monétaires, y compris les opérations avec le FMI, par la loi d'approbation des comptes de l'année",LOLF,comptes spéciaux,depense,"Ajustement des autorisations de l'année que la loi d'approbation des comptes arrête ; un montant présenté pour un compte ou un programme, ou pour le total de la catégorie."
 LOLF.OPERATIONS_MONETAIRES_RECETTES,"Recettes des comptes d'opérations monétaires, y compris les opérations avec le FMI",LOLF,comptes spéciaux,recette,
@@ -291,6 +445,8 @@ LOLF.OPERATIONS_MONETAIRES_SOLDES_CREDITEURS,"Soldes créditeurs au 31 décembre
 LOLF.OPERATIONS_MONETAIRES_SOLDES_DEBITEURS,"Soldes débiteurs au 31 décembre des comptes d'opérations monétaires, y compris les opérations avec le FMI",LOLF,comptes spéciaux,stock,"Soldes arrêtés au 31 décembre de l'année et reportés à la gestion suivante, compte par compte, ou leur total ; un solde débiteur est une créance de l'État (prêt ou avance à recouvrer, découvert)."
 LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_DEPENSES,"Solde des comptes d'opérations monétaires, hors opérations avec le FMI, compté en diminution des dépenses des comptes spéciaux",LOLF,comptes spéciaux,solde,"Le solde, de signe opposé, dans la colonne des dépenses."
 LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_RECETTES,"Solde des comptes d'opérations monétaires, hors opérations avec le FMI, compté en recettes des comptes spéciaux",LOLF,comptes spéciaux,solde,"Le solde, de même signe, dans la colonne des recettes : présentation des comptes de 2006."
+LOLF.RESSOURCES_CDP,Ressources affectées à la Caisse de la dette publique et consacrées au désendettement,LOLF,tableau de financement,recette,"Ressource de financement, ligne des textes depuis les comptes de 2014."
+LOLF.RESSOURCES_FINANCEMENT,Ressources de financement de l'État,LOLF,tableau de financement,recette,Total des ressources de financement du tableau de financement ; il égale le besoin de financement.
 LOLF.RESULTAT_BUDGETAIRE,"Résultat budgétaire de l'État, hors opérations avec le FMI",LOLF,résultat budgétaire,solde,"Solde du budget général, des budgets annexes et des comptes spéciaux, en comptabilité de caisse, arrêté par l'article 1er de la loi d'approbation des comptes de l'année (loi de règlement, puis loi relative aux résultats de la gestion). Jusqu'aux comptes de 2012, où les budgets annexes sont présentés en équilibre, son tableau se termine par le résultat d'exécution des lois de finances, de même montant."
 LOLF.RESULTAT_EXECUTION,"Résultat d'exécution des lois de finances, hors opérations avec le FMI",LOLF,RE,solde,"Solde du budget général et des comptes spéciaux, hors opérations avec le FMI, en comptabilité de caisse ; les budgets annexes n'y entrent pas (Insee, tableau 3.107 ; situation mensuelle budgétaire, « solde général d'exécution »)."
 LOLF.RESULTAT_EXECUTION_HORS_CESSION_TITRES_EDF,"Résultat d'exécution des lois de finances, hors opérations avec le FMI et hors produits de cession des titres EDF",LOLF,RE,solde,Présentation propre aux comptes de 2007 : le résultat d'exécution sans le produit des cessions de titres EDF.
@@ -299,7 +455,19 @@ LOLF.SOLDE_BUDGETS_ANNEXES,"Solde des budgets annexes, y compris fonds de concou
 LOLF.SOLDE_BUDGET_GENERAL,Solde d'exécution du budget général,LOLF,solde du budget général,solde,"Différence entre les recettes et les dépenses du budget général, négative quand les dépenses dépassent les recettes."
 LOLF.SOLDE_BUDGET_GENERAL_HORS_REGULARISATION_PENSIONS,"Solde d'exécution du budget général, hors mesure de régularisation concernant les pensions",LOLF,solde du budget général,solde,Présentation propre aux comptes de 2006 : le solde du budget général sans la régularisation des pensions du mois de décembre 2005.
 LOLF.SOLDE_COMPTES_SPECIAUX,"Solde des comptes spéciaux, hors opérations avec le FMI",LOLF,solde des comptes spéciaux,solde,"Comptes tenus en dehors du budget général pour des opérations particulières : comptes d'affectation spéciale (participations financières de l'État, pensions des fonctionnaires…), comptes de concours financiers (prêts à des États étrangers…), comptes de commerce et comptes d'opérations monétaires."
+LOLF.SUPPLEMENTS_INDEXATION,Amortissement de la dette à moyen et long termes : suppléments d'indexation versés à l'échéance (titres indexés),LOLF,tableau de financement,depense,Partie de l'amortissement de la dette à moyen et long termes.
+LOLF.VARIATION_AUTRES_BESOINS_TRESORERIE,Variation d'autres besoins de trésorerie,LOLF,tableau de financement,depense,"Besoin de financement, ligne des textes de 2007 à 2012."
+LOLF.VARIATION_AVANCES_TRESORERIE,Variation d'avances de trésorerie,LOLF,tableau de financement,recette,"Ressource de financement, ligne des textes de 2007 et 2008."
+LOLF.VARIATION_COMPTE_TRESOR,Variation du compte du Trésor,LOLF,tableau de financement,recette,"Ressource de financement, ligne des textes jusqu'aux comptes de 2013 : « et divers » en 2006, « variation du solde du compte du Trésor » de 2009 à 2013, « et assimilé » en 2013."
+LOLF.VARIATION_DEPOTS_CORRESPONDANTS,Variation des dépôts des correspondants,LOLF,tableau de financement,recette,"Ressource de financement. Les textes de 2010 à 2012 précisent : EPIC, EPA, collectivités territoriales (et assimilés) ; celui de 2014 l'intitule « variation des correspondants »."
+LOLF.VARIATION_DEPOTS_GARANTIE,Variation des dépôts de garantie,LOLF,tableau de financement,depense,"Besoin de financement, ligne des textes de 2007 à 2013."
+LOLF.VARIATION_DISPONIBILITES_TRESOR,Variation des disponibilités du Trésor à la Banque de France et des placements de trésorerie de l'État,LOLF,tableau de financement,recette,"Ressource de financement, ligne des textes depuis les comptes de 2014."
+LOLF.VARIATION_TITRES_COURT_TERME,Variation nette de l'encours des titres d'État à court terme,LOLF,tableau de financement,recette,"Ressource de financement. Les textes jusqu'aux comptes de 2013 l'intitulent « variation (nette) des bons du Trésor à taux fixe et intérêts précomptés », les titres d'État à court terme."
 PDE.GD,Dette publique au sens de Maastricht,PDE,GD,stock,"Dette brute des administrations publiques, consolidée, en valeur nominale : numéraire et dépôts, titres de créance, crédits."
+PFP.MESURES_PONCTUELLES_TEMPORAIRES,Solde des mesures ponctuelles et temporaires des administrations publiques,PFP,article liminaire,solde,Effet sur le solde des mesures ponctuelles et temporaires. Les textes depuis les comptes de 2023 l'expriment en points de PIB potentiel.
+PFP.PRINCIPALES_DEPENSES_INVESTISSEMENT,Principales dépenses d'investissement des administrations publiques,PFP,article liminaire,depense,Au sens de la loi de programmation des finances publiques pour 2023 à 2027 ; grandeur des textes depuis les comptes de 2023.
+PFP.SOLDE_CONJONCTUREL,Solde conjoncturel des administrations publiques,PFP,article liminaire,solde,Partie du solde effectif due à l'écart entre le PIB et son niveau potentiel ; elle dépend de l'estimation du PIB potentiel retenue.
+PFP.SOLDE_STRUCTUREL,Solde structurel des administrations publiques,PFP,article liminaire,solde,"Solde corrigé des variations conjoncturelles, déduction faite des mesures ponctuelles et temporaires ; il dépend de l'estimation du PIB potentiel retenue. Les textes jusqu'aux comptes de 2022 l'expriment en points de PIB, ceux depuis 2023 en points de PIB potentiel."
 SEC2010.B1GQ,Produit intérieur brut aux prix du marché,SEC2010,B1GQ,agregat,
 SEC2010.B8G,Épargne brute,SEC2010,B.8g,solde,
 SEC2010.B9,Capacité (+) ou besoin (−) de financement,SEC2010,B.9,solde,Solde des recettes et des dépenses : le déficit public au sens des règles européennes. L'Insee le note B9NF (compte non financier).

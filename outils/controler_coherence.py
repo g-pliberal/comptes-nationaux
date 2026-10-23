@@ -140,6 +140,82 @@ IDENTITES += [(f"LOLF.CS_A_CREDITS_{m}{_HORS}", [f"LOLF.CAS_{m}", f"LOLF.CCF_{m}
 IDENTITES += [("LOLF.COMPTES_COMMERCE_SOLDE", [f"LOLF.COMPTES_COMMERCE_RECETTES{_HORS}", f"-LOLF.COMPTES_COMMERCE_DEPENSES{_HORS}",
                                               f"LOLF.COMPTES_COMMERCE_RECETTES{_CLOS}", f"-LOLF.COMPTES_COMMERCE_DEPENSES{_CLOS}"])]
 
+# Articles liminaire, 2 et 3 des lois d'approbation des comptes : tableau de financement, compte de résultat et bilan
+# de l'État, soldes structurel et effectif. Leurs lignes changent d'une année à l'autre et une case vide y vaut
+# « rien » : une composante marquée « ? » peut manquer. Une identité ne s'applique pas quand la source publie une
+# composante marquée « ! », qui réunit alors certaines des autres.
+def _facultatives(prefixe, total, composantes, exclues=()):
+    return (prefixe + total, ["?" + ("-" if c.startswith("-") else "") + prefixe + c.lstrip("-") for c in composantes]
+            + ["!" + prefixe + c for c in exclues])
+
+
+_TF = [("BESOIN_FINANCEMENT", ["AMORTISSEMENT_DETTE_LT", "AMORTISSEMENT_DETTE_MT", "AMORTISSEMENT_DETTES_REPRISES",
+                               "ENGAGEMENTS_ETAT", "IMPACT_TRESORERIE_SOLDE_GESTION", "VARIATION_DEPOTS_GARANTIE",
+                               "VARIATION_AUTRES_BESOINS_TRESORERIE"], ["AMORTISSEMENT_DETTE_MLT"]),
+       ("BESOIN_FINANCEMENT", ["AMORTISSEMENT_DETTE_MLT", "AMORTISSEMENT_SNCF_RESEAU", "AMORTISSEMENT_AUTRES_DETTES",
+                               "DEFICIT_A_FINANCER", "AUTRES_BESOINS_TRESORERIE"], []),
+       ("AMORTISSEMENT_DETTE_MLT", ["AMORTISSEMENT_DETTE_LT", "AMORTISSEMENT_DETTE_MT", "AMORTISSEMENT_DETTE_NOMINAL",
+                                    "SUPPLEMENTS_INDEXATION"], []),
+       ("DEFICIT_A_FINANCER", ["DEFICIT_A_FINANCER_DEFICIT_BUDGETAIRE", "DEFICIT_A_FINANCER_DOTATION_PIA"], []),
+       ("RESSOURCES_FINANCEMENT", ["EMISSIONS_DETTE_MLT", "ANNULATION_TITRES_CDP", "RESSOURCES_CDP",
+                                   "VARIATION_TITRES_COURT_TERME", "VARIATION_DEPOTS_CORRESPONDANTS",
+                                   "VARIATION_AVANCES_TRESORERIE", "VARIATION_COMPTE_TRESOR",
+                                   "VARIATION_DISPONIBILITES_TRESOR", "AUTRES_RESSOURCES_TRESORERIE"], [])]
+IDENTITES += [_facultatives("LOLF.", t, c, e) for t, c, e in _TF]
+IDENTITES += [("LOLF.RESSOURCES_FINANCEMENT", ["LOLF.BESOIN_FINANCEMENT"])]
+_RESULTAT = [
+    ("CHARGES_FONCTIONNEMENT_DIRECT", ["CHARGES_PERSONNEL", "ACHATS_PRESTATIONS_EXTERNES", "DOTATIONS_FONCTIONNEMENT",
+                                       "AUTRES_CHARGES_FONCTIONNEMENT"]),
+    ("CHARGES_FONCTIONNEMENT_INDIRECT", ["SUBVENTIONS_CHARGES_SERVICE_PUBLIC", "DOTATIONS_FONCTIONNEMENT_INDIRECT",
+                                         "AUTRES_CHARGES_FONCTIONNEMENT_INDIRECT"]),
+    ("CHARGES_FONCTIONNEMENT", ["CHARGES_FONCTIONNEMENT_DIRECT", "CHARGES_FONCTIONNEMENT_INDIRECT"]),
+    ("PRODUITS_FONCTIONNEMENT", ["VENTES_PRESTATIONS", "PRODUCTION_STOCKEE_IMMOBILISEE", "REPRISES_FONCTIONNEMENT",
+                                 "AUTRES_PRODUITS_FONCTIONNEMENT"]),
+    ("CHARGES_FONCTIONNEMENT_NETTES", ["CHARGES_FONCTIONNEMENT", "-PRODUITS_FONCTIONNEMENT"]),
+    ("CHARGES_INTERVENTION", ["TRANSFERTS_MENAGES", "TRANSFERTS_ENTREPRISES", "TRANSFERTS_COLLECTIVITES_TERRITORIALES",
+                              "TRANSFERTS_AUTRES_COLLECTIVITES", "CHARGES_GARANTIES", "DOTATIONS_INTERVENTION"]),
+    ("PRODUITS_INTERVENTION", ["CONTRIBUTIONS_TIERS", "REPRISES_INTERVENTION"]),
+    ("CHARGES_INTERVENTION_NETTES", ["CHARGES_INTERVENTION", "-PRODUITS_INTERVENTION"]),
+    ("CHARGES_FINANCIERES", ["INTERETS", "PERTES_CHANGE", "DOTATIONS_FINANCIERES", "AUTRES_CHARGES_FINANCIERES"]),
+    ("PRODUITS_FINANCIERS", ["PRODUITS_CREANCES_ACTIF_IMMOBILISE", "PRODUITS_IMMOBILISATIONS_FINANCIERES", "GAINS_CHANGE",
+                             "REPRISES_FINANCIERES", "AUTRES_INTERETS_PRODUITS"]),
+    ("CHARGES_FINANCIERES_NETTES", ["CHARGES_FINANCIERES", "-PRODUITS_FINANCIERS"]),
+    ("CHARGES_NETTES", ["CHARGES_FONCTIONNEMENT_NETTES", "CHARGES_INTERVENTION_NETTES", "CHARGES_FINANCIERES_NETTES"]),
+    ("PRODUITS_FISCAUX_NETS", ["IMPOT_REVENU", "IMPOT_SOCIETES", "TAXE_SALAIRES", "TICPE", "TVA", "ENREGISTREMENT_TIMBRE",
+                               "AUTRES_PRODUITS_FISCAUX"]),
+    ("AUTRES_PRODUITS_REGALIENS_NETS", ["AMENDES"]),
+    ("RESSOURCES_PROPRES_UE", ["RESSOURCE_PROPRE_UE_RNB", "RESSOURCE_PROPRE_UE_TVA"]),
+    # Les ressources propres de l'Union européenne sont présentées en montant négatif.
+    ("PRODUITS_REGALIENS_NETS", ["PRODUITS_FISCAUX_NETS", "AUTRES_PRODUITS_REGALIENS_NETS", "RESSOURCES_PROPRES_UE"]),
+    ("SOLDE_OPERATIONS_EXERCICE", ["PRODUITS_REGALIENS_NETS", "-CHARGES_NETTES"]),
+]
+IDENTITES += [_facultatives("COMPTES_ETAT.", t, c) for t, c in _RESULTAT]
+_ACTIF = [("ACTIF_IMMOBILISE", ["IMMOBILISATIONS_INCORPORELLES", "IMMOBILISATIONS_CORPORELLES", "IMMOBILISATIONS_FINANCIERES"]),
+          ("CREANCES", ["CREANCES_REDEVABLES", "CREANCES_CLIENTS", "AUTRES_CREANCES"]),
+          ("ACTIF_CIRCULANT", ["STOCKS", "CREANCES", "CHARGES_CONSTATEES_AVANCE"]),
+          ("TRESORERIE_ACTIF", ["DISPONIBILITES", "FONDS_BANCAIRES_CAISSE", "VALEURS_ESCOMPTEES",
+                                "AUTRES_COMPOSANTES_TRESORERIE", "EQUIVALENTS_TRESORERIE", "VALEURS_MOBILIERES_PLACEMENT"]),
+          ("ACTIF", ["ACTIF_IMMOBILISE", "ACTIF_CIRCULANT", "TRESORERIE_ACTIF", "COMPTES_REGULARISATION_ACTIF"])]
+_LIGNES_ACTIF = sorted({t for t, _ in _ACTIF} | {c for _, cs in _ACTIF for c in cs})
+IDENTITES += [_facultatives("COMPTES_ETAT.", t + s, [c + s for c in cs]) for t, cs in _ACTIF
+              for s in ("", "_BRUT", "_AMORTISSEMENTS")]
+IDENTITES += [(f"COMPTES_ETAT.{x}", [f"COMPTES_ETAT.{x}_BRUT", f"?-COMPTES_ETAT.{x}_AMORTISSEMENTS"]) for x in _LIGNES_ACTIF]
+_PASSIF = [("DETTES_FINANCIERES", ["TITRES_NEGOCIABLES", "TITRES_NON_NEGOCIABLES", "AUTRES_EMPRUNTS",
+                                   "DETTES_FINANCIERES_AUTRES_EMPRUNTS"]),
+           ("DETTES_NON_FINANCIERES", ["DETTES_FONCTIONNEMENT", "DETTES_INTERVENTION", "PRODUITS_CONSTATES_AVANCE",
+                                       "AUTRES_DETTES_NON_FINANCIERES"]),
+           ("PROVISIONS_RISQUES_CHARGES", ["PROVISIONS_RISQUES", "PROVISIONS_CHARGES"]),
+           ("TRESORERIE_PASSIF", ["CORRESPONDANTS_TRESOR", "AUTRES_TRESORERIE_PASSIF"]),
+           ("PASSIF", ["DETTES_FINANCIERES", "DETTES_NON_FINANCIERES", "PROVISIONS_RISQUES_CHARGES", "AUTRES_PASSIFS",
+                       "TRESORERIE_PASSIF", "COMPTES_REGULARISATION_PASSIF"]),
+           ("SITUATION_NETTE", ["REPORT_EXERCICES_ANTERIEURS", "SOLDE_EXERCICES_ANTERIEURS_ATTENTE",
+                                "ECARTS_REEVALUATION_INTEGRATION", "SOLDE_EXERCICE_BILAN"])]
+IDENTITES += [_facultatives("COMPTES_ETAT.", t, cs) for t, cs in _PASSIF]
+IDENTITES += [("COMPTES_ETAT.SITUATION_NETTE", ["COMPTES_ETAT.ACTIF", "-COMPTES_ETAT.PASSIF"])]
+# Article liminaire, en points de PIB : le solde effectif (au sens de Maastricht) est la somme des soldes structurel et
+# conjoncturel et des mesures ponctuelles et temporaires.
+IDENTITES += [("SEC2010.B9", ["PFP.SOLDE_STRUCTUREL", "PFP.SOLDE_CONJONCTUREL", "PFP.MESURES_PONCTUELLES_TEMPORAIRES"])]
+
 IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique (1) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_DROITS_CONSTATES", "rubrique (2) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_NON_BUDGETAIRES", "rubrique (3) du tableau 3.107"),
@@ -212,6 +288,9 @@ PASSERELLES = [
     ("Solde des comptes spéciaux à fin décembre (situation mensuelle) contre tableau 3.107",
      [(_SMB, "ETAT_LF", "LOLF.SOLDE_COMPTES_SPECIAUX", 1, *_DECEMBRE)],
      [("insee.t3107", "ETAT_LF", "LOLF.SOLDE_COMPTES_SPECIAUX", 1)]),
+    ("Déficit à financer du tableau de financement contre résultat budgétaire de l'État, de signe opposé, dans le projet "
+     "de loi d'approbation des comptes",
+     [(_LOI, "ETAT_LF", "LOLF.DEFICIT_A_FINANCER", 1)], [(_LOI, "ETAT_LF", "LOLF.RESULTAT_BUDGETAIRE", -1)]),
     ("Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) "
      "et (3), dans le tableau 3.107",
      [("insee.t3107", "S13111", "SEC2010.B9", 1)],
@@ -220,10 +299,12 @@ PASSERELLES = [
                                                                            "NON_BUDGETAIRES")]),
 ]
 
+# Ratios qui s'additionnent chez une même source pour une même année : leur dénominateur est le même.
+RATIOS_ADDITIFS = {"PC_PIB", "PC_PIB_POTENTIEL"}
 # Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes.
 FAMILLES = {"EUR": ("euros", 1), "MIO_EUR": ("euros", 1e6), "MD_EUR": ("euros", 1e9),
             "MIO_ECU_EUR": ("écus puis euros", 1e6)}
-NOMS_RATIOS = {"PC_PIB": "% du PIB", "PC_DEPENSE": "% de la dépense totale"}
+NOMS_RATIOS = {"PC_PIB": "% du PIB", "PC_DEPENSE": "% de la dépense totale"}  # ratios que l'on recalcule
 REGLES = {"indique": "le PIB indiqué par la source, dans le même tableau",
           "depense": "la dépense totale du même périmètre, chez la même source",
           "libre": "non indiqué par la source : chaque série de PIB enregistrée pour l'année est essayée"}
@@ -275,27 +356,38 @@ def comparer(total, parties):
 
 
 def sommes(derniers):
-    """Identités comptables, pour chaque source, périmètre, fonction et année. Une identité ne s'applique qu'à
-    une source qui publie, pour ce périmètre, le total et chacune des composantes ; quand certaines manquent
-    pour une fonction ou une année, la somme est dite partielle. Une identité dont une autre, du même total,
-    prolonge les composantes s'efface devant elle quand la source publie aussi les composantes ajoutées."""
+    """Identités comptables, pour chaque source, périmètre, fonction et année, en montant ou dans un ratio qui
+    s'additionne (RATIOS_ADDITIFS). Une identité ne s'applique qu'à une source qui publie, pour ce périmètre et dans
+    cette famille d'unités, le total et chacune des composantes obligatoires ; quand certaines manquent pour une
+    fonction ou une année, la somme est dite partielle. Une identité dont une autre, du même total, prolonge les
+    composantes s'efface devant elle quand la source publie aussi les composantes obligatoires de celle-ci."""
     groupes, publies = collections.defaultdict(dict), collections.defaultdict(set)
     for k, l in derniers.items():
-        if valeur(l)[2] == "euros":
+        if valeur(l)[2] == "euros" or k[6] in RATIOS_ADDITIFS:
             groupes[k[:3] + k[4:]][k[3]] = l
-            publies[(k[0], k[2])].add(k[3])
+            publies[(k[0], k[2], valeur(l)[2])].add(k[3])
+
+    def termes(composantes):  # (obligatoires, facultatives, exclues), sans leurs marques
+        return ([c for c in composantes if c[0] not in "?!"], [c[1:] for c in composantes if c[0] == "?"],
+                {c[1:] for c in composantes if c[0] == "!"})
+
     resultats = []
     for (source, zone, perimetre, fonction, traitements, unite, periode), concepts in sorted(groupes.items()):
+        publies_ = publies[(source, perimetre, FAMILLES.get(unite, (unite,))[0])]
         for total, composantes in IDENTITES:
-            noms = {c.lstrip("-") for c in composantes}
-            parties = [(-1 if c.startswith("-") else 1, concepts[c.lstrip("-")]) for c in composantes if c.lstrip("-") in concepts]
-            if total not in concepts or not parties or not noms <= publies[(source, perimetre)]:
+            obligatoires, facultatives, exclues = termes(composantes)
+            noms = {c.lstrip("-") for c in obligatoires + facultatives}
+            parties = [(-1 if c.startswith("-") else 1, concepts[c.lstrip("-")]) for c in obligatoires + facultatives
+                       if c.lstrip("-") in concepts]
+            if total not in concepts or not parties or not {c.lstrip("-") for c in obligatoires} <= publies_ or \
+                    exclues & set(concepts):
                 continue
-            if any(t == total and noms < {c.lstrip("-") for c in autres} <= publies[(source, perimetre)]
-                   for t, autres in IDENTITES):
+            if any(t == total and noms < {c.lstrip("-") for o, f, _ in [termes(autres)] for c in o + f} and
+                   {c.lstrip("-") for c in termes(autres)[0]} <= publies_ for t, autres in IDENTITES):
                 continue
             resultats.append({"source": source, "perimetre": perimetre, "fonction": fonction, "periode": periode,
-                              "total": total, "complet": len(parties) == len(composantes),
+                              "total": total, "unite": valeur(concepts[total])[2],
+                              "complet": all(c.lstrip("-") in concepts for c in obligatoires),
                               **comparer(concepts[total], parties)})
     return resultats
 
@@ -458,7 +550,7 @@ def fr(x, decimales, signe=False):
 def ecart_lisible(ecart, unite):
     if unite == "euros":
         return f"{fr(ecart / 1e6, 1, True)} M€"
-    nom = {"PC_PIB": "de PIB", "PC_DEPENSE": "de dépense"}.get(unite, unite)
+    nom = {"PC_PIB": "de PIB", "PC_PIB_POTENTIEL": "de PIB potentiel", "PC_DEPENSE": "de dépense"}.get(unite, unite)
     return f"{fr(ecart, 1, True)} point{'s' if abs(ecart) >= 2 else ''} {nom}"
 
 
@@ -519,15 +611,23 @@ def partie_sommes(derniers):
     complets = [r for r in resultats if r["complet"]]
     ecarts = [r for r in complets if not r["juste"]]
     lignes = ["## 1. Sommes comptables", "",
-              "Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.", "",
+              "Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en "
+              "montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois "
+              "d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : "
+              "une composante qu'ils ne présentent pas une année y compte pour zéro.", "",
               f"{len(complets)} sommes vérifiées avec toutes leurs composantes : {len(complets) - len(ecarts)} justes, "
               f"{len(ecarts)} en écart.", ""]
+
+    def montant_lisible(x, unite):
+        noms = {**NOMS_RATIOS, "PC_PIB_POTENTIEL": "% du PIB potentiel"}
+        return f"{fr(x / 1e9, 4)} Md€" if unite == "euros" else f"{fr(x, 1)} {noms.get(unite, unite)}"
+
     if ecarts:
-        lignes += ["| Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |",
+        lignes += ["| Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |",
                    "|---|---|---|---|---|---|---|---|"]
         lignes += [f"| {r['source']} | {r['perimetre']} | {r['fonction'] or 'ensemble'} | {r['periode']} | {r['total']} | "
-                   f"{fr(r['valeur'] / 1e9, 4)} | {fr(r['somme'] / 1e9, 4)} | {ecart_lisible(r['valeur'] - r['somme'], 'euros')} |"
-                   for r in ecarts]
+                   f"{montant_lisible(r['valeur'], r['unite'])} | {montant_lisible(r['somme'], r['unite'])} | "
+                   f"{ecart_lisible(r['valeur'] - r['somme'], r['unite'])} |" for r in ecarts]
         lignes.append("")
     return lignes + partielles(resultats, "sommes")
 
