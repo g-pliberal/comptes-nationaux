@@ -219,17 +219,22 @@ def _graisse(balise, attributs):
 class _Tableaux(HTMLParser):
     """Les tableaux d'une page, numérotés dans l'ordre où ils s'ouvrent ; un tableau imbriqué a son propre numéro.
     Chaque cellule garde ses paragraphes, sa hauteur (rowspan), sa largeur (colspan), et si tout son texte est en
-    gras."""
+    gras. Chaque tableau garde aussi sa légende : le paragraphe, hors tableau, qui le précède immédiatement."""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.tableaux, self.ouverts, self.cellule, self.balises = [], [], None, []
+        self.legendes, self.libre, self.dernier_libre = [], [], ""
 
     def handle_starttag(self, tag, attrs):
         a = {k.lower(): v for k, v in attrs}
+        if tag == "p" and self.cellule is None:
+            self.libre = []
         if tag == "table":
             self.ouverts.append([])
             self.tableaux.append(self.ouverts[-1])
+            self.legendes.append(self.dernier_libre)
+            self.dernier_libre = ""
         elif tag == "tr" and self.ouverts:
             self.ouverts[-1].append([])
         elif tag in ("td", "th") and self.ouverts:
@@ -254,13 +259,17 @@ class _Tableaux(HTMLParser):
             self.cellule = None
         elif tag == "table" and self.ouverts:
             self.ouverts.pop()
+        elif tag == "p" and self.cellule is None:
+            self.dernier_libre = " ".join("".join(self.libre).split()) or self.dernier_libre
         elif self.cellule is not None and tag not in _SANS_FIN:
             ouverte = next((k for k in range(len(self.balises) - 1, 0, -1) if self.balises[k][0] == tag), None)
             if ouverte is not None:
                 del self.balises[ouverte:]
 
     def handle_data(self, data):
-        if self.cellule is not None:
+        if self.cellule is None:
+            self.libre.append(data)
+        else:
             self.cellule["paragraphes"][-1].append(data)
             if data.strip():
                 self.cellule["gras"].append(self.balises[-1][1])
@@ -272,7 +281,8 @@ def _grille(lignes):
     et la cellule est notée parmi les fusions : {(ligne, colonne) de départ : nombre de lignes}. Le texte d'une cellule
     fusionnée sur plusieurs colonnes va à la première. Renvoie la grille et sa mise en forme : ces fusions, les
     largeurs des cellules qui couvrent plusieurs colonnes ({(ligne, colonne) : nombre de colonnes}, pour chaque case
-    qui reçoit leur texte), et l'ensemble des cases dont le texte est en gras."""
+    qui reçoit leur texte), et l'ensemble des cases dont le texte est en gras ; lire_tableaux_html y ajoute la légende
+    du tableau."""
     grille, occupees, fusions, largeurs, gras = {}, set(), {}, {}, set()
     for r, ligne in enumerate(lignes):
         c = 0
@@ -309,7 +319,7 @@ def lire_tableaux_html(chemin, mise_en_forme=False):
     lecteur.feed(pathlib.Path(chemin).read_text(encoding="utf-8"))
     lus = [_grille(t) for t in lecteur.tableaux]
     grilles = [g for g, _ in lus]
-    return (grilles, [f for _, f in lus]) if mise_en_forme else grilles
+    return (grilles, [{**f, "legende": l} for (_, f), l in zip(lus, lecteur.legendes)]) if mise_en_forme else grilles
 
 
 def texte_html(contenu):

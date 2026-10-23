@@ -92,11 +92,19 @@ IDENTITES += [
     ("LOLF.CCF_SOLDE", ["LOLF.CCF_RECETTES", "-LOLF.CCF_DEPENSES"]),
     ("LOLF.COMPTES_COMMERCE_SOLDE", ["-LOLF.COMPTES_COMMERCE_SOLDE_EN_DEPENSES"]),
     ("LOLF.OPERATIONS_MONETAIRES_SOLDE", ["-LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_DEPENSES"]),
+    ("LOLF.COMPTES_COMMERCE_SOLDE", ["LOLF.COMPTES_COMMERCE_SOLDE_EN_RECETTES"]),  # présentation des comptes de 2006
+    ("LOLF.OPERATIONS_MONETAIRES_SOLDE", ["LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_RECETTES"]),
     ("LOLF.CS_DEPENSES", ["LOLF.CAS_DEPENSES", "LOLF.CCF_DEPENSES", "LOLF.COMPTES_COMMERCE_SOLDE_EN_DEPENSES",
                           "LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_DEPENSES"]),
     ("LOLF.CS_RECETTES", ["LOLF.CAS_RECETTES", "LOLF.CCF_RECETTES"]),
+    ("LOLF.CS_RECETTES", ["LOLF.CAS_RECETTES", "LOLF.CCF_RECETTES", "LOLF.COMPTES_COMMERCE_SOLDE_EN_RECETTES",
+                          "LOLF.OPERATIONS_MONETAIRES_SOLDE_EN_RECETTES"]),
     ("LOLF.SOLDE_COMPTES_SPECIAUX", ["LOLF.CS_RECETTES", "-LOLF.CS_DEPENSES"]),
     ("LOLF.RESULTAT_BUDGETAIRE", ["LOLF.SOLDE_BUDGET_GENERAL", "LOLF.SOLDE_BUDGETS_ANNEXES", "LOLF.SOLDE_COMPTES_SPECIAUX"]),
+    ("LOLF.SOLDE_BUDGET_GENERAL_HORS_REGULARISATION_PENSIONS",
+     ["LOLF.BG_RECETTES_NETTES", "-LOLF.BG_DEPENSES_NETTES_HORS_REGULARISATION_PENSIONS"]),
+    ("LOLF.RESULTAT_EXECUTION_HORS_REGULARISATION_PENSIONS",
+     ["LOLF.SOLDE_BUDGET_GENERAL_HORS_REGULARISATION_PENSIONS", "LOLF.SOLDE_COMPTES_SPECIAUX"]),
     ("LOLF.RESULTAT_EXECUTION", ["LOLF.BG_RECETTES_AVANT_PSR", "-LOLF.BG_DEPENSES_Y_COMPRIS_PSR",
                                  "LOLF.SOLDE_COMPTES_SPECIAUX"]),
 ]
@@ -237,7 +245,8 @@ def comparer(total, parties):
 def sommes(derniers):
     """Identités comptables, pour chaque source, périmètre, fonction et année. Une identité ne s'applique qu'à
     une source qui publie, pour ce périmètre, le total et chacune des composantes ; quand certaines manquent
-    pour une fonction ou une année, la somme est dite partielle."""
+    pour une fonction ou une année, la somme est dite partielle. Une identité dont une autre, du même total,
+    prolonge les composantes s'efface devant elle quand la source publie aussi les composantes ajoutées."""
     groupes, publies = collections.defaultdict(dict), collections.defaultdict(set)
     for k, l in derniers.items():
         if valeur(l)[2] == "euros":
@@ -249,6 +258,9 @@ def sommes(derniers):
             noms = {c.lstrip("-") for c in composantes}
             parties = [(-1 if c.startswith("-") else 1, concepts[c.lstrip("-")]) for c in composantes if c.lstrip("-") in concepts]
             if total not in concepts or not parties or not noms <= publies[(source, perimetre)]:
+                continue
+            if any(t == total and noms < {c.lstrip("-") for c in autres} <= publies[(source, perimetre)]
+                   for t, autres in IDENTITES):
                 continue
             resultats.append({"source": source, "perimetre": perimetre, "fonction": fonction, "periode": periode,
                               "total": total, "complet": len(parties) == len(composantes),

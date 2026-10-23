@@ -41,6 +41,19 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
+| senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1051 |
+| senat.pjl07-429 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2007, texte n° 429 (2007-2008) transmis au Sénat le 1er juillet 2008 | 2008-07-01 | 769 |
+| senat.pjl08-502 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2008, texte n° 502 (2008-2009) transmis au Sénat le 30 juin 2009 | 2009-06-30 | 675 |
+| senat.pjl09-585 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2009, texte n° 585 (2009-2010) transmis au Sénat le 29 juin 2010 | 2010-06-29 | 664 |
+| senat.pjl10-672 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2010, texte n° 672 (2010-2011) transmis au Sénat le 28 juin 2011 | 2011-06-28 | 685 |
+| senat.pjl11-655 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2011, texte n° 655 (2011-2012) transmis au Sénat le 10 juillet 2012 | 2012-07-10 | 632 |
+| senat.pjl12-799 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2012, texte n° 799 (2012-2013) transmis au Sénat le 23 juillet 2013 en nouvelle lecture | 2013-07-23 | 652 |
+| senat.pjl13-759 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2013, texte n° 759 (2013-2014) transmis au Sénat le 21 juillet 2014 en nouvelle lecture | 2014-07-21 | 627 |
+| senat.pjl14-642 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2014, texte n° 642 (2014-2015) transmis au Sénat le 16 juillet 2015 en nouvelle lecture | 2015-07-16 | 668 |
+| senat.pjl15-785 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2015, texte n° 785 (2015-2016) transmis au Sénat le 12 juillet 2016 en nouvelle lecture | 2016-07-12 | 602 |
+| senat.pjl16-643 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2016, texte n° 643 (2016-2017) transmis au Sénat le 18 juillet 2017 | 2017-07-18 | 604 |
+| senat.pjl17-595 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2017, texte n° 595 (2017-2018) transmis au Sénat le 21 juin 2018 | 2018-06-21 | 593 |
+| senat.pjl18-686 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2018, texte n° 686 (2018-2019) transmis au Sénat le 18 juillet 2019 en nouvelle lecture | 2019-07-18 | 606 |
 | senat.pjl19-505 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2019, texte n° 505 (2019-2020) transmis au Sénat le 11 juin 2020 | 2020-06-11 | 614 |
 | senat.pjl20-784 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2020, texte n° 784 (2020-2021) transmis au Sénat le 21 juillet 2021 en nouvelle lecture | 2021-07-21 | 626 |
 | senat.pjl22-683 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2021, texte n° 683 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 667 |
@@ -53,7 +66,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.
 
-6651 sommes vérifiées avec toutes leurs composantes : 6640 justes, 11 en écart.
+6858 sommes vérifiées avec toutes leurs composantes : 6847 justes, 11 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
 |---|---|---|---|---|---|---|---|
@@ -80,7 +93,7 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG ou des missions du budget de l'État, chaque division contre la somme de ses groupes, chaque mission contre celle de ses programmes.
 
-15938 ventilations vérifiées avec toutes leurs parties : 15938 justes, 0 en écart.
+17821 ventilations vérifiées avec toutes leurs parties : 17821 justes, 0 en écart.
 
 834 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
 
@@ -111,10 +124,10 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Même passerelle, avec les impôts de l'Union européenne du tableau 3.217 | 31 années entre 1995 et 2025 | 23 années entre 1995 et 2018 | 23 années entre 1995 et 2018 | +734,9 M€ en 1995 |
 | Crédits d'impôt retranchés des prélèvements obligatoires (3.217) contre crédits d'impôt enregistrés en recettes (3.201), de signe opposé | 31 années entre 1995 et 2025 | 2017, 2018 et 2021 | 2017, 2018 et 2021 | −85,0 M€ en 2017 |
 | Prélèvements obligatoires des administrations publiques : impôts nationaux du tableau 3.217 contre somme des sous-secteurs du tableau 3.216 | 31 années entre 1995 et 2025 | 24 années entre 1995 et 2018 | 24 années entre 1995 et 2018 | +734,9 M€ en 1995 |
-| Solde général d'exécution à fin décembre (situation mensuelle) contre soldes du budget général et des comptes spéciaux du projet de loi d'approbation des comptes | 7 années entre 2019 et 2025 | 2019 | 2019 | +13,2 M€ en 2019 |
-| Solde des comptes spéciaux à fin décembre (situation mensuelle) contre projet de loi d'approbation des comptes | 7 années entre 2019 et 2025 | 2019 | 2019 | +13,4 M€ en 2019 |
-| Dépenses du budget général à fin décembre (situation mensuelle) contre dépenses nettes plus prélèvements sur recettes du projet de loi d'approbation des comptes | 7 années entre 2019 et 2025 | aucune | aucune | aucun |
-| Recettes du budget général à fin décembre (situation mensuelle) contre recettes nettes plus prélèvements sur recettes du projet de loi d'approbation des comptes | 7 années entre 2019 et 2025 | aucune | aucune | aucun |
+| Solde général d'exécution à fin décembre (situation mensuelle) contre soldes du budget général et des comptes spéciaux du projet de loi d'approbation des comptes | 17 années entre 2009 et 2025 | 2016, 2017, 2018 et 2019 | 2016, 2017, 2018 et 2019 | +76,9 M€ en 2016 |
+| Solde des comptes spéciaux à fin décembre (situation mensuelle) contre projet de loi d'approbation des comptes | 17 années entre 2009 et 2025 | 2016, 2017, 2018 et 2019 | 2016, 2017, 2018 et 2019 | +33,9 M€ en 2017 |
+| Dépenses du budget général à fin décembre (situation mensuelle) contre dépenses nettes plus prélèvements sur recettes du projet de loi d'approbation des comptes | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
+| Recettes du budget général à fin décembre (situation mensuelle) contre recettes nettes plus prélèvements sur recettes du projet de loi d'approbation des comptes | 17 années entre 2009 et 2025 | 2010, 2016, 2017 et 2018 | 2010, 2016, 2017 et 2018 | +52,1 M€ en 2016 |
 | Solde général d'exécution à fin décembre (situation mensuelle) contre résultat d'exécution des lois de finances du tableau 3.107 | 17 années entre 2009 et 2025 | 2014, 2016 et 2019 | 2014, 2016 et 2019 | +121,0 M€ en 2016 |
 | Solde du budget général à fin décembre (situation mensuelle : recettes moins dépenses) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2016 | 2016 | +101,0 M€ en 2016 |
 | Solde des comptes spéciaux à fin décembre (situation mensuelle) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2017 | 2017 | +64,0 M€ en 2017 |
@@ -190,6 +203,16 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3106 | insee.t3205 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3212 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3107 | insee.t3203 | 17 | 1 | 1 | +59,2 M€ en 2016 | +59,2 M€ en 2016 |
+| insee.t3107 | senat.pjl09-585 | 3 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl10-672 | 3 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl11-655 | 3 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl12-799 | 3 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl13-759 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl14-642 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl15-785 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl16-643 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl17-595 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl18-686 | 2 | 0 | 0 | aucun | aucun |
 | insee.t3107 | senat.pjl19-505 | 2 | 0 | 0 | aucun | aucun |
 | insee.t3107 | senat.pjl20-784 | 2 | 0 | 0 | aucun | aucun |
 | insee.t3107 | senat.pjl22-683 | 2 | 0 | 0 | aucun | aucun |
