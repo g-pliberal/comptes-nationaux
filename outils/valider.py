@@ -2,7 +2,8 @@
 """Contrôle la base avant tout usage.
 
 Vérifie que chaque table respecte son schéma, que chaque référence existe, que chaque
-identifiant de chiffre correspond à sa fiche et que chaque copie archivée est intacte.
+identifiant de chiffre correspond à sa fiche et que chaque copie archivée est intacte ; relit
+chaque copie des comptes de chaque collectivité, qui doit donner son inscription.
 
     python3 outils/valider.py
 """
@@ -12,7 +13,8 @@ import math
 import re
 import sys
 
-from commun import (BASE, empreinte, identifiant, lire, lire_jsonstat, lire_sdmx, lire_tableaux_html, lire_xlsx,
+import importer_ofgl_collectivites as ofgl
+from commun import (BASE, empreinte_et_taille, identifiant, lire, lire_jsonstat, lire_sdmx, lire_tableaux_html, lire_xlsx,
                     nombre_de_phrase, nombre_texte, paquet, ressources_chiffres, texte_html)
 
 
@@ -199,8 +201,32 @@ def controler_archives(tables, erreurs):
         chemin = BASE / f["chemin"]
         if not chemin.exists():
             erreurs.append(f"tables/fichiers.csv, ligne {n} : copie absente ({f['chemin']})")
-        elif empreinte(chemin) != f["sha256"] or str(chemin.stat().st_size) != f["octets"]:
+        elif empreinte_et_taille(chemin) != (f["sha256"], int(f["octets"])):
             erreurs.append(f"tables/fichiers.csv, ligne {n} : la copie {f['chemin']} a été modifiée")
+
+
+def controler_collectivites(tables, erreurs):
+    """Relit chaque copie inscrite dans fichiers_collectivites.csv : son contenu doit donner son inscription. Renvoie
+    le nombre de lignes de montants relues."""
+    fichiers = {f["id"]: f for f in tables["fichiers"]}
+    agregats = {a["agregat"]: a for a in tables["agregats_ofgl"]}
+    inscrits = tables["fichiers_collectivites"]
+    ordre = {"inventaire": 0, "montants": 1, "collectivites": 2}
+    relues = 0
+    for n, inscrit in sorted(enumerate(inscrits, start=2), key=lambda e: (ordre.get(e[1]["contenu"], 3), e[0])):
+        lieu = f"tables/fichiers_collectivites.csv, ligne {n}"
+        if inscrit["fichier_id"] not in fichiers:
+            continue  # référence déjà signalée
+        try:
+            attendue = ofgl.inscription(fichiers[inscrit["fichier_id"]], [i for i in inscrits if i is not inscrit],
+                                        fichiers, agregats)
+        except SystemExit as e:
+            erreurs.append(f"{lieu} : {e}")
+            continue
+        if attendue != inscrit:
+            erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
+        relues += int(inscrit["lignes"]) if inscrit["contenu"] == "montants" else 0
+    return relues
 
 
 def main():
@@ -212,13 +238,15 @@ def main():
     nombre = controler_chiffres(tables, erreurs)
     controler_archives(tables, erreurs)
     relus, sans_lecteur = controler_valeurs(tables, erreurs)
+    montants = controler_collectivites(tables, erreurs)
     for e in erreurs:
         print(e)
     if erreurs:
         sys.exit(f"{len(erreurs)} erreur(s) : base non conforme.")
     print(f"Base conforme : {nombre} chiffres, {len(tables['fichiers'])} copies archivées intactes, "
           f"{relus} chiffres publiés relus dans leur copie archivée"
-          + (f", {sans_lecteur} sans lecteur automatique." if sans_lecteur else "."))
+          + (f", {sans_lecteur} sans lecteur automatique" if sans_lecteur else "")
+          + (f" ; {montants} lignes de comptes de collectivités relues dans les leurs." if montants else "."))
 
 
 if __name__ == "__main__":

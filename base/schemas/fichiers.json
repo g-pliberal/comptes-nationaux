@@ -6,9 +6,9 @@
     {"name": "url", "type": "string", "description": "Requête exacte qui a produit le fichier.", "constraints": {"required": true}},
     {"name": "telecharge_le", "type": "datetime", "constraints": {"required": true}},
     {"name": "mis_a_jour_source", "type": "string", "description": "Date de mise à jour annoncée par la source, telle qu'elle l'écrit."},
-    {"name": "sha256", "type": "string", "constraints": {"required": true, "pattern": "[0-9a-f]{64}"}},
-    {"name": "octets", "type": "integer", "constraints": {"required": true}},
-    {"name": "chemin", "type": "string", "description": "Emplacement de la copie, relatif au dossier base/.", "constraints": {"required": true}}
+    {"name": "sha256", "type": "string", "description": "Empreinte du contenu reçu, celui d'une copie compressée une fois décompressée.", "constraints": {"required": true, "pattern": "[0-9a-f]{64}"}},
+    {"name": "octets", "type": "integer", "description": "Taille du contenu reçu, celle d'une copie compressée une fois décompressée.", "constraints": {"required": true}},
+    {"name": "chemin", "type": "string", "description": "Emplacement de la copie, relatif au dossier base/ ; « .bz2 » à la fin si elle est compressée.", "constraints": {"required": true}}
   ],
   "primaryKey": ["id"],
   "foreignKeys": [

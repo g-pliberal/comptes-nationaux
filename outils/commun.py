@@ -1,9 +1,11 @@
 """Fonctions partagées par les outils de la base : chemins, lecture et écriture des tables, empreintes."""
 
+import bz2
 import csv
 import datetime
 import hashlib
 import html
+import io
 import json
 import math
 import pathlib
@@ -26,8 +28,33 @@ COMPOSANTES_ID = ["source_id", "zone", "perimetre_id", "concept_id", "fonction_i
                   "unite_id", "periode", "version"]
 
 
+def ouvrir_copie(chemin):
+    """Une copie archivée, ouverte en lecture binaire telle que reçue : décompressée si elle a été archivée compressée
+    (« .bz2 »)."""
+    chemin = pathlib.Path(chemin)
+    return bz2.open(chemin, "rb") if chemin.suffix == ".bz2" else chemin.open("rb")
+
+
+def empreinte_et_taille(chemin):
+    """Empreinte SHA-256 et taille en octets du contenu reçu, décompressé pour une copie compressée."""
+    h, n = hashlib.sha256(), 0
+    with ouvrir_copie(chemin) as f:
+        while bloc := f.read(1 << 20):
+            h.update(bloc)
+            n += len(bloc)
+    return h.hexdigest(), n
+
+
 def empreinte(chemin):
-    return hashlib.sha256(pathlib.Path(chemin).read_bytes()).hexdigest()
+    return empreinte_et_taille(chemin)[0]
+
+
+def lire_export_ofgl(chemin):
+    """Les lignes d'un export csv de data.ofgl.fr (point-virgule, marque d'ordre des octets en tête) : (en-tête, lignes)."""
+    with ouvrir_copie(chemin) as f:
+        lecteur = csv.reader(io.TextIOWrapper(f, encoding="utf-8-sig", newline=""), delimiter=";")
+        entete = next(lecteur, [])
+        return entete, list(lecteur)
 
 
 def maintenant():

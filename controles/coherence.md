@@ -665,3 +665,21 @@ Détail des grandeurs en écart :
 | senat.pjl12-103 | senat.pjl13-117 | FR REGIME_GENERAL_HORS_FSV COMPTES_SECU.REPORT_A_NOUVEAU | ensemble | 2011 | 2011 | +9 800,0 M€ en 2011 |
 | senat.pjl15-128 | senat.pjl16-106 | FR SECU_LFSS COMPTES_SECU.CREANCES_ENTITES_PUBLIQUES | ensemble | 2014 | 2014 | −400,0 M€ en 2014 |
 | senat.pjl16-106 | senat.pjl17-063 | FR FSV COMPTES_SECU.ENCOURS_BANCAIRE | ensemble | 2015 | 2015 | +900,0 M€ en 2015 |
+
+## 7. Comptes de chaque collectivité
+
+Les comptes que l'OFGL publie collectivité par collectivité sur data.ofgl.fr, dans la version la plus récente de chaque exercice. Chaque ligne donne, pour une collectivité et un agrégat, le montant de son budget principal, celui de ses budgets annexes, les flux croisés entre eux et le montant consolidé : celui-ci doit être la somme des deux premiers moins le troisième, au centime près. Pour chaque collectivité, les identités comptables de la section 1 s'appliquent à chacun des quatre montants. La somme des collectivités se compare aux totaux des annexes des rapports de l'OFGL : 2A pour les budgets principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés.
+
+| Jeu de données | Exercices | Collectivités au dernier exercice | Lignes | Lignes dont le consolidé n'est pas BP + BA − flux |
+|---|---|---|---|---|
+| ofgl.base-gfp-consolidee | 2025 | 1 262 | 63 854 | 0 |
+
+Identités comptables de chaque collectivité : 105 816 vérifiées, 105 816 justes, 0 en écart.
+
+Somme des collectivités contre les totaux des annexes : 102 comparaisons, 0 justes, 102 en écart. Le dernier exercice d'un jeu est provisoire, et les annexes d'un rapport ne sont pas toujours établies sur la même version des comptes que le portail : un écart qui touche un chiffre révisable peut venir de là.
+
+| Jeu de données | Montant | Comparaisons | En écart | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (somme − annexe) | Plus grand écart (somme − annexe) |
+|---|---|---|---|---|---|---|
+| ofgl.base-gfp-consolidee | budget principal | 38 | 38 | 0 | aucun | −53,7 M€ en 2025 (COMPTES_LOCAUX.DETTE) |
+| ofgl.base-gfp-consolidee | budgets annexes | 32 | 32 | 0 | aucun | +94,8 M€ en 2025 (COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT) |
+| ofgl.base-gfp-consolidee | consolidé | 32 | 32 | 0 | aucun | +131,2 M€ en 2025 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) |

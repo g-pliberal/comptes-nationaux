@@ -1,0 +1,12 @@
+{
+  "description": "Agrégats financiers des comptes de chaque collectivité publiés par data.ofgl.fr, sous le libellé exact de ses exports, et le concept de la base que chacun mesure.",
+  "fields": [
+    {"name": "agregat", "type": "string", "description": "Libellé de l'agrégat, tel qu'il figure dans les exports du portail.", "constraints": {"required": true}},
+    {"name": "concept_id", "type": "string", "constraints": {"required": true}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["agregat"],
+  "foreignKeys": [
+    {"fields": ["concept_id"], "reference": {"resource": "concepts", "fields": ["id"]}}
+  ]
+}
