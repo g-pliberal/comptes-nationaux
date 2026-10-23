@@ -672,18 +672,18 @@ Les comptes que l'OFGL publie collectivité par collectivité sur data.ofgl.fr, 
 
 | Jeu de données | Exercices | Collectivités au dernier exercice | Lignes | Lignes dont le consolidé n'est pas BP + BA − flux |
 |---|---|---|---|---|
-| ofgl.base-communes-consolidee | 7 années entre 2019 et 2025 | 34 778 | 11 832 130 | 0 |
+| ofgl.base-communes-consolidee | 8 années entre 2018 et 2025 | 34 778 | 13 535 660 | 0 |
 | ofgl.base-gfp-consolidee | 8 années entre 2018 et 2025 | 1 262 | 508 116 | 0 |
 
-Identités comptables de chaque collectivité : 21 180 232 vérifiées, 21 180 232 justes, 0 en écart.
+Identités comptables de chaque collectivité : 24 095 288 vérifiées, 24 095 288 justes, 0 en écart.
 
-Somme des collectivités contre les totaux des annexes : 1 516 comparaisons, 1 030 justes, 486 en écart. Le dernier exercice d'un jeu est provisoire, et les annexes d'un rapport ne sont pas toujours établies sur la même version des comptes que le portail : un écart qui touche un chiffre révisable peut venir de là.
+Somme des collectivités contre les totaux des annexes : 1 616 comparaisons, 1 093 justes, 523 en écart. Le dernier exercice d'un jeu est provisoire, et les annexes d'un rapport ne sont pas toujours établies sur la même version des comptes que le portail : un écart qui touche un chiffre révisable peut venir de là.
 
 | Jeu de données | Montant | Comparaisons | En écart | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (somme − annexe) | Plus grand écart (somme − annexe) |
 |---|---|---|---|---|---|---|
-| ofgl.base-communes-consolidee | budget principal | 270 | 114 | 75 | −13,6 M€ en 2024 (COMPTES_LOCAUX.REC_TOTALES) | −82,3 M€ en 2025 (COMPTES_LOCAUX.DEP_TOTALES) |
-| ofgl.base-communes-consolidee | budgets annexes | 221 | 76 | 45 | −1,2 M€ en 2024 (COMPTES_LOCAUX.DETTE) | −17,3 M€ en 2025 (COMPTES_LOCAUX.DETTE) |
-| ofgl.base-communes-consolidee | consolidé | 221 | 133 | 101 | +121,0 M€ en 2024 (COMPTES_LOCAUX.DEPENSES_INTERVENTION) | +173,8 M€ en 2025 (COMPTES_LOCAUX.DEPENSES_INTERVENTION) |
+| ofgl.base-communes-consolidee | budget principal | 308 | 115 | 76 | −13,6 M€ en 2024 (COMPTES_LOCAUX.REC_TOTALES) | −82,3 M€ en 2025 (COMPTES_LOCAUX.DEP_TOTALES) |
+| ofgl.base-communes-consolidee | budgets annexes | 252 | 93 | 62 | −1,2 M€ en 2024 (COMPTES_LOCAUX.DETTE) | −17,3 M€ en 2025 (COMPTES_LOCAUX.DETTE) |
+| ofgl.base-communes-consolidee | consolidé | 252 | 152 | 120 | +121,0 M€ en 2024 (COMPTES_LOCAUX.DEPENSES_INTERVENTION) | +173,8 M€ en 2025 (COMPTES_LOCAUX.DEPENSES_INTERVENTION) |
 | ofgl.base-gfp-consolidee | budget principal | 300 | 38 | 0 | aucun | −53,7 M€ en 2025 (COMPTES_LOCAUX.DETTE) |
 | ofgl.base-gfp-consolidee | budgets annexes | 252 | 69 | 37 | +0,6 M€ en 2018 (COMPTES_LOCAUX.DEP_TOTALES) | +94,8 M€ en 2025 (COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT) |
 | ofgl.base-gfp-consolidee | consolidé | 252 | 56 | 24 | +84,4 M€ en 2024 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) | +131,2 M€ en 2025 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) |
@@ -714,7 +714,7 @@ Somme des collectivités contre les totaux des annexes : 1 516 comparaisons, 1 0
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.EPARGNE_BRUTE | 2019 et 2024 | −1,2 M€ en 2024 |
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.EPARGNE_NETTE | 2019 et 2024 | −0,8 M€ en 2024 |
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.FCTVA | 2019 et 2024 | −1,4 M€ en 2024 |
-| ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.FISCALITE_REVERSEE | 2019, 2022, 2023 et 2024 | −1,6 M€ en 2024 |
+| ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.FISCALITE_REVERSEE | 5 années entre 2018 et 2024 | +3,0 M€ en 2018 |
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.FLUX_NET_DETTE | 2019 et 2024 | +0,3 M€ en 2024 |
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.FRAIS_PERSONNEL | 2019 et 2024 | −4,2 M€ en 2024 |
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.IMPOTS_LOCAUX | 2019 et 2024 | −5,3 M€ en 2024 |
@@ -730,63 +730,63 @@ Somme des collectivités contre les totaux des annexes : 1 516 comparaisons, 1 0
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.TRESORERIE_NETTE | 2024 | −4,1 M€ en 2024 |
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 2019 et 2024 | −0,5 M€ en 2024 |
 | ofgl.base-communes-consolidee | budget principal | COMPTES_LOCAUX.VENTES_BIENS_SERVICES | 2019 et 2024 | −1,0 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 2024 | −0,1 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_DEP_FONCTIONNEMENT | 2024 | −2 856 € en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | 2024 | +0,1 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.CAPACITE_BESOIN_FINANCEMENT | 2019, 2023 et 2024 | −0,1 M€ en 2023 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 2018 et 2024 | −0,1 M€ en 2024 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_DEP_FONCTIONNEMENT | 2018 et 2024 | −0,2 M€ en 2018 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | 2018 et 2024 | −0,2 M€ en 2018 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.CAPACITE_BESOIN_FINANCEMENT | 2018, 2019, 2023 et 2024 | −0,1 M€ en 2023 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.CHARGES_FINANCIERES | 2019 et 2024 | −48 236 € en 2024 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DEPENSES_EQUIPEMENT | 2024 | −908 € en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 2019 et 2024 | −0,2 M€ en 2024 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 2018, 2019 et 2024 | −0,2 M€ en 2018 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_INVESTISSEMENT | 2024 | −907 € en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_TOTALES | 2019 et 2024 | −0,3 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | 2019 et 2024 | −0,2 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DETTE | 2019, 2020, 2023 et 2024 | −1,2 M€ en 2024 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_TOTALES | 2018, 2019 et 2024 | −0,4 M€ en 2018 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | 2018, 2019 et 2024 | −0,2 M€ en 2018 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DETTE | 5 années entre 2018 et 2024 | −1,2 M€ en 2024 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.DOTATIONS_SUBVENTIONS_INVESTISSEMENT | 2024 | −47 710 € en 2024 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.EMPRUNTS | 2023 | −0,1 M€ en 2023 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.EPARGNE_BRUTE | 2019, 2023 et 2024 | +0,1 M€ en 2024 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.EPARGNE_BRUTE | 2018, 2019, 2023 et 2024 | +0,1 M€ en 2024 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.FCTVA | 2024 | −6 844 € en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.FLUX_NET_DETTE | 2019, 2023 et 2024 | +0,1 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.FRAIS_PERSONNEL | 2024 | −9 996 € en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 2023 et 2024 | −0,1 M€ en 2023 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.FLUX_NET_DETTE | 2018, 2019, 2023 et 2024 | +0,1 M€ en 2024 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.FRAIS_PERSONNEL | 2018 et 2024 | −18 184 € en 2018 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 2018, 2023 et 2024 | −0,3 M€ en 2018 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REC_INVESTISSEMENT | 2024 | −0,1 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REC_TOTALES | 2023 et 2024 | −0,2 M€ en 2023 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 2023 et 2024 | −0,1 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | 2019 et 2024 | −0,1 M€ en 2024 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REC_TOTALES | 2018, 2023 et 2024 | −0,3 M€ en 2018 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 2018, 2023 et 2024 | −0,3 M€ en 2018 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | 2018, 2019 et 2024 | −0,1 M€ en 2024 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES | 2023 | −0,1 M€ en 2023 |
 | ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.TRESORERIE_NETTE | 2023 | −0,1 M€ en 2023 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 2019, 2023 et 2024 | +0,2 M€ en 2024 |
-| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.VENTES_BIENS_SERVICES | 2024 | −0,2 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 2019, 2022, 2023 et 2024 | −1,7 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.AUTRES_DEP_FONCTIONNEMENT | 6 années entre 2019 et 2024 | −110,3 M€ en 2024 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 2018, 2019, 2023 et 2024 | +0,2 M€ en 2024 |
+| ofgl.base-communes-consolidee | budgets annexes | COMPTES_LOCAUX.VENTES_BIENS_SERVICES | 2018 et 2024 | −0,2 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 5 années entre 2018 et 2024 | −1,7 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.AUTRES_DEP_FONCTIONNEMENT | 7 années entre 2018 et 2024 | −110,3 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.AUTRES_DEP_INVESTISSEMENT | 2024 | −0,1 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | 6 années entre 2019 et 2024 | −110,2 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.AUTRES_REC_INVESTISSEMENT | 2019 et 2024 | −0,1 M€ en 2019 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.CAPACITE_BESOIN_FINANCEMENT | 2019 et 2024 | −0,8 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | 7 années entre 2018 et 2024 | −110,2 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.AUTRES_REC_INVESTISSEMENT | 2018, 2019 et 2024 | +0,1 M€ en 2018 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.CAPACITE_BESOIN_FINANCEMENT | 2018, 2019 et 2024 | −0,8 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.CHARGES_FINANCIERES | 2019 et 2024 | −0,2 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.CONCOURS_ETAT | 2019 et 2024 | −0,9 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEPENSES_EQUIPEMENT | 2019 et 2024 | −5,0 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEPENSES_INTERVENTION | 2019, 2022, 2023 et 2024 | +121,0 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 6 années entre 2019 et 2024 | −73,7 M€ en 2023 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 7 années entre 2018 et 2024 | −73,7 M€ en 2023 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEP_INVESTISSEMENT | 2019 et 2024 | −5,2 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEP_TOTALES | 6 années entre 2019 et 2024 | −73,7 M€ en 2023 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | 6 années entre 2019 et 2024 | −73,7 M€ en 2023 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DETTE | 2019, 2020 et 2024 | −5,2 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEP_TOTALES | 7 années entre 2018 et 2024 | −73,7 M€ en 2023 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | 7 années entre 2018 et 2024 | −73,7 M€ en 2023 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DETTE | 2018, 2019, 2020 et 2024 | −5,2 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.DOTATIONS_SUBVENTIONS_INVESTISSEMENT | 2019 et 2024 | −3,4 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.EPARGNE_BRUTE | 2019 et 2024 | −1,1 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.EPARGNE_BRUTE | 2018, 2019 et 2024 | −1,1 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.FCTVA | 2019 et 2024 | −1,4 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.FLUX_NET_DETTE | 2019 et 2024 | +0,5 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.FRAIS_PERSONNEL | 2019 et 2024 | −4,2 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.FLUX_NET_DETTE | 2018, 2019 et 2024 | +0,5 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.FRAIS_PERSONNEL | 2018, 2019 et 2024 | −4,2 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.IMPOTS_TAXES | 2019 et 2024 | −6,0 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 6 années entre 2019 et 2024 | −73,7 M€ en 2023 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REC_INVESTISSEMENT | 2019 et 2024 | −4,9 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REC_TOTALES | 6 années entre 2019 et 2024 | −73,7 M€ en 2023 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 6 années entre 2019 et 2024 | −73,7 M€ en 2023 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | 2019 et 2024 | −0,5 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 7 années entre 2018 et 2024 | −73,7 M€ en 2023 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REC_INVESTISSEMENT | 2018, 2019 et 2024 | −4,9 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REC_TOTALES | 7 années entre 2018 et 2024 | −73,7 M€ en 2023 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 7 années entre 2018 et 2024 | −73,7 M€ en 2023 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | 2018, 2019 et 2024 | −0,5 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.SUBVENTIONS_EQUIPEMENT_VERSEES | 2019 et 2024 | −0,1 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES | 2019, 2022, 2023 et 2024 | +120,8 M€ en 2024 |
 | ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.TRESORERIE_NETTE | 2024 | −4,1 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 2019 et 2024 | −0,3 M€ en 2024 |
-| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.VENTES_BIENS_SERVICES | 2019, 2022, 2023 et 2024 | +0,3 M€ en 2023 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 2018, 2019 et 2024 | −0,3 M€ en 2024 |
+| ofgl.base-communes-consolidee | consolidé | COMPTES_LOCAUX.VENTES_BIENS_SERVICES | 5 années entre 2018 et 2024 | +0,3 M€ en 2023 |
 | ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 2018 et 2024 | +47 670 € en 2018 |
 | ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_DEP_INVESTISSEMENT | 2018 | +1 976 € en 2018 |
 | ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | 2018 | −1 082 € en 2018 |

@@ -32,16 +32,21 @@ JOIN perimetres p ON p.id = c.perimetre_id
 JOIN unites u ON u.id = c.unite_id
 LEFT JOIN fonctions f ON f.id = c.fonction_id;
 
--- Les comptes de chaque collectivité, dans la version la plus récente de chaque exercice, avec le nom, le territoire et
--- la population de la collectivité.
+-- Les comptes de chaque collectivité, dans la version la plus récente de chaque exercice, avec leurs libellés et le nom,
+-- le territoire et la population de la collectivité.
 CREATE VIEW v_comptes_collectivites AS
-SELECT c.*, k.insee, k.insee_2025, k.nom, k.categorie, k.nature_juridique, k.departement, k.region, k.epci, k.population
+SELECT f.source_id, f.exercice, f.version, f.statut, f.fichier_id, c.siren, co.id AS concept_id,
+       co.libelle AS concept_libelle, c.montant_bp, c.montant_ba, c.montant_flux, c.montant,
+       k.insee, k.insee_2025, k.nom, k.categorie, k.nature_juridique, k.departement, k.region, k.epci, k.population
 FROM comptes_collectivites c
-LEFT JOIN collectivites k ON k.source_id = c.source_id AND k.exercice = c.exercice AND k.siren = c.siren
-  AND k.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
-                   WHERE g.source_id = c.source_id AND g.exercice = c.exercice AND g.contenu = 'collectivites')
-WHERE c.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
-                   WHERE g.source_id = c.source_id AND g.exercice = c.exercice AND g.contenu = 'montants');
+JOIN fichiers_collectivites f ON f.rowid = c.lot
+JOIN concepts co ON co.rowid = c.concept
+LEFT JOIN collectivites k ON k.siren = c.siren AND k.lot = (
+    SELECT g.rowid FROM fichiers_collectivites g
+    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'collectivites'
+    ORDER BY g.version DESC LIMIT 1)
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
+                   WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
 
 -- Pour chaque chiffre, sa version la plus récente chez la même source.
 CREATE VIEW v_dernieres_versions AS
@@ -54,26 +59,30 @@ WHERE c.version = (
 """
 
 
-# Les comptes de chaque collectivité : colonnes et lignes, lues dans les copies archivées.
-COMPTES = ["source_id", "fichier_id", "version", "statut", "exercice", "siren", "agregat", "concept_id", "montant_bp",
-           "montant_ba", "montant_flux", "montant"]
-COLLECTIVITES = ["source_id", "fichier_id", "version", "exercice", "siren", "insee", "insee_2025", "nom", "categorie",
-                 "nature_juridique", "mode_financement", "departement", "region", "epci", "population"]
+# Les comptes de chaque collectivité, lus dans les copies archivées. Pour que la base reste maniable (quatorze millions
+# de lignes), une ligne de compte ne porte que le numéro de sa copie (`lot`, la ligne de fichiers_collectivites qui
+# l'inscrit) et celui de son concept (`concept`, la ligne de concepts) ; la vue v_comptes_collectivites rétablit les
+# libellés.
+COMPTES = [("lot", "INTEGER"), ("siren", "TEXT"), ("concept", "INTEGER"), ("montant_bp", "REAL"),
+           ("montant_ba", "REAL"), ("montant_flux", "REAL"), ("montant", "REAL")]
+COLLECTIVITES = [("lot", "INTEGER"), ("siren", "TEXT"), ("insee", "TEXT"), ("insee_2025", "TEXT"), ("nom", "TEXT"),
+                 ("categorie", "TEXT"), ("nature_juridique", "TEXT"), ("mode_financement", "TEXT"),
+                 ("departement", "TEXT"), ("region", "TEXT"), ("epci", "TEXT"), ("population", "INTEGER")]
 # Champ de l'export de data.ofgl.fr → colonne de la table collectivites.
 CHAMPS_COLLECTIVITES = {"siren": "siren", "insee": "insee", "com_code": "insee_2025", "lbudg": "nom", "categ": "categorie",
                         "nat_juridique": "nature_juridique", "mode_financement": "mode_financement",
                         "dep_code": "departement", "reg_code": "region", "epci_code": "epci", "ptot": "population"}
 
 
-def lignes_collectivites():
-    """(table, colonnes, lignes) des comptes de chaque collectivité et des collectivités, une copie après l'autre."""
+def lignes_collectivites(lots, concepts):
+    """(table, lignes) des comptes de chaque collectivité et des collectivités, une copie après l'autre ; `lots` et
+    `concepts` donnent le numéro de ligne de chaque copie inscrite et de chaque concept."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     agregats = {a["agregat"]: a["concept_id"] for a in lire("tables/agregats_ofgl.csv")}
     for inscrit in lire("tables/fichiers_collectivites.csv"):
-        fichier = fichiers[inscrit["fichier_id"]]
-        tete = [inscrit["source_id"], fichier["id"], inscrit["version"]]
+        fichier, lot = fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]]
         if inscrit["contenu"] == "montants":
-            yield "comptes_collectivites", [tete + [inscrit["statut"], inscrit["exercice"], s, a, agregats[a], *v]
+            yield "comptes_collectivites", [[lot, s, concepts[agregats[a]], *v]
                                             for s, a, *v in ofgl.montants(fichier, agregats)]
         elif inscrit["contenu"] == "collectivites":
             fiches, _ = ofgl.collectivites(fichier)
@@ -81,7 +90,7 @@ def lignes_collectivites():
             for siren, fiche in sorted(fiches.items()):
                 colonnes = {CHAMPS_COLLECTIVITES[c]: v for c, v in fiche.items()}
                 colonnes["population"] = int(colonnes["population"]) if colonnes.get("population") else None
-                lues.append(tete + [inscrit["exercice"]] + [colonnes.get(c) for c in COLLECTIVITES[4:]])
+                lues.append([lot] + [colonnes.get(c) for c, _ in COLLECTIVITES[1:]])
             yield "collectivites", lues
 
 
@@ -116,10 +125,12 @@ def main():
         ecrivain.writerows([l[c["name"]] for c in champs] for l in lignes)
         empreintes.append({"table": nom, "lignes": len(lignes),
                            "sha256": hashlib.sha256(texte.getvalue().encode("utf-8")).hexdigest()})
-    connexion.execute(f"CREATE TABLE comptes_collectivites ({', '.join(COMPTES)})")
-    connexion.execute(f"CREATE TABLE collectivites ({', '.join(COLLECTIVITES)})")
+    for table, colonnes in (("comptes_collectivites", COMPTES), ("collectivites", COLLECTIVITES)):
+        connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
+    lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
+    concepts = {c: r for r, c in connexion.execute("SELECT rowid, id FROM concepts")}
     hachages = {"comptes_collectivites": [hashlib.sha256(), 0], "collectivites": [hashlib.sha256(), 0]}
-    for table, lues in lignes_collectivites():
+    for table, lues in lignes_collectivites(lots, concepts):
         if not lues:
             continue
         connexion.executemany(f"INSERT INTO {table} VALUES ({', '.join('?' * len(lues[0]))})", lues)
@@ -127,8 +138,9 @@ def main():
         csv.writer(texte, lineterminator="\n").writerows(lues)
         hachages[table][0].update(texte.getvalue().encode("utf-8"))
         hachages[table][1] += len(lues)
-    connexion.execute("CREATE INDEX comptes_collectivites_cle ON comptes_collectivites (source_id, exercice, siren)")
-    connexion.execute("CREATE INDEX collectivites_cle ON collectivites (source_id, exercice, siren)")
+    connexion.execute("CREATE INDEX comptes_collectivites_lot ON comptes_collectivites (lot, concept)")
+    connexion.execute("CREATE INDEX comptes_collectivites_siren ON comptes_collectivites (siren)")
+    connexion.execute("CREATE INDEX collectivites_cle ON collectivites (lot, siren)")
     empreintes += [{"table": t, "lignes": n, "sha256": h.hexdigest()} for t, (h, n) in hachages.items()]
     connexion.executescript(VUES)
     connexion.commit()
