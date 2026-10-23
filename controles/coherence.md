@@ -51,44 +51,44 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | senat.pjl09-585 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2009, texte n° 585 (2009-2010) transmis au Sénat le 29 juin 2010 | 2010-06-29 | 1075 |
 | senat.pjl10-084 | Projet de loi de financement de la sécurité sociale pour 2011, texte n° 84 (2010-2011) transmis au Sénat le 3 novembre 2010 | 2010-11-03 | 36 |
 | senat.pjl10-672 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2010, texte n° 672 (2010-2011) transmis au Sénat le 28 juin 2011 | 2011-06-28 | 1096 |
-| senat.pjl11-073 | Projet de loi de financement de la sécurité sociale pour 2012, texte n° 73 (2011-2012) transmis au Sénat le 2 novembre 2011 | 2011-11-02 | 36 |
+| senat.pjl11-073 | Projet de loi de financement de la sécurité sociale pour 2012, texte n° 73 (2011-2012) transmis au Sénat le 2 novembre 2011 | 2011-11-02 | 172 |
 | senat.pjl11-655 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2011, texte n° 655 (2011-2012) transmis au Sénat le 10 juillet 2012 | 2012-07-10 | 1094 |
-| senat.pjl12-103 | Projet de loi de financement de la sécurité sociale pour 2013, texte n° 103 (2012-2013) transmis au Sénat le 6 novembre 2012 | 2012-11-06 | 37 |
+| senat.pjl12-103 | Projet de loi de financement de la sécurité sociale pour 2013, texte n° 103 (2012-2013) transmis au Sénat le 6 novembre 2012 | 2012-11-06 | 179 |
 | senat.pjl12-799 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2012, texte n° 799 (2012-2013) transmis au Sénat le 23 juillet 2013 en nouvelle lecture | 2013-07-23 | 1128 |
-| senat.pjl13-117 | Projet de loi de financement de la sécurité sociale pour 2014, texte n° 117 (2013-2014) transmis au Sénat le 5 novembre 2013 | 2013-11-05 | 37 |
+| senat.pjl13-117 | Projet de loi de financement de la sécurité sociale pour 2014, texte n° 117 (2013-2014) transmis au Sénat le 5 novembre 2013 | 2013-11-05 | 179 |
 | senat.pjl13-759 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2013, texte n° 759 (2013-2014) transmis au Sénat le 21 juillet 2014 en nouvelle lecture | 2014-07-21 | 1111 |
-| senat.pjl14-078 | Projet de loi de financement de la sécurité sociale pour 2015, texte n° 78 (2014-2015) transmis au Sénat le 3 novembre 2014 | 2014-11-03 | 37 |
+| senat.pjl14-078 | Projet de loi de financement de la sécurité sociale pour 2015, texte n° 78 (2014-2015) transmis au Sénat le 3 novembre 2014 | 2014-11-03 | 184 |
 | senat.pjl14-642 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2014, texte n° 642 (2014-2015) transmis au Sénat le 16 juillet 2015 en nouvelle lecture | 2015-07-16 | 1168 |
-| senat.pjl15-128 | Projet de loi de financement de la sécurité sociale pour 2016, texte n° 128 (2015-2016) transmis au Sénat le 2 novembre 2015 | 2015-11-02 | 37 |
+| senat.pjl15-128 | Projet de loi de financement de la sécurité sociale pour 2016, texte n° 128 (2015-2016) transmis au Sénat le 2 novembre 2015 | 2015-11-02 | 194 |
 | senat.pjl15-785 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2015, texte n° 785 (2015-2016) transmis au Sénat le 12 juillet 2016 en nouvelle lecture | 2016-07-12 | 1073 |
-| senat.pjl16-106 | Projet de loi de financement de la sécurité sociale pour 2017, texte n° 106 (2016-2017) transmis au Sénat le 7 novembre 2016 | 2016-11-07 | 43 |
+| senat.pjl16-106 | Projet de loi de financement de la sécurité sociale pour 2017, texte n° 106 (2016-2017) transmis au Sénat le 7 novembre 2016 | 2016-11-07 | 206 |
 | senat.pjl16-643 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2016, texte n° 643 (2016-2017) transmis au Sénat le 18 juillet 2017 | 2017-07-18 | 1075 |
-| senat.pjl17-063 | Projet de loi de financement de la sécurité sociale pour 2018, texte n° 63 (2017-2018) transmis au Sénat le 6 novembre 2017 | 2017-11-06 | 43 |
+| senat.pjl17-063 | Projet de loi de financement de la sécurité sociale pour 2018, texte n° 63 (2017-2018) transmis au Sénat le 6 novembre 2017 | 2017-11-06 | 211 |
 | senat.pjl17-595 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2017, texte n° 595 (2017-2018) transmis au Sénat le 21 juin 2018 | 2018-06-21 | 1047 |
-| senat.pjl18-106 | Projet de loi de financement de la sécurité sociale pour 2019, texte n° 106 (2018-2019) transmis au Sénat le 5 novembre 2018 | 2018-11-05 | 42 |
+| senat.pjl18-106 | Projet de loi de financement de la sécurité sociale pour 2019, texte n° 106 (2018-2019) transmis au Sénat le 5 novembre 2018 | 2018-11-05 | 213 |
 | senat.pjl18-686 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2018, texte n° 686 (2018-2019) transmis au Sénat le 18 juillet 2019 en nouvelle lecture | 2019-07-18 | 1052 |
-| senat.pjl19-098 | Projet de loi de financement de la sécurité sociale pour 2020, texte n° 98 (2019-2020) transmis au Sénat le 4 novembre 2019 | 2019-11-04 | 43 |
+| senat.pjl19-098 | Projet de loi de financement de la sécurité sociale pour 2020, texte n° 98 (2019-2020) transmis au Sénat le 4 novembre 2019 | 2019-11-04 | 217 |
 | senat.pjl19-505 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2019, texte n° 505 (2019-2020) transmis au Sénat le 11 juin 2020 | 2020-06-11 | 1061 |
-| senat.pjl20-101 | Projet de loi de financement de la sécurité sociale pour 2021, texte n° 101 (2020-2021) transmis au Sénat le 2 novembre 2020 | 2020-11-02 | 43 |
+| senat.pjl20-101 | Projet de loi de financement de la sécurité sociale pour 2021, texte n° 101 (2020-2021) transmis au Sénat le 2 novembre 2020 | 2020-11-02 | 218 |
 | senat.pjl20-784 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2020, texte n° 784 (2020-2021) transmis au Sénat le 21 juillet 2021 en nouvelle lecture | 2021-07-21 | 1061 |
-| senat.pjl21-118 | Projet de loi de financement de la sécurité sociale pour 2022, texte n° 118 (2021-2022) transmis au Sénat le 2 novembre 2021 | 2021-11-02 | 43 |
+| senat.pjl21-118 | Projet de loi de financement de la sécurité sociale pour 2022, texte n° 118 (2021-2022) transmis au Sénat le 2 novembre 2021 | 2021-11-02 | 221 |
 | senat.pjl22-683 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2021, texte n° 683 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 1090 |
 | senat.pjl22-684 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2022, texte n° 684 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 1098 |
-| senat.pjl22-705 | Projet de loi d'approbation des comptes de la sécurité sociale pour l'année 2022, texte n° 705 (2022-2023) transmis au Sénat le 7 juin 2023 | 2023-06-07 | 31 |
+| senat.pjl22-705 | Projet de loi d'approbation des comptes de la sécurité sociale pour l'année 2022, texte n° 705 (2022-2023) transmis au Sénat le 7 juin 2023 | 2023-06-07 | 215 |
 | senat.pjl24-032 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2023, texte n° 32 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 1075 |
-| senat.pjl24-035 | Projet de loi d'approbation des comptes de la sécurité sociale de l'année 2023, texte n° 35 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 31 |
+| senat.pjl24-035 | Projet de loi d'approbation des comptes de la sécurité sociale de l'année 2023, texte n° 35 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 215 |
 | senat.pjl24-718 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2024, texte n° 718 (2024-2025) transmis au Sénat le 10 juin 2025 | 2025-06-10 | 1066 |
-| senat.pjl24-729 | Projet de loi d'approbation des comptes de la sécurité sociale de l'année 2024, texte n° 729 (2024-2025) transmis au Sénat le 11 juin 2025 | 2025-06-11 | 30 |
+| senat.pjl24-729 | Projet de loi d'approbation des comptes de la sécurité sociale de l'année 2024, texte n° 729 (2024-2025) transmis au Sénat le 11 juin 2025 | 2025-06-11 | 214 |
 | senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 1053 |
-| senat.pjl25-727 | Projet de loi portant approbation des comptes de la sécurité sociale de l'année 2025, texte n° 727 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 30 |
+| senat.pjl25-727 | Projet de loi portant approbation des comptes de la sécurité sociale de l'année 2025, texte n° 727 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 214 |
 | senat.tas05-033 | Projet de loi de financement de la sécurité sociale pour 2006, texte définitif n° 33 (2005-2006) adopté par le Sénat le 23 novembre 2005 | 2005-11-23 | 39 |
-| senat.tas22-018 | Projet de loi de financement de la sécurité sociale pour 2023, texte n° 18 (2022-2023) adopté par le Sénat en première lecture le 15 novembre 2022 | 2022-11-15 | 49 |
+| senat.tas22-018 | Projet de loi de financement de la sécurité sociale pour 2023, texte n° 18 (2022-2023) adopté par le Sénat en première lecture le 15 novembre 2022 | 2022-11-15 | 230 |
 
 ## 1. Sommes comptables
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-8703 sommes vérifiées avec toutes leurs composantes : 8687 justes, 16 en écart.
+9095 sommes vérifiées avec toutes leurs composantes : 9076 justes, 19 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
@@ -104,9 +104,12 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 Md€ | −16,3100 Md€ | −574,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 Md€ | −17,1280 Md€ | −578,0 M€ |
 | senat.pjl13-759 | ETAT_LF | ensemble | 2013 | LOLF.COMPTES_COMMERCE_SOLDE | 0,1368 Md€ | 0,2654 Md€ | −128,6 M€ |
+| senat.pjl15-128 | SECU_LFSS | ensemble | 2014 | COMPTES_SECU.ACTIF_CIRCULANT | 69,7000 Md€ | 69,3000 Md€ | +400,0 M€ |
+| senat.pjl15-128 | SECU_LFSS | ensemble | 2014 | COMPTES_SECU.PASSIF_FINANCIER | 179,9000 Md€ | 177,0000 Md€ | +2 900,0 M€ |
 | senat.pjl19-505 | ETAT_LF | ensemble | 2019 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 23,3199 Md€ | 24,5853 Md€ | −1 265,4 M€ |
 | senat.pjl25-726 | ETAT_CGE | ensemble | 2025 | COMPTES_ETAT.SITUATION_NETTE | −2 115,8890 Md€ | −1 986,4230 Md€ | −129 466,0 M€ |
 | senat.pjl25-726 | ETAT_LF | ensemble | 2025 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 16,0862 Md€ | 16,0902 Md€ | −4,0 M€ |
+| senat.tas22-018 | REGIME_GENERAL_HORS_FSV | ensemble | 2021 | COMPTES_SECU.RESULTAT_COMPTABLE | −27,7000 Md€ | −22,8000 Md€ | −4 900,0 M€ |
 | senat.tas22-018 | REGIME_GENERAL_HORS_FSV | COMPTES_SECU.MALADIE | 2021 | COMPTES_SECU.RESULTAT_COMPTABLE | −28,7000 Md€ | −29,7000 Md€ | +1 000,0 M€ |
 
 11116 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour 11111 d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables. Pour les 5 autres, elles ne suffisent pas : des parties absentes ne sont pas nulles.
@@ -131,15 +134,17 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 
 ## 3. Additivité des sous-secteurs
 
-Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV.
+Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité.
 
-1707 additions vérifiées : 1685 justes, 22 en écart.
+2096 additions vérifiées : 2072 justes, 24 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
 | eurostat.gov_10a_main | SEC2010.B9 | S13 | S1311 + S1313 + S1314 | ensemble | 2011 | −0,4 M€ en 2011 |
 | insee.t3106 | SEC2010.B9 | S1311 | S13111 + S13112 | ensemble | 19 années entre 1959 et 1977 | +6 502,0 M€ en 1974 |
 | insee.t3212, insee.t3213, insee.t3214 | SEC2010.B9 | S1314 | S13141 + S13142 | ensemble | 2019 | +8,0 M€ en 2019 |
+| senat.pjl13-117 | COMPTES_SECU.REPORT_A_NOUVEAU | SECU_LFSS | REGIME_GENERAL_HORS_FSV + AUTRES_REGIMES_BASE + CADES | ensemble | 2011 | +9 800,0 M€ en 2011 |
+| senat.pjl17-063 | COMPTES_SECU.ENCOURS_BANCAIRE | SECU_LFSS | REGIME_GENERAL_HORS_FSV + AUTRES_REGIMES_BASE + FSV + CADES + FRR | ensemble | 2015 | +900,0 M€ en 2015 |
 | senat.tas22-018 | COMPTES_SECU.RESULTAT_COMPTABLE | REGIME_GENERAL | REGIME_GENERAL_HORS_FSV + FSV | ensemble | 2021 | −200,0 M€ en 2021 |
 
 ## 4. Passerelles entre tableaux
@@ -166,6 +171,7 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Solde des comptes spéciaux à fin décembre (situation mensuelle) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2017 | 2017 | +64,0 M€ en 2017 |
 | Déficit à financer du tableau de financement contre résultat budgétaire de l'État, de signe opposé, dans le projet de loi d'approbation des comptes | 12 années entre 2014 et 2025 | 2014 | 2014 | −11 955,0 M€ en 2014 |
 | Résultat comptable du régime général, Fonds de solidarité vieillesse compris (tableau 3.108), contre soldes du régime général et du FSV approuvés par la loi de financement de la sécurité sociale | 13 années entre 2009 et 2021 | 2021 | 2021 | +4 800,0 M€ en 2021 |
+| Dette amortie par la CADES, qu'approuve la loi de financement de la sécurité sociale, contre son résultat de l'exercice dans la situation patrimoniale (annexe A) | 16 années entre 2010 et 2025 | aucune | aucune | aucun |
 | Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) et (3), dans le tableau 3.107 | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
 
 ## 5. Ratios
@@ -323,6 +329,87 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3217 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3301 | insee.t3307 | 1248 | 408 | 408 | −20 301,0 M€ en 2009 | −20 301,0 M€ en 2009 |
 | senat.pjl06-389 | senat.pjl07-429 | 127 | 10 | 10 | +3 761,0 M€ en 2006 | +3 761,0 M€ en 2006 |
+| senat.pjl11-073 | senat.pjl12-103 | 66 | 6 | 6 | −1 000,0 M€ en 2010 | −1 000,0 M€ en 2010 |
+| senat.pjl12-103 | senat.pjl13-117 | 69 | 1 | 1 | +9 800,0 M€ en 2011 | +9 800,0 M€ en 2011 |
+| senat.pjl13-117 | senat.pjl14-078 | 65 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl15-128 | 79 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl16-106 | 10 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl17-063 | 10 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl18-106 | 10 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl19-098 | 10 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl20-101 | 10 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl21-118 | 10 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl22-705 | 10 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl24-035 | 8 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl24-729 | 6 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.pjl25-727 | 4 | 0 | 0 | aucun | aucun |
+| senat.pjl14-078 | senat.tas22-018 | 10 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl16-106 | 85 | 1 | 1 | −400,0 M€ en 2014 | −400,0 M€ en 2014 |
+| senat.pjl15-128 | senat.pjl17-063 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl18-106 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl19-098 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl20-101 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl21-118 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl22-705 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl24-035 | 15 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl24-729 | 12 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.pjl25-727 | 9 | 0 | 0 | aucun | aucun |
+| senat.pjl15-128 | senat.tas22-018 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.pjl17-063 | 92 | 1 | 1 | +900,0 M€ en 2015 | +900,0 M€ en 2015 |
+| senat.pjl16-106 | senat.pjl18-106 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.pjl19-098 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.pjl20-101 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.pjl21-118 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.pjl22-705 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.pjl24-035 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.pjl24-729 | 15 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.pjl25-727 | 12 | 0 | 0 | aucun | aucun |
+| senat.pjl16-106 | senat.tas22-018 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.pjl18-106 | 95 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.pjl19-098 | 24 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.pjl20-101 | 24 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.pjl21-118 | 24 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.pjl22-705 | 24 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.pjl24-035 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.pjl24-729 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.pjl25-727 | 15 | 0 | 0 | aucun | aucun |
+| senat.pjl17-063 | senat.tas22-018 | 24 | 0 | 0 | aucun | aucun |
+| senat.pjl18-106 | senat.pjl19-098 | 100 | 0 | 0 | aucun | aucun |
+| senat.pjl18-106 | senat.pjl20-101 | 27 | 0 | 0 | aucun | aucun |
+| senat.pjl18-106 | senat.pjl21-118 | 27 | 0 | 0 | aucun | aucun |
+| senat.pjl18-106 | senat.pjl22-705 | 27 | 0 | 0 | aucun | aucun |
+| senat.pjl18-106 | senat.pjl24-035 | 24 | 0 | 0 | aucun | aucun |
+| senat.pjl18-106 | senat.pjl24-729 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl18-106 | senat.pjl25-727 | 18 | 0 | 0 | aucun | aucun |
+| senat.pjl18-106 | senat.tas22-018 | 27 | 0 | 0 | aucun | aucun |
+| senat.pjl19-098 | senat.pjl20-101 | 101 | 0 | 0 | aucun | aucun |
+| senat.pjl19-098 | senat.pjl21-118 | 30 | 0 | 0 | aucun | aucun |
+| senat.pjl19-098 | senat.pjl22-705 | 30 | 0 | 0 | aucun | aucun |
+| senat.pjl19-098 | senat.pjl24-035 | 27 | 0 | 0 | aucun | aucun |
+| senat.pjl19-098 | senat.pjl24-729 | 24 | 0 | 0 | aucun | aucun |
+| senat.pjl19-098 | senat.pjl25-727 | 21 | 0 | 0 | aucun | aucun |
+| senat.pjl19-098 | senat.tas22-018 | 30 | 0 | 0 | aucun | aucun |
+| senat.pjl20-101 | senat.pjl21-118 | 104 | 0 | 0 | aucun | aucun |
+| senat.pjl20-101 | senat.pjl22-705 | 33 | 0 | 0 | aucun | aucun |
+| senat.pjl20-101 | senat.pjl24-035 | 30 | 0 | 0 | aucun | aucun |
+| senat.pjl20-101 | senat.pjl24-729 | 27 | 0 | 0 | aucun | aucun |
+| senat.pjl20-101 | senat.pjl25-727 | 24 | 0 | 0 | aucun | aucun |
+| senat.pjl20-101 | senat.tas22-018 | 33 | 0 | 0 | aucun | aucun |
+| senat.pjl21-118 | senat.pjl22-705 | 36 | 0 | 0 | aucun | aucun |
+| senat.pjl21-118 | senat.pjl24-035 | 33 | 0 | 0 | aucun | aucun |
+| senat.pjl21-118 | senat.pjl24-729 | 30 | 0 | 0 | aucun | aucun |
+| senat.pjl21-118 | senat.pjl25-727 | 27 | 0 | 0 | aucun | aucun |
+| senat.pjl21-118 | senat.tas22-018 | 107 | 0 | 0 | aucun | aucun |
+| senat.pjl22-705 | senat.pjl24-035 | 110 | 0 | 0 | aucun | aucun |
+| senat.pjl22-705 | senat.pjl24-729 | 36 | 0 | 0 | aucun | aucun |
+| senat.pjl22-705 | senat.pjl25-727 | 33 | 0 | 0 | aucun | aucun |
+| senat.pjl22-705 | senat.tas22-018 | 110 | 0 | 0 | aucun | aucun |
+| senat.pjl24-035 | senat.pjl24-729 | 110 | 0 | 0 | aucun | aucun |
+| senat.pjl24-035 | senat.pjl25-727 | 36 | 0 | 0 | aucun | aucun |
+| senat.pjl24-035 | senat.tas22-018 | 36 | 0 | 0 | aucun | aucun |
+| senat.pjl24-729 | senat.pjl25-727 | 110 | 0 | 0 | aucun | aucun |
+| senat.pjl24-729 | senat.tas22-018 | 33 | 0 | 0 | aucun | aucun |
+| senat.pjl25-727 | senat.tas22-018 | 30 | 0 | 0 | aucun | aucun |
 
 Détail des grandeurs en écart :
 
@@ -433,3 +520,12 @@ Détail des grandeurs en écart :
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.TRESORERIE_ACTIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.TRESORERIE_PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
+| senat.pjl11-073 | senat.pjl12-103 | FR SECU_LFSS COMPTES_SECU.ACTIF_CIRCULANT | ensemble | 2010 | 2010 | −200,0 M€ en 2010 |
+| senat.pjl11-073 | senat.pjl12-103 | FR SECU_LFSS COMPTES_SECU.AUTRES_PASSIFS | ensemble | 2010 | 2010 | +700,0 M€ en 2010 |
+| senat.pjl11-073 | senat.pjl12-103 | FR SECU_LFSS COMPTES_SECU.DETTES_ENTITES_PUBLIQUES | ensemble | 2010 | 2010 | −1 000,0 M€ en 2010 |
+| senat.pjl11-073 | senat.pjl12-103 | FR SECU_LFSS COMPTES_SECU.PASSIF_CIRCULANT | ensemble | 2010 | 2010 | −300,0 M€ en 2010 |
+| senat.pjl11-073 | senat.pjl12-103 | FR SECU_LFSS COMPTES_SECU.TOTAL_ACTIF | ensemble | 2010 | 2010 | −300,0 M€ en 2010 |
+| senat.pjl11-073 | senat.pjl12-103 | FR SECU_LFSS COMPTES_SECU.TOTAL_PASSIF | ensemble | 2010 | 2010 | −300,0 M€ en 2010 |
+| senat.pjl12-103 | senat.pjl13-117 | FR REGIME_GENERAL_HORS_FSV COMPTES_SECU.REPORT_A_NOUVEAU | ensemble | 2011 | 2011 | +9 800,0 M€ en 2011 |
+| senat.pjl15-128 | senat.pjl16-106 | FR SECU_LFSS COMPTES_SECU.CREANCES_ENTITES_PUBLIQUES | ensemble | 2014 | 2014 | −400,0 M€ en 2014 |
+| senat.pjl16-106 | senat.pjl17-063 | FR FSV COMPTES_SECU.ENCOURS_BANCAIRE | ensemble | 2015 | 2015 | +900,0 M€ en 2015 |

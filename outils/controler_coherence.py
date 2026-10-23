@@ -218,6 +218,31 @@ IDENTITES += [("SEC2010.B9", ["PFP.SOLDE_STRUCTUREL", "PFP.SOLDE_CONJONCTUREL", 
 # Tableaux d'équilibre des lois de financement de la sécurité sociale : le solde est la différence des recettes et des
 # dépenses, pour chaque branche comme pour l'ensemble.
 IDENTITES += [("COMPTES_SECU.RESULTAT_COMPTABLE", ["COMPTES_SECU.RECETTES", "-COMPTES_SECU.DEPENSES"])]
+# Situation patrimoniale de la sécurité sociale (annexe A des lois de financement) : chaque agrégat est la somme des
+# postes que le tableau présente cette année-là ; le résultat de l'exercice, au bilan, est celui des tableaux
+# d'équilibre et du tableau d'évolution du passif net ; le passif net, les fonds propres ; l'endettement financier
+# net, l'actif financier moins le passif financier.
+_BILAN_SECU = [("TOTAL_ACTIF", ["IMMOBILISATIONS", "ACTIF_FINANCIER", "ACTIF_CIRCULANT"], False),
+               ("IMMOBILISATIONS", ["IMMOBILISATIONS_NON_FINANCIERES", "PRETS_DEPOTS_GARANTIE", "AVANCES_SPHERE_SOCIALE"], True),
+               ("ACTIF_FINANCIER", ["VALEURS_MOBILIERES", "ENCOURS_BANCAIRE", "CREANCES_INSTRUMENTS_FINANCIERS"], True),
+               ("ACTIF_CIRCULANT", ["CREANCES_PRESTATIONS", "CREANCES_ET_PRODUITS_A_RECEVOIR_COTISATIONS",
+                                    "CREANCES_COTISATIONS", "PRODUITS_A_RECEVOIR_COTISATIONS",
+                                    "CREANCES_ET_PRODUITS_A_RECEVOIR_ENTITES_PUBLIQUES", "CREANCES_ENTITES_PUBLIQUES",
+                                    "PRODUITS_A_RECEVOIR_ETAT", "AUTRES_ACTIFS"], True),
+               ("TOTAL_PASSIF", ["FONDS_PROPRES", "PROVISIONS_RISQUES_CHARGES", "PASSIF_FINANCIER", "PASSIF_CIRCULANT"], False),
+               ("FONDS_PROPRES", ["DOTATIONS", "RESERVES", "REPORT_A_NOUVEAU", "RESULTAT_EXERCICE_BILAN",
+                                  "RESULTAT_EN_INSTANCE_AFFECTATION", "ECART_ESTIMATION_FRR", "AUTRES_FONDS_PROPRES"], True),
+               ("PASSIF_FINANCIER", ["DETTES_REPRESENTEES_PAR_UN_TITRE", "DETTES_ETABLISSEMENTS_CREDIT", "DEPOTS_RECUS",
+                                     "DETTES_INSTRUMENTS_FINANCIERS", "AUTRES_DETTES_FINANCIERES"], True),
+               ("PASSIF_CIRCULANT", ["DETTES_BENEFICIAIRES", "DETTES_COTISANTS", "DETTES_ENTITES_PUBLIQUES",
+                                     "AUTRES_PASSIFS"], True),
+               ("TOTAL_PASSIF", ["TOTAL_ACTIF"], False), ("PASSIF_NET", ["FONDS_PROPRES"], False),
+               ("ENDETTEMENT_FINANCIER_NET", ["ACTIF_FINANCIER", "-PASSIF_FINANCIER"], False),
+               ("RESULTAT_COMPTABLE", ["RESULTAT_EXERCICE_BILAN"], False)]
+IDENTITES += [_facultatives("COMPTES_SECU.", t, c) if f else (f"COMPTES_SECU.{t}", [("-" if x.startswith("-") else "")
+                                                                                  + "COMPTES_SECU." + x.lstrip("-")
+                                                                                  for x in c])
+              for t, c, f in _BILAN_SECU]
 
 IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique (1) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_DROITS_CONSTATES", "rubrique (2) du tableau 3.107"),
@@ -234,6 +259,11 @@ DECOMPOSITIONS = [("S13", ["S1311", "S1313", "S1314"]), ("S1311", ["S13111", "S1
                   ("S1314_HORS_RG", ["CADES", "FRR", "AUTRES_REGIMES_SECU", "S13142"]),
                   ("REGIME_GENERAL", ["REGIME_GENERAL_HORS_FSV", "FSV"]), ("ROBSS_FSV", ["ROBSS", "FSV"])]
 ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO", "COMPTES_SECU.RESULTAT_COMPTABLE"}
+# Situation patrimoniale de la sécurité sociale : un poste de l'ensemble contre la somme des lignes de ses entités, que
+# le tableau ne détaille que pour certains postes et n'y donne que pour les entités concernées (« ? » : peut manquer).
+DECOMPOSITIONS_PAR_CONCEPT = {f"COMPTES_SECU.{c}": [("SECU_LFSS", ["?REGIME_GENERAL_HORS_FSV", "?ACOSS", "?ROBSS",
+                                                                   "?AUTRES_REGIMES_BASE", "?FSV", "?CADES", "?FRR"])]
+                              for t, cs, _ in _BILAN_SECU[:8] for c in [t] + cs}
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
 # de droite), chaque terme étant (source, périmètre, concept, signe) et, au besoin, (modèle de période, traitement),
@@ -301,6 +331,9 @@ PASSERELLES = [
      [("insee.t3108", "REGIME_GENERAL", "COMPTES_SECU.RESULTAT_COMPTABLE", 1)],
      [(_SECU, "REGIME_GENERAL_HORS_FSV", "COMPTES_SECU.RESULTAT_COMPTABLE", 1),
       (_SECU, "FSV", "COMPTES_SECU.RESULTAT_COMPTABLE", 1)]),
+    ("Dette amortie par la CADES, qu'approuve la loi de financement de la sécurité sociale, contre son résultat de "
+     "l'exercice dans la situation patrimoniale (annexe A)",
+     [(_SECU, "CADES", "LFSS.CADES_DETTE_AMORTIE", 1)], [(_SECU, "CADES", "COMPTES_SECU.RESULTAT_EXERCICE_BILAN", 1)]),
     ("Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) "
      "et (3), dans le tableau 3.107",
      [("insee.t3107", "S13111", "SEC2010.B9", 1)],
@@ -437,7 +470,8 @@ def ventilations(derniers):
 
 def additivite(derniers):
     """Le solde d'un ensemble, ou sa part de la dépense consolidée de l'ensemble des administrations publiques,
-    égale la somme de ceux de ses parties."""
+    égale la somme de ceux de ses parties ; de même, un poste de la situation patrimoniale de la sécurité sociale
+    égale la somme de ses lignes par entité."""
     apu = {k[0] for k, l in derniers.items() if l["consolidation"] == "consolide_apu"}
     par_annee = collections.defaultdict(dict)
     for k, l in derniers.items():
@@ -446,6 +480,8 @@ def additivite(derniers):
         if k[3] in ADDITIFS:
             # Les tableaux 3.201 à 3.214 de l'Insee publient un sous-secteur chacun : on les réunit.
             famille = "insee.t3201 à t3214" if re.fullmatch(r"insee\.t32(0[1-9]|1[0-4])", k[0]) else k[0]
+        elif k[3] in DECOMPOSITIONS_PAR_CONCEPT:
+            famille = k[0]
         elif k[0] in apu and (l["consolidation"] == "consolide_apu" or k[2] == "S13"):
             famille = k[0]
         else:
@@ -453,8 +489,9 @@ def additivite(derniers):
         par_annee[(famille, k[3], k[4], k[6], k[7])][k[2]] = valeur(l)[:2] + (k[0],)
     controles, ecarts = 0, []
     for (famille, concept, fonction, unite, periode), valeurs in sorted(par_annee.items()):
-        for ensemble, parties in DECOMPOSITIONS:
-            if ensemble in valeurs and all(p in valeurs for p in parties):
+        for ensemble, parties in DECOMPOSITIONS_PAR_CONCEPT.get(concept, DECOMPOSITIONS):
+            parties = [p for p in parties if p[0] != "?"] + [p[1:] for p in parties if p[0] == "?" and p[1:] in valeurs]
+            if ensemble in valeurs and parties and all(p in valeurs for p in parties):
                 controles += 1
                 ecart = valeurs[ensemble][0] - sum(valeurs[p][0] for p in parties)
                 if depasse(ecart, valeurs[ensemble][1] + sum(valeurs[p][1] for p in parties)):
@@ -678,7 +715,8 @@ def partie_additivite(derniers):
               "Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble "
               "des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour "
               "la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité "
-              "vieillesse compris, contre la somme des leurs et de celui du FSV.", "",
+              "vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation "
+              "patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité.", "",
               f"{n} additions vérifiées : {n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
     for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart in ecarts:

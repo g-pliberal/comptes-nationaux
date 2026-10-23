@@ -136,9 +136,50 @@ COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT,Valeurs mobilières de placement,COMPT
 COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT_AMORTISSEMENTS,Valeurs mobilières de placement : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
 COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT_BRUT,Valeurs mobilières de placement : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
 COMPTES_ETAT.VENTES_PRESTATIONS,Ventes de produits et prestations de service,COMPTES_ETAT,compte de résultat : charges de fonctionnement,recette,Produit de fonctionnement.
+COMPTES_SECU.ACTIF_CIRCULANT,Actif circulant,COMPTES_SECU,situation patrimoniale : actif,stock,"Créances et produits à recevoir de prestations, de cotisations, contributions sociales et impôts, sur l'État et les entités publiques, et autres actifs. Montant net."
+COMPTES_SECU.ACTIF_FINANCIER,Actif financier,COMPTES_SECU,situation patrimoniale : actif,stock,"Valeurs mobilières et titres de placement, encours bancaire, créances nettes au titre des instruments financiers. Montant net."
+COMPTES_SECU.AUTRES_ACTIFS,Autres actifs,COMPTES_SECU,situation patrimoniale : actif,stock,"Débiteurs divers, comptes d'attente et de régularisation. Montant net."
+COMPTES_SECU.AUTRES_DETTES_FINANCIERES,Autres dettes financières,COMPTES_SECU,situation patrimoniale : passif,stock,Ligne « Autres » du passif financier.
+COMPTES_SECU.AUTRES_FONDS_PROPRES,Autres fonds propres,COMPTES_SECU,situation patrimoniale : fonds propres,stock,"Ligne « Autres » des capitaux propres, dans les situations de 2010 à 2012."
+COMPTES_SECU.AUTRES_PASSIFS,Autres passifs,COMPTES_SECU,situation patrimoniale : passif,stock,"Créditeurs divers, comptes d'attente et de régularisation."
+COMPTES_SECU.AVANCES_SPHERE_SOCIALE,Avances et prêts accordés à des organismes de la sphère sociale,COMPTES_SECU,situation patrimoniale : actif,stock,Montant net.
+COMPTES_SECU.CREANCES_COTISATIONS,"Créances de cotisations, contributions sociales et impôts de sécurité sociale",COMPTES_SECU,situation patrimoniale : actif,stock,Montant net.
+COMPTES_SECU.CREANCES_ENTITES_PUBLIQUES,Créances sur entités publiques et organismes de sécurité sociale,COMPTES_SECU,situation patrimoniale : actif,stock,"« Créances sur l'État et autres entités publiques » en 2011 et 2012, « Créances sur entités publiques » en 2013 et 2014. Montant net."
+COMPTES_SECU.CREANCES_ET_PRODUITS_A_RECEVOIR_COTISATIONS,"Créances et produits à recevoir sur cotisations, contributions sociales et impôts",COMPTES_SECU,situation patrimoniale : actif,stock,"Ligne de la situation de 2010, que les suivantes séparent en créances et produits à recevoir. Montant net."
+COMPTES_SECU.CREANCES_ET_PRODUITS_A_RECEVOIR_ENTITES_PUBLIQUES,Créances et produits à recevoir sur l'État et autres entités publiques,COMPTES_SECU,situation patrimoniale : actif,stock,"Ligne de la situation de 2010, que les suivantes séparent en créances sur les entités publiques et produits à recevoir de l'État. Montant net."
+COMPTES_SECU.CREANCES_INSTRUMENTS_FINANCIERS,Créances nettes au titre des instruments financiers,COMPTES_SECU,situation patrimoniale : actif,stock,
+COMPTES_SECU.CREANCES_PRESTATIONS,Créances de prestations,COMPTES_SECU,situation patrimoniale : actif,stock,« Créances sur prestations » dans les situations de 2010 à 2012. Montant net.
 COMPTES_SECU.DEPENSES,Dépenses,COMPTES_SECU,tableau d'équilibre : dépenses,depense,"Dépenses de l'exercice d'une branche, d'un régime ou d'un organisme, telles que les présente son tableau d'équilibre dans la loi de financement de la sécurité sociale ou la loi d'approbation des comptes. Celles d'une branche comprennent les transferts versés aux autres branches ; celles de l'ensemble des branches les excluent."
+COMPTES_SECU.DEPOTS_RECUS,Dépôts reçus,COMPTES_SECU,situation patrimoniale : passif,stock,« Dépôts » dans les situations de 2010 à 2012.
+COMPTES_SECU.DETTES_BENEFICIAIRES,Dettes et charges à payer à l'égard des bénéficiaires de prestations,COMPTES_SECU,situation patrimoniale : passif,stock,
+COMPTES_SECU.DETTES_COTISANTS,Dettes et charges à payer à l'égard des cotisants,COMPTES_SECU,situation patrimoniale : passif,stock,« Dettes à l'égard des cotisants » dans les situations de 2010 à 2014.
+COMPTES_SECU.DETTES_ENTITES_PUBLIQUES,Dettes et charges à payer à l'égard d'entités publiques et organismes de sécurité sociale,COMPTES_SECU,situation patrimoniale : passif,stock,"« Dettes et charges à payer à l'égard de l'État et autres entités publiques » de 2010 à 2012, « Dettes à l'égard d'entités publiques » en 2013 et 2014, « Dettes et charges à payer à l'égard d'entités publiques » de 2015 à 2018."
+COMPTES_SECU.DETTES_ETABLISSEMENTS_CREDIT,Dettes à l'égard d'établissements de crédit,COMPTES_SECU,situation patrimoniale : passif,stock,
+COMPTES_SECU.DETTES_INSTRUMENTS_FINANCIERS,Dettes nettes au titre des instruments financiers,COMPTES_SECU,situation patrimoniale : passif,stock,
+COMPTES_SECU.DETTES_REPRESENTEES_PAR_UN_TITRE,"Dettes représentées par un titre (obligations, billets de trésorerie, europapiers commerciaux)",COMPTES_SECU,situation patrimoniale : passif,stock,
+COMPTES_SECU.DOTATIONS,Dotations,COMPTES_SECU,situation patrimoniale : fonds propres,stock,
+COMPTES_SECU.ECART_ESTIMATION_FRR,Écart d'estimation : réévaluation des actifs du FRR en valeur de marché,COMPTES_SECU,situation patrimoniale : fonds propres,stock,
+COMPTES_SECU.ENCOURS_BANCAIRE,Encours bancaire,COMPTES_SECU,situation patrimoniale : actif,stock,
+COMPTES_SECU.ENDETTEMENT_FINANCIER_NET,Endettement financier net,COMPTES_SECU,situation patrimoniale : évolution depuis 2009,stock,"Actif financier moins passif financier : négatif, il mesure l'endettement."
+COMPTES_SECU.FONDS_PROPRES,Fonds propres,COMPTES_SECU,situation patrimoniale : fonds propres,stock,"« Capitaux propres » dans les situations de 2010 à 2019. Négatifs, ils mesurent le passif net."
+COMPTES_SECU.IMMOBILISATIONS,Immobilisations,COMPTES_SECU,situation patrimoniale : actif,stock,"Immobilisations non financières, prêts et dépôts, avances aux organismes de la sphère sociale. Montant net."
+COMPTES_SECU.IMMOBILISATIONS_NON_FINANCIERES,Immobilisations non financières,COMPTES_SECU,situation patrimoniale : actif,stock,Montant net.
+COMPTES_SECU.PASSIF_CIRCULANT,Passif circulant,COMPTES_SECU,situation patrimoniale : passif,stock,"Dettes et charges à payer à l'égard des bénéficiaires de prestations, des cotisants, des entités publiques, et autres passifs."
+COMPTES_SECU.PASSIF_FINANCIER,Passif financier,COMPTES_SECU,situation patrimoniale : passif,stock,"Dettes représentées par un titre, dettes à l'égard d'établissements de crédit, dépôts reçus, dettes nettes au titre des instruments financiers, autres."
+COMPTES_SECU.PASSIF_NET,Passif net (fonds propres négatifs),COMPTES_SECU,situation patrimoniale : évolution depuis 2009,stock,"Fonds propres de l'ensemble, tels que les présente sous ce nom le tableau de leur évolution : négatifs, ils mesurent le passif net, ou dette, de la sécurité sociale."
+COMPTES_SECU.PRETS_DEPOTS_GARANTIE,"Prêts, dépôts de garantie",COMPTES_SECU,situation patrimoniale : actif,stock,"« Prêts, dépôts de garantie et autres » dans les situations de 2010 à 2012. Montant net."
+COMPTES_SECU.PRODUITS_A_RECEVOIR_COTISATIONS,"Produits à recevoir de cotisations, contributions sociales et autres impositions",COMPTES_SECU,situation patrimoniale : actif,stock,Montant net.
+COMPTES_SECU.PRODUITS_A_RECEVOIR_ETAT,Produits à recevoir de l'État,COMPTES_SECU,situation patrimoniale : actif,stock,Montant net.
+COMPTES_SECU.PROVISIONS_RISQUES_CHARGES,Provisions pour risques et charges,COMPTES_SECU,situation patrimoniale : passif,stock,
 COMPTES_SECU.RECETTES,Recettes,COMPTES_SECU,tableau d'équilibre : recettes,recette,"Recettes de l'exercice d'une branche, d'un régime ou d'un organisme, telles que les présente son tableau d'équilibre dans la loi de financement de la sécurité sociale ou la loi d'approbation des comptes. Celles d'une branche comprennent les transferts reçus des autres branches ; celles de l'ensemble des branches les excluent."
+COMPTES_SECU.REPORT_A_NOUVEAU,Report à nouveau,COMPTES_SECU,situation patrimoniale : fonds propres,stock,
+COMPTES_SECU.RESERVES,Réserves,COMPTES_SECU,situation patrimoniale : fonds propres,stock,
 COMPTES_SECU.RESULTAT_COMPTABLE,Résultat comptable,COMPTES_SECU,RC,solde,"Résultat au sens de la comptabilité publique, semblable à celui d'une comptabilité générale d'entreprise (Insee). C'est le solde des tableaux d'équilibre des lois de financement de la sécurité sociale : recettes moins dépenses."
+COMPTES_SECU.RESULTAT_EN_INSTANCE_AFFECTATION,Résultat d'un exercice antérieur en instance d'affectation,COMPTES_SECU,situation patrimoniale : fonds propres,stock,Ligne des situations patrimoniales des comptes de 2017 et 2018 : le résultat de l'exercice 2016.
+COMPTES_SECU.RESULTAT_EXERCICE_BILAN,"Résultat de l'exercice, au bilan",COMPTES_SECU,situation patrimoniale : fonds propres,stock,"Ligne des fonds propres : le résultat comptable de l'exercice, avant son affectation."
+COMPTES_SECU.TOTAL_ACTIF,Total de l'actif,COMPTES_SECU,situation patrimoniale : actif,stock,Total de l'actif de la situation patrimoniale. Montant net.
+COMPTES_SECU.TOTAL_PASSIF,Total du passif,COMPTES_SECU,situation patrimoniale : passif,stock,"Total du passif de la situation patrimoniale, fonds propres compris."
+COMPTES_SECU.VALEURS_MOBILIERES,Valeurs mobilières et titres de placement,COMPTES_SECU,situation patrimoniale : actif,stock,Montant net.
 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS,Acquisitions moins cessions d'actifs non financiers,INSEE_APU,P.51g + P.52 + P.53 + NP,depense,
 INSEE_APU.DEP_CREDITS_IMPOT,Crédits d'impôt enregistrés en dépenses,INSEE_APU,"partie de D.3, D.6, D.7 et D.9",depense,"Crédits d'impôt restituables, que la comptabilité nationale enregistre en dépenses même lorsqu'ils réduisent l'impôt dû."
 INSEE_APU.DEP_FONCTIONNEMENT,Dépenses de fonctionnement,INSEE_APU,P.2 + D.1 + D.29 + D.4 hors D.41 + D.5,depense,
