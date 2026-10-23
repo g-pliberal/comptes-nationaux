@@ -672,14 +672,18 @@ Les comptes que l'OFGL publie collectivité par collectivité sur data.ofgl.fr, 
 
 | Jeu de données | Exercices | Collectivités au dernier exercice | Lignes | Lignes dont le consolidé n'est pas BP + BA − flux |
 |---|---|---|---|---|
+| ofgl.base-communes-consolidee | 2025 | 34 778 | 1 689 271 | 0 |
 | ofgl.base-gfp-consolidee | 8 années entre 2018 et 2025 | 1 262 | 508 116 | 0 |
 
-Identités comptables de chaque collectivité : 846 300 vérifiées, 846 300 justes, 0 en écart.
+Identités comptables de chaque collectivité : 3 759 652 vérifiées, 3 759 652 justes, 0 en écart.
 
-Somme des collectivités contre les totaux des annexes : 804 comparaisons, 641 justes, 163 en écart. Le dernier exercice d'un jeu est provisoire, et les annexes d'un rapport ne sont pas toujours établies sur la même version des comptes que le portail : un écart qui touche un chiffre révisable peut venir de là.
+Somme des collectivités contre les totaux des annexes : 907 comparaisons, 642 justes, 265 en écart. Le dernier exercice d'un jeu est provisoire, et les annexes d'un rapport ne sont pas toujours établies sur la même version des comptes que le portail : un écart qui touche un chiffre révisable peut venir de là.
 
 | Jeu de données | Montant | Comparaisons | En écart | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (somme − annexe) | Plus grand écart (somme − annexe) |
 |---|---|---|---|---|---|---|
+| ofgl.base-communes-consolidee | budget principal | 39 | 39 | 0 | aucun | −82,3 M€ en 2025 (COMPTES_LOCAUX.DEP_TOTALES) |
+| ofgl.base-communes-consolidee | budgets annexes | 32 | 31 | 0 | aucun | −17,3 M€ en 2025 (COMPTES_LOCAUX.DETTE) |
+| ofgl.base-communes-consolidee | consolidé | 32 | 32 | 0 | aucun | +173,8 M€ en 2025 (COMPTES_LOCAUX.DEPENSES_INTERVENTION) |
 | ofgl.base-gfp-consolidee | budget principal | 300 | 38 | 0 | aucun | −53,7 M€ en 2025 (COMPTES_LOCAUX.DETTE) |
 | ofgl.base-gfp-consolidee | budgets annexes | 252 | 69 | 37 | +0,6 M€ en 2018 (COMPTES_LOCAUX.DEP_TOTALES) | +94,8 M€ en 2025 (COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT) |
 | ofgl.base-gfp-consolidee | consolidé | 252 | 56 | 24 | +84,4 M€ en 2024 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) | +131,2 M€ en 2025 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) |
