@@ -668,43 +668,62 @@ Détail des grandeurs en écart :
 
 ## 7. Comptes de chaque collectivité
 
-Les comptes que l'OFGL publie collectivité par collectivité sur data.ofgl.fr, dans la version la plus récente de chaque exercice. Chaque ligne donne, pour une collectivité et un agrégat, le montant de son budget principal, celui de ses budgets annexes, les flux croisés entre eux et le montant consolidé : celui-ci doit être la somme des deux premiers moins le troisième, au centime près. Pour chaque collectivité, les identités comptables de la section 1 s'appliquent à chacun des quatre montants. La somme des collectivités se compare aux totaux des annexes des rapports de l'OFGL : 2A pour les budgets principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés.
+Les comptes que l'OFGL publie collectivité par collectivité sur data.ofgl.fr, dans la version la plus récente de chaque exercice. Chaque ligne donne, pour une collectivité et un agrégat, le montant de son budget principal, celui de ses budgets annexes, les flux croisés entre eux et le montant consolidé : celui-ci doit être la somme des deux premiers moins le troisième, à l'arrondi près : la demi-unité de la dernière décimale publiée de chaque montant, au centime au plus fin (les montants de 2022 n'ont que dix chiffres significatifs). Pour chaque collectivité, les identités comptables de la section 1 s'appliquent à chacun des quatre montants. La somme des collectivités se compare aux totaux des annexes des rapports de l'OFGL : 2A pour les budgets principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés.
 
 | Jeu de données | Exercices | Collectivités au dernier exercice | Lignes | Lignes dont le consolidé n'est pas BP + BA − flux |
 |---|---|---|---|---|
-| ofgl.base-gfp-consolidee | 2024 et 2025 | 1 262 | 128 006 | 0 |
+| ofgl.base-gfp-consolidee | 8 années entre 2018 et 2025 | 1 262 | 508 116 | 0 |
 
-Identités comptables de chaque collectivité : 212 012 vérifiées, 212 012 justes, 0 en écart.
+Identités comptables de chaque collectivité : 846 300 vérifiées, 846 300 justes, 0 en écart.
 
-Somme des collectivités contre les totaux des annexes : 204 comparaisons, 82 justes, 122 en écart. Le dernier exercice d'un jeu est provisoire, et les annexes d'un rapport ne sont pas toujours établies sur la même version des comptes que le portail : un écart qui touche un chiffre révisable peut venir de là.
+Somme des collectivités contre les totaux des annexes : 804 comparaisons, 641 justes, 163 en écart. Le dernier exercice d'un jeu est provisoire, et les annexes d'un rapport ne sont pas toujours établies sur la même version des comptes que le portail : un écart qui touche un chiffre révisable peut venir de là.
 
 | Jeu de données | Montant | Comparaisons | En écart | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (somme − annexe) | Plus grand écart (somme − annexe) |
 |---|---|---|---|---|---|---|
-| ofgl.base-gfp-consolidee | budget principal | 76 | 38 | 0 | aucun | −53,7 M€ en 2025 (COMPTES_LOCAUX.DETTE) |
-| ofgl.base-gfp-consolidee | budgets annexes | 64 | 39 | 7 | −4 185 € en 2024 (COMPTES_LOCAUX.DEP_TOTALES) | +94,8 M€ en 2025 (COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT) |
-| ofgl.base-gfp-consolidee | consolidé | 64 | 45 | 13 | +84,4 M€ en 2024 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) | +131,2 M€ en 2025 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) |
+| ofgl.base-gfp-consolidee | budget principal | 300 | 38 | 0 | aucun | −53,7 M€ en 2025 (COMPTES_LOCAUX.DETTE) |
+| ofgl.base-gfp-consolidee | budgets annexes | 252 | 69 | 37 | +0,6 M€ en 2018 (COMPTES_LOCAUX.DEP_TOTALES) | +94,8 M€ en 2025 (COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT) |
+| ofgl.base-gfp-consolidee | consolidé | 252 | 56 | 24 | +84,4 M€ en 2024 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) | +131,2 M€ en 2025 (COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES) |
 
 Écarts hors chiffres révisables :
 
 | Jeu de données | Montant | Grandeur | Années en écart | Plus grand écart (somme − annexe) |
 |---|---|---|---|---|
-| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 2024 | −4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.CAPACITE_BESOIN_FINANCEMENT | 2024 | +4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 2024 | −4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_TOTALES | 2024 | −4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | 2024 | −4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.EPARGNE_BRUTE | 2024 | +4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 2024 | +4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 2024 | −16,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 2018 et 2024 | +47 670 € en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_DEP_INVESTISSEMENT | 2018 | +1 976 € en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | 2018 | −1 082 € en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.AUTRES_REC_INVESTISSEMENT | 2018 | +23 357 € en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.CAPACITE_BESOIN_FINANCEMENT | 2018, 2023 et 2024 | +0,1 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.CHARGES_FINANCIERES | 2018 | +16 440 € en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 2018 et 2024 | +0,1 M€ en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_INVESTISSEMENT | 2018 | +1 975 € en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_TOTALES | 2018 et 2024 | +0,6 M€ en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | 2018 et 2024 | +0,1 M€ en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.DETTE | 2018 et 2023 | +0,1 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.EMPRUNTS | 2023 | +0,1 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.EPARGNE_BRUTE | 2018, 2023 et 2024 | +0,1 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.FLUX_NET_DETTE | 2018 et 2023 | −0,5 M€ en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.IMPOTS_TAXES | 2018 | +1 083 € en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 2023 | +0,1 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.REC_INVESTISSEMENT | 2018 | +23 357 € en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.REC_TOTALES | 2018 et 2023 | +0,2 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 2018 et 2023 | +0,1 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | 2018 | +0,6 M€ en 2018 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES | 2023 | +0,1 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.TRESORERIE_NETTE | 2023 | +0,1 M€ en 2023 |
+| ofgl.base-gfp-consolidee | budgets annexes | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 2018, 2023 et 2024 | −0,6 M€ en 2018 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | 2023 et 2024 | −16,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | 2018 | −1 082 € en 2018 |
 | ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.CAPACITE_BESOIN_FINANCEMENT | 2024 | +4 185 € en 2024 |
 | ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.DEPENSES_INTERVENTION | 2024 | +84,4 M€ en 2024 |
-| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 2024 | +67,7 M€ en 2024 |
-| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.DEP_TOTALES | 2024 | +67,7 M€ en 2024 |
-| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | 2024 | +67,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 2023 et 2024 | +67,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.DEP_TOTALES | 2023 et 2024 | +67,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | 2023 et 2024 | +67,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.DETTE | 2018 | +1 989 € en 2018 |
 | ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.EPARGNE_BRUTE | 2024 | +4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 2024 | +67,7 M€ en 2024 |
-| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.REC_TOTALES | 2024 | +67,7 M€ en 2024 |
-| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 2024 | +67,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.IMPOTS_TAXES | 2018 | +1 082 € en 2018 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 2023 et 2024 | +67,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.REC_TOTALES | 2023 et 2024 | +67,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 2023 et 2024 | +67,7 M€ en 2024 |
 | ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.SUBVENTIONS_PARTICIPATIONS_RECUES | 2024 | +84,4 M€ en 2024 |
 | ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 2024 | +4 185 € en 2024 |
-| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.VENTES_BIENS_SERVICES | 2024 | −16,7 M€ en 2024 |
+| ofgl.base-gfp-consolidee | consolidé | COMPTES_LOCAUX.VENTES_BIENS_SERVICES | 2023 et 2024 | −16,7 M€ en 2024 |

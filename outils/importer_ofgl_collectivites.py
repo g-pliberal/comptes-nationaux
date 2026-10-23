@@ -104,8 +104,19 @@ def inventaire(fichier):
     return resultat
 
 
-def montants(fichier, agregats):
-    """Les lignes de montants : [(siren, agrégat, budget principal, budgets annexes, flux croisés, consolidé)]."""
+def marge(texte):
+    """Demi-unité de la dernière décimale d'un montant publié, sans les zéros finaux (« 1103074315.0 » est un montant
+    à l'euro), au centime au plus fin : les montants de 2022 n'ont que dix chiffres significatifs, ceux des autres
+    exercices portent parfois des décimales de calcul au-delà du centime. Un montant nul est exact."""
+    if "e" in texte.lower() or float(texte) == 0:
+        return 0.005
+    decimales = len(texte.split(".")[1].rstrip("0")) if "." in texte else 0
+    return 0.5 * 10 ** -min(decimales, 2)
+
+
+def montants(fichier, agregats, marges=False):
+    """Les lignes de montants : [(siren, agrégat, budget principal, budgets annexes, flux croisés, consolidé)], et, si
+    `marges`, la marge d'arrondi de chacun des quatre montants à la suite."""
     resultat, vues = [], set()
     for n, (siren, agregat, *valeurs) in enumerate(lignes(fichier, MONTANTS), start=2):
         lieu = f"{fichier['id']}, ligne {n}"
@@ -116,7 +127,8 @@ def montants(fichier, agregats):
         if (siren, agregat) in vues:
             sys.exit(f"{lieu} : deuxième ligne pour {siren} et « {agregat} »")
         vues.add((siren, agregat))
-        resultat.append((siren, agregat, *(montant(v, lieu) for v in valeurs)))
+        resultat.append((siren, agregat, *(montant(v, lieu) for v in valeurs))
+                        + (tuple(marge(v) for v in valeurs) if marges else ()))
     return resultat
 
 

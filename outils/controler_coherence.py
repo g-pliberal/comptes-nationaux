@@ -720,7 +720,6 @@ def concordances(derniers):
 NIVEAUX_COLLECTIVITES = {"ofgl.base-gfp-consolidee": "GFP", "ofgl.base-communes-consolidee": "COMMUNES"}
 BUDGETS = [("budget principal", "ofgl.annexe-2a", "_BP"), ("budgets annexes", "ofgl.annexe-2b", "_BA"),
            ("flux croisés", None, None), ("consolidé", "ofgl.annexe-2c", "_BP_BA")]
-CENTIME = 0.005  # demi-unité des montants de chaque collectivité, publiés au centime
 # Grandeurs des annexes que les comptes de chaque collectivité ne donnent qu'en parties : la trésorerie nette est la
 # différence des dépôts au Trésor et des crédits de trésorerie.
 EN_PARTIES = {"COMPTES_LOCAUX.TRESORERIE_NETTE": [(1, "COMPTES_LOCAUX.DEPOTS_TRESOR"),
@@ -743,12 +742,13 @@ def collectivites(derniers):
     exercices, sommes_controlees = [], []
     controles = collections.defaultdict(lambda: [0, 0, None])  # (source, total, budget) → [vérifiées, en écart, pire]
     for (source, exercice), inscrit in sorted(retenus.items()):
-        par_siren, sommes, lignes_en_ecart = collections.defaultdict(dict), collections.defaultdict(lambda: [0.0] * 4), 0
-        for siren, agregat, *montants in ofgl.montants(fichiers[inscrit["fichier_id"]], agregats):
+        par_siren, lignes_en_ecart = collections.defaultdict(dict), 0
+        sommes = collections.defaultdict(lambda: [0.0] * 8)  # quatre montants, puis leurs marges d'arrondi
+        for siren, agregat, *montants in ofgl.montants(fichiers[inscrit["fichier_id"]], agregats, marges=True):
             concept = agregats[agregat]["concept_id"]
             par_siren[siren][concept] = montants
-            lignes_en_ecart += depasse(montants[0] + montants[1] - montants[2] - montants[3], 4 * CENTIME)
-            for k in range(4):
+            lignes_en_ecart += depasse(montants[0] + montants[1] - montants[2] - montants[3], sum(montants[4:]))
+            for k in range(8):
                 sommes[concept][k] += montants[k]
         exercices.append((source, exercice, inscrit["version"], inscrit["statut"], len(par_siren), int(inscrit["lignes"]),
                           lignes_en_ecart))
@@ -764,14 +764,15 @@ def collectivites(derniers):
                     ecart = montants[total][k] - sum(s * montants[c][k] for s, c in parties)
                     entree = controles[(source, total, tuple(c for _, c in parties), budget)]
                     entree[0] += 1
-                    if depasse(ecart, CENTIME * (1 + len(parties))):
+                    if depasse(ecart, montants[total][4 + k] + sum(montants[c][4 + k] for _, c in parties)):
                         entree[1] += 1
                         if entree[2] is None or abs(ecart) > abs(entree[2][0]):
                             entree[2] = (ecart, siren, exercice)
         niveau = NIVEAUX_COLLECTIVITES[source]
         for concept, parties in EN_PARTIES.items():
             if concept not in sommes and all(c in sommes for _, c in parties):
-                sommes[concept] = [sum(s * sommes[c][k] for s, c in parties) for k in range(4)]
+                sommes[concept] = ([sum(s * sommes[c][k] for s, c in parties) for k in range(4)]
+                                   + [sum(sommes[c][k] for _, c in parties) for k in range(4, 8)])
         for concept, somme in sorted(sommes.items()):
             for k, (budget, annexe, suffixe) in enumerate(BUDGETS):
                 publie = derniers.get((annexe, "FR", f"{niveau}{suffixe}", concept, "", "", "MD_EUR", exercice))
@@ -780,7 +781,7 @@ def collectivites(derniers):
                 v, marge, _ = valeur(publie)
                 ecart = somme[k] - v
                 sommes_controlees.append((source, budget, concept, exercice, ecart,
-                                          not depasse(ecart, marge + CENTIME * len(par_siren)),
+                                          not depasse(ecart, marge + somme[4 + k]),
                                           inscrit["statut"] == "provisoire" or publie["statut"] in REVISABLES))
     return exercices, controles, sommes_controlees
 
@@ -796,7 +797,9 @@ def ecart_lisible(ecart, unite):
     if unite in DENOMBREMENTS:
         return fr(ecart, 0, True)
     if unite == "euros":
-        # Un écart de moins de 50 000 euros s'écrirait « 0,0 M€ » : il s'écrit en euros.
+        # Un écart de moins de 50 000 euros s'écrirait « 0,0 M€ » : il s'écrit en euros, en centimes sous l'euro.
+        if abs(ecart) < 1:
+            return f"{fr(ecart, 2, True)} €"
         return f"{fr(ecart / 1e6, 1, True)} M€" if abs(ecart) >= 5e4 else f"{fr(ecart, 0, True)} €"
     nom = {"PC_PIB": "de PIB", "PC_PIB_POTENTIEL": "de PIB potentiel", "PC_DEPENSE": "de dépense"}.get(unite, unite)
     return f"{fr(ecart, 1, True)} point{'s' if abs(ecart) >= 2 else ''} {nom}"
@@ -1099,7 +1102,9 @@ def partie_collectivites(derniers):
               "Les comptes que l'OFGL publie collectivité par collectivité sur data.ofgl.fr, dans la version la plus "
               "récente de chaque exercice. Chaque ligne donne, pour une collectivité et un agrégat, le montant de son "
               "budget principal, celui de ses budgets annexes, les flux croisés entre eux et le montant consolidé : "
-              "celui-ci doit être la somme des deux premiers moins le troisième, au centime près. Pour chaque "
+              "celui-ci doit être la somme des deux premiers moins le troisième, à l'arrondi près : la demi-unité de "
+              "la dernière décimale publiée de chaque montant, au centime au plus fin (les montants de 2022 n'ont que "
+              "dix chiffres significatifs). Pour chaque "
               "collectivité, les identités comptables de la section 1 s'appliquent à chacun des quatre montants. La "
               "somme des collectivités se compare aux totaux des annexes des rapports de l'OFGL : 2A pour les budgets "
               "principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés.", "",
