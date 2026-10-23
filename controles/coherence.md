@@ -41,32 +41,54 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
+| senat.pjl06-051 | Projet de loi de financement de la sécurité sociale pour 2007, texte n° 51 (2006-2007) transmis au Sénat le 6 novembre 2006 | 2006-11-06 | 42 |
 | senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1602 |
+| senat.pjl07-067 | Projet de loi de financement de la sécurité sociale pour 2008, texte n° 67 (2007-2008) transmis au Sénat le 6 novembre 2007 | 2007-11-06 | 39 |
 | senat.pjl07-429 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2007, texte n° 429 (2007-2008) transmis au Sénat le 1er juillet 2008 | 2008-07-01 | 1341 |
+| senat.pjl08-080 | Projet de loi de financement de la sécurité sociale pour 2009, texte n° 80 (2008-2009) transmis au Sénat le 5 novembre 2008 | 2008-11-05 | 39 |
 | senat.pjl08-502 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2008, texte n° 502 (2008-2009) transmis au Sénat le 30 juin 2009 | 2009-06-30 | 1123 |
+| senat.pjl09-082 | Projet de loi de financement de la sécurité sociale pour 2010, texte n° 82 (2009-2010) transmis au Sénat le 3 novembre 2009 | 2009-11-03 | 39 |
 | senat.pjl09-585 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2009, texte n° 585 (2009-2010) transmis au Sénat le 29 juin 2010 | 2010-06-29 | 1075 |
+| senat.pjl10-084 | Projet de loi de financement de la sécurité sociale pour 2011, texte n° 84 (2010-2011) transmis au Sénat le 3 novembre 2010 | 2010-11-03 | 36 |
 | senat.pjl10-672 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2010, texte n° 672 (2010-2011) transmis au Sénat le 28 juin 2011 | 2011-06-28 | 1096 |
+| senat.pjl11-073 | Projet de loi de financement de la sécurité sociale pour 2012, texte n° 73 (2011-2012) transmis au Sénat le 2 novembre 2011 | 2011-11-02 | 36 |
 | senat.pjl11-655 | Projet de loi de règlement des comptes et rapport de gestion pour l'année 2011, texte n° 655 (2011-2012) transmis au Sénat le 10 juillet 2012 | 2012-07-10 | 1094 |
+| senat.pjl12-103 | Projet de loi de financement de la sécurité sociale pour 2013, texte n° 103 (2012-2013) transmis au Sénat le 6 novembre 2012 | 2012-11-06 | 37 |
 | senat.pjl12-799 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2012, texte n° 799 (2012-2013) transmis au Sénat le 23 juillet 2013 en nouvelle lecture | 2013-07-23 | 1128 |
+| senat.pjl13-117 | Projet de loi de financement de la sécurité sociale pour 2014, texte n° 117 (2013-2014) transmis au Sénat le 5 novembre 2013 | 2013-11-05 | 37 |
 | senat.pjl13-759 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2013, texte n° 759 (2013-2014) transmis au Sénat le 21 juillet 2014 en nouvelle lecture | 2014-07-21 | 1111 |
+| senat.pjl14-078 | Projet de loi de financement de la sécurité sociale pour 2015, texte n° 78 (2014-2015) transmis au Sénat le 3 novembre 2014 | 2014-11-03 | 37 |
 | senat.pjl14-642 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2014, texte n° 642 (2014-2015) transmis au Sénat le 16 juillet 2015 en nouvelle lecture | 2015-07-16 | 1168 |
+| senat.pjl15-128 | Projet de loi de financement de la sécurité sociale pour 2016, texte n° 128 (2015-2016) transmis au Sénat le 2 novembre 2015 | 2015-11-02 | 37 |
 | senat.pjl15-785 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2015, texte n° 785 (2015-2016) transmis au Sénat le 12 juillet 2016 en nouvelle lecture | 2016-07-12 | 1073 |
+| senat.pjl16-106 | Projet de loi de financement de la sécurité sociale pour 2017, texte n° 106 (2016-2017) transmis au Sénat le 7 novembre 2016 | 2016-11-07 | 43 |
 | senat.pjl16-643 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2016, texte n° 643 (2016-2017) transmis au Sénat le 18 juillet 2017 | 2017-07-18 | 1075 |
+| senat.pjl17-063 | Projet de loi de financement de la sécurité sociale pour 2018, texte n° 63 (2017-2018) transmis au Sénat le 6 novembre 2017 | 2017-11-06 | 43 |
 | senat.pjl17-595 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2017, texte n° 595 (2017-2018) transmis au Sénat le 21 juin 2018 | 2018-06-21 | 1047 |
+| senat.pjl18-106 | Projet de loi de financement de la sécurité sociale pour 2019, texte n° 106 (2018-2019) transmis au Sénat le 5 novembre 2018 | 2018-11-05 | 42 |
 | senat.pjl18-686 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2018, texte n° 686 (2018-2019) transmis au Sénat le 18 juillet 2019 en nouvelle lecture | 2019-07-18 | 1052 |
+| senat.pjl19-098 | Projet de loi de financement de la sécurité sociale pour 2020, texte n° 98 (2019-2020) transmis au Sénat le 4 novembre 2019 | 2019-11-04 | 43 |
 | senat.pjl19-505 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2019, texte n° 505 (2019-2020) transmis au Sénat le 11 juin 2020 | 2020-06-11 | 1061 |
+| senat.pjl20-101 | Projet de loi de financement de la sécurité sociale pour 2021, texte n° 101 (2020-2021) transmis au Sénat le 2 novembre 2020 | 2020-11-02 | 43 |
 | senat.pjl20-784 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2020, texte n° 784 (2020-2021) transmis au Sénat le 21 juillet 2021 en nouvelle lecture | 2021-07-21 | 1061 |
+| senat.pjl21-118 | Projet de loi de financement de la sécurité sociale pour 2022, texte n° 118 (2021-2022) transmis au Sénat le 2 novembre 2021 | 2021-11-02 | 43 |
 | senat.pjl22-683 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2021, texte n° 683 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 1090 |
 | senat.pjl22-684 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2022, texte n° 684 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 1098 |
+| senat.pjl22-705 | Projet de loi d'approbation des comptes de la sécurité sociale pour l'année 2022, texte n° 705 (2022-2023) transmis au Sénat le 7 juin 2023 | 2023-06-07 | 31 |
 | senat.pjl24-032 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2023, texte n° 32 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 1075 |
+| senat.pjl24-035 | Projet de loi d'approbation des comptes de la sécurité sociale de l'année 2023, texte n° 35 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 31 |
 | senat.pjl24-718 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2024, texte n° 718 (2024-2025) transmis au Sénat le 10 juin 2025 | 2025-06-10 | 1066 |
+| senat.pjl24-729 | Projet de loi d'approbation des comptes de la sécurité sociale de l'année 2024, texte n° 729 (2024-2025) transmis au Sénat le 11 juin 2025 | 2025-06-11 | 30 |
 | senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 1053 |
+| senat.pjl25-727 | Projet de loi portant approbation des comptes de la sécurité sociale de l'année 2025, texte n° 727 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 30 |
+| senat.tas05-033 | Projet de loi de financement de la sécurité sociale pour 2006, texte définitif n° 33 (2005-2006) adopté par le Sénat le 23 novembre 2005 | 2005-11-23 | 39 |
+| senat.tas22-018 | Projet de loi de financement de la sécurité sociale pour 2023, texte n° 18 (2022-2023) adopté par le Sénat en première lecture le 15 novembre 2022 | 2022-11-15 | 49 |
 
 ## 1. Sommes comptables
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-8447 sommes vérifiées avec toutes leurs composantes : 8432 justes, 15 en écart.
+8703 sommes vérifiées avec toutes leurs composantes : 8687 justes, 16 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
@@ -85,6 +107,7 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | senat.pjl19-505 | ETAT_LF | ensemble | 2019 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 23,3199 Md€ | 24,5853 Md€ | −1 265,4 M€ |
 | senat.pjl25-726 | ETAT_CGE | ensemble | 2025 | COMPTES_ETAT.SITUATION_NETTE | −2 115,8890 Md€ | −1 986,4230 Md€ | −129 466,0 M€ |
 | senat.pjl25-726 | ETAT_LF | ensemble | 2025 | LOLF.CS_ENSEMBLE_SOLDES_CREDITEURS | 16,0862 Md€ | 16,0902 Md€ | −4,0 M€ |
+| senat.tas22-018 | REGIME_GENERAL_HORS_FSV | COMPTES_SECU.MALADIE | 2021 | COMPTES_SECU.RESULTAT_COMPTABLE | −28,7000 Md€ | −29,7000 Md€ | +1 000,0 M€ |
 
 11116 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour 11111 d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables. Pour les 5 autres, elles ne suffisent pas : des parties absentes ne sont pas nulles.
 
@@ -95,9 +118,9 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 ## 2. Ventilations par fonction
 
-Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes.
+Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-19609 ventilations vérifiées avec toutes leurs parties : 19607 justes, 2 en écart.
+19649 ventilations vérifiées avec toutes leurs parties : 19647 justes, 2 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
@@ -108,15 +131,16 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 
 ## 3. Additivité des sous-secteurs
 
-Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.
+Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV.
 
-1689 additions vérifiées : 1668 justes, 21 en écart.
+1707 additions vérifiées : 1685 justes, 22 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
 | eurostat.gov_10a_main | SEC2010.B9 | S13 | S1311 + S1313 + S1314 | ensemble | 2011 | −0,4 M€ en 2011 |
 | insee.t3106 | SEC2010.B9 | S1311 | S13111 + S13112 | ensemble | 19 années entre 1959 et 1977 | +6 502,0 M€ en 1974 |
 | insee.t3212, insee.t3213, insee.t3214 | SEC2010.B9 | S1314 | S13141 + S13142 | ensemble | 2019 | +8,0 M€ en 2019 |
+| senat.tas22-018 | COMPTES_SECU.RESULTAT_COMPTABLE | REGIME_GENERAL | REGIME_GENERAL_HORS_FSV + FSV | ensemble | 2021 | −200,0 M€ en 2021 |
 
 ## 4. Passerelles entre tableaux
 
@@ -141,6 +165,7 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Solde du budget général à fin décembre (situation mensuelle : recettes moins dépenses) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2016 | 2016 | +101,0 M€ en 2016 |
 | Solde des comptes spéciaux à fin décembre (situation mensuelle) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2017 | 2017 | +64,0 M€ en 2017 |
 | Déficit à financer du tableau de financement contre résultat budgétaire de l'État, de signe opposé, dans le projet de loi d'approbation des comptes | 12 années entre 2014 et 2025 | 2014 | 2014 | −11 955,0 M€ en 2014 |
+| Résultat comptable du régime général, Fonds de solidarité vieillesse compris (tableau 3.108), contre soldes du régime général et du FSV approuvés par la loi de financement de la sécurité sociale | 13 années entre 2009 et 2021 | 2021 | 2021 | +4 800,0 M€ en 2021 |
 | Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) et (3), dans le tableau 3.107 | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
 
 ## 5. Ratios
@@ -216,9 +241,13 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | eurostat.gov_10a_main | senat.pjl20-784 | 1 | 1 | 0 | aucun | +0,3 point de PIB en 2020 |
 | eurostat.gov_10a_main | senat.pjl22-683 | 1 | 0 | 0 | aucun | aucun |
 | eurostat.gov_10a_main | senat.pjl22-684 | 1 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | senat.pjl22-705 | 3 | 0 | 0 | aucun | aucun |
 | eurostat.gov_10a_main | senat.pjl24-032 | 1 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | senat.pjl24-035 | 3 | 2 | 0 | aucun | −0,3 point de PIB en 2023 |
 | eurostat.gov_10a_main | senat.pjl24-718 | 1 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | senat.pjl24-729 | 3 | 0 | 0 | aucun | aucun |
 | eurostat.gov_10a_main | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | senat.pjl25-727 | 3 | 0 | 0 | aucun | aucun |
 | eurostat.nama_10_gdp | insee.t3101 | 48 | 42 | 42 | −9 571,2 M€ en 1990 | −9 571,2 M€ en 1990 |
 | eurostat.nama_10_gdp | insee.t3106 | 51 | 0 | 0 | aucun | aucun |
 | insee.t3101 | insee.t3106 | 48 | 42 | 42 | +9 571,2 M€ en 1990 | +9 571,2 M€ en 1990 |
@@ -244,9 +273,13 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3106 | senat.pjl20-784 | 1 | 1 | 0 | aucun | +0,3 point de PIB en 2020 |
 | insee.t3106 | senat.pjl22-683 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3106 | senat.pjl22-684 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl22-705 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3106 | senat.pjl24-032 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl24-035 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3106 | senat.pjl24-718 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl24-729 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3106 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3106 | senat.pjl25-727 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3107 | insee.t3203 | 17 | 1 | 1 | +59,2 M€ en 2016 | +59,2 M€ en 2016 |
 | insee.t3107 | senat.pjl09-585 | 3 | 0 | 0 | aucun | aucun |
 | insee.t3107 | senat.pjl10-672 | 3 | 0 | 0 | aucun | aucun |
@@ -267,6 +300,13 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3107 | senat.pjl25-726 | 2 | 0 | 0 | aucun | aucun |
 | insee.t3108 | insee.t3212 | 17 | 0 | 0 | aucun | aucun |
 | insee.t3108 | insee.t3214 | 13 | 6 | 6 | +271,0 M€ en 2018 | +271,0 M€ en 2018 |
+| insee.t3108 | senat.pjl16-106 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3108 | senat.pjl17-063 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3108 | senat.pjl18-106 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3108 | senat.pjl19-098 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3108 | senat.pjl20-101 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3108 | senat.pjl21-118 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3108 | senat.tas22-018 | 1 | 1 | 1 | +5 000,0 M€ en 2021 | +5 000,0 M€ en 2021 |
 | insee.t3201 | insee.t3301 | 240 | 35 | 19 | +43,1 M€ en 2021 | −2 012,0 M€ en 2024 |
 | insee.t3201 | insee.t3307 | 16 | 16 | 14 | −20 301,8 M€ en 2009 | −20 301,8 M€ en 2009 |
 | insee.t3202 | insee.t3302 | 240 | 20 | 5 | −0,6 M€ en 2016 | +1 029,5 M€ en 2024 |
@@ -313,6 +353,8 @@ Détail des grandeurs en écart :
 | eurostat.gov_10a_main | senat.pjl18-686 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2018 | aucune | +0,2 point de PIB en 2018 |
 | eurostat.gov_10a_main | senat.pjl19-505 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2019 | aucune | +0,6 point de PIB en 2019 |
 | eurostat.gov_10a_main | senat.pjl20-784 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2020 | aucune | +0,3 point de PIB en 2020 |
+| eurostat.gov_10a_main | senat.pjl24-035 | FR S1314 SEC2010.TE, en % du PIB | ensemble | 2023 | aucune | −0,2 point de PIB en 2023 |
+| eurostat.gov_10a_main | senat.pjl24-035 | FR S1314 SEC2010.TR, en % du PIB | ensemble | 2023 | aucune | −0,3 point de PIB en 2023 |
 | eurostat.nama_10_gdp | insee.t3101 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | −9 571,2 M€ en 1990 |
 | insee.t3101 | insee.t3106 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | +9 571,2 M€ en 1990 |
 | insee.t3101 | senat.pjl24-032 | FR S13 PDE.GD, en % du PIB | ensemble | 2023 | aucune | −1,1 point de PIB en 2023 |
@@ -330,6 +372,7 @@ Détail des grandeurs en écart :
 | insee.t3107 | insee.t3203 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | +59,2 M€ en 2016 |
 | insee.t3107 | senat.pjl24-718 | FR ETAT_LF LOLF.SOLDE_COMPTES_SPECIAUX | ensemble | 2024 | aucune | −50,0 M€ en 2024 |
 | insee.t3108 | insee.t3214 | FR S13142 SEC2010.B9 | ensemble | 6 années entre 2013 et 2018 | 6 années entre 2013 et 2018 | +271,0 M€ en 2018 |
+| insee.t3108 | senat.tas22-018 | FR REGIME_GENERAL COMPTES_SECU.RESULTAT_COMPTABLE | ensemble | 2021 | 2021 | +5 000,0 M€ en 2021 |
 | insee.t3201 | insee.t3301 | FR S13 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | +487,9 M€ en 2024 |
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.D1PAY | ensemble | 2011, 2023 et 2024 | 2011 | +889,0 M€ en 2024 |
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.D3PAY | ensemble | 2001, 2023 et 2024 | 2001 | +552,0 M€ en 2023 |

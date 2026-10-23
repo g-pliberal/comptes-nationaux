@@ -13,7 +13,7 @@ import re
 import sys
 
 from commun import (BASE, empreinte, identifiant, lire, lire_jsonstat, lire_sdmx, lire_tableaux_html, lire_xlsx,
-                    nombre_texte, paquet, ressources_chiffres)
+                    nombre_de_phrase, nombre_texte, paquet, ressources_chiffres, texte_html)
 
 
 def erreur_de_type(type_, texte):
@@ -133,6 +133,13 @@ def valeur_archivee(fichier, emplacement, copies):
             copies[(fichier["id"], feuille)] = lire_xlsx(chemin, feuille)[1]
         valeur = copies[(fichier["id"], feuille)].get(cellule)
         return (valeur, "") if isinstance(valeur, float) else None
+    if fichier["chemin"].endswith(".html") and emplacement.startswith("phrase="):
+        # Un montant énoncé dans le texte : la phrase doit figurer telle quelle dans la page.
+        if (fichier["id"], "texte") not in copies:
+            copies[(fichier["id"], "texte")] = texte_html(chemin.read_text(encoding="utf-8"))
+        phrase = emplacement[len("phrase="):]
+        nombre = nombre_de_phrase(phrase) if phrase in copies[(fichier["id"], "texte")] else None
+        return (float(nombre[0]), "") if nombre else None
     if fichier["chemin"].endswith(".html"):
         trouve = re.match(r"tableau=([0-9]+);ligne=([0-9]+);colonne=([0-9]+)", emplacement)
         if trouve is None:

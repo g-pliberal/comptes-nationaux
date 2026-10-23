@@ -206,6 +206,7 @@ def nombre(valeur):
 # --- Pages HTML (textes de loi publiés par le Sénat) et séries SDMX de l'Insee ---------------------------
 
 _SANS_FIN = {"br", "img", "hr", "col", "input", "meta", "link", "wbr"}
+_BLOCS = {"p", "br", "div", "td", "th", "tr", "li", "h1", "h2", "h3", "h4", "h5", "h6"}  # séparent les mots
 
 
 def _graisse(balise, attributs):
@@ -219,18 +220,25 @@ def _graisse(balise, attributs):
 class _Tableaux(HTMLParser):
     """Les tableaux d'une page, numérotés dans l'ordre où ils s'ouvrent ; un tableau imbriqué a son propre numéro.
     Chaque cellule garde ses paragraphes, sa hauteur (rowspan), sa largeur (colspan), et si tout son texte est en
-    gras. Chaque tableau garde aussi sa légende : le paragraphe, hors tableau, qui le précède immédiatement."""
+    gras. Chaque tableau garde aussi sa légende : le paragraphe, hors tableau, qui le précède immédiatement. Le flux
+    est le texte de la page dans l'ordre de lecture, cellules comprises, où « ⟦k⟧ » marque l'ouverture du tableau k
+    et « ⟦/k⟧ » sa fermeture."""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.tableaux, self.ouverts, self.cellule, self.balises = [], [], None, []
         self.legendes, self.libre, self.dernier_libre = [], [], ""
+        self.flux, self.numeros = [], []
 
     def handle_starttag(self, tag, attrs):
         a = {k.lower(): v for k, v in attrs}
+        if tag in _BLOCS:
+            self.flux.append(" ")
         if tag == "p" and self.cellule is None:
             self.libre = []
         if tag == "table":
+            self.flux.append(f" ⟦{len(self.tableaux)}⟧ ")
+            self.numeros.append(len(self.tableaux))
             self.ouverts.append([])
             self.tableaux.append(self.ouverts[-1])
             self.legendes.append(self.dernier_libre)
@@ -259,14 +267,18 @@ class _Tableaux(HTMLParser):
             self.cellule = None
         elif tag == "table" and self.ouverts:
             self.ouverts.pop()
+            self.flux.append(f" ⟦/{self.numeros.pop()}⟧ ")
         elif tag == "p" and self.cellule is None:
             self.dernier_libre = " ".join("".join(self.libre).split()) or self.dernier_libre
         elif self.cellule is not None and tag not in _SANS_FIN:
             ouverte = next((k for k in range(len(self.balises) - 1, 0, -1) if self.balises[k][0] == tag), None)
             if ouverte is not None:
                 del self.balises[ouverte:]
+        if tag in _BLOCS:
+            self.flux.append(" ")
 
     def handle_data(self, data):
+        self.flux.append(data)
         if self.cellule is None:
             self.libre.append(data)
         else:
@@ -312,14 +324,22 @@ def _grille(lignes):
         {"fusions": fusions, "largeurs": largeurs, "gras": gras}
 
 
-def lire_tableaux_html(chemin, mise_en_forme=False):
-    """Tableaux d'une page HTML, chacun sous forme de grille : liste de lignes, chacune liste des textes de ses
-    colonnes. Avec mise_en_forme=True, renvoie aussi la mise en forme de chaque tableau (voir _grille)."""
+def lire_page_html(chemin):
+    """Tableaux d'une page HTML, chacun sous forme de grille (liste de lignes, chacune liste des textes de ses
+    colonnes), la mise en forme de chaque tableau (voir _grille) et le texte de la page dans l'ordre de lecture, où
+    « ⟦k⟧ » marque l'ouverture du tableau k et « ⟦/k⟧ » sa fermeture."""
     lecteur = _Tableaux()
     lecteur.feed(pathlib.Path(chemin).read_text(encoding="utf-8"))
     lus = [_grille(t) for t in lecteur.tableaux]
-    grilles = [g for g, _ in lus]
-    return (grilles, [{**f, "legende": l} for (_, f), l in zip(lus, lecteur.legendes)]) if mise_en_forme else grilles
+    return [g for g, _ in lus], [{**f, "legende": l} for (_, f), l in zip(lus, lecteur.legendes)], \
+        " ".join("".join(lecteur.flux).split())
+
+
+def lire_tableaux_html(chemin, mise_en_forme=False):
+    """Tableaux d'une page HTML, chacun sous forme de grille : liste de lignes, chacune liste des textes de ses
+    colonnes. Avec mise_en_forme=True, renvoie aussi la mise en forme de chaque tableau (voir _grille)."""
+    grilles, formes, _ = lire_page_html(chemin)
+    return (grilles, formes) if mise_en_forme else grilles
 
 
 def texte_html(contenu):
@@ -330,13 +350,22 @@ def texte_html(contenu):
 def nombre_texte(texte):
     """« -3 377 967 838,47 » → (« -3377967838.47 », 2) ; None si le texte n'est pas un nombre. Un appel de note,
     astérisque avant ou après le nombre ou numéro entre parenthèses après lui (« 164,0 (1) »), n'en fait pas
-    partie, ni le signe + d'un nombre positif."""
+    partie, ni le signe + d'un nombre positif, ni le signe % d'un pourcentage (« 26,7 % » → 26,7)."""
     t = re.sub(r"[\s\u00a0\u202f]", "", texte).replace("−", "-").replace("–", "-").replace(",", ".")
-    t = re.sub(r"^\(?\*\)?|\(?\*\)?$|(?<=[0-9])\([0-9]\)$", "", t)
+    t = re.sub(r"^\(?\*\)?|\(?\*\)?$|(?<=[0-9])\([0-9]\)$|(?<=[0-9])%$", "", t)
     if not re.fullmatch(r"[-+]?[0-9]+(\.[0-9]+)?", t):
         return None
     t = t.lstrip("+")
     return t, len(t.split(".")[1]) if "." in t else 0
+
+
+def nombre_de_phrase(phrase):
+    """Le montant qu'énonce une phrase d'un texte (« …, s'élevant à 2,2 milliards d'euros ») : son seul nombre, lu
+    comme par nombre_texte, ou zéro si elle le dit nul (« …, lesquelles sont nulles ») ; None sinon."""
+    if re.search(r"\bnul(?:le)?s?$", phrase):
+        return None if re.search(r"[0-9]", phrase) else ("0", 0)
+    nombres = re.findall(r"[0-9]+(?:,[0-9]+)?", phrase)
+    return nombre_texte(nombres[0]) if len(nombres) == 1 else None
 
 
 MOIS = {m: i for i, m in enumerate(["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre",
@@ -344,13 +373,17 @@ MOIS = {m: i for i, m in enumerate(["janvier", "février", "mars", "avril", "mai
 
 
 def date_html(texte):
-    """Date qu'un texte publié par le Sénat porte lui-même : enregistrement, transmission ou adoption."""
-    trouve = re.search(r"(?:Enregistré à la Présidence du Sénat|transmis au Sénat|adopté par le Sénat) le "
-                       r"([0-9]{1,2})(?:er)? (" + "|".join(MOIS) + r") ([0-9]{4})", texte)
-    if trouve is None:
-        return ""
-    jour, mois, annee = trouve.groups()
-    return f"{annee}-{MOIS[mois]:02d}-{int(jour):02d}"
+    """Date qu'un texte publié par le Sénat porte lui-même : enregistrement, transmission ou adoption ; à défaut,
+    celle de la séance au procès-verbal de laquelle il est annexé, ou celle qui suit la session dans l'en-tête d'un
+    texte adopté par le Sénat."""
+    date = r"([0-9]{1,2})(?:er)? (" + "|".join(MOIS) + r") ([0-9]{4})"
+    for annonce in (r"(?:Enregistré à la Présidence du Sénat|transmis au Sénat|adopté (?:définitivement )?par le Sénat) le ",
+                    r"Annexe au procès-verbal de la séance du ", r"SESSION (?:ORDINAIRE|EXTRAORDINAIRE) DE [0-9]{4}-[0-9]{4} "):
+        trouve = re.search(annonce + date, texte)
+        if trouve:
+            jour, mois, annee = trouve.groups()
+            return f"{annee}-{MOIS[mois]:02d}-{int(jour):02d}"
+    return ""
 
 
 def lire_sdmx(chemin):

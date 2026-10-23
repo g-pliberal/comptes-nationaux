@@ -8,7 +8,7 @@
     {"name": "zone", "type": "string", "description": "Code du pays ou de la zone (FR, EU27_2020…).", "constraints": {"required": true, "pattern": "[A-Z0-9_]+"}},
     {"name": "perimetre_id", "type": "string", "constraints": {"required": true}},
     {"name": "concept_id", "type": "string", "constraints": {"required": true}},
-    {"name": "fonction_id", "type": "string", "description": "Fonction de la dépense : COFOG, ou mission et programme du budget de l'État ; vide pour l'ensemble."},
+    {"name": "fonction_id", "type": "string", "description": "Fonction de la dépense : COFOG, mission et programme du budget de l'État, ou branche de la sécurité sociale ; vide pour l'ensemble."},
     {"name": "traitements", "type": "string", "description": "Traitements particuliers, séparés par « ; »."},
     {"name": "unite_id", "type": "string", "constraints": {"required": true}},
     {"name": "periode", "type": "string", "description": "Année (2025), trimestre (2025-T2) ou mois (2025-08).", "constraints": {"required": true, "pattern": "[0-9]{4}(-T[1-4]|-[0-9]{2})?"}},

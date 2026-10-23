@@ -1,4 +1,9 @@
 id,libelle,norme_id,parent_id
+COMPTES_SECU.AT_MP,Accidents du travail et maladies professionnelles,COMPTES_SECU,
+COMPTES_SECU.AUTONOMIE,Autonomie,COMPTES_SECU,
+COMPTES_SECU.FAMILLE,Famille,COMPTES_SECU,
+COMPTES_SECU.MALADIE,Maladie,COMPTES_SECU,
+COMPTES_SECU.VIEILLESSE,Vieillesse,COMPTES_SECU,
 GF01,Services généraux des administrations publiques,COFOG1999,
 GF0101,"Fonctionnement des organes exécutifs et législatifs, affaires financières et fiscales, affaires étrangères",COFOG1999,GF01
 GF0102,Aide économique extérieure,COFOG1999,GF01

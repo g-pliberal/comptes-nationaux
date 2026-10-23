@@ -215,6 +215,9 @@ IDENTITES += [("COMPTES_ETAT.SITUATION_NETTE", ["COMPTES_ETAT.ACTIF", "-COMPTES_
 # Article liminaire, en points de PIB : le solde effectif (au sens de Maastricht) est la somme des soldes structurel et
 # conjoncturel et des mesures ponctuelles et temporaires.
 IDENTITES += [("SEC2010.B9", ["PFP.SOLDE_STRUCTUREL", "PFP.SOLDE_CONJONCTUREL", "PFP.MESURES_PONCTUELLES_TEMPORAIRES"])]
+# Tableaux d'équilibre des lois de financement de la sécurité sociale : le solde est la différence des recettes et des
+# dépenses, pour chaque branche comme pour l'ensemble.
+IDENTITES += [("COMPTES_SECU.RESULTAT_COMPTABLE", ["COMPTES_SECU.RECETTES", "-COMPTES_SECU.DEPENSES"])]
 
 IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique (1) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.ETAT_DROITS_CONSTATES", "rubrique (2) du tableau 3.107"),
@@ -228,8 +231,9 @@ DECOMPOSITIONS = [("S13", ["S1311", "S1313", "S1314"]), ("S1311", ["S13111", "S1
                   ("S1314", ["S13141", "S13142"]), ("S13131", ["S131311", "S131312", "S131313", "S131314"]),
                   ("S13_S212", ["S13", "S212"]), ("S13_S212", ["S1311", "S1313", "S1314", "S212"]),
                   ("S1314", ["REGIME_GENERAL", "S1314_HORS_RG"]),
-                  ("S1314_HORS_RG", ["CADES", "FRR", "AUTRES_REGIMES_SECU", "S13142"])]
-ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO"}
+                  ("S1314_HORS_RG", ["CADES", "FRR", "AUTRES_REGIMES_SECU", "S13142"]),
+                  ("REGIME_GENERAL", ["REGIME_GENERAL_HORS_FSV", "FSV"]), ("ROBSS_FSV", ["ROBSS", "FSV"])]
+ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO", "COMPTES_SECU.RESULTAT_COMPTABLE"}
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
 # de droite), chaque terme étant (source, périmètre, concept, signe) et, au besoin, (modèle de période, traitement),
@@ -239,6 +243,7 @@ _LOI = "senat.pjl*"  # projets de loi d'approbation des comptes (de règlement, 
 #                       gestion) publiés par le Sénat
 _DECEMBRE = ("{annee}-12", "cumul_depuis_janvier")  # situation mensuelle budgétaire, cumul à fin décembre
 _SMB = "insee.bdm-comptes-etat"
+_SECU = "senat.*"  # lois de financement et projets de loi d'approbation des comptes de la sécurité sociale
 _IMPOTS_PRODUCTION_3217 = [("insee.t3217", "S13_S212", f"SEC2010.{c}REC", 1) for c in ("D211", "D212", "D214", "D291", "D292")]
 PASSERELLES = [
     ("Cotisations sociales : tableau 3.217 contre tableau 3.201",
@@ -291,6 +296,11 @@ PASSERELLES = [
     ("Déficit à financer du tableau de financement contre résultat budgétaire de l'État, de signe opposé, dans le projet "
      "de loi d'approbation des comptes",
      [(_LOI, "ETAT_LF", "LOLF.DEFICIT_A_FINANCER", 1)], [(_LOI, "ETAT_LF", "LOLF.RESULTAT_BUDGETAIRE", -1)]),
+    ("Résultat comptable du régime général, Fonds de solidarité vieillesse compris (tableau 3.108), contre soldes du "
+     "régime général et du FSV approuvés par la loi de financement de la sécurité sociale",
+     [("insee.t3108", "REGIME_GENERAL", "COMPTES_SECU.RESULTAT_COMPTABLE", 1)],
+     [(_SECU, "REGIME_GENERAL_HORS_FSV", "COMPTES_SECU.RESULTAT_COMPTABLE", 1),
+      (_SECU, "FSV", "COMPTES_SECU.RESULTAT_COMPTABLE", 1)]),
     ("Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) "
      "et (3), dans le tableau 3.107",
      [("insee.t3107", "S13111", "SEC2010.B9", 1)],
@@ -395,9 +405,11 @@ def sommes(derniers):
 def ventilations(derniers):
     """Un ensemble contre la somme de ses parties, selon la hiérarchie de la table des fonctions : l'ensemble des
     fonctions contre les divisions de la COFOG, les missions du budget général de l'État ou ses comptes (budgets
-    annexes, comptes spéciaux), chaque division contre ses groupes, chaque mission ou compte contre ses programmes.
-    Les parties d'un ensemble sont celles que la source publie, pour cette grandeur, au moins une année ; s'il en
-    manque une année, la ventilation est partielle."""
+    annexes, comptes spéciaux), ou les branches de la sécurité sociale, chaque division contre ses groupes, chaque
+    mission ou compte contre ses programmes. Les parties d'un ensemble sont celles que la source publie, pour cette
+    grandeur, au moins une année ; s'il en manque une année, la ventilation est partielle. Un ensemble consolidé ne se
+    compare pas à des parties qui ne le sont pas (les recettes de l'ensemble des branches, hors transferts entre
+    branches) : seul s'additionne alors le solde."""
     enfants = collections.defaultdict(list)
     for f in lire("tables/fonctions.csv"):
         if "+" not in f["id"]:
@@ -415,6 +427,8 @@ def ventilations(derniers):
             presents = [f for f in fils if f in par_fonction]
             if parent not in par_fonction or not presents:
                 continue  # pas de ventilation publiée
+            if len({par_fonction[f]["consolidation"] for f in [parent] + presents} & CONSOLIDATIONS_EXCLUSIVES) > 1:
+                continue  # l'ensemble et ses parties ne mesurent pas la même chose
             resultats.append({"source": source, "perimetre": perimetre, "concept": concept, "fonction": parent,
                               "periode": periode, "complet": len(presents) == len(fils),
                               **comparer(par_fonction[parent], [(1, par_fonction[f]) for f in presents])})
@@ -638,8 +652,10 @@ def partie_ventilations(derniers):
     ecarts = [r for r in complets if not r["juste"]]
     lignes = ["## 2. Ventilations par fonction", "",
               "Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions "
-              "du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), chaque division contre "
-              "la somme de ses groupes, chaque mission ou compte contre celle de ses programmes.", "",
+              "du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la "
+              "sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de "
+              "ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble "
+              "des branches excluent les transferts entre elles, que comptent celles de chaque branche.", "",
               f"{len(complets)} ventilations vérifiées avec toutes leurs parties : {len(complets) - len(ecarts)} justes, "
               f"{len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
@@ -660,7 +676,9 @@ def partie_additivite(derniers):
     n, ecarts = additivite(derniers)
     lignes = ["## 3. Additivité des sous-secteurs", "",
               "Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble "
-              "des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties.", "",
+              "des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour "
+              "la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité "
+              "vieillesse compris, contre la somme des leurs et de celui du FSV.", "",
               f"{n} additions vérifiées : {n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
     for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart in ecarts:
