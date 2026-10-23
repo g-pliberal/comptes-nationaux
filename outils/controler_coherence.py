@@ -15,7 +15,8 @@ vérifie ce que disent les sources elles-mêmes :
 6. les écarts entre sources pour une même grandeur.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
-demi-unité de la dernière décimale de chaque valeur en jeu. Une incohérence trouvée ici n'est pas une
+demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
+ses montants. Une incohérence trouvée ici n'est pas une
 erreur de la base : c'est un constat sur la source, publié tel quel. Le rapport ne contient aucune date
 d'exécution, pour qu'un rapport à jour ne change pas.
 """
@@ -263,6 +264,15 @@ _LOCAUX = [("DEP_FONCTIONNEMENT", ["ACHATS_CHARGES_EXTERNES", "FRAIS_PERSONNEL",
            ("DEP_TOTALES", ["DEP_TOTALES_HORS_REMBOURSEMENTS", "REMBOURSEMENTS_DETTE"]),
            ("REC_TOTALES", ["REC_TOTALES_HORS_EMPRUNTS", "EMPRUNTS"]),
            ("VARIATION_FONDS_ROULEMENT", ["REC_TOTALES", "-DEP_TOTALES"])]
+# Les publications de la DGCL par collectivité détaillent les impôts sans leur total, et présentent les soldes de gestion :
+# l'épargne de gestion, puis l'épargne brute après charges financières ; l'annuité réunit remboursements et intérêts.
+_LOCAUX += [("REC_FONCTIONNEMENT", ["IMPOTS_LOCAUX", "AUTRES_IMPOTS_TAXES", "CONCOURS_ETAT",
+                                    "SUBVENTIONS_PARTICIPATIONS_RECUES", "VENTES_BIENS_SERVICES",
+                                    "AUTRES_REC_FONCTIONNEMENT"]),
+            ("DEPENSES_GESTION", ["DEP_FONCTIONNEMENT", "-CHARGES_FINANCIERES"]),
+            ("EPARGNE_GESTION", ["REC_FONCTIONNEMENT", "-DEPENSES_GESTION"]),
+            ("EPARGNE_BRUTE", ["EPARGNE_GESTION", "-CHARGES_FINANCIERES"]),
+            ("ANNUITE_DETTE", ["REMBOURSEMENTS_DETTE", "INTERETS_DETTE"])]
 IDENTITES += [(f"COMPTES_LOCAUX.{t}", [("-" if c.startswith("-") else "") + "COMPTES_LOCAUX." + c.lstrip("-") for c in cs])
               for t, cs in _LOCAUX]
 
@@ -293,7 +303,22 @@ _NIVEAUX_LOCAUX = [("SECTEUR_COMMUNAL_BP", ["COMMUNES_BP", "GFP_BP"]),
                    ("COLLECTIVITES_TERRITORIALES_GFP_BP", ["COMMUNES_BP", "GFP_BP", "DEPARTEMENTS_BP", "REGIONS_CTU_BP"]),
                    ("COLLECTIVITES_LOCALES_BP", ["COLLECTIVITES_TERRITORIALES_GFP_BP", "SYNDICATS_BP"]),
                    ("GFP_BP", ["GFP_METROPOLES_BP", "GFP_CU_BP", "GFP_CA_BP", "GFP_CC_BP"])]
-DECOMPOSITIONS_PAR_CONCEPT.update({c["id"]: _NIVEAUX_LOCAUX for c in lire("tables/concepts.csv")
+# Les totaux des publications de la DGCL par collectivité : chacun contre la somme des collectivités que la table des
+# périmètres range sous lui (« ? » : une collectivité n'existe pas toutes les années, comme la Collectivité européenne
+# d'Alsace, créée en 2021), puis contre celle des totaux qu'il réunit.
+_SOUS = collections.defaultdict(list)
+for _p in lire("tables/perimetres.csv"):
+    _SOUS[_p["parent_id"]].append(_p["id"])
+_ENTITES_LOCALES = [(t, ["?" + p for p in sorted(_SOUS[t])])
+                    for t in ("DEPARTEMENTS_METROPOLE_BP", "DEPARTEMENTS_OUTRE_MER_BP", "REGIONS_METROPOLE_HORS_IDF_BP",
+                              "REGIONS_OUTRE_MER_BP")]
+_ENTITES_LOCALES += [("DEPARTEMENTS_BP", ["DEPARTEMENTS_METROPOLE_BP", "DEPARTEMENTS_OUTRE_MER_BP"]),
+                     ("DEPARTEMENTS_CTU_BP", ["DEPARTEMENTS_BP", "METROPOLE_LYON_BP", "VILLE_DE_PARIS_BP",
+                                              "COLLECTIVITE_DE_CORSE_BP", "CTU_MARTINIQUE_BP", "CTU_GUYANE_BP"]),
+                     ("REGIONS_METROPOLE_BP", ["REGIONS_METROPOLE_HORS_IDF_BP", "REG_11_BP"]),
+                     ("REGIONS_BP", ["REGIONS_METROPOLE_BP", "REGIONS_OUTRE_MER_BP"]),
+                     ("REGIONS_CTU_BP", ["REGIONS_BP", "COLLECTIVITE_DE_CORSE_BP", "CTU_MARTINIQUE_BP", "CTU_GUYANE_BP"])]
+DECOMPOSITIONS_PAR_CONCEPT.update({c["id"]: _NIVEAUX_LOCAUX + _ENTITES_LOCALES for c in lire("tables/concepts.csv")
                                    if c["norme_id"] == "COMPTES_LOCAUX"})
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
@@ -375,6 +400,10 @@ PASSERELLES = [
 
 # Ratios qui s'additionnent chez une même source pour une même année : leur dénominateur est le même.
 RATIOS_ADDITIFS = {"PC_PIB", "PC_PIB_POTENTIEL"}
+# Sources dont les montants ne sont exacts qu'à une unité près de leur dernière décimale, et non à une demi-unité :
+# l'OFGL arrondit ou tronque selon les cas ses montants à l'euro, comme le montre leur comparaison aux montants au
+# centime des publications de la DGCL.
+A_UNE_UNITE_PRES = {"ofgl.annexe-2a"}
 # Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes.
 FAMILLES = {"EUR": ("euros", 1), "MIO_EUR": ("euros", 1e6), "MD_EUR": ("euros", 1e9),
             "MIO_ECU_EUR": ("écus puis euros", 1e6)}
@@ -401,9 +430,11 @@ def charger():
 
 
 def valeur(ligne):
-    """(valeur dans l'unité de base de sa famille, demi-unité de sa dernière décimale, famille d'unités)."""
+    """(valeur dans l'unité de base de sa famille, demi-unité de sa dernière décimale, ou unité entière pour une source
+    qui tronque, famille d'unités)."""
     nom, echelle = FAMILLES.get(ligne["unite_id"], (ligne["unite_id"], 1))
-    return float(ligne["valeur"]) * echelle, 0.5 * 10 ** -int(ligne["decimales"]) * echelle, nom
+    marge = (1 if ligne["source_id"] in A_UNE_UNITE_PRES else 0.5) * 10 ** -int(ligne["decimales"]) * echelle
+    return float(ligne["valeur"]) * echelle, marge, nom
 
 
 def depasse(ecart, marge):
@@ -752,7 +783,8 @@ def partie_additivite(derniers):
               "patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les "
               "collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un "
               "niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre "
-              "contre la somme de leurs types (annexe 2A des rapports de l'OFGL).", "",
+              "contre la somme de leurs types (annexe 2A des rapports de l'OFGL), chaque total des publications de la "
+              "DGCL contre la somme de ses départements ou de ses régions.", "",
               f"{n} additions vérifiées : {n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
     for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart in ecarts:
@@ -764,12 +796,17 @@ def partie_additivite(derniers):
             annee, ecart, _, fonction = plus_grand(liste, lambda e: e[1])
             tableaux = ", ".join(sorted({t for _, _, ts, _ in liste for t in ts}))
             fonctions = sorted({f or "ensemble" for _, _, _, f in liste})
-            lignes.append(f"| {tableaux} | {concept} | {ensemble} | {' + '.join(parties)} | "
+            lignes.append(f"| {tableaux} | {concept} | {ensemble} | {parties_lisibles(parties)} | "
                           f"{', '.join(fonctions) if len(fonctions) <= 3 else f'{len(fonctions)} fonctions'} | "
                           f"{plage([a for a, _, _, _ in liste])} | {ecart_lisible(ecart, 'euros')} en {annee}"
                           f"{'' if fonction == '' else f' ({fonction})'} |")
         lignes.append("")
     return lignes
+
+
+def parties_lisibles(parties):
+    """Les parties d'une addition ; au-delà de six, leur nombre, la première et la dernière."""
+    return " + ".join(parties) if len(parties) <= 6 else f"ses {len(parties)} parties ({parties[0]} … {parties[-1]})"
 
 
 def partie_passerelles(derniers):
@@ -919,7 +956,8 @@ def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
               "Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la "
-              "demi-unité de la dernière décimale de chaque valeur en jeu. Une incohérence signalée ici est un constat "
+              "demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour l'OFGL, qui arrondit "
+              "ou tronque selon les cas ses montants à l'euro. Une incohérence signalée ici est un constat "
               "sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.", ""]
     lignes += partie_sources(derniers) + partie_sommes(derniers) + partie_ventilations(derniers)
     lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)

@@ -2,7 +2,7 @@
 
 Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.
 
-Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la demi-unité de la dernière décimale de chaque valeur en jeu. Une incohérence signalée ici est un constat sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.
+Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour l'OFGL, qui arrondit ou tronque selon les cas ses montants à l'euro. Une incohérence signalée ici est un constat sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.
 
 ## Les sources contrôlées
 
@@ -10,6 +10,8 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 | Source | Titre | Version la plus récente | Chiffres |
 |---|---|---|---|
+| dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
+| dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4070 |
 | eurostat.gov_10a_exp | Dépenses des administrations publiques par fonction (COFOG) | 2026-10-21 | 1290 |
 | eurostat.gov_10a_main | Recettes, dépenses et principaux agrégats des administrations publiques | 2026-10-21 | 1488 |
 | eurostat.nama_10_gdp | PIB et principaux agrégats | 2026-10-21 | 102 |
@@ -89,10 +91,53 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-10625 sommes vérifiées avec toutes leurs composantes : 10598 justes, 27 en écart.
+18930 sommes vérifiées avec toutes leurs composantes : 18868 justes, 62 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
+| dgcl.finances-departements | DEPARTEMENTS_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 59,5032 Md€ | 60,2187 Md€ | −715,5 M€ |
+| dgcl.finances-departements | DEPARTEMENTS_BP | ensemble | 2022 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 71,4088 Md€ | 71,4338 Md€ | −25,0 M€ |
+| dgcl.finances-departements | DEPARTEMENTS_CTU_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 70,7601 Md€ | 71,4756 Md€ | −715,5 M€ |
+| dgcl.finances-departements | DEPARTEMENTS_CTU_BP | ensemble | 2022 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 83,9477 Md€ | 83,9727 Md€ | −25,0 M€ |
+| dgcl.finances-departements | DEPARTEMENTS_METROPOLE_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 57,5987 Md€ | 58,3032 Md€ | −704,5 M€ |
+| dgcl.finances-departements | DEPARTEMENTS_METROPOLE_BP | ensemble | 2022 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 69,2457 Md€ | 69,2707 Md€ | −25,0 M€ |
+| dgcl.finances-departements | DEPARTEMENTS_OUTRE_MER_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 1,9046 Md€ | 1,9156 Md€ | −11,0 M€ |
+| dgcl.finances-departements | DEP_06_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 1,0877 Md€ | 1,1377 Md€ | −50,0 M€ |
+| dgcl.finances-departements | DEP_07_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,3222 Md€ | 0,3322 Md€ | −10,0 M€ |
+| dgcl.finances-departements | DEP_10_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,3031 Md€ | 0,3081 Md€ | −5,0 M€ |
+| dgcl.finances-departements | DEP_12_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,3168 Md€ | 0,3258 Md€ | −9,0 M€ |
+| dgcl.finances-departements | DEP_14_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,6131 Md€ | 0,6581 Md€ | −45,0 M€ |
+| dgcl.finances-departements | DEP_15_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,1870 Md€ | 0,1920 Md€ | −5,0 M€ |
+| dgcl.finances-departements | DEP_16_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,3785 Md€ | 0,3865 Md€ | −8,0 M€ |
+| dgcl.finances-departements | DEP_17_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,6549 Md€ | 0,6689 Md€ | −14,0 M€ |
+| dgcl.finances-departements | DEP_19_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,2399 Md€ | 0,2649 Md€ | −25,0 M€ |
+| dgcl.finances-departements | DEP_19_BP | ensemble | 2022 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 0,3328 Md€ | 0,3578 Md€ | −25,0 M€ |
+| dgcl.finances-departements | DEP_22_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,5612 Md€ | 0,5712 Md€ | −10,0 M€ |
+| dgcl.finances-departements | DEP_25_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,4913 Md€ | 0,4983 Md€ | −7,0 M€ |
+| dgcl.finances-departements | DEP_26_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,5211 Md€ | 0,5401 Md€ | −19,0 M€ |
+| dgcl.finances-departements | DEP_29_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,8043 Md€ | 0,8483 Md€ | −44,0 M€ |
+| dgcl.finances-departements | DEP_31_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 1,4214 Md€ | 1,4714 Md€ | −50,0 M€ |
+| dgcl.finances-departements | DEP_32_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,2410 Md€ | 0,2490 Md€ | −8,0 M€ |
+| dgcl.finances-departements | DEP_33_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 1,5991 Md€ | 1,6091 Md€ | −10,0 M€ |
+| dgcl.finances-departements | DEP_34_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 1,2624 Md€ | 1,2884 Md€ | −26,0 M€ |
+| dgcl.finances-departements | DEP_36_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,2017 Md€ | 0,2067 Md€ | −5,0 M€ |
+| dgcl.finances-departements | DEP_37_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,5238 Md€ | 0,5488 Md€ | −25,0 M€ |
+| dgcl.finances-departements | DEP_42_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,7026 Md€ | 0,7176 Md€ | −15,0 M€ |
+| dgcl.finances-departements | DEP_53_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,2810 Md€ | 0,2947 Md€ | −13,7 M€ |
+| dgcl.finances-departements | DEP_54_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,6883 Md€ | 0,7101 Md€ | −21,8 M€ |
+| dgcl.finances-departements | DEP_57_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,7677 Md€ | 0,7927 Md€ | −25,0 M€ |
+| dgcl.finances-departements | DEP_60_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,6784 Md€ | 0,7084 Md€ | −30,0 M€ |
+| dgcl.finances-departements | DEP_62_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 1,5449 Md€ | 1,5867 Md€ | −41,8 M€ |
+| dgcl.finances-departements | DEP_63_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,5936 Md€ | 0,6036 Md€ | −10,0 M€ |
+| dgcl.finances-departements | DEP_69_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,4004 Md€ | 0,4174 Md€ | −17,0 M€ |
+| dgcl.finances-departements | DEP_71_BP | ensemble | 2022 | COMPTES_LOCAUX.EPARGNE_NETTE | 0,0521 Md€ | 0,0579 Md€ | −5,8 M€ |
+| dgcl.finances-departements | DEP_71_BP | ensemble | 2022 | COMPTES_LOCAUX.ANNUITE_DETTE | 0,0472 Md€ | 0,0413 Md€ | +5,8 M€ |
+| dgcl.finances-departements | DEP_73_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,4248 Md€ | 0,4540 Md€ | −29,2 M€ |
+| dgcl.finances-departements | DEP_74_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,6769 Md€ | 0,7269 Md€ | −50,0 M€ |
+| dgcl.finances-departements | DEP_83_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 1,0331 Md€ | 1,0631 Md€ | −30,0 M€ |
+| dgcl.finances-departements | DEP_84_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,5443 Md€ | 0,5743 Md€ | −30,0 M€ |
+| dgcl.finances-departements | DEP_86_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,3899 Md€ | 0,4059 Md€ | −16,0 M€ |
+| dgcl.finances-departements | DEP_974_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,9592 Md€ | 0,9702 Md€ | −11,0 M€ |
 | insee.bdm-comptes-etat | ETAT_LF | ensemble | 2019-04 | LOLF.RESULTAT_EXECUTION | −67,2150 Md€ | −65,5960 Md€ | −1 619,0 M€ |
 | insee.t3207 | S131311 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 36,3688 Md€ | 36,2870 Md€ | +81,8 M€ |
 | insee.t3207 | S131311 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 31,1743 Md€ | 31,0840 Md€ | +90,3 M€ |
@@ -104,14 +149,6 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | insee.t3210 | S131314 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 Md€ | 5,0550 Md€ | +16,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 Md€ | −16,3100 Md€ | −574,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 Md€ | −17,1280 Md€ | −578,0 M€ |
-| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2017 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 181,6835 Md€ | 181,6835 Md€ | +5 € |
-| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2017 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 214,5300 Md€ | 214,5300 Md€ | +4 € |
-| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2017 | COMPTES_LOCAUX.CONCOURS_ETAT | 38,9382 Md€ | 38,9382 Md€ | +3 € |
-| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2018 | COMPTES_LOCAUX.IMPOTS_TAXES | 142,8837 Md€ | 142,8837 Md€ | +2 € |
-| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2018 | COMPTES_LOCAUX.DEP_INVESTISSEMENT | 56,2728 Md€ | 56,2728 Md€ | +3 € |
-| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2019 | COMPTES_LOCAUX.IMPOTS_TAXES | 147,5381 Md€ | 147,5381 Md€ | +2 € |
-| ofgl.annexe-2a | COLLECTIVITES_LOCALES_BP | ensemble | 2019 | COMPTES_LOCAUX.EPARGNE_BRUTE | 37,6705 Md€ | 37,6705 Md€ | −2 € |
-| ofgl.annexe-2a | GFP_CU_BP | ensemble | 2023 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 2,0916 Md€ | 2,0916 Md€ | +3 € |
 | senat.pjl13-759 | ETAT_LF | ensemble | 2013 | LOLF.COMPTES_COMMERCE_SOLDE | 0,1368 Md€ | 0,2654 Md€ | −128,6 M€ |
 | senat.pjl15-128 | SECU_LFSS | ensemble | 2014 | COMPTES_SECU.ACTIF_CIRCULANT | 69,7000 Md€ | 69,3000 Md€ | +400,0 M€ |
 | senat.pjl15-128 | SECU_LFSS | ensemble | 2014 | COMPTES_SECU.PASSIF_FINANCIER | 179,9000 Md€ | 177,0000 Md€ | +2 900,0 M€ |
@@ -143,45 +180,34 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 
 ## 3. Additivité des sous-secteurs
 
-Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexe 2A des rapports de l'OFGL).
+Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexe 2A des rapports de l'OFGL), chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions.
 
-3678 additions vérifiées : 3621 justes, 57 en écart.
+5363 additions vérifiées : 5320 justes, 43 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
+| dgcl.finances-departements | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | DEPARTEMENTS_METROPOLE_BP | ses 92 parties (CEA_BP … DEP_95_BP) | ensemble | 2022 | +5,8 M€ en 2022 |
 | eurostat.gov_10a_main | SEC2010.B9 | S13 | S1311 + S1313 + S1314 | ensemble | 2011 | −0,4 M€ en 2011 |
 | insee.t3106 | SEC2010.B9 | S1311 | S13111 + S13112 | ensemble | 19 années entre 1959 et 1977 | +6 502,0 M€ en 1974 |
 | insee.t3212, insee.t3213, insee.t3214 | SEC2010.B9 | S1314 | S13141 + S13142 | ensemble | 2019 | +8,0 M€ en 2019 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2018 et 2019 | +3 € en 2018 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.AUTRES_IMPOTS_TAXES | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2020 | +3 € en 2020 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.AUTRES_REC_INVESTISSEMENT | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2020 | +3 € en 2020 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEPENSES_INTERVENTION | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEPENSES_INTERVENTION | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.DEP_INVESTISSEMENT | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2019 | +3 € en 2019 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEP_TOTALES | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEP_TOTALES | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.DETTE | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2017 | +3 € en 2017 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.EPARGNE_NETTE | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2017 et 2018 | +3 € en 2017 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.FCTVA | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2017 | +3 € en 2017 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.FRAIS_PERSONNEL | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2017 | +3 € en 2017 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_LOCAUX | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_LOCAUX | GFP_BP | GFP_METROPOLES_BP + GFP_CU_BP + GFP_CA_BP + GFP_CC_BP | ensemble | 2022 | +3 € en 2022 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_LOCAUX | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_TAXES | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.IMPOTS_TAXES | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.PEREQUATIONS_COMPENSATIONS | COLLECTIVITES_TERRITORIALES_GFP_BP | COMMUNES_BP + GFP_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2020 | +3 € en 2020 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.REC_FONCTIONNEMENT | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.REC_FONCTIONNEMENT | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2022 et 2025 | +47,4 M€ en 2025 |
+| ofgl.annexe-2a | COMPTES_LOCAUX.REC_FONCTIONNEMENT | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | GFP_BP | GFP_METROPOLES_BP + GFP_CU_BP + GFP_CA_BP + GFP_CC_BP | ensemble | 2023 | +3 € en 2023 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | SECTEUR_COMMUNAL_BP | COMMUNES_BP + GFP_BP | ensemble | 2025 | +47,4 M€ en 2025 |
-| ofgl.annexe-2a | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | GFP_BP | GFP_METROPOLES_BP + GFP_CU_BP + GFP_CA_BP + GFP_CC_BP | ensemble | 2020 | +3 € en 2020 |
 | senat.pjl13-117 | COMPTES_SECU.REPORT_A_NOUVEAU | SECU_LFSS | REGIME_GENERAL_HORS_FSV + AUTRES_REGIMES_BASE + CADES | ensemble | 2011 | +9 800,0 M€ en 2011 |
 | senat.pjl17-063 | COMPTES_SECU.ENCOURS_BANCAIRE | SECU_LFSS | REGIME_GENERAL_HORS_FSV + AUTRES_REGIMES_BASE + FSV + CADES + FRR | ensemble | 2015 | +900,0 M€ en 2015 |
 | senat.tas22-018 | COMPTES_SECU.RESULTAT_COMPTABLE | REGIME_GENERAL | REGIME_GENERAL_HORS_FSV + FSV | ensemble | 2021 | −200,0 M€ en 2021 |
@@ -260,6 +286,9 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 
 | Source A | Source B | Comparaisons | Écarts | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (A − B) | Plus grand écart (A − B) |
 |---|---|---|---|---|---|---|
+| dgcl.finances-departements | dgcl.finances-regions | 540 | 0 | 0 | aucun | aucun |
+| dgcl.finances-departements | ofgl.annexe-2a | 170 | 8 | 8 | +715,5 M€ en 2022 | +715,5 M€ en 2022 |
+| dgcl.finances-regions | ofgl.annexe-2a | 165 | 7 | 7 | +9 933 € en 2023 | +9 933 € en 2023 |
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | 60 | 19 | 16 | +3,2 M€ en 2019 | +0,3 point de PIB en 2024 ; −914,4 M€ en 2024 |
 | eurostat.gov_10a_exp | insee.t3201 | 30 | 20 | 18 | −42,4 M€ en 2021 | −878,3 M€ en 2023 |
 | eurostat.gov_10a_exp | insee.t3301 | 330 | 5 | 5 | +0,9 M€ en 2020 | +0,9 M€ en 2020 |
@@ -454,6 +483,18 @@ Détail des grandeurs en écart :
 
 | Source A | Source B | Grandeur | Fonctions en écart | Années en écart | dont hors chiffres révisables | Plus grand écart (A − B) |
 |---|---|---|---|---|---|---|
+| dgcl.finances-departements | ofgl.annexe-2a | FR DEPARTEMENTS_BP COMPTES_LOCAUX.AUTRES_DEP_FONCTIONNEMENT | ensemble | 2022 | 2022 | +715,5 M€ en 2022 |
+| dgcl.finances-departements | ofgl.annexe-2a | FR DEPARTEMENTS_BP COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | ensemble | 2022 | 2022 | +25,0 M€ en 2022 |
+| dgcl.finances-departements | ofgl.annexe-2a | FR DEPARTEMENTS_BP COMPTES_LOCAUX.EMPRUNTS | ensemble | 2020 et 2022 | 2020 et 2022 | +15,8 M€ en 2020 |
+| dgcl.finances-departements | ofgl.annexe-2a | FR DEPARTEMENTS_BP COMPTES_LOCAUX.EPARGNE_NETTE | ensemble | 2020 et 2022 | 2020 et 2022 | −15,8 M€ en 2020 |
+| dgcl.finances-departements | ofgl.annexe-2a | FR DEPARTEMENTS_BP COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | ensemble | 2020 et 2022 | 2020 et 2022 | +15,8 M€ en 2020 |
+| dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | ensemble | 2023 | 2023 | −14 € en 2023 |
+| dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.AUTRES_REC_INVESTISSEMENT | ensemble | 2023 | 2023 | +9 933 € en 2023 |
+| dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.EPARGNE_BRUTE | ensemble | 2023 | 2023 | −15 € en 2023 |
+| dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.EPARGNE_NETTE | ensemble | 2023 | 2023 | −15 € en 2023 |
+| dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.REC_FONCTIONNEMENT | ensemble | 2023 | 2023 | −14 € en 2023 |
+| dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.REC_INVESTISSEMENT | ensemble | 2023 | 2023 | +9 932 € en 2023 |
+| dgcl.finances-regions | ofgl.annexe-2a | FR REGIONS_CTU_BP COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | ensemble | 2023 | 2023 | +9 919 € en 2023 |
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE, en % du PIB | ensemble | 2024 | aucune | +0,3 point de PIB en 2024 |
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE | ensemble | 18 années entre 1995 et 2024 | 16 années entre 1995 et 2022 | −914,4 M€ en 2024 |
 | eurostat.gov_10a_exp | insee.t3201 | FR S13 SEC2010.TE | ensemble | 20 années entre 1995 et 2024 | 18 années entre 1995 et 2022 | −878,3 M€ en 2023 |

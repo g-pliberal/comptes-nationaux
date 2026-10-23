@@ -3,11 +3,114 @@ ACOSS,Agence centrale des organismes de sécurité sociale (Acoss),COMPTES_SECU,
 AUTRES_REGIMES_BASE,Régimes obligatoires de base autres que le régime général,COMPTES_SECU,ROBSS,
 AUTRES_REGIMES_SECU,"Autres régimes de sécurité sociale, dont assurance chômage",SEC2010,S13141,"Régimes d'assurance sociale autres que le régime général, la CADES et le Fonds de réserve pour les retraites ; dont l'assurance chômage."
 CADES,Caisse d'amortissement de la dette sociale (CADES),SEC2010,S13141,
+CEA_BP,"Collectivité européenne d'Alsace, budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,Créée le 1er janvier 2021 en lieu et place des départements du Bas-Rhin et du Haut-Rhin ; comptée avec les départements.
 CNSA,Caisse nationale de solidarité pour l'autonomie (CNSA),COMPTES_SECU,S13141,"Organisme concourant au financement des régimes obligatoires de base dans les tableaux d'équilibre des comptes de 2004 et 2005 ; ses comptes forment, depuis ceux de 2021, la branche autonomie du régime général."
 COLLECTIVITES_LOCALES_BP,"Collectivités locales et syndicats, budgets principaux",COMPTES_LOCAUX,S13131,"Communes, groupements de communes à fiscalité propre, départements, régions et collectivités territoriales uniques, et syndicats ; budgets principaux. Hors établissements publics locaux. Montants non consolidés entre niveaux de collectivités, sauf reversements fiscaux."
 COLLECTIVITES_TERRITORIALES_GFP_BP,"Collectivités territoriales et groupements de communes à fiscalité propre, budgets principaux",COMPTES_LOCAUX,COLLECTIVITES_LOCALES_BP,"Communes, groupements de communes à fiscalité propre (y compris les établissements publics territoriaux de la métropole du Grand Paris), départements, régions et collectivités territoriales uniques ; budgets principaux. Montants non consolidés entre niveaux de collectivités, sauf reversements fiscaux."
+COLLECTIVITE_DE_CORSE_BP,"Collectivité de Corse, budget principal",COMPTES_LOCAUX,REGIONS_CTU_BP,"Collectivité territoriale unique, qui exerce depuis 2018 les compétences de la région et des deux départements de Corse ; comptée avec les régions par l'OFGL."
 COMMUNES_BP,"Communes, budgets principaux",COMPTES_LOCAUX,SECTEUR_COMMUNAL_BP,"Y compris, depuis 2019, la Ville de Paris, créée en lieu et place de la commune et du département de Paris."
+CTU_GUYANE_BP,"Collectivité territoriale de Guyane, budget principal",COMPTES_LOCAUX,REGIONS_CTU_BP,"Collectivité territoriale unique, qui exerce depuis 2016 les compétences de la région et du département de Guyane ; comptée avec les régions par l'OFGL."
+CTU_MARTINIQUE_BP,"Collectivité territoriale de Martinique, budget principal",COMPTES_LOCAUX,REGIONS_CTU_BP,"Collectivité territoriale unique, qui exerce depuis 2016 les compétences de la région et du département de Martinique ; comptée avec les régions par l'OFGL."
 DEPARTEMENTS_BP,"Départements, budgets principaux",COMPTES_LOCAUX,COLLECTIVITES_TERRITORIALES_GFP_BP,"Hors collectivités territoriales uniques de Guyane et de Martinique (depuis 2016) et collectivité de Corse (depuis 2018), comptées avec les régions, et hors Ville de Paris (depuis 2019), comptée avec les communes. La métropole de Lyon est comptée avec les groupements de communes à fiscalité propre."
+DEPARTEMENTS_CTU_BP,"Départements, métropole de Lyon, Ville de Paris et collectivités territoriales uniques, budgets principaux",COMPTES_LOCAUX,COLLECTIVITES_TERRITORIALES_GFP_BP,"Ensemble des collectivités qui exercent les compétences d'un département : départements, métropole de Lyon, Ville de Paris, collectivités de Corse, de Guyane et de Martinique (« Total départements et CTU » des publications de la DGCL)."
+DEPARTEMENTS_METROPOLE_BP,"Départements de métropole, budgets principaux",COMPTES_LOCAUX,DEPARTEMENTS_BP,"Hors Ville de Paris, métropole de Lyon et collectivité de Corse."
+DEPARTEMENTS_OUTRE_MER_BP,"Départements d'outre-mer, budgets principaux",COMPTES_LOCAUX,DEPARTEMENTS_BP,"Guadeloupe, La Réunion et Mayotte ; hors collectivités territoriales uniques de Guyane et de Martinique."
+DEP_01_BP,"Ain (département 01), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_02_BP,"Aisne (département 02), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_03_BP,"Allier (département 03), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_04_BP,"Alpes-de-Haute-Provence (département 04), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_05_BP,"Hautes-Alpes (département 05), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_06_BP,"Alpes-Maritimes (département 06), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_07_BP,"Ardèche (département 07), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_08_BP,"Ardennes (département 08), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_09_BP,"Ariège (département 09), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_10_BP,"Aube (département 10), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_11_BP,"Aude (département 11), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_12_BP,"Aveyron (département 12), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_13_BP,"Bouches-du-Rhône (département 13), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_14_BP,"Calvados (département 14), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_15_BP,"Cantal (département 15), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_16_BP,"Charente (département 16), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_17_BP,"Charente-Maritime (département 17), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_18_BP,"Cher (département 18), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_19_BP,"Corrèze (département 19), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_21_BP,"Côte-d'Or (département 21), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_22_BP,"Côtes-d'Armor (département 22), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_23_BP,"Creuse (département 23), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_24_BP,"Dordogne (département 24), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_25_BP,"Doubs (département 25), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_26_BP,"Drôme (département 26), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_27_BP,"Eure (département 27), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_28_BP,"Eure-et-Loir (département 28), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_29_BP,"Finistère (département 29), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_30_BP,"Gard (département 30), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_31_BP,"Haute-Garonne (département 31), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_32_BP,"Gers (département 32), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_33_BP,"Gironde (département 33), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_34_BP,"Hérault (département 34), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_35_BP,"Ille-et-Vilaine (département 35), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_36_BP,"Indre (département 36), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_37_BP,"Indre-et-Loire (département 37), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_38_BP,"Isère (département 38), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_39_BP,"Jura (département 39), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_40_BP,"Landes (département 40), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_41_BP,"Loir-et-Cher (département 41), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_42_BP,"Loire (département 42), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_43_BP,"Haute-Loire (département 43), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_44_BP,"Loire-Atlantique (département 44), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_45_BP,"Loiret (département 45), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_46_BP,"Lot (département 46), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_47_BP,"Lot-et-Garonne (département 47), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_48_BP,"Lozère (département 48), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_49_BP,"Maine-et-Loire (département 49), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_50_BP,"Manche (département 50), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_51_BP,"Marne (département 51), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_52_BP,"Haute-Marne (département 52), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_53_BP,"Mayenne (département 53), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_54_BP,"Meurthe-et-Moselle (département 54), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_55_BP,"Meuse (département 55), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_56_BP,"Morbihan (département 56), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_57_BP,"Moselle (département 57), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_58_BP,"Nièvre (département 58), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_59_BP,"Nord (département 59), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_60_BP,"Oise (département 60), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_61_BP,"Orne (département 61), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_62_BP,"Pas-de-Calais (département 62), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_63_BP,"Puy-de-Dôme (département 63), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_64_BP,"Pyrénées-Atlantiques (département 64), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_65_BP,"Hautes-Pyrénées (département 65), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_66_BP,"Pyrénées-Orientales (département 66), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_67_BP,"Bas-Rhin (département 67), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,Jusqu'en 2020 : réuni ensuite au Haut-Rhin dans la Collectivité européenne d'Alsace.
+DEP_68_BP,"Haut-Rhin (département 68), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,Jusqu'en 2020 : réuni ensuite au Bas-Rhin dans la Collectivité européenne d'Alsace.
+DEP_69_BP,"Rhône (département 69), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,Hors métropole de Lyon.
+DEP_70_BP,"Haute-Saône (département 70), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_71_BP,"Saône-et-Loire (département 71), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_72_BP,"Sarthe (département 72), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_73_BP,"Savoie (département 73), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_74_BP,"Haute-Savoie (département 74), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_76_BP,"Seine-Maritime (département 76), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_77_BP,"Seine-et-Marne (département 77), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_78_BP,"Yvelines (département 78), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_79_BP,"Deux-Sèvres (département 79), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_80_BP,"Somme (département 80), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_81_BP,"Tarn (département 81), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_82_BP,"Tarn-et-Garonne (département 82), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_83_BP,"Var (département 83), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_84_BP,"Vaucluse (département 84), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_85_BP,"Vendée (département 85), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_86_BP,"Vienne (département 86), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_87_BP,"Haute-Vienne (département 87), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_88_BP,"Vosges (département 88), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_89_BP,"Yonne (département 89), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_90_BP,"Territoire de Belfort (département 90), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_91_BP,"Essonne (département 91), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_92_BP,"Hauts-de-Seine (département 92), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_93_BP,"Seine-Saint-Denis (département 93), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_94_BP,"Val-de-Marne (département 94), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_95_BP,"Val-d'Oise (département 95), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_METROPOLE_BP,
+DEP_971_BP,"Guadeloupe (département 971), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_OUTRE_MER_BP,
+DEP_974_BP,"La Réunion (département 974), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_OUTRE_MER_BP,
+DEP_976_BP,"Mayotte (département 976), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_OUTRE_MER_BP,Département qui exerce aussi les compétences d'une région.
 ETAT_CGE,"État, comptes annuels",COMPTES_ETAT,,"L'État tel que le décrivent ses comptes annuels (compte de résultat et bilan) : l'ensemble de ses opérations, budgétaires ou de trésorerie, et de son patrimoine, en droits constatés."
 ETAT_LF,"État, champ des lois de finances",LOLF,,"Budget général, budgets annexes et comptes spéciaux de l'État, que retracent les lois de finances. L'État de la comptabilité nationale (S13111) en diffère : il comprend aussi certains fonds non budgétaires, et ses opérations sont enregistrées selon d'autres règles."
 FFIPSA,Fonds de financement des prestations sociales des non-salariés agricoles (FFIPSA),COMPTES_SECU,S13141,Organisme concourant au financement des régimes obligatoires de base dans les tableaux d'équilibre des comptes de 2005 à 2008.
@@ -18,9 +121,28 @@ GFP_CA_BP,"Communautés d'agglomération, budgets principaux",COMPTES_LOCAUX,GFP
 GFP_CC_BP,"Communautés de communes, budgets principaux",COMPTES_LOCAUX,GFP_BP,
 GFP_CU_BP,"Communautés urbaines, budgets principaux",COMPTES_LOCAUX,GFP_BP,
 GFP_METROPOLES_BP,"Métropoles, budgets principaux",COMPTES_LOCAUX,GFP_BP,"Y compris la métropole de Lyon, la métropole du Grand Paris et ses établissements publics territoriaux."
+METROPOLE_LYON_BP,"Métropole de Lyon, budget principal",COMPTES_LOCAUX,DEPARTEMENTS_CTU_BP,Exerce sur son territoire les compétences d'une métropole et celles du département du Rhône ; comptée avec les groupements à fiscalité propre par l'OFGL.
 REGIME_GENERAL,Régime général de la sécurité sociale,COMPTES_SECU,S13141,"Caisse nationale d'allocations familiales (CNAF), Caisse nationale d'assurance maladie (CNAM), Caisse nationale d'assurance vieillesse (CNAV), Fonds de solidarité vieillesse (FSV) et, depuis 2021, Caisse nationale de solidarité pour l'autonomie (CNSA)."
 REGIME_GENERAL_HORS_FSV,"Régime général de la sécurité sociale, hors Fonds de solidarité vieillesse",COMPTES_SECU,REGIME_GENERAL,"Branches du régime général que présente son tableau d'équilibre dans les lois de financement de la sécurité sociale : maladie, accidents du travail et maladies professionnelles, vieillesse, famille et, depuis les comptes de 2021, autonomie."
+REGIONS_BP,"Régions, budgets principaux",COMPTES_LOCAUX,REGIONS_CTU_BP,"Hors collectivités territoriales uniques de Corse, de Guyane et de Martinique."
 REGIONS_CTU_BP,"Régions et collectivités territoriales uniques, budgets principaux",COMPTES_LOCAUX,COLLECTIVITES_TERRITORIALES_GFP_BP,Y compris les collectivités territoriales uniques de Guyane et de Martinique (depuis 2016) et la collectivité de Corse (depuis 2018).
+REGIONS_METROPOLE_BP,"Régions de métropole, budgets principaux",COMPTES_LOCAUX,REGIONS_BP,Hors collectivité de Corse.
+REGIONS_METROPOLE_HORS_IDF_BP,"Régions de métropole hors Île-de-France, budgets principaux",COMPTES_LOCAUX,REGIONS_METROPOLE_BP,Hors Île-de-France et collectivité de Corse.
+REGIONS_OUTRE_MER_BP,"Régions d'outre-mer, budgets principaux",COMPTES_LOCAUX,REGIONS_BP,Guadeloupe et La Réunion ; hors collectivités territoriales uniques de Guyane et de Martinique.
+REG_01_BP,"Guadeloupe (région 01), budget principal",COMPTES_LOCAUX,REGIONS_OUTRE_MER_BP,
+REG_04_BP,"La Réunion (région 04), budget principal",COMPTES_LOCAUX,REGIONS_OUTRE_MER_BP,
+REG_11_BP,"Île-de-France (région 11), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_BP,
+REG_24_BP,"Centre-Val de Loire (région 24), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_27_BP,"Bourgogne-Franche-Comté (région 27), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_28_BP,"Normandie (région 28), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_32_BP,"Hauts-de-France (région 32), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_44_BP,"Grand Est (région 44), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_52_BP,"Pays de la Loire (région 52), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_53_BP,"Bretagne (région 53), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_75_BP,"Nouvelle-Aquitaine (région 75), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_76_BP,"Occitanie (région 76), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_84_BP,"Auvergne-Rhône-Alpes (région 84), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
+REG_93_BP,"Provence-Alpes-Côte d'Azur (région 93), budget principal",COMPTES_LOCAUX,REGIONS_METROPOLE_HORS_IDF_BP,
 ROBSS,Régimes obligatoires de base de sécurité sociale,COMPTES_SECU,S13,"Ensemble des régimes obligatoires de base de sécurité sociale, régime général compris, que retracent les lois de financement de la sécurité sociale ; ni l'assurance chômage ni les régimes complémentaires de retraite n'en font partie. Il comprend des régimes d'employeurs, dont celui des fonctionnaires de l'État, que la comptabilité nationale range dans l'État."
 ROBSS_FSV,Régimes obligatoires de base de sécurité sociale et Fonds de solidarité vieillesse,COMPTES_SECU,S13,"Ensemble des régimes obligatoires de base et Fonds de solidarité vieillesse, hors transferts entre eux, que présentent les tableaux d'équilibre depuis les comptes de 2015."
 S1,Économie totale,SEC2010,,Ensemble des unités résidentes.
@@ -44,3 +166,4 @@ S212,Institutions et organes de l'Union européenne,SEC2010,,Sous-secteur du res
 SECTEUR_COMMUNAL_BP,"Secteur communal (communes et groupements de communes à fiscalité propre), budgets principaux",COMPTES_LOCAUX,COLLECTIVITES_TERRITORIALES_GFP_BP,Montants non consolidés entre communes et groupements.
 SECU_LFSS,"Régimes obligatoires de base, FSV, CADES et FRR",COMPTES_SECU,S13,"Ensemble des régimes obligatoires de base de sécurité sociale et des organismes concourant à leur financement (Fonds de solidarité vieillesse), à l'amortissement de leur dette (Caisse d'amortissement de la dette sociale) ou à la mise en réserve de recettes à leur profit (Fonds de réserve pour les retraites), dont l'annexe A des lois de financement retrace la situation patrimoniale."
 SYNDICATS_BP,"Syndicats, budgets principaux",COMPTES_LOCAUX,COLLECTIVITES_LOCALES_BP,"Types 421 à 424 des comptes de gestion : y compris les syndicats intercommunaux à vocation unique (SIVU) ou multiple (SIVOM), les pôles métropolitains et les pôles d'équilibre territorial et rural (PETR), mais hors établissements publics territoriaux de la métropole du Grand Paris, comptés avec les groupements à fiscalité propre. Le Sytral, syndicat des transports du Rhône et de l'agglomération lyonnaise devenu établissement public local, en sort en 2022."
+VILLE_DE_PARIS_BP,"Ville de Paris, budget principal",COMPTES_LOCAUX,DEPARTEMENTS_CTU_BP,Créée en 2019 en lieu et place de la commune et du département de Paris ; comptée avec les communes par l'OFGL.
