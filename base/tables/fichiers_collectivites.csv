@@ -1,4 +1,5 @@
 fichier_id,source_id,contenu,exercice,version,statut,lignes,collectivites
+ofgl.base-communes-consolidee@2026-10-23-beffff11,ofgl.base-communes-consolidee,inventaire,,2026-07-28,,8,
 ofgl.base-gfp-consolidee@2026-10-23-05c2a3ab,ofgl.base-gfp-consolidee,montants,2019,2026-07-22,definitif,62717,1272
 ofgl.base-gfp-consolidee@2026-10-23-1953f813,ofgl.base-gfp-consolidee,collectivites,2022,2026-07-22,definitif,1421,1266
 ofgl.base-gfp-consolidee@2026-10-23-19be24e8,ofgl.base-gfp-consolidee,montants,2024,2026-07-22,definitif,64152,1266
