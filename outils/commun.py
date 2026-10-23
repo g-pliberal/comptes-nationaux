@@ -205,24 +205,41 @@ def nombre(valeur):
 
 # --- Pages HTML (textes de loi publiés par le Sénat) et séries SDMX de l'Insee ---------------------------
 
+_SANS_FIN = {"br", "img", "hr", "col", "input", "meta", "link", "wbr"}
+
+
+def _graisse(balise, attributs):
+    """True si la balise met son texte en gras, False si elle l'annule, None si elle hérite de son parent."""
+    poids = re.search(r"font-weight:(\w+)", re.sub(r"\s+", "", (attributs.get("style") or "").lower()))
+    if poids:
+        return poids.group(1) in ("bold", "bolder", "600", "700", "800", "900")
+    return True if balise in ("b", "strong", "th") else None
+
+
 class _Tableaux(HTMLParser):
     """Les tableaux d'une page, numérotés dans l'ordre où ils s'ouvrent ; un tableau imbriqué a son propre numéro.
-    Chaque cellule garde ses paragraphes, sa hauteur (rowspan) et sa largeur (colspan)."""
+    Chaque cellule garde ses paragraphes, sa hauteur (rowspan), sa largeur (colspan), et si tout son texte est en
+    gras."""
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.tableaux, self.ouverts, self.cellule = [], [], None
+        self.tableaux, self.ouverts, self.cellule, self.balises = [], [], None, []
 
     def handle_starttag(self, tag, attrs):
+        a = {k.lower(): v for k, v in attrs}
         if tag == "table":
             self.ouverts.append([])
             self.tableaux.append(self.ouverts[-1])
         elif tag == "tr" and self.ouverts:
             self.ouverts[-1].append([])
         elif tag in ("td", "th") and self.ouverts:
-            a = {k.lower(): v for k, v in attrs}
-            self.cellule = {"paragraphes": [[]], "hauteur": int(a.get("rowspan") or 1), "largeur": int(a.get("colspan") or 1)}
-        elif tag in ("p", "br") and self.cellule is not None:
+            self.cellule = {"paragraphes": [[]], "hauteur": int(a.get("rowspan") or 1), "largeur": int(a.get("colspan") or 1),
+                            "gras": []}
+            self.balises = [(tag, bool(_graisse(tag, a)))]
+        elif self.cellule is not None and tag not in _SANS_FIN:
+            graisse = _graisse(tag, a)
+            self.balises.append((tag, self.balises[-1][1] if graisse is None else graisse))
+        if tag in ("p", "br") and self.cellule is not None:
             self.cellule["paragraphes"].append([])
 
     def handle_endtag(self, tag):
@@ -232,20 +249,31 @@ class _Tableaux(HTMLParser):
             paragraphes = [" ".join("".join(p).split()) for p in self.cellule["paragraphes"]]
             self.cellule["paragraphes"] = [p for p in paragraphes if p] if self.cellule["hauteur"] == 1 else \
                 [p for i, p in enumerate(paragraphes) if p or i > 0]
+            self.cellule["gras"] = bool(self.cellule["gras"]) and all(self.cellule["gras"])
             self.ouverts[-1][-1].append(self.cellule)
             self.cellule = None
         elif tag == "table" and self.ouverts:
             self.ouverts.pop()
+        elif self.cellule is not None and tag not in _SANS_FIN:
+            ouverte = next((k for k in range(len(self.balises) - 1, 0, -1) if self.balises[k][0] == tag), None)
+            if ouverte is not None:
+                del self.balises[ouverte:]
 
     def handle_data(self, data):
         if self.cellule is not None:
             self.cellule["paragraphes"][-1].append(data)
+            if data.strip():
+                self.cellule["gras"].append(self.balises[-1][1])
 
 
 def _grille(lignes):
     """Place les cellules d'un tableau sur sa grille, fusions comprises. Une cellule fusionnée sur n lignes qui
-    contient n paragraphes donne un paragraphe à chacune de ces lignes ; sinon, son texte va à sa case de départ."""
-    grille, occupees = {}, set()
+    contient n paragraphes donne un paragraphe à chacune de ces lignes ; sinon, son texte va à sa case de départ,
+    et la cellule est notée parmi les fusions : {(ligne, colonne) de départ : nombre de lignes}. Le texte d'une cellule
+    fusionnée sur plusieurs colonnes va à la première. Renvoie la grille et sa mise en forme : ces fusions, les
+    largeurs des cellules qui couvrent plusieurs colonnes ({(ligne, colonne) : nombre de colonnes}, pour chaque case
+    qui reçoit leur texte), et l'ensemble des cases dont le texte est en gras."""
+    grille, occupees, fusions, largeurs, gras = {}, set(), {}, {}, set()
     for r, ligne in enumerate(lignes):
         c = 0
         for cellule in ligne:
@@ -255,23 +283,33 @@ def _grille(lignes):
             for dr in range(h):
                 for dc in range(l):
                     occupees.add((r + dr, c + dc))
+            cases = range(h) if h > 1 and len(paragraphes) == h else range(1)
             if h > 1 and len(paragraphes) == h:
                 for dr, texte in enumerate(paragraphes):
                     grille[(r + dr, c)] = texte
             else:
                 grille[(r, c)] = " ".join(paragraphes)
+                if h > 1:
+                    fusions[(r, c)] = h
+            if l > 1:
+                largeurs.update(((r + dr, c), l) for dr in cases)
+            if cellule["gras"]:
+                gras.update((r + dr, c) for dr in cases)
             c += l
     largeur = max((c for _, c in occupees), default=-1) + 1
     hauteur = max((r for r, _ in occupees), default=-1) + 1
-    return [[grille.get((r, c), "") for c in range(largeur)] for r in range(max(hauteur, len(lignes)))]
+    return [[grille.get((r, c), "") for c in range(largeur)] for r in range(max(hauteur, len(lignes)))], \
+        {"fusions": fusions, "largeurs": largeurs, "gras": gras}
 
 
-def lire_tableaux_html(chemin):
+def lire_tableaux_html(chemin, mise_en_forme=False):
     """Tableaux d'une page HTML, chacun sous forme de grille : liste de lignes, chacune liste des textes de ses
-    colonnes."""
+    colonnes. Avec mise_en_forme=True, renvoie aussi la mise en forme de chaque tableau (voir _grille)."""
     lecteur = _Tableaux()
     lecteur.feed(pathlib.Path(chemin).read_text(encoding="utf-8"))
-    return [_grille(t) for t in lecteur.tableaux]
+    lus = [_grille(t) for t in lecteur.tableaux]
+    grilles = [g for g, _ in lus]
+    return (grilles, [f for _, f in lus]) if mise_en_forme else grilles
 
 
 def texte_html(contenu):

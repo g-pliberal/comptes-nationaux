@@ -75,7 +75,7 @@ def _rubrique(total, code_norme):
     return total, sorted(c["id"] for c in lire("tables/concepts.csv") if c["code_norme"] == code_norme and c["id"] != total)
 
 
-# Budget de l'État : article 1er de la loi relative aux résultats de la gestion, et situation mensuelle budgétaire.
+# Budget de l'État : article 1er du projet de loi d'approbation des comptes, et situation mensuelle budgétaire.
 IDENTITES += [
     ("LOLF.BG_RECETTES_FISCALES_NETTES", ["LOLF.BG_RECETTES_FISCALES_BRUTES", "-LOLF.BG_REMBOURSEMENTS_DEGREVEMENTS"]),
     ("LOLF.BG_RECETTES_NETTES_HORS_FDC", ["LOLF.BG_RECETTES_FISCALES_NETTES", "LOLF.BG_RECETTES_NON_FISCALES"]),
@@ -119,7 +119,8 @@ ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO"}
 # de droite), chaque terme étant (source, périmètre, concept, signe) et, au besoin, (modèle de période, traitement),
 # en montant, pour l'ensemble des fonctions. Une source terminée par « * » désigne toute source qui commence ainsi :
 # les termes d'un même préfixe viennent d'une même source, l'une après l'autre s'il y en a plusieurs.
-_LOI = "senat.pjl*"  # textes des lois relatives aux résultats de la gestion publiés par le Sénat
+_LOI = "senat.pjl*"  # projets de loi d'approbation des comptes (de règlement, puis relatifs aux résultats de la
+#                       gestion) publiés par le Sénat
 _DECEMBRE = ("{annee}-12", "cumul_depuis_janvier")  # situation mensuelle budgétaire, cumul à fin décembre
 _SMB = "insee.bdm-comptes-etat"
 _IMPOTS_PRODUCTION_3217 = [("insee.t3217", "S13_S212", f"SEC2010.{c}REC", 1) for c in ("D211", "D212", "D214", "D291", "D292")]
@@ -148,15 +149,17 @@ PASSERELLES = [
      "sous-secteurs du tableau 3.216",
      [("insee.t3217", "S13", "INSEE_PO.PO", 1)], [("insee.t3216", p, "INSEE_PO.PO", 1) for p in ("S1311", "S1313", "S1314")]),
     ("Solde général d'exécution à fin décembre (situation mensuelle) contre soldes du budget général et des comptes "
-     "spéciaux de la loi relative aux résultats de la gestion",
+     "spéciaux du projet de loi d'approbation des comptes",
      [(_SMB, "ETAT_LF", "LOLF.RESULTAT_EXECUTION", 1, *_DECEMBRE)],
      [(_LOI, "ETAT_LF", "LOLF.SOLDE_BUDGET_GENERAL", 1), (_LOI, "ETAT_LF", "LOLF.SOLDE_COMPTES_SPECIAUX", 1)]),
+    ("Solde des comptes spéciaux à fin décembre (situation mensuelle) contre projet de loi d'approbation des comptes",
+     [(_SMB, "ETAT_LF", "LOLF.SOLDE_COMPTES_SPECIAUX", 1, *_DECEMBRE)], [(_LOI, "ETAT_LF", "LOLF.SOLDE_COMPTES_SPECIAUX", 1)]),
     ("Dépenses du budget général à fin décembre (situation mensuelle) contre dépenses nettes plus prélèvements sur "
-     "recettes de la loi relative aux résultats de la gestion",
+     "recettes du projet de loi d'approbation des comptes",
      [(_SMB, "ETAT_LF", "LOLF.BG_DEPENSES_Y_COMPRIS_PSR", 1, *_DECEMBRE)],
      [(_LOI, "ETAT_LF", "LOLF.BG_DEPENSES_NETTES", 1), (_LOI, "ETAT_LF", "LOLF.BG_PRELEVEMENTS_SUR_RECETTES", 1)]),
     ("Recettes du budget général à fin décembre (situation mensuelle) contre recettes nettes plus prélèvements sur "
-     "recettes de la loi relative aux résultats de la gestion",
+     "recettes du projet de loi d'approbation des comptes",
      [(_SMB, "ETAT_LF", "LOLF.BG_RECETTES_AVANT_PSR", 1, *_DECEMBRE)],
      [(_LOI, "ETAT_LF", "LOLF.BG_RECETTES_NETTES", 1), (_LOI, "ETAT_LF", "LOLF.BG_PRELEVEMENTS_SUR_RECETTES", 1)]),
     ("Solde général d'exécution à fin décembre (situation mensuelle) contre résultat d'exécution des lois de finances "

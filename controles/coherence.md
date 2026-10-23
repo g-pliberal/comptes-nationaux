@@ -41,13 +41,19 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
+| senat.pjl19-505 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2019, texte n° 505 (2019-2020) transmis au Sénat le 11 juin 2020 | 2020-06-11 | 614 |
+| senat.pjl20-784 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2020, texte n° 784 (2020-2021) transmis au Sénat le 21 juillet 2021 en nouvelle lecture | 2021-07-21 | 626 |
+| senat.pjl22-683 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2021, texte n° 683 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 667 |
+| senat.pjl22-684 | Projet de loi de règlement du budget et d'approbation des comptes de l'année 2022, texte n° 684 (2022-2023) transmis au Sénat le 6 juin 2023 | 2023-06-06 | 671 |
+| senat.pjl24-032 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2023, texte n° 32 (2024-2025) transmis au Sénat le 15 octobre 2024 | 2024-10-15 | 653 |
+| senat.pjl24-718 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2024, texte n° 718 (2024-2025) transmis au Sénat le 10 juin 2025 | 2025-06-10 | 641 |
 | senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 638 |
 
 ## 1. Sommes comptables
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année.
 
-6549 sommes vérifiées avec toutes leurs composantes : 6538 justes, 11 en écart.
+6651 sommes vérifiées avec toutes leurs composantes : 6640 justes, 11 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié (Md€) | Somme des composantes (Md€) | Écart |
 |---|---|---|---|---|---|---|---|
@@ -74,7 +80,7 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG ou des missions du budget de l'État, chaque division contre la somme de ses groupes, chaque mission contre celle de ses programmes.
 
-15122 ventilations vérifiées avec toutes leurs parties : 15122 justes, 0 en écart.
+15938 ventilations vérifiées avec toutes leurs parties : 15938 justes, 0 en écart.
 
 834 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
 
@@ -105,9 +111,10 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Même passerelle, avec les impôts de l'Union européenne du tableau 3.217 | 31 années entre 1995 et 2025 | 23 années entre 1995 et 2018 | 23 années entre 1995 et 2018 | +734,9 M€ en 1995 |
 | Crédits d'impôt retranchés des prélèvements obligatoires (3.217) contre crédits d'impôt enregistrés en recettes (3.201), de signe opposé | 31 années entre 1995 et 2025 | 2017, 2018 et 2021 | 2017, 2018 et 2021 | −85,0 M€ en 2017 |
 | Prélèvements obligatoires des administrations publiques : impôts nationaux du tableau 3.217 contre somme des sous-secteurs du tableau 3.216 | 31 années entre 1995 et 2025 | 24 années entre 1995 et 2018 | 24 années entre 1995 et 2018 | +734,9 M€ en 1995 |
-| Solde général d'exécution à fin décembre (situation mensuelle) contre soldes du budget général et des comptes spéciaux de la loi relative aux résultats de la gestion | 2025 | aucune | aucune | aucun |
-| Dépenses du budget général à fin décembre (situation mensuelle) contre dépenses nettes plus prélèvements sur recettes de la loi relative aux résultats de la gestion | 2025 | aucune | aucune | aucun |
-| Recettes du budget général à fin décembre (situation mensuelle) contre recettes nettes plus prélèvements sur recettes de la loi relative aux résultats de la gestion | 2025 | aucune | aucune | aucun |
+| Solde général d'exécution à fin décembre (situation mensuelle) contre soldes du budget général et des comptes spéciaux du projet de loi d'approbation des comptes | 7 années entre 2019 et 2025 | 2019 | 2019 | +13,2 M€ en 2019 |
+| Solde des comptes spéciaux à fin décembre (situation mensuelle) contre projet de loi d'approbation des comptes | 7 années entre 2019 et 2025 | 2019 | 2019 | +13,4 M€ en 2019 |
+| Dépenses du budget général à fin décembre (situation mensuelle) contre dépenses nettes plus prélèvements sur recettes du projet de loi d'approbation des comptes | 7 années entre 2019 et 2025 | aucune | aucune | aucun |
+| Recettes du budget général à fin décembre (situation mensuelle) contre recettes nettes plus prélèvements sur recettes du projet de loi d'approbation des comptes | 7 années entre 2019 et 2025 | aucune | aucune | aucun |
 | Solde général d'exécution à fin décembre (situation mensuelle) contre résultat d'exécution des lois de finances du tableau 3.107 | 17 années entre 2009 et 2025 | 2014, 2016 et 2019 | 2014, 2016 et 2019 | +121,0 M€ en 2016 |
 | Solde du budget général à fin décembre (situation mensuelle : recettes moins dépenses) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2016 | 2016 | +101,0 M€ en 2016 |
 | Solde des comptes spéciaux à fin décembre (situation mensuelle) contre tableau 3.107 | 17 années entre 2009 et 2025 | 2017 | 2017 | +64,0 M€ en 2017 |
@@ -183,6 +190,12 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3106 | insee.t3205 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3212 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3107 | insee.t3203 | 17 | 1 | 1 | +59,2 M€ en 2016 | +59,2 M€ en 2016 |
+| insee.t3107 | senat.pjl19-505 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl20-784 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl22-683 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl22-684 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl24-032 | 2 | 0 | 0 | aucun | aucun |
+| insee.t3107 | senat.pjl24-718 | 2 | 1 | 0 | aucun | −50,0 M€ en 2024 |
 | insee.t3107 | senat.pjl25-726 | 2 | 0 | 0 | aucun | aucun |
 | insee.t3108 | insee.t3212 | 17 | 0 | 0 | aucun | aucun |
 | insee.t3108 | insee.t3214 | 13 | 6 | 6 | +271,0 M€ en 2018 | +271,0 M€ en 2018 |
@@ -220,6 +233,7 @@ Détail des grandeurs en écart :
 | insee.t3101 | insee.t3106 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | +9 571,2 M€ en 1990 |
 | insee.t3106 | insee.t3107 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | −59,0 M€ en 2016 |
 | insee.t3107 | insee.t3203 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | +59,2 M€ en 2016 |
+| insee.t3107 | senat.pjl24-718 | FR ETAT_LF LOLF.SOLDE_COMPTES_SPECIAUX | ensemble | 2024 | aucune | −50,0 M€ en 2024 |
 | insee.t3108 | insee.t3214 | FR S13142 SEC2010.B9 | ensemble | 6 années entre 2013 et 2018 | 6 années entre 2013 et 2018 | +271,0 M€ en 2018 |
 | insee.t3201 | insee.t3301 | FR S13 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | +487,9 M€ en 2024 |
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.D1PAY | ensemble | 2011, 2023 et 2024 | 2011 | +889,0 M€ en 2024 |
