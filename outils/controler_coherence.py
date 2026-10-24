@@ -292,6 +292,23 @@ _LOCAUX += [("DEP_INVESTISSEMENT_REMBOURSEMENTS_COMPRIS", ["DEP_INVESTISSEMENT",
 # n'en a pas de ligne (« ? » : peut manquer).
 _LOCAUX += [("DMTO_APRES_PEREQUATION", ["DMTO", "?ATTRIBUTIONS_PEREQUATION_DMTO", "?-PRELEVEMENTS_PEREQUATION_DMTO"]),
             ("EPARGNE_BRUTE_AVANT_TRAVAUX_REGIE", ["EPARGNE_BRUTE", "?TRAVAUX_REGIE"])]
+# Ceux des SDIS détaillent leurs dépenses d'équipement, leurs frais de personnel, les participations et les subventions
+# d'investissement qu'ils reçoivent : l'OFGL calcule par différence la partie « autre » de chaque total, et une partie
+# nulle n'a pas de ligne. Les participations des communes figurent aussi dans les comptes des centres d'action sociale,
+# sans les autres parties : cette identité-là ne s'applique qu'avec la partie « autre ».
+_LOCAUX += [("DEPENSES_EQUIPEMENT", ["?EQUIPEMENT_CONSTRUCTION", "?EQUIPEMENT_VEHICULES", "?EQUIPEMENT_MATERIEL",
+                                     "?EQUIPEMENT_INFORMATIQUE", "?EQUIPEMENT_AVANCES", "?AUTRES_DEPENSES_EQUIPEMENT"]),
+            ("FRAIS_PERSONNEL", ["?REMUNERATIONS_TITULAIRES", "?REMUNERATIONS_VACATAIRES",
+                                 "?REMUNERATIONS_AUTRES_PERSONNELS", "?AUTRES_FRAIS_PERSONNEL"]),
+            ("SUBVENTIONS_PARTICIPATIONS_RECUES", ["?PARTICIPATIONS_DEPARTEMENTS", "?PARTICIPATIONS_COMMUNES",
+                                                   "?PARTICIPATIONS_GFP", "?PARTICIPATIONS_REGIONS",
+                                                   "AUTRES_PARTICIPATIONS_FONCTIONNEMENT"]),
+            ("DOTATIONS_SUBVENTIONS_INVESTISSEMENT", ["?SUBVENTIONS_INVESTISSEMENT_BLOC_COMMUNAL",
+                                                      "?SUBVENTIONS_INVESTISSEMENT_DEPARTEMENTS",
+                                                      "?SUBVENTIONS_INVESTISSEMENT_REGIONS",
+                                                      "?SUBVENTIONS_INVESTISSEMENT_ETAT",
+                                                      "?SUBVENTIONS_INVESTISSEMENT_EUROPE",
+                                                      "?SUBVENTIONS_INVESTISSEMENT_AUTRES"])]
 
 
 def _local(composante):
@@ -738,8 +755,11 @@ NIVEAUX_COLLECTIVITES = {"ofgl.base-gfp-consolidee": ("GFP", None), "ofgl.base-c
                          "ofgl.base-departements-consolidee": ("DEPARTEMENTS", {"DEPT"}),
                          "ofgl.base-regions-consolidee": ("REGIONS_CTU", None),
                          "ofgl.base-syndicats-consolidee": ("SYNDICATS", None)}
+# Les annexes ne donnent pas de total des établissements publics locaux, des SDIS ni des centres d'action sociale.
+NIVEAUX_COLLECTIVITES.update({s: (None, None) for s in ("ofgl.base-epl-consolidee", "ofgl.base-sdis", "ofgl.base-ccas-cias")})
 BUDGETS = [("budget principal", "ofgl.annexe-2a", "_BP"), ("budgets annexes", "ofgl.annexe-2b", "_BA"),
            ("flux croisés", None, None), ("consolidé", "ofgl.annexe-2c", "_BP_BA")]
+BUDGET_SEUL = "budget par budget"  # le seul montant d'une ligne d'un jeu publié budget par budget
 # Grandeurs des annexes que les comptes de chaque collectivité ne donnent qu'en parties : la trésorerie nette est la
 # différence des dépôts au Trésor et des crédits de trésorerie.
 EN_PARTIES = {"COMPTES_LOCAUX.TRESORERIE_NETTE": [(1, "COMPTES_LOCAUX.DEPOTS_TRESOR"),
@@ -767,13 +787,36 @@ def listes_collectivites():
     return {cle: ofgl.collectivites(fichiers[i["fichier_id"]])[0] for cle, i in sorted(retenues.items())}
 
 
+def identites_comptables(controles, identites, source, exercice, cle, montants, lus):
+    """Les identités comptables d'une collectivité, ou d'un budget (`cle`), sur ses montants {concept: valeurs} : `lus`
+    donne, pour chacun des montants d'une ligne, son libellé et la place de sa valeur et de sa marge d'arrondi. Une
+    identité dont aucune partie n'a de ligne ne s'applique pas."""
+    for total, composantes in identites:
+        obligatoires = [c for c in composantes if c[0] not in "?!"]
+        if total not in montants or any(c.lstrip("-") not in montants for c in obligatoires) or \
+                any(c[1:] in montants for c in composantes if c[0] == "!"):
+            continue
+        parties = [(-1 if c.startswith("-") else 1, c.lstrip("-")) for c in
+                   obligatoires + [c[1:] for c in composantes if c[0] == "?"] if c.lstrip("-") in montants]
+        if not parties:
+            continue
+        for budget, k, m in lus:
+            ecart = montants[total][k] - sum(s * montants[c][k] for s, c in parties)
+            entree = controles[(source, total, tuple(c for _, c in parties), budget)]
+            entree[0] += 1
+            if depasse(ecart, montants[total][m] + sum(montants[c][m] for _, c in parties)):
+                entree[1] += 1
+                if entree[2] is None or abs(ecart) > abs(entree[2][0]):
+                    entree[2] = (ecart, cle, exercice)
+
+
 def collectivites(derniers, listes):
     """Pour chaque jeu des comptes de chaque collectivité et chaque exercice, dans sa version la plus récente : les lignes
     dont le montant consolidé n'est pas le budget principal plus les budgets annexes moins les flux croisés ; les
     identités comptables de chaque collectivité, pour chacun des quatre montants ; les comptes d'une collectivité que
     deux jeux donnent ; la somme des collectivités contre les totaux des annexes 2A (budgets principaux), 2B (budgets
     annexes) et 2C (consolidés) des rapports de l'OFGL ; le budget principal de chaque département et de chaque région
-    contre sa fiche de la DGCL."""
+    contre sa fiche de la DGCL. Pour un jeu publié budget par budget : les identités comptables de chaque budget."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
     retenus = {}
@@ -783,7 +826,7 @@ def collectivites(derniers, listes):
             retenus[cle] = i
     presences = collections.defaultdict(list)  # (exercice, siren) → jeux dont la liste porte la collectivité
     for (source, exercice), fiches in listes.items():
-        for siren in fiches:
+        for siren in sorted({f["siren"] for f in fiches.values()}) if source in ofgl.PAR_BUDGET else fiches:
             presences[(exercice, siren)].append(source)
     doubles = {cle: jeux for cle, jeux in presences.items() if len(jeux) > 1}
     identites = [(t, c) for t, c in IDENTITES if t.startswith("COMPTES_LOCAUX.")]
@@ -792,6 +835,18 @@ def collectivites(derniers, listes):
     for (source, exercice), inscrit in sorted(retenus.items()):
         niveau, categories = NIVEAUX_COLLECTIVITES[source]
         fiches = listes.get((source, exercice))  # sans liste, ni catégories ni codes : pas de somme triée ni de fiche
+        if source in ofgl.PAR_BUDGET:
+            # Un jeu publié budget par budget : un montant par ligne, ni consolidation, ni total publié.
+            par_budget, sirens = collections.defaultdict(dict), set()
+            for siren, budget, agregat, montant_, marge_ in ofgl.montants_budgets(fichiers[inscrit["fichier_id"]],
+                                                                                  agregats, marges=True):
+                par_budget[budget][agregats[agregat]["concept_id"]] = (montant_, marge_)
+                sirens.add(siren)
+            exercices.append((source, exercice, inscrit["version"], inscrit["statut"], len(sirens),
+                              int(inscrit["lignes"]), None))
+            for budget, montants in par_budget.items():
+                identites_comptables(controles, identites, source, exercice, budget, montants, [(BUDGET_SEUL, 0, 1)])
+            continue
         par_siren, lignes_en_ecart = collections.defaultdict(dict), 0
         sommes = collections.defaultdict(lambda: [0.0] * 8)  # quatre montants, puis leurs marges d'arrondi
         for siren, agregat, *montants in ofgl.montants(fichiers[inscrit["fichier_id"]], agregats, marges=True):
@@ -821,21 +876,10 @@ def collectivites(derniers, listes):
                                                   not depasse(m[0] - v, marge + m[4]),
                                                   inscrit["statut"] == "provisoire" or publie["statut"] in REVISABLES))
         for siren, montants in par_siren.items():
-            for total, composantes in identites:
-                obligatoires = [c for c in composantes if c[0] not in "?!"]
-                if total not in montants or any(c.lstrip("-") not in montants for c in obligatoires) or \
-                        any(c[1:] in montants for c in composantes if c[0] == "!"):
-                    continue
-                parties = [(-1 if c.startswith("-") else 1, c.lstrip("-")) for c in
-                           obligatoires + [c[1:] for c in composantes if c[0] == "?"] if c.lstrip("-") in montants]
-                for k, (budget, _, _) in enumerate(BUDGETS):
-                    ecart = montants[total][k] - sum(s * montants[c][k] for s, c in parties)
-                    entree = controles[(source, total, tuple(c for _, c in parties), budget)]
-                    entree[0] += 1
-                    if depasse(ecart, montants[total][4 + k] + sum(montants[c][4 + k] for _, c in parties)):
-                        entree[1] += 1
-                        if entree[2] is None or abs(ecart) > abs(entree[2][0]):
-                            entree[2] = (ecart, siren, exercice)
+            identites_comptables(controles, identites, source, exercice, siren, montants,
+                                 [(budget, k, 4 + k) for k, (budget, _, _) in enumerate(BUDGETS)])
+        if niveau is None:
+            continue
         for concept, parties in EN_PARTIES.items():
             if concept not in sommes and all(c in sommes for _, c in parties):
                 sommes[concept] = ([sum(s * sommes[c][k] for s, c in parties) for k in range(4)]
@@ -858,7 +902,8 @@ def collectivites(derniers, listes):
     for (exercice, siren), jeux in sorted(doubles.items()):
         for ja, jb in itertools.combinations(sorted(jeux), 2):
             a, b = comptes_doubles.get((ja, exercice, siren)), comptes_doubles.get((jb, exercice, siren))
-            if a is None or b is None:
+            if a is None or b is None:  # un jeu publié budget par budget : présente, sans montants comparables
+                memes.append((exercice, siren, (ja, jb), 0, [], set(), set()))
                 continue
             communs = sorted(set(a) & set(b))
             ecarts = [(c, BUDGETS[k][0], a[c][k] - b[c][k]) for c in communs for k in range(4)
@@ -1181,7 +1226,10 @@ def partie_collectivites(derniers):
               "principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés ; celle des départements sans la "
               "métropole de Lyon ni la Ville de Paris, que les annexes comptent avec les groupements à fiscalité propre "
               "et avec les communes. Le budget principal de chaque département et de chaque région se compare aussi à sa "
-              "fiche dans les publications de la DGCL.", "",
+              "fiche dans les publications de la DGCL. Les SDIS et les centres d'action sociale ne sont publiés que "
+              "budget par budget, sans consolidation : chaque ligne donne le montant d'un budget, auquel s'appliquent "
+              "les identités comptables. Les annexes ne donnent de total ni pour eux, ni pour les établissements publics "
+              "locaux.", "",
               "| Jeu de données | Exercices | Collectivités au dernier exercice | Lignes | "
               "Lignes dont le consolidé n'est pas BP + BA − flux |", "|---|---|---|---|---|"]
     par_source = collections.defaultdict(list)
@@ -1189,11 +1237,12 @@ def partie_collectivites(derniers):
         par_source[e[0]].append(e)
     for source, liste in sorted(par_source.items()):
         dernier = max(liste, key=lambda e: e[1])
+        consolides = "sans objet" if source in ofgl.PAR_BUDGET else fr(sum(e[6] for e in liste), 0)
         lignes.append(f"| {source} | {plage([e[1] for e in liste])} | {fr(dernier[4], 0)} | "
-                      f"{fr(sum(e[5] for e in liste), 0)} | {fr(sum(e[6] for e in liste), 0)} |")
+                      f"{fr(sum(e[5] for e in liste), 0)} | {consolides} |")
     n, faux = sum(v[0] for v in controles.values()), sum(v[1] for v in controles.values())
-    lignes += ["", f"Identités comptables de chaque collectivité : {fr(n, 0)} vérifiées, {fr(n - faux, 0)} justes, "
-               f"{fr(faux, 0)} en écart.", ""]
+    lignes += ["", f"Identités comptables de chaque collectivité, ou de chaque budget pour les jeux publiés budget par "
+               f"budget : {fr(n, 0)} vérifiées, {fr(n - faux, 0)} justes, {fr(faux, 0)} en écart.", ""]
     en_ecart = [(k, v) for k, v in sorted(controles.items()) if v[1]]
     if en_ecart:
         lignes += ["| Jeu de données | Total | Parties | Montant | En écart | Plus grand écart |",
@@ -1258,17 +1307,21 @@ def partie_memes_collectivites(listes, memes):
     lignes = [f"Collectivités que deux jeux de données donnent : {fr(comparees, 0)} montants comparés de l'un à l'autre, "
               f"{fr(comparees - en_ecart, 0)} égaux, {fr(en_ecart, 0)} en écart. Les agrégats qu'un seul des deux jeux "
               "publie, désignés par leur concept de la norme COMPTES_LOCAUX, ne se comparent pas.", "",
-              "| Collectivité | Premier jeu | Second jeu | Exercices | Montants comparés | En écart | "
+              "| Premier jeu | Second jeu | Collectivités | Exercices | Montants comparés | En écart | "
               "Agrégats du seul premier jeu | Agrégats du seul second |", "|---|---|---|---|---|---|---|---|"]
     regroupes = collections.defaultdict(list)
     for m in memes:
-        regroupes[(m[1], m[2])].append(m)
-    for (siren, (ja, jb)), liste in sorted(regroupes.items()):
-        dernier = max(m[0] for m in liste)
+        regroupes[m[2]].append(m)
+    for (ja, jb), liste in sorted(regroupes.items()):
+        derniers = {}  # siren → dernier exercice où les deux jeux le donnent
+        for m in liste:
+            derniers[m[1]] = max(derniers.get(m[1], ""), m[0])
+        qui = (", ".join(f"{nom(listes, ja, e, s)} ({s})" for s, e in sorted(derniers.items())) if len(derniers) <= 3
+               else f"{fr(len(derniers), 0)} collectivités")
         seuls = [sorted(set().union(*(m[k] for m in liste))) for k in (5, 6)]
-        lignes.append(f"| {nom(listes, ja, dernier, siren)} ({siren}) | {ja} | {jb} | {plage([m[0] for m in liste])} | "
-                      f"{fr(sum(m[3] for m in liste), 0)} | {fr(sum(len(m[4]) for m in liste), 0)} | "
-                      f"{concepts_lisibles(seuls[0])} | {concepts_lisibles(seuls[1])} |")
+        lignes.append(f"| {ja} | {jb} | {qui} | {plage([m[0] for m in liste])} | {fr(sum(m[3] for m in liste), 0)} | "
+                      f"{fr(sum(len(m[4]) for m in liste), 0)} | {concepts_lisibles(seuls[0])} | "
+                      f"{concepts_lisibles(seuls[1])} |")
     lignes.append("")
     ecarts = [(m[1], m[2], m[0], *e) for m in memes for e in m[4]]
     if ecarts:

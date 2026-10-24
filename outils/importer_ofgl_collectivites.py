@@ -12,12 +12,15 @@ de la DGFiP. Trois exports d'un jeu sont archivés, compressés, et s'importent 
 - l'inventaire : le nombre de lignes de chaque exercice du jeu ;
 - pour chaque exercice, les montants : une ligne par collectivité et par agrégat ;
 - pour chaque exercice, les collectivités : nom, catégorie, territoire et population.
+Les comptes des services départementaux d'incendie et de secours et ceux des centres d'action sociale ne sont publiés
+que budget par budget, sans consolidation : chaque ligne des montants donne, pour un budget, désigné par son numéro
+SIRET, et un agrégat, le montant de ce budget, et la liste est celle des budgets, avec leur collectivité.
 Ces copies sont les chiffres eux-mêmes : la base ne les recopie pas, elle les lit. L'import vérifie chaque ligne
-(agrégat connu de tables/agregats_ofgl.csv, montants numériques, une seule ligne par collectivité et par agrégat),
-que les montants ont le nombre de lignes de l'inventaire et que la liste des collectivités est celle des montants, puis
-inscrit la copie dans tables/fichiers_collectivites.csv. La version d'une copie est la date de modification du jeu de
-données qu'annonce le portail ; la copie qui en contrôle une autre est la plus récente de même source dont la version ne
-la dépasse pas. Le dernier exercice de l'inventaire est provisoire, les autres définitifs.
+(agrégat connu de tables/agregats_ofgl.csv, montants numériques, une seule ligne par collectivité, ou par budget, et par
+agrégat), que les montants ont le nombre de lignes de l'inventaire et que la liste des collectivités, ou des budgets, est
+celle des montants, puis inscrit la copie dans tables/fichiers_collectivites.csv. La version d'une copie est la date de
+modification du jeu de données qu'annonce le portail ; la copie qui en contrôle une autre est la plus récente de même
+source dont la version ne la dépasse pas. Le dernier exercice de l'inventaire est provisoire, les autres définitifs.
 """
 
 import collections
@@ -40,13 +43,24 @@ JEUX = {
     "ofgl.base-regions-consolidee": ("ofgl-base-regions-consolidee", ["siren", "lbudg", "categ", "reg_code", "ptot"]),
     "ofgl.base-syndicats-consolidee": ("ofgl-base-syndicats-consolidee", ["siren", "lbudg", "categ", "categorie_synd",
                                                                           "dep_current_code", "reg_code"]),
+    "ofgl.base-epl-consolidee": ("ofgl-base-epl-consolidee", ["siren", "nom_epl", "lbudg", "categ", "categorie_epl_abr",
+                                                              "libelle_cacti_simplifie", "dep_code", "reg_code"]),
+    "ofgl.base-sdis": ("ofgl-base-sdis", ["siren", "ident", "lbudg", "cbudg", "nomen", "categorie_sdis", "code_dep",
+                                          "code_region", "population_totale"]),
+    "ofgl.base-ccas-cias": ("ofgl-base-ccas-cias", ["siren", "ident", "lbudg", "nom_ccas", "type", "type_de_budget",
+                                                    "nomen", "ctype", "code_dep", "code_reg"]),
 }
 MONTANTS = ["siren", "agregat", "montant_bp", "montant_ba", "montant_flux", "montant"]
+# Jeux publiés budget par budget, sans consolidation : une ligne par budget, désigné par son numéro SIRET (« ident »),
+# et par agrégat ; leur liste est celle des budgets.
+PAR_BUDGET = {"ofgl.base-sdis", "ofgl.base-ccas-cias"}
+MONTANTS_BUDGETS = ["siren", "ident", "agregat", "montant"]
 INVENTAIRE = ["exer", "lignes"]
 # Champs qu'une collectivité peut avoir plusieurs fois, une ligne par valeur : un groupement s'étend sur plusieurs
 # départements, voire plusieurs régions.
 MULTIPLES = {"dep_code", "reg_code"}
-SIRENS = {}  # copie de montants → numéros Siren qu'elle porte, pour contrôler la liste des collectivités sans la relire
+POPULATIONS = {"ptot", "population_totale"}
+CLES = {}  # copie de montants → numéros Siren, ou SIRET des budgets, qu'elle porte, pour contrôler la liste sans la relire
 
 
 def requete(jeu, **parametres):
@@ -57,8 +71,10 @@ def requetes(source_id, exercice):
     """Les trois exports à archiver pour un exercice d'un jeu de données : inventaire, montants, collectivités."""
     jeu, champs_collectivites = JEUX[source_id]
     filtre = f"exer=date'{exercice}'"
+    champs_montants = MONTANTS_BUDGETS if source_id in PAR_BUDGET else MONTANTS
+    ordre = "siren,ident,agregat" if source_id in PAR_BUDGET else "siren,agregat"
     return {"inventaire": requete(jeu, select="exer,count(*) as lignes", group_by="exer", order_by="exer"),
-            "montants": requete(jeu, select=",".join(MONTANTS), where=filtre, order_by="siren,agregat"),
+            "montants": requete(jeu, select=",".join(champs_montants), where=filtre, order_by=ordre),
             "collectivites": requete(jeu, select=",".join(champs_collectivites), where=filtre,
                                      group_by=",".join(champs_collectivites), order_by=",".join(champs_collectivites))}
 
@@ -137,29 +153,56 @@ def montants(fichier, agregats, marges=False):
     return resultat
 
 
+def montants_budgets(fichier, agregats, marges=False):
+    """Les lignes de montants d'un jeu publié budget par budget : [(siren, SIRET du budget, agrégat, montant)], et, si
+    `marges`, la marge d'arrondi du montant à la suite."""
+    resultat, vues = [], set()
+    for n, (siren, budget, agregat, texte) in enumerate(lignes(fichier, MONTANTS_BUDGETS), start=2):
+        lieu = f"{fichier['id']}, ligne {n}"
+        if not re.fullmatch(r"[0-9]{9}", siren) or not re.fullmatch(siren + r"[0-9]{5}", budget):
+            sys.exit(f"{lieu} : numéro Siren ou SIRET du budget illisible « {siren} », « {budget} »")
+        if agregat not in agregats:
+            sys.exit(f"{lieu} : agrégat inconnu « {agregat} » (le déclarer dans tables/agregats_ofgl.csv)")
+        if (budget, agregat) in vues:
+            sys.exit(f"{lieu} : deuxième ligne pour le budget {budget} et « {agregat} »")
+        vues.add((budget, agregat))
+        resultat.append((siren, budget, agregat, montant(texte, lieu)) + ((marge(texte),) if marges else ()))
+    return resultat
+
+
 def collectivites(fichier):
     """({siren: {champ: valeur}}, nombre de lignes), les valeurs d'un champ multiple réunies, triées, séparées par
-    « ; »."""
+    « ; » ; pour un jeu publié budget par budget, la fiche de chaque budget, sous son SIRET."""
     champs_ = JEUX[fichier["source_id"]][1]
-    par_siren = collections.defaultdict(list)
+    cle = "ident" if fichier["source_id"] in PAR_BUDGET else "siren"
+    par_cle = collections.defaultdict(list)
     contenu = lignes(fichier, champs_)
     for n, ligne in enumerate(contenu, start=2):
         valeurs = dict(zip(champs_, ligne))
-        if not re.fullmatch(r"[0-9]{9}", valeurs["siren"]):
-            sys.exit(f"{fichier['id']}, ligne {n} : numéro Siren illisible « {valeurs['siren']} »")
-        if valeurs.get("ptot") and not valeurs["ptot"].isdigit():
-            sys.exit(f"{fichier['id']}, ligne {n} : population illisible « {valeurs['ptot']} »")
-        par_siren[valeurs["siren"]].append(valeurs)
+        if not re.fullmatch(r"[0-9]{9}", valeurs["siren"]) or cle == "ident" and \
+                not re.fullmatch(valeurs["siren"] + r"[0-9]{5}", valeurs["ident"]):
+            sys.exit(f"{fichier['id']}, ligne {n} : numéro Siren ou SIRET illisible « {valeurs['siren']} »")
+        for c in POPULATIONS & set(valeurs):
+            if valeurs[c] and not valeurs[c].isdigit():
+                sys.exit(f"{fichier['id']}, ligne {n} : population illisible « {valeurs[c]} »")
+        par_cle[valeurs[cle]].append(valeurs)
     resultat = {}
-    for siren, liste in par_siren.items():
+    for identifiant, liste in par_cle.items():
         fiche = {}
         for c in champs_:
             distinctes = sorted({v[c] for v in liste})
             if len(distinctes) > 1 and c not in MULTIPLES:
-                sys.exit(f"{fichier['id']} : {siren} a plusieurs valeurs de {c} ({distinctes})")
+                sys.exit(f"{fichier['id']} : {identifiant} a plusieurs valeurs de {c} ({distinctes})")
             fiche[c] = ";".join(distinctes)
-        resultat[siren] = fiche
+        resultat[identifiant] = fiche
     return resultat, len(contenu)
+
+
+def cles_montants(fichier, agregats):
+    """Les numéros Siren, ou pour un jeu publié budget par budget les SIRET des budgets, d'une copie de montants."""
+    if fichier["source_id"] in PAR_BUDGET:
+        return {l[1] for l in montants_budgets(fichier, agregats)}
+    return {l[0] for l in montants(fichier, agregats)}
 
 
 def controleur(fichier, inscrits, contenu, exercice=""):
@@ -189,22 +232,23 @@ def inscription(fichier, inscrits, fichiers, agregats):
     exercices = inventaire(fichiers[controleur(fichier, inscrits, "inventaire")])
     if exercice not in exercices:
         sys.exit(f"{fichier['id']} : l'exercice {exercice} manque à l'inventaire")
+    par_budget = fichier["source_id"] in PAR_BUDGET
     if contenu == "montants":
-        lues = montants(fichier, agregats)
+        lues = montants_budgets(fichier, agregats) if par_budget else montants(fichier, agregats)
         if len(lues) != exercices[exercice]:
             sys.exit(f"{fichier['id']} : {len(lues)} lignes, l'inventaire en annonce {exercices[exercice]}")
         nombre, sirens = len(lues), {l[0] for l in lues}
-        SIRENS[fichier["id"]] = sirens
+        CLES[fichier["id"]] = {l[1] for l in lues} if par_budget else sirens
     else:
         fiches, nombre = collectivites(fichier)
-        sirens = set(fiches)
+        sirens = {f["siren"] for f in fiches.values()}
         temoin = controleur(fichier, inscrits, "montants", exercice)
-        if temoin not in SIRENS:
-            SIRENS[temoin] = {l[0] for l in montants(fichiers[temoin], agregats)}
-        attendus = SIRENS[temoin]
-        if sirens != attendus:
-            sys.exit(f"{fichier['id']} : la liste des collectivités n'est pas celle des montants "
-                     f"({len(sirens - attendus)} en plus, {len(attendus - sirens)} en moins)")
+        if temoin not in CLES:
+            CLES[temoin] = cles_montants(fichiers[temoin], agregats)
+        attendus = CLES[temoin]
+        if set(fiches) != attendus:
+            sys.exit(f"{fichier['id']} : la liste des {'budgets' if par_budget else 'collectivités'} n'est pas celle "
+                     f"des montants ({len(set(fiches) - attendus)} en plus, {len(attendus - set(fiches))} en moins)")
     ligne.update(statut="provisoire" if exercice == max(exercices) else "definitif", lignes=str(nombre),
                  collectivites=str(len(sirens)))
     return ligne

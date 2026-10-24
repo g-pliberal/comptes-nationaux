@@ -668,24 +668,28 @@ Détail des grandeurs en écart :
 
 ## 7. Comptes de chaque collectivité
 
-Les comptes que l'OFGL publie collectivité par collectivité sur data.ofgl.fr, dans la version la plus récente de chaque exercice. Chaque ligne donne, pour une collectivité et un agrégat, le montant de son budget principal, celui de ses budgets annexes, les flux croisés entre eux et le montant consolidé : celui-ci doit être la somme des deux premiers moins le troisième, à l'arrondi près : la demi-unité de la dernière décimale publiée de chaque montant, au centime au plus fin (les montants de 2022 n'ont que dix chiffres significatifs). Pour chaque collectivité, les identités comptables de la section 1 s'appliquent à chacun des quatre montants. La somme des collectivités se compare aux totaux des annexes des rapports de l'OFGL : 2A pour les budgets principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés ; celle des départements sans la métropole de Lyon ni la Ville de Paris, que les annexes comptent avec les groupements à fiscalité propre et avec les communes. Le budget principal de chaque département et de chaque région se compare aussi à sa fiche dans les publications de la DGCL.
+Les comptes que l'OFGL publie collectivité par collectivité sur data.ofgl.fr, dans la version la plus récente de chaque exercice. Chaque ligne donne, pour une collectivité et un agrégat, le montant de son budget principal, celui de ses budgets annexes, les flux croisés entre eux et le montant consolidé : celui-ci doit être la somme des deux premiers moins le troisième, à l'arrondi près : la demi-unité de la dernière décimale publiée de chaque montant, au centime au plus fin (les montants de 2022 n'ont que dix chiffres significatifs). Pour chaque collectivité, les identités comptables de la section 1 s'appliquent à chacun des quatre montants. La somme des collectivités se compare aux totaux des annexes des rapports de l'OFGL : 2A pour les budgets principaux, 2B pour les budgets annexes, 2C pour les comptes consolidés ; celle des départements sans la métropole de Lyon ni la Ville de Paris, que les annexes comptent avec les groupements à fiscalité propre et avec les communes. Le budget principal de chaque département et de chaque région se compare aussi à sa fiche dans les publications de la DGCL. Les SDIS et les centres d'action sociale ne sont publiés que budget par budget, sans consolidation : chaque ligne donne le montant d'un budget, auquel s'appliquent les identités comptables. Les annexes ne donnent de total ni pour eux, ni pour les établissements publics locaux.
 
 | Jeu de données | Exercices | Collectivités au dernier exercice | Lignes | Lignes dont le consolidé n'est pas BP + BA − flux |
 |---|---|---|---|---|
+| ofgl.base-ccas-cias | 8 années entre 2018 et 2025 | 11 023 | 5 154 438 | sans objet |
 | ofgl.base-communes-consolidee | 8 années entre 2018 et 2025 | 34 778 | 13 535 660 | 0 |
 | ofgl.base-departements-consolidee | 14 années entre 2012 et 2025 | 97 | 88 417 | 0 |
+| ofgl.base-epl-consolidee | 8 années entre 2018 et 2025 | 1 197 | 382 050 | 0 |
 | ofgl.base-gfp-consolidee | 8 années entre 2018 et 2025 | 1 262 | 508 116 | 0 |
 | ofgl.base-regions-consolidee | 14 années entre 2012 et 2025 | 17 | 14 547 | 0 |
+| ofgl.base-sdis | 14 années entre 2012 et 2025 | 97 | 84 420 | sans objet |
 | ofgl.base-syndicats-consolidee | 8 années entre 2018 et 2025 | 8 522 | 3 027 867 | 0 |
 
-Identités comptables de chaque collectivité : 29 515 772 vérifiées, 29 515 772 justes, 0 en écart.
+Identités comptables de chaque collectivité, ou de chaque budget pour les jeux publiés budget par budget : 32 462 722 vérifiées, 32 462 722 justes, 0 en écart.
 
-Collectivités que deux jeux de données donnent : 2 972 montants comparés de l'un à l'autre, 2 966 égaux, 6 en écart. Les agrégats qu'un seul des deux jeux publie, désignés par leur concept de la norme COMPTES_LOCAUX, ne se comparent pas.
+Collectivités que deux jeux de données donnent : 131 768 montants comparés de l'un à l'autre, 131 762 égaux, 6 en écart. Les agrégats qu'un seul des deux jeux publie, désignés par leur concept de la norme COMPTES_LOCAUX, ne se comparent pas.
 
-| Collectivité | Premier jeu | Second jeu | Exercices | Montants comparés | En écart | Agrégats du seul premier jeu | Agrégats du seul second |
+| Premier jeu | Second jeu | Collectivités | Exercices | Montants comparés | En écart | Agrégats du seul premier jeu | Agrégats du seul second |
 |---|---|---|---|---|---|---|---|
-| MET DE LYON (200046977) | ofgl.base-departements-consolidee | ofgl.base-gfp-consolidee | 8 années entre 2018 et 2025 | 1 572 | 6 | ALLOCATIONS_APA, ALLOCATIONS_PCH, ALLOCATIONS_RSA, ATTRIBUTIONS_PEREQUATION_DMTO, CONCOURS_CNSA, CONTRIBUTIONS_SDIS, CVAE, DDEC, DMTO, DMTO_APRES_PEREQUATION, EPARGNE_BRUTE_AVANT_TRAVAUX_REGIE, FMDI, FRAIS_HEBERGEMENT, PRELEVEMENTS_PEREQUATION_DMTO, TICPE, TSCA | CREDITS_TRESORERIE, TEOM, VERSEMENT_TRANSPORT |
-| VILLE DE PARIS (217500016) | ofgl.base-communes-consolidee | ofgl.base-departements-consolidee | 7 années entre 2019 et 2025 | 1 400 | 0 | TEOM | ALLOCATIONS_APA, ALLOCATIONS_PCH, ALLOCATIONS_RSA, CONCOURS_CNSA, CONTRIBUTIONS_SDIS, CVAE, DDEC, DMTO, DMTO_APRES_PEREQUATION, EPARGNE_BRUTE_AVANT_TRAVAUX_REGIE, FMDI, FRAIS_HEBERGEMENT, PRELEVEMENTS_PEREQUATION_DMTO, TICPE, TRAVAUX_REGIE, TSCA |
+| ofgl.base-communes-consolidee | ofgl.base-departements-consolidee | VILLE DE PARIS (217500016) | 7 années entre 2019 et 2025 | 1 400 | 0 | TEOM | ALLOCATIONS_APA, ALLOCATIONS_PCH, ALLOCATIONS_RSA, CONCOURS_CNSA, CONTRIBUTIONS_SDIS, CVAE, DDEC, DMTO, DMTO_APRES_PEREQUATION, EPARGNE_BRUTE_AVANT_TRAVAUX_REGIE, FMDI, FRAIS_HEBERGEMENT, PRELEVEMENTS_PEREQUATION_DMTO, TICPE, TRAVAUX_REGIE, TSCA |
+| ofgl.base-departements-consolidee | ofgl.base-gfp-consolidee | MET DE LYON (200046977) | 8 années entre 2018 et 2025 | 1 572 | 6 | ALLOCATIONS_APA, ALLOCATIONS_PCH, ALLOCATIONS_RSA, ATTRIBUTIONS_PEREQUATION_DMTO, CONCOURS_CNSA, CONTRIBUTIONS_SDIS, CVAE, DDEC, DMTO, DMTO_APRES_PEREQUATION, EPARGNE_BRUTE_AVANT_TRAVAUX_REGIE, FMDI, FRAIS_HEBERGEMENT, PRELEVEMENTS_PEREQUATION_DMTO, TICPE, TSCA | CREDITS_TRESORERIE, TEOM, VERSEMENT_TRANSPORT |
+| ofgl.base-epl-consolidee | ofgl.base-syndicats-consolidee | 102 collectivités | 8 années entre 2018 et 2025 | 128 796 | 0 | aucun | aucun |
 
 | Collectivité | Exercice | Grandeur | Montant | Écart (premier jeu − second) |
 |---|---|---|---|---|

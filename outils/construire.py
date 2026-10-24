@@ -7,7 +7,8 @@
 base/construite/empreintes.csv : une empreinte du contenu de chaque table, qui permet à
 chacun de vérifier qu'une base reconstruite contient exactement les mêmes données. Les comptes
 de chaque collectivité y sont lus dans les copies archivées des exports de data.ofgl.fr
-(tables comptes_collectivites et collectivites).
+(tables comptes_collectivites et collectivites), ceux des jeux publiés budget par budget dans les
+tables comptes_budgets et budgets.
 """
 
 import csv
@@ -37,11 +38,28 @@ LEFT JOIN fonctions f ON f.id = c.fonction_id;
 CREATE VIEW v_comptes_collectivites AS
 SELECT f.source_id, f.exercice, f.version, f.statut, f.fichier_id, c.siren, co.id AS concept_id,
        co.libelle AS concept_libelle, c.montant_bp, c.montant_ba, c.montant_flux, c.montant,
-       k.insee, k.insee_2025, k.nom, k.categorie, k.nature_juridique, k.departement, k.region, k.epci, k.population
+       k.insee, k.insee_2025, k.nom, k.denomination, k.categorie, k.nature_juridique, k.activite, k.departement,
+       k.region, k.epci, k.population
 FROM comptes_collectivites c
 JOIN fichiers_collectivites f ON f.rowid = c.lot
 JOIN concepts co ON co.rowid = c.concept
 LEFT JOIN collectivites k ON k.siren = c.siren AND k.lot = (
+    SELECT g.rowid FROM fichiers_collectivites g
+    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'collectivites'
+    ORDER BY g.version DESC LIMIT 1)
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
+                   WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
+
+-- Les comptes de chaque budget des jeux publiés budget par budget (SDIS, centres d'action sociale), dans la version la
+-- plus récente de chaque exercice, avec leurs libellés et la fiche du budget.
+CREATE VIEW v_comptes_budgets AS
+SELECT f.source_id, f.exercice, f.version, f.statut, f.fichier_id, c.siren, c.budget, co.id AS concept_id,
+       co.libelle AS concept_libelle, c.montant, b.nom, b.collectivite, b.categorie, b.type_budget, b.nature,
+       b.nomenclature, b.departement, b.region, b.population
+FROM comptes_budgets c
+JOIN fichiers_collectivites f ON f.rowid = c.lot
+JOIN concepts co ON co.rowid = c.concept
+LEFT JOIN budgets b ON b.budget = c.budget AND b.lot = (
     SELECT g.rowid FROM fichiers_collectivites g
     WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'collectivites'
     ORDER BY g.version DESC LIMIT 1)
@@ -59,22 +77,38 @@ WHERE c.version = (
 """
 
 
-# Les comptes de chaque collectivité, lus dans les copies archivées. Pour que la base reste maniable (dix-sept millions
-# de lignes), une ligne de compte ne porte que le numéro de sa copie (`lot`, la ligne de fichiers_collectivites qui
-# l'inscrit) et celui de son concept (`concept`, la ligne de concepts) ; la vue v_comptes_collectivites rétablit les
-# libellés.
+# Les comptes de chaque collectivité, lus dans les copies archivées. Pour que la base reste maniable (près de vingt-trois
+# millions de lignes), une ligne de compte ne porte que le numéro de sa copie (`lot`, la ligne de fichiers_collectivites
+# qui l'inscrit) et celui de son concept (`concept`, la ligne de concepts) ; la vue v_comptes_collectivites rétablit
+# les libellés.
 COMPTES = [("lot", "INTEGER"), ("siren", "TEXT"), ("concept", "INTEGER"), ("montant_bp", "REAL"),
            ("montant_ba", "REAL"), ("montant_flux", "REAL"), ("montant", "REAL")]
 COLLECTIVITES = [("lot", "INTEGER"), ("siren", "TEXT"), ("insee", "TEXT"), ("insee_2025", "TEXT"), ("nom", "TEXT"),
-                 ("categorie", "TEXT"), ("nature_juridique", "TEXT"), ("mode_financement", "TEXT"),
-                 ("departement", "TEXT"), ("region", "TEXT"), ("epci", "TEXT"), ("population", "INTEGER")]
+                 ("denomination", "TEXT"), ("categorie", "TEXT"), ("nature_juridique", "TEXT"), ("activite", "TEXT"),
+                 ("mode_financement", "TEXT"), ("departement", "TEXT"), ("region", "TEXT"), ("epci", "TEXT"),
+                 ("population", "INTEGER")]
 # Champ de l'export de data.ofgl.fr → colonne de la table collectivites ; la catégorie d'un syndicat (SIVU, SIVOM, syndicat
-# mixte, pôle, maison départementale des personnes handicapées) y tient lieu de nature juridique.
-CHAMPS_COLLECTIVITES = {"siren": "siren", "insee": "insee", "com_code": "insee_2025", "lbudg": "nom", "categ": "categorie",
-                        "nat_juridique": "nature_juridique", "categorie_synd": "nature_juridique",
-                        "mode_financement": "mode_financement", "dep_code": "departement",
-                        "dep_current_code": "departement", "reg_code": "region", "epci_code": "epci",
-                        "ptot": "population"}
+# mixte, pôle, maison départementale des personnes handicapées) ou d'un établissement public local (EPA, régie, GIP) y
+# tient lieu de nature juridique.
+CHAMPS_COLLECTIVITES = {"siren": "siren", "insee": "insee", "com_code": "insee_2025", "lbudg": "nom",
+                        "nom_epl": "denomination", "categ": "categorie", "nat_juridique": "nature_juridique",
+                        "categorie_synd": "nature_juridique", "categorie_epl_abr": "nature_juridique",
+                        "libelle_cacti_simplifie": "activite", "mode_financement": "mode_financement",
+                        "dep_code": "departement", "dep_current_code": "departement", "reg_code": "region",
+                        "epci_code": "epci", "ptot": "population"}
+# Les jeux publiés budget par budget : une ligne par budget, désigné par son SIRET, et par agrégat ; la table budgets
+# donne la fiche de chaque budget, chaque exercice : son libellé, le nom de sa collectivité, sa catégorie (de SDIS, ou
+# CCAS, CIAS), son type (« 1 » ou « 3 » pour le budget principal ou un budget annexe d'un SDIS, « Budget principal »
+# ou « Budget annexe » pour un centre d'action sociale), sa nature (établissement social ou médico-social…) et sa
+# nomenclature comptable.
+COMPTES_BUDGETS = [("lot", "INTEGER"), ("siren", "TEXT"), ("budget", "TEXT"), ("concept", "INTEGER"), ("montant", "REAL")]
+BUDGETS = [("lot", "INTEGER"), ("siren", "TEXT"), ("budget", "TEXT"), ("nom", "TEXT"), ("collectivite", "TEXT"),
+           ("categorie", "TEXT"), ("type_budget", "TEXT"), ("nature", "TEXT"), ("nomenclature", "TEXT"),
+           ("departement", "TEXT"), ("region", "TEXT"), ("population", "INTEGER")]
+CHAMPS_BUDGETS = {"siren": "siren", "ident": "budget", "lbudg": "nom", "nom_ccas": "collectivite",
+                  "categorie_sdis": "categorie", "type": "categorie", "cbudg": "type_budget",
+                  "type_de_budget": "type_budget", "ctype": "nature", "nomen": "nomenclature", "code_dep": "departement",
+                  "code_region": "region", "code_reg": "region", "population_totale": "population"}
 
 
 def lignes_collectivites(lots, concepts):
@@ -84,17 +118,22 @@ def lignes_collectivites(lots, concepts):
     agregats = {a["agregat"]: a["concept_id"] for a in lire("tables/agregats_ofgl.csv")}
     for inscrit in lire("tables/fichiers_collectivites.csv"):
         fichier, lot = fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]]
-        if inscrit["contenu"] == "montants":
+        par_budget = inscrit["source_id"] in ofgl.PAR_BUDGET
+        if inscrit["contenu"] == "montants" and par_budget:
+            yield "comptes_budgets", [[lot, s, b, concepts[agregats[a]], v]
+                                      for s, b, a, v in ofgl.montants_budgets(fichier, agregats)]
+        elif inscrit["contenu"] == "montants":
             yield "comptes_collectivites", [[lot, s, concepts[agregats[a]], *v]
                                             for s, a, *v in ofgl.montants(fichier, agregats)]
         elif inscrit["contenu"] == "collectivites":
             fiches, _ = ofgl.collectivites(fichier)
+            table, correspondance = (BUDGETS, CHAMPS_BUDGETS) if par_budget else (COLLECTIVITES, CHAMPS_COLLECTIVITES)
             lues = []
-            for siren, fiche in sorted(fiches.items()):
-                colonnes = {CHAMPS_COLLECTIVITES[c]: v for c, v in fiche.items()}
+            for _, fiche in sorted(fiches.items()):
+                colonnes = {correspondance[c]: v for c, v in fiche.items()}
                 colonnes["population"] = int(colonnes["population"]) if colonnes.get("population") else None
-                lues.append([lot] + [colonnes.get(c) for c, _ in COLLECTIVITES[1:]])
-            yield "collectivites", lues
+                lues.append([lot] + [colonnes.get(c) for c, _ in table[1:]])
+            yield "budgets" if par_budget else "collectivites", lues
 
 
 def valeur_sql(champ, texte):
@@ -128,11 +167,13 @@ def main():
         ecrivain.writerows([l[c["name"]] for c in champs] for l in lignes)
         empreintes.append({"table": nom, "lignes": len(lignes),
                            "sha256": hashlib.sha256(texte.getvalue().encode("utf-8")).hexdigest()})
-    for table, colonnes in (("comptes_collectivites", COMPTES), ("collectivites", COLLECTIVITES)):
+    nouvelles = {"comptes_collectivites": COMPTES, "collectivites": COLLECTIVITES, "comptes_budgets": COMPTES_BUDGETS,
+                 "budgets": BUDGETS}
+    for table, colonnes in nouvelles.items():
         connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
     lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
     concepts = {c: r for r, c in connexion.execute("SELECT rowid, id FROM concepts")}
-    hachages = {"comptes_collectivites": [hashlib.sha256(), 0], "collectivites": [hashlib.sha256(), 0]}
+    hachages = {table: [hashlib.sha256(), 0] for table in nouvelles}
     for table, lues in lignes_collectivites(lots, concepts):
         if not lues:
             continue
@@ -144,6 +185,9 @@ def main():
     connexion.execute("CREATE INDEX comptes_collectivites_lot ON comptes_collectivites (lot, concept)")
     connexion.execute("CREATE INDEX comptes_collectivites_siren ON comptes_collectivites (siren)")
     connexion.execute("CREATE INDEX collectivites_cle ON collectivites (lot, siren)")
+    connexion.execute("CREATE INDEX comptes_budgets_lot ON comptes_budgets (lot, concept)")
+    connexion.execute("CREATE INDEX comptes_budgets_siren ON comptes_budgets (siren)")
+    connexion.execute("CREATE INDEX budgets_cle ON budgets (lot, budget)")
     empreintes += [{"table": t, "lignes": n, "sha256": h.hexdigest()} for t, (h, n) in hachages.items()]
     connexion.executescript(VUES)
     connexion.commit()
