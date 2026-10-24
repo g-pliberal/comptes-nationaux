@@ -1227,3 +1227,133 @@ Participations des départements qu'un SDIS déclare recevoir sans que son dépa
 | SDIS ARDECHE | 7 années entre 2012 et 2018 | 17,5 M€ en 2015 |
 | SDIS HAUTES-PYRENEES | 2012 | 10,0 M€ en 2012 |
 | SDIS MAYOTTE | 2012, 2013, 2014 et 2015 | 13,7 M€ en 2014 |
+
+## 9. Dépenses de chaque département par fonction
+
+La présentation fonctionnelle des comptes des départements, que l'OFGL publie sur data.ofgl.fr, ventile les dépenses de chaque budget des départements, de la métropole de Lyon et de la Ville de Paris entre les fonctions de la nomenclature de son instruction budgétaire et comptable : la M52, puis la M57, que les départements adoptent l'un après l'autre et dont les fonctions ne se correspondent pas toutes ; le jeu ne porte que sur les dépenses. Chaque montant y figure à chacun des niveaux de sa fonction, d'un à quatre chiffres, et un montant nul n'a pas de ligne : une fonction doit valoir la somme de ses sous-fonctions, et les fonctions de premier niveau réunies, le total du budget. Dans chaque fonction s'appliquent les identités comptables des agrégats de dépenses, une partie sans ligne valant zéro. La somme des fonctions de premier niveau du budget principal de chaque collectivité se compare au montant de son budget principal dans le jeu de ses comptes consolidés, celle de ses budgets annexes réunis au montant de ses budgets annexes. Le dernier exercice est provisoire.
+
+| Exercice | Version | Statut | Budgets principaux en M52 | Budgets principaux en M57 | Budgets annexes | Lignes |
+|---|---|---|---|---|---|---|
+| 2012 | 2026-08-05 | definitif | 101 | 0 | 80 | 59 245 |
+| 2013 | 2026-08-05 | definitif | 101 | 0 | 90 | 59 367 |
+| 2014 | 2026-08-05 | definitif | 100 | 1 | 120 | 59 571 |
+| 2015 | 2026-08-05 | definitif | 100 | 2 | 123 | 60 137 |
+| 2016 | 2026-08-05 | definitif | 99 | 1 | 133 | 58 342 |
+| 2017 | 2026-08-05 | definitif | 99 | 1 | 129 | 59 013 |
+| 2018 | 2026-08-05 | definitif | 96 | 2 | 123 | 57 214 |
+| 2019 | 2026-08-05 | definitif | 90 | 8 | 148 | 60 819 |
+| 2020 | 2026-08-05 | definitif | 89 | 9 | 151 | 60 762 |
+| 2021 | 2026-08-05 | definitif | 78 | 19 | 140 | 61 496 |
+| 2022 | 2026-08-05 | definitif | 68 | 29 | 142 | 63 147 |
+| 2023 | 2026-08-05 | definitif | 49 | 48 | 139 | 65 005 |
+| 2024 | 2026-08-05 | definitif | 2 | 95 | 135 | 71 269 |
+| 2025 | 2026-08-05 | provisoire | 2 | 95 | 139 | 70 348 |
+
+Fonctions comparées à la somme de leurs sous-fonctions, pour chaque budget et chaque agrégat : 326 246, dont 325 168 égales à l'arrondi près et 1 078 en écart. Un écart peut venir d'un montant que le budget classe dans la fonction sans le ventiler entre ses sous-fonctions : il se retrouve alors dans chacun des agrégats qui comptent ce montant.
+
+| Fonction | Exercices en écart | Budgets en écart, chaque exercice compté | Plus grand écart (fonction − sous-fonctions) |
+|---|---|---|---|
+| 0 de la M52 (SERVICES GÉNÉRAUX) | 8 années entre 2012 et 2019 | 22 | +2,1 M€ (DEP_FONCTIONNEMENT) : VOSGES DEVELOPPEMENT-DEP VOSGES (22880001700250), 2013 |
+| 02 de la M52 (Administration générale) | 10 années entre 2013 et 2022 | 21 | +29,2 M€ (DEP_FONCTIONNEMENT) : DEP MAYOTTE (22985000300018), 2016 |
+| 020 de la M52 (Administration générale de la collectivité) | 11 années entre 2012 et 2022 | 21 | −2,5 M€ (DEP_FONCTIONNEMENT) : DEP MAYOTTE (22985000300018), 2013 |
+| 04 de la M52 (Coopération décentralisée, action européenne et internationale) | 11 années entre 2012 et 2023 | 24 | +0,6 M€ (DEP_FONCTIONNEMENT) : DEP MAYOTTE (22985000300018), 2017 |
+| 1 de la M52 (Sécurité) | 5 années entre 2012 et 2018 | 13 | +6,2 M€ (DEP_TOTALES_HORS_REMBOURSEMENTS) : DEP YVELINES (22780646000019), 2012 |
+| 2 de la M52 (Enseignement) | 5 années entre 2012 et 2023 | 8 | +0,2 M€ (DEP_INVESTISSEMENT) : DEP PYRENEES-ATLANTIQUES (22640001800876), 2023 |
+| 22 de la M52 (Enseignement du second degré) | 9 années entre 2014 et 2023 | 9 | +0,2 M€ (DEPENSES_EQUIPEMENT) : DEP DEUX-SEVRES (22790001600352), 2020 |
+| 3 de la M52 (Culture, vie sociale, jeunesse, sports et loisirs) | 2012, 2016 et 2023 | 3 | +0,4 M€ (DEP_TOTALES_HORS_REMBOURSEMENTS) : DEP LOIRE (22420001400013), 2016 |
+| 31 de la M52 (Culture) | 8 années entre 2013 et 2023 | 14 | +4,7 M€ (DEP_TOTALES_HORS_REMBOURSEMENTS) : DEP MAYOTTE (22985000300018), 2017 |
+| 4 de la M52 (Prévention médico-sociale) | 2013, 2015, 2016 et 2019 | 6 | +7 261 € (DEP_FONCTIONNEMENT) : DEP DU LOIRET (22450001700013), 2013 |
+| 5 de la M52 (Action sociale) | 12 années entre 2012 et 2023 | 13 | +0,1 M€ (DEP_TOTALES_HORS_REMBOURSEMENTS) : DEP DU VAL-DE-MARNE (22940028800010), 2012 |
+| 53 de la M52 (Personnes âgées) | 2017 | 47 | +58,0 M€ (DEP_TOTALES_HORS_REMBOURSEMENTS) : DEP VAR (22830001800113), 2017 |
+| 54 de la M52 (Revenu minimum d'insertion) | 2012, 2016 et 2017 | 4 | +3,3 M€ (DEP_FONCTIONNEMENT) : DEP MAYOTTE (22985000300018), 2016 |
+| 547 de la M52 (Revenu minimum d'insertion - Revenu minimum d'activité) | 8 années entre 2012 et 2019 | 12 | +0,1 M€ (DEPENSES_INTERVENTION) : DEP OISE (22600001600403), 2016 |
+| 55 de la M52 (Personnes dépendantes (APA)) | 2015 | 1 | +19 336 € (DEPENSES_INTERVENTION) : DEP NIEVRE (22580001000012), 2015 |
+| 56 de la M52 (Revenu de solidarité active) | 2014 et 2019 | 2 | +0,1 M€ (DEP_TOTALES_HORS_REMBOURSEMENTS) : DEP ARDENNES (22080004900011), 2014 |
+| 6 de la M52 (Réseaux et infrastructures) | 9 années entre 2012 et 2020 | 26 | +6,3 M€ (DEPENSES_INTERVENTION) : DEP MAYOTTE (22985000300018), 2016 |
+| 62 de la M52 (Routes et voirie) | 11 années entre 2012 et 2023 | 27 | +1,9 M€ (DEP_INVESTISSEMENT) : DEP BOUCHES-DU-RHONE (22130001500247), 2012 |
+| 7 de la M52 (Aménagement et environnement) | 2015 | 1 | +356 € (DEPENSES_INTERVENTION) : DEP CHER (22180001400013), 2015 |
+| 73 de la M52 (Environnement) | 5 années entre 2016 et 2023 | 11 | +7,2 M€ (DEP_FONCTIONNEMENT) : DEP MAYOTTE (22985000300018), 2016 |
+| 8 de la M52 (Transports) | 2013 et 2015 | 2 | +3 158 € (DEPENSES_INTERVENTION) : TRANSPORTS SCOLAIRES (22570001200209), 2015 |
+| 82 de la M52 (Transports publics de voyageurs) | 6 années entre 2013 et 2019 | 12 | +0,8 M€ (DEP_TOTALES_HORS_REMBOURSEMENTS) : DEP COTES-D'ARMOR (22220001600327), 2017 |
+| 9 de la M52 (Développement économique) | 2012 | 1 | +3 100 € (DEPENSES_INTERVENTION) : DEP ISERE (22380001200013), 2012 |
+| 92 de la M52 (Agriculture et pêche) | 6 années entre 2012 et 2019 | 8 | +6,1 M€ (FRAIS_PERSONNEL) : DEP MAYOTTE (22985000300018), 2018 |
+| 20 de la M57 (Services communs) | 2021, 2023 et 2024 | 7 | +3,8 M€ (DEP_FONCTIONNEMENT) : DEP SEINE-MARITIME (22760540900019), 2021 |
+| 25 de la M57 (Formation professionnelle) | 2024 et 2025 | 2 | +18 498 € (ACHATS_CHARGES_EXTERNES) : DEP HAUTES-PYRENEES (22650001500012), 2025 |
+| 50 de la M57 (Services communs) | 2021, 2022, 2023 et 2024 | 15 | +16,0 M€ (DEP_FONCTIONNEMENT) : DEP VAUCLUSE (22840001600017), 2021 |
+
+Identités comptables dans chaque fonction de chaque budget : 342 175 vérifiées, 342 175 justes, 0 en écart.
+
+| Total | Parties | Vérifiées | En écart | Plus grand écart |
+|---|---|---|---|---|
+| DEP_FONCTIONNEMENT | ACHATS_CHARGES_EXTERNES, FRAIS_PERSONNEL, CHARGES_FINANCIERES, DEPENSES_INTERVENTION, AUTRES_DEP_FONCTIONNEMENT | 127 075 | 0 | aucun |
+| DEP_INVESTISSEMENT | DEPENSES_EQUIPEMENT, SUBVENTIONS_EQUIPEMENT_VERSEES, AUTRES_DEP_INVESTISSEMENT | 81 324 | 0 | aucun |
+| DEP_TOTALES_HORS_REMBOURSEMENTS | DEP_FONCTIONNEMENT, DEP_INVESTISSEMENT | 133 776 | 0 | aucun |
+
+Fonctions de premier niveau du budget principal de chaque collectivité, réunies, contre le montant de son budget principal dans ses comptes consolidés : 23 460 comparaisons, 23 445 égales à l'arrondi près, 15 en écart.
+
+| Collectivité | Agrégat | Exercices en écart | Plus grand écart (fonctions − comptes consolidés) |
+|---|---|---|---|
+| DEP EURE (222702292) | AUTRES_DEP_FONCTIONNEMENT | 2023 et 2025 | +2 362 € en 2023 |
+| DEP EURE (222702292) | DEP_FONCTIONNEMENT | 2023 et 2025 | +2 362 € en 2023 |
+| DEP EURE (222702292) | DEP_TOTALES_HORS_REMBOURSEMENTS | 2023 et 2025 | +2 362 € en 2023 |
+| DEP LOT-ET-GARONNE (224700013) | DEPENSES_EQUIPEMENT | 2025 | +0,1 M€ en 2025 |
+| DEP LOT-ET-GARONNE (224700013) | DEP_INVESTISSEMENT | 2025 | +0,1 M€ en 2025 |
+| DEP LOT-ET-GARONNE (224700013) | DEP_TOTALES_HORS_REMBOURSEMENTS | 2025 | +0,1 M€ en 2025 |
+| DEP MEURTHE-ET-MOSELLE (225400019) | DEPENSES_EQUIPEMENT | 2013 | +0,4 M€ en 2013 |
+| DEP MEURTHE-ET-MOSELLE (225400019) | DEP_INVESTISSEMENT | 2013 | +0,4 M€ en 2013 |
+| DEP MEURTHE-ET-MOSELLE (225400019) | DEP_TOTALES_HORS_REMBOURSEMENTS | 2013 | +0,4 M€ en 2013 |
+| DEP RHONE (226900017) | AUTRES_DEP_FONCTIONNEMENT | 2023 | +820 € en 2023 |
+| DEP RHONE (226900017) | DEP_FONCTIONNEMENT | 2023 | +820 € en 2023 |
+| DEP RHONE (226900017) | DEP_TOTALES_HORS_REMBOURSEMENTS | 2023 | +820 € en 2023 |
+
+Budgets annexes : le jeu fonctionnel ne donne que des budgets tenus selon la M52 ou la M57, et un budget annexe tenu selon une autre instruction n'y figure pas. Une collectivité dont tous les budgets annexes y figurent retrouve, pour chaque agrégat, le montant de ses budgets annexes dans ses comptes consolidés ; les autres y ont un montant moindre.
+
+| Exercice | Collectivités qui ont des budgets annexes | dont budgets annexes tous présentés par fonction | Dépenses totales hors remboursements des budgets annexes : par fonction | dans les comptes consolidés |
+|---|---|---|---|---|
+| 2012 | 99 | 8 | 312,4 M€ | 1 923,2 M€ |
+| 2013 | 99 | 9 | 319,7 M€ | 1 870,0 M€ |
+| 2014 | 99 | 11 | 398,8 M€ | 1 862,3 M€ |
+| 2015 | 100 | 10 | 394,4 M€ | 2 071,6 M€ |
+| 2016 | 97 | 12 | 408,2 M€ | 2 068,1 M€ |
+| 2017 | 97 | 13 | 333,0 M€ | 1 868,9 M€ |
+| 2018 | 94 | 11 | 342,7 M€ | 1 629,0 M€ |
+| 2019 | 96 | 13 | 519,8 M€ | 2 119,8 M€ |
+| 2020 | 96 | 12 | 681,5 M€ | 2 200,7 M€ |
+| 2021 | 95 | 13 | 718,3 M€ | 2 307,3 M€ |
+| 2022 | 94 | 14 | 814,2 M€ | 2 425,7 M€ |
+| 2023 | 93 | 14 | 913,0 M€ | 2 558,7 M€ |
+| 2024 | 92 | 13 | 906,5 M€ | 2 652,4 M€ |
+| 2025 | 91 | 12 | 943,8 M€ | 2 595,4 M€ |
+
+Budgets annexes dont les fonctions réunies dépassent le montant des comptes consolidés, ce que l'absence d'un budget n'explique pas, sauf pour un agrégat qu'un montant négatif réduit :
+
+| Collectivité | Agrégat | Exercices | Plus grand écart (fonctions − comptes consolidés) |
+|---|---|---|---|
+| DEP CANTAL (221500010) | ACHATS_CHARGES_EXTERNES | 2015 | +1,2 M€ en 2015 |
+| DEP CANTAL (221500010) | AUTRES_DEP_FONCTIONNEMENT | 2015 | +3 585 € en 2015 |
+| DEP CANTAL (221500010) | DEP_FONCTIONNEMENT | 2015 | +2,7 M€ en 2015 |
+| DEP CANTAL (221500010) | DEP_TOTALES_HORS_REMBOURSEMENTS | 2015 | +2,7 M€ en 2015 |
+| DEP CANTAL (221500010) | FRAIS_PERSONNEL | 2015 | +1,5 M€ en 2015 |
+| DEP FINISTERE (222900011) | DEPENSES_EQUIPEMENT | 2014 | +0,1 M€ en 2014 |
+| DEP FINISTERE (222900011) | DEP_INVESTISSEMENT | 2014 | +0,1 M€ en 2014 |
+| DEP ILLE-ET-VILAINE (223500018) | AUTRES_DEP_FONCTIONNEMENT | 2012 | +0,1 M€ en 2012 |
+| DEP MARNE (225100015) | CHARGES_FINANCIERES | 2015 | +0,1 M€ en 2015 |
+| DEP MOSELLE (225700012) | ACHATS_CHARGES_EXTERNES | 2014 | +0,1 M€ en 2014 |
+| DEP MOSELLE (225700012) | DEPENSES_INTERVENTION | 2014 | +2,4 M€ en 2014 |
+| DEP MOSELLE (225700012) | DEP_FONCTIONNEMENT | 2014 | +2,5 M€ en 2014 |
+| DEP MOSELLE (225700012) | DEP_TOTALES_HORS_REMBOURSEMENTS | 2014 | +2,5 M€ en 2014 |
+| DEP SAONE-ET-LOIRE (227100013) | CHARGES_FINANCIERES | 2016 | +0,1 M€ en 2016 |
+
+Fonctions dont le libellé change d'un exercice à l'autre, ou d'un budget à l'autre dans un même exercice : une même fonction peut ne pas désigner les mêmes dépenses d'une année à l'autre.
+
+| Nomenclature | Fonction | Libellés (exercices) |
+|---|---|---|
+| M57 | 11 | Gendarmerie, police, sécurité, justice (2016 et 2017) ; Police, sécurité, justice (8 années entre 2018 et 2025) |
+| M57 | 33 | Jeunesse (action socio-éducative…) et loisirs (11 années entre 2014 et 2025) ; Jeunesse (action socio-éducative.) et loisirs (2022) |
+| M57 | 4213 | Crèches et garderies (2015 et 2017) ; Aides sociales à l'enfance (8 années entre 2018 et 2025) |
+| M57 | 422 | Personnes handicapées (2014, 2015, 2016 et 2017) ; Petite enfance (7 années entre 2019 et 2025) |
+| M57 | 4238 | Autres (2017) ; Autres actions en faveur des personnes âgées (8 années entre 2018 et 2025) |
+| M57 | 588 | Autres (2014 et 2015) ; Autres actions d'aménagement (7 années entre 2019 et 2025) |
+| M57 | 6312 | Autres (11 années entre 2014 et 2024) ; Marchés alimentaires (2025) |
+
+Regroupements que le portail fait, pour ses visualisations, de fonctions des deux nomenclatures, les autres fonctions étant rangées sous « Autres » : « 221-Collèges » : 221 de la M52, 221 de la M57 ; « 62-Voirie » : 62 de la M52, 84 de la M57.
