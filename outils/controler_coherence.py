@@ -17,7 +17,9 @@ vérifie ce que disent les sources elles-mêmes :
 6. les écarts entre sources pour une même grandeur ;
 7. les comptes de chaque collectivité : montant consolidé, identités comptables de chacune, comptes d'une même
    collectivité dans deux jeux de données, somme des collectivités contre les totaux publiés, et chaque
-   département et chaque région contre sa fiche de la DGCL.
+   département et chaque région contre sa fiche de la DGCL ;
+8. les flux entre collectivités : ce que l'une déclare verser à une autre contre ce que celle-ci déclare
+   recevoir, pour les contributions des départements aux SDIS.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -774,6 +776,25 @@ PERIMETRES_DGCL = {"226700011": "DEP_67_BP", "226800019": "DEP_68_BP", "20009433
                    "200046977": "METROPOLE_LYON_BP", "217500016": "VILLE_DE_PARIS_BP",
                    "200076958": "COLLECTIVITE_DE_CORSE_BP", "200055507": "CTU_MARTINIQUE_BP",
                    "200052678": "CTU_GUYANE_BP"}
+# Ce que chaque collectivité de niveau départemental déclare verser au SDIS de son territoire, contre ce que celui-ci
+# déclare recevoir à son budget principal. Le jeu des départements désigne par « 67A » le Bas-Rhin, le Haut-Rhin puis
+# la Collectivité européenne d'Alsace, et par « 691 » la métropole de Lyon ; Paris, les Hauts-de-Seine, la
+# Seine-Saint-Denis et le Val-de-Marne n'ont pas de SDIS, la brigade de sapeurs-pompiers de Paris y tenant ce rôle. Dans
+# le jeu des régions, la collectivité de Corse et les collectivités territoriales uniques de Martinique et de Guyane ont
+# les compétences d'un département.
+SDIS = "ofgl.base-sdis"
+PAYEURS_SDIS = {"ofgl.base-departements-consolidee", "ofgl.base-regions-consolidee"}
+CONTRIBUTIONS_SDIS = "COMPTES_LOCAUX.CONTRIBUTIONS_SDIS"
+TERRITOIRES_SDIS = {"67A": ("67", "68"), "691": ("69",)}
+SANS_SDIS = {"75", "92", "93", "94"}
+SDIS_DES_REGIONS = {"200076958": ("2A", "2B"), "200055507": ("972",), "200052678": ("973",)}
+# Rubriques du SDIS où se lit la contribution : les participations des départements, sauf pour la métropole de Lyon et
+# les collectivités territoriales uniques, que leur SDIS inscrit parmi les autres participations, puis parmi celles
+# des groupements à fiscalité propre ; les collectivités territoriales uniques se comparent aussi aux participations
+# des départements, que le SDIS de Martinique emploie en 2016.
+_DEP, _GFP, _AUTRES = (f"COMPTES_LOCAUX.{c}" for c in ("PARTICIPATIONS_DEPARTEMENTS", "PARTICIPATIONS_GFP",
+                                                       "AUTRES_PARTICIPATIONS_FONCTIONNEMENT"))
+RUBRIQUES_SDIS = {"200046977": (_GFP, _AUTRES), "200055507": (_DEP, _GFP, _AUTRES), "200052678": (_DEP, _GFP, _AUTRES)}
 
 
 def listes_collectivites():
@@ -816,7 +837,9 @@ def collectivites(derniers, listes):
     identités comptables de chaque collectivité, pour chacun des quatre montants ; les comptes d'une collectivité que
     deux jeux donnent ; la somme des collectivités contre les totaux des annexes 2A (budgets principaux), 2B (budgets
     annexes) et 2C (consolidés) des rapports de l'OFGL ; le budget principal de chaque département et de chaque région
-    contre sa fiche de la DGCL. Pour un jeu publié budget par budget : les identités comptables de chaque budget."""
+    contre sa fiche de la DGCL. Pour un jeu publié budget par budget : les identités comptables de chaque budget. Enfin,
+    les contributions des collectivités de niveau départemental aux SDIS contre les participations que ceux-ci
+    reçoivent."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
     retenus = {}
@@ -832,6 +855,10 @@ def collectivites(derniers, listes):
     identites = [(t, c) for t, c in IDENTITES if t.startswith("COMPTES_LOCAUX.")]
     exercices, sommes_controlees, fiches_controlees, comptes_doubles = [], [], [], {}
     controles = collections.defaultdict(lambda: [0, 0, None])  # (source, total, budget) → [vérifiées, en écart, pire]
+    contributions = {}  # (exercice, source, siren) → (contribution aux SDIS, tous budgets, marge d'arrondi)
+    # (exercice, département du SDIS, concept) → [participation reçue au budget principal, marge] ; (exercice,
+    # département) → nom du SDIS
+    participations, noms_sdis = collections.defaultdict(lambda: [0.0, 0.0]), {}
     for (source, exercice), inscrit in sorted(retenus.items()):
         niveau, categories = NIVEAUX_COLLECTIVITES[source]
         fiches = listes.get((source, exercice))  # sans liste, ni catégories ni codes : pas de somme triée ni de fiche
@@ -846,6 +873,14 @@ def collectivites(derniers, listes):
                               int(inscrit["lignes"]), None))
             for budget, montants in par_budget.items():
                 identites_comptables(controles, identites, source, exercice, budget, montants, [(BUDGET_SEUL, 0, 1)])
+                fiche = (fiches or {}).get(budget)
+                if source == SDIS and fiche is not None and fiche["cbudg"] == "1":
+                    noms_sdis[(exercice, fiche["code_dep"])] = fiche["lbudg"]
+                    for concept in (_DEP, _GFP, _AUTRES):
+                        if concept in montants:
+                            cellule = participations[(exercice, fiche["code_dep"], concept)]
+                            cellule[0] += montants[concept][0]
+                            cellule[1] += montants[concept][1]
             continue
         par_siren, lignes_en_ecart = collections.defaultdict(dict), 0
         sommes = collections.defaultdict(lambda: [0.0] * 8)  # quatre montants, puis leurs marges d'arrondi
@@ -859,6 +894,9 @@ def collectivites(derniers, listes):
         exercices.append((source, exercice, inscrit["version"], inscrit["statut"], len(par_siren), int(inscrit["lignes"]),
                           lignes_en_ecart))
         comptes_doubles.update({(source, exercice, s): par_siren[s] for s in par_siren if (exercice, s) in doubles})
+        if source in PAYEURS_SDIS:
+            contributions.update({(exercice, source, s): (m[CONTRIBUTIONS_SDIS][3], m[CONTRIBUTIONS_SDIS][7])
+                                  for s, m in par_siren.items() if CONTRIBUTIONS_SDIS in m})
         if source in FICHES_DGCL and fiches is not None:
             # Un agrégat que le jeu publie pour d'autres collectivités de l'exercice, mais pas pour celle-ci, y vaut zéro.
             publication, modele = FICHES_DGCL[source]
@@ -909,7 +947,41 @@ def collectivites(derniers, listes):
             ecarts = [(c, BUDGETS[k][0], a[c][k] - b[c][k]) for c in communs for k in range(4)
                       if depasse(a[c][k] - b[c][k], a[c][4 + k] + b[c][4 + k])]
             memes.append((exercice, siren, (ja, jb), 4 * len(communs), ecarts, set(a) - set(b), set(b) - set(a)))
-    return exercices, controles, sommes_controlees, memes, fiches_controlees
+    return (exercices, controles, sommes_controlees, memes, fiches_controlees,
+            flux_sdis(listes, contributions, participations, noms_sdis))
+
+
+def flux_sdis(listes, contributions, participations, noms_sdis):
+    """Les contributions aux SDIS contre les participations reçues : les comparaisons [(exercice, payeurs [(source,
+    siren)], départements des SDIS, rubriques, noms des SDIS, versé, reçu, égaux à l'arrondi près)], les contributions
+    sans SDIS [(exercice, source, siren, versé, territoire reconnu)], et les participations des départements
+    qu'aucune contribution ne déclare [(exercice, département du SDIS, nom du SDIS, reçu)]."""
+    groupes = collections.defaultdict(lambda: [[], 0.0, 0.0])  # (exercice, SDIS, rubriques) → [payeurs, versé, marge]
+    sans_sdis = []
+    for (exercice, source, siren), (verse, marge) in sorted(contributions.items()):
+        if source == "ofgl.base-regions-consolidee":
+            codes = SDIS_DES_REGIONS.get(siren)
+        else:
+            dep = listes.get((source, exercice), {}).get(siren, {}).get("dep_code")
+            codes = () if dep in SANS_SDIS else TERRITOIRES_SDIS.get(dep, (dep,)) if dep else None
+        if not codes:
+            sans_sdis.append((exercice, source, siren, verse, codes is not None))
+            continue
+        groupe = groupes[(exercice, codes, RUBRIQUES_SDIS.get(siren, (_DEP,)))]
+        groupe[0].append((source, siren))
+        groupe[1] += verse
+        groupe[2] += marge
+    comparaisons, lues = [], set()
+    for (exercice, codes, rubriques), (payeurs, verse, marge) in sorted(groupes.items()):
+        cellules = [participations.get((exercice, code, r), [0.0, 0.0]) for code in codes for r in rubriques]
+        lues.update((exercice, code, r) for code in codes for r in rubriques)
+        recu, marge_recu = sum(c[0] for c in cellules), sum(c[1] for c in cellules)
+        nom_sdis = " et ".join(noms_sdis.get((exercice, code), code) for code in codes)
+        comparaisons.append((exercice, payeurs, codes, rubriques, nom_sdis, verse, recu,
+                             not depasse(verse - recu, marge + marge_recu)))
+    orphelines = [(exercice, code, noms_sdis.get((exercice, code), code), m) for (exercice, code, r), (m, _) in
+                  sorted(participations.items()) if r == _DEP and (exercice, code, r) not in lues and m]
+    return comparaisons, sans_sdis, orphelines
 
 
 # --- Le rapport ----------------------------------------------------------------------------------------
@@ -1211,7 +1283,7 @@ def nom(listes, source, exercice, siren):
 
 def partie_collectivites(derniers):
     listes = listes_collectivites()
-    exercices, controles, sommes, memes, fiches = collectivites(derniers, listes)
+    exercices, controles, sommes, memes, fiches, flux = collectivites(derniers, listes)
     if not exercices:
         return []
     lignes = ["## 7. Comptes de chaque collectivité", "",
@@ -1290,7 +1362,7 @@ def partie_collectivites(derniers):
             lignes.append(f"| {source} | {budget} | {concept} | {plage([x[3] for x in liste])} | "
                           f"{ecart_lisible(e[4], 'euros')} en {e[3]} |")
         lignes.append("")
-    return lignes + partie_fiches_dgcl(listes, fiches)
+    return lignes + partie_fiches_dgcl(listes, fiches) + partie_flux(listes, flux)
 
 
 def concepts_lisibles(concepts):
@@ -1355,6 +1427,110 @@ def partie_fiches_dgcl(listes, fiches):
                               f"{fr(len(fausses), 0)} | {plage([f[2] for f in fausses])} | "
                               f"{ecart_lisible(ecart, 'euros')} : {nom(listes, source, exercice, siren)} ({siren}), "
                               f"{exercice} |")
+        lignes.append("")
+    return lignes
+
+
+def un_pour_cent(verse, recu):
+    """Vrai si l'écart, non nul, atteint 1 % du plus grand des deux montants."""
+    return verse != recu and abs(verse - recu) >= 0.01 * max(abs(verse), abs(recu))
+
+
+def millions(x):
+    return f"{fr(x / 1e6, 1)} M€"
+
+
+def pour_cent(part):
+    """Une part en pour cent, à une décimale ; « moins de 0,1 % » si elle s'arrondirait à zéro."""
+    return f"{fr(100 * part, 1, True)} %" if round(100 * part, 1) else "moins de 0,1 %"
+
+
+def partie_flux(listes, flux):
+    """Les flux entre collectivités : ce que l'une déclare verser à une autre contre ce que celle-ci déclare recevoir."""
+    comparaisons, sans_sdis, orphelines = flux
+    if not comparaisons:
+        return []
+    annees = sorted({c[0] for c in comparaisons})
+    egales = sum(1 for c in comparaisons if c[7])
+    lignes = ["## 8. Flux entre collectivités", "",
+              "Ce qu'une collectivité déclare verser à une autre doit se retrouver dans les comptes de celle qui le "
+              "reçoit. Des jeux de l'OFGL, un seul flux se lit des deux côtés : la contribution des départements aux "
+              "services départementaux d'incendie et de secours (SDIS), que les départements publient sous l'agrégat "
+              "« Contributions aux SDIS » et que les SDIS comptent parmi les participations qu'ils reçoivent. Les "
+              "comptes des communes et des groupements à fiscalité propre ne détaillent ni leurs contributions aux "
+              "SDIS, ni leurs subventions aux centres d'action sociale : ces flux ne se lisent que chez qui les reçoit.",
+              "",
+              "Chaque département se compare au SDIS de son territoire : sa contribution, tous budgets, contre les "
+              "participations des départements que le SDIS inscrit à son budget principal. Le Bas-Rhin, le Haut-Rhin "
+              "puis la Collectivité européenne d'Alsace, que le jeu des départements désigne tous par le code 67A, se "
+              "comparent aux SDIS du Bas-Rhin et du Haut-Rhin ensemble, comme la collectivité de Corse, depuis 2018, à "
+              "ceux de Corse-du-Sud et de Haute-Corse. Le SDIS du Rhône inscrit la contribution de la métropole de "
+              "Lyon, depuis 2015, et ceux de Martinique et de Guyane celle de leur collectivité territoriale unique, "
+              "depuis 2016, parmi les autres participations, puis parmi celles des groupements à fiscalité propre : "
+              "la métropole se compare à ces deux rubriques, chaque collectivité territoriale unique à ces deux "
+              "rubriques et aux participations des départements, que le SDIS de Martinique emploie en 2016 ; ces "
+              "rubriques peuvent compter d'autres participations que la sienne. Le dernier exercice est provisoire.", "",
+              f"{fr(len(comparaisons), 0)} comparaisons de {annees[0]} à {annees[-1]} : {fr(egales, 0)} égales à "
+              f"l'arrondi près, {fr(len(comparaisons) - egales, 0)} en écart, dont "
+              f"{fr(sum(1 for c in comparaisons if not c[7] and un_pour_cent(c[5], c[6])), 0)} de 1 % ou plus.", "",
+              "| Exercice | Comparaisons | Égales | En écart | dont de 1 % ou plus | Versé | Reçu | Écart (versé − reçu) |",
+              "|---|---|---|---|---|---|---|---|"]
+    for annee in annees:
+        liste = [c for c in comparaisons if c[0] == annee]
+        verse, recu = sum(c[5] for c in liste), sum(c[6] for c in liste)
+        fausses = [c for c in liste if not c[7]]
+        lignes.append(f"| {annee} | {fr(len(liste), 0)} | {fr(len(liste) - len(fausses), 0)} | {fr(len(fausses), 0)} | "
+                      f"{fr(sum(1 for c in fausses if un_pour_cent(c[5], c[6])), 0)} | {millions(verse)} | "
+                      f"{millions(recu)} | {ecart_lisible(verse - recu, 'euros')} |")
+    lignes.append("")
+    regroupes = collections.defaultdict(list)  # (départements des SDIS, rubriques) → comparaisons
+    for c in comparaisons:
+        regroupes[(c[2], c[3])].append(c)
+    en_ecart = {cle: liste for cle, liste in regroupes.items() if any(not c[7] for c in liste)}
+    if en_ecart:
+        lignes += ["Comparaisons en écart, territoire par territoire, sous le nom le plus récent de chacun :", "",
+                   "| Collectivité | SDIS | Exercices en écart | dont de 1 % ou plus | "
+                   "Plus grand écart (versé − reçu) |", "|---|---|---|---|---|"]
+        for (codes, _), liste in sorted(en_ecart.items(), key=lambda e: (e[0][0], len(e[0][1]))):
+            dernier = max(liste, key=lambda c: c[0])
+            payeurs = " et ".join(nom(listes, s, dernier[0], siren) for s, siren in dernier[1])
+            fausses = [c for c in liste if not c[7]]
+            fortes = [c[0] for c in fausses if un_pour_cent(c[5], c[6])]
+            pire = plus_grand(fausses, lambda c: c[5] - c[6])
+            part = (pire[5] - pire[6]) / max(abs(pire[5]), abs(pire[6]))
+            lignes.append(f"| {payeurs} | {dernier[4]} | {plage([c[0] for c in fausses])} | "
+                          f"{plage(fortes) if fortes else 'aucun'} | {ecart_lisible(pire[5] - pire[6], 'euros')} en "
+                          f"{pire[0]} ({pour_cent(part)}) |")
+        lignes.append("")
+    if sans_sdis:
+        reconnues = [s for s in sans_sdis if s[4]]
+        deps = {listes.get((s[1], s[0]), {}).get(s[2], {}).get("dep_code") for s in reconnues}
+        departements = listes.get(("ofgl.base-departements-consolidee", annees[-1]), {}).values()
+        muets = sorted(f"{f['lbudg']} ({f['siren']})" for f in departements if f.get("dep_code") in SANS_SDIS - deps)
+        lignes += ["Contributions sans SDIS à qui les comparer. Paris et les départements de la petite couronne n'ont pas "
+                   "de SDIS : la brigade de sapeurs-pompiers de Paris, unité militaire, y tient ce rôle, et ses comptes ne "
+                   "figurent pas dans ces jeux" + (f" ; aucune contribution n'est publiée sous cet agrégat pour "
+                                                  f"{', '.join(muets)}" if muets else "") + ".", "",
+                   "| Collectivité | Exercices | Contribution au dernier exercice |", "|---|---|---|"]
+        par_payeur = collections.defaultdict(list)
+        for s in sans_sdis:
+            par_payeur[(s[1], s[2], s[4])].append(s)
+        for (source, siren, reconnue), liste in sorted(par_payeur.items(), key=lambda e: not e[0][2]):
+            dernier = max(liste, key=lambda s: s[0])
+            lignes.append(f"| {nom(listes, source, dernier[0], siren)} ({siren}){'' if reconnue else ', territoire non reconnu'}"
+                          f" | {plage([s[0] for s in liste])} | {millions(dernier[3])} en {dernier[0]} |")
+        lignes.append("")
+    if orphelines:
+        lignes += ["Participations des départements qu'un SDIS déclare recevoir sans que son département publie de "
+                   "contribution sous cet agrégat :", "",
+                   "| SDIS | Exercices | Plus grande participation |", "|---|---|---|"]
+        par_sdis = collections.defaultdict(list)
+        for o in orphelines:
+            par_sdis[o[1]].append(o)
+        for code, liste in sorted(par_sdis.items()):
+            pire = max(liste, key=lambda o: abs(o[3]))
+            lignes.append(f"| {max(liste, key=lambda o: o[0])[2]} | {plage([o[0] for o in liste])} | "
+                          f"{millions(pire[3])} en {pire[0]} |")
         lignes.append("")
     return lignes
 

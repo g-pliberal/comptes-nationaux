@@ -1021,3 +1021,108 @@ Budget principal de chaque département et de chaque région contre sa fiche dan
 | ofgl.base-regions-consolidee | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 85 | 1 | 2023 | +14 € : REG PAYS-DE-LA-LOIRE (234400034), 2023 |
 | ofgl.base-regions-consolidee | COMPTES_LOCAUX.REC_INVESTISSEMENT | 85 | 1 | 2023 | −9 933 € : REG OCCITANIE (200053791), 2023 |
 | ofgl.base-regions-consolidee | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 85 | 2 | 2023 | −9 932 € : REG OCCITANIE (200053791), 2023 |
+
+## 8. Flux entre collectivités
+
+Ce qu'une collectivité déclare verser à une autre doit se retrouver dans les comptes de celle qui le reçoit. Des jeux de l'OFGL, un seul flux se lit des deux côtés : la contribution des départements aux services départementaux d'incendie et de secours (SDIS), que les départements publient sous l'agrégat « Contributions aux SDIS » et que les SDIS comptent parmi les participations qu'ils reçoivent. Les comptes des communes et des groupements à fiscalité propre ne détaillent ni leurs contributions aux SDIS, ni leurs subventions aux centres d'action sociale : ces flux ne se lisent que chez qui les reçoit.
+
+Chaque département se compare au SDIS de son territoire : sa contribution, tous budgets, contre les participations des départements que le SDIS inscrit à son budget principal. Le Bas-Rhin, le Haut-Rhin puis la Collectivité européenne d'Alsace, que le jeu des départements désigne tous par le code 67A, se comparent aux SDIS du Bas-Rhin et du Haut-Rhin ensemble, comme la collectivité de Corse, depuis 2018, à ceux de Corse-du-Sud et de Haute-Corse. Le SDIS du Rhône inscrit la contribution de la métropole de Lyon, depuis 2015, et ceux de Martinique et de Guyane celle de leur collectivité territoriale unique, depuis 2016, parmi les autres participations, puis parmi celles des groupements à fiscalité propre : la métropole se compare à ces deux rubriques, chaque collectivité territoriale unique à ces deux rubriques et aux participations des départements, que le SDIS de Martinique emploie en 2016 ; ces rubriques peuvent compter d'autres participations que la sienne. Le dernier exercice est provisoire.
+
+1 335 comparaisons de 2012 à 2025 : 1 024 égales à l'arrondi près, 311 en écart, dont 170 de 1 % ou plus.
+
+| Exercice | Comparaisons | Égales | En écart | dont de 1 % ou plus | Versé | Reçu | Écart (versé − reçu) |
+|---|---|---|---|---|---|---|---|
+| 2012 | 93 | 72 | 21 | 9 | 2 386,6 M€ | 2 391,6 M€ | −5,0 M€ |
+| 2013 | 94 | 71 | 23 | 11 | 2 427,4 M€ | 2 436,3 M€ | −8,9 M€ |
+| 2014 | 94 | 73 | 21 | 8 | 2 464,7 M€ | 2 472,1 M€ | −7,4 M€ |
+| 2015 | 95 | 75 | 20 | 9 | 2 530,1 M€ | 2 536,1 M€ | −6,0 M€ |
+| 2016 | 96 | 79 | 17 | 10 | 2 559,9 M€ | 2 557,2 M€ | +2,6 M€ |
+| 2017 | 96 | 77 | 19 | 12 | 2 573,2 M€ | 2 571,4 M€ | +1,7 M€ |
+| 2018 | 95 | 74 | 21 | 10 | 2 590,3 M€ | 2 592,1 M€ | −1,8 M€ |
+| 2019 | 96 | 77 | 19 | 10 | 2 629,4 M€ | 2 624,6 M€ | +4,8 M€ |
+| 2020 | 96 | 76 | 20 | 12 | 2 685,7 M€ | 2 682,6 M€ | +3,0 M€ |
+| 2021 | 96 | 69 | 27 | 16 | 2 750,4 M€ | 2 753,2 M€ | −2,7 M€ |
+| 2022 | 96 | 70 | 26 | 20 | 2 867,0 M€ | 2 873,9 M€ | −6,8 M€ |
+| 2023 | 96 | 71 | 25 | 16 | 3 008,4 M€ | 3 009,6 M€ | −1,2 M€ |
+| 2024 | 96 | 69 | 27 | 14 | 3 128,5 M€ | 3 136,7 M€ | −8,2 M€ |
+| 2025 | 96 | 71 | 25 | 13 | 3 216,7 M€ | 3 224,3 M€ | −7,6 M€ |
+
+Comparaisons en écart, territoire par territoire, sous le nom le plus récent de chacun :
+
+| Collectivité | SDIS | Exercices en écart | dont de 1 % ou plus | Plus grand écart (versé − reçu) |
+|---|---|---|---|---|
+| DEP AIN | SDIS AIN | 2024 et 2025 | aucun | −0,1 M€ en 2025 (−0,2 %) |
+| DEP ALLIER | SDIS ALLIER | 2024 et 2025 | 2024 et 2025 | −0,3 M€ en 2024 (−1,3 %) |
+| DEP ALPES-DE-HAUTE-PROVENCE | SDIS ALPES-DE-HAUTE-PROVENCE | 6 années entre 2012 et 2017 | 6 années entre 2012 et 2017 | −1,8 M€ en 2012 (−22,2 %) |
+| DEP DES HAUTES-ALPES | SDIS HAUTES-ALPES | 7 années entre 2012 et 2025 | aucun | −24 000 € en 2012 (−0,4 %) |
+| DEP ARDECHE | SDIS ARDECHE | 7 années entre 2019 et 2025 | 2019, 2022 et 2025 | −2,1 M€ en 2022 (−10,4 %) |
+| DEP ARIEGE | SDIS ARIEGE | 2024 | aucun | −780 € en 2024 (moins de 0,1 %) |
+| DEP AUBE | SDIS AUBE | 2012, 2014 et 2015 | 2012 | +0,4 M€ en 2012 (+8,4 %) |
+| DEP AUDE | SDIS AUDE | 14 années entre 2012 et 2025 | 14 années entre 2012 et 2025 | −1,2 M€ en 2020 (−7,5 %) |
+| DEP BOUCHES-DU-RHONE | SDIS BOUCHES-DU-RHONE | 14 années entre 2012 et 2025 | 14 années entre 2012 et 2025 | +10,0 M€ en 2021 (+12,7 %) |
+| DEP CHARENTE | SDIS CHARENTE | 2025 | aucun | −155 € en 2025 (moins de 0,1 %) |
+| DEP CHARENTE-MARITIME | SDIS CHARENTE-MARITIME | 2023 | aucun | −0,1 M€ en 2023 (−0,3 %) |
+| DEP CORREZE | SDIS DEP-CORREZE | 2018, 2019, 2020 et 2021 | 2018, 2019, 2020 et 2021 | −0,2 M€ en 2018 (−2,6 %) |
+| DEP CREUSE | SDIS CREUSE | 5 années entre 2019 et 2023 | 2021, 2022 et 2023 | −0,1 M€ en 2023 (−1,5 %) |
+| DEP DORDOGNE | SDIS DORDOGNE | 13 années entre 2013 et 2025 | 7 années entre 2019 et 2025 | −0,4 M€ en 2025 (−1,8 %) |
+| DEP EURE | SDIS DE L' EURE | 2012 et 2013 | 2013 | −1,8 M€ en 2013 (−7,7 %) |
+| DEP FINISTERE | SDIS FINISTERE | 2022, 2023 et 2024 | 2022, 2023 et 2024 | +1,6 M€ en 2022 (+6,0 %) |
+| DEP CORSE-DU-SUD | SDIS CORSE-DU-SUD | 2016 et 2017 | 2016 et 2017 | −1,1 M€ en 2016 (−5,3 %) |
+| COLLECTIVITE DE CORSE | SDIS CORSE-DU-SUD et SDIS HAUTE-CORSE | 2021 et 2022 | 2021 et 2022 | +1,2 M€ en 2021 (+2,6 %) |
+| DEP HAUTE-CORSE | SDIS HAUTE-CORSE | 2014 | aucun | −19 000 € en 2014 (−0,1 %) |
+| DEP GARD | SDIS GARD | 2020 et 2022 | 2020 et 2022 | −3,0 M€ en 2020 (−6,5 %) |
+| DEP GERS | SDIS GERS | 2018 et 2025 | 2025 | −0,1 M€ en 2025 (−1,2 %) |
+| DEP GIRONDE | SDIS GIRONDE | 2015 | aucun | +50 € en 2015 (moins de 0,1 %) |
+| DEP HERAULT | SDIS HERAULT | 2018 et 2019 | aucun | −0,1 M€ en 2019 (−0,2 %) |
+| DEP ILLE-ET-VILAINE | SDIS ILLE-ET-VILAINE | 2012 et 2013 | 2012 et 2013 | −1,0 M€ en 2012 (−3,3 %) |
+| DEP JURA | SDIS JURA | 14 années entre 2012 et 2025 | 12 années entre 2012 et 2023 | +0,5 M€ en 2014 (+7,1 %) |
+| DEP DES LANDES | SDIS LANDES | 14 années entre 2012 et 2025 | 2022 et 2023 | −1,7 M€ en 2022 (−7,1 %) |
+| DEP LOIR-ET-CHER | SDIS LOIR-ET-CHER | 2024 et 2025 | aucun | −3 150 € en 2025 (moins de 0,1 %) |
+| DEP LOIRE | SDIS LOIRE | 2013 | aucun | +435 € en 2013 (moins de 0,1 %) |
+| DEP LOIRE-ATLANTIQUE | SDIS LOIRE-ATLANTIQUE | 8 années entre 2015 et 2024 | aucun | −0,1 M€ en 2018 (−0,2 %) |
+| DEP LOIRET | SDIS LOIRET | 2021 | 2021 | −1,5 M€ en 2021 (−6,9 %) |
+| DEP LOT | SDIS LOT | 13 années entre 2012 et 2025 | 5 années entre 2012 et 2016 | +0,2 M€ en 2013 (+3,7 %) |
+| DEP LOZERE | SDIS LOZERE | 7 années entre 2012 et 2025 | aucun | −14 466 € en 2012 (−0,4 %) |
+| DEP MANCHE | SDIS MANCHE | 2023 et 2024 | 2023 et 2024 | −0,3 M€ en 2023 (−1,7 %) |
+| DEP HAUTE-MARNE | SDIS HAUTE-MARNE | 2012, 2013, 2014 et 2023 | 2023 | −1,0 M€ en 2023 (−10,9 %) |
+| DEP MAYENNE | SDIS MAYENNE | 14 années entre 2012 et 2025 | aucun | −48 030 € en 2019 (−0,5 %) |
+| DEP MOSELLE | SDIS MOSELLE | 2012, 2013 et 2024 | aucun | −0,1 M€ en 2012 (−0,2 %) |
+| DEP PAS-DE-CALAIS | SDIS PAS-DE-CALAIS | 7 années entre 2012 et 2018 | 6 années entre 2013 et 2018 | −1,9 M€ en 2015 (−2,6 %) |
+| DEP HAUTES-PYRENEES | SDIS HAUTES-PYRENEES | 6 années entre 2013 et 2018 | 2015, 2016 et 2017 | +0,4 M€ en 2015 (+3,8 %) |
+| COLLECTIVITE EUROPEENNE D'ALSACE | SIS BAS-RHIN et SIS HAUT-RHIN | 2019, 2021 et 2023 | aucun | −41 010 € en 2021 (−0,1 %) |
+| MET DE LYON | SDMIS RHONE METROPOLE LYON | 11 années entre 2015 et 2025 | 5 années entre 2020 et 2025 | −6,2 M€ en 2021 (−5,0 %) |
+| DEP HAUTE-SAONE | SDIS HAUTE-SAONE | 2012 | aucun | −2 058 € en 2012 (moins de 0,1 %) |
+| DEP SAONE-ET-LOIRE | SDIS SAONE-ET-LOIRE | 14 années entre 2012 et 2025 | 14 années entre 2012 et 2025 | −0,5 M€ en 2013 (−3,3 %) |
+| DEP SARTHE | SDIS SARTHE | 2012 et 2013 | 2012 et 2013 | +0,7 M€ en 2012 (+4,1 %) |
+| DEP SAVOIE | SDIS SAVOIE | 8 années entre 2012 et 2025 | aucun | −40 251 € en 2022 (−0,1 %) |
+| DEP HAUTE-SAVOIE | SDIS HAUTE-SAVOIE | 2023, 2024 et 2025 | 2023, 2024 et 2025 | −12,0 M€ en 2025 (−19,0 %) |
+| DEP DEUX-SEVRES | SDIS DEUX-SEVRES | 6 années entre 2013 et 2025 | 2022 et 2023 | +0,3 M€ en 2022 (+1,9 %) |
+| DEP SOMME | SDIS SOMME | 2012, 2020 et 2021 | aucun | +0,1 M€ en 2012 (+0,2 %) |
+| DEP VAR | SDIS VAR | 2017 | 2017 | +1,0 M€ en 2017 (+2,0 %) |
+| DEP VAUCLUSE | SDIS VAUCLUSE | 7 années entre 2017 et 2025 | 6 années entre 2018 et 2025 | −2,5 M€ en 2024 (−6,6 %) |
+| DEP VIENNE | SDIS VIENNE | 9 années entre 2015 et 2025 | 9 années entre 2015 et 2025 | −0,5 M€ en 2017 (−4,0 %) |
+| DEP YONNE | SDIS YONNE | 2014 et 2015 | aucun | −180 € en 2014 (moins de 0,1 %) |
+| DEP TERRITOIRE-BELFORT | SDIS TERR-BELFORT | 9 années entre 2017 et 2025 | 9 années entre 2017 et 2025 | −0,1 M€ en 2021 (−1,6 %) |
+| DEP ESSONNE | SDIS ESSONNE | 14 années entre 2012 et 2025 | aucun | +0,6 M€ en 2020 (+0,7 %) |
+| DEP GUADELOUPE | SDIS GUADELOUPE | 5 années entre 2020 et 2024 | 5 années entre 2020 et 2024 | −1,5 M€ en 2024 (−5,5 %) |
+| DEP MARTINIQUE | SDIS MARTINIQUE | 2014 et 2015 | aucun | −0,1 M€ en 2015 (−0,5 %) |
+| CTU MARTINIQUE | SDIS MARTINIQUE | 10 années entre 2016 et 2025 | 10 années entre 2016 et 2025 | −4,5 M€ en 2018 (−25,0 %) |
+| DEP GUYANE | SDIS GUYANE | 2013 et 2014 | 2013 et 2014 | −0,9 M€ en 2014 (−9,6 %) |
+| CTU Guyane | SDIS GUYANE | 2021 et 2022 | 2021 et 2022 | −0,9 M€ en 2021 (−5,2 %) |
+| DEP MAYOTTE | SDIS MAYOTTE | 2020 et 2022 | 2022 | −0,1 M€ en 2022 (−1,2 %) |
+
+Contributions sans SDIS à qui les comparer. Paris et les départements de la petite couronne n'ont pas de SDIS : la brigade de sapeurs-pompiers de Paris, unité militaire, y tient ce rôle, et ses comptes ne figurent pas dans ces jeux ; aucune contribution n'est publiée sous cet agrégat pour DEP HAUTS-DE-SEINE (229200506).
+
+| Collectivité | Exercices | Contribution au dernier exercice |
+|---|---|---|
+| DEP DU VAL-DE-MARNE (229400288) | 14 années entre 2012 et 2025 | 41,7 M€ en 2025 |
+| DEP SEINE-SAINT-DENIS (229300082) | 10 années entre 2016 et 2025 | 49,3 M€ en 2025 |
+| VILLE DE PARIS (217500016) | 7 années entre 2019 et 2025 | 112,0 M€ en 2025 |
+
+Participations des départements qu'un SDIS déclare recevoir sans que son département publie de contribution sous cet agrégat :
+
+| SDIS | Exercices | Plus grande participation |
+|---|---|---|
+| SDIS ARDECHE | 7 années entre 2012 et 2018 | 17,5 M€ en 2015 |
+| SDIS HAUTES-PYRENEES | 2012 | 10,0 M€ en 2012 |
+| SDIS MAYOTTE | 2012, 2013, 2014 et 2015 | 13,7 M€ en 2014 |
