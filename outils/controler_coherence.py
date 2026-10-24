@@ -776,6 +776,24 @@ PERIMETRES_DGCL = {"226700011": "DEP_67_BP", "226800019": "DEP_68_BP", "20009433
                    "200046977": "METROPOLE_LYON_BP", "217500016": "VILLE_DE_PARIS_BP",
                    "200076958": "COLLECTIVITE_DE_CORSE_BP", "200055507": "CTU_MARTINIQUE_BP",
                    "200052678": "CTU_GUYANE_BP"}
+# La dotation globale de fonctionnement que l'État notifie à chaque collectivité, d'après les fichiers de répartition de
+# la DGCL, contre celle que la collectivité inscrit à ses comptes (agrégat « Dotation globale de fonctionnement », tous
+# budgets). La commune se retrouve par son code Insee de l'exercice, le groupement par son numéro Siren, le département
+# par son code, le Bas-Rhin et le Haut-Rhin avec la Collectivité européenne d'Alsace, que les comptes codent tous
+# « 67A ». La métropole de Lyon et la Ville de Paris, que deux jeux des comptes donnent, se comparent une fois, avec les
+# deux parts de leur dotation : celles d'un groupement et d'un département, celles d'une commune et d'un département. La
+# collectivité de Corse et les collectivités territoriales uniques de Martinique et de Guyane ont leurs comptes dans le
+# jeu des régions, les syndicats touristiques du jeu des dotations des groupements, dans celui des syndicats.
+COMMUNES, GFP, SYNDICATS = "ofgl.base-communes-consolidee", "ofgl.base-gfp-consolidee", "ofgl.base-syndicats-consolidee"
+DEPARTEMENTS, REGIONS = "ofgl.base-departements-consolidee", "ofgl.base-regions-consolidee"
+DGF = "COMPTES_LOCAUX.DGF"
+COMPTES_DES_DOTATIONS = {"ofgl.dotations-communes": COMMUNES, "ofgl.dotations-gfp": GFP,
+                         "ofgl.dotations-departements": DEPARTEMENTS}
+UNITES_DGF = {"MET69": (GFP, "200046977"), "75": (COMMUNES, "217500016"), "20": (REGIONS, "200076958"),
+              "972": (REGIONS, "200055507"), "973": (REGIONS, "200052678")}
+TERRITOIRES_DGF = {"67": "67A", "68": "67A"}
+NIVEAUX_DGF = {COMMUNES: "communes", GFP: "groupements à fiscalité propre", SYNDICATS: "syndicats",
+               DEPARTEMENTS: "départements", REGIONS: "collectivités uniques"}
 # Ce que chaque collectivité de niveau départemental déclare verser au SDIS de son territoire, contre ce que celui-ci
 # déclare recevoir à son budget principal. Le jeu des départements désigne par « 67A » le Bas-Rhin, le Haut-Rhin puis
 # la Collectivité européenne d'Alsace, et par « 691 » la métropole de Lyon ; Paris, les Hauts-de-Seine, la
@@ -849,6 +867,8 @@ def collectivites(derniers, listes):
             retenus[cle] = i
     presences = collections.defaultdict(list)  # (exercice, siren) → jeux dont la liste porte la collectivité
     for (source, exercice), fiches in listes.items():
+        if source in ofgl.DOTATIONS:
+            continue
         for siren in sorted({f["siren"] for f in fiches.values()}) if source in ofgl.PAR_BUDGET else fiches:
             presences[(exercice, siren)].append(source)
     doubles = {cle: jeux for cle, jeux in presences.items() if len(jeux) > 1}
@@ -859,7 +879,14 @@ def collectivites(derniers, listes):
     # (exercice, département du SDIS, concept) → [participation reçue au budget principal, marge] ; (exercice,
     # département) → nom du SDIS
     participations, noms_sdis = collections.defaultdict(lambda: [0.0, 0.0]), {}
+    # (exercice, jeu des dotations, collectivité) → {variable: (montant notifié, marge)} ; (exercice, jeu des comptes,
+    # siren) → (dotation globale de fonctionnement inscrite, tous budgets, marge)
+    notifiees, inscrites = collections.defaultdict(dict), {}
     for (source, exercice), inscrit in sorted(retenus.items()):
+        if source in ofgl.DOTATIONS:
+            for code, variable, montant_, marge_ in ofgl.montants_dotations(fichiers[inscrit["fichier_id"]], marges=True):
+                notifiees[(exercice, source, code)][variable] = (montant_, marge_)
+            continue
         niveau, categories = NIVEAUX_COLLECTIVITES[source]
         fiches = listes.get((source, exercice))  # sans liste, ni catégories ni codes : pas de somme triée ni de fiche
         if source in ofgl.PAR_BUDGET:
@@ -897,6 +924,7 @@ def collectivites(derniers, listes):
         if source in PAYEURS_SDIS:
             contributions.update({(exercice, source, s): (m[CONTRIBUTIONS_SDIS][3], m[CONTRIBUTIONS_SDIS][7])
                                   for s, m in par_siren.items() if CONTRIBUTIONS_SDIS in m})
+        inscrites.update({(exercice, source, s): (m[DGF][3], m[DGF][7]) for s, m in par_siren.items() if DGF in m})
         if source in FICHES_DGCL and fiches is not None:
             # Un agrégat que le jeu publie pour d'autres collectivités de l'exercice, mais pas pour celle-ci, y vaut zéro.
             publication, modele = FICHES_DGCL[source]
@@ -948,7 +976,85 @@ def collectivites(derniers, listes):
                       if depasse(a[c][k] - b[c][k], a[c][4 + k] + b[c][4 + k])]
             memes.append((exercice, siren, (ja, jb), 4 * len(communs), ecarts, set(a) - set(b), set(b) - set(a)))
     return (exercices, controles, sommes_controlees, memes, fiches_controlees,
-            flux_sdis(listes, contributions, participations, noms_sdis))
+            (dotations_dgf(listes, notifiees, inscrites), flux_sdis(listes, contributions, participations, noms_sdis)))
+
+
+def unite_dgf(listes, insee, exercice, source, code):
+    """Les comptes auxquels se compare la dotation notifiée à une collectivité : (jeu des comptes, numéro Siren), ou pour
+    un département (jeu des départements, code de département) ; rien si elle n'a pas de comptes dans ces jeux. Un code
+    du jeu des départements désigne un département des comptes s'il en est un, sinon la collectivité qui en tient lieu
+    (la Ville de Paris depuis 2019)."""
+    if source == "ofgl.dotations-communes":
+        siren = insee.get((exercice, code))
+        return (COMMUNES, siren) if siren else None
+    if source == "ofgl.dotations-gfp":
+        return next(((jeu, code) for jeu in (GFP, SYNDICATS) if code in listes.get((jeu, exercice), {})), None)
+    departement = TERRITOIRES_DGF.get(code, code)
+    if any(f["dep_code"] == departement and f["categ"] == "DEPT" for f in listes.get((DEPARTEMENTS, exercice), {}).values()):
+        return (DEPARTEMENTS, departement)
+    if code in UNITES_DGF:
+        jeu, siren = UNITES_DGF[code]
+        return (jeu, siren) if siren in listes.get((jeu, exercice), {}) else None
+    return None
+
+
+def sirens_dgf(listes, exercice, unite):
+    """Les collectivités dont les comptes forment une unité : une seule, ou les départements d'un même code."""
+    jeu, cle = unite
+    if jeu != DEPARTEMENTS:
+        return [cle]
+    return sorted(s for s, f in listes.get((jeu, exercice), {}).items() if f["dep_code"] == cle and f["categ"] == "DEPT")
+
+
+def dotations_dgf(listes, notifiees, inscrites):
+    """La dotation globale de fonctionnement que l'État notifie contre celle que chaque collectivité inscrit à ses
+    comptes : les identités de la dotation notifiée {(source, total, parties, montant): [vérifiées, en écart, pire]}, les
+    comparaisons [(exercice, unité, dotations [(source, code)], notifié, inscrit, égaux à l'arrondi près)], les
+    dotations notifiées à une collectivité sans comptes [(exercice, source, code, notifié)], les dotations inscrites
+    sans notification [(exercice, jeu des comptes, siren, inscrit)], pour les exercices dont on a les deux, et les
+    dotations notifiées en parties seulement, sans total [(exercice, source, code)], qui ne se comparent pas."""
+    identites = collections.defaultdict(lambda: [0, 0, None])
+    insee = {(exercice, f["insee"]): s for (jeu, exercice), fiches in listes.items() if jeu == COMMUNES
+             for s, f in fiches.items()}
+    unites = collections.defaultdict(lambda: [[], 0.0, 0.0])  # (exercice, unité) → [dotations, notifié, marge]
+    sans_comptes, sans_total, exercices = [], [], collections.defaultdict(set)  # jeu des comptes → exercices comparés
+    lues = set()  # comptes auxquels se compare une dotation, ou qu'une dotation sans total laisse sans comparaison
+    for (exercice, source, code), montants in sorted(notifiees.items()):
+        total, *parties = ofgl.DOTATIONS[source][2]
+        identites_comptables(identites, [(total, ["?" + p for p in parties])], source, exercice, code, montants,
+                             [(BUDGET_SEUL, 0, 1)])
+        if total not in montants:
+            sans_total.append((exercice, source, code))
+        if (COMPTES_DES_DOTATIONS[source], exercice) not in listes:
+            continue
+        exercices[COMPTES_DES_DOTATIONS[source]].add(exercice)
+        unite = unite_dgf(listes, insee, exercice, source, code)
+        if total not in montants:
+            if unite is not None:
+                lues.update((exercice, unite[0], s) for s in sirens_dgf(listes, exercice, unite))
+            continue
+        if unite is None:
+            sans_comptes.append((exercice, source, code, montants[total][0]))
+            continue
+        groupe = unites[(exercice, unite)]
+        groupe[0].append((source, code))
+        groupe[1] += montants[total][0]
+        groupe[2] += montants[total][1]
+    comparaisons = []
+    for (exercice, unite), (dotations, notifie, marge) in sorted(unites.items()):
+        sirens = sirens_dgf(listes, exercice, unite)
+        cellules = [inscrites.get((exercice, unite[0], s), (0.0, 0.0)) for s in sirens]
+        lues.update((exercice, unite[0], s) for s in sirens)
+        inscrit, marge_inscrit = sum(c[0] for c in cellules), sum(c[1] for c in cellules)
+        comparaisons.append((exercice, unite, dotations, notifie, inscrit,
+                             not depasse(notifie - inscrit, marge + marge_inscrit)))
+    # Une dotation inscrite que rien ne notifie, dans un jeu et un exercice comparés : le jeu des départements ne compte
+    # que ses départements, la métropole de Lyon et la Ville de Paris se comparant avec les groupements et les communes.
+    exercices[REGIONS], exercices[SYNDICATS] = exercices[DEPARTEMENTS], exercices[GFP]
+    sans_notification = [(exercice, jeu, siren, m) for (exercice, jeu, siren), (m, _) in sorted(inscrites.items())
+                         if exercice in exercices.get(jeu, ()) and (exercice, jeu, siren) not in lues and m
+                         and (jeu != DEPARTEMENTS or listes.get((jeu, exercice), {}).get(siren, {}).get("categ") == "DEPT")]
+    return identites, comparaisons, sans_comptes, sans_notification, sans_total
 
 
 def flux_sdis(listes, contributions, participations, noms_sdis):
@@ -1277,8 +1383,10 @@ def partie_concordances(derniers):
 
 
 def nom(listes, source, exercice, siren):
-    """Le libellé d'une collectivité dans la liste la plus récente de l'exercice."""
-    return listes.get((source, exercice), {}).get(siren, {}).get("lbudg", "")
+    """Le libellé d'une collectivité dans la liste la plus récente de l'exercice, ou son nom dans celle d'un jeu des
+    dotations."""
+    fiche = listes.get((source, exercice), {}).get(siren, {})
+    return next((fiche[c] for c in ("lbudg", "commune", "nom_epci", "nom_departement") if fiche.get(c)), "")
 
 
 def partie_collectivites(derniers):
@@ -1446,20 +1554,131 @@ def pour_cent(part):
 
 
 def partie_flux(listes, flux):
-    """Les flux entre collectivités : ce que l'une déclare verser à une autre contre ce que celle-ci déclare recevoir."""
-    comparaisons, sans_sdis, orphelines = flux
+    """Les flux entre administrations : ce que l'une déclare verser à une autre contre ce que celle-ci déclare
+    recevoir."""
+    dgf, sdis = flux
+    lignes = partie_dgf(listes, dgf) + partie_sdis(listes, sdis)
+    if not lignes:
+        return []
+    return ["## 8. Flux entre administrations", "",
+            "Ce qu'une administration déclare verser à une autre doit se retrouver dans les comptes de celle qui le "
+            "reçoit. Deux flux se lisent ainsi des deux côtés : la dotation globale de fonctionnement, que l'État notifie "
+            "à chaque collectivité et que celle-ci inscrit à ses comptes, et la contribution des départements aux "
+            "services départementaux d'incendie et de secours (SDIS). Les comptes des communes et des groupements à "
+            "fiscalité propre ne détaillent ni leurs contributions aux SDIS, ni leurs subventions aux centres d'action "
+            "sociale : ces flux ne se lisent que chez qui les reçoit.", ""] + lignes
+
+
+def nom_unite(listes, exercice, unite):
+    """Le nom et le numéro Siren, ou le code de département, des comptes auxquels se compare une dotation."""
+    jeu, cle = unite
+    return f"{' et '.join(nom(listes, jeu, exercice, s) for s in sirens_dgf(listes, exercice, unite))} ({cle})"
+
+
+def partie_dgf(listes, dgf):
+    """La dotation globale de fonctionnement que l'État notifie contre celle qu'inscrit chaque collectivité."""
+    identites, comparaisons, sans_comptes, sans_notification, sans_total = dgf
+    if not comparaisons:
+        return []
+    annees = sorted({c[0] for c in comparaisons})
+    n, faux = sum(v[0] for v in identites.values()), sum(v[1] for v in identites.values())
+    egales = sum(1 for c in comparaisons if c[5])
+    lignes = ["### La dotation globale de fonctionnement", "",
+              "L'État notifie à chaque commune, à chaque groupement à fiscalité propre et à chaque département le montant "
+              "de sa dotation globale de fonctionnement, d'après les fichiers de répartition de la DGCL ; la collectivité "
+              "l'inscrit à ses comptes (agrégat « Dotation globale de fonctionnement », compte 741, tous budgets). La "
+              "commune se retrouve par son code Insee de l'exercice, le groupement par son numéro Siren, le département par "
+              "son code ; le Bas-Rhin et le Haut-Rhin se comparent avec la Collectivité européenne d'Alsace, que les "
+              "comptes codent tous 67A. La métropole de Lyon et la Ville de Paris, que deux jeux des comptes donnent, se "
+              "comparent une fois, avec les deux parts de leur dotation : de groupement et de département pour la "
+              "première, de commune et de département pour la seconde. La collectivité de Corse et les collectivités "
+              "territoriales uniques de Martinique et de Guyane se comparent à leurs comptes du jeu des régions, les "
+              "syndicats touristiques, auxquels le jeu des groupements notifie la dotation des groupements "
+              "touristiques, aux leurs du jeu des syndicats. Le dernier exercice des comptes est provisoire.", "",
+              f"Dotation notifiée : pour chaque collectivité et chaque exercice, son total égale la somme de ses parts : "
+              f"{fr(n, 0)} identités vérifiées, {fr(n - faux, 0)} justes, {fr(faux, 0)} en écart."
+              + (" Dotations notifiées en parties seulement, sans total, qui ne se vérifient ni ne se comparent : "
+                 + ", ".join(f"{nom(listes, s, e, c)} ({c}), {e}" for e, s, c in sans_total) + "." if sans_total else ""),
+              ""]
+    if faux:
+        lignes += ["| Jeu de données | Total | Parties | En écart | Plus grand écart |", "|---|---|---|---|---|"]
+        for (source, total, parties, _), (verifiees, nombre, pire) in sorted(identites.items()):
+            if nombre:
+                ecart, code, exercice = pire
+                lignes.append(f"| {source} | {total} | {', '.join(parties)} | {fr(nombre, 0)} sur {fr(verifiees, 0)} | "
+                              f"{ecart_lisible(ecart, 'euros')} : {nom(listes, source, exercice, code)} ({code}), "
+                              f"{exercice} |")
+        lignes.append("")
+    lignes += [f"Dotation notifiée contre dotation inscrite : {fr(len(comparaisons), 0)} comparaisons de {annees[0]} à "
+               f"{annees[-1]}, {fr(egales, 0)} égales à l'arrondi près, {fr(len(comparaisons) - egales, 0)} en écart, "
+               f"dont {fr(sum(1 for c in comparaisons if not c[5] and un_pour_cent(c[3], c[4])), 0)} de 1 % ou plus.", "",
+               "| Niveau | Exercice | Comparaisons | Égales | En écart | dont de 1 % ou plus | Notifié | Inscrit | "
+               "Écart (notifié − inscrit) |", "|---|---|---|---|---|---|---|---|---|"]
+    for jeu, niveau in NIVEAUX_DGF.items():
+        for annee in annees:
+            liste = [c for c in comparaisons if c[0] == annee and c[1][0] == jeu]
+            if not liste:
+                continue
+            notifie, inscrit = sum(c[3] for c in liste), sum(c[4] for c in liste)
+            fausses = [c for c in liste if not c[5]]
+            lignes.append(f"| {niveau} | {annee} | {fr(len(liste), 0)} | {fr(len(liste) - len(fausses), 0)} | "
+                          f"{fr(len(fausses), 0)} | {fr(sum(1 for c in fausses if un_pour_cent(c[3], c[4])), 0)} | "
+                          f"{millions(notifie)} | {millions(inscrit)} | {ecart_lisible(notifie - inscrit, 'euros')} |")
+    lignes.append("")
+    fausses = sorted((c for c in comparaisons if not c[5]), key=lambda c: (-abs(c[3] - c[4]), c[0], c[1]))
+    if fausses:
+        lignes += [f"Les {fr(min(20, len(fausses)), 0)} plus grands écarts :", "",
+                   "| Collectivité | Niveau | Exercice | Notifié | Inscrit | Écart (notifié − inscrit) |",
+                   "|---|---|---|---|---|---|"]
+        for exercice, unite, _, notifie, inscrit, _ in fausses[:20]:
+            part = (notifie - inscrit) / max(abs(notifie), abs(inscrit))
+            lignes.append(f"| {nom_unite(listes, exercice, unite)} | {NIVEAUX_DGF[unite[0]]} | {exercice} | "
+                          f"{millions(notifie)} | {millions(inscrit)} | {ecart_lisible(notifie - inscrit, 'euros')} "
+                          f"({pour_cent(part)}) |")
+        lignes.append("")
+    if sans_comptes:
+        lignes += ["Dotations notifiées à des collectivités qui n'ont pas de comptes dans ces jeux, comme les communes et "
+                   "les collectivités d'outre-mer hors du champ des balances comptables de la DGFiP (Saint-Pierre-et-"
+                   "Miquelon, Saint-Martin, Wallis-et-Futuna, Polynésie française…) :", "",
+                   "| Jeu des dotations | Exercices | Collectivités au dernier exercice | Notifié au dernier exercice | "
+                   "Les plus grandes au dernier exercice |", "|---|---|---|---|---|"]
+        par_jeu = collections.defaultdict(list)
+        for s in sans_comptes:
+            par_jeu[s[1]].append(s)
+        for source, liste in sorted(par_jeu.items()):
+            dernier = max(s[0] for s in liste)
+            derniers = sorted((s for s in liste if s[0] == dernier), key=lambda s: (-s[3], s[2]))
+            tete = ", ".join(f"{nom(listes, source, dernier, s[2])} ({s[2]})" for s in derniers[:3])
+            lignes.append(f"| {source} | {plage([s[0] for s in liste])} | {fr(len(derniers), 0)} | "
+                          f"{millions(sum(s[3] for s in derniers))} | {tete} |")
+        lignes.append("")
+    if sans_notification:
+        lignes += ["Dotations inscrites aux comptes de collectivités auxquelles les fichiers de répartition ne notifient "
+                   "rien :", "", "| Niveau | Exercices | Collectivités au dernier exercice | Inscrit au dernier exercice | "
+                   "Les plus grandes au dernier exercice |", "|---|---|---|---|---|"]
+        par_jeu = collections.defaultdict(list)
+        for s in sans_notification:
+            par_jeu[s[1]].append(s)
+        for jeu, liste in sorted(par_jeu.items(), key=lambda e: list(NIVEAUX_DGF).index(e[0])):
+            dernier = max(s[0] for s in liste)
+            derniers = sorted((s for s in liste if s[0] == dernier), key=lambda s: (-abs(s[3]), s[2]))
+            tete = ", ".join(f"{nom(listes, jeu, dernier, s[2])} ({s[2]})" for s in derniers[:3])
+            lignes.append(f"| {NIVEAUX_DGF[jeu]} | {plage([s[0] for s in liste])} | {fr(len(derniers), 0)} | "
+                          f"{millions(sum(s[3] for s in derniers))} | {tete} |")
+        lignes.append("")
+    return lignes
+
+
+def partie_sdis(listes, sdis):
+    """Les contributions des départements aux SDIS contre les participations que ceux-ci déclarent recevoir."""
+    comparaisons, sans_sdis, orphelines = sdis
     if not comparaisons:
         return []
     annees = sorted({c[0] for c in comparaisons})
     egales = sum(1 for c in comparaisons if c[7])
-    lignes = ["## 8. Flux entre collectivités", "",
-              "Ce qu'une collectivité déclare verser à une autre doit se retrouver dans les comptes de celle qui le "
-              "reçoit. Des jeux de l'OFGL, un seul flux se lit des deux côtés : la contribution des départements aux "
-              "services départementaux d'incendie et de secours (SDIS), que les départements publient sous l'agrégat "
-              "« Contributions aux SDIS » et que les SDIS comptent parmi les participations qu'ils reçoivent. Les "
-              "comptes des communes et des groupements à fiscalité propre ne détaillent ni leurs contributions aux "
-              "SDIS, ni leurs subventions aux centres d'action sociale : ces flux ne se lisent que chez qui les reçoit.",
-              "",
+    lignes = ["### Les contributions des départements aux SDIS", "",
+              "Les départements publient leur contribution aux SDIS sous l'agrégat « Contributions aux SDIS », que les "
+              "SDIS comptent parmi les participations qu'ils reçoivent. "
               "Chaque département se compare au SDIS de son territoire : sa contribution, tous budgets, contre les "
               "participations des départements que le SDIS inscrit à son budget principal. Le Bas-Rhin, le Haut-Rhin "
               "puis la Collectivité européenne d'Alsace, que le jeu des départements désigne tous par le code 67A, se "

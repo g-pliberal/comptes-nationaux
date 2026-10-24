@@ -207,12 +207,12 @@ def controler_archives(tables, erreurs):
 
 def controler_collectivites(tables, erreurs):
     """Relit chaque copie inscrite dans fichiers_collectivites.csv : son contenu doit donner son inscription. Renvoie
-    le nombre de lignes de montants relues."""
+    les nombres de lignes de montants relues, de comptes et de dotations."""
     fichiers = {f["id"]: f for f in tables["fichiers"]}
     agregats = {a["agregat"]: a for a in tables["agregats_ofgl"]}
     inscrits = tables["fichiers_collectivites"]
     ordre = {"inventaire": 0, "montants": 1, "collectivites": 2}
-    relues = 0
+    relues = {"comptes": 0, "dotations": 0}
     for n, inscrit in sorted(enumerate(inscrits, start=2), key=lambda e: (ordre.get(e[1]["contenu"], 3), e[0])):
         lieu = f"tables/fichiers_collectivites.csv, ligne {n}"
         if inscrit["fichier_id"] not in fichiers:
@@ -225,8 +225,9 @@ def controler_collectivites(tables, erreurs):
             continue
         if attendue != inscrit:
             erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
-        relues += int(inscrit["lignes"]) if inscrit["contenu"] == "montants" else 0
-    return relues
+        if inscrit["contenu"] == "montants":
+            relues["dotations" if inscrit["source_id"] in ofgl.DOTATIONS else "comptes"] += int(inscrit["lignes"])
+    return relues["comptes"], relues["dotations"]
 
 
 def main():
@@ -238,7 +239,7 @@ def main():
     nombre = controler_chiffres(tables, erreurs)
     controler_archives(tables, erreurs)
     relus, sans_lecteur = controler_valeurs(tables, erreurs)
-    montants = controler_collectivites(tables, erreurs)
+    montants, dotations = controler_collectivites(tables, erreurs)
     for e in erreurs:
         print(e)
     if erreurs:
@@ -246,7 +247,9 @@ def main():
     print(f"Base conforme : {nombre} chiffres, {len(tables['fichiers'])} copies archivées intactes, "
           f"{relus} chiffres publiés relus dans leur copie archivée"
           + (f", {sans_lecteur} sans lecteur automatique" if sans_lecteur else "")
-          + (f" ; {montants} lignes de comptes de collectivités relues dans les leurs." if montants else "."))
+          + (f" ; {montants} lignes de comptes de collectivités" if montants else "")
+          + (f" et {dotations} lignes de dotations" if montants and dotations else "")
+          + (" relues dans les leurs." if montants else "."))
 
 
 if __name__ == "__main__":

@@ -1022,11 +1022,112 @@ Budget principal de chaque département et de chaque région contre sa fiche dan
 | ofgl.base-regions-consolidee | COMPTES_LOCAUX.REC_INVESTISSEMENT | 85 | 1 | 2023 | −9 933 € : REG OCCITANIE (200053791), 2023 |
 | ofgl.base-regions-consolidee | COMPTES_LOCAUX.REC_TOTALES_HORS_EMPRUNTS | 85 | 2 | 2023 | −9 932 € : REG OCCITANIE (200053791), 2023 |
 
-## 8. Flux entre collectivités
+## 8. Flux entre administrations
 
-Ce qu'une collectivité déclare verser à une autre doit se retrouver dans les comptes de celle qui le reçoit. Des jeux de l'OFGL, un seul flux se lit des deux côtés : la contribution des départements aux services départementaux d'incendie et de secours (SDIS), que les départements publient sous l'agrégat « Contributions aux SDIS » et que les SDIS comptent parmi les participations qu'ils reçoivent. Les comptes des communes et des groupements à fiscalité propre ne détaillent ni leurs contributions aux SDIS, ni leurs subventions aux centres d'action sociale : ces flux ne se lisent que chez qui les reçoit.
+Ce qu'une administration déclare verser à une autre doit se retrouver dans les comptes de celle qui le reçoit. Deux flux se lisent ainsi des deux côtés : la dotation globale de fonctionnement, que l'État notifie à chaque collectivité et que celle-ci inscrit à ses comptes, et la contribution des départements aux services départementaux d'incendie et de secours (SDIS). Les comptes des communes et des groupements à fiscalité propre ne détaillent ni leurs contributions aux SDIS, ni leurs subventions aux centres d'action sociale : ces flux ne se lisent que chez qui les reçoit.
 
-Chaque département se compare au SDIS de son territoire : sa contribution, tous budgets, contre les participations des départements que le SDIS inscrit à son budget principal. Le Bas-Rhin, le Haut-Rhin puis la Collectivité européenne d'Alsace, que le jeu des départements désigne tous par le code 67A, se comparent aux SDIS du Bas-Rhin et du Haut-Rhin ensemble, comme la collectivité de Corse, depuis 2018, à ceux de Corse-du-Sud et de Haute-Corse. Le SDIS du Rhône inscrit la contribution de la métropole de Lyon, depuis 2015, et ceux de Martinique et de Guyane celle de leur collectivité territoriale unique, depuis 2016, parmi les autres participations, puis parmi celles des groupements à fiscalité propre : la métropole se compare à ces deux rubriques, chaque collectivité territoriale unique à ces deux rubriques et aux participations des départements, que le SDIS de Martinique emploie en 2016 ; ces rubriques peuvent compter d'autres participations que la sienne. Le dernier exercice est provisoire.
+### La dotation globale de fonctionnement
+
+L'État notifie à chaque commune, à chaque groupement à fiscalité propre et à chaque département le montant de sa dotation globale de fonctionnement, d'après les fichiers de répartition de la DGCL ; la collectivité l'inscrit à ses comptes (agrégat « Dotation globale de fonctionnement », compte 741, tous budgets). La commune se retrouve par son code Insee de l'exercice, le groupement par son numéro Siren, le département par son code ; le Bas-Rhin et le Haut-Rhin se comparent avec la Collectivité européenne d'Alsace, que les comptes codent tous 67A. La métropole de Lyon et la Ville de Paris, que deux jeux des comptes donnent, se comparent une fois, avec les deux parts de leur dotation : de groupement et de département pour la première, de commune et de département pour la seconde. La collectivité de Corse et les collectivités territoriales uniques de Martinique et de Guyane se comparent à leurs comptes du jeu des régions, les syndicats touristiques, auxquels le jeu des groupements notifie la dotation des groupements touristiques, aux leurs du jeu des syndicats. Le dernier exercice des comptes est provisoire.
+
+Dotation notifiée : pour chaque collectivité et chaque exercice, son total égale la somme de ses parts : 328 130 identités vérifiées, 328 095 justes, 35 en écart. Dotations notifiées en parties seulement, sans total, qui ne se vérifient ni ne se comparent : COMMUNAUTE D’AGGLOMERATION DE VESOUL (70) (247000011), 2019.
+
+| Jeu de données | Total | Parties | En écart | Plus grand écart |
+|---|---|---|---|---|
+| ofgl.dotations-communes | Montant Dotation DGF | Montant Dotation forfaitaire, Montant Dotation DSR | 2 sur 109 346 | −13 485 € : POMMIERS-EN-FOREZ (42) (42173), 2025 |
+| ofgl.dotations-communes | Montant Dotation DGF | Montant Dotation forfaitaire, Montant Dotation DSR, Montant Dotation DNP | 2 sur 187 424 | −9 778 € : SAINT-GERMAIN-LAVAL (42) (42230), 2025 |
+| ofgl.dotations-gfp | Montant DGF | Montant Dotation des groupements touristiques | 31 sur 56 | −2,6 M€ : SI DE LA GRANDE PLAGNE (73) (257300087), 2025 |
+
+Dotation notifiée contre dotation inscrite : 290 857 comparaisons de 2018 à 2025, 259 771 égales à l'arrondi près, 31 086 en écart, dont 27 609 de 1 % ou plus.
+
+| Niveau | Exercice | Comparaisons | Égales | En écart | dont de 1 % ou plus | Notifié | Inscrit | Écart (notifié − inscrit) |
+|---|---|---|---|---|---|---|---|---|
+| communes | 2018 | 35 356 | 31 304 | 4 052 | 3 660 | 11 627,8 M€ | 11 684,7 M€ | −56,9 M€ |
+| communes | 2019 | 34 966 | 30 952 | 4 014 | 3 579 | 11 662,3 M€ | 11 716,5 M€ | −54,2 M€ |
+| communes | 2020 | 34 968 | 31 131 | 3 837 | 3 400 | 11 712,0 M€ | 11 758,7 M€ | −46,6 M€ |
+| communes | 2021 | 34 964 | 31 267 | 3 697 | 3 262 | 11 777,4 M€ | 11 821,9 M€ | −44,6 M€ |
+| communes | 2022 | 34 955 | 30 404 | 4 551 | 4 136 | 11 839,2 M€ | 11 897,1 M€ | −58,0 M€ |
+| communes | 2023 | 34 945 | 31 131 | 3 814 | 3 469 | 12 147,6 M€ | 12 206,4 M€ | −58,8 M€ |
+| communes | 2024 | 34 932 | 31 514 | 3 418 | 3 016 | 12 390,1 M€ | 12 450,0 M€ | −59,9 M€ |
+| communes | 2025 | 34 778 | 31 941 | 2 837 | 2 537 | 12 604,0 M€ | 12 645,7 M€ | −41,7 M€ |
+| groupements à fiscalité propre | 2018 | 1 264 | 1 142 | 122 | 82 | 6 687,1 M€ | 6 688,7 M€ | −1,6 M€ |
+| groupements à fiscalité propre | 2019 | 1 258 | 1 155 | 103 | 74 | 6 640,9 M€ | 6 619,7 M€ | +21,2 M€ |
+| groupements à fiscalité propre | 2020 | 1 255 | 1 161 | 94 | 66 | 6 586,3 M€ | 6 363,6 M€ | +222,7 M€ |
+| groupements à fiscalité propre | 2021 | 1 254 | 1 166 | 88 | 59 | 6 521,7 M€ | 6 512,7 M€ | +9,1 M€ |
+| groupements à fiscalité propre | 2022 | 1 255 | 1 157 | 98 | 64 | 6 453,6 M€ | 6 448,7 M€ | +4,8 M€ |
+| groupements à fiscalité propre | 2023 | 1 255 | 1 172 | 83 | 57 | 6 458,1 M€ | 6 457,4 M€ | +0,7 M€ |
+| groupements à fiscalité propre | 2024 | 1 255 | 1 177 | 78 | 54 | 6 529,1 M€ | 6 531,3 M€ | −2,1 M€ |
+| groupements à fiscalité propre | 2025 | 1 251 | 1 188 | 63 | 42 | 6 441,1 M€ | 6 440,4 M€ | +0,7 M€ |
+| syndicats | 2018 | 24 | 18 | 6 | 6 | 6,4 M€ | 4,2 M€ | +2,2 M€ |
+| syndicats | 2019 | 21 | 15 | 6 | 6 | 6,3 M€ | 4,0 M€ | +2,2 M€ |
+| syndicats | 2020 | 20 | 15 | 5 | 5 | 6,3 M€ | 4,1 M€ | +2,2 M€ |
+| syndicats | 2021 | 20 | 16 | 4 | 4 | 5,5 M€ | 4,1 M€ | +1,4 M€ |
+| syndicats | 2022 | 20 | 15 | 5 | 5 | 5,5 M€ | 4,0 M€ | +1,5 M€ |
+| syndicats | 2023 | 19 | 13 | 6 | 6 | 5,5 M€ | 3,8 M€ | +1,7 M€ |
+| syndicats | 2024 | 19 | 13 | 6 | 6 | 5,5 M€ | 4,2 M€ | +1,3 M€ |
+| syndicats | 2025 | 18 | 7 | 11 | 11 | 0,0 M€ | 4,0 M€ | −4,0 M€ |
+| départements | 2018 | 96 | 85 | 11 | 0 | 8 139,3 M€ | 8 139,8 M€ | −0,5 M€ |
+| départements | 2019 | 95 | 85 | 10 | 0 | 8 132,4 M€ | 8 132,8 M€ | −0,4 M€ |
+| départements | 2020 | 95 | 83 | 12 | 1 | 8 035,0 M€ | 8 005,8 M€ | +29,3 M€ |
+| départements | 2021 | 95 | 81 | 14 | 2 | 7 945,6 M€ | 7 975,9 M€ | −30,3 M€ |
+| départements | 2022 | 95 | 85 | 10 | 0 | 7 805,7 M€ | 7 806,3 M€ | −0,7 M€ |
+| départements | 2023 | 95 | 86 | 9 | 0 | 7 798,5 M€ | 7 798,9 M€ | −0,4 M€ |
+| départements | 2024 | 95 | 86 | 9 | 0 | 7 797,2 M€ | 7 798,1 M€ | −0,9 M€ |
+| départements | 2025 | 95 | 90 | 5 | 0 | 7 797,2 M€ | 7 797,5 M€ | −0,3 M€ |
+| collectivités uniques | 2018 | 3 | 1 | 2 | 0 | 303,7 M€ | 304,3 M€ | −0,6 M€ |
+| collectivités uniques | 2019 | 3 | 3 | 0 | 0 | 304,1 M€ | 304,1 M€ | +0,00 € |
+| collectivités uniques | 2020 | 3 | 3 | 0 | 0 | 303,8 M€ | 303,8 M€ | +0,00 € |
+| collectivités uniques | 2021 | 3 | 1 | 2 | 0 | 304,3 M€ | 304,9 M€ | −0,5 M€ |
+| collectivités uniques | 2022 | 3 | 2 | 1 | 0 | 304,2 M€ | 304,3 M€ | −14 108 € |
+| collectivités uniques | 2023 | 3 | 1 | 2 | 0 | 304,1 M€ | 304,1 M€ | −40 068 € |
+| collectivités uniques | 2024 | 3 | 2 | 1 | 0 | 304,0 M€ | 304,0 M€ | −0,1 M€ |
+| collectivités uniques | 2025 | 3 | 3 | 0 | 0 | 303,7 M€ | 303,7 M€ | +0,00 € |
+
+Les 20 plus grands écarts :
+
+| Collectivité | Niveau | Exercice | Notifié | Inscrit | Écart (notifié − inscrit) |
+|---|---|---|---|---|---|
+| MET MEL (245900410) | groupements à fiscalité propre | 2020 | 216,4 M€ | 0,0 M€ | +216,4 M€ (+100,0 %) |
+| DEP REUNION (974) | départements | 2020 | 241,2 M€ | 211,5 M€ | +29,7 M€ (+12,3 %) |
+| DEP REUNION (974) | départements | 2021 | 184,6 M€ | 214,3 M€ | −29,7 M€ (−13,8 %) |
+| CA DU CALAISIS (246201149) | groupements à fiscalité propre | 2019 | 10,2 M€ | 0,0 M€ | +10,2 M€ (+100,0 %) |
+| CU LE HAVRE SEINE METROPOLE (200084952) | groupements à fiscalité propre | 2019 | 26,9 M€ | 36,3 M€ | −9,4 M€ (−25,8 %) |
+| CA ST GERMAIN BOUCLES DE SEINE (200058519) | groupements à fiscalité propre | 2019 | 31,3 M€ | 23,2 M€ | +8,1 M€ (+25,8 %) |
+| CA SEINE EURE - EX (200035665) | groupements à fiscalité propre | 2019 | 6,6 M€ | 0,0 M€ | +6,6 M€ (+100,0 %) |
+| CA DU SICOVAL (243100633) | groupements à fiscalité propre | 2018 | 7,1 M€ | 0,8 M€ | +6,3 M€ (+88,9 %) |
+| CA DU SICOVAL (243100633) | groupements à fiscalité propre | 2019 | 7,0 M€ | 0,9 M€ | +6,2 M€ (+87,5 %) |
+| CA DU SICOVAL (243100633) | groupements à fiscalité propre | 2020 | 7,0 M€ | 1,0 M€ | +6,1 M€ (+86,0 %) |
+| CA DU SICOVAL (243100633) | groupements à fiscalité propre | 2021 | 7,0 M€ | 1,1 M€ | +5,9 M€ (+84,3 %) |
+| CA DU SICOVAL (243100633) | groupements à fiscalité propre | 2022 | 7,0 M€ | 1,2 M€ | +5,8 M€ (+82,5 %) |
+| TSINGONI (200008886) | communes | 2023 | 4,4 M€ | 9,3 M€ | −4,9 M€ (−53,0 %) |
+| NOISY-LE-SEC (219300530) | communes | 2018 | 12,8 M€ | 17,1 M€ | −4,3 M€ (−25,0 %) |
+| NOISY-LE-SEC (219300530) | communes | 2019 | 12,9 M€ | 17,2 M€ | −4,2 M€ (−24,6 %) |
+| EPINAY-SUR-SEINE (219300316) | communes | 2019 | 23,8 M€ | 27,2 M€ | −3,4 M€ (−12,5 %) |
+| EPINAY-SUR-SEINE (219300316) | communes | 2018 | 23,0 M€ | 26,3 M€ | −3,3 M€ (−12,4 %) |
+| SEGRE EN ANJOU BLEU (200065423) | communes | 2024 | 4,4 M€ | 7,4 M€ | −3,0 M€ (−40,7 %) |
+| SIVU GRANDE PLAGNE (257300087) | syndicats | 2025 | 0,0 M€ | 2,6 M€ | −2,6 M€ (−100,0 %) |
+| AUBERVILLIERS (219300019) | communes | 2022 | 30,5 M€ | 33,0 M€ | −2,6 M€ (−7,7 %) |
+
+Dotations notifiées à des collectivités qui n'ont pas de comptes dans ces jeux, comme les communes et les collectivités d'outre-mer hors du champ des balances comptables de la DGFiP (Saint-Pierre-et-Miquelon, Saint-Martin, Wallis-et-Futuna, Polynésie française…) :
+
+| Jeu des dotations | Exercices | Collectivités au dernier exercice | Notifié au dernier exercice | Les plus grandes au dernier exercice |
+|---|---|---|---|---|
+| ofgl.dotations-communes | 8 années entre 2018 et 2025 | 183 | 201,5 M€ | NOUMEA (988) (98818), PAPEETE (987) (98735), FAAA (987) (98715) |
+| ofgl.dotations-departements | 8 années entre 2018 et 2025 | 2 | 15,7 M€ | SAINT-MARTIN (978), ST PIERRE ET MIQUELON (975) |
+| ofgl.dotations-gfp | 8 années entre 2018 et 2025 | 20 | 16,8 M€ | CA D’EPINAL (88) (200068757), CC TEREHEAMANU (987) (200094803), CC DE HAVA’I (987) (200031243) |
+
+Dotations inscrites aux comptes de collectivités auxquelles les fichiers de répartition ne notifient rien :
+
+| Niveau | Exercices | Collectivités au dernier exercice | Inscrit au dernier exercice | Les plus grandes au dernier exercice |
+|---|---|---|---|---|
+| communes | 2021 | 1 | 0,2 M€ | LES TROIS-LACS (200063782) |
+| groupements à fiscalité propre | 8 années entre 2018 et 2025 | 1 | 0,0 M€ | GRAND-ORLY SEINE BIEVRE (200058014) |
+| syndicats | 8 années entre 2018 et 2025 | 32 | 10,4 M€ | SMICTOM OUEST AUDOIS (251100236), SYNDMC BASSIN VERSANT GAPEAU (200046795), EAUX PLUVIALES URB - SICTEUB (200091924) |
+| collectivités uniques | 8 années entre 2018 et 2025 | 2 | 0,1 M€ | REG HAUTS DE FRANCE (200053742), REG NOUVELLE AQUITAINE (200053759) |
+
+### Les contributions des départements aux SDIS
+
+Les départements publient leur contribution aux SDIS sous l'agrégat « Contributions aux SDIS », que les SDIS comptent parmi les participations qu'ils reçoivent. Chaque département se compare au SDIS de son territoire : sa contribution, tous budgets, contre les participations des départements que le SDIS inscrit à son budget principal. Le Bas-Rhin, le Haut-Rhin puis la Collectivité européenne d'Alsace, que le jeu des départements désigne tous par le code 67A, se comparent aux SDIS du Bas-Rhin et du Haut-Rhin ensemble, comme la collectivité de Corse, depuis 2018, à ceux de Corse-du-Sud et de Haute-Corse. Le SDIS du Rhône inscrit la contribution de la métropole de Lyon, depuis 2015, et ceux de Martinique et de Guyane celle de leur collectivité territoriale unique, depuis 2016, parmi les autres participations, puis parmi celles des groupements à fiscalité propre : la métropole se compare à ces deux rubriques, chaque collectivité territoriale unique à ces deux rubriques et aux participations des départements, que le SDIS de Martinique emploie en 2016 ; ces rubriques peuvent compter d'autres participations que la sienne. Le dernier exercice est provisoire.
 
 1 335 comparaisons de 2012 à 2025 : 1 024 égales à l'arrondi près, 311 en écart, dont 170 de 1 % ou plus.
 

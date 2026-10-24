@@ -8,7 +8,8 @@ base/construite/empreintes.csv : une empreinte du contenu de chaque table, qui p
 chacun de vérifier qu'une base reconstruite contient exactement les mêmes données. Les comptes
 de chaque collectivité y sont lus dans les copies archivées des exports de data.ofgl.fr
 (tables comptes_collectivites et collectivites), ceux des jeux publiés budget par budget dans les
-tables comptes_budgets et budgets.
+tables comptes_budgets et budgets, et les dotations que l'État notifie à chaque collectivité dans
+les tables dotations et beneficiaires.
 """
 
 import csv
@@ -66,6 +67,20 @@ LEFT JOIN budgets b ON b.budget = c.budget AND b.lot = (
 WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
                    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
 
+-- Les dotations que l'État notifie à chaque collectivité, dans la version la plus récente de chaque exercice, avec le
+-- nom et le territoire de la collectivité.
+CREATE VIEW v_dotations AS
+SELECT f.source_id, f.exercice, f.version, f.statut, f.fichier_id, d.code, b.nom, b.departement, b.epci,
+       b.nature_juridique, d.variable, d.montant
+FROM dotations d
+JOIN fichiers_collectivites f ON f.rowid = d.lot
+LEFT JOIN beneficiaires b ON b.code = d.code AND b.lot = (
+    SELECT g.rowid FROM fichiers_collectivites g
+    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'collectivites'
+    ORDER BY g.version DESC LIMIT 1)
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
+                   WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
+
 -- Pour chaque chiffre, sa version la plus récente chez la même source.
 CREATE VIEW v_dernieres_versions AS
 SELECT * FROM v_chiffres c
@@ -109,6 +124,18 @@ CHAMPS_BUDGETS = {"siren": "siren", "ident": "budget", "lbudg": "nom", "nom_ccas
                   "categorie_sdis": "categorie", "type": "categorie", "cbudg": "type_budget",
                   "type_de_budget": "type_budget", "ctype": "nature", "nomen": "nomenclature", "code_dep": "departement",
                   "code_region": "region", "code_reg": "region", "population_totale": "population"}
+# Les dotations notifiées : une ligne par collectivité, désignée par son code Insee, son numéro Siren ou son code de
+# département (`code`), et par variable ; la table beneficiaires donne le nom de chaque collectivité, chaque exercice,
+# son département, et le groupement d'une commune ou la nature juridique d'un groupement.
+DOTATIONS = [("lot", "INTEGER"), ("code", "TEXT"), ("variable", "TEXT"), ("montant", "REAL")]
+BENEFICIAIRES = [("lot", "INTEGER"), ("code", "TEXT"), ("nom", "TEXT"), ("departement", "TEXT"), ("epci", "TEXT"),
+                 ("nature_juridique", "TEXT")]
+CHAMPS_BENEFICIAIRES = {
+    "ofgl.dotations-communes": {"exercice": "exercice", "code_insee": "code", "commune": "nom",
+                                "code_departement": "departement", "siren_epci": "epci"},
+    "ofgl.dotations-gfp": {"exercice": "exercice", "siren": "code", "nom_epci": "nom",
+                           "nature_juridique": "nature_juridique", "code_departement": "departement"},
+    "ofgl.dotations-departements": {"exercice": "exercice", "code_departement": "code", "nom_departement": "nom"}}
 
 
 def lignes_collectivites(lots, concepts):
@@ -118,8 +145,10 @@ def lignes_collectivites(lots, concepts):
     agregats = {a["agregat"]: a["concept_id"] for a in lire("tables/agregats_ofgl.csv")}
     for inscrit in lire("tables/fichiers_collectivites.csv"):
         fichier, lot = fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]]
-        par_budget = inscrit["source_id"] in ofgl.PAR_BUDGET
-        if inscrit["contenu"] == "montants" and par_budget:
+        par_budget, dotations = inscrit["source_id"] in ofgl.PAR_BUDGET, inscrit["source_id"] in ofgl.DOTATIONS
+        if inscrit["contenu"] == "montants" and dotations:
+            yield "dotations", [[lot, *l] for l in ofgl.montants_dotations(fichier)]
+        elif inscrit["contenu"] == "montants" and par_budget:
             yield "comptes_budgets", [[lot, s, b, concepts[agregats[a]], v]
                                       for s, b, a, v in ofgl.montants_budgets(fichier, agregats)]
         elif inscrit["contenu"] == "montants":
@@ -127,13 +156,15 @@ def lignes_collectivites(lots, concepts):
                                             for s, a, *v in ofgl.montants(fichier, agregats)]
         elif inscrit["contenu"] == "collectivites":
             fiches, _ = ofgl.collectivites(fichier)
-            table, correspondance = (BUDGETS, CHAMPS_BUDGETS) if par_budget else (COLLECTIVITES, CHAMPS_COLLECTIVITES)
+            table, correspondance, nom = ((BENEFICIAIRES, CHAMPS_BENEFICIAIRES[inscrit["source_id"]], "beneficiaires")
+                                          if dotations else (BUDGETS, CHAMPS_BUDGETS, "budgets") if par_budget
+                                          else (COLLECTIVITES, CHAMPS_COLLECTIVITES, "collectivites"))
             lues = []
             for _, fiche in sorted(fiches.items()):
                 colonnes = {correspondance[c]: v for c, v in fiche.items()}
                 colonnes["population"] = int(colonnes["population"]) if colonnes.get("population") else None
                 lues.append([lot] + [colonnes.get(c) for c, _ in table[1:]])
-            yield "budgets" if par_budget else "collectivites", lues
+            yield nom, lues
 
 
 def valeur_sql(champ, texte):
@@ -168,7 +199,7 @@ def main():
         empreintes.append({"table": nom, "lignes": len(lignes),
                            "sha256": hashlib.sha256(texte.getvalue().encode("utf-8")).hexdigest()})
     nouvelles = {"comptes_collectivites": COMPTES, "collectivites": COLLECTIVITES, "comptes_budgets": COMPTES_BUDGETS,
-                 "budgets": BUDGETS}
+                 "budgets": BUDGETS, "dotations": DOTATIONS, "beneficiaires": BENEFICIAIRES}
     for table, colonnes in nouvelles.items():
         connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
     lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
@@ -188,6 +219,9 @@ def main():
     connexion.execute("CREATE INDEX comptes_budgets_lot ON comptes_budgets (lot, concept)")
     connexion.execute("CREATE INDEX comptes_budgets_siren ON comptes_budgets (siren)")
     connexion.execute("CREATE INDEX budgets_cle ON budgets (lot, budget)")
+    connexion.execute("CREATE INDEX dotations_lot ON dotations (lot, variable)")
+    connexion.execute("CREATE INDEX dotations_code ON dotations (code)")
+    connexion.execute("CREATE INDEX beneficiaires_cle ON beneficiaires (lot, code)")
     empreintes += [{"table": t, "lignes": n, "sha256": h.hexdigest()} for t, (h, n) in hachages.items()]
     connexion.executescript(VUES)
     connexion.commit()
