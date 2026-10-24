@@ -3,7 +3,7 @@
   "fields": [
     {"name": "fichier_id", "type": "string", "constraints": {"required": true}},
     {"name": "source_id", "type": "string", "constraints": {"required": true}},
-    {"name": "contenu", "type": "string", "description": "inventaire : nombre de lignes de chaque exercice du jeu de données ; montants : une ligne par collectivité, ou par budget pour un jeu publié budget par budget, et par agrégat, ou par variable pour un jeu des dotations ; collectivites : nom, catégorie, territoire et population de chaque collectivité, ou fiche de chaque budget.", "constraints": {"required": true, "enum": ["inventaire", "montants", "collectivites"]}},
+    {"name": "contenu", "type": "string", "description": "inventaire : nombre de lignes de chaque exercice du jeu de données ; montants : une ligne par collectivité, ou par budget pour un jeu publié budget par budget, et par agrégat, et aussi par fonction pour la présentation fonctionnelle, ou par variable pour un jeu des dotations ; collectivites : nom, catégorie, territoire et population de chaque collectivité, ou fiche de chaque budget.", "constraints": {"required": true, "enum": ["inventaire", "montants", "collectivites"]}},
     {"name": "exercice", "type": "string", "description": "Exercice des comptes ; vide pour un inventaire.", "constraints": {"pattern": "[0-9]{4}"}},
     {"name": "version", "type": "date", "description": "Date de modification du jeu de données qu'annonçait le portail lors de l'export.", "constraints": {"required": true}},
     {"name": "statut", "type": "string", "description": "provisoire pour le dernier exercice de l'inventaire, définitif pour les autres ; vide pour un inventaire.", "constraints": {"enum": ["provisoire", "definitif"]}},

@@ -15,17 +15,22 @@ de la DGFiP. Trois exports d'un jeu sont archivés, compressés, et s'importent 
 Les comptes des services départementaux d'incendie et de secours et ceux des centres d'action sociale ne sont publiés
 que budget par budget, sans consolidation : chaque ligne des montants donne, pour un budget, désigné par son numéro
 SIRET, et un agrégat, le montant de ce budget, et la liste est celle des budgets, avec leur collectivité.
+La présentation fonctionnelle des comptes des départements est publiée budget par budget et fonction par fonction :
+chaque ligne des montants donne, pour un budget, une fonction de la nomenclature fonctionnelle de son instruction
+budgétaire et comptable (M52, puis M57), à l'un de ses quatre niveaux, et un agrégat des dépenses, le montant de ce
+budget, avec le libellé de la fonction et le regroupement que le portail en fait ; la liste est celle des budgets.
 Le portail publie aussi, d'après les fichiers de répartition de la DGCL, les dotations que l'État notifie à chaque
 commune, à chaque groupement à fiscalité propre et à chaque département : une ligne par collectivité et par variable. On
 en lit le montant notifié de la dotation globale de fonctionnement et celui de chacune de ses parts ; la collectivité y
 est désignée par son code Insee, son numéro Siren ou son code de département.
 Ces copies sont les chiffres eux-mêmes : la base ne les recopie pas, elle les lit. L'import vérifie chaque ligne
 (agrégat connu de tables/agregats_ofgl.csv, ou variable attendue, montants numériques, une seule ligne par collectivité,
-ou par budget, et par agrégat ou variable), que les montants ont le nombre de lignes de l'inventaire et que la liste des
-collectivités, ou des budgets, est celle des montants, puis inscrit la copie dans tables/fichiers_collectivites.csv. La
-version d'une copie est la date de
-modification du jeu de données qu'annonce le portail ; la copie qui en contrôle une autre est la plus récente de même
-source dont la version ne la dépasse pas. Le dernier exercice de l'inventaire est provisoire, les autres définitifs.
+ou par budget, par fonction, et par agrégat ou variable ; une fonction d'un chiffre par niveau, une seule nomenclature
+par budget), que les montants ont le nombre de lignes de l'inventaire et que la liste des collectivités, ou des
+budgets, est celle des montants, puis inscrit la copie dans tables/fichiers_collectivites.csv. La version d'une copie
+est la date de modification du jeu de données qu'annonce le portail ; la copie qui en contrôle une autre est la plus
+récente de même source dont la version ne la dépasse pas. Le dernier exercice de l'inventaire est provisoire, les
+autres définitifs.
 """
 
 import collections
@@ -54,6 +59,9 @@ JEUX = {
                                           "code_region", "population_totale"]),
     "ofgl.base-ccas-cias": ("ofgl-base-ccas-cias", ["siren", "ident", "lbudg", "nom_ccas", "type", "type_de_budget",
                                                     "nomen", "ctype", "code_dep", "code_reg"]),
+    "ofgl.base-departements-fonctionnelle": ("ofgl-base-departements-fonctionnelle", ["siren", "ident", "lbudg", "cbudg",
+                                                                                      "categ", "dep_code", "reg_code",
+                                                                                      "ptot"]),
     "ofgl.dotations-communes": ("dotations-communes", ["exercice", "code_insee", "commune", "code_departement",
                                                        "siren_epci"]),
     "ofgl.dotations-gfp": ("dotations-gfp", ["exercice", "siren", "nom_epci", "nature_juridique", "code_departement"]),
@@ -83,6 +91,14 @@ MONTANTS = ["siren", "agregat", "montant_bp", "montant_ba", "montant_flux", "mon
 # et par agrégat ; leur liste est celle des budgets.
 PAR_BUDGET = {"ofgl.base-sdis", "ofgl.base-ccas-cias"}
 MONTANTS_BUDGETS = ["siren", "ident", "agregat", "montant"]
+# Jeux publiés budget par budget et fonction par fonction : une ligne par budget, par fonction, à chacun de ses niveaux
+# (un chiffre par niveau, que la ligne donne aussi), et par agrégat ; chaque budget suit, chaque exercice, une seule
+# nomenclature. Le regroupement (« classement_fonctionnel_2 ») rapproche des fonctions des deux nomenclatures, la voirie
+# et les collèges, et range les autres sous « Autres ». Leur liste est celle des budgets.
+PAR_FONCTION = {"ofgl.base-departements-fonctionnelle"}
+MONTANTS_FONCTIONS = ["siren", "ident", "nomen", "niveau_hierarchique", "fonction", "nom_fonction",
+                      "classement_fonctionnel_2", "agregat", "montant"]
+NOMENCLATURES = r"M52|M57"
 INVENTAIRE = ["exer", "lignes"]
 # Champs qu'une collectivité peut avoir plusieurs fois, une ligne par valeur : un groupement s'étend sur plusieurs
 # départements, voire plusieurs régions.
@@ -108,8 +124,12 @@ def requetes(source_id, exercice):
                 "collectivites": requete(jeu, select=",".join(champs_collectivites), where=f"{filtre} and {lues}",
                                          group_by=",".join(champs_collectivites), order_by=",".join(champs_collectivites))}
     filtre = f"exer=date'{exercice}'"
-    champs_montants = MONTANTS_BUDGETS if source_id in PAR_BUDGET else MONTANTS
-    ordre = "siren,ident,agregat" if source_id in PAR_BUDGET else "siren,agregat"
+    if source_id in PAR_FONCTION:
+        champs_montants, ordre = MONTANTS_FONCTIONS, "siren,ident,fonction,agregat"
+    elif source_id in PAR_BUDGET:
+        champs_montants, ordre = MONTANTS_BUDGETS, "siren,ident,agregat"
+    else:
+        champs_montants, ordre = MONTANTS, "siren,agregat"
     return {"inventaire": requete(jeu, select="exer,count(*) as lignes", group_by="exer", order_by="exer"),
             "montants": requete(jeu, select=",".join(champs_montants), where=filtre, order_by=ordre),
             "collectivites": requete(jeu, select=",".join(champs_collectivites), where=filtre,
@@ -208,6 +228,31 @@ def montants_budgets(fichier, agregats, marges=False):
     return resultat
 
 
+def montants_fonctions(fichier, agregats, marges=False):
+    """Les lignes de montants d'un jeu publié fonction par fonction : [(siren, SIRET du budget, nomenclature, fonction,
+    libellé de la fonction, regroupement, agrégat, montant)], et, si `marges`, la marge d'arrondi du montant à la
+    suite."""
+    resultat, vues, nomenclatures = [], set(), {}
+    for n, (siren, budget, nomen, niveau, fonction, libelle, regroupement, agregat, texte) in enumerate(
+            lignes(fichier, MONTANTS_FONCTIONS), start=2):
+        lieu = f"{fichier['id']}, ligne {n}"
+        if not re.fullmatch(r"[0-9]{9}", siren) or not re.fullmatch(siren + r"[0-9]{5}", budget):
+            sys.exit(f"{lieu} : numéro Siren ou SIRET du budget illisible « {siren} », « {budget} »")
+        if not re.fullmatch(NOMENCLATURES, nomen) or nomenclatures.setdefault(budget, nomen) != nomen:
+            sys.exit(f"{lieu} : nomenclature « {nomen} » inattendue pour le budget {budget}")
+        if not re.fullmatch(r"[0-9]{1,4}", fonction) or niveau != str(len(fonction)) or not libelle or not regroupement:
+            sys.exit(f"{lieu} : fonction illisible « {fonction} » (niveau « {niveau} », « {libelle} », "
+                     f"« {regroupement} »)")
+        if agregat not in agregats:
+            sys.exit(f"{lieu} : agrégat inconnu « {agregat} » (le déclarer dans tables/agregats_ofgl.csv)")
+        if (budget, fonction, agregat) in vues:
+            sys.exit(f"{lieu} : deuxième ligne pour le budget {budget}, la fonction {fonction} et « {agregat} »")
+        vues.add((budget, fonction, agregat))
+        resultat.append((siren, budget, nomen, fonction, libelle, regroupement, agregat, montant(texte, lieu))
+                        + ((marge(texte),) if marges else ()))
+    return resultat
+
+
 def montants_dotations(fichier, marges=False):
     """Les lignes de montants d'un jeu des dotations : [(collectivité, variable, montant)], et, si `marges`, la marge
     d'arrondi du montant à la suite."""
@@ -228,11 +273,11 @@ def montants_dotations(fichier, marges=False):
 
 def collectivites(fichier):
     """({siren: {champ: valeur}}, nombre de lignes), les valeurs d'un champ multiple réunies, triées, séparées par
-    « ; » ; pour un jeu publié budget par budget, la fiche de chaque budget, sous son SIRET ; pour un jeu des
-    dotations, celle de chaque collectivité, sous le champ qui la désigne."""
+    « ; » ; pour un jeu publié budget par budget, ou fonction par fonction, la fiche de chaque budget, sous son SIRET ;
+    pour un jeu des dotations, celle de chaque collectivité, sous le champ qui la désigne."""
     source = fichier["source_id"]
     champs_ = JEUX[source][1]
-    cle = DOTATIONS[source][0] if source in DOTATIONS else "ident" if source in PAR_BUDGET else "siren"
+    cle = DOTATIONS[source][0] if source in DOTATIONS else "ident" if source in PAR_BUDGET | PAR_FONCTION else "siren"
     par_cle = collections.defaultdict(list)
     contenu = lignes(fichier, champs_)
     for n, ligne in enumerate(contenu, start=2):
@@ -260,12 +305,14 @@ def collectivites(fichier):
 
 
 def cles_montants(fichier, agregats):
-    """Les numéros Siren, ou pour un jeu publié budget par budget les SIRET des budgets, pour un jeu des dotations les
-    collectivités, d'une copie de montants."""
+    """Les numéros Siren, ou pour un jeu publié budget par budget, ou fonction par fonction, les SIRET des budgets, pour
+    un jeu des dotations les collectivités, d'une copie de montants."""
     if fichier["source_id"] in DOTATIONS:
         return {l[0] for l in montants_dotations(fichier)}
     if fichier["source_id"] in PAR_BUDGET:
         return {l[1] for l in montants_budgets(fichier, agregats)}
+    if fichier["source_id"] in PAR_FONCTION:
+        return {l[1] for l in montants_fonctions(fichier, agregats)}
     return {l[0] for l in montants(fichier, agregats)}
 
 
@@ -296,9 +343,10 @@ def inscription(fichier, inscrits, fichiers, agregats):
     exercices = inventaire(fichiers[controleur(fichier, inscrits, "inventaire")])
     if exercice not in exercices:
         sys.exit(f"{fichier['id']} : l'exercice {exercice} manque à l'inventaire")
-    par_budget, dotations = fichier["source_id"] in PAR_BUDGET, fichier["source_id"] in DOTATIONS
+    par_budget, dotations = fichier["source_id"] in PAR_BUDGET | PAR_FONCTION, fichier["source_id"] in DOTATIONS
     if contenu == "montants":
-        lues = (montants_dotations(fichier) if dotations else montants_budgets(fichier, agregats) if par_budget
+        lues = (montants_dotations(fichier) if dotations else montants_fonctions(fichier, agregats)
+                if fichier["source_id"] in PAR_FONCTION else montants_budgets(fichier, agregats) if par_budget
                 else montants(fichier, agregats))
         if len(lues) != exercices[exercice]:
             sys.exit(f"{fichier['id']} : {len(lues)} lignes, l'inventaire en annonce {exercices[exercice]}")

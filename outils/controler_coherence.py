@@ -18,8 +18,11 @@ vérifie ce que disent les sources elles-mêmes :
 7. les comptes de chaque collectivité : montant consolidé, identités comptables de chacune, comptes d'une même
    collectivité dans deux jeux de données, somme des collectivités contre les totaux publiés, et chaque
    département et chaque région contre sa fiche de la DGCL ;
-8. les flux entre collectivités : ce que l'une déclare verser à une autre contre ce que celle-ci déclare
-   recevoir, pour les contributions des départements aux SDIS.
+8. les flux entre administrations : ce que l'une déclare verser à une autre contre ce que celle-ci déclare
+   recevoir, pour la dotation globale de fonctionnement que l'État notifie à chaque collectivité et pour les
+   contributions des départements aux SDIS ;
+9. les dépenses de chaque département par fonction : chaque fonction contre la somme de ses sous-fonctions,
+   les identités comptables dans chaque fonction, et les fonctions réunies contre les comptes consolidés.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -813,6 +816,13 @@ SDIS_DES_REGIONS = {"200076958": ("2A", "2B"), "200055507": ("972",), "200052678
 _DEP, _GFP, _AUTRES = (f"COMPTES_LOCAUX.{c}" for c in ("PARTICIPATIONS_DEPARTEMENTS", "PARTICIPATIONS_GFP",
                                                        "AUTRES_PARTICIPATIONS_FONCTIONNEMENT"))
 RUBRIQUES_SDIS = {"200046977": (_GFP, _AUTRES), "200055507": (_DEP, _GFP, _AUTRES), "200052678": (_DEP, _GFP, _AUTRES)}
+# Dépenses de chaque département par fonction (présentation fonctionnelle) : chaque montant y figure à chacun des niveaux
+# de sa fonction, d'un à quatre chiffres, et un montant nul n'a pas de ligne. Pour chaque budget et chaque agrégat, une
+# fonction se compare à la somme de ses sous-fonctions ; dans chaque fonction s'appliquent les identités comptables
+# dont le jeu publie tous les termes ; la somme des fonctions de premier niveau du budget principal de chaque
+# collectivité, puis celle de ses budgets annexes réunis, se compare à ses comptes consolidés.
+FONCTIONNELLE = "ofgl.base-departements-fonctionnelle"
+BUDGET_PRINCIPAL = "1"  # « cbudg » du budget principal, « 3 » pour un budget annexe
 
 
 def listes_collectivites():
@@ -824,6 +834,16 @@ def listes_collectivites():
         if i["contenu"] == "collectivites" and (cle not in retenues or i["version"] > retenues[cle]["version"]):
             retenues[cle] = i
     return {cle: ofgl.collectivites(fichiers[i["fichier_id"]])[0] for cle, i in sorted(retenues.items())}
+
+
+def montants_retenus():
+    """{(source, exercice): inscription} : la copie des montants la plus récente de chaque exercice de chaque jeu."""
+    retenus = {}
+    for i in lire("tables/fichiers_collectivites.csv"):
+        cle = (i["source_id"], i["exercice"])
+        if i["contenu"] == "montants" and (cle not in retenus or i["version"] > retenus[cle]["version"]):
+            retenus[cle] = i
+    return retenus
 
 
 def identites_comptables(controles, identites, source, exercice, cle, montants, lus):
@@ -860,14 +880,11 @@ def collectivites(derniers, listes):
     reçoivent."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
-    retenus = {}
-    for i in lire("tables/fichiers_collectivites.csv"):
-        cle = (i["source_id"], i["exercice"])
-        if i["contenu"] == "montants" and (cle not in retenus or i["version"] > retenus[cle]["version"]):
-            retenus[cle] = i
+    # Le jeu fonctionnel des départements a ses propres contrôles (fonctions_departements).
+    retenus = {cle: i for cle, i in montants_retenus().items() if cle[0] not in ofgl.PAR_FONCTION}
     presences = collections.defaultdict(list)  # (exercice, siren) → jeux dont la liste porte la collectivité
     for (source, exercice), fiches in listes.items():
-        if source in ofgl.DOTATIONS:
+        if source in ofgl.DOTATIONS or source in ofgl.PAR_FONCTION:
             continue
         for siren in sorted({f["siren"] for f in fiches.values()}) if source in ofgl.PAR_BUDGET else fiches:
             presences[(exercice, siren)].append(source)
@@ -1088,6 +1105,118 @@ def flux_sdis(listes, contributions, participations, noms_sdis):
     orphelines = [(exercice, code, noms_sdis.get((exercice, code), code), m) for (exercice, code, r), (m, _) in
                   sorted(participations.items()) if r == _DEP and (exercice, code, r) not in lues and m]
     return comparaisons, sans_sdis, orphelines
+
+
+def termes_identite(composantes):
+    """[(signe, concept)] des composantes d'une identité, sans leurs marques."""
+    termes = [c.lstrip("?!") for c in composantes]
+    return [(-1 if t.startswith("-") else 1, t.lstrip("-")) for t in termes]
+
+
+def fonctions_departements(listes):
+    """Pour chaque exercice du jeu fonctionnel des départements, dans sa version la plus récente : les budgets de chaque
+    nomenclature ; chaque fonction contre la somme de ses sous-fonctions, pour chaque budget et chaque agrégat ; les
+    identités comptables dans chaque fonction de chaque budget, une partie sans ligne valant zéro ; la somme des
+    fonctions de premier niveau de chaque collectivité contre ses comptes consolidés, budget principal puis budgets
+    annexes. Pour l'ensemble des exercices : les libellés de chaque fonction et les regroupements du portail."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
+    retenus = montants_retenus()
+    identites_locales = [(t, termes_identite(cs)) for t, cs in IDENTITES if t.startswith("COMPTES_LOCAUX.")]
+    exercices = []  # (exercice, version, statut, {(nomenclature, type de budget): budgets}, lignes)
+    sous_fonctions = [0, 0]  # fonctions comparées à leurs sous-fonctions, égales
+    # (exercice, siren, budget, nomenclature, concept, fonction, libellé, montant, somme des sous-fonctions)
+    ecarts_sous_fonctions = []
+    identites = collections.defaultdict(lambda: [0, 0, None])  # (total, parties) → [vérifiées, en écart, pire]
+    consolides = []  # (exercice, siren, budgets, concept, somme des fonctions, consolidé, égaux)
+    absents = []  # (exercice, siren, jeu qui ne le donne pas)
+    # (nomenclature, fonction) → {libellé: exercices}
+    libelles = collections.defaultdict(lambda: collections.defaultdict(set))
+    regroupements = collections.defaultdict(set)  # (nomenclature, fonction) → regroupements
+    for (source, exercice), inscrit in sorted(retenus.items()):
+        if source != FONCTIONNELLE:
+            continue
+        fiches = listes.get((FONCTIONNELLE, exercice), {})
+        par_agregat = collections.defaultdict(dict)  # (budget, concept) → {fonction: (montant, marge)}
+        par_fonction = collections.defaultdict(dict)  # (budget, fonction) → {concept: (montant, marge)}
+        sirens, nomenclatures, publies, noms = {}, {}, set(), {}  # noms : (nomenclature, fonction) → premier libellé
+        for siren, budget, nomen, fonction, libelle, regroupement, agregat, montant_, marge_ in \
+                ofgl.montants_fonctions(fichiers[inscrit["fichier_id"]], agregats, marges=True):
+            concept = agregats[agregat]["concept_id"]
+            par_agregat[(budget, concept)][fonction] = (montant_, marge_)
+            par_fonction[(budget, fonction)][concept] = (montant_, marge_)
+            sirens[budget], nomenclatures[budget] = siren, nomen
+            publies.add(concept)
+            libelles[(nomen, fonction)][libelle].add(exercice)
+            noms.setdefault((nomen, fonction), libelle)
+            regroupements[(nomen, fonction)].add(regroupement)
+        # Le type de chaque budget, d'après sa fiche (« ? » sans fiche) ; les collectivités du jeu.
+        types = {b: "?" if b not in fiches else "BP" if fiches[b]["cbudg"] == BUDGET_PRINCIPAL else "BA" for b in sirens}
+        collectivites_ = set(sirens.values())
+        exercices.append((exercice, inscrit["version"], inscrit["statut"],
+                          collections.Counter((nomenclatures[b], types[b]) for b in sirens), int(inscrit["lignes"])))
+        # Chaque fonction dont une sous-fonction a une ligne contre la somme de ses sous-fonctions.
+        for (budget, concept), par_code in par_agregat.items():
+            enfants = collections.defaultdict(list)  # fonction → ses sous-fonctions qui ont une ligne
+            for f in par_code:
+                if len(f) > 1:
+                    enfants[f[:-1]].append(f)
+            for parent, liste in sorted(enfants.items()):
+                m, marge_ = par_code.get(parent, (0.0, 0.0))
+                somme = sum(par_code[f][0] for f in liste)
+                sous_fonctions[0] += 1
+                if depasse(m - somme, marge_ + sum(par_code[f][1] for f in liste)):
+                    ecarts_sous_fonctions.append((exercice, sirens[budget], budget, nomenclatures[budget], concept,
+                                                  parent, noms.get((nomenclatures[budget], parent), ""), m, somme))
+                else:
+                    sous_fonctions[1] += 1
+        # Les identités dont le jeu publie, cet exercice, le total et toutes les parties.
+        applicables = [(t, p) for t, p in identites_locales if t in publies and all(c in publies for _, c in p)]
+        for (budget, fonction), montants in par_fonction.items():
+            for total, parties in applicables:
+                if total not in montants and not any(c in montants for _, c in parties):
+                    continue
+                termes = {c: montants.get(c, (0.0, 0.0)) for c in [total] + [c for _, c in parties]}
+                ecart = termes[total][0] - sum(s * termes[c][0] for s, c in parties)
+                entree = identites[(total, tuple(c for _, c in parties))]
+                entree[0] += 1
+                if depasse(ecart, sum(v[1] for v in termes.values())):
+                    entree[1] += 1
+                    if entree[2] is None or abs(ecart) > abs(entree[2][0]):
+                        entree[2] = (ecart, exercice, budget, fonction)
+        # La somme des fonctions de premier niveau, budget principal puis budgets annexes réunis, contre les comptes
+        # consolidés de la collectivité.
+        sommes = collections.defaultdict(lambda: [0.0, 0.0])  # (siren, budgets, concept) → [somme, marge]
+        for (budget, concept), par_code in par_agregat.items():
+            if types[budget] == "?":
+                continue
+            cellule = sommes[(sirens[budget], types[budget], concept)]
+            for f, (m, marge_) in par_code.items():
+                if len(f) == 1:
+                    cellule[0] += m
+                    cellule[1] += marge_
+        temoin = retenus.get((DEPARTEMENTS, exercice))
+        if temoin is None or not fiches:  # sans liste, le type de chaque budget n'est pas connu
+            continue
+        comptes = {}  # (siren, budgets, concept) → (montant, marge)
+        for siren, agregat, bp, ba, _, _, marge_bp, marge_ba, _, _ in ofgl.montants(fichiers[temoin["fichier_id"]],
+                                                                                    agregats, marges=True):
+            concept = agregats[agregat]["concept_id"]
+            if concept in publies:
+                comptes[(siren, "BP", concept)] = (bp, marge_bp)
+                comptes[(siren, "BA", concept)] = (ba, marge_ba)
+        a_comptes = {cle[0] for cle in comptes}
+        absents += [(exercice, s, DEPARTEMENTS) for s in sorted(collectivites_ - a_comptes)]
+        absents += [(exercice, s, FONCTIONNELLE) for s in sorted(a_comptes - collectivites_)]
+        for cle in sorted(set(sommes) | set(comptes)):
+            if cle[0] not in a_comptes or cle[0] not in collectivites_:
+                continue
+            somme, marge_somme = sommes.get(cle, (0.0, 0.0))
+            publie, marge_publie = comptes.get(cle, (0.0, 0.0))
+            if somme or publie:
+                consolides.append((exercice, *cle, somme, publie, not depasse(somme - publie, marge_somme + marge_publie)))
+    return (exercices, sous_fonctions, ecarts_sous_fonctions, identites, consolides, absents, libelles,
+            regroupements)
 
 
 # --- Le rapport ----------------------------------------------------------------------------------------
@@ -1470,7 +1599,7 @@ def partie_collectivites(derniers):
             lignes.append(f"| {source} | {budget} | {concept} | {plage([x[3] for x in liste])} | "
                           f"{ecart_lisible(e[4], 'euros')} en {e[3]} |")
         lignes.append("")
-    return lignes + partie_fiches_dgcl(listes, fiches) + partie_flux(listes, flux)
+    return lignes + partie_fiches_dgcl(listes, fiches) + partie_flux(listes, flux) + partie_fonctions(listes)
 
 
 def concepts_lisibles(concepts):
@@ -1751,6 +1880,155 @@ def partie_sdis(listes, sdis):
             lignes.append(f"| {max(liste, key=lambda o: o[0])[2]} | {plage([o[0] for o in liste])} | "
                           f"{millions(pire[3])} en {pire[0]} |")
         lignes.append("")
+    return lignes
+
+
+def nom_budget(listes, exercice, budget):
+    """Le libellé d'un budget du jeu fonctionnel et son SIRET."""
+    return f"{listes.get((FONCTIONNELLE, exercice), {}).get(budget, {}).get('lbudg', '')} ({budget})"
+
+
+def partie_fonctions(listes):
+    """Les dépenses de chaque département par fonction : budgets de chaque nomenclature, fonctions contre leurs
+    sous-fonctions, identités comptables dans chaque fonction, fonctions de premier niveau contre les comptes
+    consolidés, libellés des fonctions et regroupements du portail."""
+    (exercices, sous_fonctions, ecarts_sous_fonctions, identites, consolides, absents, libelles,
+     regroupements) = fonctions_departements(listes)
+    if not exercices:
+        return []
+    lignes = ["## 9. Dépenses de chaque département par fonction", "",
+              "La présentation fonctionnelle des comptes des départements, que l'OFGL publie sur data.ofgl.fr, ventile "
+              "les dépenses de chaque budget des départements, de la métropole de Lyon et de la Ville de Paris entre "
+              "les fonctions de la nomenclature de son instruction budgétaire et comptable : la M52, puis la M57, que "
+              "les départements adoptent l'un après l'autre et dont les fonctions ne se correspondent pas toutes ; le "
+              "jeu ne porte que sur les dépenses. Chaque montant y figure à chacun des niveaux de sa fonction, d'un à "
+              "quatre chiffres, et un montant nul n'a pas de ligne : une fonction doit valoir la somme de ses "
+              "sous-fonctions, et les fonctions de premier niveau réunies, le total du budget. Dans chaque fonction "
+              "s'appliquent les identités comptables des agrégats de dépenses, une partie sans ligne valant zéro. La "
+              "somme des fonctions de premier niveau du budget principal de chaque collectivité se compare au montant "
+              "de son budget principal dans le jeu de ses comptes consolidés, celle de ses budgets annexes réunis au "
+              "montant de ses budgets annexes. Le dernier exercice est provisoire.", "",
+              "| Exercice | Version | Statut | Budgets principaux en M52 | Budgets principaux en M57 | "
+              "Budgets annexes | Lignes |", "|---|---|---|---|---|---|---|"]
+    for exercice, version, statut, budgets, nombre in exercices:
+        annexes = sum(n for (_, t), n in budgets.items() if t == "BA")
+        sans_fiche = sum(n for (_, t), n in budgets.items() if t == "?")
+        lignes.append(f"| {exercice} | {version} | {statut} | {fr(budgets[('M52', 'BP')], 0)} | "
+                      f"{fr(budgets[('M57', 'BP')], 0)} | {fr(annexes, 0)}"
+                      f"{f', et {fr(sans_fiche, 0)} sans fiche' if sans_fiche else ''} | {fr(nombre, 0)} |")
+    comparees, egales = sous_fonctions
+    lignes += ["", f"Fonctions comparées à la somme de leurs sous-fonctions, pour chaque budget et chaque agrégat : "
+               f"{fr(comparees, 0)}, dont {fr(egales, 0)} égales à l'arrondi près et {fr(comparees - egales, 0)} en "
+               "écart. Un écart peut venir d'un montant que le budget classe dans la fonction sans le ventiler entre ses "
+               "sous-fonctions : il se retrouve alors dans chacun des agrégats qui comptent ce montant.", ""]
+    if ecarts_sous_fonctions:
+        regroupes = collections.defaultdict(list)  # (nomenclature, fonction) → écarts
+        for e in ecarts_sous_fonctions:
+            regroupes[(e[3], e[5])].append(e)
+        lignes += ["| Fonction | Exercices en écart | Budgets en écart, chaque exercice compté | "
+                   "Plus grand écart (fonction − sous-fonctions) |", "|---|---|---|---|"]
+        for (nomen, fonction), ecarts in sorted(regroupes.items()):
+            exercice, _, budget, _, concept, _, libelle, m, somme = plus_grand(ecarts, lambda e: e[7] - e[8])
+            lignes.append(f"| {fonction} de la {nomen}{f' ({libelle})' if libelle else ''} | "
+                          f"{plage([e[0] for e in ecarts])} | {fr(len({(e[0], e[2]) for e in ecarts}), 0)} | "
+                          f"{ecart_lisible(m - somme, 'euros')} ({concept.removeprefix('COMPTES_LOCAUX.')}) : "
+                          f"{nom_budget(listes, exercice, budget)}, {exercice} |")
+        lignes.append("")
+    n, faux = sum(v[0] for v in identites.values()), sum(v[1] for v in identites.values())
+    lignes += [f"Identités comptables dans chaque fonction de chaque budget : {fr(n, 0)} vérifiées, {fr(n - faux, 0)} "
+               f"justes, {fr(faux, 0)} en écart.", "",
+               "| Total | Parties | Vérifiées | En écart | Plus grand écart |", "|---|---|---|---|---|"]
+    for (total, parties), (verifiees, nombre, pire) in sorted(identites.items()):
+        texte = (f"{ecart_lisible(pire[0], 'euros')} : {nom_budget(listes, pire[1], pire[2])}, fonction {pire[3]}, "
+                 f"{pire[1]}" if pire else "aucun")
+        lignes.append(f"| {total.removeprefix('COMPTES_LOCAUX.')} | {concepts_lisibles(parties)} | {fr(verifiees, 0)} | "
+                      f"{fr(nombre, 0)} | {texte} |")
+    lignes.append("")
+    principaux = [c for c in consolides if c[2] == "BP"]
+    fausses = [c for c in principaux if not c[6]]
+    lignes += [f"Fonctions de premier niveau du budget principal de chaque collectivité, réunies, contre le montant de son "
+               f"budget principal dans ses comptes consolidés : {fr(len(principaux), 0)} comparaisons, "
+               f"{fr(len(principaux) - len(fausses), 0)} égales à l'arrondi près, {fr(len(fausses), 0)} en écart.", ""]
+    if fausses:
+        lignes += ["| Collectivité | Agrégat | Exercices en écart | Plus grand écart (fonctions − comptes consolidés) |",
+                   "|---|---|---|---|"]
+        regroupees = collections.defaultdict(list)
+        for c in fausses:
+            regroupees[(c[1], c[3])].append(c)
+        for (siren, concept), liste in sorted(regroupees.items()):
+            pire = plus_grand(liste, lambda c: c[4] - c[5])
+            lignes.append(f"| {nom(listes, DEPARTEMENTS, max(c[0] for c in liste), siren)} ({siren}) | "
+                          f"{concept.removeprefix('COMPTES_LOCAUX.')} | {plage([c[0] for c in liste])} | "
+                          f"{ecart_lisible(pire[4] - pire[5], 'euros')} en {pire[0]} |")
+        lignes.append("")
+    # Les budgets annexes : une collectivité dont un budget annexe n'est pas présenté par fonction a, dans ce jeu, moins
+    # de budgets annexes que dans ses comptes consolidés.
+    par_collectivite = collections.defaultdict(list)  # (exercice, siren) → comparaisons de ses budgets annexes
+    for c in consolides:
+        if c[2] == "BA":
+            par_collectivite[(c[0], c[1])].append(c)
+    if par_collectivite:
+        totaux = "COMPTES_LOCAUX.DEP_TOTALES_HORS_REMBOURSEMENTS"
+        lignes += ["Budgets annexes : le jeu fonctionnel ne donne que des budgets tenus selon la M52 ou la M57, et un "
+                   "budget annexe tenu selon une autre instruction n'y figure pas. Une collectivité dont tous les budgets "
+                   "annexes y figurent retrouve, pour chaque agrégat, le montant de ses budgets annexes dans ses comptes "
+                   "consolidés ; les autres y ont un montant moindre.", "",
+                   "| Exercice | Collectivités qui ont des budgets annexes | dont budgets annexes tous présentés par "
+                   "fonction | Dépenses totales hors remboursements des budgets annexes : par fonction | dans les comptes "
+                   "consolidés |", "|---|---|---|---|---|"]
+        for exercice in sorted({e for e, _ in par_collectivite}):
+            groupes = [liste for (e, _), liste in par_collectivite.items() if e == exercice]
+            completes = sum(1 for liste in groupes if all(c[6] for c in liste))
+            depenses = [c for liste in groupes for c in liste if c[3] == totaux]
+            lignes.append(f"| {exercice} | {fr(len(groupes), 0)} | {fr(completes, 0)} | "
+                          f"{millions(sum(c[4] for c in depenses))} | {millions(sum(c[5] for c in depenses))} |")
+        lignes.append("")
+        au_dessus = [c for liste in par_collectivite.values() for c in liste if not c[6] and c[4] > c[5]]
+        if au_dessus:
+            lignes += ["Budgets annexes dont les fonctions réunies dépassent le montant des comptes consolidés, ce que "
+                       "l'absence d'un budget n'explique pas, sauf pour un agrégat qu'un montant négatif réduit :", "",
+                       "| Collectivité | Agrégat | Exercices | Plus grand écart (fonctions − comptes consolidés) |",
+                       "|---|---|---|---|"]
+            regroupees = collections.defaultdict(list)
+            for c in au_dessus:
+                regroupees[(c[1], c[3])].append(c)
+            for (siren, concept), liste in sorted(regroupees.items()):
+                pire = plus_grand(liste, lambda c: c[4] - c[5])
+                lignes.append(f"| {nom(listes, DEPARTEMENTS, max(c[0] for c in liste), siren)} ({siren}) | "
+                              f"{concept.removeprefix('COMPTES_LOCAUX.')} | {plage([c[0] for c in liste])} | "
+                              f"{ecart_lisible(pire[4] - pire[5], 'euros')} en {pire[0]} |")
+            lignes.append("")
+    if absents:
+        lignes += ["Collectivités qu'un seul des deux jeux donne :", "",
+                   "| Collectivité | Exercices | Absente du jeu |", "|---|---|---|"]
+        regroupes = collections.defaultdict(list)
+        for exercice, siren, jeu in absents:
+            regroupes[(siren, jeu)].append(exercice)
+        for (siren, jeu), annees in sorted(regroupes.items()):
+            source = FONCTIONNELLE if jeu == DEPARTEMENTS else DEPARTEMENTS
+            lignes.append(f"| {nom(listes, source, max(annees), siren)} ({siren}) | {plage(annees)} | {jeu} |")
+        lignes.append("")
+    changeants = {cle: noms for cle, noms in libelles.items() if len(noms) > 1}
+    if changeants:
+        lignes += ["Fonctions dont le libellé change d'un exercice à l'autre, ou d'un budget à l'autre dans un même "
+                   "exercice : une même fonction peut ne pas désigner les mêmes dépenses d'une année à l'autre.", "",
+                   "| Nomenclature | Fonction | Libellés (exercices) |", "|---|---|---|"]
+        for (nomen, fonction), noms in sorted(changeants.items(), key=lambda e: (e[0][0], e[0][1])):
+            textes = [f"{l} ({plage(sorted(a))})" for l, a in sorted(noms.items(), key=lambda e: min(e[1]))]
+            lignes.append(f"| {nomen} | {fonction} | {' ; '.join(textes)} |")
+        lignes.append("")
+    groupes = collections.defaultdict(list)  # regroupement → fonctions
+    for (nomen, fonction), noms in sorted(regroupements.items()):
+        for r in noms:
+            if r != "Autres":
+                groupes[r].append(f"{fonction} de la {nomen}")
+    melanges = sorted(f"{fonction} de la {nomen}" for (nomen, fonction), noms in regroupements.items() if len(noms) > 1)
+    if groupes:
+        lignes += ["Regroupements que le portail fait, pour ses visualisations, de fonctions des deux nomenclatures, les "
+                   "autres fonctions étant rangées sous « Autres » : "
+                   + " ; ".join(f"« {r} » : {', '.join(fs)}" for r, fs in sorted(groupes.items()))
+                   + (f". Fonctions rangées dans plusieurs regroupements : {', '.join(melanges)}." if melanges else "."),
+                   ""]
     return lignes
 
 

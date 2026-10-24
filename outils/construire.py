@@ -8,8 +8,9 @@ base/construite/empreintes.csv : une empreinte du contenu de chaque table, qui p
 chacun de vérifier qu'une base reconstruite contient exactement les mêmes données. Les comptes
 de chaque collectivité y sont lus dans les copies archivées des exports de data.ofgl.fr
 (tables comptes_collectivites et collectivites), ceux des jeux publiés budget par budget dans les
-tables comptes_budgets et budgets, et les dotations que l'État notifie à chaque collectivité dans
-les tables dotations et beneficiaires.
+tables comptes_budgets et budgets, les dépenses de chaque budget des départements par fonction dans
+les tables comptes_fonctions et budgets, et les dotations que l'État notifie à chaque collectivité
+dans les tables dotations et beneficiaires.
 """
 
 import csv
@@ -67,6 +68,24 @@ LEFT JOIN budgets b ON b.budget = c.budget AND b.lot = (
 WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
                    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
 
+-- Les dépenses de chaque budget des départements par fonction, dans la version la plus récente de chaque exercice, avec
+-- leurs libellés, la fiche du budget et le nom de sa collectivité (le libellé de son budget principal). Chaque montant
+-- figure à chacun des niveaux de sa fonction : n'additionner que les fonctions d'un même niveau.
+CREATE VIEW v_comptes_fonctions AS
+SELECT f.source_id, f.exercice, f.version, f.statut, f.fichier_id, c.siren, p.nom AS collectivite, c.budget, b.nom,
+       b.type_budget, b.categorie, b.departement, b.region, b.population, c.nomenclature, c.niveau, c.fonction,
+       c.libelle AS fonction_libelle, c.regroupement, co.id AS concept_id, co.libelle AS concept_libelle, c.montant
+FROM comptes_fonctions c
+JOIN fichiers_collectivites f ON f.rowid = c.lot
+JOIN concepts co ON co.rowid = c.concept
+LEFT JOIN budgets b ON b.budget = c.budget AND b.lot = (
+    SELECT g.rowid FROM fichiers_collectivites g
+    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'collectivites'
+    ORDER BY g.version DESC LIMIT 1)
+LEFT JOIN budgets p ON p.lot = b.lot AND p.siren = c.siren AND p.type_budget = '1'
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
+                   WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
+
 -- Les dotations que l'État notifie à chaque collectivité, dans la version la plus récente de chaque exercice, avec le
 -- nom et le territoire de la collectivité.
 CREATE VIEW v_dotations AS
@@ -121,9 +140,17 @@ BUDGETS = [("lot", "INTEGER"), ("siren", "TEXT"), ("budget", "TEXT"), ("nom", "T
            ("categorie", "TEXT"), ("type_budget", "TEXT"), ("nature", "TEXT"), ("nomenclature", "TEXT"),
            ("departement", "TEXT"), ("region", "TEXT"), ("population", "INTEGER")]
 CHAMPS_BUDGETS = {"siren": "siren", "ident": "budget", "lbudg": "nom", "nom_ccas": "collectivite",
-                  "categorie_sdis": "categorie", "type": "categorie", "cbudg": "type_budget",
+                  "categorie_sdis": "categorie", "type": "categorie", "categ": "categorie", "cbudg": "type_budget",
                   "type_de_budget": "type_budget", "ctype": "nature", "nomen": "nomenclature", "code_dep": "departement",
-                  "code_region": "region", "code_reg": "region", "population_totale": "population"}
+                  "dep_code": "departement", "code_region": "region", "code_reg": "region", "reg_code": "region",
+                  "population_totale": "population", "ptot": "population"}
+# Les dépenses par fonction : une ligne par budget, par fonction de la nomenclature du budget (M52 ou M57), à chacun de
+# ses niveaux (le nombre de ses chiffres), et par agrégat, avec le libellé de la fonction et le regroupement du portail ;
+# la fiche de chaque budget, chaque exercice, est dans la table budgets, sa catégorie étant celle de sa collectivité
+# (« DEPT », « ML » pour la métropole de Lyon, « PARIS »).
+COMPTES_FONCTIONS = [("lot", "INTEGER"), ("siren", "TEXT"), ("budget", "TEXT"), ("nomenclature", "TEXT"),
+                     ("niveau", "INTEGER"), ("fonction", "TEXT"), ("libelle", "TEXT"), ("regroupement", "TEXT"),
+                     ("concept", "INTEGER"), ("montant", "REAL")]
 # Les dotations notifiées : une ligne par collectivité, désignée par son code Insee, son numéro Siren ou son code de
 # département (`code`), et par variable ; la table beneficiaires donne le nom de chaque collectivité, chaque exercice,
 # son département, et le groupement d'une commune ou la nature juridique d'un groupement.
@@ -145,9 +172,14 @@ def lignes_collectivites(lots, concepts):
     agregats = {a["agregat"]: a["concept_id"] for a in lire("tables/agregats_ofgl.csv")}
     for inscrit in lire("tables/fichiers_collectivites.csv"):
         fichier, lot = fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]]
-        par_budget, dotations = inscrit["source_id"] in ofgl.PAR_BUDGET, inscrit["source_id"] in ofgl.DOTATIONS
+        par_fonction = inscrit["source_id"] in ofgl.PAR_FONCTION
+        par_budget = inscrit["source_id"] in ofgl.PAR_BUDGET or par_fonction
+        dotations = inscrit["source_id"] in ofgl.DOTATIONS
         if inscrit["contenu"] == "montants" and dotations:
             yield "dotations", [[lot, *l] for l in ofgl.montants_dotations(fichier)]
+        elif inscrit["contenu"] == "montants" and par_fonction:
+            yield "comptes_fonctions", [[lot, s, b, n, len(f), f, l, r, concepts[agregats[a]], v]
+                                        for s, b, n, f, l, r, a, v in ofgl.montants_fonctions(fichier, agregats)]
         elif inscrit["contenu"] == "montants" and par_budget:
             yield "comptes_budgets", [[lot, s, b, concepts[agregats[a]], v]
                                       for s, b, a, v in ofgl.montants_budgets(fichier, agregats)]
@@ -199,7 +231,8 @@ def main():
         empreintes.append({"table": nom, "lignes": len(lignes),
                            "sha256": hashlib.sha256(texte.getvalue().encode("utf-8")).hexdigest()})
     nouvelles = {"comptes_collectivites": COMPTES, "collectivites": COLLECTIVITES, "comptes_budgets": COMPTES_BUDGETS,
-                 "budgets": BUDGETS, "dotations": DOTATIONS, "beneficiaires": BENEFICIAIRES}
+                 "budgets": BUDGETS, "comptes_fonctions": COMPTES_FONCTIONS, "dotations": DOTATIONS,
+                 "beneficiaires": BENEFICIAIRES}
     for table, colonnes in nouvelles.items():
         connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
     lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
@@ -219,6 +252,8 @@ def main():
     connexion.execute("CREATE INDEX comptes_budgets_lot ON comptes_budgets (lot, concept)")
     connexion.execute("CREATE INDEX comptes_budgets_siren ON comptes_budgets (siren)")
     connexion.execute("CREATE INDEX budgets_cle ON budgets (lot, budget)")
+    connexion.execute("CREATE INDEX comptes_fonctions_lot ON comptes_fonctions (lot, concept, niveau)")
+    connexion.execute("CREATE INDEX comptes_fonctions_siren ON comptes_fonctions (siren)")
     connexion.execute("CREATE INDEX dotations_lot ON dotations (lot, variable)")
     connexion.execute("CREATE INDEX dotations_code ON dotations (code)")
     connexion.execute("CREATE INDEX beneficiaires_cle ON beneficiaires (lot, code)")
