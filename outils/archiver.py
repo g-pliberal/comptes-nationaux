@@ -2,11 +2,14 @@
 """Télécharge des fichiers d'une source, en archive une copie dans base/archives/ et les inscrit
 dans la table des fichiers avec leur empreinte.
 
-    python3 outils/archiver.py <source_id> "<url>" ["<url>"…] [--compresser]
+    python3 outils/archiver.py <source_id> "<url>" ["<url>"…] [--compresser] [--decouper]
 
 Un fichier identique à une copie déjà archivée pour la même source n'est pas dupliqué. Avec
 --compresser, pour un gros fichier, la copie est enregistrée compressée (bzip2) : son empreinte et
-sa taille restent celles du contenu reçu, que le contrôle retrouve en la décompressant. Une connexion
+sa taille restent celles du contenu reçu, que le contrôle retrouve en la décompressant. Avec --decouper, un
+fichier trop gros pour le dépôt (GitHub refuse les fichiers de plus de 100 Mo) est enregistré en morceaux
+(« .partie01 », « .partie02 »…), que la lecture recolle : son empreinte et sa taille restent celles du
+contenu reçu. Une connexion
 coupée avant la fin du téléchargement est réessayée ; une erreur renvoyée par le serveur ne l'est pas.
 Pour un export de data.ofgl.fr, la date de modification du jeu de données est lue avant son premier
 fichier et après chacun : si elle change, l'archivage s'arrête, et les fichiers déjà inscrits gardent
@@ -27,7 +30,8 @@ import time
 import urllib.error
 import urllib.request
 
-from commun import AGENT, BASE, aujourdhui, champs, date_html, date_xlsx, ecrire, lire, lire_sdmx, maintenant, texte_html
+from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_xlsx, date_zip, ecrire, lire, lire_sdmx,
+                    maintenant, texte_html)
 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
 
@@ -63,15 +67,15 @@ def date_ofgl(url):
     return fiche["metas"]["default"]["modified"]
 
 
-def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser):
+def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper):
     """Inscrit une copie dans la table des fichiers ; renvoie son identifiant. La table reste verrouillée de sa
     lecture à son écriture, pour qu'un autre archivage n'y efface pas cette inscription."""
     with (BASE / "tables" / "fichiers.csv").open("a") as verrou:
         fcntl.flock(verrou, fcntl.LOCK_EX)
-        return inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser)
+        return inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper)
 
 
-def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser):
+def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper):
     sha256 = hashlib.sha256(contenu).hexdigest()
     fichiers = lire("tables/fichiers.csv")
     deja = next((f for f in fichiers if f["sha256"] == sha256 and f["source_id"] == source_id), None)
@@ -79,21 +83,29 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser):
         return f"déjà archivé : {deja['id']}"
     extension = ("json" if "json" in type_contenu else "xlsx" if "spreadsheetml" in type_contenu
                  else "csv" if "csv" in type_contenu else "html" if "html" in type_contenu
-                 else "xml" if "xml" in type_contenu else "bin")
+                 else "xml" if "xml" in type_contenu else "zip" if "zip" in type_contenu else "bin")
     if compresser and extension != "csv":
         sys.exit("seul un fichier csv s'archive compressé")
+    if compresser and decouper:
+        sys.exit("une copie s'archive compressée ou découpée, pas les deux")
     date = aujourdhui()
     chemin = f"archives/{source_id}/{date}-{sha256[:8]}.{extension}" + (".bz2" if compresser else "")
     (BASE / chemin).parent.mkdir(parents=True, exist_ok=True)
-    (BASE / chemin).write_bytes(bz2.compress(contenu, 9) if compresser else contenu)
+    if decouper and len(contenu) > TAILLE_MORCEAU:
+        for k in range(0, len(contenu), TAILLE_MORCEAU):
+            (BASE / f"{chemin}.partie{k // TAILLE_MORCEAU + 1:02d}").write_bytes(contenu[k:k + TAILLE_MORCEAU])
+    else:
+        (BASE / chemin).write_bytes(bz2.compress(contenu, 9) if compresser else contenu)
     # Date de mise à jour annoncée par la source : champ « updated » du JSON-stat d'Eurostat, date de
     # modification inscrite dans le classeur pour un fichier xlsx, date d'enregistrement, de transmission ou
     # d'adoption d'un texte publié par le Sénat, dernière mise à jour des séries SDMX de l'Insee, date de
-    # modification du jeu de données pour un export de data.ofgl.fr.
+    # modification du jeu de données pour un export de data.ofgl.fr, date la plus récente des fichiers que porte une
+    # archive zip.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(contenu.decode("utf-8"))),
-                                "xml": lambda: max(a.get("LAST_UPDATE", "") for a, _ in lire_sdmx(BASE / chemin).values())
+                                "xml": lambda: max(a.get("LAST_UPDATE", "") for a, _ in lire_sdmx(BASE / chemin).values()),
+                                "zip": lambda: date_zip(contenu)
                                 }.get(extension, lambda: "")()
     identifiant = f"{source_id}@{date}-{sha256[:8]}"
     fichiers.append({"id": identifiant, "source_id": source_id, "url": url, "telecharge_le": maintenant(),
@@ -107,6 +119,7 @@ def main():
     parser.add_argument("source_id", help="identifiant de la source, déclaré dans tables/sources.csv")
     parser.add_argument("urls", nargs="+", metavar="url", help="requête exacte à archiver")
     parser.add_argument("--compresser", action="store_true", help="archiver les copies compressées (bzip2)")
+    parser.add_argument("--decouper", action="store_true", help="archiver en morceaux une copie trop grosse pour le dépôt")
     args = parser.parse_args()
 
     if args.source_id not in {s["id"] for s in lire("tables/sources.csv")}:
@@ -120,7 +133,7 @@ def main():
         contenu, type_contenu = telecharger(url)
         if date_ofgl(url) != dates[jeu]:
             sys.exit(f"le jeu de données a été modifié pendant le téléchargement de {url} : recommencer")
-        print(archiver(args.source_id, url, contenu, type_contenu, dates[jeu], args.compresser), flush=True)
+        print(archiver(args.source_id, url, contenu, type_contenu, dates[jeu], args.compresser, args.decouper), flush=True)
 
 
 if __name__ == "__main__":

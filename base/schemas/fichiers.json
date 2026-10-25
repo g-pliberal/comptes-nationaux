@@ -8,7 +8,7 @@
     {"name": "mis_a_jour_source", "type": "string", "description": "Date de mise à jour annoncée par la source, telle qu'elle l'écrit."},
     {"name": "sha256", "type": "string", "description": "Empreinte du contenu reçu, celui d'une copie compressée une fois décompressée.", "constraints": {"required": true, "pattern": "[0-9a-f]{64}"}},
     {"name": "octets", "type": "integer", "description": "Taille du contenu reçu, celle d'une copie compressée une fois décompressée.", "constraints": {"required": true}},
-    {"name": "chemin", "type": "string", "description": "Emplacement de la copie, relatif au dossier base/ ; « .bz2 » à la fin si elle est compressée.", "constraints": {"required": true}}
+    {"name": "chemin", "type": "string", "description": "Emplacement de la copie, relatif au dossier base/ ; « .bz2 » à la fin si elle est compressée. Une copie découpée est conservée en morceaux qui portent ce chemin suivi de « .partie01 », « .partie02 »…", "constraints": {"required": true}}
   ],
   "primaryKey": ["id"],
   "foreignKeys": [

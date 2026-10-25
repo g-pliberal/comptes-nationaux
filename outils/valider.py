@@ -3,7 +3,8 @@
 
 Vérifie que chaque table respecte son schéma, que chaque référence existe, que chaque
 identifiant de chiffre correspond à sa fiche et que chaque copie archivée est intacte ; relit
-chaque copie des comptes de chaque collectivité, qui doit donner son inscription.
+chaque copie des comptes de chaque collectivité, et chaque fichier du recensement des éléments
+d'imposition (REI), qui doit donner son inscription.
 
     python3 outils/valider.py
 """
@@ -14,7 +15,8 @@ import re
 import sys
 
 import importer_ofgl_collectivites as ofgl
-from commun import (BASE, empreinte_et_taille, identifiant, lire, lire_jsonstat, lire_sdmx, lire_tableaux_html, lire_xlsx,
+import importer_rei as rei
+from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_jsonstat, lire_sdmx, lire_tableaux_html, lire_xlsx,
                     nombre_de_phrase, nombre_texte, paquet, ressources_chiffres, texte_html)
 
 
@@ -178,7 +180,7 @@ def controler_valeurs(tables, erreurs):
     for r in ressources_chiffres():
         for n, ligne in enumerate(tables[r["name"]], start=2):
             fichier = fichiers.get(ligne["fichier_id"])
-            if ligne["nature"] != "publie" or fichier is None or not (BASE / fichier["chemin"]).exists():
+            if ligne["nature"] != "publie" or fichier is None or not copie_presente(BASE / fichier["chemin"]):
                 continue
             archive = valeur_archivee(fichier, ligne["emplacement"], copies)
             if archive == "sans lecteur":
@@ -199,7 +201,7 @@ def controler_valeurs(tables, erreurs):
 def controler_archives(tables, erreurs):
     for n, f in enumerate(tables["fichiers"], start=2):
         chemin = BASE / f["chemin"]
-        if not chemin.exists():
+        if not copie_presente(chemin):
             erreurs.append(f"tables/fichiers.csv, ligne {n} : copie absente ({f['chemin']})")
         elif empreinte_et_taille(chemin) != (f["sha256"], int(f["octets"])):
             erreurs.append(f"tables/fichiers.csv, ligne {n} : la copie {f['chemin']} a été modifiée")
@@ -232,6 +234,32 @@ def controler_collectivites(tables, erreurs):
     return relues["comptes"], relues["fonctions"], relues["fiscalite"], relues["dotations"]
 
 
+def controler_rei(tables, erreurs):
+    """Relit chaque copie inscrite dans fichiers_rei.csv, avec ce qu'en retient le référentiel des variables : son
+    contenu doit donner son inscription. Renvoie le nombre de copies relues et celui de leurs communes."""
+    fichiers = {f["id"]: f for f in tables["fichiers"]}
+    relues = communes = 0
+    vues = {}
+    for n, inscrit in enumerate(tables["fichiers_rei"], start=2):
+        lieu = f"tables/fichiers_rei.csv, ligne {n}"
+        if (inscrit["exercice"], inscrit["version"]) in vues:
+            erreurs.append(f"{lieu} : une copie de même exercice et de même version est inscrite ligne "
+                           f"{vues[(inscrit['exercice'], inscrit['version'])]}")
+        vues[(inscrit["exercice"], inscrit["version"])] = n
+        if inscrit["fichier_id"] not in fichiers:
+            continue  # référence déjà signalée
+        try:
+            attendue = rei.inscription(fichiers[inscrit["fichier_id"]])
+        except SystemExit as e:
+            erreurs.append(f"{lieu} : {e}")
+            continue
+        if attendue != inscrit:
+            erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
+        relues += 1
+        communes += int(inscrit["communes"])
+    return relues, communes
+
+
 def lignes_relues(relues):
     """« 12 lignes de comptes de collectivités, 3 lignes de dépenses par fonction, 5 lignes de fiscalité directe locale
     et 4 lignes de dotations »."""
@@ -250,6 +278,7 @@ def main():
     controler_archives(tables, erreurs)
     relus, sans_lecteur = controler_valeurs(tables, erreurs)
     relues = controler_collectivites(tables, erreurs)
+    copies_rei, communes_rei = controler_rei(tables, erreurs)
     for e in erreurs:
         print(e)
     if erreurs:
@@ -257,7 +286,8 @@ def main():
     print(f"Base conforme : {nombre} chiffres, {len(tables['fichiers'])} copies archivées intactes, "
           f"{relus} chiffres publiés relus dans leur copie archivée"
           + (f", {sans_lecteur} sans lecteur automatique" if sans_lecteur else "")
-          + (f" ; {lignes_relues(relues)} relues dans les leurs." if any(relues) else "."))
+          + (f" ; {lignes_relues(relues)} relues dans les leurs" if any(relues) else "")
+          + (f" ; {copies_rei} fichiers du REI relus, soit {communes_rei} lignes de communes." if copies_rei else "."))
 
 
 if __name__ == "__main__":

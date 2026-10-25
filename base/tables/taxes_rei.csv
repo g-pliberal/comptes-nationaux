@@ -1,0 +1,20 @@
+taxe,libelle,notes
+CFE,Cotisation foncière des entreprises,"Le REI y rattache la taxe additionnelle pour frais de chambres de commerce et d'industrie, la taxe pour frais de chambres de métiers et de l'artisanat, la taxe spéciale d'équipement, la taxe additionnelle spéciale annuelle d'Île-de-France, la taxe spéciale complémentaire et la taxe GEMAPI, qui en partagent la base."
+CVAE,Cotisation sur la valeur ajoutée des entreprises,"Part de chaque bénéficiaire, sur le territoire de la commune, jusqu'aux impositions de 2022 ; la cotisation est collectée nationalement et répartie selon le lieu de la valeur ajoutée."
+IFER_BAR,Imposition forfaitaire sur les entreprises de réseaux : centrales hydrauliques,"Article 1519 F du code général des impôts. Sur le territoire de la commune où sont les installations."
+IFER_EOL,Imposition forfaitaire sur les entreprises de réseaux : éoliennes terrestres,"Article 1519 D du code général des impôts. Sur le territoire de la commune où sont les installations."
+IFER_GAZ,Imposition forfaitaire sur les entreprises de réseaux : installations gazières,"Article 1519 HA du code général des impôts. Sur le territoire de la commune où sont les installations."
+IFER_GEO,Imposition forfaitaire sur les entreprises de réseaux : centrales géothermiques,"Article 1519 HB du code général des impôts. Sur le territoire de la commune où sont les installations."
+IFER_HYD,Imposition forfaitaire sur les entreprises de réseaux : hydroliennes,"Article 1519 D du code général des impôts. Sur le territoire de la commune où sont les installations."
+IFER_NUC,Imposition forfaitaire sur les entreprises de réseaux : centrales nucléaires et thermiques à flamme,"Article 1519 E du code général des impôts. Sur le territoire de la commune où sont les installations."
+IFER_PV,Imposition forfaitaire sur les entreprises de réseaux : centrales photovoltaïques,"Article 1519 F du code général des impôts. Sur le territoire de la commune où sont les installations."
+IFER_RAD,Imposition forfaitaire sur les entreprises de réseaux : stations radioélectriques,"Article 1519 H du code général des impôts. Sur le territoire de la commune où sont les installations."
+IFER_TRA,Imposition forfaitaire sur les entreprises de réseaux : transformateurs électriques,"Article 1519 G du code général des impôts. Sur le territoire de la commune où sont les installations."
+TAFNB,Taxe additionnelle à la taxe foncière sur les propriétés non bâties,
+TASCOM,Taxe sur les surfaces commerciales,
+TEOM,Taxe d'enlèvement des ordures ménagères,"Le REI en donne la part fixe par zone de taux, sans dire lequel, de la commune, du syndicat ou du groupement, la perçoit : la fiche de la commune le dit (teom_niveau et teom_beneficiaire de la table communes_rei)."
+TFPB,Taxe foncière sur les propriétés bâties,"Le REI y rattache la taxe spéciale d'équipement, la taxe additionnelle spéciale annuelle d'Île-de-France et la taxe GEMAPI, qui en partagent la base."
+TFPNB,Taxe foncière sur les propriétés non bâties,"Le REI y rattache la taxe additionnelle pour frais de chambres d'agriculture, les cotisations à la caisse d'assurance accidents agricoles d'Alsace-Moselle, la taxe spéciale d'équipement et la taxe GEMAPI, qui en partagent la base."
+TH,Taxe d'habitation,"Jusqu'aux impositions de 2022, sur les résidences principales et secondaires ; en 2021 et 2022, la taxe sur les résidences principales, que paient encore les foyers non exonérés, revient à l'État. Le REI y rattache la taxe spéciale d'équipement et la taxe GEMAPI."
+THLV,Taxe d'habitation sur les logements vacants,
+THRS,Taxe d'habitation sur les résidences secondaires et autres locaux meublés non affectés à l'habitation principale,"Depuis les impositions de 2023, quand la taxe d'habitation sur les résidences principales a disparu."

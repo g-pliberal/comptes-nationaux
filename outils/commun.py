@@ -1,11 +1,13 @@
 """Fonctions partagées par les outils de la base : chemins, lecture et écriture des tables, empreintes."""
 
+import bisect
 import bz2
 import csv
 import datetime
 import hashlib
 import html
 import io
+import itertools
 import json
 import math
 import pathlib
@@ -28,15 +30,81 @@ COMPOSANTES_ID = ["source_id", "zone", "perimetre_id", "concept_id", "fonction_i
                   "unite_id", "periode", "version"]
 
 
+# Une copie trop grosse pour tenir dans un seul fichier du dépôt (GitHub refuse les fichiers de plus de 100 Mo) est
+# archivée en morceaux de TAILLE_MORCEAU octets au plus, nommés d'après son chemin : « .partie01 », « .partie02 »… ; on
+# la lit en les recollant, et son empreinte est celle du contenu recollé.
+TAILLE_MORCEAU = 45 << 20
+
+
+def morceaux(chemin):
+    """Les morceaux d'une copie découpée, dans l'ordre ; aucun pour une copie d'un seul tenant."""
+    chemin = pathlib.Path(chemin)
+    if not chemin.parent.is_dir():
+        return []
+    motif = re.compile(re.escape(chemin.name) + r"\.partie[0-9]{2}")
+    return sorted(p for p in chemin.parent.iterdir() if motif.fullmatch(p.name))
+
+
+def copie_presente(chemin):
+    """Vrai si la copie est archivée, d'un seul tenant ou en morceaux."""
+    return pathlib.Path(chemin).exists() or bool(morceaux(chemin))
+
+
+class _Recollee(io.RawIOBase):
+    """Les morceaux d'une copie découpée, lus comme un seul fichier, où l'on peut se déplacer comme dans un fichier
+    (zipfile lit le répertoire d'une archive à sa fin)."""
+
+    def __init__(self, parties):
+        super().__init__()
+        self._fichiers = [p.open("rb") for p in parties]
+        self._tailles = [p.stat().st_size for p in parties]
+        self._debuts = list(itertools.accumulate([0] + self._tailles[:-1]))
+        self._taille, self._position = sum(self._tailles), 0
+
+    def readable(self):
+        return True
+
+    def seekable(self):
+        return True
+
+    def tell(self):
+        return self._position
+
+    def seek(self, decalage, origine=io.SEEK_SET):
+        depart = {io.SEEK_SET: 0, io.SEEK_CUR: self._position, io.SEEK_END: self._taille}[origine]
+        self._position = max(0, depart + decalage)
+        return self._position
+
+    def readinto(self, tampon):
+        if self._position >= self._taille:
+            return 0
+        k = bisect.bisect_right(self._debuts, self._position) - 1
+        self._fichiers[k].seek(self._position - self._debuts[k])
+        reste = self._debuts[k] + self._tailles[k] - self._position
+        n = self._fichiers[k].readinto(memoryview(tampon)[:min(len(tampon), reste)])
+        self._position += n
+        return n
+
+    def close(self):
+        for f in self._fichiers:
+            f.close()
+        super().close()
+
+
 def ouvrir_copie(chemin):
     """Une copie archivée, ouverte en lecture binaire telle que reçue : décompressée si elle a été archivée compressée
-    (« .bz2 »)."""
+    (« .bz2 »), recollée si elle l'a été en morceaux."""
     chemin = pathlib.Path(chemin)
-    return bz2.open(chemin, "rb") if chemin.suffix == ".bz2" else chemin.open("rb")
+    if chemin.suffix == ".bz2":
+        return bz2.open(chemin, "rb")
+    if not chemin.exists() and (parties := morceaux(chemin)):
+        return io.BufferedReader(_Recollee(parties), buffer_size=1 << 20)
+    return chemin.open("rb")
 
 
 def empreinte_et_taille(chemin):
-    """Empreinte SHA-256 et taille en octets du contenu reçu, décompressé pour une copie compressée."""
+    """Empreinte SHA-256 et taille en octets du contenu reçu, décompressé pour une copie compressée, recollé pour une
+    copie découpée."""
     h, n = hashlib.sha256(), 0
     with ouvrir_copie(chemin) as f:
         while bloc := f.read(1 << 20):
@@ -203,6 +271,73 @@ def lire_xlsx(chemin, feuille=None):
 def feuilles_xlsx(chemin):
     with zipfile.ZipFile(chemin) as classeur:
         return [f.get("name") for f in ET.fromstring(classeur.read("xl/workbook.xml")).find("m:sheets", _XLSX)]
+
+
+# Lecture en flux d'une feuille trop grande pour lire_xlsx (des dizaines de millions de cellules) : les lignes une à une,
+# sans construire l'arbre XML. La valeur d'une cellule qui n'a qu'elle (« <v>…</v> », le cas de presque toutes) se lit
+# d'emblée ; celle d'une autre (texte en ligne, formule) dans son contenu. Un texte peut y échapper un caractère sous la
+# forme « _x0030_ » (ici « 0 »).
+_CELLULE = re.compile(rb'<c r="([A-Z]+)[0-9]+"([^>]*?)(?:/>|><v>([^<]*)</v></c>|>(.*?)</c>)', re.S)
+_VALEUR = re.compile(rb"<v>([^<]*)</v>")
+_TEXTE = re.compile(rb"<t[^>]*>([^<]*)</t>")
+_TYPE = re.compile(rb' t="([a-zA-Z]+)"')
+_ECHAPPEMENT = re.compile(r"_x([0-9A-Fa-f]{4})_")
+
+
+def texte_xlsx(texte):
+    """Un texte d'une cellule, ses caractères échappés (« _x0030_ ») rétablis."""
+    return _ECHAPPEMENT.sub(lambda m: chr(int(m.group(1), 16)), texte)
+
+
+def lignes_xlsx(classeur, feuille):
+    """Les lignes d'une feuille d'un classeur xlsx ouvert (zipfile.ZipFile), lues en flux : pour chacune, {colonne:
+    texte} ; un nombre reste écrit comme dans le fichier, une cellule vide est absente."""
+    cibles = {lien.get("Id"): lien.get("Target")
+              for lien in ET.fromstring(classeur.read("xl/_rels/workbook.xml.rels"))}
+    feuilles = {f.get("name"): cibles[f.get(f"{{{_XLSX['r']}}}id")]
+                for f in ET.fromstring(classeur.read("xl/workbook.xml")).find("m:sheets", _XLSX)}
+    cible = feuilles[feuille]
+    partagees = []
+    if "xl/sharedStrings.xml" in classeur.namelist():
+        partagees = [texte_xlsx(_textes(si)) for si in ET.fromstring(classeur.read("xl/sharedStrings.xml"))
+                     .findall("m:si", _XLSX)]
+    reste = b""
+    with classeur.open(cible.lstrip("/") if cible.startswith("/") else f"xl/{cible}") as flux:
+        while bloc := flux.read(1 << 24):
+            reste += bloc
+            fin = reste.rfind(b"</row>")
+            if fin < 0:
+                continue
+            complet, reste = reste[:fin + 6], reste[fin + 6:]
+            for rangee in complet.split(b"</row>")[:-1]:
+                debut = rangee.find(b"<row")
+                if debut < 0:
+                    continue
+                valeurs = {}
+                for colonne, attributs, valeur, contenu in _CELLULE.findall(rangee, debut):
+                    type_ = _TYPE.search(attributs) if b" t=" in attributs else None
+                    type_ = type_.group(1) if type_ else b"n"
+                    if type_ == b"inlineStr":
+                        valeurs[colonne.decode()] = texte_xlsx(html.unescape(
+                            "".join(t.decode() for t in _TEXTE.findall(contenu))))
+                        continue
+                    if not valeur:
+                        v = _VALEUR.search(contenu) if contenu else None
+                        if v is None or not v.group(1):
+                            continue
+                        valeur = v.group(1)
+                    texte = valeur.decode()
+                    valeurs[colonne.decode()] = (partagees[int(texte)] if type_ == b"s" else
+                                                 texte_xlsx(html.unescape(texte)) if type_ == b"str" else texte)
+                yield valeurs
+
+
+def date_zip(contenu):
+    """Date de modification la plus récente des fichiers que porte une archive zip, telle que l'y a inscrite son
+    producteur."""
+    with zipfile.ZipFile(io.BytesIO(contenu)) as archive:
+        dates = [i.date_time for i in archive.infolist() if not i.is_dir()]
+    return "%04d-%02d-%02dT%02d:%02d:%02d" % max(dates) if dates else ""
 
 
 def date_xlsx(chemin):
