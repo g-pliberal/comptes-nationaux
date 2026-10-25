@@ -1,0 +1,16 @@
+{
+  "description": "Variables du REI que la base retient : pour chaque taxe, chaque destinataire (la collectivité, l'organisme ou l'État qui perçoit la part, ou, pour la taxe d'enlèvement des ordures ménagères, la zone de taux) et chaque grandeur, le code de la variable qui la donne, de son premier à son dernier exercice. Le titre de chaque variable, chaque année, est dans la table traces_rei de la base construite. Plusieurs variables d'un même exercice qui donnent la base ou le produit d'une même imposition s'additionnent ; une variable dont le montant est celui d'une collectivité, répété sur chacune de ses communes (l'IFER du matériel roulant ferroviaire et des répartiteurs principaux, la part de CVAE des chambres de commerce et d'industrie régionales, la DCRTP, les fractions de TVA, les allocations compensatrices), n'est pas retenue.",
+  "fields": [
+    {"name": "taxe", "type": "string", "constraints": {"required": true}},
+    {"name": "destinataire", "type": "string", "constraints": {"required": true}},
+    {"name": "grandeur", "type": "string", "description": "base : base nette d'imposition ; taux_net : taux appliqué sur le territoire de la commune ; taux_vote : taux voté, qui diffère du taux net en cas d'intégration fiscale progressive ; produit : montant de l'imposition (montant réel, ou net, selon les années).", "constraints": {"required": true, "enum": ["base", "taux_net", "taux_vote", "produit"]}},
+    {"name": "code", "type": "string", "description": "Code de la variable, tel qu'il figure au tracé du fichier.", "constraints": {"required": true}},
+    {"name": "premier_exercice", "type": "string", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "dernier_exercice", "type": "string", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["taxe", "destinataire", "grandeur", "code", "premier_exercice"],
+  "foreignKeys": [
+    {"fields": ["taxe"], "reference": {"resource": "taxes_rei", "fields": ["taxe"]}}
+  ]
+}

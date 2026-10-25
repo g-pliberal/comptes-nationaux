@@ -25,7 +25,11 @@ vérifie ce que disent les sources elles-mêmes :
    les identités comptables dans chaque fonction, et les fonctions réunies contre les comptes consolidés ;
 10. la fiscalité directe locale de chaque commune : le produit de chaque taxe contre sa base multipliée par son
    taux, le taux net contre le taux voté, et la taxe d'enlèvement des ordures ménagères recensée contre celle des
-   comptes.
+   comptes ;
+11. le recensement des éléments d'imposition de la DGFiP : le produit de chaque imposition contre sa base
+   multipliée par son taux, la base simplifiée de l'OFGL contre le recensement dont elle est tirée, commune par
+   commune, le produit de chaque taxe et de chaque niveau qui perçoit, et la taxe d'enlèvement des ordures
+   ménagères recensée de chaque niveau contre celle de ses comptes.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -40,6 +44,7 @@ import math
 import re
 
 import importer_ofgl_collectivites as ofgl
+import importer_rei as rei
 from commun import RACINE, lire, ressources_chiffres
 
 RAPPORT = RACINE / "controles" / "coherence.md"
@@ -1280,6 +1285,135 @@ def fiscalite_locale():
     return exercices, produits, taux, teom
 
 
+# Les impositions de la base simplifiée de l'OFGL (taxe, bénéficiaires) et les destinataires du REI dont elle les tire :
+# la part intercommunale de la CFE se compare toutes zones réunies, l'OFGL ne la répartissant pas entre les régimes
+# fiscaux comme le REI ; l'effet du coefficient correcteur, que l'OFGL range dans la TFPB des communes, n'est pas un
+# impôt.
+COMPARAISONS_REI = [
+    ("TFPB", ("Commune",), ("commune",)), ("TFPB", ("Syndicat",), ("syndicats",)), ("TFPB", ("GFP",), ("groupement",)),
+    ("TFPB", ("Département",), ("département",)), ("TFPB", ("Région (TASA)",), ("région Île-de-France (TASA)",)),
+    ("TFPB", ("GFP (GEMAPI)",), ("groupement (GEMAPI)",)),
+    ("TFPNB", ("Commune",), ("commune",)), ("TFPNB", ("Syndicat",), ("syndicats",)), ("TFPNB", ("GFP",), ("groupement",)),
+    ("TFPNB", ("GFP (GEMAPI)",), ("groupement (GEMAPI)",)),
+    ("CFE", ("Commune",), ("commune",)), ("CFE", ("Syndicat",), ("syndicats",)),
+    ("CFE", ("GFP / hors zone", "GFP / en ZAE", "GFP / en zone éolienne"),
+     ("groupement, fiscalité additionnelle ou de zone, hors zone", "groupement, fiscalité unique ou zone d'activités",
+      "groupement, zone éolienne")),
+    ("CFE", ("Région (TASA)",), ("région Île-de-France (TASA)",)), ("CFE", ("GFP (GEMAPI)",), ("groupement (GEMAPI)",)),
+    ("TEOM", ("Divers / zone taux plein",), ("zone à taux plein",)),
+    ("TEOM", ("Divers / zone taux réduit A",), ("zone à taux réduit A",)),
+    ("TEOM", ("Divers / zone taux réduit B",), ("zone à taux réduit B",)),
+    ("TEOM", ("Divers / zone taux réduit C",), ("zone à taux réduit C",)),
+    ("TEOM", ("Divers / zone taux réduit D",), ("zone à taux réduit D",))]
+# Le niveau qui perçoit chaque part, d'après son destinataire ; pour la part fixe de la TEOM, que le REI donne par zone de
+# taux, d'après le niveau que la fiche de la commune dit la percevoir.
+NIVEAUX_REI = [(r"zone à ", None), (r"(part incitative, )?commune", "communes"),
+               (r"(part incitative, )?syndicats", "syndicats"),
+               (r"(part incitative, )?groupement|métropole du Grand Paris", "groupements"), (r"département", "départements"),
+               (r"région", "régions"), (r"État", "État"), (r"", "organismes")]
+NIVEAUX_TEOM = {"1": "communes", "2": "syndicats", "3": "groupements"}
+ORDRE_NIVEAUX = ["communes", "syndicats", "groupements", "départements", "régions", "organismes", "État", "non dit"]
+NIVEAUX_COMPTES_TEOM = [("communes", COMMUNES), ("groupements", GFP), ("syndicats", SYNDICATS)]
+
+
+def niveau_rei(destinataire, teom_niveau):
+    for motif, niveau in NIVEAUX_REI:
+        if re.match(motif, destinataire):
+            return NIVEAUX_TEOM.get(teom_niveau, "non dit") if niveau is None else niveau
+
+
+def copies_rei():
+    """{exercice: inscription} : la copie du REI la plus récente de chaque année."""
+    retenues = {}
+    for i in lire("tables/fichiers_rei.csv"):
+        if i["exercice"] not in retenues or i["version"] > retenues[i["exercice"]]["version"]:
+            retenues[i["exercice"]] = i
+    return retenues
+
+
+def recensement():
+    """Pour chaque année du REI, dans sa copie la plus récente : son inscription et le nombre d'impositions retenues ;
+    pour chaque taxe et chaque destinataire, le produit contre la base multipliée par le taux net ; chaque imposition de
+    la base simplifiée de l'OFGL contre celles du REI dont elle est tirée, commune par commune ; le produit de chaque
+    taxe, celui de chaque niveau de collectivité ou d'organisme, et la TEOM de chaque niveau, chaque année."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    referentiel = lire("tables/variables_rei.csv")
+    simplifiee = montants_retenus()
+    annees = []  # (inscription, impositions retenues)
+    # (taxe, destinataire) → [lignes comparées, égales à l'arrondi près, écart de moins de SEUIL_PRODUIT, au-delà, pire
+    # écart au-delà (écart, base multipliée par le taux, exercice, commune, nom)]
+    produits = collections.defaultdict(lambda: [0, 0, 0, 0, None])
+    # (taxe, bénéficiaires de l'OFGL) → [exercices, communes comparées, égales, en écart, sous secret statistique dans
+    # la base simplifiée, produit de la base simplifiée, produit du REI, pire écart (écart, exercice, commune, nom)]
+    comparaisons = collections.defaultdict(lambda: [set(), 0, 0, 0, 0, 0.0, 0.0, None])
+    par_taxe = collections.defaultdict(float)  # (taxe, exercice) → produit
+    communes_taxe = collections.defaultdict(set)  # (taxe, exercice) → communes où le REI donne un produit de la taxe
+    par_niveau = collections.defaultdict(float)  # (niveau, exercice) → produit
+    teom = collections.defaultdict(float)  # (niveau, exercice) → TEOM, part fixe et part incitative
+    for exercice, inscrit in sorted(copies_rei().items()):
+        _, variables, _, lignes = rei.lignes_communes(fichiers[inscrit["fichier_id"]])
+        retenus = rei.postes(exercice, variables, referentiel, inscrit["fichier_id"])
+        recenses, noms, nombre = {}, {}, 0  # (commune, taxe, destinataire) → produit ; commune → nom
+        for commune, valeurs in lignes:
+            noms[commune] = valeurs["LIBCOM"].strip()
+            teom_niveau = valeurs.get("F71", "").strip()
+            for taxe, destinataire, base, net, _, produit, m_base, m_net, _, m_produit in rei.impositions(
+                    valeurs, retenus, marges=True):
+                nombre += 1
+                if produit is None:
+                    continue
+                recenses[(commune, taxe, destinataire)] = produit
+                niveau = niveau_rei(destinataire, teom_niveau)
+                par_taxe[(taxe, exercice)] += produit
+                communes_taxe[(taxe, exercice)].add(commune)
+                par_niveau[(niveau, exercice)] += produit
+                if taxe == "TEOM":
+                    teom[(niveau, exercice)] += produit
+                if base is None or net is None:
+                    continue
+                calcule = base * net / 100
+                ecart = produit - calcule
+                entree = produits[(taxe, destinataire)]
+                entree[0] += 1
+                if not depasse(ecart, m_produit + base * m_net / 100 + net * m_base / 100):
+                    entree[1] += 1
+                elif abs(ecart) < SEUIL_PRODUIT * abs(calcule):
+                    entree[2] += 1
+                else:
+                    entree[3] += 1
+                    if entree[4] is None or abs(ecart) > abs(entree[4][0]):
+                        entree[4] = (ecart, calcule, exercice, commune, noms[commune])
+        annees.append((inscrit, nombre))
+        inscrit_ofgl = simplifiee.get((FISCALE, exercice))
+        if not inscrit_ofgl:
+            continue
+        publies = {(c, taxe, b): produit for c, taxe, b, _, _, _, produit, _
+                   in ofgl.montants_fiscalite(fichiers[inscrit_ofgl["fichier_id"]])}
+        communes = {c for c, _, _ in publies} | {c for c, _, _ in recenses}
+        for taxe, beneficiaires, destinataires in COMPARAISONS_REI:
+            entree = comparaisons[(taxe, beneficiaires)]
+            for commune in communes:
+                o = [publies.get((commune, taxe, b), 0.0) for b in beneficiaires]
+                r = sum(recenses.get((commune, taxe, d), 0.0) for d in destinataires)
+                if not r and not any(o):
+                    continue
+                entree[0].add(exercice)
+                if None in o:
+                    entree[4] += 1
+                    continue
+                ecart = r - sum(o)
+                entree[1] += 1
+                entree[5] += sum(o)
+                entree[6] += r
+                if depasse(ecart, 0.5 * (len(beneficiaires) + len(destinataires))):
+                    entree[3] += 1
+                    if entree[7] is None or abs(ecart) > abs(entree[7][0]):
+                        entree[7] = (ecart, exercice, commune, noms.get(commune, ""))
+                else:
+                    entree[2] += 1
+    return annees, produits, comparaisons, par_taxe, {k: len(v) for k, v in communes_taxe.items()}, par_niveau, teom
+
+
 # --- Le rapport ----------------------------------------------------------------------------------------
 
 def fr(x, decimales, signe=False):
@@ -1661,7 +1795,7 @@ def partie_collectivites(derniers):
                           f"{ecart_lisible(e[4], 'euros')} en {e[3]} |")
         lignes.append("")
     return (lignes + partie_fiches_dgcl(listes, fiches) + partie_flux(listes, flux) + partie_fonctions(listes)
-            + partie_fiscalite(listes, teom))
+            + partie_fiscalite(listes, teom) + partie_rei(teom))
 
 
 def concepts_lisibles(concepts):
@@ -2145,6 +2279,130 @@ def partie_fiscalite(listes, teom_comptes):
             ecart = teom[exercice][0] - sum(comptes)
             lignes.append(f"| {exercice} | {millions(teom[exercice][0])} | "
                           + " | ".join(millions(c) for c in comptes)
+                          + f" | {ecart_lisible(ecart, 'euros')} ({pour_cent(ecart / sum(comptes)) if sum(comptes) else '—'}) |")
+        lignes.append("")
+    return lignes
+
+
+def partie_rei(teom_comptes):
+    """Le recensement des éléments d'imposition (REI) : les fichiers lus, le produit contre la base multipliée par le
+    taux, la base simplifiée de l'OFGL contre le REI, le produit de chaque taxe et de chaque niveau, chaque année, et la
+    TEOM recensée de chaque niveau contre celle de ses comptes."""
+    annees, produits, comparaisons, par_taxe, communes_taxe, par_niveau, teom = recensement()
+    if not annees:
+        return []
+    exercices = [i["exercice"] for i, _ in annees]
+    lignes = ["## 11. Recensement des éléments d'imposition", "",
+              "Le fichier de recensement des éléments d'imposition à la fiscalité directe locale (REI) de la DGFiP donne, "
+              "pour le territoire de chaque commune, les bases, les taux et les produits de toutes les impositions "
+              "directes locales et de leurs taxes annexes, pour chacun de leurs destinataires : collectivités, "
+              "organismes (établissements publics fonciers, chambres consulaires, caisse d'assurance accidents "
+              "agricoles, Société du grand projet du Sud-Ouest) et État, qui perçoit des frais sur les impositions et, en "
+              "2021 et 2022, la taxe d'habitation sur les résidences principales. Ce sont les impositions du rôle "
+              "général de l'année, sans les rôles supplémentaires. La base en retient les variables que décrit "
+              "tables/variables_rei.csv : chacune figure au tracé de chacune de ses années, son titre y dit sa "
+              "grandeur, et aucune ne donne le montant d'une collectivité répété sur chacune de ses communes, ce que "
+              "l'import vérifie. Une imposition sans base ni produit n'est pas retenue.", "",
+              "| Exercice | Version | Communes | Variables | Titres de l'en-tête différents du tracé | Valeurs illisibles "
+              "| Lignes rétablies | Impositions retenues |", "|---|---|---|---|---|---|---|---|"]
+    for inscrit, nombre in annees:
+        lignes.append(f"| {inscrit['exercice']} | {inscrit['version']} | {fr(int(inscrit['communes']), 0)} | "
+                      f"{fr(int(inscrit['variables']), 0)} | {fr(int(inscrit['titres_differents']), 0)} | "
+                      f"{fr(int(inscrit['illisibles']), 0)} | {fr(int(inscrit['lignes_realignees']), 0)} | {fr(nombre, 0)} |")
+    lignes += ["", "Les valeurs illisibles sont les marques d'une valeur manquante (« , » en 2012, « . » de 2013 à "
+               "2015), et quelques textes dans une colonne numérique ; les lignes rétablies sont celles des communes de "
+               "Franche-Comté en 2012, où l'export a fondu deux champs en un.", ""]
+    comparees = sum(e[0] for e in produits.values())
+    lignes += [f"Produit contre base multipliée par le taux net : {fr(comparees, 0)} impositions comparées, "
+               f"{fr(sum(e[1] for e in produits.values()), 0)} égales à l'arrondi près, "
+               f"{fr(sum(e[2] for e in produits.values()), 0)} en écart de moins de {fr(100 * SEUIL_PRODUIT, 0)} %, "
+               f"{fr(sum(e[3] for e in produits.values()), 0)} au-delà. La source prévient qu'un produit peut différer "
+               "de sa base multipliée par son taux, du fait du lissage de la révision des valeurs locatives des locaux "
+               "professionnels, des taux moyens d'une commune où plusieurs taux s'appliquent, ou du secret statistique.",
+               "", f"| Taxe | Destinataire | Impositions comparées | Égales à l'arrondi près | Écart de moins de "
+               f"{fr(100 * SEUIL_PRODUIT, 0)} % | Au-delà | Plus grand écart au-delà (produit − base × taux) |",
+               "|---|---|---|---|---|---|---|"]
+    for (taxe, destinataire), (n, egales, faibles, fortes, pire) in sorted(produits.items()):
+        texte = "aucun"
+        if pire:
+            ecart, calcule, exercice, commune, nom_commune = pire
+            texte = (f"{ecart_lisible(ecart, 'euros')} ({pour_cent(ecart / calcule) if calcule else 'base nulle'}) : "
+                     f"{nom_commune} ({commune}), {exercice}")
+        lignes.append(f"| {taxe} | {destinataire} | {fr(n, 0)} | {fr(egales, 0)} | {fr(faibles, 0)} | {fr(fortes, 0)} | "
+                      f"{texte} |")
+    lignes.append("")
+    if comparaisons:
+        lignes += ["La base simplifiée de la fiscalité directe locale de l'OFGL (section 10) est tirée du REI : son "
+                   "produit, pour chaque commune, chaque taxe et chaque bénéficiaire, se compare à celui des "
+                   "destinataires du REI dont il vient, à l'euro près. La part intercommunale de la CFE se compare "
+                   "toutes zones réunies ; l'effet du coefficient correcteur, que l'OFGL range dans la TFPB des "
+                   "communes depuis 2021, n'est pas un impôt et n'a pas d'équivalent ici. Saint-Martin, collectivité "
+                   "d'outre-mer, figure au REI (sous le code 97808, que forment son département et son numéro) mais "
+                   "pas dans la base simplifiée. Pour les communes de la métropole de Lyon, de 2015 à 2020, le REI "
+                   "range dans la part du groupement la TFPB que perçoit la métropole au titre du département, l'OFGL "
+                   "dans celle du département : les deux écarts se compensent.", "",
+                   "| Taxe | Bénéficiaire (OFGL) | Destinataires (REI) | Exercices | Communes comparées | Égales | "
+                   "En écart | Sous secret statistique (OFGL) | Produit OFGL | Produit REI | Plus grand écart (REI − OFGL) |",
+                   "|---|---|---|---|---|---|---|---|---|---|---|"]
+        for taxe, beneficiaires, destinataires in COMPARAISONS_REI:
+            annees_, n, egales, ecarts, secrets, o, r, pire = comparaisons[(taxe, beneficiaires)]
+            if not annees_:
+                continue
+            texte = (f"{ecart_lisible(pire[0], 'euros')} : {pire[3]} ({pire[2]}), {pire[1]}" if pire else "aucun")
+            lignes.append(f"| {taxe} | {', '.join(beneficiaires)} | {', '.join(destinataires)} | {plage(annees_)} | "
+                          f"{fr(n, 0)} | {fr(egales, 0)} | {fr(ecarts, 0)} | {fr(secrets, 0)} | {millions(o)} | "
+                          f"{millions(r)} | {texte} |")
+        lignes.append("")
+    taxes = {t["taxe"]: t["libelle"] for t in lire("tables/taxes_rei.csv")}
+    lignes += ["Produit de chaque taxe, toutes parts réunies, chaque année (en millions d'euros) :", "",
+               "| Taxe | " + " | ".join(exercices) + " |", "|---|" + "---|" * len(exercices)]
+    for taxe in sorted({t for t, _ in par_taxe}):
+        lignes.append(f"| {taxe} ({taxes[taxe]}) | "
+                      + " | ".join(fr(par_taxe[(taxe, e)] / 1e6, 1) if (taxe, e) in par_taxe else "—" for e in exercices)
+                      + " |")
+    lignes += ["", "Communes où le REI donne un produit de chaque taxe, chaque année :", "",
+               "| Taxe | " + " | ".join(exercices) + " |", "|---|" + "---|" * len(exercices)]
+    for taxe in sorted({t for t, _ in par_taxe}):
+        lignes.append(f"| {taxe} | " + " | ".join(fr(communes_taxe[(taxe, e)], 0) if (taxe, e) in communes_taxe else "—"
+                                                  for e in exercices) + " |")
+    # Une année où une taxe touche moins de la moitié des communes de l'année d'avant et de celle d'après signale un
+    # fichier qui ne la donne pas partout ; la taxe sur les résidences secondaires prolonge ici la taxe d'habitation.
+    suites = {"THRS": "TH"}
+    familles = collections.Counter()
+    for (taxe, e), n in communes_taxe.items():
+        familles[(suites.get(taxe, taxe), e)] += n
+    lacunes = []
+    for famille in sorted({f for f, _ in familles}):
+        for avant, e, apres in zip(exercices, exercices[1:], exercices[2:]):
+            n = familles.get((famille, e), 0)
+            if n and n < familles.get((famille, avant), 0) / 2 and n < familles.get((famille, apres), 0) / 2:
+                lacunes.append(f"{famille} en {e} : {fr(n, 0)} communes, contre {fr(familles[(famille, avant)], 0)} en "
+                               f"{avant} et {fr(familles[(famille, apres)], 0)} en {apres}")
+    if lacunes:
+        lignes += ["", "Un fichier peut ne pas donner une taxe pour toutes les communes, ses valeurs restant vides : "
+                   + " ; ".join(lacunes) + " (pour la taxe d'habitation, celle sur les résidences secondaires depuis "
+                   "2023). Le produit de ces années est partiel."]
+    lignes += ["", "Produit de chaque niveau qui perçoit, chaque année (en millions d'euros) ; la part fixe de la TEOM est "
+               "rapportée au niveau que la fiche de la commune dit la percevoir :", "",
+               "| Exercice | " + " | ".join(n for n in ORDRE_NIVEAUX if any((n, e) in par_niveau for e in exercices))
+               + " | Ensemble |"]
+    niveaux = [n for n in ORDRE_NIVEAUX if any((n, e) in par_niveau for e in exercices)]
+    lignes.append("|---|" + "---|" * (len(niveaux) + 1))
+    for e in exercices:
+        lignes.append(f"| {e} | " + " | ".join(fr(par_niveau.get((n, e), 0.0) / 1e6, 1) for n in niveaux)
+                      + f" | {fr(sum(par_niveau.get((n, e), 0.0) for n in niveaux) / 1e6, 1)} |")
+    lignes.append("")
+    annees_teom = [e for e in exercices if any((e, s) in teom_comptes for _, s in NIVEAUX_COMPTES_TEOM)]
+    if annees_teom:
+        lignes += ["TEOM recensée de chaque niveau, part fixe et part incitative, contre celle de ses comptes consolidés ; "
+                   "le REI range au niveau du groupement la TEOM que celui-ci perçoit pour le compte d'un syndicat :", "",
+                   "| Exercice | " + " | ".join(f"{n} : recensée | comptes" for n, _ in NIVEAUX_COMPTES_TEOM)
+                   + " | Écart d'ensemble (recensée − comptes) |", "|---|" + "---|---|" * len(NIVEAUX_COMPTES_TEOM) + "---|"]
+        for e in annees_teom:
+            recensee = [teom.get((n, e), 0.0) for n, _ in NIVEAUX_COMPTES_TEOM]
+            comptes = [teom_comptes.get((e, s), [0.0, 0.0])[0] for _, s in NIVEAUX_COMPTES_TEOM]
+            ecart = sum(recensee) - sum(comptes)
+            lignes.append(f"| {e} | " + " | ".join(f"{millions(r)} | {millions(c)}" for r, c in zip(recensee, comptes))
                           + f" | {ecart_lisible(ecart, 'euros')} ({pour_cent(ecart / sum(comptes)) if sum(comptes) else '—'}) |")
         lignes.append("")
     return lignes

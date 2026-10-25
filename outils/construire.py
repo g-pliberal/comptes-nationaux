@@ -11,15 +11,19 @@ de chaque collectivité y sont lus dans les copies archivées des exports de dat
 tables comptes_budgets et budgets, les dépenses de chaque budget des départements par fonction dans
 les tables comptes_fonctions et budgets, la fiscalité directe locale de chaque commune dans les
 tables fiscalite et communes_fiscalite, et les dotations que l'État notifie à chaque collectivité
-dans les tables dotations et beneficiaires.
+dans les tables dotations et beneficiaires. Les impositions que recense la DGFiP sur le territoire de
+chaque commune (REI) y sont lues dans les copies archivées de ses fichiers : tables impositions_rei,
+postes_rei, communes_rei et traces_rei.
 """
 
 import csv
 import hashlib
 import io
+import itertools
 import sqlite3
 
 import importer_ofgl_collectivites as ofgl
+import importer_rei as rei
 from commun import BASE, lire, paquet
 
 SORTIE = BASE / "construite"
@@ -117,6 +121,30 @@ LEFT JOIN beneficiaires b ON b.code = d.code AND b.lot = (
 WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
                    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
 
+-- Les impositions que recense la DGFiP (REI) sur le territoire de chaque commune, d'après la copie la plus récente de
+-- chaque année, avec le libellé de la taxe et la fiche de la commune. Le produit d'une part intercommunale,
+-- départementale ou régionale, ou d'un organisme, est ce que paient les contribuables de la commune.
+CREATE VIEW v_impositions_rei AS
+SELECT f.exercice, f.version, f.fichier_id, x.commune, c.nom, c.departement, c.region, c.groupement, c.nom_groupement,
+       c.siren_groupement, c.regime_groupement, p.taxe, t.libelle AS taxe_libelle, p.destinataire, x.base, x.taux_net,
+       x.taux_vote, x.produit
+FROM impositions_rei x
+JOIN fichiers_rei f ON f.rowid = x.lot
+JOIN postes_rei p ON p.rowid = x.poste
+JOIN taxes_rei t ON t.taxe = p.taxe
+LEFT JOIN communes_rei c ON c.lot = x.lot AND c.commune = x.commune
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_rei g WHERE g.exercice = f.exercice);
+
+-- Le tracé de chaque fichier du REI, avec, pour chaque variable que la base retient, la taxe, le destinataire et la
+-- grandeur qu'elle donne ; une variable peut en donner plusieurs, le taux de la taxe d'habitation valant aussi pour
+-- les logements vacants.
+CREATE VIEW v_traces_rei AS
+SELECT f.exercice, f.version, f.fichier_id, v.rang, v.code, v.titre, v.titre_trace, v.format, r.taxe, r.destinataire,
+       r.grandeur
+FROM traces_rei v
+JOIN fichiers_rei f ON f.rowid = v.lot
+LEFT JOIN variables_rei r ON r.code = v.code AND f.exercice BETWEEN r.premier_exercice AND r.dernier_exercice;
+
 -- Pour chaque chiffre, sa version la plus récente chez la même source.
 CREATE VIEW v_dernieres_versions AS
 SELECT * FROM v_chiffres c
@@ -192,6 +220,21 @@ CHAMPS_BENEFICIAIRES = {
     "ofgl.dotations-gfp": {"exercice": "exercice", "siren": "code", "nom_epci": "nom",
                            "nature_juridique": "nature_juridique", "code_departement": "departement"},
     "ofgl.dotations-departements": {"exercice": "exercice", "code_departement": "code", "nom_departement": "nom"}}
+# Le recensement des éléments d'imposition (REI) : une ligne par commune, par taxe et par destinataire, avec la base, les
+# taux net et voté et le produit (vides si le fichier les laisse vides), d'après les variables que retient
+# tables/variables_rei.csv, une imposition sans base ni produit n'étant pas retenue. Pour que la table reste maniable,
+# une ligne ne porte que le numéro de sa copie (`lot`, la ligne de fichiers_rei) et celui de son imposition (`poste`, la
+# ligne de postes_rei, qui en donne la taxe et le destinataire) ; la vue v_impositions_rei rétablit les libellés. La
+# table communes_rei donne la fiche de chaque commune, chaque année : son nom, son département, sa région, son
+# groupement, le régime fiscal et la forme juridique de celui-ci, et le niveau de collectivité qui perçoit la taxe
+# d'enlèvement des ordures ménagères ; traces_rei, le tracé de chaque fichier : le rang, le code, le titre (celui de
+# l'en-tête du fichier quand il porte les titres) et le format de chaque variable.
+IMPOSITIONS_REI = [("lot", "INTEGER"), ("commune", "TEXT"), ("poste", "INTEGER"), ("base", "REAL"),
+                   ("taux_net", "REAL"), ("taux_vote", "REAL"), ("produit", "REAL")]
+POSTES_REI = [("taxe", "TEXT"), ("destinataire", "TEXT")]
+COMMUNES_REI = [("lot", "INTEGER"), ("commune", "TEXT")] + [(c, "TEXT") for c in rei.FICHE]
+TRACES_REI = [("lot", "INTEGER"), ("rang", "INTEGER"), ("code", "TEXT"), ("titre", "TEXT"), ("titre_trace", "TEXT"),
+              ("format", "TEXT")]
 
 
 def lignes_collectivites(lots, concepts):
@@ -232,6 +275,25 @@ def lignes_collectivites(lots, concepts):
             yield nom, lues
 
 
+def lignes_rei(lots, postes):
+    """(table, lignes) du REI, une copie après l'autre : son tracé, la fiche de chaque commune et ses impositions ;
+    `lots` et `postes` donnent le numéro de ligne de chaque copie inscrite et de chaque imposition (taxe, destinataire)."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    referentiel = lire("tables/variables_rei.csv")
+    for inscrit in lire("tables/fichiers_rei.csv"):
+        lot = lots[inscrit["fichier_id"]]
+        exercice, variables, _, lignes = rei.lignes_communes(fichiers[inscrit["fichier_id"]])
+        yield "traces_rei", [[lot, rang, *v] for rang, v in enumerate(variables, start=1)]
+        retenus = rei.postes(exercice, variables, referentiel, inscrit["fichier_id"])
+        communes, impositions = [], []
+        for commune, valeurs in lignes:
+            fiche = rei.fiche(valeurs)
+            communes.append([lot, commune] + [fiche[c] or None for c in rei.FICHE])
+            impositions += [[lot, commune, postes[(t, d)], *g] for t, d, *g in rei.impositions(valeurs, retenus)]
+        yield "communes_rei", communes
+        yield "impositions_rei", impositions
+
+
 def valeur_sql(champ, texte):
     if texte == "":
         return None
@@ -265,13 +327,22 @@ def main():
                            "sha256": hashlib.sha256(texte.getvalue().encode("utf-8")).hexdigest()})
     nouvelles = {"comptes_collectivites": COMPTES, "collectivites": COLLECTIVITES, "comptes_budgets": COMPTES_BUDGETS,
                  "budgets": BUDGETS, "comptes_fonctions": COMPTES_FONCTIONS, "fiscalite": FISCALITE,
-                 "communes_fiscalite": COMMUNES_FISCALITE, "dotations": DOTATIONS, "beneficiaires": BENEFICIAIRES}
+                 "communes_fiscalite": COMMUNES_FISCALITE, "dotations": DOTATIONS, "beneficiaires": BENEFICIAIRES,
+                 "postes_rei": POSTES_REI, "impositions_rei": IMPOSITIONS_REI, "communes_rei": COMMUNES_REI,
+                 "traces_rei": TRACES_REI}
     for table, colonnes in nouvelles.items():
         connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
     lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
     concepts = {c: r for r, c in connexion.execute("SELECT rowid, id FROM concepts")}
     hachages = {table: [hashlib.sha256(), 0] for table in nouvelles}
-    for table, lues in lignes_collectivites(lots, concepts):
+    lots_rei = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_rei")}
+    lues_postes = [list(p) for p in sorted({(v["taxe"], v["destinataire"]) for v in lire("tables/variables_rei.csv")})]
+    connexion.executemany("INSERT INTO postes_rei VALUES (?, ?)", lues_postes)
+    postes = {(t, d): r for r, t, d in connexion.execute("SELECT rowid, taxe, destinataire FROM postes_rei")}
+    texte = io.StringIO()
+    csv.writer(texte, lineterminator="\n").writerows(lues_postes)
+    hachages["postes_rei"] = [hashlib.sha256(texte.getvalue().encode("utf-8")), len(lues_postes)]
+    for table, lues in itertools.chain(lignes_collectivites(lots, concepts), lignes_rei(lots_rei, postes)):
         if not lues:
             continue
         connexion.executemany(f"INSERT INTO {table} VALUES ({', '.join('?' * len(lues[0]))})", lues)
@@ -293,6 +364,10 @@ def main():
     connexion.execute("CREATE INDEX dotations_lot ON dotations (lot, variable)")
     connexion.execute("CREATE INDEX dotations_code ON dotations (code)")
     connexion.execute("CREATE INDEX beneficiaires_cle ON beneficiaires (lot, code)")
+    connexion.execute("CREATE INDEX impositions_rei_lot ON impositions_rei (lot, poste)")
+    connexion.execute("CREATE INDEX impositions_rei_commune ON impositions_rei (commune)")
+    connexion.execute("CREATE INDEX communes_rei_cle ON communes_rei (lot, commune)")
+    connexion.execute("CREATE INDEX traces_rei_cle ON traces_rei (lot, code)")
     empreintes += [{"table": t, "lignes": n, "sha256": h.hexdigest()} for t, (h, n) in hachages.items()]
     connexion.executescript(VUES)
     connexion.commit()

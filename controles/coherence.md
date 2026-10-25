@@ -1418,3 +1418,194 @@ Lignes dont le taux net diffère du taux voté : CFE, Commune : 381 ; CFE, GFP /
 | 2023 | 8 489,7 M€ | 546,5 M€ | 7 924,2 M€ | 255,7 M€ | −236,7 M€ (−2,7 %) |
 | 2024 | 8 934,3 M€ | 559,6 M€ | 8 362,2 M€ | 259,1 M€ | −246,5 M€ (−2,7 %) |
 | 2025 | 9 156,6 M€ | 571,6 M€ | 8 586,3 M€ | 266,8 M€ | −268,1 M€ (−2,8 %) |
+
+## 11. Recensement des éléments d'imposition
+
+Le fichier de recensement des éléments d'imposition à la fiscalité directe locale (REI) de la DGFiP donne, pour le territoire de chaque commune, les bases, les taux et les produits de toutes les impositions directes locales et de leurs taxes annexes, pour chacun de leurs destinataires : collectivités, organismes (établissements publics fonciers, chambres consulaires, caisse d'assurance accidents agricoles, Société du grand projet du Sud-Ouest) et État, qui perçoit des frais sur les impositions et, en 2021 et 2022, la taxe d'habitation sur les résidences principales. Ce sont les impositions du rôle général de l'année, sans les rôles supplémentaires. La base en retient les variables que décrit tables/variables_rei.csv : chacune figure au tracé de chacune de ses années, son titre y dit sa grandeur, et aucune ne donne le montant d'une collectivité répété sur chacune de ses communes, ce que l'import vérifie. Une imposition sans base ni produit n'est pas retenue.
+
+| Exercice | Version | Communes | Variables | Titres de l'en-tête différents du tracé | Valeurs illisibles | Lignes rétablies | Impositions retenues |
+|---|---|---|---|---|---|---|---|
+| 2012 | 2021-12-28 | 36 681 | 452 | 0 | 1 026 145 | 1 785 | 895 889 |
+| 2013 | 2021-12-28 | 36 672 | 785 | 0 | 1 236 295 | 0 | 904 814 |
+| 2014 | 2021-12-28 | 36 682 | 778 | 0 | 1 276 710 | 0 | 908 112 |
+| 2015 | 2021-12-28 | 36 674 | 807 | 0 | 1 266 448 | 0 | 912 488 |
+| 2016 | 2021-12-28 | 36 538 | 864 | 0 | 0 | 0 | 909 258 |
+| 2017 | 2021-12-28 | 35 518 | 871 | 0 | 0 | 0 | 885 567 |
+| 2018 | 2021-12-28 | 35 389 | 951 | 0 | 0 | 0 | 892 832 |
+| 2019 | 2021-12-28 | 35 230 | 1 060 | 0 | 0 | 0 | 896 959 |
+| 2020 | 2021-12-29 | 34 969 | 1 114 | 101 | 0 | 0 | 896 901 |
+| 2021 | 2025-10-16 | 34 969 | 1 149 | 0 | 0 | 0 | 876 017 |
+| 2022 | 2023-06-21 | 34 960 | 1 180 | 0 | 0 | 0 | 886 321 |
+| 2023 | 2025-03-13 | 34 951 | 1 104 | 0 | 0 | 0 | 647 277 |
+| 2024 | 2025-06-16 | 34 940 | 1 101 | 0 | 0 | 0 | 791 362 |
+| 2025 | 2026-08-20 | 34 907 | 1 043 | 0 | 0 | 0 | 789 653 |
+
+Les valeurs illisibles sont les marques d'une valeur manquante (« , » en 2012, « . » de 2013 à 2015), et quelques textes dans une colonne numérique ; les lignes rétablies sont celles des communes de Franche-Comté en 2012, où l'export a fondu deux champs en un.
+
+Produit contre base multipliée par le taux net : 7 660 345 impositions comparées, 3 227 853 égales à l'arrondi près, 3 110 866 en écart de moins de 1 %, 1 321 626 au-delà. La source prévient qu'un produit peut différer de sa base multipliée par son taux, du fait du lissage de la révision des valeurs locatives des locaux professionnels, des taux moyens d'une commune où plusieurs taux s'appliquent, ou du secret statistique.
+
+| Taxe | Destinataire | Impositions comparées | Égales à l'arrondi près | Écart de moins de 1 % | Au-delà | Plus grand écart au-delà (produit − base × taux) |
+|---|---|---|---|---|---|---|
+| CFE | Société du grand projet du Sud-Ouest (TSC) | 4 398 | 3 175 | 482 | 741 | −204 € (−1,6 %) : LE TEICH (33527), 2025 |
+| CFE | TSE | 294 450 | 89 333 | 107 125 | 97 992 | −37 644 € (−3,8 %) : LE MESNIL AMELOT (77291), 2021 |
+| CFE | chambre de commerce et d'industrie | 405 858 | 198 460 | 101 380 | 106 018 | +0,1 M€ (base nulle) : MONT DE LANS (38253), 2016 |
+| CFE | chambre de métiers, droit additionnel | 316 615 | 126 041 | 103 471 | 87 103 | −0,2 M€ (−7,9 %) : PARIS (75056), 2017 |
+| CFE | commune | 96 728 | 47 061 | 42 991 | 6 676 | −0,2 M€ (−26,3 %) : MODANE (73157), 2019 |
+| CFE | groupement (GEMAPI) | 75 075 | 30 183 | 19 545 | 25 347 | +46 746 € (+1,2 %) : VILLE DE PARIS (75056), 2025 |
+| CFE | groupement, fiscalité additionnelle ou de zone, hors zone | 94 800 | 44 494 | 38 689 | 11 617 | −0,5 M€ (−32,0 %) : MODANE (73157), 2019 |
+| CFE | groupement, fiscalité unique ou zone d'activités | 347 160 | 129 447 | 184 024 | 33 689 | +0,7 M€ (+7,5 %) : SAINT PIERRE (97416), 2019 |
+| CFE | groupement, zone éolienne | 1 027 | 686 | 341 | 0 | aucun |
+| CFE | région Île-de-France (TASA) | 13 517 | 3 616 | 4 435 | 5 466 | −9 097 € (−3,5 %) : LE MESNIL AMELOT (77291), 2021 |
+| CFE | syndicats | 5 456 | 2 643 | 1 665 | 1 148 | +10 546 € (+20,3 %) : GENOS (65195), 2020 |
+| TAFNB | commune | 100 187 | 56 863 | 35 943 | 7 381 | +210 € (+1,9 %) : BESSE SUR ISSOLE (83018), 2013 |
+| TAFNB | groupement | 348 926 | 147 928 | 179 920 | 21 078 | −538 € (−1,2 %) : LORGUES (83072), 2023 |
+| TAFNB | métropole du Grand Paris | 1 308 | 546 | 762 | 0 | aucun |
+| TEOM | zone à taux plein | 343 403 | 280 766 | 60 663 | 1 974 | +0,3 M€ (base nulle) : GENNES-VAL DE LOIRE (49261), 2019 |
+| TEOM | zone à taux réduit A | 12 487 | 12 404 | 28 | 55 | +0,1 M€ (base nulle) : TORIGNY-LES-VILLES (50601), 2016 |
+| TEOM | zone à taux réduit B | 1 797 | 1 782 | 6 | 9 | +0,1 M€ (base nulle) : MONCOUTANT-SUR-SEVRE (79179), 2021 |
+| TEOM | zone à taux réduit C | 175 | 174 | 0 | 1 | +29 146 € (base nulle) : SABLONS SUR HUISNE (61116), 2016 |
+| TEOM | zone à taux réduit D | 9 | 9 | 0 | 0 | aucun |
+| TFPB | TSE | 324 048 | 85 436 | 141 297 | 97 315 | +0,3 M€ (+7 329,3 %) : PLOUVORN (29210), 2018 |
+| TFPB | TSE autres | 25 542 | 9 554 | 13 863 | 2 125 | +0,1 M€ (+19,6 %) : SAINT DENIS (93066), 2018 |
+| TFPB | commune | 497 722 | 237 837 | 252 108 | 7 777 | −1,6 M€ (−8,6 %) : CHESSY (77111), 2021 |
+| TFPB | département | 323 052 | 183 324 | 101 625 | 38 103 | −2,9 M€ (−34,3 %) : CHESSY (77111), 2017 |
+| TFPB | groupement | 419 833 | 240 367 | 167 443 | 12 023 | +0,3 M€ (+1,2 %) : VILLEURBANNE (69266), 2017 |
+| TFPB | groupement (GEMAPI) | 169 683 | 50 950 | 89 325 | 29 408 | +0,3 M€ (+6 308,1 %) : PLOUVORN (29210), 2018 |
+| TFPB | région Île-de-France (TASA) | 13 935 | 4 164 | 8 863 | 908 | +0,1 M€ (+16,0 %) : SAINT DENIS (93066), 2018 |
+| TFPB | syndicats | 30 985 | 13 455 | 14 055 | 3 475 | +22 503 € (+70,7 %) : VILLENEUVE LOUBET (06161), 2022 |
+| TFPNB | TSE | 235 524 | 13 592 | 2 345 | 219 587 | +4 847 € (+11,4 %) : VILLE DE PARIS (75056), 2018 |
+| TFPNB | TSE autres | 24 008 | 1 296 | 1 356 | 21 356 | −306 € (−19,1 %) : MONTAUBAN (82121), 2023 |
+| TFPNB | caisse d'assurance accidents agricoles, droit proportionnel | 20 050 | 20 050 | 0 | 0 | aucun |
+| TFPNB | chambre d'agriculture | 497 600 | 220 622 | 253 725 | 23 253 | +642 € (+1,2 %) : LEGE-CAP-FERRET (33236), 2024 |
+| TFPNB | commune | 495 100 | 119 972 | 367 624 | 7 504 | −11 199 € (−22,0 %) : CLEFS-VAL D'ANJOU (49101), 2014 |
+| TFPNB | groupement | 489 043 | 66 917 | 233 671 | 188 455 | +12 179 € (+90,9 %) : VAL-D'OIRE-ET-GARTEMPE (87028), 2019 |
+| TFPNB | groupement (GEMAPI) | 168 548 | 4 299 | 7 114 | 157 135 | −771 € (−29,3 %) : ROQUEBRUNE-SUR-ARGENS (83107), 2020 |
+| TFPNB | syndicats | 30 733 | 4 201 | 7 997 | 18 535 | −705 € (−43,2 %) : ROQUEBRUNE-SUR-ARGENS (83107), 2025 |
+| TH | TSE | 221 770 | 64 745 | 105 567 | 51 458 | −2 052 € (−1,3 %) : CLERMONT-FERRAND (63113), 2012 |
+| TH | TSE autres | 14 172 | 6 093 | 7 670 | 409 | +937 € (+1,1 %) : LE PECQ (78481), 2020 |
+| TH | commune | 372 634 | 223 857 | 148 055 | 722 | +1,2 M€ (+5,1 %) : DUNKERQUE (59183), 2013 |
+| TH | commune (GEMAPI) | 8 | 1 | 6 | 1 | −84 € (−1,2 %) : OUISTREHAM (14488), 2016 |
+| TH | groupement | 369 497 | 213 690 | 155 343 | 464 | +0,2 M€ (+6,8 %) : BORDEAUX (33063), 2021 |
+| TH | groupement (GEMAPI) | 82 784 | 44 859 | 28 101 | 9 824 | −0,1 M€ (−17,9 %) : VILLE DE PARIS (75056), 2022 |
+| TH | syndicats | 24 634 | 10 383 | 12 063 | 2 188 | −0,1 M€ (−5,4 %) : SAINT-GERMAIN-EN-LAYE (78551), 2020 |
+| TH | État (part communale) | 49 130 | 13 844 | 34 824 | 462 | −0,1 M€ (−1,2 %) : ANNECY (74010), 2022 |
+| TH | État (part intercommunale) | 48 862 | 12 521 | 36 228 | 113 | +12 216 € (+4,2 %) : MELLE (79174), 2021 |
+| THLV | TSE | 9 482 | 5 085 | 1 135 | 3 262 | −27 € (−1,2 %) : AGEN (47001), 2025 |
+| THLV | TSE autres | 875 | 474 | 169 | 232 | −8 € (−1,7 %) : COUTRAS (33138), 2023 |
+| THLV | commune | 27 425 | 18 256 | 8 804 | 365 | +6 757 € (+8,2 %) : VALSERHONE (01033), 2020 |
+| THLV | groupement | 3 120 | 2 394 | 726 | 0 | aucun |
+| THLV | groupement (GEMAPI) | 10 525 | 6 305 | 2 491 | 1 729 | +15 € (+1,4 %) : SAINT-LOUIS (68297), 2023 |
+| THLV | syndicats | 3 217 | 1 847 | 655 | 715 | −11 € (−2,8 %) : GRUISSAN (11170), 2023 |
+| THRS | TSE | 42 602 | 23 949 | 7 007 | 11 646 | −921 € (−2,8 %) : LEUCATE (11202), 2023 |
+| THRS | TSE autres | 5 597 | 3 349 | 1 454 | 794 | −138 € (−6,7 %) : SAVIGNY LE TEMPLE (77445), 2023 |
+| THRS | commune | 50 704 | 49 115 | 1 534 | 55 | −22 089 € (−6,8 %) : VALSERHONE (01033), 2023 |
+| THRS | groupement | 50 311 | 48 729 | 1 492 | 90 | +7 244 € (+3,7 %) : TOUROUVRE AU PERCHE (61491), 2024 |
+| THRS | groupement (GEMAPI) | 41 135 | 24 480 | 13 184 | 3 471 | −372 € (−2,3 %) : VILLERS SUR MER (14754), 2025 |
+| THRS | syndicats | 3 079 | 2 230 | 477 | 372 | −572 € (−5,8 %) : GRUISSAN (11170), 2025 |
+
+La base simplifiée de la fiscalité directe locale de l'OFGL (section 10) est tirée du REI : son produit, pour chaque commune, chaque taxe et chaque bénéficiaire, se compare à celui des destinataires du REI dont il vient, à l'euro près. La part intercommunale de la CFE se compare toutes zones réunies ; l'effet du coefficient correcteur, que l'OFGL range dans la TFPB des communes depuis 2021, n'est pas un impôt et n'a pas d'équivalent ici. Saint-Martin, collectivité d'outre-mer, figure au REI (sous le code 97808, que forment son département et son numéro) mais pas dans la base simplifiée. Pour les communes de la métropole de Lyon, de 2015 à 2020, le REI range dans la part du groupement la TFPB que perçoit la métropole au titre du département, l'OFGL dans celle du département : les deux écarts se compensent.
+
+| Taxe | Bénéficiaire (OFGL) | Destinataires (REI) | Exercices | Communes comparées | Égales | En écart | Sous secret statistique (OFGL) | Produit OFGL | Produit REI | Plus grand écart (REI − OFGL) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| TFPB | Commune | commune | 14 années entre 2012 et 2025 | 497 472 | 497 458 | 14 | 0 | 332 216,3 M€ | 332 404,7 M€ | +18,3 M€ : SAINT-MARTIN (97808), 2025 |
+| TFPB | Syndicat | syndicats | 14 années entre 2012 et 2025 | 30 937 | 30 937 | 0 | 0 | 1 734,8 M€ | 1 734,8 M€ | aucun |
+| TFPB | GFP | groupement | 14 années entre 2012 et 2025 | 419 673 | 419 319 | 354 | 0 | 22 293,1 M€ | 23 839,7 M€ | +110,5 M€ : LYON (69123), 2020 |
+| TFPB | Département | département | 9 années entre 2012 et 2020 | 323 406 | 323 052 | 354 | 0 | 119 709,2 M€ | 118 162,6 M€ | −110,5 M€ : LYON (69123), 2020 |
+| TFPB | Région (TASA) | région Île-de-France (TASA) | 11 années entre 2015 et 2025 | 13 935 | 13 935 | 0 | 0 | 613,4 M€ | 613,4 M€ | aucun |
+| TFPB | GFP (GEMAPI) | groupement (GEMAPI) | 11 années entre 2015 et 2025 | 169 675 | 169 675 | 0 | 0 | 1 560,5 M€ | 1 560,5 M€ | aucun |
+| TFPNB | Commune | commune | 14 années entre 2012 et 2025 | 494 477 | 494 463 | 14 | 0 | 12 013,4 M€ | 12 017,4 M€ | +0,4 M€ : SAINT-MARTIN (97808), 2025 |
+| TFPNB | Syndicat | syndicats | 14 années entre 2012 et 2025 | 30 706 | 30 706 | 0 | 0 | 77,6 M€ | 77,6 M€ | aucun |
+| TFPNB | GFP | groupement | 14 années entre 2012 et 2025 | 488 812 | 488 812 | 0 | 0 | 2 120,8 M€ | 2 120,8 M€ | aucun |
+| TFPNB | GFP (GEMAPI) | groupement (GEMAPI) | 11 années entre 2015 et 2025 | 168 429 | 168 429 | 0 | 0 | 94,3 M€ | 94,3 M€ | aucun |
+| CFE | Commune | commune | 14 années entre 2012 et 2025 | 96 268 | 96 265 | 3 | 0 | 10 530,3 M€ | 10 530,3 M€ | +8 € : MOLESME (21419), 2018 |
+| CFE | Syndicat | syndicats | 14 années entre 2012 et 2025 | 5 456 | 5 454 | 2 | 0 | 109,4 M€ | 109,4 M€ | +544 € : BUTTEN (67072), 2018 |
+| CFE | GFP / hors zone, GFP / en ZAE, GFP / en zone éolienne | groupement, fiscalité additionnelle ou de zone, hors zone, groupement, fiscalité unique ou zone d'activités, groupement, zone éolienne | 14 années entre 2012 et 2025 | 438 565 | 438 564 | 1 | 570 | 91 012,0 M€ | 91 012,0 M€ | +0,1 M€ : AIGRE (16005), 2019 |
+| CFE | Région (TASA) | région Île-de-France (TASA) | 11 années entre 2015 et 2025 | 13 517 | 13 517 | 0 | 0 | 248,4 M€ | 248,4 M€ | aucun |
+| CFE | GFP (GEMAPI) | groupement (GEMAPI) | 11 années entre 2015 et 2025 | 152 061 | 152 060 | 1 | 142 | 512,8 M€ | 512,8 M€ | +4 € : BEAULIEU (58026), 2020 |
+| TEOM | Divers / zone taux plein | zone à taux plein | 14 années entre 2012 et 2025 | 343 403 | 343 360 | 43 | 0 | 99 264,7 M€ | 99 325,8 M€ | +7,5 M€ : SAINT-MARTIN (97808), 2025 |
+| TEOM | Divers / zone taux réduit A | zone à taux réduit A | 14 années entre 2012 et 2025 | 12 487 | 12 437 | 50 | 0 | 2 044,7 M€ | 2 045,6 M€ | +0,1 M€ : TORIGNY-LES-VILLES (50601), 2016 |
+| TEOM | Divers / zone taux réduit B | zone à taux réduit B | 14 années entre 2012 et 2025 | 1 797 | 1 788 | 9 | 0 | 173,3 M€ | 173,6 M€ | +0,1 M€ : MONCOUTANT-SUR-SEVRE (79179), 2021 |
+| TEOM | Divers / zone taux réduit C | zone à taux réduit C | 14 années entre 2012 et 2025 | 175 | 174 | 1 | 0 | 36,4 M€ | 36,5 M€ | +29 146 € : SABLONS SUR HUISNE (61116), 2016 |
+| TEOM | Divers / zone taux réduit D | zone à taux réduit D | 9 années entre 2014 et 2022 | 9 | 9 | 0 | 0 | 0,0 M€ | 0,0 M€ | aucun |
+
+Produit de chaque taxe, toutes parts réunies, chaque année (en millions d'euros) :
+
+| Taxe | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CFE (Cotisation foncière des entreprises) | 7 736,8 | 8 042,1 | 8 109,7 | 8 396,7 | 8 606,2 | 8 944,1 | 9 151,0 | 9 214,2 | 9 386,5 | 7 906,1 | 8 082,2 | 8 675,2 | 9 089,6 | 9 477,3 |
+| CVAE (Cotisation sur la valeur ajoutée des entreprises) | 14 875,8 | 16 035,9 | 15 622,3 | 16 326,9 | 16 556,0 | 17 317,4 | 17 405,6 | 18 661,1 | 19 228,9 | 9 568,0 | 9 264,3 | — | — | — |
+| IFER_BAR (Imposition forfaitaire sur les entreprises de réseaux : centrales hydrauliques) | 20,1 | 22,1 | 22,1 | 22,7 | 23,4 | 24,7 | 25,1 | 25,5 | 27,5 | 28,1 | 27,5 | 28,4 | 29,7 | 30,3 |
+| IFER_EOL (Imposition forfaitaire sur les entreprises de réseaux : éoliennes terrestres) | 35,8 | 41,9 | 46,2 | 52,0 | 57,0 | 65,3 | 76,8 | 88,9 | 96,3 | 105,6 | 116,8 | 132,3 | 145,7 | 156,4 |
+| IFER_GAZ (Imposition forfaitaire sur les entreprises de réseaux : installations gazières) | 10,0 | 9,9 | 11,1 | 11,6 | 11,7 | 12,1 | 14,9 | 15,1 | 13,4 | 13,6 | 13,8 | 14,5 | 17,7 | 18,0 |
+| IFER_GEO (Imposition forfaitaire sur les entreprises de réseaux : centrales géothermiques) | — | — | — | — | — | — | — | — | 0,3 | — | — | — | — | — |
+| IFER_HYD (Imposition forfaitaire sur les entreprises de réseaux : hydroliennes) | 0,1 | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| IFER_NUC (Imposition forfaitaire sur les entreprises de réseaux : centrales nucléaires et thermiques à flamme) | 4,1 | — | 3,2 | 3,2 | 4,7 | 3,2 | 3,2 | 3,2 | 3,2 | 5,7 | 5,7 | 5,9 | 6,1 | 6,3 |
+| IFER_PV (Imposition forfaitaire sur les entreprises de réseaux : centrales photovoltaïques) | 1,5 | 4,0 | 5,2 | 7,0 | 10,8 | 12,8 | 14,9 | 18,1 | 18,6 | 20,6 | 24,8 | 31,0 | 36,6 | 45,3 |
+| IFER_RAD (Imposition forfaitaire sur les entreprises de réseaux : stations radioélectriques) | 119,4 | 126,8 | 137,1 | 150,2 | 159,4 | 181,5 | 187,1 | 197,7 | 213,6 | 242,0 | 270,1 | 305,0 | 337,4 | 378,0 |
+| IFER_TRA (Imposition forfaitaire sur les entreprises de réseaux : transformateurs électriques) | 6,1 | 1,3 | 1,4 | 1,3 | 4,7 | 4,9 | 5,1 | 5,6 | 5,2 | 5,6 | 5,6 | 6,0 | 6,8 | 7,0 |
+| TAFNB (Taxe additionnelle à la taxe foncière sur les propriétés non bâties) | 76,0 | 77,4 | 78,2 | 79,7 | 79,9 | 80,6 | 81,6 | 84,6 | 85,4 | 86,0 | 89,4 | 95,2 | 99,2 | 99,5 |
+| TASCOM (Taxe sur les surfaces commerciales) | 561,4 | 611,7 | 618,0 | 641,2 | 661,1 | 828,6 | 676,4 | 695,5 | 697,3 | 686,0 | 734,6 | 808,4 | 902,7 | 842,7 |
+| TEOM (Taxe d'enlèvement des ordures ménagères) | 6 089,9 | 6 256,2 | 6 357,6 | 6 555,6 | 6 690,3 | 6 793,9 | 6 920,9 | 7 014,0 | 7 139,7 | 7 434,9 | 7 921,0 | 8 539,5 | 8 992,3 | 9 230,4 |
+| TFPB (Taxe foncière sur les propriétés bâties) | 28 586,1 | 29 818,7 | 30 622,8 | 31 863,2 | 33 443,0 | 34 290,1 | 35 289,3 | 36 227,3 | 37 008,4 | 36 230,2 | 38 308,3 | 42 188,6 | 44 484,5 | 45 738,9 |
+| TFPNB (Taxe foncière sur les propriétés non bâties) | 1 266,3 | 1 285,1 | 1 297,8 | 1 317,3 | 1 323,8 | 1 331,6 | 1 347,5 | 1 370,8 | 1 385,2 | 1 398,2 | 1 442,7 | 1 543,7 | 1 622,3 | 1 523,9 |
+| TH (Taxe d'habitation) | 20 032,3 | 20 774,8 | 21 105,8 | 22 296,2 | 22 382,8 | 22 826,6 | 23 378,2 | 24 161,8 | 24 513,0 | 8 492,8 | 5 902,2 | — | — | — |
+| THLV (Taxe d'habitation sur les logements vacants) | 21,4 | 66,4 | 62,8 | 63,6 | 72,9 | 67,0 | 74,7 | 79,0 | 89,3 | 86,7 | 88,6 | 115,2 | 194,8 | 138,7 |
+| THRS (Taxe d'habitation sur les résidences secondaires et autres locaux meublés non affectés à l'habitation principale) | — | — | — | — | — | — | — | — | — | — | — | 2 510,1 | 3 905,8 | 3 151,2 |
+
+Communes où le REI donne un produit de chaque taxe, chaque année :
+
+| Taxe | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CFE | 32 064 | 32 445 | 32 642 | 32 882 | 32 917 | 32 036 | 32 066 | 30 759 | 30 651 | 31 611 | 31 658 | 31 925 | 32 067 | 32 152 |
+| CVAE | 30 527 | 31 045 | 31 180 | 31 337 | 31 379 | 30 705 | 30 762 | 29 798 | 29 689 | 30 328 | 30 372 | — | — | — |
+| IFER_BAR | 204 | 227 | 233 | 240 | 246 | 257 | 261 | 257 | 257 | 263 | 261 | 256 | 260 | 268 |
+| IFER_EOL | 448 | 513 | 559 | 615 | 670 | 741 | 825 | 914 | 975 | 1 076 | 1 094 | 1 155 | 1 205 | 1 258 |
+| IFER_GAZ | 95 | 82 | 143 | 135 | 127 | 134 | 131 | 132 | 131 | 135 | 137 | 138 | 137 | 143 |
+| IFER_GEO | — | — | — | — | — | — | — | — | 1 | — | — | — | — | — |
+| IFER_HYD | 1 | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| IFER_NUC | 1 | — | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 55 | 53 | 55 | 55 | 54 |
+| IFER_PV | 68 | 191 | 229 | 276 | 315 | 354 | 398 | 436 | 488 | 546 | 637 | 791 | 1 611 | 3 517 |
+| IFER_RAD | 6 950 | 7 386 | 6 937 | 7 301 | 7 712 | 8 859 | 9 763 | 10 234 | 10 713 | 11 238 | 11 521 | 12 028 | 12 665 | 13 482 |
+| IFER_TRA | 10 | 6 | 6 | 6 | 8 | 8 | 9 | 10 | 9 | 10 | 10 | 10 | 12 | 13 |
+| TAFNB | 32 946 | 32 979 | 33 034 | 33 056 | 32 917 | 32 005 | 31 894 | 31 773 | 31 561 | 31 593 | 31 619 | 31 660 | 31 696 | 31 688 |
+| TASCOM | 2 464 | 2 632 | 2 587 | 2 524 | 2 654 | 2 618 | 2 616 | 2 573 | 2 592 | 2 565 | 2 608 | 2 529 | 2 610 | 2 586 |
+| TEOM | 24 601 | 24 594 | 24 439 | 24 492 | 24 484 | 24 360 | 24 660 | 24 726 | 24 437 | 24 638 | 24 857 | 24 373 | 24 369 | 24 381 |
+| TFPB | 36 601 | 36 589 | 36 596 | 36 587 | 36 416 | 35 397 | 35 268 | 35 114 | 34 856 | 34 886 | 34 879 | 34 868 | 34 856 | 34 821 |
+| TFPNB | 36 589 | 36 578 | 36 593 | 36 588 | 36 398 | 35 380 | 35 250 | 35 089 | 34 828 | 34 884 | 34 873 | 34 869 | 34 860 | 34 821 |
+| TH | 36 601 | 36 598 | 36 607 | 36 601 | 36 462 | 35 442 | 35 306 | 35 155 | 34 891 | 32 314 | 30 497 | — | — | — |
+| THLV | 3 157 | 3 627 | 3 838 | 3 991 | 4 231 | 4 215 | 4 547 | 4 732 | 4 711 | 3 607 | 3 754 | 770 | 6 374 | 6 676 |
+| THRS | — | — | — | — | — | — | — | — | — | — | — | 1 955 | 25 449 | 23 300 |
+
+Un fichier peut ne pas donner une taxe pour toutes les communes, ses valeurs restant vides : TH en 2023 : 1 955 communes, contre 30 497 en 2022 et 25 449 en 2024 ; THLV en 2023 : 770 communes, contre 3 754 en 2022 et 6 374 en 2024 (pour la taxe d'habitation, celle sur les résidences secondaires depuis 2023). Le produit de ces années est partiel.
+
+Produit de chaque niveau qui perçoit, chaque année (en millions d'euros) ; la part fixe de la TEOM est rapportée au niveau que la fiche de la commune dit la percevoir :
+
+| Exercice | communes | syndicats | groupements | départements | régions | organismes | État | non dit | Ensemble |
+|---|---|---|---|---|---|---|---|---|---|
+| 2012 | 32 496,0 | 436,1 | 20 339,6 | 18 726,5 | 3 718,4 | 1 673,4 | 2 053,0 | 0,0 | 79 443,0 |
+| 2013 | 33 294,8 | 387,9 | 21 744,7 | 19 899,4 | 4 008,7 | 1 704,4 | 2 134,0 | 0,0 | 83 174,0 |
+| 2014 | 33 322,9 | 339,4 | 22 586,9 | 20 002,7 | 3 905,2 | 1 763,2 | 2 180,8 | 0,0 | 84 101,2 |
+| 2015 | 34 817,2 | 324,9 | 24 156,0 | 20 289,4 | 4 160,3 | 1 776,2 | 2 264,5 | 0,0 | 87 788,4 |
+| 2016 | 34 537,5 | 296,4 | 25 592,5 | 21 307,8 | 4 217,1 | 1 799,4 | 2 336,8 | 0,0 | 90 087,7 |
+| 2017 | 34 630,2 | 271,0 | 27 089,0 | 17 822,9 | 8 737,2 | 1 843,5 | 2 390,4 | 0,1 | 92 784,3 |
+| 2018 | 35 168,4 | 242,1 | 28 069,7 | 18 206,1 | 8 744,2 | 1 786,6 | 2 435,0 | 0,4 | 94 652,4 |
+| 2019 | 37 036,5 | 242,4 | 28 948,2 | 18 024,9 | 9 336,1 | 1 784,8 | 2 489,3 | 0,4 | 97 862,5 |
+| 2020 | 37 762,6 | 227,6 | 29 669,2 | 18 394,3 | 9 615,1 | 1 701,6 | 2 528,2 | 13,1 | 99 911,6 |
+| 2021 | 36 825,8 | 228,4 | 22 186,4 | 3 954,6 | 76,6 | 1 326,5 | 7 698,2 | 13,5 | 72 310,1 |
+| 2022 | 38 459,8 | 242,9 | 23 271,1 | 3 843,6 | 76,8 | 1 239,7 | 5 163,5 | 0,0 | 72 297,6 |
+| 2023 | 41 193,7 | 254,7 | 19 564,4 | 167,2 | 76,8 | 1 336,3 | 2 406,0 | 0,1 | 64 999,1 |
+| 2024 | 44 098,1 | 268,9 | 21 305,7 | 184,6 | 76,7 | 1 365,9 | 2 571,1 | 0,1 | 69 871,1 |
+| 2025 | 44 515,2 | 276,8 | 21 766,1 | 204,5 | 76,8 | 1 392,3 | 2 612,0 | 0,1 | 70 843,8 |
+
+TEOM recensée de chaque niveau, part fixe et part incitative, contre celle de ses comptes consolidés ; le REI range au niveau du groupement la TEOM que celui-ci perçoit pour le compte d'un syndicat :
+
+| Exercice | communes : recensée | comptes | groupements : recensée | comptes | syndicats : recensée | comptes | Écart d'ensemble (recensée − comptes) |
+|---|---|---|---|---|---|---|---|
+| 2018 | 622,7 M€ | 622,0 M€ | 6 247,7 M€ | 6 299,4 M€ | 50,2 M€ | 271,9 M€ | −272,7 M€ (−3,8 %) |
+| 2019 | 629,7 M€ | 628,4 M€ | 6 335,0 M€ | 6 344,8 M€ | 49,0 M€ | 259,8 M€ | −219,4 M€ (−3,0 %) |
+| 2020 | 628,0 M€ | 631,4 M€ | 6 447,4 M€ | 6 475,8 M€ | 51,1 M€ | 212,6 M€ | −193,2 M€ (−2,6 %) |
+| 2021 | 506,8 M€ | 506,8 M€ | 6 862,0 M€ | 6 879,1 M€ | 52,6 M€ | 222,9 M€ | −187,4 M€ (−2,5 %) |
+| 2022 | 521,7 M€ | 518,4 M€ | 7 339,5 M€ | 7 354,2 M€ | 59,7 M€ | 238,7 M€ | −190,3 M€ (−2,3 %) |
+| 2023 | 550,3 M€ | 546,5 M€ | 7 922,9 M€ | 7 924,2 M€ | 66,2 M€ | 255,7 M€ | −187,0 M€ (−2,1 %) |
+| 2024 | 563,3 M€ | 559,6 M€ | 8 359,9 M€ | 8 362,2 M€ | 68,9 M€ | 259,1 M€ | −188,6 M€ (−2,1 %) |
+| 2025 | 577,1 M€ | 571,6 M€ | 8 582,5 M€ | 8 586,3 M€ | 70,7 M€ | 266,8 M€ | −194,4 M€ (−2,1 %) |

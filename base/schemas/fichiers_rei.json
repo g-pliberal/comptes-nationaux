@@ -1,0 +1,17 @@
+{
+  "description": "Copies archivées des fichiers de recensement des éléments d'imposition à la fiscalité directe locale (REI) de la DGFiP, une par année d'imposition. L'import les contrôle et les inscrit ici ; la base lit leurs chiffres dans ces copies, sans les recopier.",
+  "fields": [
+    {"name": "fichier_id", "type": "string", "constraints": {"required": true}},
+    {"name": "exercice", "type": "string", "description": "Année d'imposition.", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "version", "type": "date", "description": "Date la plus récente des fichiers que porte l'archive.", "constraints": {"required": true}},
+    {"name": "communes", "type": "integer", "description": "Nombre de communes, une ligne chacune.", "constraints": {"required": true}},
+    {"name": "variables", "type": "integer", "description": "Nombre de variables du tracé, une colonne chacune.", "constraints": {"required": true}},
+    {"name": "titres_differents", "type": "integer", "description": "Nombre de titres de l'en-tête du fichier qui diffèrent de ceux du tracé, l'année où l'en-tête porte les titres des variables plutôt que leurs codes ; ses colonnes s'associent alors aux codes du tracé rang par rang.", "constraints": {"required": true}},
+    {"name": "illisibles", "type": "integer", "description": "Nombre de valeurs d'une variable numérique qui ne sont pas des nombres (« , » dans le fichier de 2012, « . » dans ceux de 2013 à 2015 : les marques d'une valeur manquante) ; la base les lit comme vides.", "constraints": {"required": true}},
+    {"name": "lignes_realignees", "type": "integer", "description": "Nombre de lignes du fichier dont l'export a fondu deux champs en un, décalant d'un rang les champs suivants, et que l'import rétablit : un texte y porte un point-virgule, et le code de la commune qui termine la ligne rétablie le confirme.", "constraints": {"required": true}}
+  ],
+  "primaryKey": ["fichier_id"],
+  "foreignKeys": [
+    {"fields": ["fichier_id"], "reference": {"resource": "fichiers", "fields": ["id"]}}
+  ]
+}

@@ -1,0 +1,279 @@
+taxe,destinataire,grandeur,code,premier_exercice,dernier_exercice,notes
+TFPNB,commune,base,B11,2012,2025,
+TFPNB,commune,taux_net,B12,2012,2025,
+TFPNB,commune,taux_vote,B12VOTE,2019,2025,
+TFPNB,commune,produit,B13,2012,2025,
+TFPNB,syndicats,base,B21,2012,2025,
+TFPNB,syndicats,taux_net,B22,2012,2025,
+TFPNB,syndicats,produit,B23,2012,2025,
+TFPNB,groupement,base,B31,2012,2025,
+TFPNB,groupement,taux_net,B32,2012,2025,
+TFPNB,groupement,taux_vote,B32VOTE,2012,2025,
+TFPNB,groupement,produit,B33,2012,2025,
+TFPNB,TSE,base,B51,2012,2025,
+TFPNB,TSE,taux_net,B52,2012,2025,
+TFPNB,TSE,produit,B53,2012,2025,
+TFPNB,TSE autres,base,B51GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,TSE autres,taux_net,B52GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,TSE autres,produit,B53GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,TSE autres,base,B51GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,TSE autres,taux_net,B52GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,TSE autres,produit,B53GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,TSE autres,base,B51A,2014,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,TSE autres,taux_net,B52A,2014,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,TSE autres,produit,B53A,2014,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPNB,groupement (GEMAPI),base,B51gGEMAPI,2015,2025,
+TFPNB,groupement (GEMAPI),taux_net,B52gGEMAPI,2015,2025,
+TFPNB,groupement (GEMAPI),produit,B53gGEMAPI,2015,2025,
+TFPNB,chambre d'agriculture,base,C11,2012,2025,
+TFPNB,chambre d'agriculture,taux_net,C12,2012,2025,
+TFPNB,chambre d'agriculture,produit,C13,2012,2025,
+TFPNB,"caisse d'assurance accidents agricoles, droit fixe",produit,C33,2012,2025,
+TFPNB,"caisse d'assurance accidents agricoles, droit proportionnel",base,C41,2012,2025,
+TFPNB,"caisse d'assurance accidents agricoles, droit proportionnel",taux_net,C42,2012,2025,
+TFPNB,"caisse d'assurance accidents agricoles, droit proportionnel",produit,C43,2012,2025,
+TFPNB,État (frais),produit,B00,2012,2025,
+TAFNB,commune,base,B11TAFNB,2012,2025,
+TAFNB,commune,taux_net,B12TAFNB,2012,2025,
+TAFNB,commune,produit,B13TAFNB,2012,2025,
+TAFNB,groupement,base,B31TAFNB,2012,2025,
+TAFNB,groupement,taux_net,B32TAFNB,2012,2025,
+TAFNB,groupement,produit,B33TAFNB,2012,2025,
+TAFNB,métropole du Grand Paris,base,B31MGPTAFNB,2016,2025,
+TAFNB,métropole du Grand Paris,taux_net,B32MGPTAFNB,2016,2025,
+TAFNB,métropole du Grand Paris,produit,B33MGPTAFNB,2016,2025,
+TFPB,commune,base,E11,2012,2025,
+TFPB,commune,taux_net,E12,2012,2025,
+TFPB,commune,taux_vote,E12VOTE,2019,2025,
+TFPB,commune,produit,E13,2012,2025,
+TFPB,syndicats,base,E21,2012,2025,
+TFPB,syndicats,taux_net,E22,2012,2025,
+TFPB,syndicats,produit,E23,2012,2025,
+TFPB,groupement,base,E31,2012,2025,
+TFPB,groupement,taux_net,E32,2012,2025,
+TFPB,groupement,taux_vote,E32VOTE,2012,2025,
+TFPB,groupement,produit,E33,2012,2025,
+TFPB,département,base,E41,2012,2020,
+TFPB,département,taux_net,E42,2012,2020,
+TFPB,département,produit,E43,2012,2020,
+TFPB,TSE,base,E51,2012,2025,
+TFPB,TSE,taux_net,E52,2012,2025,
+TFPB,TSE,produit,E53,2012,2025,
+TFPB,TSE autres,base,E51GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,TSE autres,taux_net,E52GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,TSE autres,produit,E53GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,TSE autres,base,E51GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,TSE autres,taux_net,E52GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,TSE autres,produit,E53GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,TSE autres,base,E51A,2014,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,TSE autres,taux_net,E52A,2014,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,TSE autres,produit,E53A,2014,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TFPB,région Île-de-France (TASA),base,E51TASA,2015,2025,
+TFPB,région Île-de-France (TASA),taux_net,E52TASA,2015,2025,
+TFPB,région Île-de-France (TASA),produit,E53TASA,2015,2025,
+TFPB,groupement (GEMAPI),base,E51gGEMAPI,2015,2025,
+TFPB,groupement (GEMAPI),taux_net,E52gGEMAPI,2015,2025,
+TFPB,groupement (GEMAPI),produit,E53gGEMAPI,2015,2025,
+TFPB,État (frais),produit,E00,2012,2025,
+TEOM,zone à taux plein,base,F21,2012,2025,
+TEOM,zone à taux plein,taux_net,F22,2012,2025,
+TEOM,zone à taux plein,produit,F23,2012,2025,
+TEOM,zone à taux réduit A,base,F31,2012,2025,
+TEOM,zone à taux réduit A,taux_net,F32,2012,2025,
+TEOM,zone à taux réduit A,produit,F33,2012,2025,
+TEOM,zone à taux réduit B,base,F41,2012,2025,
+TEOM,zone à taux réduit B,taux_net,F42,2012,2025,
+TEOM,zone à taux réduit B,produit,F43,2012,2025,
+TEOM,zone à taux réduit C,base,F51,2012,2025,
+TEOM,zone à taux réduit C,taux_net,F52,2012,2025,
+TEOM,zone à taux réduit C,produit,F53,2012,2025,
+TEOM,zone à taux réduit D,base,F61,2012,2025,
+TEOM,zone à taux réduit D,taux_net,F62,2012,2025,
+TEOM,zone à taux réduit D,produit,F63,2012,2025,
+TEOM,zone à taux réduit E,base,F81,2017,2025,
+TEOM,zone à taux réduit E,taux_net,F82,2017,2025,
+TEOM,zone à taux réduit E,produit,F83,2017,2025,
+TEOM,"part incitative, commune",produit,TIEOMC,2013,2025,"Part incitative de la taxe, en plus de la part fixe que donnent les zones de taux."
+TEOM,"part incitative, syndicats",produit,TIEOMS,2013,2025,"Part incitative de la taxe, en plus de la part fixe que donnent les zones de taux."
+TEOM,"part incitative, groupement",produit,TIEOMG,2013,2025,"Part incitative de la taxe, en plus de la part fixe que donnent les zones de taux."
+TH,commune,base,H11,2012,2020,
+TH,commune,taux_net,H12,2012,2020,
+TH,commune,taux_vote,H12VOTE,2019,2020,
+TH,commune,produit,H13,2012,2020,
+TH,commune,base,H11THS,2021,2022,"Part de la commune, sur les résidences secondaires : la taxe sur les résidences principales revient à l'État."
+TH,commune,taux_net,H12,2021,2022,"Part de la commune, sur les résidences secondaires : la taxe sur les résidences principales revient à l'État."
+TH,commune,taux_vote,H12VOTE,2021,2022,"Part de la commune, sur les résidences secondaires : la taxe sur les résidences principales revient à l'État."
+TH,commune,produit,H13COLL,2021,2022,"Part de la commune, sur les résidences secondaires : la taxe sur les résidences principales revient à l'État."
+TH,État (part communale),base,H11RP,2021,2022,"Taxe d'habitation sur les résidences principales que paient encore les foyers non exonérés, au profit de l'État."
+TH,État (part communale),taux_net,H12,2021,2022,"Taxe d'habitation sur les résidences principales que paient encore les foyers non exonérés, au profit de l'État."
+TH,État (part communale),produit,H13ETAT,2021,2022,"Taxe d'habitation sur les résidences principales que paient encore les foyers non exonérés, au profit de l'État."
+TH,syndicats,base,H21,2012,2022,
+TH,syndicats,taux_net,H22,2012,2022,
+TH,syndicats,produit,H23,2012,2022,
+TH,groupement,base,H31,2012,2020,
+TH,groupement,taux_net,H32,2012,2020,
+TH,groupement,taux_vote,H32VOTE,2012,2020,
+TH,groupement,produit,H33,2012,2020,
+TH,groupement,base,H31THS,2021,2022,"Part du groupement, sur les résidences secondaires : la taxe sur les résidences principales revient à l'État."
+TH,groupement,taux_net,H32,2021,2022,"Part du groupement, sur les résidences secondaires : la taxe sur les résidences principales revient à l'État."
+TH,groupement,taux_vote,H32VOTE,2021,2022,"Part du groupement, sur les résidences secondaires : la taxe sur les résidences principales revient à l'État."
+TH,groupement,produit,H33COLL,2021,2022,"Part du groupement, sur les résidences secondaires : la taxe sur les résidences principales revient à l'État."
+TH,État (part intercommunale),base,H31RP,2021,2022,"Taxe d'habitation sur les résidences principales que paient encore les foyers non exonérés, au profit de l'État."
+TH,État (part intercommunale),taux_net,H32,2021,2022,"Taxe d'habitation sur les résidences principales que paient encore les foyers non exonérés, au profit de l'État."
+TH,État (part intercommunale),produit,H33ETAT,2021,2022,"Taxe d'habitation sur les résidences principales que paient encore les foyers non exonérés, au profit de l'État."
+TH,TSE,base,H51,2012,2022,
+TH,TSE,taux_net,H52,2012,2022,
+TH,TSE,produit,H53,2012,2022,
+TH,TSE autres,base,H51GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,TSE autres,taux_net,H52GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,TSE autres,produit,H53GP,2012,2012,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,TSE autres,base,H51GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,TSE autres,taux_net,H52GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,TSE autres,produit,H53GPM,2013,2013,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,TSE autres,base,H51A,2014,2022,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,TSE autres,taux_net,H52A,2014,2022,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,TSE autres,produit,H53A,2014,2022,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+TH,groupement (GEMAPI),base,H51gGEMAPI,2015,2022,
+TH,groupement (GEMAPI),taux_net,H52gGEMAPI,2015,2022,
+TH,groupement (GEMAPI),produit,H53gGEMAPI,2015,2022,
+TH,commune (GEMAPI),base,H51cGEMAPI,2015,2017,
+TH,commune (GEMAPI),taux_net,H52cGEMAPI,2016,2017,
+TH,commune (GEMAPI),produit,H53cGEMAPI,2016,2017,
+TH,commune (majoration des résidences secondaires),produit,MTMAJOTHRS,2015,2022,"Majoration de la part communale de la taxe sur les résidences secondaires, que certaines communes votent."
+TH,État (frais),produit,H00,2012,2022,Frais sur la taxe des résidences principales et assimilées.
+TH,État (frais),produit,H01,2012,2022,Frais sur la taxe des résidences secondaires.
+TH,État (prélèvements sur les bases),produit,H73,2012,2020,Prélèvements de l'État sur les bases des locaux qui ne sont pas des résidences principales (article 1641 du code général des impôts).
+TH,État (prélèvements sur les bases),produit,H83,2012,2020,Prélèvements de l'État sur les bases des locaux qui ne sont pas des résidences principales (article 1641 du code général des impôts).
+TH,État (prélèvements sur les bases),produit,H93,2012,2020,Prélèvements de l'État sur les bases des locaux qui ne sont pas des résidences principales (article 1641 du code général des impôts).
+TH,État (prélèvements sur les bases),produit,H103,2012,2020,Prélèvements de l'État sur les bases des locaux qui ne sont pas des résidences principales (article 1641 du code général des impôts).
+THRS,commune,base,H11THS,2023,2025,
+THRS,commune,taux_net,H12,2023,2025,
+THRS,commune,taux_vote,H12VOTE,2023,2025,
+THRS,commune,produit,H13THS,2023,2025,
+THRS,syndicats,base,H21THS,2023,2025,
+THRS,syndicats,taux_net,H22,2023,2025,
+THRS,syndicats,produit,H23THS,2023,2025,
+THRS,groupement,base,H31THS,2023,2025,
+THRS,groupement,taux_net,H32,2023,2025,
+THRS,groupement,taux_vote,H32VOTE,2023,2025,
+THRS,groupement,produit,H33THS,2023,2025,
+THRS,TSE,base,H51THS,2023,2025,
+THRS,TSE,taux_net,H52,2023,2025,
+THRS,TSE,produit,H53THS,2023,2025,
+THRS,TSE autres,base,H51ATHS,2023,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+THRS,TSE autres,taux_net,H52A,2023,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+THRS,TSE autres,produit,H53ATHS,2023,2025,"Taxe spéciale d'équipement de la Société du Grand Paris et des établissements publics fonciers de Guadeloupe et de Martinique, puis aussi de la Société du grand projet du Sud-Ouest."
+THRS,groupement (GEMAPI),base,H51gGEMAPITHS,2023,2025,
+THRS,groupement (GEMAPI),taux_net,H52gGEMAPI,2023,2025,
+THRS,groupement (GEMAPI),produit,H53gGEMAPITHS,2023,2025,
+THRS,commune (majoration des résidences secondaires),produit,MTMAJOTHRS,2023,2025,"Majoration de la part communale, que certaines communes votent."
+THRS,État (frais),produit,H01,2023,2025,
+THLV,commune,base,H11LV,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,commune,taux_net,H12,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,commune,produit,H13LV,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,syndicats,base,H21LV,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,syndicats,taux_net,H22,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,syndicats,produit,H23LV,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,groupement,base,H31LV,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,groupement,taux_net,H32,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,groupement,produit,H33LV,2012,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,TSE,base,H51LV,2023,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,TSE,taux_net,H52,2023,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,TSE,produit,H53LV,2023,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,TSE autres,base,H51ALV,2023,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,TSE autres,taux_net,H52A,2023,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,TSE autres,produit,H53ALV,2023,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,groupement (GEMAPI),base,H51gGEMAPILV,2023,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,groupement (GEMAPI),taux_net,H52gGEMAPI,2016,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,groupement (GEMAPI),produit,H53gGEMAPILV,2016,2025,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,commune (GEMAPI),taux_net,H52cGEMAPI,2016,2017,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,commune (GEMAPI),produit,H53cGEMAPILV,2016,2017,"Le REI ne donnant pas de taux propre aux logements vacants, le taux est celui de la même part de la taxe d'habitation, qui s'y applique."
+THLV,État (frais),produit,H01LV,2012,2025,
+THLV,État (prélèvements sur les bases),produit,H83LV,2012,2020,Prélèvements de l'État sur les bases des logements vacants (article 1641 du code général des impôts).
+THLV,État (prélèvements sur les bases),produit,H93LV,2012,2020,Prélèvements de l'État sur les bases des logements vacants (article 1641 du code général des impôts).
+CFE,commune,base,P11,2012,2025,
+CFE,commune,taux_net,P12,2012,2025,
+CFE,commune,taux_vote,P12VOTE,2019,2025,
+CFE,commune,produit,P13,2012,2025,
+CFE,syndicats,base,P21,2012,2025,
+CFE,syndicats,taux_net,P22,2012,2025,
+CFE,syndicats,produit,P23,2012,2025,
+CFE,"groupement, fiscalité additionnelle ou de zone, hors zone",base,P31_1,2012,2025,
+CFE,"groupement, fiscalité additionnelle ou de zone, hors zone",taux_net,P32_1,2012,2025,
+CFE,"groupement, fiscalité additionnelle ou de zone, hors zone",taux_vote,P32_1vote,2012,2023,
+CFE,"groupement, fiscalité additionnelle ou de zone, hors zone",produit,P33_1,2012,2025,
+CFE,"groupement, fiscalité additionnelle ou de zone, hors zone",taux_vote,P32_1VOTE,2024,2025,
+CFE,"groupement, fiscalité unique ou zone d'activités",base,P31_2,2012,2025,
+CFE,"groupement, fiscalité unique ou zone d'activités",taux_net,P32_2,2012,2025,
+CFE,"groupement, fiscalité unique ou zone d'activités",taux_vote,P32_2vote,2012,2023,
+CFE,"groupement, fiscalité unique ou zone d'activités",produit,P33_2,2012,2025,
+CFE,"groupement, fiscalité unique ou zone d'activités",taux_vote,P32_2VOTE,2024,2025,
+CFE,"groupement, zone éolienne",base,P31_3,2012,2025,
+CFE,"groupement, zone éolienne",taux_net,P32_3,2012,2025,
+CFE,"groupement, zone éolienne",taux_vote,P32_3vote,2012,2023,
+CFE,"groupement, zone éolienne",produit,P33_3,2012,2025,
+CFE,"groupement, zone éolienne",taux_vote,P32_3VOTE,2024,2025,
+CFE,TSE,base,P51,2012,2025,"Toutes les taxes spéciales d'équipement : le REI ne sépare pas, pour la CFE, celles de la Société du Grand Paris et des établissements de Guadeloupe et de Martinique."
+CFE,TSE,taux_net,P52,2012,2025,"Toutes les taxes spéciales d'équipement : le REI ne sépare pas, pour la CFE, celles de la Société du Grand Paris et des établissements de Guadeloupe et de Martinique."
+CFE,TSE,produit,P53,2012,2025,"Toutes les taxes spéciales d'équipement : le REI ne sépare pas, pour la CFE, celles de la Société du Grand Paris et des établissements de Guadeloupe et de Martinique."
+CFE,région Île-de-France (TASA),base,P51TASA,2015,2025,
+CFE,région Île-de-France (TASA),taux_net,P52TASA,2015,2025,
+CFE,région Île-de-France (TASA),produit,P53TASA,2015,2025,
+CFE,Société du grand projet du Sud-Ouest (TSC),base,P51TSC,2024,2025,
+CFE,Société du grand projet du Sud-Ouest (TSC),taux_net,P52TSC,2024,2025,
+CFE,Société du grand projet du Sud-Ouest (TSC),produit,P53TSC,2024,2025,
+CFE,groupement (GEMAPI),base,P51gGEMAPI_1,2015,2022,"Somme des parts de fiscalité additionnelle, de fiscalité unique ou de zone et de zone éolienne, que le REI donne séparément jusqu'aux impositions de 2022."
+CFE,groupement (GEMAPI),produit,P53gGEMAPI_1,2015,2022,"Somme des parts de fiscalité additionnelle, de fiscalité unique ou de zone et de zone éolienne, que le REI donne séparément jusqu'aux impositions de 2022."
+CFE,groupement (GEMAPI),base,P51gGEMAPI_2,2015,2022,"Somme des parts de fiscalité additionnelle, de fiscalité unique ou de zone et de zone éolienne, que le REI donne séparément jusqu'aux impositions de 2022."
+CFE,groupement (GEMAPI),produit,P53gGEMAPI_2,2015,2022,"Somme des parts de fiscalité additionnelle, de fiscalité unique ou de zone et de zone éolienne, que le REI donne séparément jusqu'aux impositions de 2022."
+CFE,groupement (GEMAPI),base,P51gGEMAPI_3,2018,2022,"Somme des parts de fiscalité additionnelle, de fiscalité unique ou de zone et de zone éolienne, que le REI donne séparément jusqu'aux impositions de 2022."
+CFE,groupement (GEMAPI),produit,P53gGEMAPI_3,2018,2022,"Somme des parts de fiscalité additionnelle, de fiscalité unique ou de zone et de zone éolienne, que le REI donne séparément jusqu'aux impositions de 2022."
+CFE,groupement (GEMAPI),base,P51gGEMAPI,2023,2025,
+CFE,groupement (GEMAPI),taux_net,P52gGEMAPI,2023,2025,
+CFE,groupement (GEMAPI),produit,P53gGEMAPI,2023,2025,
+CFE,chambre de commerce et d'industrie,base,R11,2012,2025,
+CFE,chambre de commerce et d'industrie,taux_net,R12,2012,2025,
+CFE,chambre de commerce et d'industrie,produit,R13,2012,2025,
+CFE,"chambre de métiers, droit fixe",produit,R23,2012,2025,
+CFE,"chambre de métiers, droit additionnel",base,R31,2012,2025,
+CFE,"chambre de métiers, droit additionnel",taux_net,R32,2012,2025,
+CFE,"chambre de métiers, droit additionnel",produit,R33,2012,2025,
+CFE,"chambre de métiers, formation des artisans",produit,R53,2012,2017,
+CFE,"chambre de métiers, promotion de l'artisanat",produit,R63,2012,2017,
+CFE,État (frais),produit,S00,2012,2025,
+CVAE,commune,produit,CVAECOM,2012,2022,
+CVAE,groupement,produit,CVAEGFP,2012,2022,
+CVAE,département,produit,CVAEDEP,2012,2022,
+CVAE,région,produit,CVAEREG,2012,2022,
+TASCOM,commune,produit,TASCOMcom,2012,2025,
+TASCOM,groupement,produit,TASCOMgfp,2012,2025,
+IFER_EOL,commune,produit,IFTETmCOM,2012,2025,
+IFER_EOL,"groupement, fiscalité additionnelle",produit,IFTETmEPCI_1,2012,2025,
+IFER_EOL,"groupement, fiscalité unique ou de zone",produit,IFTETmEPCI_2,2012,2025,
+IFER_EOL,"groupement, fiscalité éolienne",produit,IFTETmEPCI_3,2012,2025,
+IFER_EOL,département,produit,IFTETmDEP,2012,2025,
+IFER_HYD,commune,produit,IFTEHmCOM,2012,2025,
+IFER_HYD,"groupement, fiscalité unique ou de zone",produit,IFTEHmEPCI_2,2012,2025,
+IFER_HYD,"groupement, fiscalité éolienne",produit,IFTEHmEPCI_3,2012,2025,
+IFER_HYD,département,produit,IFTEHmDEP,2012,2025,
+IFER_NUC,commune,produit,IFELECmCOM,2012,2025,
+IFER_NUC,"groupement, fiscalité unique ou de zone",produit,IFELECmEPCI_2,2012,2025,
+IFER_NUC,département,produit,IFELECmDEP,2012,2025,
+IFER_PV,commune,produit,IFEPHmCOM,2012,2025,
+IFER_PV,"groupement, fiscalité unique ou de zone",produit,IFEPHmEPCI_2,2012,2025,
+IFER_PV,département,produit,IFEPHmDEP,2012,2025,
+IFER_BAR,commune,produit,IFEHmCOM,2012,2025,
+IFER_BAR,"groupement, fiscalité unique ou de zone",produit,IFEHmEPCI_2,2012,2025,
+IFER_BAR,département,produit,IFEHmDEP,2012,2025,
+IFER_TRA,commune,produit,IFTRmCOM,2012,2025,
+IFER_TRA,"groupement, fiscalité unique ou de zone",produit,IFTRmEPCI_2,2012,2025,
+IFER_RAD,commune,produit,IFRADmCOM,2012,2025,
+IFER_RAD,"groupement, fiscalité unique ou de zone",produit,IFRADmEPCI_2,2012,2025,
+IFER_RAD,département,produit,IFRADmDEP,2012,2025,
+IFER_GAZ,commune,produit,IFGAZmCOM,2012,2025,
+IFER_GAZ,"groupement, fiscalité additionnelle",produit,IFGAZmEPCI_1,2012,2025,
+IFER_GAZ,"groupement, fiscalité unique ou de zone",produit,IFGAZmEPCI_2,2012,2025,
+IFER_GAZ,département,produit,IFGAZmDEP,2012,2025,
+IFER_GEO,commune,produit,IFGEOmCOM,2020,2025,
+IFER_GEO,région,produit,IFGEOmREG,2020,2025,
+IFER_NUC,fonds de compensation,produit,IFELECfonds,2021,2025,Part versée au fonds de compensation des communes et groupements qui perdent une centrale.

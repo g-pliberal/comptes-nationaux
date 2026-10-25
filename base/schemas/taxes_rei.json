@@ -1,0 +1,9 @@
+{
+  "description": "Taxes que le fichier de recensement des éléments d'imposition à la fiscalité directe locale (REI) de la DGFiP permet de lire, sous le code que leur donne la base.",
+  "fields": [
+    {"name": "taxe", "type": "string", "constraints": {"required": true, "pattern": "[A-Z][A-Z_]*"}},
+    {"name": "libelle", "type": "string", "constraints": {"required": true}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["taxe"]
+}
