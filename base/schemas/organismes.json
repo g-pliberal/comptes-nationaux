@@ -1,0 +1,19 @@
+{
+  "description": "Organismes publics que nomment les listes officielles, un par ligne : pour l'instant, chaque organisme divers d'administration centrale (ODAC) de la liste de l'Insee, sous la fonction dont elle le fait relever. L'import lit chaque liste dans sa copie archivée et l'inscrit ici ; le contrôle de la base la relit.",
+  "fields": [
+    {"name": "fichier_id", "type": "string", "description": "Copie archivée de la liste.", "constraints": {"required": true}},
+    {"name": "rang", "type": "integer", "description": "Rang de l'organisme dans la liste, à partir de 1.", "constraints": {"required": true}},
+    {"name": "annee", "type": "string", "description": "Année de comptes à laquelle la liste se rapporte.", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "perimetre_id", "type": "string", "description": "Sous-secteur des administrations publiques auquel la liste rattache l'organisme.", "constraints": {"required": true}},
+    {"name": "fonction_id", "type": "string", "description": "Fonction (premier niveau de la COFOG) sous laquelle la liste range l'organisme."},
+    {"name": "sigle", "type": "string", "description": "Sigle de l'organisme, tel que la liste l'écrit."},
+    {"name": "nom", "type": "string", "description": "Nom de l'organisme, tel que la liste l'écrit, ses blancs répétés réduits à une espace.", "constraints": {"required": true}},
+    {"name": "page", "type": "integer", "description": "Page de la liste où l'organisme figure.", "constraints": {"required": true}}
+  ],
+  "primaryKey": ["fichier_id", "rang"],
+  "foreignKeys": [
+    {"fields": ["fichier_id"], "reference": {"resource": "fichiers", "fields": ["id"]}},
+    {"fields": ["perimetre_id"], "reference": {"resource": "perimetres", "fields": ["id"]}},
+    {"fields": ["fonction_id"], "reference": {"resource": "fonctions", "fields": ["id"]}}
+  ]
+}

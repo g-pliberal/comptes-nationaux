@@ -10,7 +10,8 @@ vérifie ce que disent les sources elles-mêmes :
    groupes ; pour le budget de l'État, chaque mission celle de ses programmes) ;
 3. l'additivité des sous-secteurs, pour les soldes, les prélèvements obligatoires, la dette et les dépenses
    consolidées de l'ensemble, et pour tous les montants des comptes complets, et celle des niveaux de collectivités
-   locales, pour tous leurs montants et leurs nombres de budgets ;
+   locales, pour tous leurs montants et leurs nombres de budgets, et celle des catégories d'organismes et de
+   collectivités dans leurs décomptes ;
 4. les passerelles entre tableaux qui présentent autrement les mêmes grandeurs, dont les grandeurs que la
    consolidation des comptes des collectivités locales laisse inchangées, la dette trimestrielle contre la dette de fin
    d'année, et les comptes complets contre les dépenses et recettes ;
@@ -30,7 +31,9 @@ vérifie ce que disent les sources elles-mêmes :
 11. le recensement des éléments d'imposition de la DGFiP : le produit de chaque imposition contre sa base
    multipliée par son taux, la base simplifiée de l'OFGL contre le recensement dont elle est tirée, commune par
    commune, le produit de chaque taxe et de chaque niveau qui perçoit, et la taxe d'enlèvement des ordures
-   ménagères recensée de chaque niveau contre celle de ses comptes.
+   ménagères recensée de chaque niveau contre celle de ses comptes ;
+12. les organismes publics : les listes et décomptes officiels des unités publiques, de l'Insee et de la DGCL, contre
+   les unités dont la base a les comptes une à une.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -45,6 +48,7 @@ import math
 import re
 
 import importer_ofgl_collectivites as ofgl
+import importer_organismes as organismes
 import importer_rei as rei
 from commun import RACINE, lire, ressources_chiffres
 
@@ -459,6 +463,13 @@ _ENTITES_LOCALES += [("DEPARTEMENTS_BP", ["DEPARTEMENTS_METROPOLE_BP", "DEPARTEM
                      ("REGIONS_CTU_BP", ["REGIONS_BP", "COLLECTIVITE_DE_CORSE_BP", "CTU_MARTINIQUE_BP", "CTU_GUYANE_BP"])]
 DECOMPOSITIONS_PAR_CONCEPT.update({c["id"]: _NIVEAUX_LOCAUX + _ENTITES_LOCALES for c in lire("tables/concepts.csv")
                                    if c["norme_id"] == "COMPTES_LOCAUX"})
+# Nombres d'organismes et de collectivités : chaque catégorie contre la somme de celles que la table des périmètres range
+# sous elle, et le nombre d'organismes divers d'administration locale contre la somme de leurs catégories.
+_UNITES = {p["id"] for p in lire("tables/perimetres.csv") if p["norme_id"] == "UNITES_PUBLIQUES"}
+_CATEGORIES = [(t, sorted(p for p in _SOUS[t] if p in _UNITES)) for t in sorted(_UNITES | {"S13132"})
+               if any(p in _UNITES for p in _SOUS[t])]
+DECOMPOSITIONS_PAR_CONCEPT.update({c["id"]: _CATEGORIES for c in lire("tables/concepts.csv")
+                                   if c["norme_id"] == "UNITES_PUBLIQUES"})
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
 # de droite), chaque terme étant (source, périmètre, concept, signe) et, au besoin, (modèle de période, traitement),
@@ -1705,7 +1716,9 @@ def partie_additivite(derniers):
               "niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre "
               "contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets "
               "annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, "
-              "chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions.", "",
+              "chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions ; pour "
+              "les décomptes d'organismes et de collectivités, chaque catégorie contre la somme de ses sous-catégories "
+              "(organismes divers d'administration locale de l'Insee, collectivités et groupements de la DGCL).", "",
               f"{n} additions vérifiées : {n - len(ecarts)} justes, {len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
     for famille, concept, fonction, annee, ensemble, parties, tableaux, ecart, unite in ecarts:
@@ -1899,8 +1912,7 @@ def nom(listes, source, exercice, siren):
     return next((fiche[c] for c in ("lbudg", "commune", "nom_epci", "nom_departement", "nom") if fiche.get(c)), "")
 
 
-def partie_collectivites(derniers):
-    listes = listes_collectivites()
+def partie_collectivites(derniers, listes):
     exercices, controles, sommes, memes, fiches, flux, teom = collectivites(derniers, listes)
     if not exercices:
         return []
@@ -2608,6 +2620,204 @@ def liste_de_fonctions(fonctions):
     return parties[0] if len(parties) == 1 else ", ".join(parties[:-1]) + " et " + parties[-1]
 
 
+# Ce que la base couvre des unités publiques : les décomptes officiels contre les unités dont elle a les comptes un à
+# un, que donnent les listes des jeux de l'OFGL (leurs numéros Siren distincts, le jeu des SDIS et celui des centres
+# d'action sociale étant publiés budget par budget). Chaque catégorie de la DGCL se compare aux unités de l'exercice
+# qui y correspondent : (catégorie, périmètre, [(jeu, fiches retenues)], unités retenues).
+UNITES_DGCL, UNITES_ODAL = "dgcl.collectivites-locales-en-chiffres", "insee.liste-odal"
+NOMBRE_1ER_JANVIER, NOMBRE_DANS_LE_CHAMP = "UNITES_PUBLIQUES.NOMBRE_1ER_JANVIER", "UNITES_PUBLIQUES.NOMBRE_DANS_LE_CHAMP"
+CCAS, EPL = "ofgl.base-ccas-cias", "ofgl.base-epl-consolidee"
+MDPH_SYNDICATS, MDPH_EPL = "Maison départementale des personnes handicapées (MDPH)", "GIP - MDPH"
+COUVERTURE_DGCL = [
+    ("Communes", "COMMUNES", [(COMMUNES, lambda f: True)], "le jeu des communes, Ville de Paris comprise"),
+    ("Départements", "CONSEILS_DEPARTEMENTAUX", [(DEPARTEMENTS, lambda f: f.get("categ") == "DEPT")],
+     "la catégorie « DEPT » du jeu des départements, qui comprend le Département de Mayotte"),
+    ("Régions", "CONSEILS_REGIONAUX", [(REGIONS, lambda f: f.get("categ") == "REG")],
+     "la catégorie « REG » du jeu des régions"),
+    ("Collectivités à statut particulier", "COLLECTIVITES_STATUT_PARTICULIER",
+     [(REGIONS, lambda f: f.get("categ") == "CTU"), (GFP, lambda f: f.get("categ") == "ML")],
+     "les collectivités territoriales uniques du jeu des régions (Corse, Martinique, Guyane) et la métropole de Lyon ; "
+     "le Département de Mayotte est compté avec les départements"),
+    ("Groupements à fiscalité propre", "GFP", [(GFP, lambda f: f.get("categ") == "GFP")],
+     "la catégorie « GFP » du jeu des groupements, sans la métropole de Lyon ni les établissements publics territoriaux"),
+    ("Syndicats", "SYNDICATS", [(SYNDICATS, lambda f: f.get("categorie_synd") != MDPH_SYNDICATS),
+                                (GFP, lambda f: f.get("categ") == "EPT")],
+     "le jeu des syndicats sans les maisons départementales des personnes handicapées, et les établissements publics "
+     "territoriaux du jeu des groupements, que la DGCL compte parmi les syndicats")]
+COUVERTURE_ODAL = {
+    "ODAL_SDIS": ([(SDIS, lambda f: True)], "le jeu des SDIS"),
+    "ODAL_CCAS": ([(CCAS, lambda f: True)], "le jeu des centres d'action sociale : centres communaux et intercommunaux, et "
+                                            "celui de la Ville de Paris"),
+    "ODAL_MDPH": ([(SYNDICATS, lambda f: f.get("categorie_synd") == MDPH_SYNDICATS),
+                   (EPL, lambda f: f.get("categorie_epl_abr") == MDPH_EPL)],
+                  "les maisons départementales des personnes handicapées des jeux des syndicats et des établissements "
+                  "publics locaux")}
+EPL_HORS_MDPH = [(EPL, lambda f: f.get("categorie_epl_abr") != MDPH_EPL)]
+# Les périmètres des autres normes qui décrivent un sous-secteur sans être rangés sous lui : l'État des lois de finances et
+# de ses comptes annuels, les ensembles des lois de financement de la sécurité sociale.
+AUTRES_PERIMETRES = {"S13111": ("ETAT_LF", "ETAT_CGE"), "S1314": ("ROBSS", "ROBSS_FSV", "SECU_LFSS")}
+
+
+def sirens(listes, exercice, jeux):
+    """Les numéros Siren distincts des fiches retenues de jeux de l'OFGL pour un exercice ; None s'il manque un jeu."""
+    retenus = set()
+    for jeu, retenue in jeux:
+        if (jeu, exercice) not in listes:
+            return None
+        retenus |= {f["siren"] for f in listes[(jeu, exercice)].values() if retenue(f)}
+    return retenus
+
+
+def nombre_officiel(derniers, source, concept, perimetre, periode):
+    ligne = derniers.get((source, "FR", perimetre, concept, "", "", "NOMBRE", periode))
+    return round(float(ligne["valeur"])) if ligne else None
+
+
+def officiel_contre_base(officiel, base):
+    """« 34 935 / 34 932 (−3) » : le décompte officiel, les unités de la base, et leur écart s'il y en a un."""
+    texte = f"{'—' if officiel is None else fr(officiel, 0)} / {'—' if base is None else fr(len(base), 0)}"
+    return texte + (f" ({fr(len(base) - officiel, 0, True)})" if None not in (officiel, base) and len(base) != officiel
+                    else "")
+
+
+def noms_compacts(noms):
+    """Des noms de sources d'un producteur : « bdm-dette-trim-apu, t3101 à t3105, t3203 » ; au-delà de quinze, leur nombre,
+    le premier et le dernier."""
+    noms = sorted(noms)
+    if len(noms) > 15:
+        return f"{len(noms)} sources ({noms[0]} … {noms[-1]})"
+    suites, autres = [], [n for n in noms if not re.fullmatch(r"t[0-9]{4}", n)]
+    for n in sorted(int(n[1:]) for n in noms if re.fullmatch(r"t[0-9]{4}", n)):
+        if suites and n == suites[-1][-1] + 1:
+            suites[-1].append(n)
+        else:
+            suites.append([n])
+    return ", ".join(autres + [f"t{s[0]} à t{s[-1]}" if len(s) >= 3 else ", ".join(f"t{n}" for n in s) for s in suites])
+
+
+def sources_du_sous_secteur(derniers, perimetre, autres=()):
+    """Les sources dont des chiffres portent sur le sous-secteur, sur un périmètre qu'il contient ou sur l'un des
+    `autres`, hors décomptes d'unités, groupées par producteur : « insee : t3204, t7304 ; senat : 22 sources (pjl06-051 …
+    tas22-018) »."""
+    parents = {p["id"]: p["parent_id"] for p in lire("tables/perimetres.csv")}
+
+    def dedans(p):
+        while p:
+            if p == perimetre or p in autres:
+                return True
+            p = parents.get(p)
+        return False
+
+    par_producteur = collections.defaultdict(set)
+    for k in derniers:
+        if not k[3].startswith("UNITES_PUBLIQUES.") and dedans(k[2]):
+            producteur, nom = k[0].split(".", 1)
+            par_producteur[producteur].add(nom)
+    return " ; ".join(f"{p} : {noms_compacts(n)}" for p, n in sorted(par_producteur.items()))
+
+
+def partie_organismes(derniers, listes):
+    inscrits = lire("tables/organismes.csv")
+    annees_dgcl = sorted({k[7] for k in derniers if k[0] == UNITES_DGCL and k[3] == NOMBRE_1ER_JANVIER})
+    annees_odal = sorted({k[7] for k in derniers if k[0] == UNITES_ODAL and k[3] == NOMBRE_DANS_LE_CHAMP})
+    if not (inscrits or annees_dgcl or annees_odal):
+        return []
+    par_liste = collections.defaultdict(list)
+    for o in inscrits:
+        par_liste[(o["annee"], o["fichier_id"])].append(o)
+    (annee_odac, _), odac = max(par_liste.items()) if par_liste else ((None, None), [])
+    annee = annee_odac or max(annees_odal or annees_dgcl)
+    libelles = {p["id"]: p["libelle"] for p in lire("tables/perimetres.csv")}
+    jeux_dgcl = [j for _, _, jeux, _ in COUVERTURE_DGCL for j in jeux]
+    jeux_odal = [j for jeux, _ in COUVERTURE_ODAL.values() for j in jeux] + EPL_HORS_MDPH
+    lignes = ["## 12. Organismes publics : ce que la base couvre", "",
+              "Le secteur des administrations publiques, unité par unité, d'après les listes et décomptes officiels : la "
+              "liste des organismes divers d'administration centrale (ODAC) et le nombre d'organismes divers "
+              "d'administration locale (ODAL) par catégorie, que l'Insee établit pour les comptes nationaux, le nombre de "
+              "collectivités territoriales et de groupements au 1er janvier que publie la DGCL. Ils se comparent aux "
+              "unités dont la base a les comptes une à une, d'après les listes des jeux de l'OFGL (numéros Siren "
+              "distincts). Un écart n'est pas une erreur : un décompte à une date et la liste des comptes d'un exercice "
+              "ne retiennent pas toujours les mêmes unités.", "",
+              f"### Les sous-secteurs en {annee}", "",
+              "| Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | "
+              "Sources de la base sur le sous-secteur ou ses parties |", "|---|---|---|---|"]
+    collectivites = nombre_officiel(derniers, UNITES_DGCL, NOMBRE_1ER_JANVIER, "COLLECTIVITES_ET_GROUPEMENTS", annee)
+    odal = nombre_officiel(derniers, UNITES_ODAL, NOMBRE_DANS_LE_CHAMP, "S13132", annee)
+    base_collectivites, base_odal = sirens(listes, annee, jeux_dgcl), sirens(listes, annee, jeux_odal)
+    selon_ofgl = f"jeux de l'OFGL, exercice {annee}"
+    sous_secteurs = [
+        ("État (S13111)", "S13111", "l'État",
+         "l'État, d'après son budget exécuté et ses comptes annuels (lois de règlement et de résultats)"),
+        ("Organismes divers d'administration centrale (S13112)", "S13112",
+         f"{fr(len(odac), 0)} (liste des ODAC, {annee_odac})" if odac else "—", "aucun"),
+        ("Collectivités locales (S13131)", "S13131",
+         "—" if collectivites is None else f"{fr(collectivites, 0)} au 1er janvier (DGCL)",
+         "—" if base_collectivites is None else f"{fr(len(base_collectivites), 0)} ({selon_ofgl})"),
+        ("Organismes divers d'administration locale (S13132)", "S13132",
+         "—" if odal is None else f"{fr(odal, 0)} (liste des ODAL)",
+         "—" if base_odal is None else f"{fr(len(base_odal), 0)} : SDIS, centres d'action sociale, établissements "
+                                       f"publics locaux ({selon_ofgl})"),
+        ("Administrations de sécurité sociale (S1314)", "S1314",
+         "pas de liste dans la documentation des comptes nationaux de l'Insee",
+         "aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, "
+         "CADES, FRR")]
+    lignes += [f"| {nom} | {officiel} | {base} | "
+               f"{sources_du_sous_secteur(derniers, perimetre, AUTRES_PERIMETRES.get(perimetre, ()))} |"
+               for nom, perimetre, officiel, base in sous_secteurs] + [""]
+    annees = [a for a in annees_dgcl if sirens(listes, a, jeux_dgcl) is not None]
+    if annees:
+        lignes += ["### Collectivités territoriales et groupements", "",
+                   "Pour chaque catégorie, le nombre que la DGCL décompte au 1er janvier (tableaux 2.2 et 2.5a de « Les "
+                   "collectivités locales en chiffres »), puis le nombre d'unités dont la base a les comptes de "
+                   "l'exercice, et leur écart.", "",
+                   "| Catégorie | " + " | ".join(annees) + " |", "|---|" + "---|" * len(annees)]
+        for libelle, perimetre, jeux, _ in COUVERTURE_DGCL + [("Ensemble", "COLLECTIVITES_ET_GROUPEMENTS", jeux_dgcl, "")]:
+            lignes.append(f"| {libelle} | " + " | ".join(officiel_contre_base(
+                nombre_officiel(derniers, UNITES_DGCL, NOMBRE_1ER_JANVIER, perimetre, a), sirens(listes, a, jeux))
+                for a in annees) + " |")
+        lignes += ["", "Unités retenues dans la base :", ""]
+        lignes += [f"- {libelle} : {retenues}." for libelle, _, _, retenues in COUVERTURE_DGCL] + [""]
+    if annees_odal:
+        a = max(annees_odal)
+        lignes += [f"### Organismes divers d'administration locale en {a}", "",
+                   "Pour chaque catégorie de la liste de l'Insee, le nombre de ses organismes, puis celui des unités dont "
+                   f"la base a les comptes de l'exercice {a}, pour les catégories que publie un jeu de l'OFGL.", "",
+                   "| Catégorie | Organismes (Insee) | Dans la base |", "|---|---|---|"]
+        for perimetre in list(organismes.CATEGORIES_ODAL.values()) + ["S13132"]:
+            jeux = COUVERTURE_ODAL.get(perimetre, ([],))[0] if perimetre != "S13132" else jeux_odal
+            base = sirens(listes, a, jeux) if jeux else None
+            libelle = "Ensemble" if perimetre == "S13132" else libelles.get(perimetre, perimetre)
+            officiel = nombre_officiel(derniers, UNITES_ODAL, NOMBRE_DANS_LE_CHAMP, perimetre, a)
+            lignes.append(f"| {libelle} | {'—' if officiel is None else fr(officiel, 0)} | "
+                          f"{'—' if base is None else fr(len(base), 0)} |")
+            if perimetre == list(organismes.CATEGORIES_ODAL.values())[-1]:
+                epl = sirens(listes, a, EPL_HORS_MDPH)
+                lignes.append(f"| Établissements publics locaux (jeu de l'OFGL), hors MDPH | — | "
+                              f"{'—' if epl is None else fr(len(epl), 0)} |")
+        activites = collections.Counter(f.get("libelle_cacti_simplifie") or "non dite" for f in listes.get((EPL, a), {}).values()
+                                        if f.get("categorie_epl_abr") != MDPH_EPL)
+        lignes += ["", "Unités retenues dans la base :", ""]
+        lignes += [f"- {libelles.get(p, p)} : {retenues}." for p, (_, retenues) in COUVERTURE_ODAL.items()]
+        if activites:
+            premieres, autres = activites.most_common()[:6], activites.most_common()[6:]
+            lignes.append("- Établissements publics locaux : établissements publics administratifs, régies personnalisées "
+                          "et groupements d'intérêt public, que l'Insee range dans plusieurs de ses catégories ; par "
+                          "activité : " + ", ".join(f"{n.lower()} {fr(c, 0)}" for n, c in premieres)
+                          + (f", et {fr(sum(c for _, c in autres), 0)} dans {len(autres)} autres activités" if autres else "")
+                          + ".")
+        lignes.append("")
+    if odac:
+        fonctions = {f["id"]: f["libelle"] for f in lire("tables/fonctions.csv")}
+        par_fonction = collections.Counter(o["fonction_id"] for o in odac)
+        lignes += [f"### Organismes divers d'administration centrale en {annee_odac}", "",
+                   f"La liste de l'Insee, que la table des organismes reprend organisme par organisme : "
+                   f"{fr(len(odac), 0)} organismes, par fonction (premier niveau de la COFOG). La base n'a les comptes "
+                   "d'aucun d'eux un à un.", "", "| Fonction | Organismes |", "|---|---|"]
+        lignes += [f"| {f} {fonctions.get(f, '')} | {fr(n, 0)} |" for f, n in sorted(par_fonction.items())]
+        lignes += [f"| Ensemble | {fr(len(odac), 0)} |", ""]
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -2618,7 +2828,8 @@ def ecrire_rapport(derniers):
               "sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.", ""]
     lignes += partie_sources(derniers) + partie_sommes(derniers) + partie_ventilations(derniers)
     lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)
-    lignes += partie_concordances(derniers) + partie_collectivites(derniers)
+    listes = listes_collectivites()
+    lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

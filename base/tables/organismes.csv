@@ -1,0 +1,702 @@
+fichier_id,rang,annee,perimetre_id,fonction_id,sigle,nom,page
+insee.liste-odac@2026-10-25-117882a9,1,2024,S13112,GF01,ADOM,l'Agence de l'outre-mer pour la mobilité,1
+insee.liste-odac@2026-10-25-117882a9,2,2024,S13112,GF01,AFA,Groupement d'intérêt public Agence française de l'adoption,1
+insee.liste-odac@2026-10-25-117882a9,3,2024,S13112,GF01,ANTS,Agence nationale des titres sécurisés,1
+insee.liste-odac@2026-10-25-117882a9,4,2024,S13112,GF01,BPI_FSIPME,FSI PME Portefeuille,1
+insee.liste-odac@2026-10-25-117882a9,5,2024,S13112,GF01,BPI_IC,Bpifrance international capital,1
+insee.liste-odac@2026-10-25-117882a9,6,2024,S13112,GF01,BPI_PARTICIP,Bpifrance Participations,1
+insee.liste-odac@2026-10-25-117882a9,7,2024,S13112,GF01,BRGM,BRGM (Bureau de recherches géologiques et minières),1
+insee.liste-odac@2026-10-25-117882a9,8,2024,S13112,GF01,CDAD,GIP Conseil départemental de laccès au droit de la Lozère,1
+insee.liste-odac@2026-10-25-117882a9,9,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit de la Réunion,1
+insee.liste-odac@2026-10-25-117882a9,10,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit de l'Hérault,1
+insee.liste-odac@2026-10-25-117882a9,11,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit de Lot-et-Garonne,1
+insee.liste-odac@2026-10-25-117882a9,12,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit de Maine-et-Loire,1
+insee.liste-odac@2026-10-25-117882a9,13,2024,S13112,GF01,CDAD,GIP Conseil départemental de laccès au droit de Paris,1
+insee.liste-odac@2026-10-25-117882a9,14,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit de Vaucluse,1
+insee.liste-odac@2026-10-25-117882a9,15,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit des Alpes de Haute-Provence,1
+insee.liste-odac@2026-10-25-117882a9,16,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit des Alpes Maritimes,1
+insee.liste-odac@2026-10-25-117882a9,17,2024,S13112,GF01,CDAD,GIP Conseil Départemental de l'accès au droit des Côtes d'Armor,1
+insee.liste-odac@2026-10-25-117882a9,18,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit du Bas-Rhin,1
+insee.liste-odac@2026-10-25-117882a9,19,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit du Pas-de-Calais,1
+insee.liste-odac@2026-10-25-117882a9,20,2024,S13112,GF01,CDAD,GIP Conseil départemental de l'accès au droit du Val d'Oise,1
+insee.liste-odac@2026-10-25-117882a9,21,2024,S13112,GF01,CDAD,Groupement dintérêt public Conseil départemental daccès au droit de la Loire- Atlantique,1
+insee.liste-odac@2026-10-25-117882a9,22,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Corse-du-Sud,1
+insee.liste-odac@2026-10-25-117882a9,23,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Dordogne,1
+insee.liste-odac@2026-10-25-117882a9,24,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Haute Saone,1
+insee.liste-odac@2026-10-25-117882a9,25,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Haute-Loire,1
+insee.liste-odac@2026-10-25-117882a9,26,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Charente,1
+insee.liste-odac@2026-10-25-117882a9,27,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Charente Maritime,1
+insee.liste-odac@2026-10-25-117882a9,28,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Corrèze,1
+insee.liste-odac@2026-10-25-117882a9,29,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Creuse,1
+insee.liste-odac@2026-10-25-117882a9,30,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Drôme,1
+insee.liste-odac@2026-10-25-117882a9,31,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Gironde,1
+insee.liste-odac@2026-10-25-117882a9,32,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Guyane,1
+insee.liste-odac@2026-10-25-117882a9,33,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Haute Corse,1
+insee.liste-odac@2026-10-25-117882a9,34,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Haute- Garonne,2
+insee.liste-odac@2026-10-25-117882a9,35,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Haute-Savoie,2
+insee.liste-odac@2026-10-25-117882a9,36,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Loire,2
+insee.liste-odac@2026-10-25-117882a9,37,2024,S13112,GF01,CDAD,Groupement dintérêt public Conseil départemental de laccès au droit de la Martinique,2
+insee.liste-odac@2026-10-25-117882a9,38,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Meuse,2
+insee.liste-odac@2026-10-25-117882a9,39,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Moselle,2
+insee.liste-odac@2026-10-25-117882a9,40,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Nièvre,2
+insee.liste-odac@2026-10-25-117882a9,41,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Sarthe,2
+insee.liste-odac@2026-10-25-117882a9,42,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Savoie,2
+insee.liste-odac@2026-10-25-117882a9,43,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Somme,2
+insee.liste-odac@2026-10-25-117882a9,44,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de la Vienne,2
+insee.liste-odac@2026-10-25-117882a9,45,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Ain,2
+insee.liste-odac@2026-10-25-117882a9,46,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Aisne,2
+insee.liste-odac@2026-10-25-117882a9,47,2024,S13112,GF01,CDAD,Groupement dintérêt public Conseil départemental de laccès au droit de lAllier,2
+insee.liste-odac@2026-10-25-117882a9,48,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Ardèche,2
+insee.liste-odac@2026-10-25-117882a9,49,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Ariège,2
+insee.liste-odac@2026-10-25-117882a9,50,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Aube,2
+insee.liste-odac@2026-10-25-117882a9,51,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Aude,2
+insee.liste-odac@2026-10-25-117882a9,52,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Eure,2
+insee.liste-odac@2026-10-25-117882a9,53,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Ille et Vilaine,2
+insee.liste-odac@2026-10-25-117882a9,54,2024,S13112,GF01,CDAD,Groupement dintérêt public Conseil départemental de laccès au droit de lIndre,2
+insee.liste-odac@2026-10-25-117882a9,55,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Isère,2
+insee.liste-odac@2026-10-25-117882a9,56,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Loir-et- Cher,2
+insee.liste-odac@2026-10-25-117882a9,57,2024,S13112,GF01,CDAD,Groupement dintérêt public Conseil départemental de laccès au droit de lOise,2
+insee.liste-odac@2026-10-25-117882a9,58,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de l'Orne,2
+insee.liste-odac@2026-10-25-117882a9,59,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Mayenne,2
+insee.liste-odac@2026-10-25-117882a9,60,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Mayotte,2
+insee.liste-odac@2026-10-25-117882a9,61,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Meurthe-et-Moselle,2
+insee.liste-odac@2026-10-25-117882a9,62,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Saint-Barthélemy - Saint-Martin,2
+insee.liste-odac@2026-10-25-117882a9,63,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Saône-et-Loire,2
+insee.liste-odac@2026-10-25-117882a9,64,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Seine-Maritime,2
+insee.liste-odac@2026-10-25-117882a9,65,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Seine-Saint-Denis,2
+insee.liste-odac@2026-10-25-117882a9,66,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Tarn-et- Garonne,2
+insee.liste-odac@2026-10-25-117882a9,67,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit de Vendée,2
+insee.liste-odac@2026-10-25-117882a9,68,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit des Bouches du Rhone,2
+insee.liste-odac@2026-10-25-117882a9,69,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit des Deux-Sèvres,2
+insee.liste-odac@2026-10-25-117882a9,70,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit des Hautes-Alpes,2
+insee.liste-odac@2026-10-25-117882a9,71,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit des Hautes-Pyrénées,2
+insee.liste-odac@2026-10-25-117882a9,72,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit des Landes,2
+insee.liste-odac@2026-10-25-117882a9,73,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit des Pyrénées-Atlantiques,2
+insee.liste-odac@2026-10-25-117882a9,74,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit des Pyrénées-Orientales,2
+insee.liste-odac@2026-10-25-117882a9,75,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit des Yvelines,2
+insee.liste-odac@2026-10-25-117882a9,76,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit d'Indre-et-Loire,2
+insee.liste-odac@2026-10-25-117882a9,77,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Calvados,2
+insee.liste-odac@2026-10-25-117882a9,78,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Cantal,2
+insee.liste-odac@2026-10-25-117882a9,79,2024,S13112,GF01,CDAD,Groupement dintérêt public Conseil départemental de laccès au droit du Cher,2
+insee.liste-odac@2026-10-25-117882a9,80,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Doubs,2
+insee.liste-odac@2026-10-25-117882a9,81,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Finistère,2
+insee.liste-odac@2026-10-25-117882a9,82,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Gard,2
+insee.liste-odac@2026-10-25-117882a9,83,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Gers,2
+insee.liste-odac@2026-10-25-117882a9,84,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Jura,2
+insee.liste-odac@2026-10-25-117882a9,85,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Loiret,2
+insee.liste-odac@2026-10-25-117882a9,86,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Morbihan,3
+insee.liste-odac@2026-10-25-117882a9,87,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Nord,3
+insee.liste-odac@2026-10-25-117882a9,88,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Puy-de- Dôme,3
+insee.liste-odac@2026-10-25-117882a9,89,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Tarn,3
+insee.liste-odac@2026-10-25-117882a9,90,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Territoire de Belfort,3
+insee.liste-odac@2026-10-25-117882a9,91,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Val-de- Marne,3
+insee.liste-odac@2026-10-25-117882a9,92,2024,S13112,GF01,CDAD,Groupement d'intérêt public Conseil départemental de l'accès au droit du Var,3
+insee.liste-odac@2026-10-25-117882a9,93,2024,S13112,GF01,CDP,Caisse de la dette publique,3
+insee.liste-odac@2026-10-25-117882a9,94,2024,S13112,GF01,CINES,Centre informatique national de l'enseignement supérieur,3
+insee.liste-odac@2026-10-25-117882a9,95,2024,S13112,GF01,CIVIQUE,Groupement d'intérêt public Agence du service civique,3
+insee.liste-odac@2026-10-25-117882a9,96,2024,S13112,GF01,CNG,Centre national de gestion des praticiens hospitaliers et des personnels de direction de la fonction publique hospitaliè,3
+insee.liste-odac@2026-10-25-117882a9,97,2024,S13112,GF01,CNRS,Centre national de la recherche scientifique,3
+insee.liste-odac@2026-10-25-117882a9,98,2024,S13112,GF01,COFRANCE,Collège de France,3
+insee.liste-odac@2026-10-25-117882a9,99,2024,S13112,GF01,CSA,Conseil supérieur de l'audiovisuel,3
+insee.liste-odac@2026-10-25-117882a9,100,2024,S13112,GF01,CYCERON,centre d'imagerie cérébrale et de recherches en neuroscience,3
+insee.liste-odac@2026-10-25-117882a9,101,2024,S13112,GF01,FGAO,fonds de garantie des assurances obligatoires de dommage,3
+insee.liste-odac@2026-10-25-117882a9,102,2024,S13112,GF01,FGTI,fonds de garantie des victimes des actes de terrorisme et d'autres infractions,3
+insee.liste-odac@2026-10-25-117882a9,103,2024,S13112,GF01,FSD,Fonds de solidarité pour le développement,3
+insee.liste-odac@2026-10-25-117882a9,104,2024,S13112,GF01,HONNEUR,Grande chancellerie de la Légion dhonneur,3
+insee.liste-odac@2026-10-25-117882a9,105,2024,S13112,GF01,IFRTPE,Groupement d'intérêt public Institut polaire français Paul-Emile Victor,3
+insee.liste-odac@2026-10-25-117882a9,106,2024,S13112,GF01,IGNF,Institut national de linformation géographique et forestière,3
+insee.liste-odac@2026-10-25-117882a9,107,2024,S13112,GF01,IHESBY,institut des hautes études scientifiques de Bures-sur-Yvette,3
+insee.liste-odac@2026-10-25-117882a9,108,2024,S13112,GF01,INED,Institut national détudes démographiques,3
+insee.liste-odac@2026-10-25-117882a9,109,2024,S13112,GF01,INRAP,Institut national de recherches archéologiques préventives,3
+insee.liste-odac@2026-10-25-117882a9,110,2024,S13112,GF01,INRIA,Institut national de recherche en informatique et en automatique,3
+insee.liste-odac@2026-10-25-117882a9,111,2024,S13112,GF01,IRD,Institut de recherche pour le développement,3
+insee.liste-odac@2026-10-25-117882a9,112,2024,S13112,GF01,LIBERATION,Conseil national des communes Compagnon de la Libération,3
+insee.liste-odac@2026-10-25-117882a9,113,2024,S13112,GF01,MRDJ,mission de recherche droit et justice,3
+insee.liste-odac@2026-10-25-117882a9,114,2024,S13112,GF01,MSH,fondation maison des sciences de l'homme,3
+insee.liste-odac@2026-10-25-117882a9,115,2024,S13112,GF01,OBPA,Observatoire de Paris,3
+insee.liste-odac@2026-10-25-117882a9,116,2024,S13112,GF01,OCA,Observatoire de la Côte-d'Azur,3
+insee.liste-odac@2026-10-25-117882a9,117,2024,S13112,GF01,OFFPRA,Office français de protection des réfugiés et apatrides,3
+insee.liste-odac@2026-10-25-117882a9,118,2024,S13112,GF01,OFII,Office français de limmigration et de lintégration,3
+insee.liste-odac@2026-10-25-117882a9,119,2024,S13112,GF01,SPPE,Société de prise de participations de l'Etat,3
+insee.liste-odac@2026-10-25-117882a9,120,2024,S13112,GF02,ECPAD,Etablissement de communication et de production audiovisuelle de la défense,3
+insee.liste-odac@2026-10-25-117882a9,121,2024,S13112,GF02,ENSOSP,Ecole nationale supérieure des officiers de Sapeurs-Pompiers,3
+insee.liste-odac@2026-10-25-117882a9,122,2024,S13112,GF02,IHEDN,Institut des hautes études de défense nationale,3
+insee.liste-odac@2026-10-25-117882a9,123,2024,S13112,GF02,ISL,institut franco allemand de recherches de Saint-Louis,3
+insee.liste-odac@2026-10-25-117882a9,124,2024,S13112,GF02,SHOM,Etablissement public administratif Service hydrographique et océanographique de la marine,3
+insee.liste-odac@2026-10-25-117882a9,125,2024,S13112,GF03,ACMOSS,Agence des communications mobiles opérationnelles de sécurité et de secours,3
+insee.liste-odac@2026-10-25-117882a9,126,2024,S13112,GF03,AGRASC,Agence de gestion et de recouvrement des avoirs saisis et confisqués,3
+insee.liste-odac@2026-10-25-117882a9,127,2024,S13112,GF03,ANTAI,Agence nationale de traitement automatisé des infractions,3
+insee.liste-odac@2026-10-25-117882a9,128,2024,S13112,GF03,APIJ,Agence publique pour limmobilier de la justice,3
+insee.liste-odac@2026-10-25-117882a9,129,2024,S13112,GF03,CNAPS,Conseil national des activités privées de sécurité,3
+insee.liste-odac@2026-10-25-117882a9,130,2024,S13112,GF04,ACTA,association de coordination des techniques agricoles,4
+insee.liste-odac@2026-10-25-117882a9,131,2024,S13112,GF04,ACTIA,association de coordination techniques pour l'industrie agro-alimentaire,4
+insee.liste-odac@2026-10-25-117882a9,132,2024,S13112,GF04,ADEME,Agence de l'environnement et de la maîtrise de l'énergie,4
+insee.liste-odac@2026-10-25-117882a9,133,2024,S13112,GF04,AFDPAB,Groupement d'intérêt public Agence française pour le développement et la promotion de l'agriculture biologique,4
+insee.liste-odac@2026-10-25-117882a9,134,2024,S13112,GF04,AFITF,Agence de financement des infrastructures de transport de France,4
+insee.liste-odac@2026-10-25-117882a9,135,2024,S13112,GF04,AMF,Autorité des marchés financiers,4
+insee.liste-odac@2026-10-25-117882a9,136,2024,S13112,GF04,ANACT,Agence nationale pour lamélioration des conditions de travail,4
+insee.liste-odac@2026-10-25-117882a9,137,2024,S13112,GF04,ANF,Agence nationale des fréquences,4
+insee.liste-odac@2026-10-25-117882a9,138,2024,S13112,GF04,ANR,Agence nationale de la recherche,4
+insee.liste-odac@2026-10-25-117882a9,139,2024,S13112,GF04,ARAF,Autorité de régulation des transports,4
+insee.liste-odac@2026-10-25-117882a9,140,2024,S13112,GF04,ARPE,Autorité des Relations sociales des Plateformes d’Emploi,4
+insee.liste-odac@2026-10-25-117882a9,141,2024,S13112,GF04,ASIP,Groupement dintérêt public Agence du numérique en santé (ANS),4
+insee.liste-odac@2026-10-25-117882a9,142,2024,S13112,GF04,ASP,Agence de services et de paiement,4
+insee.liste-odac@2026-10-25-117882a9,143,2024,S13112,GF04,BPI_AE,Bpifrance Assurance Export,4
+insee.liste-odac@2026-10-25-117882a9,144,2024,S13112,GF04,BPI_EPIC,EPIC BPIFRANCE,4
+insee.liste-odac@2026-10-25-117882a9,145,2024,S13112,GF04,BPI_INVEST,Bpifrance Investissement,4
+insee.liste-odac@2026-10-25-117882a9,146,2024,S13112,GF04,BUSINESS_FRANCE,Business France,4
+insee.liste-odac@2026-10-25-117882a9,147,2024,S13112,GF04,CDGX,Gestionnaire d'infrastructures CDG-Express,4
+insee.liste-odac@2026-10-25-117882a9,148,2024,S13112,GF04,CDR,consortium de réalisation,4
+insee.liste-odac@2026-10-25-117882a9,149,2024,S13112,GF04,CEA,commissariat à l'énergie atomique,4
+insee.liste-odac@2026-10-25-117882a9,150,2024,S13112,GF04,CEPREMAP,centre pour la recherche économique et ses applications,4
+insee.liste-odac@2026-10-25-117882a9,151,2024,S13112,GF04,CIRAD,centre de coopération internationale en recherche agronomique,4
+insee.liste-odac@2026-10-25-117882a9,152,2024,S13112,GF04,CNA,Caisse nationale des autoroutes,4
+insee.liste-odac@2026-10-25-117882a9,153,2024,S13112,GF04,CNES,Centre national détudes spatiales,4
+insee.liste-odac@2026-10-25-117882a9,154,2024,S13112,GF04,CPSSP,Comité professionnel des stocks stratégiques pétroliers,4
+insee.liste-odac@2026-10-25-117882a9,155,2024,S13112,GF04,EPSF,Etablissement public de sécurité ferroviaire,4
+insee.liste-odac@2026-10-25-117882a9,156,2024,S13112,GF04,FCOMPET,France Compétences,4
+insee.liste-odac@2026-10-25-117882a9,157,2024,S13112,GF04,FGDR,Fonds de garantie des dépôts et de résolution,4
+insee.liste-odac@2026-10-25-117882a9,158,2024,S13112,GF04,FRANCE_AGRIMER,Etablissement national des produits de l'agriculture et de la mer,4
+insee.liste-odac@2026-10-25-117882a9,159,2024,S13112,GF04,H3C,Haut-Conseil du commissariat aux comptes,4
+insee.liste-odac@2026-10-25-117882a9,160,2024,S13112,GF04,HCERES,Haut Conseil de l'évaluation de la recherche et de l'enseignement supérieur,4
+insee.liste-odac@2026-10-25-117882a9,161,2024,S13112,GF04,IFCE,Institut français du cheval et de l'équitation,4
+insee.liste-odac@2026-10-25-117882a9,162,2024,S13112,GF04,IFPEN,institut français du pétrole,4
+insee.liste-odac@2026-10-25-117882a9,163,2024,S13112,GF04,IFREMER,Institut français de recherche pour l'exploitation de la mer,4
+insee.liste-odac@2026-10-25-117882a9,164,2024,S13112,GF04,INAO,Institut national de l'origine et de la qualité,4
+insee.liste-odac@2026-10-25-117882a9,165,2024,S13112,GF04,INFFO,centre pour le développement de l'information sur la formation permanente,4
+insee.liste-odac@2026-10-25-117882a9,166,2024,S13112,GF04,INPI,Institut national de la propriété industrielle,4
+insee.liste-odac@2026-10-25-117882a9,167,2024,S13112,GF04,INRA,"Institut national de recherche pour l'agriculture, l'alimentation et l'environnement",4
+insee.liste-odac@2026-10-25-117882a9,168,2024,S13112,GF04,INTEFP,"Institut national du travail, de l'emploi et de la formation professionnelle",4
+insee.liste-odac@2026-10-25-117882a9,169,2024,S13112,GF04,METEO,Météo-France,4
+insee.liste-odac@2026-10-25-117882a9,170,2024,S13112,GF04,MNE,Médiateur national de l'énergie,4
+insee.liste-odac@2026-10-25-117882a9,171,2024,S13112,GF04,ODEADOM,Office de développement de l'économie agricole d'outre-mer,4
+insee.liste-odac@2026-10-25-117882a9,172,2024,S13112,GF04,ONERA,Office national détudes et de recherches aérospatiales,4
+insee.liste-odac@2026-10-25-117882a9,173,2024,S13112,GF04,OPCO,Afdas,4
+insee.liste-odac@2026-10-25-117882a9,174,2024,S13112,GF04,OPCO,Akto,4
+insee.liste-odac@2026-10-25-117882a9,175,2024,S13112,GF04,OPCO,Atlas,4
+insee.liste-odac@2026-10-25-117882a9,176,2024,S13112,GF04,OPCO,Constructys,4
+insee.liste-odac@2026-10-25-117882a9,177,2024,S13112,GF04,OPCO,L'Opcommerce,4
+insee.liste-odac@2026-10-25-117882a9,178,2024,S13112,GF04,OPCO,Ocapiat,4
+insee.liste-odac@2026-10-25-117882a9,179,2024,S13112,GF04,OPCO,Opco EP,4
+insee.liste-odac@2026-10-25-117882a9,180,2024,S13112,GF04,OPCO,Opco Mobilités,5
+insee.liste-odac@2026-10-25-117882a9,181,2024,S13112,GF04,OPCO,Opco Santé,5
+insee.liste-odac@2026-10-25-117882a9,182,2024,S13112,GF04,OPCO,Opco2i,5
+insee.liste-odac@2026-10-25-117882a9,183,2024,S13112,GF04,OPCO,Uniformation,5
+insee.liste-odac@2026-10-25-117882a9,184,2024,S13112,GF04,PPLE,Groupement d'intérêt public Portail d'accès à la publicité légale des entreprises (www.pple.fr),5
+insee.liste-odac@2026-10-25-117882a9,185,2024,S13112,GF04,SAGESS,Société anonyme de gestion de stocks de sécurité,5
+insee.liste-odac@2026-10-25-117882a9,186,2024,S13112,GF04,SGFGAS,Société de Gestion du Fonds de Garantie de l'Accession Sociale à la propriété,5
+insee.liste-odac@2026-10-25-117882a9,187,2024,S13112,GF04,SNCFR,SNCF RÉSEAU,5
+insee.liste-odac@2026-10-25-117882a9,188,2024,S13112,GF04,TELT,Tunnel euroalpin Lyon Turin SAS,5
+insee.liste-odac@2026-10-25-117882a9,189,2024,S13112,GF04,VNF,Voies navigables de France,5
+insee.liste-odac@2026-10-25-117882a9,190,2024,S13112,GF05,CALANQUES,Parc national des Calanques,5
+insee.liste-odac@2026-10-25-117882a9,191,2024,S13112,GF05,CELRL,Conservatoire de l'espace littoral et des rivages lacustres,5
+insee.liste-odac@2026-10-25-117882a9,192,2024,S13112,GF05,CEREMA,"Centre détudes et dexpertise sur les risques, lenvironnement, la mobilité et laménagement",5
+insee.liste-odac@2026-10-25-117882a9,193,2024,S13112,GF05,CEVENNES,Parc national des Cévennes,5
+insee.liste-odac@2026-10-25-117882a9,194,2024,S13112,GF05,CROS,Parc national de Port-Cros,5
+insee.liste-odac@2026-10-25-117882a9,195,2024,S13112,GF05,ECOFOR,Groupement d'intérêt public Ecosystèmes forestiers,5
+insee.liste-odac@2026-10-25-117882a9,196,2024,S13112,GF05,ECRINS,Parc national des Ecrins,5
+insee.liste-odac@2026-10-25-117882a9,197,2024,S13112,GF05,GUADE,Parc national de la Guadeloupe,5
+insee.liste-odac@2026-10-25-117882a9,198,2024,S13112,GF05,GUYANE,Parc amazonien de Guyane,5
+insee.liste-odac@2026-10-25-117882a9,199,2024,S13112,GF05,INERIS,Institut national de l'environnement industriel et des risques,5
+insee.liste-odac@2026-10-25-117882a9,200,2024,S13112,GF05,MERCANTO,Parc national du Mercantour,5
+insee.liste-odac@2026-10-25-117882a9,201,2024,S13112,GF05,OFB,Office français de la biodiversité,5
+insee.liste-odac@2026-10-25-117882a9,202,2024,S13112,GF05,PNF,Parc national de forêts,5
+insee.liste-odac@2026-10-25-117882a9,203,2024,S13112,GF05,PNR,Parc national de la Réunion,5
+insee.liste-odac@2026-10-25-117882a9,204,2024,S13112,GF05,PYRENEES,Parc national des Pyrénées,5
+insee.liste-odac@2026-10-25-117882a9,205,2024,S13112,GF05,VANOISE,Parc national de la Vanoise,5
+insee.liste-odac@2026-10-25-117882a9,206,2024,S13112,GF06,ALS,Action logement services,5
+insee.liste-odac@2026-10-25-117882a9,207,2024,S13112,GF06,ANAH,Agence nationale de lhabitat,5
+insee.liste-odac@2026-10-25-117882a9,208,2024,S13112,GF06,ANRU,Agence nationale pour la rénovation urbaine,5
+insee.liste-odac@2026-10-25-117882a9,209,2024,S13112,GF06,CGLLS,Caisse de garantie du logement locatif social,5
+insee.liste-odac@2026-10-25-117882a9,210,2024,S13112,GF06,FNAP,Fonds national des aides à la pierre,5
+insee.liste-odac@2026-10-25-117882a9,211,2024,S13112,GF06,FNAVDL,Fonds national d'accompagnement vers et dans le logement,5
+insee.liste-odac@2026-10-25-117882a9,212,2024,S13112,GF07,AASPEG,Groupement d'intérêt public Réseau addictions Guadeloupe,5
+insee.liste-odac@2026-10-25-117882a9,213,2024,S13112,GF07,ABM,Agence de la Biomédecine,5
+insee.liste-odac@2026-10-25-117882a9,214,2024,S13112,GF07,AFLD,Agence française de lutte contre le dopage,5
+insee.liste-odac@2026-10-25-117882a9,215,2024,S13112,GF07,AFSSPS,Agence nationale de sécurité du médicament et des produits de santé,5
+insee.liste-odac@2026-10-25-117882a9,216,2024,S13112,GF07,ANAP,GIP Agence nationale d'appui à la performance des établissements de santé et médico-sociaux,5
+insee.liste-odac@2026-10-25-117882a9,217,2024,S13112,GF07,ANSES,"Agence nationale chargée de la sécurité sanitaire, de l'alimentation, de l'environnement et du travail",5
+insee.liste-odac@2026-10-25-117882a9,218,2024,S13112,GF07,ARS,Agence régionale de santé Auvergne-Rhône-Alpes,5
+insee.liste-odac@2026-10-25-117882a9,219,2024,S13112,GF07,ARS,Agence régionale de santé Bourgogne-Franche-Comté,6
+insee.liste-odac@2026-10-25-117882a9,220,2024,S13112,GF07,ARS,Agence régionale de santé de Bretagne,6
+insee.liste-odac@2026-10-25-117882a9,221,2024,S13112,GF07,ARS,Agence régionale de santé de Corse,6
+insee.liste-odac@2026-10-25-117882a9,222,2024,S13112,GF07,ARS,Agence régionale de santé de Guyane,6
+insee.liste-odac@2026-10-25-117882a9,223,2024,S13112,GF07,ARS,"Agence régionale de santé de la Guadeloupe, de Saint-Martin et de Saint-Barthélémy",6
+insee.liste-odac@2026-10-25-117882a9,224,2024,S13112,GF07,ARS,Agence Régionale de Santé de la Réunion,6
+insee.liste-odac@2026-10-25-117882a9,225,2024,S13112,GF07,ARS,Agence régionale de santé de Martinique,6
+insee.liste-odac@2026-10-25-117882a9,226,2024,S13112,GF07,ARS,Agence Régionale de Santé de Mayotte,6
+insee.liste-odac@2026-10-25-117882a9,227,2024,S13112,GF07,ARS,Agence régionale de santé de Provence-Alpes- Côte d'Azur,6
+insee.liste-odac@2026-10-25-117882a9,228,2024,S13112,GF07,ARS,Agence régionale de santé des Pays-de-la-Loire,6
+insee.liste-odac@2026-10-25-117882a9,229,2024,S13112,GF07,ARS,Agence régionale de santé dIle-de-France,6
+insee.liste-odac@2026-10-25-117882a9,230,2024,S13112,GF07,ARS,Agence régionale de santé du Centre - Val de Loire,6
+insee.liste-odac@2026-10-25-117882a9,231,2024,S13112,GF07,ARS,Agence régionale de santé Grand Est,6
+insee.liste-odac@2026-10-25-117882a9,232,2024,S13112,GF07,ARS,Agence régionale de santé Hauts-de-France,6
+insee.liste-odac@2026-10-25-117882a9,233,2024,S13112,GF07,ARS,Agence régionale de santé Normandie,6
+insee.liste-odac@2026-10-25-117882a9,234,2024,S13112,GF07,ARS,Agence régionale de santé Nouvelle-Aquitaine,6
+insee.liste-odac@2026-10-25-117882a9,235,2024,S13112,GF07,ARS,Agence régionale de santé Occitanie,6
+insee.liste-odac@2026-10-25-117882a9,236,2024,S13112,GF07,CEDERNU_LYON,Groupement dintérêt public Centre de recherches en nutrition humaine Rhône-Alpes,6
+insee.liste-odac@2026-10-25-117882a9,237,2024,S13112,GF07,CNMPF,conféderation nationale du mouvement pour le planing familial,6
+insee.liste-odac@2026-10-25-117882a9,238,2024,S13112,GF07,CPP,Comité de protection des personnes Est I,6
+insee.liste-odac@2026-10-25-117882a9,239,2024,S13112,GF07,CPP,Comité de protection des personnes Est II,6
+insee.liste-odac@2026-10-25-117882a9,240,2024,S13112,GF07,CPP,Comité de protection des personnes Est III,6
+insee.liste-odac@2026-10-25-117882a9,241,2024,S13112,GF07,CPP,Comité de protection des personnes Est IV,6
+insee.liste-odac@2026-10-25-117882a9,242,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France I,6
+insee.liste-odac@2026-10-25-117882a9,243,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France II,6
+insee.liste-odac@2026-10-25-117882a9,244,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France III,6
+insee.liste-odac@2026-10-25-117882a9,245,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France IV,6
+insee.liste-odac@2026-10-25-117882a9,246,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France V,6
+insee.liste-odac@2026-10-25-117882a9,247,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France VI,6
+insee.liste-odac@2026-10-25-117882a9,248,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France VII,6
+insee.liste-odac@2026-10-25-117882a9,249,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France VIII,6
+insee.liste-odac@2026-10-25-117882a9,250,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France X,6
+insee.liste-odac@2026-10-25-117882a9,251,2024,S13112,GF07,CPP,Comité de protection des personnes Ile-de-France XI,6
+insee.liste-odac@2026-10-25-117882a9,252,2024,S13112,GF07,CPP,Comité de protection des personnes Nord-ouest I,6
+insee.liste-odac@2026-10-25-117882a9,253,2024,S13112,GF07,CPP,Comité de protection des personnes Nord-Ouest II,6
+insee.liste-odac@2026-10-25-117882a9,254,2024,S13112,GF07,CPP,Comité de protection des personnes Nord-Ouest III,6
+insee.liste-odac@2026-10-25-117882a9,255,2024,S13112,GF07,CPP,Comité de protection des personnes Nord-Ouest IV,6
+insee.liste-odac@2026-10-25-117882a9,256,2024,S13112,GF07,CPP,Comité de protection des personnes Ouest I,6
+insee.liste-odac@2026-10-25-117882a9,257,2024,S13112,GF07,CPP,Comité de protection des personnes Ouest II,6
+insee.liste-odac@2026-10-25-117882a9,258,2024,S13112,GF07,CPP,Comité de protection des personnes Ouest III,6
+insee.liste-odac@2026-10-25-117882a9,259,2024,S13112,GF07,CPP,Comité de protection des personnes Ouest IV,6
+insee.liste-odac@2026-10-25-117882a9,260,2024,S13112,GF07,CPP,Comité de protection des personnes Ouest V,6
+insee.liste-odac@2026-10-25-117882a9,261,2024,S13112,GF07,CPP,Comité de protection des personnes Ouest VI,6
+insee.liste-odac@2026-10-25-117882a9,262,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Est I,6
+insee.liste-odac@2026-10-25-117882a9,263,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Est II,6
+insee.liste-odac@2026-10-25-117882a9,264,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Est III,6
+insee.liste-odac@2026-10-25-117882a9,265,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Est IV,6
+insee.liste-odac@2026-10-25-117882a9,266,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Est V,6
+insee.liste-odac@2026-10-25-117882a9,267,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Est VI,6
+insee.liste-odac@2026-10-25-117882a9,268,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Méditerranée I,6
+insee.liste-odac@2026-10-25-117882a9,269,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Méditerranée II,6
+insee.liste-odac@2026-10-25-117882a9,270,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Méditerranée III,6
+insee.liste-odac@2026-10-25-117882a9,271,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Méditerranée IV,7
+insee.liste-odac@2026-10-25-117882a9,272,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Méditerranée V,7
+insee.liste-odac@2026-10-25-117882a9,273,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Ouest et outre- mer I,7
+insee.liste-odac@2026-10-25-117882a9,274,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Ouest et outre- mer II,7
+insee.liste-odac@2026-10-25-117882a9,275,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Ouest et outre mer III,7
+insee.liste-odac@2026-10-25-117882a9,276,2024,S13112,GF07,CPP,Comité de protection des personnes Sud-Ouest et Outre- mer IV,7
+insee.liste-odac@2026-10-25-117882a9,277,2024,S13112,GF07,EFS,Etablissement français du sang,7
+insee.liste-odac@2026-10-25-117882a9,278,2024,S13112,GF07,FEP,GIP France enfance protégée,7
+insee.liste-odac@2026-10-25-117882a9,279,2024,S13112,GF07,HAS,Haute autorité de santé,7
+insee.liste-odac@2026-10-25-117882a9,280,2024,S13112,GF07,INCA,Groupement d'intérêt public Institut national du cancer,7
+insee.liste-odac@2026-10-25-117882a9,281,2024,S13112,GF07,INSERM,INSERM - Institut national de la santé et de la recherche médicale,7
+insee.liste-odac@2026-10-25-117882a9,282,2024,S13112,GF07,IRSN,Institut de radioprotection et de sûreté nucléaire,7
+insee.liste-odac@2026-10-25-117882a9,283,2024,S13112,GF07,MDA,Groupement d'intérêt public Maison départementale des adolescents de la Vendée,7
+insee.liste-odac@2026-10-25-117882a9,284,2024,S13112,GF07,MDA,Groupement d'intérêt public Maison départementale des adolescents de Loire-Atlantique,7
+insee.liste-odac@2026-10-25-117882a9,285,2024,S13112,GF07,MDA,Groupement dintérêt public Maison des adolescents,7
+insee.liste-odac@2026-10-25-117882a9,286,2024,S13112,GF07,MDA,Groupement d'intérêt public Maison des adolescents,7
+insee.liste-odac@2026-10-25-117882a9,287,2024,S13112,GF07,MDA,groupement d'intérêt public Maison des adolescents de Vaucluse,7
+insee.liste-odac@2026-10-25-117882a9,288,2024,S13112,GF07,MDA,Groupement d'intérêt public Maison des adolescents des Côtes d'Armor,7
+insee.liste-odac@2026-10-25-117882a9,289,2024,S13112,GF07,MDA,Groupement d'intérêt public Maison des adolescents d'Ille et Vilaine,7
+insee.liste-odac@2026-10-25-117882a9,290,2024,S13112,GF07,MDA,Groupement d'intérêt public Maison Des Adolescents Pays Ajaccien,7
+insee.liste-odac@2026-10-25-117882a9,291,2024,S13112,GF07,MDA,Groupement d'intérêt public Maison des adolescents Sud Corse,7
+insee.liste-odac@2026-10-25-117882a9,292,2024,S13112,GF07,ONDT,GIP Observatoire français des drogues et des toxicomanies,7
+insee.liste-odac@2026-10-25-117882a9,293,2024,S13112,GF07,SANTE,Agence nationale de santé publique,7
+insee.liste-odac@2026-10-25-117882a9,294,2024,S13112,GF08,ABES,Agence bibliographique de l'enseignement supérieur,7
+insee.liste-odac@2026-10-25-117882a9,295,2024,S13112,GF08,ACADE,académie agriculture de France,7
+insee.liste-odac@2026-10-25-117882a9,296,2024,S13112,GF08,ACADE,académie de chirurgie,7
+insee.liste-odac@2026-10-25-117882a9,297,2024,S13112,GF08,ACADE,Académie de Marine,7
+insee.liste-odac@2026-10-25-117882a9,298,2024,S13112,GF08,ACADE,académie de médecine,7
+insee.liste-odac@2026-10-25-117882a9,299,2024,S13112,GF08,ACADE,académie de pharmacie,7
+insee.liste-odac@2026-10-25-117882a9,300,2024,S13112,GF08,ACADE,académie des beaux arts,7
+insee.liste-odac@2026-10-25-117882a9,301,2024,S13112,GF08,ACADE,academie des inscriptions et belles lettres,7
+insee.liste-odac@2026-10-25-117882a9,302,2024,S13112,GF08,ACADE,académie des sciences,7
+insee.liste-odac@2026-10-25-117882a9,303,2024,S13112,GF08,ACADE,Académie des sciences d'outre-mer,7
+insee.liste-odac@2026-10-25-117882a9,304,2024,S13112,GF08,ACADE,academie des sciences morales et politiques,7
+insee.liste-odac@2026-10-25-117882a9,305,2024,S13112,GF08,ACADE,Académie des technologies,7
+insee.liste-odac@2026-10-25-117882a9,306,2024,S13112,GF08,ACADE,académie française,7
+insee.liste-odac@2026-10-25-117882a9,307,2024,S13112,GF08,ACADE,académie véterinaire de France,7
+insee.liste-odac@2026-10-25-117882a9,308,2024,S13112,GF08,ACADE,institut de France et fondations,7
+insee.liste-odac@2026-10-25-117882a9,309,2024,S13112,GF08,ACMISA,GIP Action Culturelle en Milieu Scolaire d'Alsace,7
+insee.liste-odac@2026-10-25-117882a9,310,2024,S13112,GF08,AFIF,association française du festival international du film,7
+insee.liste-odac@2026-10-25-117882a9,311,2024,S13112,GF08,ANS,Agence nationale du sport,7
+insee.liste-odac@2026-10-25-117882a9,312,2024,S13112,GF08,ARMEE,Musée de larmée,7
+insee.liste-odac@2026-10-25-117882a9,313,2024,S13112,GF08,ARTE,ARTE France,7
+insee.liste-odac@2026-10-25-117882a9,314,2024,S13112,GF08,ASTP,association pour le soutien du théâtre privé,7
+insee.liste-odac@2026-10-25-117882a9,315,2024,S13112,GF08,BNF,Bibliothèque nationale de France,7
+insee.liste-odac@2026-10-25-117882a9,316,2024,S13112,GF08,BNUS,Bibliothèque nationale et universitaire de Strasbourg,7
+insee.liste-odac@2026-10-25-117882a9,317,2024,S13112,GF08,BPI,Bibliothèque publique d'information,7
+insee.liste-odac@2026-10-25-117882a9,318,2024,S13112,GF08,BRANLY,Etablissement public du Musée du quai Branly-Jacques Chirac,7
+insee.liste-odac@2026-10-25-117882a9,319,2024,S13112,GF08,BULC,Groupement dintérêt public Bibliothèque universitaire des langues et civilisations,7
+insee.liste-odac@2026-10-25-117882a9,320,2024,S13112,GF08,CFRANC,Comédie-Française,8
+insee.liste-odac@2026-10-25-117882a9,321,2024,S13112,GF08,CGP,Centre national d'art et de culture Georges Pompidou,8
+insee.liste-odac@2026-10-25-117882a9,322,2024,S13112,GF08,CHAILLOT,Théâtre national de Chaillot,8
+insee.liste-odac@2026-10-25-117882a9,323,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Bourgogne Franche Comté,8
+insee.liste-odac@2026-10-25-117882a9,324,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Bretagne,8
+insee.liste-odac@2026-10-25-117882a9,325,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Champagne-Ardenne,8
+insee.liste-odac@2026-10-25-117882a9,326,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Guadeloupe,8
+insee.liste-odac@2026-10-25-117882a9,327,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Guyane,8
+insee.liste-odac@2026-10-25-117882a9,328,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de la Nouvelle Aquitaine,8
+insee.liste-odac@2026-10-25-117882a9,329,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de La Réunion,8
+insee.liste-odac@2026-10-25-117882a9,330,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Normandie Caen,8
+insee.liste-odac@2026-10-25-117882a9,331,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Paris,8
+insee.liste-odac@2026-10-25-117882a9,332,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Provence-Alpes-Côte d'Azur,8
+insee.liste-odac@2026-10-25-117882a9,333,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Rhône Alpes,8
+insee.liste-odac@2026-10-25-117882a9,334,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse de Seine-et-Marne,8
+insee.liste-odac@2026-10-25-117882a9,335,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse des Hauts-de-France,8
+insee.liste-odac@2026-10-25-117882a9,336,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse des Pays de Loire,8
+insee.liste-odac@2026-10-25-117882a9,337,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse des Yvelines,8
+insee.liste-odac@2026-10-25-117882a9,338,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse du Centre,8
+insee.liste-odac@2026-10-25-117882a9,339,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse du Val d'Oise,8
+insee.liste-odac@2026-10-25-117882a9,340,2024,S13112,GF08,CIDJ,centre régional d'information et de documentation jeunesse Occitanie,8
+insee.liste-odac@2026-10-25-117882a9,341,2024,S13112,GF08,CIFRA,cinémathèque française,8
+insee.liste-odac@2026-10-25-117882a9,342,2024,S13112,GF08,CITEMUSI,Etablissement public de la Cité de la musique - Philharmonie de Paris,8
+insee.liste-odac@2026-10-25-117882a9,343,2024,S13112,GF08,CNAP,Centre national des arts plastiques,8
+insee.liste-odac@2026-10-25-117882a9,344,2024,S13112,GF08,CNC,Centre national du cinéma et de limage animée,8
+insee.liste-odac@2026-10-25-117882a9,345,2024,S13112,GF08,CND,Centre national de la danse,8
+insee.liste-odac@2026-10-25-117882a9,346,2024,S13112,GF08,CNHI,Etablissement public du palais de la Porte Dorée,8
+insee.liste-odac@2026-10-25-117882a9,347,2024,S13112,GF08,CNL,Centre national du livre,8
+insee.liste-odac@2026-10-25-117882a9,348,2024,S13112,GF08,COLINE,Théâtre national de la Colline,8
+insee.liste-odac@2026-10-25-117882a9,349,2024,S13112,GF08,COTRAVA,cotravaux,8
+insee.liste-odac@2026-10-25-117882a9,350,2024,S13112,GF08,CTL,Centre technique du livre de l'enseignement supérieur,8
+insee.liste-odac@2026-10-25-117882a9,351,2024,S13112,GF08,DAME,Etablissement public chargé de la conservation et de la restauration de la cathédrale Notre-Dame de Paris,8
+insee.liste-odac@2026-10-25-117882a9,352,2024,S13112,GF08,EMN,Établissement Public du Mobilier National,8
+insee.liste-odac@2026-10-25-117882a9,353,2024,S13112,GF08,EPPDCSI,Etablissement public du palais de la Découverte et de la Cité des sciences et de l'industrie,8
+insee.liste-odac@2026-10-25-117882a9,354,2024,S13112,GF08,EPPGHV,Etablissement public du parc et de la grande halle de la Villette,8
+insee.liste-odac@2026-10-25-117882a9,355,2024,S13112,GF08,ESPA,Musée de l'air et de l'espace,8
+insee.liste-odac@2026-10-25-117882a9,356,2024,S13112,GF08,FDML,Fonds de dotation du Musée du Louvre,8
+insee.liste-odac@2026-10-25-117882a9,357,2024,S13112,GF08,FONJEP,fonds de coopération de la jeunesse et de l'éducation populaire,8
+insee.liste-odac@2026-10-25-117882a9,358,2024,S13112,GF08,FONTAINEBLEAU,Etablissement public du château de Fontainebleau,8
+insee.liste-odac@2026-10-25-117882a9,359,2024,S13112,GF08,FRANCETELE,France 2 cinéma,8
+insee.liste-odac@2026-10-25-117882a9,360,2024,S13112,GF08,FRANCETELE,France 3 cinéma,8
+insee.liste-odac@2026-10-25-117882a9,361,2024,S13112,GF08,FRANCETELE,France Télévision,8
+insee.liste-odac@2026-10-25-117882a9,362,2024,S13112,GF08,FRANCETELE,France Télévisions Distribution,8
+insee.liste-odac@2026-10-25-117882a9,363,2024,S13112,GF08,FRANCETELE,France Télévisions Gestion Immobilière,8
+insee.liste-odac@2026-10-25-117882a9,364,2024,S13112,GF08,FRANCETELE,France Télévisions Publicité,8
+insee.liste-odac@2026-10-25-117882a9,365,2024,S13112,GF08,FRANCETELE,France Télévisions Publicité Conseil,8
+insee.liste-odac@2026-10-25-117882a9,366,2024,S13112,GF08,FRANCETELE,France Télévisions Publicité Inter Océan,8
+insee.liste-odac@2026-10-25-117882a9,367,2024,S13112,GF08,FRANCETELE,France Télévisions SVOD,8
+insee.liste-odac@2026-10-25-117882a9,368,2024,S13112,GF08,FRANCETELE,France.tvpresse,8
+insee.liste-odac@2026-10-25-117882a9,369,2024,S13112,GF08,FRANCETELE,France.tvstudio,9
+insee.liste-odac@2026-10-25-117882a9,370,2024,S13112,GF08,FRANCETELE,Les tontons truqueurs,9
+insee.liste-odac@2026-10-25-117882a9,371,2024,S13112,GF08,FRANCETELE,Papangue Immo,9
+insee.liste-odac@2026-10-25-117882a9,372,2024,S13112,GF08,FRANCETELE,Réseau Outre Mer 1,9
+insee.liste-odac@2026-10-25-117882a9,373,2024,S13112,GF08,FRANCETELE,SCI France Télévisions,9
+insee.liste-odac@2026-10-25-117882a9,374,2024,S13112,GF08,FRANCETELE,SCI VALIN,9
+insee.liste-odac@2026-10-25-117882a9,375,2024,S13112,GF08,FRANCETELE,Société de gestion du réseau R1,9
+insee.liste-odac@2026-10-25-117882a9,376,2024,S13112,GF08,FRMEDIA_MONDE,France média Monde,9
+insee.liste-odac@2026-10-25-117882a9,377,2024,S13112,GF08,GUIMET,Etablissement public du musée des arts asiatiques Guimet,9
+insee.liste-odac@2026-10-25-117882a9,378,2024,S13112,GF08,HENNERMOREAU,Etablissement public du musée national Jean-Jacques Henner et du Musée national Gustave Moreau,9
+insee.liste-odac@2026-10-25-117882a9,379,2024,S13112,GF08,ICS,institut de la cinématographie scientifique,9
+insee.liste-odac@2026-10-25-117882a9,380,2024,S13112,GF08,IMA,institut du monde arabe,9
+insee.liste-odac@2026-10-25-117882a9,381,2024,S13112,GF08,INA,institut national de l'audiovisuel,9
+insee.liste-odac@2026-10-25-117882a9,382,2024,S13112,GF08,INSTITUT_FRANCAIS,Institut français,9
+insee.liste-odac@2026-10-25-117882a9,383,2024,S13112,GF08,LOUVRE,Etablissement public du musée du Louvre,9
+insee.liste-odac@2026-10-25-117882a9,384,2024,S13112,GF08,MARINE,Musée national de la Marine,9
+insee.liste-odac@2026-10-25-117882a9,385,2024,S13112,GF08,MICHEL,Etablissement public du Mont Saint Michel,9
+insee.liste-odac@2026-10-25-117882a9,386,2024,S13112,GF08,MNHN,Muséum national d'histoire naturelle,9
+insee.liste-odac@2026-10-25-117882a9,387,2024,S13112,GF08,MNS,Musée national du sport,9
+insee.liste-odac@2026-10-25-117882a9,388,2024,S13112,GF08,MUCEM,Musée des civilisations de l'Europe et de la Méditerranée,9
+insee.liste-odac@2026-10-25-117882a9,389,2024,S13112,GF08,ODEON,Théâtre national de lOdéon,9
+insee.liste-odac@2026-10-25-117882a9,390,2024,S13112,GF08,ONAIRAC,"Groupement d'intérêt public d'Onairac : Terre de vie, terres de vignes",9
+insee.liste-odac@2026-10-25-117882a9,391,2024,S13112,GF08,OPPIC,Opérateur du patrimoine et des projets immobiliers de la culture,9
+insee.liste-odac@2026-10-25-117882a9,392,2024,S13112,GF08,ORCHESTR,ensemble intercontemporain,9
+insee.liste-odac@2026-10-25-117882a9,393,2024,S13112,GF08,ORCHESTR,ensemble orchestral de Paris,9
+insee.liste-odac@2026-10-25-117882a9,394,2024,S13112,GF08,ORCHESTR,orchestre de Lille,9
+insee.liste-odac@2026-10-25-117882a9,395,2024,S13112,GF08,ORCHESTR,orchestre de Montpellier Languedoc-Roussillon,9
+insee.liste-odac@2026-10-25-117882a9,396,2024,S13112,GF08,ORCHESTR,orchestre d'Île-de-France,9
+insee.liste-odac@2026-10-25-117882a9,397,2024,S13112,GF08,ORCHESTR,orchestre national de chambre de Toulouse,9
+insee.liste-odac@2026-10-25-117882a9,398,2024,S13112,GF08,ORCHESTR,orchestre régional de Provence-Alpes-Côte d'Azur de Cannes,9
+insee.liste-odac@2026-10-25-117882a9,399,2024,S13112,GF08,PICASSO,Musée national Picasso-Paris,9
+insee.liste-odac@2026-10-25-117882a9,400,2024,S13112,GF08,RADIOFR,Radio France,9
+insee.liste-odac@2026-10-25-117882a9,401,2024,S13112,GF08,SEVRES_LIMOGES,Etablissement public Cité de la céramique Sèvres et Limoges,9
+insee.liste-odac@2026-10-25-117882a9,402,2024,S13112,GF08,TNOC,Théâtre national de l'Opéra-comique,9
+insee.liste-odac@2026-10-25-117882a9,403,2024,S13112,GF08,TNOP,Opéra national de Paris,9
+insee.liste-odac@2026-10-25-117882a9,404,2024,S13112,GF08,TNS,Théâtre national de Strasbourg,9
+insee.liste-odac@2026-10-25-117882a9,405,2024,S13112,GF08,TOKYO,Association Palais de Tokyo,9
+insee.liste-odac@2026-10-25-117882a9,406,2024,S13112,GF08,TV5MONDE,TV 5 Monde,9
+insee.liste-odac@2026-10-25-117882a9,407,2024,S13112,GF08,UCAD,union centrale des arts décoratifs,9
+insee.liste-odac@2026-10-25-117882a9,408,2024,S13112,GF08,UNIF,unifrance films,9
+insee.liste-odac@2026-10-25-117882a9,409,2024,S13112,GF09,A2E2F,Groupement d'intérêt public Agence Erasmus France/Education Formation,9
+insee.liste-odac@2026-10-25-117882a9,410,2024,S13112,GF09,AEFE,Agence pour l'enseignement français à l'étranger,9
+insee.liste-odac@2026-10-25-117882a9,411,2024,S13112,GF09,AFDET,association française pour le développement de l'enseignement technique,9
+insee.liste-odac@2026-10-25-117882a9,412,2024,S13112,GF09,AFPA,Agence nationale pour la formation professionnelle des adultes,9
+insee.liste-odac@2026-10-25-117882a9,413,2024,S13112,GF09,AGRO,"Institut national d'enseignement supérieur pour l'agriculture, l'alimentation et l'environnement (INESAAE)",9
+insee.liste-odac@2026-10-25-117882a9,414,2024,S13112,GF09,AMUEPE,GIP Ag. de mutualisation des univers. et des étab. d'enseig sup. ou de rech. et de support à l'enseign. sup. ou à la re,9
+insee.liste-odac@2026-10-25-117882a9,415,2024,S13112,GF09,ANSC,Agence du numérique de la sécurité civile,10
+insee.liste-odac@2026-10-25-117882a9,416,2024,S13112,GF09,ARSON,Villa Arson,10
+insee.liste-odac@2026-10-25-117882a9,417,2024,S13112,GF09,C2RP,GIP Centre régional de ressources pédagogiques et de développement de la qualité de la formation,10
+insee.liste-odac@2026-10-25-117882a9,418,2024,S13112,GF09,CAMJUSS,Etablissement public d'aménagement universitaire de la région Ile-de-France,10
+insee.liste-odac@2026-10-25-117882a9,419,2024,S13112,GF09,CAMPUS_FRANCE,Campus France,10
+insee.liste-odac@2026-10-25-117882a9,420,2024,S13112,GF09,CEREQ,Centre d'études et de recherches sur les qualifications,10
+insee.liste-odac@2026-10-25-117882a9,421,2024,S13112,GF09,CHANCEL,Chancellerie des universités de Paris,10
+insee.liste-odac@2026-10-25-117882a9,422,2024,S13112,GF09,CHAPTAL,fondation Léonie Chaptal,10
+insee.liste-odac@2026-10-25-117882a9,423,2024,S13112,GF09,CIEP,Centre international d'études pédagogiques,10
+insee.liste-odac@2026-10-25-117882a9,424,2024,S13112,GF09,CNDP,Réseau Canopé,10
+insee.liste-odac@2026-10-25-117882a9,425,2024,S13112,GF09,CNED,Centre national d'enseignement à distance,10
+insee.liste-odac@2026-10-25-117882a9,426,2024,S13112,GF09,CNM,Centre national de la musique,10
+insee.liste-odac@2026-10-25-117882a9,427,2024,S13112,GF09,COMUE,COMUE Angers - Le Mans,10
+insee.liste-odac@2026-10-25-117882a9,428,2024,S13112,GF09,COMUE,COMUE HESAM Université,10
+insee.liste-odac@2026-10-25-117882a9,429,2024,S13112,GF09,COMUE,COMUE Normandie Université,10
+insee.liste-odac@2026-10-25-117882a9,430,2024,S13112,GF09,COMUE,COMUE université Bourgogne - Franche-Comté,10
+insee.liste-odac@2026-10-25-117882a9,431,2024,S13112,GF09,COMUE,COMUE Université de Lyon,10
+insee.liste-odac@2026-10-25-117882a9,432,2024,S13112,GF09,COMUE,COMUE Université fédérale de Toulouse Midi-Pyrénées,10
+insee.liste-odac@2026-10-25-117882a9,433,2024,S13112,GF09,COMUE,COMUE Université Paris Lumières,10
+insee.liste-odac@2026-10-25-117882a9,434,2024,S13112,GF09,COMUE,COMUE Université Paris-Est,10
+insee.liste-odac@2026-10-25-117882a9,435,2024,S13112,GF09,CUFR_MAYOTTE,Centre universitaire de formation et de recherche de Mayotte,10
+insee.liste-odac@2026-10-25-117882a9,436,2024,S13112,GF09,E_LOUVRE,Ecole du Louvre,10
+insee.liste-odac@2026-10-25-117882a9,437,2024,S13112,GF09,EAMV,Ecole nationale supérieure d'architecture de Marne-la-Vallée,10
+insee.liste-odac@2026-10-25-117882a9,438,2024,S13112,GF09,EDA,Ecole de l'air,10
+insee.liste-odac@2026-10-25-117882a9,439,2024,S13112,GF09,EHESP,Ecole des hautes études en santé publique,10
+insee.liste-odac@2026-10-25-117882a9,440,2024,S13112,GF09,ENA,Institut National du Service Publique,10
+insee.liste-odac@2026-10-25-117882a9,441,2024,S13112,GF09,ENA,Institut régional d'administration de Bastia,10
+insee.liste-odac@2026-10-25-117882a9,442,2024,S13112,GF09,ENA,Institut régional dadministration de Lille,10
+insee.liste-odac@2026-10-25-117882a9,443,2024,S13112,GF09,ENA,Institut régional dadministration de Lyon,10
+insee.liste-odac@2026-10-25-117882a9,444,2024,S13112,GF09,ENA,Institut régional dadministration de Metz,10
+insee.liste-odac@2026-10-25-117882a9,445,2024,S13112,GF09,ENA,Institut régional dadministration de Nantes,10
+insee.liste-odac@2026-10-25-117882a9,446,2024,S13112,GF09,ENAC,Ecole nationale de laviation civile,10
+insee.liste-odac@2026-10-25-117882a9,447,2024,S13112,GF09,ENAM,Ecole nationale supérieure d'arts et métiers,10
+insee.liste-odac@2026-10-25-117882a9,448,2024,S13112,GF09,ENAP,Ecole nationale de ladministration pénitentiaire,10
+insee.liste-odac@2026-10-25-117882a9,449,2024,S13112,GF09,ENM,Ecole nationale de la magistrature,10
+insee.liste-odac@2026-10-25-117882a9,450,2024,S13112,GF09,ENPC,Ecole nationale des ponts et chaussées,10
+insee.liste-odac@2026-10-25-117882a9,451,2024,S13112,GF09,ENSM,Ecole nationale des sports de montagne,10
+insee.liste-odac@2026-10-25-117882a9,452,2024,S13112,GF09,ENSN,Ecole nationale de voile et des sports nautiques,10
+insee.liste-odac@2026-10-25-117882a9,453,2024,S13112,GF09,ENSO,école normale sociale de l'ouest d'Angers,10
+insee.liste-odac@2026-10-25-117882a9,454,2024,S13112,GF09,ENSP,Ecole nationale supérieure de paysage de Versailles,10
+insee.liste-odac@2026-10-25-117882a9,455,2024,S13112,GF09,ENSPO,Ecole nationale supérieure de la police,10
+insee.liste-odac@2026-10-25-117882a9,456,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Bordeaux",10
+insee.liste-odac@2026-10-25-117882a9,457,2024,S13112,GF09,ENSSPORT,"Centre de ressources, d'expertise et de performance sportives de Dijon",10
+insee.liste-odac@2026-10-25-117882a9,458,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de la Réunion",10
+insee.liste-odac@2026-10-25-117882a9,459,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Montpellier",10
+insee.liste-odac@2026-10-25-117882a9,460,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Nancy",10
+insee.liste-odac@2026-10-25-117882a9,461,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Pointe à Pitre",10
+insee.liste-odac@2026-10-25-117882a9,462,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Poitiers",10
+insee.liste-odac@2026-10-25-117882a9,463,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Reims",10
+insee.liste-odac@2026-10-25-117882a9,464,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Rhône-Alpes",10
+insee.liste-odac@2026-10-25-117882a9,465,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Strasbourg",10
+insee.liste-odac@2026-10-25-117882a9,466,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Toulouse",10
+insee.liste-odac@2026-10-25-117882a9,467,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Vichy",11
+insee.liste-odac@2026-10-25-117882a9,468,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives de Wattignies",11
+insee.liste-odac@2026-10-25-117882a9,469,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives dIle de France",11
+insee.liste-odac@2026-10-25-117882a9,470,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives du Centre",11
+insee.liste-odac@2026-10-25-117882a9,471,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives Pays de la Loire",11
+insee.liste-odac@2026-10-25-117882a9,472,2024,S13112,GF09,ENSSPORT,"Centre de ressources, dexpertise et de performance sportives Provence-Alpes-Côte dAzur",11
+insee.liste-odac@2026-10-25-117882a9,473,2024,S13112,GF09,ENSSPORT,"Institut national du sport, de l'expertise et de la performance",11
+insee.liste-odac@2026-10-25-117882a9,474,2024,S13112,GF09,ENSSS,Ecole nationale supérieure de sécurité sociale,11
+insee.liste-odac@2026-10-25-117882a9,475,2024,S13112,GF09,ENTPE,Ecole nationale des travaux publics de l'Etat,11
+insee.liste-odac@2026-10-25-117882a9,476,2024,S13112,GF09,EPCS_CONDORCET,Etablissement public Campus Condorcet,11
+insee.liste-odac@2026-10-25-117882a9,477,2024,S13112,GF09,EPE,Etablissement public expérimental Université Clermont Auvergne (UCA),11
+insee.liste-odac@2026-10-25-117882a9,478,2024,S13112,GF09,EPOLY,Ecole polytechnique,11
+insee.liste-odac@2026-10-25-117882a9,479,2024,S13112,GF09,ESAG,Centre denseignement zootechnique,11
+insee.liste-odac@2026-10-25-117882a9,480,2024,S13112,GF09,ESAG,Ecole nationale du génie de leau et de lenvironnement de Strasbourg,11
+insee.liste-odac@2026-10-25-117882a9,481,2024,S13112,GF09,ESAG,Ecole nationale supérieure de formation de lenseignement agricole,11
+insee.liste-odac@2026-10-25-117882a9,482,2024,S13112,GF09,ESAG,institut supérieur de l'agriculture de Rhône-Alpes,11
+insee.liste-odac@2026-10-25-117882a9,483,2024,S13112,GF09,ESAR,centre national des arts du cirque,11
+insee.liste-odac@2026-10-25-117882a9,484,2024,S13112,GF09,ESAR,Conservatoire national supérieur dart dramatique,11
+insee.liste-odac@2026-10-25-117882a9,485,2024,S13112,GF09,ESAR,Conservatoire national supérieur de musique et de danse de Lyon,11
+insee.liste-odac@2026-10-25-117882a9,486,2024,S13112,GF09,ESAR,Conservatoire national supérieur de musique et de danse de Paris,11
+insee.liste-odac@2026-10-25-117882a9,487,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Bretagne,11
+insee.liste-odac@2026-10-25-117882a9,488,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Clermont-Ferrand,11
+insee.liste-odac@2026-10-25-117882a9,489,2024,S13112,GF09,ESAR,Ecole nationale supérieure darchitecture de Grenoble,11
+insee.liste-odac@2026-10-25-117882a9,490,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Lyon,11
+insee.liste-odac@2026-10-25-117882a9,491,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Marseille,11
+insee.liste-odac@2026-10-25-117882a9,492,2024,S13112,GF09,ESAR,Ecole nationale supérieure darchitecture de Montpellier,11
+insee.liste-odac@2026-10-25-117882a9,493,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Nancy,11
+insee.liste-odac@2026-10-25-117882a9,494,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Nantes,11
+insee.liste-odac@2026-10-25-117882a9,495,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Normandie,11
+insee.liste-odac@2026-10-25-117882a9,496,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Paris-Belleville,11
+insee.liste-odac@2026-10-25-117882a9,497,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Paris-la Villette,11
+insee.liste-odac@2026-10-25-117882a9,498,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Paris-Malaquais,11
+insee.liste-odac@2026-10-25-117882a9,499,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Paris-Val de Seine,11
+insee.liste-odac@2026-10-25-117882a9,500,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Saint-Etienne,11
+insee.liste-odac@2026-10-25-117882a9,501,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Strasbourg,11
+insee.liste-odac@2026-10-25-117882a9,502,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Toulouse,11
+insee.liste-odac@2026-10-25-117882a9,503,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture de Versailles,11
+insee.liste-odac@2026-10-25-117882a9,504,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'architecture et de paysage de Bordeaux,11
+insee.liste-odac@2026-10-25-117882a9,505,2024,S13112,GF09,ESAR,Ecole nationale supérieure darchitecture et de paysage de Lille,11
+insee.liste-odac@2026-10-25-117882a9,506,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'art de Bourges,11
+insee.liste-odac@2026-10-25-117882a9,507,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'art de Cergy,11
+insee.liste-odac@2026-10-25-117882a9,508,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'art de Dijon,11
+insee.liste-odac@2026-10-25-117882a9,509,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'art de Limoges-Aubusson,11
+insee.liste-odac@2026-10-25-117882a9,510,2024,S13112,GF09,ESAR,Ecole nationale supérieure d'art et de design de Nancy,11
+insee.liste-odac@2026-10-25-117882a9,511,2024,S13112,GF09,ESAR,Ecole nationale supérieure de création industrielle,11
+insee.liste-odac@2026-10-25-117882a9,512,2024,S13112,GF09,ESAR,Ecole nationale supérieure de la photographie,11
+insee.liste-odac@2026-10-25-117882a9,513,2024,S13112,GF09,ESAR,Ecole nationale supérieure des arts décoratifs,11
+insee.liste-odac@2026-10-25-117882a9,514,2024,S13112,GF09,ESAR,Ecole nationale supérieure des arts et techniques du théâtre,11
+insee.liste-odac@2026-10-25-117882a9,515,2024,S13112,GF09,ESAR,Ecole nationale supérieure des beaux-arts,11
+insee.liste-odac@2026-10-25-117882a9,516,2024,S13112,GF09,ESAR,Ecole nationale supérieure des métiers de l'image et du son,11
+insee.liste-odac@2026-10-25-117882a9,517,2024,S13112,GF09,ESAR,Ecole nationale supérieure des sciences de linformation et des bibliothèques,11
+insee.liste-odac@2026-10-25-117882a9,518,2024,S13112,GF09,ESAR,Etablissement public de la Cité de l'architecture et du patrimoine,11
+insee.liste-odac@2026-10-25-117882a9,519,2024,S13112,GF09,ESAR,Institut national du Patrimoine,12
+insee.liste-odac@2026-10-25-117882a9,520,2024,S13112,GF09,EST,Ecole nationale supérieure Louis-Lumière,12
+insee.liste-odac@2026-10-25-117882a9,521,2024,S13112,GF09,FCIP,"GIP académique pour la promotion de la formation des adultes, l'insertion professio nnelle et la validation",12
+insee.liste-odac@2026-10-25-117882a9,522,2024,S13112,GF09,FCIP,"GIP Dispositif académique d'insertion, de formation et d'ingénierie FCIP Guadeloupe",12
+insee.liste-odac@2026-10-25-117882a9,523,2024,S13112,GF09,FCIP,GIP Formation continue et insertion professionnelle de Bourgogne,12
+insee.liste-odac@2026-10-25-117882a9,524,2024,S13112,GF09,FCIP,GIP Formation Continue et Insertion professionnelle de Franche Comté,12
+insee.liste-odac@2026-10-25-117882a9,525,2024,S13112,GF09,FCIP,GIP Formation Continue et Insertion Professionnelle de l'Académie de Normandie,12
+insee.liste-odac@2026-10-25-117882a9,526,2024,S13112,GF09,FCIP,GIP Formation continue et Insertion professionnelle de Paris,12
+insee.liste-odac@2026-10-25-117882a9,527,2024,S13112,GF09,FCIP,GIP Formation et certification pour l'insertion professionnelle de Toulouse,12
+insee.liste-odac@2026-10-25-117882a9,528,2024,S13112,GF09,FCIP,GIP Formation tout au long de la vie,12
+insee.liste-odac@2026-10-25-117882a9,529,2024,S13112,GF09,FCIP,GIP Formation tout au long de la vie et insertion professionnelle de l'académie d'Orléans-Tours,12
+insee.liste-odac@2026-10-25-117882a9,530,2024,S13112,GF09,FCIP,Groupement d'intérêt public - Formation continue et insertion professionnelle de l'académie de Poitiers,12
+insee.liste-odac@2026-10-25-117882a9,531,2024,S13112,GF09,FCIP,Groupement d'intérêt public académique dans les domaines de la formation et de l'insertion professionnelle,12
+insee.liste-odac@2026-10-25-117882a9,532,2024,S13112,GF09,FCIP,Groupement d'intérêt public académique Formation Continue,12
+insee.liste-odac@2026-10-25-117882a9,533,2024,S13112,GF09,FCIP,Groupement d'intérêt public Auvergne,12
+insee.liste-odac@2026-10-25-117882a9,534,2024,S13112,GF09,FCIP,Groupement d'intérêt public de l'académie de Lyon,12
+insee.liste-odac@2026-10-25-117882a9,535,2024,S13112,GF09,FCIP,Groupement dintérêt public Education et formation tout au long de la vie de lacadémie de Lille,12
+insee.liste-odac@2026-10-25-117882a9,536,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et inserti on professionnelle de l'académ ie de Martinique,12
+insee.liste-odac@2026-10-25-117882a9,537,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et insertion professionnelle - Alsace,12
+insee.liste-odac@2026-10-25-117882a9,538,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et insertion professionnelle : EXPERIENCE,12
+insee.liste-odac@2026-10-25-117882a9,539,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et insertion professionnelle d'Aquitaine,12
+insee.liste-odac@2026-10-25-117882a9,540,2024,S13112,GF09,FCIP,Groupement dintérêt public Formation continue et insertion professionnelle de la Guyane,12
+insee.liste-odac@2026-10-25-117882a9,541,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et insertion professionnelle de l'académie de Corse (GIPACOR),12
+insee.liste-odac@2026-10-25-117882a9,542,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et insertion professionnelle de l'académie de Créteil,12
+insee.liste-odac@2026-10-25-117882a9,543,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et insertion professionnelle de l'académie de la Réunion,12
+insee.liste-odac@2026-10-25-117882a9,544,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et insertion professionnelle de l'académie de Limoges,12
+insee.liste-odac@2026-10-25-117882a9,545,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation continue et insertion professionnelle de l'académie de Versailles,12
+insee.liste-odac@2026-10-25-117882a9,546,2024,S13112,GF09,FCIP,Groupement d'intérêt public formation de l'académie de Rennes - GIPFAR,12
+insee.liste-odac@2026-10-25-117882a9,547,2024,S13112,GF09,FCIP,Groupement dintérêt public Formation et insertion professionnelles de lacadémie de Grenoble,12
+insee.liste-odac@2026-10-25-117882a9,548,2024,S13112,GF09,FCIP,Groupement d'intérêt public Formation et insertion professionnelles de l'académie de Nice,12
+insee.liste-odac@2026-10-25-117882a9,549,2024,S13112,GF09,FCIP,Groupement d'intérêt public FORMAVIE - académie de Montpellier,12
+insee.liste-odac@2026-10-25-117882a9,550,2024,S13112,GF09,FCIP,Groupement d'intérêt public Insertion,12
+insee.liste-odac@2026-10-25-117882a9,551,2024,S13112,GF09,FCS_PSCC,FCS Paris Saclay Cancer Cluster,12
+insee.liste-odac@2026-10-25-117882a9,552,2024,S13112,GF09,FIPHFP,Fonds pour l'insertion des personnes handicapées dans la Fonction Publique,12
+insee.liste-odac@2026-10-25-117882a9,553,2024,S13112,GF09,FPE,Institut national des jeunes aveugles,12
+insee.liste-odac@2026-10-25-117882a9,554,2024,S13112,GF09,FPE,Institut national des jeunes sourds de Bordeaux,12
+insee.liste-odac@2026-10-25-117882a9,555,2024,S13112,GF09,FPE,Institut national des jeunes sourds de Chambéry,12
+insee.liste-odac@2026-10-25-117882a9,556,2024,S13112,GF09,FPE,Institut national des jeunes sourds de Metz,12
+insee.liste-odac@2026-10-25-117882a9,557,2024,S13112,GF09,FPE,Institut national des jeunes sourds de Paris,12
+insee.liste-odac@2026-10-25-117882a9,558,2024,S13112,GF09,FPE,Institut national supérieur de formation et de recherche pour léducation des jeunes handica pés et enseignements adapté,12
+insee.liste-odac@2026-10-25-117882a9,559,2024,S13112,GF09,GEES,Ecole des hautes études en sciences sociales,13
+insee.liste-odac@2026-10-25-117882a9,560,2024,S13112,GF09,GEES,Ecole française dExtrême- Orient,13
+insee.liste-odac@2026-10-25-117882a9,561,2024,S13112,GF09,GEES,Ecole nationale des chartes,13
+insee.liste-odac@2026-10-25-117882a9,562,2024,S13112,GF09,GEES,Ecole nationale supérieure d'informatique pour l'industrie et l'entreprise,13
+insee.liste-odac@2026-10-25-117882a9,563,2024,S13112,GF09,GEES,Ecole nationale Supérieure maritime,13
+insee.liste-odac@2026-10-25-117882a9,564,2024,S13112,GF09,GEES,Ecole navale,13
+insee.liste-odac@2026-10-25-117882a9,565,2024,S13112,GF09,GEES,Ecole normale supérieure,13
+insee.liste-odac@2026-10-25-117882a9,566,2024,S13112,GF09,GEES,Ecole normale supérieure de Lyon,13
+insee.liste-odac@2026-10-25-117882a9,567,2024,S13112,GF09,GEES,Ecole normale supérieure de Paris-Saclay,13
+insee.liste-odac@2026-10-25-117882a9,568,2024,S13112,GF09,GEES,Ecole normale supérieure de Rennes,13
+insee.liste-odac@2026-10-25-117882a9,569,2024,S13112,GF09,GEES,Ecole pratique des hautes études,13
+insee.liste-odac@2026-10-25-117882a9,570,2024,S13112,GF09,GEES,Institut national des langues et civilisations orientales,13
+insee.liste-odac@2026-10-25-117882a9,571,2024,S13112,GF09,GEES,institut supérieur de gestion,13
+insee.liste-odac@2026-10-25-117882a9,572,2024,S13112,GF09,GEEST,Centrale Lille Institut,13
+insee.liste-odac@2026-10-25-117882a9,573,2024,S13112,GF09,GEEST,CentraleSupélec,13
+insee.liste-odac@2026-10-25-117882a9,574,2024,S13112,GF09,GEEST,Conservatoire national des arts et métiers,13
+insee.liste-odac@2026-10-25-117882a9,575,2024,S13112,GF09,GEEST,Ecole centrale de Lyon,13
+insee.liste-odac@2026-10-25-117882a9,576,2024,S13112,GF09,GEEST,Ecole centrale de Marseille,13
+insee.liste-odac@2026-10-25-117882a9,577,2024,S13112,GF09,GEEST,Ecole centrale de Nantes,13
+insee.liste-odac@2026-10-25-117882a9,578,2024,S13112,GF09,GEEST,Ecole nationale dingénieurs de Brest,13
+insee.liste-odac@2026-10-25-117882a9,579,2024,S13112,GF09,GEEST,Ecole nationale dingénieurs de Tarbes,13
+insee.liste-odac@2026-10-25-117882a9,580,2024,S13112,GF09,GEEST,Ecole nationale supérieure de chimie de Montpellier,13
+insee.liste-odac@2026-10-25-117882a9,581,2024,S13112,GF09,GEEST,Ecole nationale supérieure de chimie de Paris,13
+insee.liste-odac@2026-10-25-117882a9,582,2024,S13112,GF09,GEEST,Ecole nationale supérieure de chimie de Rennes,13
+insee.liste-odac@2026-10-25-117882a9,583,2024,S13112,GF09,GEEST,école nationale supérieure de l'électronique et de ses applications de Cergy,13
+insee.liste-odac@2026-10-25-117882a9,584,2024,S13112,GF09,GEEST,Ecole nationale supérieure de mécanique et d'aérotechnique de Poitiers,13
+insee.liste-odac@2026-10-25-117882a9,585,2024,S13112,GF09,GEEST,école nationale supérieure de mécanique et de microtechnique de Besançon,13
+insee.liste-odac@2026-10-25-117882a9,586,2024,S13112,GF09,GEEST,Ecole nationale supérieure de techniques avancées Bretagne,13
+insee.liste-odac@2026-10-25-117882a9,587,2024,S13112,GF09,GEEST,Ecole nationale supérieure de techniques avancées ParisTech,13
+insee.liste-odac@2026-10-25-117882a9,588,2024,S13112,GF09,GEEST,Ecole nationale supérieure des arts et industries textiles,13
+insee.liste-odac@2026-10-25-117882a9,589,2024,S13112,GF09,GEEST,Ecole nationale supérieure des mines de Paris,13
+insee.liste-odac@2026-10-25-117882a9,590,2024,S13112,GF09,GEEST,école nationale supérieure d'ingénieurs de Caen,13
+insee.liste-odac@2026-10-25-117882a9,591,2024,S13112,GF09,GEEST,école supérieure du bois,13
+insee.liste-odac@2026-10-25-117882a9,592,2024,S13112,GF09,GEEST,institut d'optique théorique et appliquée,13
+insee.liste-odac@2026-10-25-117882a9,593,2024,S13112,GF09,GEEST,Institut Mines-Télécom,13
+insee.liste-odac@2026-10-25-117882a9,594,2024,S13112,GF09,GEEST,Institut polytechnique de Bordeaux,13
+insee.liste-odac@2026-10-25-117882a9,595,2024,S13112,GF09,GEEST,Institut supérieur de l'aéronautique et de l'espace,13
+insee.liste-odac@2026-10-25-117882a9,596,2024,S13112,GF09,GEEST,Institut supérieur de mécanique de Paris,13
+insee.liste-odac@2026-10-25-117882a9,597,2024,S13112,GF09,GEN,Groupement d'intérêt public La Grande Ecole du Numérique,13
+insee.liste-odac@2026-10-25-117882a9,598,2024,S13112,GF09,GENES,Groupe des écoles nationales d'économie et statistique,13
+insee.liste-odac@2026-10-25-117882a9,599,2024,S13112,GF09,IAEP,Institut d'administration des entreprises de Paris,13
+insee.liste-odac@2026-10-25-117882a9,600,2024,S13112,GF09,IEP,Institut détudes politiques d'Aix-en-Provence,13
+insee.liste-odac@2026-10-25-117882a9,601,2024,S13112,GF09,IEP,Institut d'études politiques de Bordeaux,13
+insee.liste-odac@2026-10-25-117882a9,602,2024,S13112,GF09,IEP,Institut d'études politiques de Grenoble,13
+insee.liste-odac@2026-10-25-117882a9,603,2024,S13112,GF09,IEP,Institut d'études politiques de Lille,13
+insee.liste-odac@2026-10-25-117882a9,604,2024,S13112,GF09,IEP,Institut d'études politiques de Lyon,13
+insee.liste-odac@2026-10-25-117882a9,605,2024,S13112,GF09,IEP,Institut d'études politiques de Rennes,13
+insee.liste-odac@2026-10-25-117882a9,606,2024,S13112,GF09,IEP,Institut d'études politiques de Toulouse,13
+insee.liste-odac@2026-10-25-117882a9,607,2024,S13112,GF09,IHEST,Institut des hautes études pour la science et la technologie,13
+insee.liste-odac@2026-10-25-117882a9,608,2024,S13112,GF09,INFOMA,Institut national de formation des personnels du ministère de l'agriculture,13
+insee.liste-odac@2026-10-25-117882a9,609,2024,S13112,GF09,INHA,Institut national d'histoire de l'art,13
+insee.liste-odac@2026-10-25-117882a9,610,2024,S13112,GF09,INSA,Institut national des sciences appliquées Centre Val de Loire,13
+insee.liste-odac@2026-10-25-117882a9,611,2024,S13112,GF09,INSA,Institut national des sciences appliquées de Lyon,14
+insee.liste-odac@2026-10-25-117882a9,612,2024,S13112,GF09,INSA,Institut national des sciences appliquées de Rennes,14
+insee.liste-odac@2026-10-25-117882a9,613,2024,S13112,GF09,INSA,Institut national des sciences appliquées de Rouen,14
+insee.liste-odac@2026-10-25-117882a9,614,2024,S13112,GF09,INSA,Institut national des sciences appliquées de Strasbourg,14
+insee.liste-odac@2026-10-25-117882a9,615,2024,S13112,GF09,INSA,Institut national des sciences appliquées de Toulouse,14
+insee.liste-odac@2026-10-25-117882a9,616,2024,S13112,GF09,INSA,Institut National des Sciences appliquées Hauts de France,14
+insee.liste-odac@2026-10-25-117882a9,617,2024,S13112,GF09,INUJFC,Institut national universitaire Jean-François Champollion,14
+insee.liste-odac@2026-10-25-117882a9,618,2024,S13112,GF09,ONISEP,Office national dinformation sur les enseignements et les professions,14
+insee.liste-odac@2026-10-25-117882a9,619,2024,S13112,GF09,PTECH,Agro Paris Tech,14
+insee.liste-odac@2026-10-25-117882a9,620,2024,S13112,GF09,UNIVERS,Clermont Auvergne INP,14
+insee.liste-odac@2026-10-25-117882a9,621,2024,S13112,GF09,UNIVERS,CY Cergy Paris Université,14
+insee.liste-odac@2026-10-25-117882a9,622,2024,S13112,GF09,UNIVERS,Institut de physique du globe de Paris,14
+insee.liste-odac@2026-10-25-117882a9,623,2024,S13112,GF09,UNIVERS,Institut national polytechnique de Toulouse,14
+insee.liste-odac@2026-10-25-117882a9,624,2024,S13112,GF09,UNIVERS,Institut polytechnique de Grenoble,14
+insee.liste-odac@2026-10-25-117882a9,625,2024,S13112,GF09,UNIVERS,Institut Polytechnique de Paris,14
+insee.liste-odac@2026-10-25-117882a9,626,2024,S13112,GF09,UNIVERS,Université Claude Bernard Lyon I,14
+insee.liste-odac@2026-10-25-117882a9,627,2024,S13112,GF09,UNIVERS,Université Côte d'Azur,14
+insee.liste-odac@2026-10-25-117882a9,628,2024,S13112,GF09,UNIVERS,Université dAix-Marseille,14
+insee.liste-odac@2026-10-25-117882a9,629,2024,S13112,GF09,UNIVERS,Université dAngers,14
+insee.liste-odac@2026-10-25-117882a9,630,2024,S13112,GF09,UNIVERS,Université dArtois,14
+insee.liste-odac@2026-10-25-117882a9,631,2024,S13112,GF09,UNIVERS,Université d'Avignon et des Pays-de-Vaucluse,14
+insee.liste-odac@2026-10-25-117882a9,632,2024,S13112,GF09,UNIVERS,Université de Besançon (Marie et Louis Pasteur),14
+insee.liste-odac@2026-10-25-117882a9,633,2024,S13112,GF09,UNIVERS,Université de Bordeaux,14
+insee.liste-odac@2026-10-25-117882a9,634,2024,S13112,GF09,UNIVERS,Université de Bordeaux III,14
+insee.liste-odac@2026-10-25-117882a9,635,2024,S13112,GF09,UNIVERS,Université de Bourgogne Europe,14
+insee.liste-odac@2026-10-25-117882a9,636,2024,S13112,GF09,UNIVERS,Université de Bretagne occidentale,14
+insee.liste-odac@2026-10-25-117882a9,637,2024,S13112,GF09,UNIVERS,Université de Bretagne-Sud,14
+insee.liste-odac@2026-10-25-117882a9,638,2024,S13112,GF09,UNIVERS,Université de Caen,14
+insee.liste-odac@2026-10-25-117882a9,639,2024,S13112,GF09,UNIVERS,Université de Chambéry,14
+insee.liste-odac@2026-10-25-117882a9,640,2024,S13112,GF09,UNIVERS,Université de Corse,14
+insee.liste-odac@2026-10-25-117882a9,641,2024,S13112,GF09,UNIVERS,Université de Grenoble Alpes,14
+insee.liste-odac@2026-10-25-117882a9,642,2024,S13112,GF09,UNIVERS,Université de la Guyane,14
+insee.liste-odac@2026-10-25-117882a9,643,2024,S13112,GF09,UNIVERS,Université de la Réunion,14
+insee.liste-odac@2026-10-25-117882a9,644,2024,S13112,GF09,UNIVERS,Université de la Rochelle,14
+insee.liste-odac@2026-10-25-117882a9,645,2024,S13112,GF09,UNIVERS,Université de Lille,14
+insee.liste-odac@2026-10-25-117882a9,646,2024,S13112,GF09,UNIVERS,Université de Limoges,14
+insee.liste-odac@2026-10-25-117882a9,647,2024,S13112,GF09,UNIVERS,Université de Lorraine,14
+insee.liste-odac@2026-10-25-117882a9,648,2024,S13112,GF09,UNIVERS,Université de Lyon II,14
+insee.liste-odac@2026-10-25-117882a9,649,2024,S13112,GF09,UNIVERS,Université de Lyon III,14
+insee.liste-odac@2026-10-25-117882a9,650,2024,S13112,GF09,UNIVERS,Université de Montpellier,14
+insee.liste-odac@2026-10-25-117882a9,651,2024,S13112,GF09,UNIVERS,Université de Montpellier Paul Valéry,14
+insee.liste-odac@2026-10-25-117882a9,652,2024,S13112,GF09,UNIVERS,Université de Mulhouse,14
+insee.liste-odac@2026-10-25-117882a9,653,2024,S13112,GF09,UNIVERS,Université de Nantes,14
+insee.liste-odac@2026-10-25-117882a9,654,2024,S13112,GF09,UNIVERS,Université de Nîmes,14
+insee.liste-odac@2026-10-25-117882a9,655,2024,S13112,GF09,UNIVERS,Université de Paris,14
+insee.liste-odac@2026-10-25-117882a9,656,2024,S13112,GF09,UNIVERS,Université de Paris I Panthéon Sorbonne,14
+insee.liste-odac@2026-10-25-117882a9,657,2024,S13112,GF09,UNIVERS,Université de Paris III,14
+insee.liste-odac@2026-10-25-117882a9,658,2024,S13112,GF09,UNIVERS,Université de Paris VIII,14
+insee.liste-odac@2026-10-25-117882a9,659,2024,S13112,GF09,UNIVERS,Université de Paris XII,14
+insee.liste-odac@2026-10-25-117882a9,660,2024,S13112,GF09,UNIVERS,Université de Paris XIII,14
+insee.liste-odac@2026-10-25-117882a9,661,2024,S13112,GF09,UNIVERS,Université de Pau et des Pays de lAdour,14
+insee.liste-odac@2026-10-25-117882a9,662,2024,S13112,GF09,UNIVERS,Université de Perpignan,14
+insee.liste-odac@2026-10-25-117882a9,663,2024,S13112,GF09,UNIVERS,Université de Picardie Jules Verne,15
+insee.liste-odac@2026-10-25-117882a9,664,2024,S13112,GF09,UNIVERS,Université de Poitiers,15
+insee.liste-odac@2026-10-25-117882a9,665,2024,S13112,GF09,UNIVERS,Université de Reims,15
+insee.liste-odac@2026-10-25-117882a9,666,2024,S13112,GF09,UNIVERS,Université de Rennes,15
+insee.liste-odac@2026-10-25-117882a9,667,2024,S13112,GF09,UNIVERS,Université de Rennes II,15
+insee.liste-odac@2026-10-25-117882a9,668,2024,S13112,GF09,UNIVERS,Université de Rouen,15
+insee.liste-odac@2026-10-25-117882a9,669,2024,S13112,GF09,UNIVERS,Université de Saint-Etienne,15
+insee.liste-odac@2026-10-25-117882a9,670,2024,S13112,GF09,UNIVERS,Université de Strasbourg,15
+insee.liste-odac@2026-10-25-117882a9,671,2024,S13112,GF09,UNIVERS,Université de technologie de Belfort-Montbéliard,15
+insee.liste-odac@2026-10-25-117882a9,672,2024,S13112,GF09,UNIVERS,Université de technologie de Compiègne,15
+insee.liste-odac@2026-10-25-117882a9,673,2024,S13112,GF09,UNIVERS,Université de technologie de Troyes,15
+insee.liste-odac@2026-10-25-117882a9,674,2024,S13112,GF09,UNIVERS,Université de Toulon et du Var,15
+insee.liste-odac@2026-10-25-117882a9,675,2024,S13112,GF09,UNIVERS,Université de Toulouse,15
+insee.liste-odac@2026-10-25-117882a9,676,2024,S13112,GF09,UNIVERS,Université de Toulouse II le Mirail,15
+insee.liste-odac@2026-10-25-117882a9,677,2024,S13112,GF09,UNIVERS,Université de Tours,15
+insee.liste-odac@2026-10-25-117882a9,678,2024,S13112,GF09,UNIVERS,Université de Versailles Saint-Quentin-en-Yvelines,15
+insee.liste-odac@2026-10-25-117882a9,679,2024,S13112,GF09,UNIVERS,Université des Antilles,15
+insee.liste-odac@2026-10-25-117882a9,680,2024,S13112,GF09,UNIVERS,Université d'Evry-Val d'Essonne,15
+insee.liste-odac@2026-10-25-117882a9,681,2024,S13112,GF09,UNIVERS,Université dOrléans,15
+insee.liste-odac@2026-10-25-117882a9,682,2024,S13112,GF09,UNIVERS,Université du Havre,15
+insee.liste-odac@2026-10-25-117882a9,683,2024,S13112,GF09,UNIVERS,Université du Littoral Côte d'Opale,15
+insee.liste-odac@2026-10-25-117882a9,684,2024,S13112,GF09,UNIVERS,Université du Maine,15
+insee.liste-odac@2026-10-25-117882a9,685,2024,S13112,GF09,UNIVERS,Université Gustave Eiffel,15
+insee.liste-odac@2026-10-25-117882a9,686,2024,S13112,GF09,UNIVERS,Université Paris Nanterre (Paris X),15
+insee.liste-odac@2026-10-25-117882a9,687,2024,S13112,GF09,UNIVERS,Université Paris Saclay,15
+insee.liste-odac@2026-10-25-117882a9,688,2024,S13112,GF09,UNIVERS,Université Paris sciences et lettres,15
+insee.liste-odac@2026-10-25-117882a9,689,2024,S13112,GF09,UNIVERS,Université Paris-Dauphine,15
+insee.liste-odac@2026-10-25-117882a9,690,2024,S13112,GF09,UNIVERS,Université Paris-Panthéon-Assas,15
+insee.liste-odac@2026-10-25-117882a9,691,2024,S13112,GF09,UNIVERS,Université Polytechnique Hauts de France,15
+insee.liste-odac@2026-10-25-117882a9,692,2024,S13112,GF09,UNIVERS,Université Sorbonne Université,15
+insee.liste-odac@2026-10-25-117882a9,693,2024,S13112,GF09,UNIVERS,Université Toulouse Capitole,15
+insee.liste-odac@2026-10-25-117882a9,694,2024,S13112,GF09,UNIVFSSP,Université numérique en santé et sport.fr (UNESS.fr),15
+insee.liste-odac@2026-10-25-117882a9,695,2024,S13112,GF10,AGS,association pour la gestion du régime d'assurance des créances des salariés,15
+insee.liste-odac@2026-10-25-117882a9,696,2024,S13112,GF10,CLEISS,Agence nationale de contrôle du logement social,15
+insee.liste-odac@2026-10-25-117882a9,697,2024,S13112,GF10,ANCT,Agence nationale de la cohésion des territoires,15
+insee.liste-odac@2026-10-25-117882a9,698,2024,S13112,GF10,CLEISS,Centre des liaisons européennes et internationales de sécurité sociale,15
+insee.liste-odac@2026-10-25-117882a9,699,2024,S13112,GF10,EPIDE,Etablissement public d'insertion de la défense,15
+insee.liste-odac@2026-10-25-117882a9,700,2024,S13112,GF10,ONAC,Office national des anciens combattants et victimes de guerre,15
+insee.liste-odac@2026-10-25-117882a9,701,2024,S13112,GF10,SNE,Groupement d'intérêt public système national d'enregistrement,15

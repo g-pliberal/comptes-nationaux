@@ -13,7 +13,8 @@ les tables comptes_fonctions et budgets, la fiscalité directe locale de chaque 
 tables fiscalite et communes_fiscalite, et les dotations que l'État notifie à chaque collectivité
 dans les tables dotations et beneficiaires. Les impositions que recense la DGFiP sur le territoire de
 chaque commune (REI) y sont lues dans les copies archivées de ses fichiers : tables impositions_rei,
-postes_rei, communes_rei et traces_rei.
+postes_rei, communes_rei et traces_rei. La vue v_organismes donne les organismes que nomment les listes
+officielles, avec les libellés de leur sous-secteur et de leur fonction.
 """
 
 import csv
@@ -144,6 +145,16 @@ SELECT f.exercice, f.version, f.fichier_id, v.rang, v.code, v.titre, v.titre_tra
 FROM traces_rei v
 JOIN fichiers_rei f ON f.rowid = v.lot
 LEFT JOIN variables_rei r ON r.code = v.code AND f.exercice BETWEEN r.premier_exercice AND r.dernier_exercice;
+
+-- Les organismes que nomment les listes officielles, avec les libellés de leur sous-secteur et de leur fonction, et la
+-- source et la version de leur liste.
+CREATE VIEW v_organismes AS
+SELECT o.annee, o.rang, o.sigle, o.nom, o.perimetre_id, p.libelle AS perimetre_libelle, o.fonction_id,
+       f.libelle AS fonction_libelle, o.page, x.source_id, x.mis_a_jour_source AS version, o.fichier_id
+FROM organismes o
+JOIN perimetres p ON p.id = o.perimetre_id
+JOIN fichiers x ON x.id = o.fichier_id
+LEFT JOIN fonctions f ON f.id = o.fonction_id;
 
 -- Pour chaque chiffre, sa version la plus récente chez la même source.
 CREATE VIEW v_dernieres_versions AS
@@ -314,9 +325,10 @@ def main():
     for nom, (schema, lignes) in tables.items():
         champs = schema["fields"]
         colonnes = ", ".join(f'"{c["name"]}" {TYPES_SQL.get(c.get("type"), "TEXT")}' for c in champs)
-        cle = schema.get("primaryKey", [])
+        cle, par_nom = schema.get("primaryKey", []), {c["name"]: c for c in champs}
         connexion.execute(f'CREATE TABLE "{nom}" ({colonnes}{", PRIMARY KEY (" + ", ".join(cle) + ")" if cle else ""})')
-        lignes = sorted(lignes, key=lambda l: tuple(l[c] for c in cle))
+        # Les lignes dans l'ordre de leur clé, chaque champ selon son type : un rang se trie en nombre.
+        lignes = sorted(lignes, key=lambda l: tuple(valeur_sql(par_nom[c], l[c]) for c in cle))
         connexion.executemany(f'INSERT INTO "{nom}" VALUES ({", ".join("?" * len(champs))})',
                               [[valeur_sql(c, l[c["name"]]) for c in champs] for l in lignes])
         texte = io.StringIO()

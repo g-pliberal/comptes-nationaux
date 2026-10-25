@@ -15,6 +15,7 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
+import zlib
 from html.parser import HTMLParser
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
@@ -199,13 +200,14 @@ def lire(chemin):
 
 
 def ecrire(chemin, champs, lignes, cle="id"):
-    """Écrit une table triée par sa clé, pour que les différences d'une version à l'autre restent lisibles."""
+    """Écrit une table triée par sa clé, pour que les différences d'une version à l'autre restent lisibles ; la clé est
+    le nom d'un champ, ou la fonction qui la donne pour une ligne."""
     chemin = BASE / chemin
     chemin.parent.mkdir(parents=True, exist_ok=True)
     with chemin.open("w", newline="", encoding="utf-8") as f:
         ecrivain = csv.DictWriter(f, fieldnames=champs, lineterminator="\n")
         ecrivain.writeheader()
-        ecrivain.writerows(sorted(lignes, key=lambda l: l[cle]))
+        ecrivain.writerows(sorted(lignes, key=cle if callable(cle) else lambda l: l[cle]))
 
 
 def lire_jsonstat(chemin):
@@ -557,6 +559,361 @@ def lire_sdmx(chemin):
             observations = {o.get("TIME_PERIOD"): dict(o.attrib) for o in serie if o.tag.split("}")[-1] == "Obs"}
             series[serie.get("IDBANK")] = (dict(serie.attrib), observations)
     return series
+
+
+# --- Fichiers PDF, lus sans bibliothèque extérieure ----------------------------------------------------
+#
+# Le lecteur suffit aux PDF qu'écrivent les traitements de texte, comme les listes d'organismes de l'Insee : flux
+# compressés (FlateDecode), objets rangés dans des flux d'objets, polices simples à l'encodage WinAnsi, polices
+# composites (Identity-H), et toute police munie d'une table ToUnicode. Il rend le texte tel que la page le dessine,
+# morceau par morceau, à la position où commence chacun ; ce qu'il ne sait pas lire l'arrête, plutôt que de lui faire
+# rendre un texte faux. Le texte d'une page faite d'images ne se lit pas.
+
+_BLANCS_PDF = b" \t\r\n\f\x00"
+_MOT_PDF = re.compile(rb"[^\s()<>\[\]{}/%]+")
+_NOMBRE_PDF = re.compile(rb"[-+]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)$")
+_REFERENCE_PDF = re.compile(rb"([0-9]+)\s+[0-9]+\s+R(?![^\s()<>\[\]{}/%])")
+_OBJET_PDF = re.compile(rb"(?<![0-9])([0-9]+)\s+[0-9]+\s+obj\b")
+_IDENTITE_PDF = (1, 0, 0, 1, 0, 0)
+
+
+class _NomPdf(str):
+    """Un nom PDF (« /Font »), sans sa barre oblique."""
+
+
+class _OperateurPdf(bytes):
+    """Un opérateur d'un flux de contenu (« BT », « Tj »…)."""
+
+
+def _blancs_pdf(texte, i):
+    """La position du prochain élément, après les blancs et les commentaires."""
+    while i < len(texte):
+        if texte[i] in _BLANCS_PDF:
+            i += 1
+        elif texte[i] == 0x25:  # « % » : un commentaire, jusqu'à la fin de la ligne
+            while i < len(texte) and texte[i] not in b"\r\n":
+                i += 1
+        else:
+            break
+    return i
+
+
+def _chaine_pdf(texte, i):
+    """(octets, position qui suit) de la chaîne littérale qui commence en `i`, sur « ( » : ses parenthèses équilibrées
+    en font partie, ses caractères échappés sont rétablis."""
+    sortie, profondeur, i = bytearray(), 1, i + 1
+    echappes = {ord("n"): b"\n", ord("r"): b"\r", ord("t"): b"\t", ord("b"): b"\b", ord("f"): b"\f"}
+    while i < len(texte):
+        c = texte[i]
+        if c == 0x5C:  # « \ »
+            suivant = texte[i + 1:i + 2]
+            if suivant and suivant[0] in echappes:
+                sortie += echappes[suivant[0]]
+                i += 2
+            elif suivant and suivant in b"01234567":
+                octal = re.match(rb"[0-7]{1,3}", texte[i + 1:i + 4]).group(0)
+                sortie.append(int(octal, 8) & 0xFF)
+                i += 1 + len(octal)
+            elif suivant in (b"\r", b"\n"):  # fin de ligne échappée : la chaîne continue sur la ligne suivante
+                i += 3 if texte[i + 1:i + 3] == b"\r\n" else 2
+            else:
+                sortie += suivant
+                i += 2
+            continue
+        profondeur += {0x28: 1, 0x29: -1}.get(c, 0)
+        if profondeur == 0:
+            return bytes(sortie), i + 1
+        sortie.append(c)
+        i += 1
+    raise ValueError("chaîne PDF non fermée")
+
+
+def _objet_pdf(texte, i=0):
+    """(objet, position qui suit) de l'objet PDF qui commence en `i` : dictionnaire (dict), tableau (list), nom
+    (_NomPdf), nombre, chaîne (bytes), référence ((numéro,)), booléen, None ; un autre mot est un opérateur
+    (_OperateurPdf)."""
+    i = _blancs_pdf(texte, i)
+    if texte[i:i + 2] == b"<<":
+        dictionnaire, i = {}, i + 2
+        while (i := _blancs_pdf(texte, i)) < len(texte) and texte[i:i + 2] != b">>":
+            cle, i = _objet_pdf(texte, i)
+            dictionnaire[cle], i = _objet_pdf(texte, i)
+        if i >= len(texte):
+            raise ValueError("dictionnaire PDF non fermé")
+        return dictionnaire, i + 2
+    if texte[i:i + 1] == b"[":
+        tableau, i = [], i + 1
+        while (i := _blancs_pdf(texte, i)) < len(texte) and texte[i:i + 1] != b"]":
+            element, i = _objet_pdf(texte, i)
+            tableau.append(element)
+        if i >= len(texte):
+            raise ValueError("tableau PDF non fermé")
+        return tableau, i + 1
+    if texte[i:i + 1] == b"(":
+        return _chaine_pdf(texte, i)
+    if texte[i:i + 1] == b"<":
+        fin = texte.index(b">", i)
+        hexa = re.sub(rb"\s", b"", texte[i + 1:fin])
+        return bytes.fromhex((hexa + b"0" * (len(hexa) % 2)).decode("ascii")), fin + 1
+    if texte[i:i + 1] == b"/":
+        mot = _MOT_PDF.match(texte, i + 1)
+        nom = mot.group(0) if mot else b""
+        return _NomPdf(re.sub(rb"#([0-9A-Fa-f]{2})", lambda m: bytes([int(m.group(1), 16)]), nom).decode("latin-1")), \
+            i + 1 + len(nom)
+    if reference := _REFERENCE_PDF.match(texte, i):
+        return (int(reference.group(1)),), reference.end()
+    mot = _MOT_PDF.match(texte, i)
+    if mot is None:
+        raise ValueError(f"objet PDF illisible à la position {i}")
+    mot = mot.group(0)
+    if _NOMBRE_PDF.match(mot):
+        return (float(mot) if b"." in mot else int(mot)), i + len(mot)
+    return {b"true": True, b"false": False, b"null": None}.get(mot, _OperateurPdf(mot)), i + len(mot)
+
+
+def _objets_pdf(donnees):
+    """{numéro: (valeur, flux brut ou None)} des objets d'un PDF, ceux de ses flux d'objets compris. Un objet défini
+    deux fois (un PDF mis à jour) garde sa définition la plus tardive dans le fichier."""
+    objets, positions = {}, {}
+    for entete in _OBJET_PDF.finditer(donnees):
+        try:
+            valeur, i = _objet_pdf(donnees, entete.end())
+        except (ValueError, IndexError, RecursionError, UnicodeDecodeError):
+            continue  # pas un objet : ces octets appartiennent au flux d'un autre
+        brut = None
+        if donnees.startswith(b"stream", debut := _blancs_pdf(donnees, i)):
+            debut += len(b"stream")
+            debut += 2 if donnees[debut:debut + 2] == b"\r\n" else 1
+            longueur = valeur.get("Length") if isinstance(valeur, dict) else None
+            if isinstance(longueur, int) and re.match(rb"\s*endstream", donnees[debut + longueur:debut + longueur + 12]):
+                brut = donnees[debut:debut + longueur]
+            else:
+                fin = donnees.index(b"endstream", debut)
+                brut = donnees[debut:fin - (2 if donnees[fin - 2:fin] == b"\r\n" else 1 if donnees[fin - 1:fin] in b"\r\n"
+                                            else 0)]
+        objets[int(entete.group(1))] = (valeur, brut)
+        positions[int(entete.group(1))] = entete.start()
+    for numero, (valeur, brut) in list(objets.items()):
+        if isinstance(valeur, dict) and valeur.get("Type") == "ObjStm":
+            contenu, premier, n = _flux_pdf(objets, (numero,)), *(_resoudre_pdf(objets, valeur[c]) for c in ("First", "N"))
+            nombres = [int(x) for x in contenu[:premier].split()]
+            for numero_contenu, decalage in zip(nombres[0:2 * n:2], nombres[1:2 * n:2]):
+                if positions.get(numero_contenu, -1) < positions[numero]:
+                    objets[numero_contenu] = (_objet_pdf(contenu, premier + decalage)[0], None)
+                    positions[numero_contenu] = positions[numero]
+    return objets
+
+
+def _resoudre_pdf(objets, valeur):
+    """La valeur d'un objet, la référence qui la désigne suivie."""
+    while isinstance(valeur, tuple):
+        valeur = objets[valeur[0]][0] if valeur[0] in objets else None
+    return valeur
+
+
+def _flux_pdf(objets, reference):
+    """Le contenu, décompressé, du flux que désigne une référence."""
+    dictionnaire, brut = objets.get(reference[0], (None, None))
+    if brut is None:
+        raise ValueError(f"l'objet PDF {reference[0]} n'est pas un flux")
+    filtres = _resoudre_pdf(objets, dictionnaire.get("Filter"))
+    parametres = _resoudre_pdf(objets, dictionnaire.get("DecodeParms"))
+    for filtre in filtres if isinstance(filtres, list) else [filtres] if filtres else []:
+        if filtre != "FlateDecode":
+            raise ValueError(f"flux PDF compressé par un filtre que le lecteur ne connaît pas : {filtre}")
+        brut = zlib.decompressobj().decompress(brut)
+    if any(isinstance(p, dict) and p.get("Predictor", 1) > 1 for p in (parametres if isinstance(parametres, list)
+                                                                         else [parametres])):
+        raise ValueError("flux PDF à prédicteur, que le lecteur ne connaît pas")
+    return brut
+
+
+def _table_tounicode(texte):
+    """La table d'une CMap ToUnicode : code (entier) → texte."""
+    table = {}
+    for bloc in re.findall(rb"beginbfchar(.*?)endbfchar", texte, re.S):
+        for code, destination in re.findall(rb"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]*)>", bloc):
+            table[int(code, 16)] = bytes.fromhex(destination.decode("ascii")).decode("utf-16-be")
+    for bloc in re.findall(rb"beginbfrange(.*?)endbfrange", texte, re.S):
+        for debut, fin, destination in re.findall(rb"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*(<[0-9A-Fa-f]*>|\[[^\]]*\])",
+                                                   bloc):
+            debut, fin = int(debut, 16), int(fin, 16)
+            if destination.startswith(b"["):
+                for k, d in enumerate(re.findall(rb"<([0-9A-Fa-f]*)>", destination)):
+                    table[debut + k] = bytes.fromhex(d.decode("ascii")).decode("utf-16-be")
+            else:  # la destination du premier code, dont le dernier octet augmente d'un code à l'autre
+                octets = bytes.fromhex(destination[1:-1].decode("ascii"))
+                for k in range(fin - debut + 1):
+                    suivant = octets[:-1] + bytes([octets[-1] + k]) if octets else b""
+                    table[debut + k] = suivant.decode("utf-16-be")
+    return table
+
+
+def _polices_pdf(objets, ressources):
+    """{nom: (octets par code, table ToUnicode ou None, encodage simple ou None)} des polices de ressources."""
+    polices = {}
+    for nom, reference in (_resoudre_pdf(objets, ressources.get("Font")) or {}).items():
+        police = _resoudre_pdf(objets, reference)
+        table = _table_tounicode(_flux_pdf(objets, police["ToUnicode"])) if "ToUnicode" in police else None
+        if police.get("Subtype") == "Type0":
+            if police.get("Encoding") not in ("Identity-H", "Identity-V") or table is None:
+                raise ValueError(f"police composite {police.get('BaseFont')} sans table ToUnicode ou à l'encodage "
+                                 f"{police.get('Encoding')}, que le lecteur ne connaît pas")
+            polices[nom] = (2, table, None)
+            continue
+        encodage = _resoudre_pdf(objets, police.get("Encoding"))
+        if isinstance(encodage, dict):
+            encodage = None if "Differences" in encodage else encodage.get("BaseEncoding")
+        if encodage != "WinAnsiEncoding" and table is None:
+            raise ValueError(f"police {police.get('BaseFont')} à l'encodage {encodage}, que le lecteur ne connaît pas")
+        polices[nom] = (1, table, "cp1252" if encodage == "WinAnsiEncoding" else None)
+    return polices
+
+
+def _decoder_pdf(octets, police):
+    largeur, table, encodage = police
+    if len(octets) % largeur:
+        raise ValueError("chaîne PDF d'une longueur qui ne convient pas à sa police")
+    texte = []
+    for k in range(0, len(octets), largeur):
+        code = int.from_bytes(octets[k:k + largeur], "big")
+        if table is not None and code in table:
+            texte.append(table[code])
+        elif encodage is not None:
+            texte.append(bytes([code]).decode(encodage))
+        else:
+            raise ValueError(f"code {code:#x} sans correspondance dans sa police")
+    return "".join(texte)
+
+
+def _produit_pdf(m, n):
+    """Le produit de deux matrices de transformation [a b c d e f] : m, puis n."""
+    a, b, c, d, e, f = m
+    a2, b2, c2, d2, e2, f2 = n
+    return (a * a2 + b * c2, a * b2 + b * d2, c * a2 + d * c2, c * b2 + d * d2, e * a2 + f * c2 + e2, e * b2 + f * d2 + f2)
+
+
+def _morceaux_pdf(objets, contenu, ressources, matrice, morceaux):
+    """Ajoute à `morceaux` ceux d'un flux de contenu : (x, y, texte), à la position où commence chacun, dans l'espace de
+    la page ; un formulaire (XObject) que dessine le flux y ajoute les siens."""
+    polices, pile, etats = _polices_pdf(objets, ressources), [], []
+    police, tm, tlm, interligne, i = None, _IDENTITE_PDF, _IDENTITE_PDF, 0, 0
+    while (i := _blancs_pdf(contenu, i)) < len(contenu):
+        element, i = _objet_pdf(contenu, i)
+        if not isinstance(element, _OperateurPdf):
+            pile.append(element)
+            continue
+        operateur = bytes(element)
+        if operateur == b"BI":  # une image en ligne : ses données, jusqu'à « EI », ne sont pas des objets
+            i = re.compile(rb"\sEI(?![^\s()<>\[\]{}/%])").search(contenu, contenu.index(b"ID", i) + 3).end()
+        elif operateur == b"q":
+            etats.append(matrice)
+        elif operateur == b"Q" and etats:
+            matrice = etats.pop()
+        elif operateur == b"cm":
+            matrice = _produit_pdf(pile[-6:], matrice)
+        elif operateur == b"BT":
+            tm = tlm = _IDENTITE_PDF
+        elif operateur == b"Tf":
+            if pile[-2] not in polices:
+                raise ValueError(f"police {pile[-2]} absente des ressources de la page")
+            police = polices[pile[-2]]
+        elif operateur == b"TL":
+            interligne = pile[-1]
+        elif operateur == b"Tm":
+            tm = tlm = tuple(pile[-6:])
+        elif operateur in (b"Td", b"TD", b"T*", b"'", b'"'):
+            if operateur == b"TD":
+                interligne = -pile[-1]
+            dx, dy = pile[-2:] if operateur in (b"Td", b"TD") else (0, -interligne)
+            tm = tlm = _produit_pdf((1, 0, 0, 1, dx, dy), tlm)
+        if operateur in (b"Tj", b"TJ", b"'", b'"'):
+            if police is None:
+                raise ValueError("texte PDF dessiné sans police")
+            chaines = pile[-1] if operateur == b"TJ" else [pile[-1]]
+            x, y = _produit_pdf(tm, matrice)[4:]
+            morceaux.append((x, y, "".join(_decoder_pdf(c, police) for c in chaines if isinstance(c, bytes))))
+        elif operateur == b"Do":
+            reference = (_resoudre_pdf(objets, ressources.get("XObject")) or {}).get(pile[-1])
+            formulaire = _resoudre_pdf(objets, reference)
+            if isinstance(formulaire, dict) and formulaire.get("Subtype") == "Form":
+                _morceaux_pdf(objets, _flux_pdf(objets, reference),
+                              _resoudre_pdf(objets, formulaire.get("Resources")) or ressources,
+                              _produit_pdf(formulaire.get("Matrix", _IDENTITE_PDF), matrice), morceaux)
+        pile = []
+    return morceaux
+
+
+def _pages_pdf(donnees, objets):
+    """Les pages d'un PDF dans l'ordre, chacune (dictionnaire, ressources, héritées au besoin de l'arbre des pages)."""
+    racine = re.findall(rb"/Root\s+([0-9]+)\s+[0-9]+\s+R", donnees)
+    catalogue = _resoudre_pdf(objets, (int(racine[-1]),)) if racine else None
+    if not isinstance(catalogue, dict) or "Pages" not in catalogue:
+        raise ValueError("PDF sans catalogue de ses pages")
+    noeuds = [(catalogue["Pages"], {})]
+    pages = []
+    while noeuds:
+        noeud, ressources = noeuds.pop(0)
+        noeud = _resoudre_pdf(objets, noeud)
+        ressources = _resoudre_pdf(objets, noeud.get("Resources")) or ressources
+        if noeud.get("Type") == "Pages":
+            noeuds[:0] = [(fils, ressources) for fils in _resoudre_pdf(objets, noeud["Kids"])]
+        else:
+            pages.append((noeud, ressources))
+    return pages
+
+
+def lignes_pdf(morceaux, tolerance=1.0):
+    """Les morceaux d'une page en lignes, de haut en bas : (ordonnée, [(abscisse, texte)…]), de gauche à droite ; deux
+    morceaux sont sur une même ligne si leurs ordonnées diffèrent d'au plus `tolerance` points."""
+    lignes = []
+    for x, y, texte in sorted(morceaux, key=lambda m: -m[1]):
+        if lignes and lignes[-1][0] - y <= tolerance:
+            lignes[-1][1].append((x, texte))
+        else:
+            lignes.append((y, [(x, texte)]))
+    return [(y, sorted(ligne, key=lambda m: m[0])) for y, ligne in lignes]
+
+
+def lire_pdf(chemin):
+    """Le texte d'un PDF, page par page : pour chaque page, ses lignes de haut en bas (voir lignes_pdf)."""
+    with ouvrir_copie(chemin) as f:
+        donnees = f.read()
+    objets, pages = _objets_pdf(donnees), []
+    for page, ressources in _pages_pdf(donnees, objets):
+        contenus = page.get("Contents")
+        if isinstance(_resoudre_pdf(objets, contenus), list):  # un tableau de flux, désigné par une référence
+            contenus = _resoudre_pdf(objets, contenus)
+        references = contenus if isinstance(contenus, list) else [contenus] if contenus is not None else []
+        contenu = b"\n".join(_flux_pdf(objets, r) for r in references)
+        pages.append(lignes_pdf(_morceaux_pdf(objets, contenu, ressources, _IDENTITE_PDF, [])))
+    return pages
+
+
+def texte_pdf(morceaux):
+    """Le texte de morceaux d'une ligne, (abscisse, texte) : mis bout à bout, ses blancs réduits à une espace."""
+    return " ".join("".join(t for _, t in morceaux).split())
+
+
+def date_pdf(donnees):
+    """Date de dernière modification que le producteur a inscrite dans un PDF, à défaut date de création : « D:2026051815
+    4927+02'00' » → « 2026-05-18T15:49:27+02:00 » ; vide s'il n'en porte pas."""
+    infos = re.findall(rb"/Info\s+([0-9]+)\s+[0-9]+\s+R", donnees)
+    info = _resoudre_pdf(_objets_pdf(donnees), (int(infos[-1]),)) if infos else None
+    for cle in ("ModDate", "CreationDate"):
+        date = info.get(cle) if isinstance(info, dict) else None
+        if isinstance(date, bytes):
+            date = date[2:].decode("utf-16-be") if date.startswith(b"\xfe\xff") else date.decode("latin-1")
+            m = re.match(r"D:([0-9]{4})([0-9]{2})?([0-9]{2})?([0-9]{2})?([0-9]{2})?([0-9]{2})?(Z|[-+][0-9]{2}'?[0-9]{2})?",
+                         date)
+            if m:
+                annee, mois, jour, heure, minute, seconde, zone = m.groups()
+                texte = "-".join(p for p in (annee, mois, jour) if p)
+                if heure:
+                    texte += f"T{heure}:{minute or '00'}:{seconde or '00'}"
+                    texte += "" if zone is None else "Z" if zone == "Z" else f"{zone[:3]}:{zone[-2:]}"
+                return texte
+    return ""
 
 
 # --- Fusion des chiffres importés ----------------------------------------------------------------------

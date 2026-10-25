@@ -3,21 +3,24 @@
 
 Vérifie que chaque table respecte son schéma, que chaque référence existe, que chaque
 identifiant de chiffre correspond à sa fiche et que chaque copie archivée est intacte ; relit
-chaque copie des comptes de chaque collectivité, et chaque fichier du recensement des éléments
-d'imposition (REI), qui doit donner son inscription.
+chaque copie des comptes de chaque collectivité, chaque fichier du recensement des éléments
+d'imposition (REI) et chaque liste d'organismes publics, qui doit donner son inscription.
 
     python3 outils/valider.py
 """
 
+import collections
 import datetime
 import math
 import re
 import sys
 
 import importer_ofgl_collectivites as ofgl
+import importer_organismes as organismes
 import importer_rei as rei
-from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_jsonstat, lire_sdmx, lire_tableaux_html, lire_xlsx,
-                    nombre_de_phrase, nombre_texte, paquet, ressources_chiffres, texte_html)
+from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_jsonstat, lire_pdf, lire_sdmx,
+                    lire_tableaux_html, lire_xlsx, nombre_de_phrase, nombre_texte, paquet, ressources_chiffres, texte_html,
+                    texte_pdf)
 
 
 def erreur_de_type(type_, texte):
@@ -167,6 +170,18 @@ def valeur_archivee(fichier, emplacement, copies):
         if observation is None or nombre_texte(observation.get("OBS_VALUE", "")) is None:
             return None
         return float(observation["OBS_VALUE"]), observation.get("OBS_QUAL", "")
+    if fichier["chemin"].endswith(".pdf"):
+        # Un nombre au bout d'une ligne de tableau, désignée par sa page et son libellé : une seule ligne de la page doit
+        # commencer par ce libellé et ne porter, après lui, qu'un nombre.
+        trouve = re.fullmatch(r"page=([0-9]+);libelle=(.+)", emplacement)
+        if trouve is None:
+            return None
+        if fichier["id"] not in copies:
+            copies[fichier["id"]] = lire_pdf(chemin)
+        page, libelle = int(trouve.group(1)), trouve.group(2)
+        lignes = [texte_pdf(m) for _, m in copies[fichier["id"]][page - 1]] if 1 <= page <= len(copies[fichier["id"]]) else []
+        nombres = [n for l in lignes if l.startswith(libelle) and (n := nombre_texte(l[len(libelle):])) is not None]
+        return (float(nombres[0][0]), "") if len(nombres) == 1 else None
     return "sans lecteur"
 
 
@@ -260,6 +275,35 @@ def controler_rei(tables, erreurs):
     return relues, communes
 
 
+def controler_organismes(tables, erreurs):
+    """Relit chaque liste inscrite dans organismes.csv dans sa copie archivée : elle doit donner son inscription.
+    Renvoie le nombre de listes relues et celui de leurs organismes."""
+    fichiers = {f["id"]: f for f in tables["fichiers"]}
+    inscrites = collections.defaultdict(list)
+    for o in tables["organismes"]:
+        inscrites[o["fichier_id"]].append(o)
+    relues = 0
+    for fichier_id, liste in sorted(inscrites.items()):
+        fichier = fichiers.get(fichier_id)
+        if fichier is None:
+            continue  # référence déjà signalée
+        if fichier["source_id"] != organismes.ODAC:
+            erreurs.append(f"tables/organismes.csv : la copie {fichier_id} n'est pas une liste d'organismes")
+            continue
+        try:
+            attendue = organismes.organismes_odac(fichier)
+        except SystemExit as e:
+            erreurs.append(f"tables/organismes.csv : {e}")
+            continue
+        liste = sorted(liste, key=lambda o: int(o["rang"]) if o["rang"].isdigit() else 0)
+        if liste != attendue:
+            ecart = next((a, b) for a, b in zip(liste + [None] * len(attendue), attendue + [None] * len(liste)) if a != b)
+            erreurs.append(f"tables/organismes.csv : la copie {fichier_id} donne une autre liste ({ecart[0]} inscrit, "
+                           f"{ecart[1]} dans la copie)")
+        relues += 1
+    return relues, sum(len(l) for l in inscrites.values())
+
+
 def lignes_relues(relues):
     """« 12 lignes de comptes de collectivités, 3 lignes de dépenses par fonction, 5 lignes de fiscalité directe locale
     et 4 lignes de dotations »."""
@@ -279,6 +323,7 @@ def main():
     relus, sans_lecteur = controler_valeurs(tables, erreurs)
     relues = controler_collectivites(tables, erreurs)
     copies_rei, communes_rei = controler_rei(tables, erreurs)
+    listes, nombre_organismes = controler_organismes(tables, erreurs)
     for e in erreurs:
         print(e)
     if erreurs:
@@ -287,7 +332,9 @@ def main():
           f"{relus} chiffres publiés relus dans leur copie archivée"
           + (f", {sans_lecteur} sans lecteur automatique" if sans_lecteur else "")
           + (f" ; {lignes_relues(relues)} relues dans les leurs" if any(relues) else "")
-          + (f" ; {copies_rei} fichiers du REI relus, soit {communes_rei} lignes de communes." if copies_rei else "."))
+          + (f" ; {copies_rei} fichiers du REI relus, soit {communes_rei} lignes de communes" if copies_rei else "")
+          + (f" ; {listes} liste{'s' if listes > 1 else ''} d'organismes relue{'s' if listes > 1 else ''}, soit "
+             f"{nombre_organismes} organismes." if listes else "."))
 
 
 if __name__ == "__main__":
