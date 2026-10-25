@@ -16,7 +16,12 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | eurostat.gov_10a_main | Recettes, dépenses et principaux agrégats des administrations publiques | 2026-10-21 | 1488 |
 | eurostat.nama_10_gdp | PIB et principaux agrégats | 2026-10-21 | 102 |
 | insee.bdm-comptes-etat | Situation mensuelle du budget de l'État : dépenses, recettes, solde des comptes spéciaux et solde général d'exécution, cumulés depuis le début de l'année (Banque de données macro-économiques, jeu COMPTES-ETAT) | 2026-10-06 | 848 |
+| insee.bdm-dette-trim-apu | Dette trimestrielle des administrations publiques : dette au sens de Maastricht par sous-secteur et par instrument, dette nette, actions cotées et titres d'OPC détenus, dette brute au sens du FMI (Banque de données macro-économiques, jeu DETTE-TRIM-APU-2020) | 2026-09-29 | 2583 |
 | insee.t3101 | Tableau 3.101 : Dette des administrations publiques (S13) au sens de Maastricht et sa répartition par sous-secteur | 2026-07-28 | 624 |
+| insee.t3102 | Tableau 3.102 : Dette des administrations publiques (S13) au sens de Maastricht et sa répartition par sous-secteurs : décomposition par instrument | 2026-07-28 | 1271 |
+| insee.t3103 | Tableau 3.103 : Dette nette des administrations publiques (S13) et autres actifs liquides détenus par les administrations publiques | 2026-08-04 | 558 |
+| insee.t3104 | Tableau 3.104 : Passage du total des passifs des administrations publiques (S13) en comptabilité nationale à leur dette au sens de Maastricht | 2026-08-04 | 2418 |
+| insee.t3105 | Tableau 3.105 : Passage du déficit des administrations publiques (S13) à la variation de leur dette au sens de Maastricht | 2026-07-28 | 306 |
 | insee.t3106 | Tableau 3.106 : Déficit des administrations publiques (S13) au sens de Maastricht | 2026-08-10 | 961 |
 | insee.t3107 | Tableau 3.107 : Passage du résultat d'exécution des lois de finances au déficit de l'État (S13111) au sens de Maastricht | 2026-05-27 | 587 |
 | insee.t3108 | Tableau 3.108 : Passage du résultat comptable du régime général au déficit des administrations de sécurité sociale (S1314) au sens de Maastricht | 2026-08-26 | 313 |
@@ -34,6 +39,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3212 | Tableau 3.212 : Dépenses et recettes des administrations de sécurité sociale (S1314) | 2026-08-10 | 2352 |
 | insee.t3213 | Tableau 3.213 : Dépenses et recettes des régimes d'assurance sociale (S13141) | 2026-08-10 | 627 |
 | insee.t3214 | Tableau 3.214 : Dépenses et recettes des organismes dépendant des assurances sociales - hôpitaux (S13142) | 2026-08-10 | 625 |
+| insee.t3215 | Tableau 3.215 : Dépenses et recettes des administrations publiques par sous-secteur | 2026-08-10 | 960 |
 | insee.t3216 | Tableau 3.216 : Prélèvements obligatoires par sous-secteurs des administrations publiques et pour l'Union européenne | 2026-05-10 | 1290 |
 | insee.t3217 | Tableau 3.217 : Principaux impôts par catégorie | 2026-05-10 | 2655 |
 | insee.t3301 | Tableau 3.301 : Dépenses des administrations publiques (S13) ventilées par fonction | 2025-11-28 | 21256 |
@@ -43,6 +49,12 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | insee.t3305 | Tableau 3.305 : Dépenses des administrations publiques locales (S1313) ventilées par fonction | 2025-11-28 | 18857 |
 | insee.t3306 | Tableau 3.306 : Dépenses des administrations de sécurité sociale (S1314) ventilées par fonction | 2025-11-28 | 11594 |
 | insee.t3307 | Tableau 3.307 : Répartition par sous-secteur des dépenses consolidées des administrations publiques ventilées par fonction | 2025-11-28 | 5968 |
+| insee.t7301 | Tableau 7.301 : Compte des administrations publiques (S13) | 2026-08-27 | 7062 |
+| insee.t7302 | Tableau 7.302 : Compte de l'administration publique centrale (S1311) | 2026-08-11 | 6778 |
+| insee.t7303 | Tableau 7.303 : Compte de l'État (S13111) | 2026-08-11 | 4580 |
+| insee.t7304 | Tableau 7.304 : Compte des organismes divers d'administration centrale (S13112) | 2026-08-11 | 4160 |
+| insee.t7305 | Tableau 7.305 : Compte des administrations publiques locales (S1313) | 2026-08-11 | 6364 |
+| insee.t7306 | Tableau 7.306 : Compte des administrations de sécurité sociale (S1314) | 2026-08-24 | 6372 |
 | ofgl.annexe-2a | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2A : budgets principaux des collectivités locales, par niveau de collectivité | 2026-08-17 | 3922 |
 | ofgl.annexe-2b | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2B : budgets annexes des collectivités locales, par niveau de collectivité | 2026-08-17 | 2444 |
 | ofgl.annexe-2c | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2C : budgets principaux et annexes consolidés de chaque niveau de collectivité | 2026-04-28 | 1415 |
@@ -94,7 +106,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-20550 sommes vérifiées avec toutes leurs composantes : 20488 justes, 62 en écart.
+33980 sommes vérifiées avec toutes leurs composantes : 33874 justes, 106 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
@@ -142,6 +154,31 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | dgcl.finances-departements | DEP_86_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,3899 Md€ | 0,4059 Md€ | −16,0 M€ |
 | dgcl.finances-departements | DEP_974_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,9592 Md€ | 0,9702 Md€ | −11,0 M€ |
 | insee.bdm-comptes-etat | ETAT_LF | ensemble | 2019-04 | LOLF.RESULTAT_EXECUTION | −67,2150 Md€ | −65,5960 Md€ | −1 619,0 M€ |
+| insee.t3104 | S13 | ensemble | 2013 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 155,6000 Md€ | 155,3000 Md€ | +300,0 M€ |
+| insee.t3104 | S13 | ensemble | 2015 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 278,7000 Md€ | 277,9000 Md€ | +800,0 M€ |
+| insee.t3104 | S13 | ensemble | 2016 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 320,4000 Md€ | 319,3000 Md€ | +1 100,0 M€ |
+| insee.t3104 | S13 | ensemble | 2017 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 286,0000 Md€ | 284,8000 Md€ | +1 200,0 M€ |
+| insee.t3104 | S13 | ensemble | 2018 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 268,7000 Md€ | 267,2000 Md€ | +1 500,0 M€ |
+| insee.t3104 | S13 | ensemble | 2019 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 344,1000 Md€ | 342,3000 Md€ | +1 800,0 M€ |
+| insee.t3104 | S13 | ensemble | 2020 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 413,5000 Md€ | 410,8000 Md€ | +2 700,0 M€ |
+| insee.t3104 | S13 | ensemble | 2021 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 329,1000 Md€ | 326,3000 Md€ | +2 800,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2013 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 145,7000 Md€ | 145,4000 Md€ | +300,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2014 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 264,6000 Md€ | 264,1000 Md€ | +500,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2015 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 253,9000 Md€ | 253,1000 Md€ | +800,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2016 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 293,7000 Md€ | 292,6000 Md€ | +1 100,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2017 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 269,4000 Md€ | 268,2000 Md€ | +1 200,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2018 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 253,1000 Md€ | 251,7000 Md€ | +1 400,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2019 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 326,3000 Md€ | 324,5000 Md€ | +1 800,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2020 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 404,5000 Md€ | 401,8000 Md€ | +2 700,0 M€ |
+| insee.t3104 | S1311 | ensemble | 2021 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 314,8000 Md€ | 311,9000 Md€ | +2 900,0 M€ |
+| insee.t3104 | S13111 | ensemble | 2014 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 262,3000 Md€ | 261,8000 Md€ | +500,0 M€ |
+| insee.t3104 | S13111 | ensemble | 2015 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 251,6000 Md€ | 250,8000 Md€ | +800,0 M€ |
+| insee.t3104 | S13111 | ensemble | 2016 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 291,6000 Md€ | 290,6000 Md€ | +1 000,0 M€ |
+| insee.t3104 | S13111 | ensemble | 2017 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 268,7000 Md€ | 267,4000 Md€ | +1 300,0 M€ |
+| insee.t3104 | S13111 | ensemble | 2018 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 252,2000 Md€ | 250,7000 Md€ | +1 500,0 M€ |
+| insee.t3104 | S13111 | ensemble | 2019 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 324,9000 Md€ | 323,2000 Md€ | +1 700,0 M€ |
+| insee.t3104 | S13111 | ensemble | 2020 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 403,4000 Md€ | 401,1000 Md€ | +2 300,0 M€ |
+| insee.t3104 | S13111 | ensemble | 2021 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 313,2000 Md€ | 310,7000 Md€ | +2 500,0 M€ |
 | insee.t3207 | S131311 | ensemble | 2019 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 36,3688 Md€ | 36,2870 Md€ | +81,8 M€ |
 | insee.t3207 | S131311 | ensemble | 2020 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 31,1743 Md€ | 31,0840 Md€ | +90,3 M€ |
 | insee.t3207 | S131311 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 32,5278 Md€ | 32,4602 Md€ | +67,6 M€ |
@@ -152,6 +189,25 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | insee.t3210 | S131314 | ensemble | 2021 | INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | 5,0710 Md€ | 5,0550 Md€ | +16,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2018 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −16,8840 Md€ | −16,3100 Md€ | −574,0 M€ |
 | insee.t3217 | S13_S212 | ensemble | 2019 | INSEE_PO.AJUSTEMENT_CREDITS_IMPOT_IMPUTES | −17,7060 Md€ | −17,1280 Md€ | −578,0 M€ |
+| insee.t7301 | S13 | ensemble | 1959 | SEC2010.P1 | 7,3680 Md€ | 1,4840 Md€ | +5 884,0 M€ |
+| insee.t7301 | S13 | ensemble | 1960 | SEC2010.P1 | 7,8240 Md€ | 1,5860 Md€ | +6 238,0 M€ |
+| insee.t7301 | S13 | ensemble | 1961 | SEC2010.P1 | 8,6700 Md€ | 1,7810 Md€ | +6 889,0 M€ |
+| insee.t7301 | S13 | ensemble | 1962 | SEC2010.P1 | 9,8840 Md€ | 2,0300 Md€ | +7 854,0 M€ |
+| insee.t7301 | S13 | ensemble | 1963 | SEC2010.P1 | 11,3010 Md€ | 2,3170 Md€ | +8 984,0 M€ |
+| insee.t7301 | S13 | ensemble | 1964 | SEC2010.P1 | 12,4780 Md€ | 2,5870 Md€ | +9 891,0 M€ |
+| insee.t7301 | S13 | ensemble | 1965 | SEC2010.P1 | 13,4450 Md€ | 2,8480 Md€ | +10 597,0 M€ |
+| insee.t7301 | S13 | ensemble | 1966 | SEC2010.P1 | 14,5190 Md€ | 3,0810 Md€ | +11 438,0 M€ |
+| insee.t7301 | S13 | ensemble | 1967 | SEC2010.P1 | 15,8010 Md€ | 3,3630 Md€ | +12 438,0 M€ |
+| insee.t7301 | S13 | ensemble | 1968 | SEC2010.P1 | 18,0130 Md€ | 4,0020 Md€ | +14 011,0 M€ |
+| insee.t7301 | S13 | ensemble | 1969 | SEC2010.P1 | 20,3340 Md€ | 4,1350 Md€ | +16 199,0 M€ |
+| insee.t7301 | S13 | ensemble | 1970 | SEC2010.P1 | 22,7660 Md€ | 4,4340 Md€ | +18 332,0 M€ |
+| insee.t7301 | S13 | ensemble | 1971 | SEC2010.P1 | 26,0300 Md€ | 5,1580 Md€ | +20 872,0 M€ |
+| insee.t7301 | S13 | ensemble | 1972 | SEC2010.P1 | 29,1870 Md€ | 5,9020 Md€ | +23 285,0 M€ |
+| insee.t7301 | S13 | ensemble | 1973 | SEC2010.P1 | 32,8480 Md€ | 6,2150 Md€ | +26 633,0 M€ |
+| insee.t7301 | S13 | ensemble | 1974 | SEC2010.P1 | 39,3290 Md€ | 7,4110 Md€ | +31 918,0 M€ |
+| insee.t7301 | S13 | ensemble | 1975 | SEC2010.P1 | 48,1020 Md€ | 9,0730 Md€ | +39 029,0 M€ |
+| insee.t7301 | S13 | ensemble | 1976 | SEC2010.P1 | 56,6210 Md€ | 10,5060 Md€ | +46 115,0 M€ |
+| insee.t7301 | S13 | ensemble | 1977 | SEC2010.P1 | 64,4780 Md€ | 11,4500 Md€ | +53 028,0 M€ |
 | senat.pjl13-759 | ETAT_LF | ensemble | 2013 | LOLF.COMPTES_COMMERCE_SOLDE | 0,1368 Md€ | 0,2654 Md€ | −128,6 M€ |
 | senat.pjl15-128 | SECU_LFSS | ensemble | 2014 | COMPTES_SECU.ACTIF_CIRCULANT | 69,7000 Md€ | 69,3000 Md€ | +400,0 M€ |
 | senat.pjl15-128 | SECU_LFSS | ensemble | 2014 | COMPTES_SECU.PASSIF_FINANCIER | 179,9000 Md€ | 177,0000 Md€ | +2 900,0 M€ |
@@ -161,12 +217,13 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | senat.tas22-018 | REGIME_GENERAL_HORS_FSV | ensemble | 2021 | COMPTES_SECU.RESULTAT_COMPTABLE | −27,7000 Md€ | −22,8000 Md€ | −4 900,0 M€ |
 | senat.tas22-018 | REGIME_GENERAL_HORS_FSV | COMPTES_SECU.MALADIE | 2021 | COMPTES_SECU.RESULTAT_COMPTABLE | −28,7000 Md€ | −29,7000 Md€ | +1 000,0 M€ |
 
-11116 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour 11111 d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables. Pour les 5 autres, elles ne suffisent pas : des parties absentes ne sont pas nulles.
+11343 sommes ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour 11303 d'entre elles, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables. Pour les 40 autres, elles ne suffisent pas : des parties absentes ne sont pas nulles.
 
 | Source | Périmètre | Total | Fonction | Années | Plus grand reste (total − parties diffusées) |
 |---|---|---|---|---|---|
 | insee.t3107 | S13111 | INSEE_PASSAGES.ETAT_DROITS_CONSTATES | ensemble | 2023 | −1 300,0 M€ en 2023 |
 | insee.t3107 | S13111 | INSEE_PASSAGES.ETAT_NON_BUDGETAIRES | ensemble | 2019, 2020, 2021 et 2024 | −2 600,0 M€ en 2021 |
+| insee.t7301 | S13 | SEC2010.D39PAY_EN_RESSOURCES | ensemble | 35 années entre 1978 et 2012 | −20 309,0 M€ en 2012 |
 
 ## 2. Ventilations par fonction
 
@@ -183,14 +240,17 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 
 ## 3. Additivité des sous-secteurs
 
-Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions.
+Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; de même sa dette au sens de Maastricht, ses instruments et sa dette nette, celles d'un sous-secteur étant sa contribution à la dette consolidée de l'ensemble (tableaux 3.101 à 3.104 et dette trimestrielle), et chaque montant de ses comptes complets, qui ne sont pas consolidés (tableaux 7.301 à 7.306) ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions.
 
-6525 additions vérifiées : 6482 justes, 43 en écart.
+17365 additions vérifiées : 17294 justes, 71 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
 | dgcl.finances-departements | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | DEPARTEMENTS_METROPOLE_BP | ses 92 parties (CEA_BP … DEP_95_BP) | ensemble | 2022 | +5,8 M€ en 2022 |
 | eurostat.gov_10a_main | SEC2010.B9 | S13 | S1311 + S1313 + S1314 | ensemble | 2011 | −0,4 M€ en 2011 |
+| insee.t3101 | PDE.GD | S13 | S1311 + S1313 + S1314 | ensemble | 13 années entre 1996 et 2012 | −1,5 M€ en 2010 |
+| insee.t3101 | PDE.GD | S1311 | S13111 + S13112 | ensemble | 14 années entre 1996 et 2012 | +1,8 M€ en 2002 |
+| insee.t3104 | PDE.GD | S13 | S1311 + S1313 + S1314 | ensemble | 2025 | −400,0 M€ en 2025 |
 | insee.t3106 | SEC2010.B9 | S1311 | S13111 + S13112 | ensemble | 19 années entre 1959 et 1977 | +6 502,0 M€ en 1974 |
 | insee.t3212, insee.t3213, insee.t3214 | SEC2010.B9 | S1314 | S13141 + S13142 | ensemble | 2019 | +8,0 M€ en 2019 |
 | ofgl.annexe-2a | COMPTES_LOCAUX.DEPENSES_INTERVENTION | COLLECTIVITES_TERRITORIALES_GFP_BP | SECTEUR_COMMUNAL_BP + DEPARTEMENTS_BP + REGIONS_CTU_BP | ensemble | 2025 | −47,4 M€ en 2025 |
@@ -217,7 +277,7 @@ Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolid
 
 ## 4. Passerelles entre tableaux
 
-Des tableaux différents présentent autrement les mêmes grandeurs. Chaque passerelle vérifie qu'ils concordent, à l'arrondi près, pour chaque année où figurent tous ses termes. Pour les collectivités locales, la consolidation des budgets principaux et annexes retire chaque flux croisé des recettes comme des dépenses de la même section : la variation du fonds de roulement, l'épargne brute, la dette et la trésorerie d'un ensemble consolidé égalent la somme de celles de ses parties.
+Des tableaux différents présentent autrement les mêmes grandeurs. Chaque passerelle vérifie qu'ils concordent, à l'arrondi près, pour chaque année où figurent tous ses termes. Pour les collectivités locales, la consolidation des budgets principaux et annexes retire chaque flux croisé des recettes comme des dépenses de la même section : la variation du fonds de roulement, l'épargne brute, la dette et la trésorerie d'un ensemble consolidé égalent la somme de celles de ses parties. La dette à la fin du quatrième trimestre est celle de la fin de l'année.
 
 | Passerelle | Années vérifiées | Années en écart | dont hors chiffres révisables | Plus grand écart (gauche − droite) |
 |---|---|---|---|---|
@@ -241,6 +301,21 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Résultat comptable du régime général, Fonds de solidarité vieillesse compris (tableau 3.108), contre soldes du régime général et du FSV approuvés par la loi de financement de la sécurité sociale | 13 années entre 2009 et 2021 | 2021 | 2021 | +4 800,0 M€ en 2021 |
 | Dette amortie par la CADES, qu'approuve la loi de financement de la sécurité sociale, contre son résultat de l'exercice dans la situation patrimoniale (annexe A) | 16 années entre 2010 et 2025 | aucune | aucune | aucun |
 | Déficit de l'État au sens de Maastricht contre résultat d'exécution des lois de finances plus corrections (1), (2) et (3), dans le tableau 3.107 | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
+| Déficit des administrations publiques du tableau 3.105 contre leur capacité de financement au sens de Maastricht (tableau 3.106), de signe opposé | 17 années entre 2009 et 2025 | aucune | aucune | aucun |
+| Variation de la dette au sens de Maastricht (tableau 3.105) contre l'écart entre la dette de fin d'année et celle de l'année précédente (tableau 3.101) | 17 années entre 2009 et 2025 | 2011, 2014 et 2015 | 2011, 2014 et 2015 | +633,7 M€ en 2014 |
+| Dette au sens de Maastricht des administrations publiques, au quatrième trimestre (série trimestrielle), contre la dette de fin d'année du tableau 3.101 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht de l'État, au quatrième trimestre (série trimestrielle), contre la dette de fin d'année du tableau 3.101 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des organismes divers d'administration centrale, au quatrième trimestre (série trimestrielle), contre la dette de fin d'année du tableau 3.101 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des administrations publiques locales, au quatrième trimestre (série trimestrielle), contre la dette de fin d'année du tableau 3.101 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des administrations de sécurité sociale, au quatrième trimestre (série trimestrielle), contre la dette de fin d'année du tableau 3.101 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des administrations publiques, dépôts, au quatrième trimestre (série trimestrielle), contre le tableau 3.102 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des administrations publiques, titres de créance, au quatrième trimestre (série trimestrielle), contre le tableau 3.102 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des administrations publiques, titres de créance à court terme, au quatrième trimestre (série trimestrielle), contre le tableau 3.102 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des administrations publiques, titres de créance à long terme, au quatrième trimestre (série trimestrielle), contre le tableau 3.102 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des administrations publiques, crédits à court terme, au quatrième trimestre (série trimestrielle), contre le tableau 3.102 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette au sens de Maastricht des administrations publiques, crédits à long terme, au quatrième trimestre (série trimestrielle), contre le tableau 3.102 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Dette nette des administrations publiques, au quatrième trimestre (série trimestrielle), contre le tableau 3.103 | 31 années entre 1995 et 2025 | aucune | aucune | aucun |
+| Actions cotées et parts de fonds d'investissement détenues par les administrations publiques, au quatrième trimestre (série trimestrielle), contre le tableau 3.103 | 31 années entre 1995 et 2025 | 15 années entre 2001 et 2015 | 15 années entre 2001 et 2015 | −5 300,0 M€ en 2015 |
 | Collectivités locales, variation du fonds de roulement : communes, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2018 et 2023 | 2018 et 2023 | −0,2 M€ en 2023 |
 | Collectivités locales, variation du fonds de roulement : groupements à fiscalité propre, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | 2018 et 2023 | 2018 et 2023 | −0,6 M€ en 2018 |
 | Collectivités locales, variation du fonds de roulement : départements, budgets principaux et annexes consolidés (annexe 2C de l'OFGL) contre budgets principaux (2A) plus budgets annexes (2B) | 9 années entre 2017 et 2025 | aucune | aucune | aucun |
@@ -270,15 +345,39 @@ Des tableaux différents présentent autrement les mêmes grandeurs. Chaque pass
 | Collectivités locales, trésorerie nette au 31 décembre : bloc communal consolidé (annexe 2D) contre communes plus groupements à fiscalité propre consolidés (2C) | 2022, 2023, 2024 et 2025 | aucune | aucune | aucun |
 | Collectivités locales, trésorerie nette au 31 décembre : ensemble des collectivités consolidé (annexe 2D) contre ses cinq niveaux consolidés (2C) | 2022, 2023, 2024 et 2025 | aucune | aucune | aucun |
 
+Les comptes complets des tableaux 7.301 à 7.306 et les dépenses et recettes des tableaux 3.201 à 3.214 présentent les mêmes opérations, sous-secteur par sous-secteur. Les premiers ne sont pas consolidés ; les seconds consolident les revenus de la propriété et les transferts entre administrations, qui ne se comparent donc pas. Les autres opérations doivent être égales ; les subventions, que les comptes complets inscrivent avec un signe négatif, de signe opposé. L'épargne brute et la capacité de financement, que la consolidation ne change pas, se comparent à la section 6.
+
+| Comptes complets | Dépenses et recettes | Comparaisons | En écart | dont hors chiffres révisables | Plus grand écart (comptes complets − dépenses et recettes) |
+|---|---|---|---|---|---|
+| SEC2010.P11 | SEC2010.P11 | 307 | 19 | 19 | −14,0 M€ (S13, 1971) |
+| SEC2010.P12 | SEC2010.P12 | 307 | 0 | 0 | aucun |
+| SEC2010.P2 | SEC2010.P2 | 307 | 0 | 0 | aucun |
+| SEC2010.D1PAY | SEC2010.D1PAY | 307 | 0 | 0 | aucun |
+| SEC2010.D122PAY | SEC2010.D122PAY | 307 | 0 | 0 | aucun |
+| SEC2010.D29PAY | SEC2010.D29PAY | 307 | 0 | 0 | aucun |
+| SEC2010.D39REC_EN_EMPLOIS | −SEC2010.D39REC | 257 | 0 | 0 | aucun |
+| SEC2010.D2REC | SEC2010.D2REC | 307 | 0 | 0 | aucun |
+| SEC2010.D3PAY_EN_RESSOURCES | −SEC2010.D3PAY | 307 | 0 | 0 | aucun |
+| SEC2010.D5REC | SEC2010.D5REC | 307 | 0 | 0 | aucun |
+| SEC2010.D5PAY | SEC2010.D5PAY | 259 | 0 | 0 | aucun |
+| SEC2010.D61REC | SEC2010.D61REC | 307 | 0 | 0 | aucun |
+| SEC2010.D612REC | SEC2010.D612REC | 307 | 0 | 0 | aucun |
+| SEC2010.D62PAY | SEC2010.D62PAY | 307 | 0 | 0 | aucun |
+| SEC2010.D632PAY | SEC2010.D632PAY | 307 | 17 | 17 | −14,1 M€ (S13, 1971) |
+| SEC2010.D91REC | SEC2010.D91REC | 186 | 0 | 0 | aucun |
+| SEC2010.P51G | SEC2010.P51G | 307 | 0 | 0 | aucun |
+
 ## 5. Ratios
 
 Chaque ratio est recalculé : le même chiffre en montant, divisé par son dénominateur. Il est retrouvé si l'écart ne dépasse pas ce que permettent les arrondis du ratio, du montant et du dénominateur.
+
+La dette trimestrielle en % du PIB rapporte l'encours, à la fin du quatrième trimestre, au PIB de l'année, et les autres trimestres au cumul du PIB trimestriel, corrigé des variations saisonnières et des jours ouvrables, des quatre derniers trimestres, que la base n'enregistre pas : ces 92 ratios-là ne sont pas recalculés.
 
 | Dénominateur | Ratios | Retrouvés | Non retrouvés |
 |---|---|---|---|
 | le PIB indiqué par la source, dans le même tableau | 730 | 597 | 133 |
 | la dépense totale du même périmètre, chez la même source | 300 | 300 | 0 |
-| non indiqué par la source : chaque série de PIB enregistrée pour l'année est essayée | 1500 | 1493 | 7 |
+| non indiqué par la source : chaque série de PIB enregistrée pour l'année est essayée | 2197 | 2185 | 12 |
 
 Ratios non retrouvés :
 
@@ -304,6 +403,14 @@ Ratios non retrouvés :
 - **insee.t3101, PDE.GD, S1314, en % du PIB** : 2 ratios ne sont pas retrouvés avec le PIB indiqué, celui de insee.t3101, pour 2007 et 2009.
   Avec le PIB de eurostat.nama_10_gdp, 2 sont retrouvés.
   Avec le PIB de insee.t3106, 2 sont retrouvés.
+- **insee.t3215, SEC2010.TE, S13, en % du PIB** : 2 ratios ne sont retrouvés avec aucune des séries de PIB enregistrées, pour 2023 et 2024.
+  En 2023, aucune série enregistrée ne le retrouve ; il faudrait un PIB compris entre 2 833,825 et 2 833,827 Md€ (PIB enregistrés : eurostat.nama_10_gdp 2 833,826 Md€ ; insee.t3101 2 833,826 Md€ ; insee.t3106 2 833,826 Md€).
+  En 2024, aucune série enregistrée ne le retrouve ; il faudrait un PIB compris entre 2 935,235 et 2 935,237 Md€ (PIB enregistrés : eurostat.nama_10_gdp 2 935,236 Md€ ; insee.t3101 2 935,236 Md€ ; insee.t3106 2 935,236 Md€).
+- **insee.t3215, SEC2010.TE, S1314, en % du PIB** : 1 ratio n’est retrouvé avec aucune des séries de PIB enregistrées, pour 2023.
+  En 2023, aucune série enregistrée ne le retrouve ; il faudrait un PIB compris entre 2 833,825 et 2 833,827 Md€ (PIB enregistrés : eurostat.nama_10_gdp 2 833,826 Md€ ; insee.t3101 2 833,826 Md€ ; insee.t3106 2 833,826 Md€).
+- **insee.t3215, SEC2010.TR, S13, en % du PIB** : 2 ratios ne sont retrouvés avec aucune des séries de PIB enregistrées, pour 2023 et 2024.
+  En 2023, aucune série enregistrée ne le retrouve ; il faudrait un PIB compris entre 2 833,825 et 2 833,827 Md€ (PIB enregistrés : eurostat.nama_10_gdp 2 833,826 Md€ ; insee.t3101 2 833,826 Md€ ; insee.t3106 2 833,826 Md€).
+  En 2024, aucune série enregistrée ne le retrouve ; il faudrait un PIB compris entre 2 935,235 et 2 935,237 Md€ (PIB enregistrés : eurostat.nama_10_gdp 2 935,236 Md€ ; insee.t3101 2 935,236 Md€ ; insee.t3106 2 935,236 Md€).
 - **senat.pjl24-032, SEC2010.TE, S13, en % du PIB** : 1 ratio n’est retrouvé avec aucune des séries de PIB enregistrées, pour 2023.
   En 2023, aucune série enregistrée ne le retrouve ; il faudrait un PIB compris entre 2 799,118 et 2 805,826 Md€ (PIB enregistrés : eurostat.nama_10_gdp 2 833,826 Md€ ; insee.t3101 2 833,826 Md€ ; insee.t3106 2 833,826 Md€).
 - **senat.pjl24-718, SEC2010.TE, S13, en % du PIB** : 1 ratio n’est retrouvé avec aucune des séries de PIB enregistrées, pour 2024.
@@ -324,6 +431,7 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | dgcl.finances-regions | ofgl.annexe-2b | 10 | 5 | 0 | aucun | +144,4 M€ en 2024 |
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | 60 | 19 | 16 | +3,2 M€ en 2019 | +0,3 point de PIB en 2024 ; −914,4 M€ en 2024 |
 | eurostat.gov_10a_exp | insee.t3201 | 30 | 20 | 18 | −42,4 M€ en 2021 | −878,3 M€ en 2023 |
+| eurostat.gov_10a_exp | insee.t3215 | 60 | 22 | 18 | +3,2 M€ en 2019 | +0,3 point de PIB en 2024 ; −914,4 M€ en 2024 |
 | eurostat.gov_10a_exp | insee.t3301 | 330 | 5 | 5 | +0,9 M€ en 2020 | +0,9 M€ en 2020 |
 | eurostat.gov_10a_exp | insee.t3307 | 176 | 100 | 100 | −20 300,8 M€ en 2009 | −20 300,8 M€ en 2009 |
 | eurostat.gov_10a_main | insee.t3106 | 248 | 1 | 1 | +0,9 M€ en 2011 | +0,9 M€ en 2011 |
@@ -332,11 +440,16 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | eurostat.gov_10a_main | insee.t3202 | 124 | 0 | 0 | aucun | aucun |
 | eurostat.gov_10a_main | insee.t3205 | 124 | 0 | 0 | aucun | aucun |
 | eurostat.gov_10a_main | insee.t3212 | 124 | 6 | 6 | +39,0 M€ en 2019 | +39,0 M€ en 2019 |
+| eurostat.gov_10a_main | insee.t3215 | 372 | 3 | 2 | +0,4 M€ en 2011 | +119,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3301 | 30 | 15 | 13 | −3,3 M€ en 2019 | +914,2 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3302 | 30 | 6 | 4 | −0,6 M€ en 2015 | +954,2 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3305 | 30 | 4 | 2 | −0,6 M€ en 2002 | +738,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3306 | 30 | 3 | 1 | +0,7 M€ en 2022 | −1 139,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3307 | 16 | 16 | 14 | −20 301,7 M€ en 2009 | −20 301,7 M€ en 2009 |
+| eurostat.gov_10a_main | insee.t7301 | 31 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | insee.t7302 | 31 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | insee.t7305 | 31 | 0 | 0 | aucun | aucun |
+| eurostat.gov_10a_main | insee.t7306 | 31 | 1 | 1 | +0,9 M€ en 2011 | +0,9 M€ en 2011 |
 | eurostat.gov_10a_main | senat.pjl12-799 | 1 | 1 | 0 | aucun | −0,4 point de PIB en 2012 |
 | eurostat.gov_10a_main | senat.pjl13-759 | 1 | 1 | 0 | aucun | −0,6 point de PIB en 2013 |
 | eurostat.gov_10a_main | senat.pjl14-642 | 1 | 1 | 0 | aucun | −0,6 point de PIB en 2014 |
@@ -357,10 +470,13 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | eurostat.gov_10a_main | senat.pjl25-727 | 3 | 0 | 0 | aucun | aucun |
 | eurostat.nama_10_gdp | insee.t3101 | 48 | 42 | 42 | −9 571,2 M€ en 1990 | −9 571,2 M€ en 1990 |
 | eurostat.nama_10_gdp | insee.t3106 | 51 | 0 | 0 | aucun | aucun |
+| insee.t3101 | insee.t3102 | 186 | 0 | 0 | aucun | aucun |
+| insee.t3101 | insee.t3104 | 186 | 16 | 15 | +171,0 M€ en 2015 | −500,0 M€ en 2025 |
 | insee.t3101 | insee.t3106 | 48 | 42 | 42 | +9 571,2 M€ en 1990 | +9 571,2 M€ en 1990 |
 | insee.t3101 | senat.pjl24-032 | 1 | 1 | 0 | aucun | −1,1 point de PIB en 2023 |
 | insee.t3101 | senat.pjl24-718 | 1 | 1 | 0 | aucun | −0,4 point de PIB en 2024 |
 | insee.t3101 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
+| insee.t3102 | insee.t3104 | 186 | 3 | 2 | +200,0 M€ en 2015 | −500,0 M€ en 2025 |
 | insee.t3106 | insee.t3107 | 17 | 1 | 1 | −59,0 M€ en 2016 | −59,0 M€ en 2016 |
 | insee.t3106 | insee.t3108 | 17 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3201 | 67 | 0 | 0 | aucun | aucun |
@@ -369,6 +485,12 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3106 | insee.t3204 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3205 | 48 | 0 | 0 | aucun | aucun |
 | insee.t3106 | insee.t3212 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t7301 | 77 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t7302 | 77 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t7303 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t7304 | 48 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t7305 | 77 | 0 | 0 | aucun | aucun |
+| insee.t3106 | insee.t7306 | 77 | 0 | 0 | aucun | aucun |
 | insee.t3106 | senat.pjl12-799 | 1 | 1 | 0 | aucun | −0,4 point de PIB en 2012 |
 | insee.t3106 | senat.pjl13-759 | 1 | 1 | 0 | aucun | −0,6 point de PIB en 2013 |
 | insee.t3106 | senat.pjl14-642 | 1 | 1 | 0 | aucun | −0,6 point de PIB en 2014 |
@@ -388,6 +510,7 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3106 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3106 | senat.pjl25-727 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3107 | insee.t3203 | 17 | 1 | 1 | +59,2 M€ en 2016 | +59,2 M€ en 2016 |
+| insee.t3107 | insee.t7303 | 17 | 1 | 1 | +59,0 M€ en 2016 | +59,0 M€ en 2016 |
 | insee.t3107 | senat.pjl09-585 | 3 | 0 | 0 | aucun | aucun |
 | insee.t3107 | senat.pjl10-672 | 3 | 0 | 0 | aucun | aucun |
 | insee.t3107 | senat.pjl11-655 | 3 | 0 | 0 | aucun | aucun |
@@ -407,6 +530,7 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3107 | senat.pjl25-726 | 2 | 0 | 0 | aucun | aucun |
 | insee.t3108 | insee.t3212 | 17 | 0 | 0 | aucun | aucun |
 | insee.t3108 | insee.t3214 | 13 | 6 | 6 | +271,0 M€ en 2018 | +271,0 M€ en 2018 |
+| insee.t3108 | insee.t7306 | 17 | 0 | 0 | aucun | aucun |
 | insee.t3108 | senat.pjl16-106 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3108 | senat.pjl17-063 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3108 | senat.pjl18-106 | 1 | 0 | 0 | aucun | aucun |
@@ -414,13 +538,34 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3108 | senat.pjl20-101 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3108 | senat.pjl21-118 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3108 | senat.tas22-018 | 1 | 1 | 1 | +5 000,0 M€ en 2021 | +5 000,0 M€ en 2021 |
+| insee.t3201 | insee.t3215 | 96 | 3 | 2 | +43,0 M€ en 2021 | −119,0 M€ en 2024 |
 | insee.t3201 | insee.t3301 | 240 | 35 | 19 | +43,1 M€ en 2021 | −2 012,0 M€ en 2024 |
 | insee.t3201 | insee.t3307 | 16 | 16 | 14 | −20 301,8 M€ en 2009 | −20 301,8 M€ en 2009 |
+| insee.t3201 | insee.t7301 | 134 | 1 | 1 | +1,3 M€ en 2022 | +1,3 M€ en 2022 |
 | insee.t3202 | insee.t3302 | 240 | 20 | 5 | −0,6 M€ en 2016 | +1 029,5 M€ en 2024 |
+| insee.t3202 | insee.t7302 | 96 | 0 | 0 | aucun | aucun |
+| insee.t3203 | insee.t3215 | 96 | 0 | 0 | aucun | aucun |
 | insee.t3203 | insee.t3303 | 128 | 21 | 6 | −2,0 M€ en 2021 | +698,0 M€ en 2023 |
+| insee.t3203 | insee.t7303 | 96 | 0 | 0 | aucun | aucun |
+| insee.t3204 | insee.t3215 | 96 | 0 | 0 | aucun | aucun |
 | insee.t3204 | insee.t3304 | 128 | 17 | 2 | −2,4 M€ en 2020 | +3 073,7 M€ en 2024 |
+| insee.t3204 | insee.t7304 | 96 | 1 | 1 | +1,4 M€ en 2022 | +1,4 M€ en 2022 |
+| insee.t3205 | insee.t3215 | 96 | 0 | 0 | aucun | aucun |
 | insee.t3205 | insee.t3305 | 240 | 18 | 2 | −0,6 M€ en 2002 | +738,0 M€ en 2024 |
+| insee.t3205 | insee.t7305 | 96 | 0 | 0 | aucun | aucun |
+| insee.t3212 | insee.t3215 | 96 | 4 | 4 | −39,0 M€ en 2019 | −39,0 M€ en 2019 |
 | insee.t3212 | insee.t3306 | 240 | 19 | 5 | −39,4 M€ en 2019 | +1 304,3 M€ en 2024 |
+| insee.t3212 | insee.t7306 | 96 | 0 | 0 | aucun | aucun |
+| insee.t3215 | insee.t3301 | 30 | 15 | 13 | −3,3 M€ en 2019 | +914,2 M€ en 2024 |
+| insee.t3215 | insee.t3303 | 16 | 7 | 5 | −2,0 M€ en 2021 | +698,0 M€ en 2023 |
+| insee.t3215 | insee.t3304 | 16 | 4 | 2 | −2,4 M€ en 2020 | +3 073,7 M€ en 2024 |
+| insee.t3215 | insee.t3305 | 30 | 4 | 2 | −0,6 M€ en 2002 | +738,0 M€ en 2024 |
+| insee.t3215 | insee.t3306 | 30 | 3 | 1 | +0,7 M€ en 2022 | −1 139,0 M€ en 2024 |
+| insee.t3215 | insee.t3307 | 16 | 16 | 14 | −20 301,8 M€ en 2009 | −20 301,8 M€ en 2009 |
+| insee.t3215 | senat.pjl22-705 | 2 | 1 | 0 | aucun | −0,1 point de PIB en 2022 |
+| insee.t3215 | senat.pjl24-035 | 2 | 2 | 0 | aucun | −0,3 point de PIB en 2023 |
+| insee.t3215 | senat.pjl24-729 | 2 | 2 | 0 | aucun | −0,1 point de PIB en 2024 |
+| insee.t3215 | senat.pjl25-727 | 2 | 2 | 0 | aucun | +0,1 point de PIB en 2025 |
 | insee.t3216 | insee.t3217 | 93 | 24 | 24 | +734,9 M€ en 1995 | +734,9 M€ en 1995 |
 | insee.t3216 | senat.pjl24-032 | 1 | 1 | 0 | aucun | −0,3 point de PIB en 2023 |
 | insee.t3216 | senat.pjl24-718 | 1 | 1 | 0 | aucun | −0,1 point de PIB en 2024 |
@@ -536,6 +681,8 @@ Détail des grandeurs en écart :
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE, en % du PIB | ensemble | 2024 | aucune | +0,3 point de PIB en 2024 |
 | eurostat.gov_10a_exp | eurostat.gov_10a_main | FR S13 SEC2010.TE | ensemble | 18 années entre 1995 et 2024 | 16 années entre 1995 et 2022 | −914,4 M€ en 2024 |
 | eurostat.gov_10a_exp | insee.t3201 | FR S13 SEC2010.TE | ensemble | 20 années entre 1995 et 2024 | 18 années entre 1995 et 2022 | −878,3 M€ en 2023 |
+| eurostat.gov_10a_exp | insee.t3215 | FR S13 SEC2010.TE, en % du PIB | ensemble | 2023 et 2024 | aucune | +0,3 point de PIB en 2024 |
+| eurostat.gov_10a_exp | insee.t3215 | FR S13 SEC2010.TE | ensemble | 20 années entre 1995 et 2024 | 18 années entre 1995 et 2022 | −914,4 M€ en 2024 |
 | eurostat.gov_10a_exp | insee.t3301 | FR S13 SEC2010.TE | ensemble, GF01, GF04 et GF05 | 2012, 2018, 2020 et 2021 | 2012, 2018, 2020 et 2021 | +0,9 M€ en 2020 (GF01) |
 | eurostat.gov_10a_exp | insee.t3307 | FR S13 SEC2010.TE | ensemble et 9 divisions | 10 années entre 2009 et 2018 | 10 années entre 2009 et 2018 | −20 300,8 M€ en 2009 (ensemble) |
 | eurostat.gov_10a_main | insee.t3106 | FR S1314 SEC2010.B9 | ensemble | 2011 | 2011 | +0,9 M€ en 2011 |
@@ -544,11 +691,15 @@ Détail des grandeurs en écart :
 | eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.B9 | ensemble | 2011 | 2011 | +0,4 M€ en 2011 |
 | eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.TE | ensemble | 2019 et 2020 | 2019 et 2020 | +39,0 M€ en 2019 |
 | eurostat.gov_10a_main | insee.t3212 | FR S1314 SEC2010.TR | ensemble | 2011, 2019 et 2020 | 2011, 2019 et 2020 | +39,0 M€ en 2019 |
+| eurostat.gov_10a_main | insee.t3215 | FR S13 SEC2010.TE | ensemble | 2013 | 2013 | +0,2 M€ en 2013 |
+| eurostat.gov_10a_main | insee.t3215 | FR S13 SEC2010.TR | ensemble | 2024 | aucune | +119,0 M€ en 2024 |
+| eurostat.gov_10a_main | insee.t3215 | FR S1314 SEC2010.TR | ensemble | 2011 | 2011 | +0,4 M€ en 2011 |
 | eurostat.gov_10a_main | insee.t3301 | FR S13 SEC2010.TE | ensemble | 15 années entre 1995 et 2024 | 13 années entre 1995 et 2022 | +914,2 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3302 | FR S1311 SEC2010.TE | ensemble | 6 années entre 1996 et 2024 | 1996, 2008, 2015 et 2016 | +954,2 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3305 | FR S1313 SEC2010.TE | ensemble | 2002, 2013, 2023 et 2024 | 2002 et 2013 | +738,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3306 | FR S1314 SEC2010.TE | ensemble | 2022, 2023 et 2024 | 2022 | −1 139,0 M€ en 2024 |
 | eurostat.gov_10a_main | insee.t3307 | FR S13 SEC2010.TE | ensemble | 16 années entre 2009 et 2024 | 14 années entre 2009 et 2022 | −20 301,7 M€ en 2009 |
+| eurostat.gov_10a_main | insee.t7306 | FR S1314 SEC2010.B9 | ensemble | 2011 | 2011 | +0,9 M€ en 2011 |
 | eurostat.gov_10a_main | senat.pjl12-799 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2012 | aucune | −0,4 point de PIB en 2012 |
 | eurostat.gov_10a_main | senat.pjl13-759 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2013 | aucune | −0,6 point de PIB en 2013 |
 | eurostat.gov_10a_main | senat.pjl14-642 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2014 | aucune | −0,6 point de PIB en 2014 |
@@ -561,9 +712,14 @@ Détail des grandeurs en écart :
 | eurostat.gov_10a_main | senat.pjl24-035 | FR S1314 SEC2010.TE, en % du PIB | ensemble | 2023 | aucune | −0,2 point de PIB en 2023 |
 | eurostat.gov_10a_main | senat.pjl24-035 | FR S1314 SEC2010.TR, en % du PIB | ensemble | 2023 | aucune | −0,3 point de PIB en 2023 |
 | eurostat.nama_10_gdp | insee.t3101 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | −9 571,2 M€ en 1990 |
+| insee.t3101 | insee.t3104 | FR S13 PDE.GD | ensemble | 6 années entre 2013 et 2022 | 6 années entre 2013 et 2022 | +171,0 M€ en 2015 |
+| insee.t3101 | insee.t3104 | FR S1311 PDE.GD | ensemble | 9 années entre 1996 et 2020 | 9 années entre 1996 et 2020 | −79,2 M€ en 2007 |
+| insee.t3101 | insee.t3104 | FR S1314 PDE.GD | ensemble | 2025 | aucune | −500,0 M€ en 2025 |
 | insee.t3101 | insee.t3106 | FR S1 SEC2010.B1GQ | ensemble | 42 années entre 1978 et 2019 | 42 années entre 1978 et 2019 | +9 571,2 M€ en 1990 |
 | insee.t3101 | senat.pjl24-032 | FR S13 PDE.GD, en % du PIB | ensemble | 2023 | aucune | −1,1 point de PIB en 2023 |
 | insee.t3101 | senat.pjl24-718 | FR S13 PDE.GD, en % du PIB | ensemble | 2024 | aucune | −0,4 point de PIB en 2024 |
+| insee.t3102 | insee.t3104 | FR S13 PDE.GD | ensemble | 2015 et 2020 | 2015 et 2020 | +200,0 M€ en 2015 |
+| insee.t3102 | insee.t3104 | FR S1314 PDE.GD | ensemble | 2025 | aucune | −500,0 M€ en 2025 |
 | insee.t3106 | insee.t3107 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | −59,0 M€ en 2016 |
 | insee.t3106 | senat.pjl12-799 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2012 | aucune | −0,4 point de PIB en 2012 |
 | insee.t3106 | senat.pjl13-759 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2013 | aucune | −0,6 point de PIB en 2013 |
@@ -575,9 +731,12 @@ Détail des grandeurs en écart :
 | insee.t3106 | senat.pjl19-505 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2019 | aucune | +0,6 point de PIB en 2019 |
 | insee.t3106 | senat.pjl20-784 | FR S13 SEC2010.B9, en % du PIB | ensemble | 2020 | aucune | +0,3 point de PIB en 2020 |
 | insee.t3107 | insee.t3203 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | +59,2 M€ en 2016 |
+| insee.t3107 | insee.t7303 | FR S13111 SEC2010.B9 | ensemble | 2016 | 2016 | +59,0 M€ en 2016 |
 | insee.t3107 | senat.pjl24-718 | FR ETAT_LF LOLF.SOLDE_COMPTES_SPECIAUX | ensemble | 2024 | aucune | −50,0 M€ en 2024 |
 | insee.t3108 | insee.t3214 | FR S13142 SEC2010.B9 | ensemble | 6 années entre 2013 et 2018 | 6 années entre 2013 et 2018 | +271,0 M€ en 2018 |
 | insee.t3108 | senat.tas22-018 | FR REGIME_GENERAL COMPTES_SECU.RESULTAT_COMPTABLE | ensemble | 2021 | 2021 | +5 000,0 M€ en 2021 |
+| insee.t3201 | insee.t3215 | FR S13 SEC2010.TE | ensemble | 2021 et 2024 | 2021 | −119,0 M€ en 2024 |
+| insee.t3201 | insee.t3215 | FR S13 SEC2010.TR | ensemble | 2021 | 2021 | +43,0 M€ en 2021 |
 | insee.t3201 | insee.t3301 | FR S13 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | +487,9 M€ en 2024 |
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.D1PAY | ensemble | 2011, 2023 et 2024 | 2011 | +889,0 M€ en 2024 |
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.D3PAY | ensemble | 2001, 2023 et 2024 | 2001 | +552,0 M€ en 2023 |
@@ -587,6 +746,7 @@ Détail des grandeurs en écart :
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +1 340,5 M€ en 2024 |
 | insee.t3201 | insee.t3301 | FR S13 SEC2010.TE | ensemble | 15 années entre 1995 et 2024 | 13 années entre 1995 et 2022 | +877,8 M€ en 2023 |
 | insee.t3201 | insee.t3307 | FR S13 SEC2010.TE | ensemble | 16 années entre 2009 et 2024 | 14 années entre 2009 et 2022 | −20 301,8 M€ en 2009 |
+| insee.t3201 | insee.t7301 | FR S13 SEC2010.B8G | ensemble | 2022 | 2022 | +1,3 M€ en 2022 |
 | insee.t3202 | insee.t3302 | FR S1311 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | −207,2 M€ en 2023 |
 | insee.t3202 | insee.t3302 | FR S1311 SEC2010.D1PAY | ensemble | 2023 et 2024 | aucune | +1 029,5 M€ en 2024 |
 | insee.t3202 | insee.t3302 | FR S1311 SEC2010.D3PAY | ensemble | 2023 et 2024 | aucune | +549,0 M€ en 2023 |
@@ -611,6 +771,7 @@ Détail des grandeurs en écart :
 | insee.t3204 | insee.t3304 | FR S13112 SEC2010.D9_HORS_D995PAY | ensemble | 2023 et 2024 | aucune | +170,0 M€ en 2024 |
 | insee.t3204 | insee.t3304 | FR S13112 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +746,9 M€ en 2024 |
 | insee.t3204 | insee.t3304 | FR S13112 SEC2010.TE | ensemble | 2018, 2020, 2023 et 2024 | 2018 et 2020 | +3 073,7 M€ en 2024 |
+| insee.t3204 | insee.t7304 | FR S13112 SEC2010.B8G | ensemble | 2022 | 2022 | +1,4 M€ en 2022 |
 | insee.t3205 | insee.t3305 | FR S1313 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | +592,5 M€ en 2024 |
 | insee.t3205 | insee.t3305 | FR S1313 SEC2010.D1PAY | ensemble | 2023 et 2024 | aucune | +24,0 M€ en 2023 |
 | insee.t3205 | insee.t3305 | FR S1313 SEC2010.D3PAY | ensemble | 2023 et 2024 | aucune | −10,0 M€ en 2024 |
@@ -619,6 +780,8 @@ Détail des grandeurs en écart :
 | insee.t3205 | insee.t3305 | FR S1313 SEC2010.D9_HORS_D995PAY | ensemble | 2023 et 2024 | aucune | −331,0 M€ en 2024 |
 | insee.t3205 | insee.t3305 | FR S1313 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | −316,2 M€ en 2023 |
 | insee.t3205 | insee.t3305 | FR S1313 SEC2010.TE | ensemble | 2002, 2013, 2023 et 2024 | 2002 et 2013 | +738,0 M€ en 2024 |
+| insee.t3212 | insee.t3215 | FR S1314 SEC2010.TE | ensemble | 2019 et 2020 | 2019 et 2020 | −39,0 M€ en 2019 |
+| insee.t3212 | insee.t3215 | FR S1314 SEC2010.TR | ensemble | 2019 et 2020 | 2019 et 2020 | −39,0 M€ en 2019 |
 | insee.t3212 | insee.t3306 | FR S1314 INSEE_APU.DEP_ACTIFS_NON_FINANCIERS | ensemble | 2023 et 2024 | aucune | −162,8 M€ en 2024 |
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.D1PAY | ensemble | 2023 et 2024 | aucune | −156,3 M€ en 2024 |
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.D3PAY | ensemble | 2024 | aucune | +166,0 M€ en 2024 |
@@ -627,6 +790,19 @@ Détail des grandeurs en écart :
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.D9_HORS_D995PAY | ensemble | 2019, 2020 et 2024 | 2019 et 2020 | −1 181,0 M€ en 2024 |
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.P2 | ensemble | 2023 et 2024 | aucune | +464,6 M€ en 2024 |
 | insee.t3212 | insee.t3306 | FR S1314 SEC2010.TE | ensemble | 5 années entre 2019 et 2024 | 2019, 2020 et 2022 | −1 139,0 M€ en 2024 |
+| insee.t3215 | insee.t3301 | FR S13 SEC2010.TE | ensemble | 15 années entre 1995 et 2024 | 13 années entre 1995 et 2022 | +914,2 M€ en 2024 |
+| insee.t3215 | insee.t3303 | FR S13111 SEC2010.TE | ensemble | 7 années entre 2014 et 2024 | 5 années entre 2014 et 2021 | +698,0 M€ en 2023 |
+| insee.t3215 | insee.t3304 | FR S13112 SEC2010.TE | ensemble | 2018, 2020, 2023 et 2024 | 2018 et 2020 | +3 073,7 M€ en 2024 |
+| insee.t3215 | insee.t3305 | FR S1313 SEC2010.TE | ensemble | 2002, 2013, 2023 et 2024 | 2002 et 2013 | +738,0 M€ en 2024 |
+| insee.t3215 | insee.t3306 | FR S1314 SEC2010.TE | ensemble | 2022, 2023 et 2024 | 2022 | −1 139,0 M€ en 2024 |
+| insee.t3215 | insee.t3307 | FR S13 SEC2010.TE | ensemble | 16 années entre 2009 et 2024 | 14 années entre 2009 et 2022 | −20 301,8 M€ en 2009 |
+| insee.t3215 | senat.pjl22-705 | FR S1314 SEC2010.TR, en % du PIB | ensemble | 2022 | aucune | −0,1 point de PIB en 2022 |
+| insee.t3215 | senat.pjl24-035 | FR S1314 SEC2010.TE, en % du PIB | ensemble | 2023 | aucune | −0,2 point de PIB en 2023 |
+| insee.t3215 | senat.pjl24-035 | FR S1314 SEC2010.TR, en % du PIB | ensemble | 2023 | aucune | −0,3 point de PIB en 2023 |
+| insee.t3215 | senat.pjl24-729 | FR S1314 SEC2010.TE, en % du PIB | ensemble | 2024 | aucune | −0,1 point de PIB en 2024 |
+| insee.t3215 | senat.pjl24-729 | FR S1314 SEC2010.TR, en % du PIB | ensemble | 2024 | aucune | −0,1 point de PIB en 2024 |
+| insee.t3215 | senat.pjl25-727 | FR S1314 SEC2010.TE, en % du PIB | ensemble | 2025 | aucune | +0,1 point de PIB en 2025 |
+| insee.t3215 | senat.pjl25-727 | FR S1314 SEC2010.TR, en % du PIB | ensemble | 2025 | aucune | +0,1 point de PIB en 2025 |
 | insee.t3216 | insee.t3217 | FR S212 INSEE_PO.PO | ensemble | 24 années entre 1995 et 2018 | 24 années entre 1995 et 2018 | +734,9 M€ en 1995 |
 | insee.t3216 | senat.pjl24-032 | FR S13_S212 INSEE_PO.PO, en % du PIB | ensemble | 2023 | aucune | −0,3 point de PIB en 2023 |
 | insee.t3216 | senat.pjl24-718 | FR S13_S212 INSEE_PO.PO, en % du PIB | ensemble | 2024 | aucune | −0,1 point de PIB en 2024 |

@@ -8,11 +8,12 @@ vérifie ce que disent les sources elles-mêmes :
 1. les sommes comptables (un total égale la somme de ses composantes) ;
 2. les ventilations par fonction (l'ensemble égale la somme des fonctions, chaque fonction celle de ses
    groupes ; pour le budget de l'État, chaque mission celle de ses programmes) ;
-3. l'additivité des sous-secteurs, pour les soldes, les prélèvements obligatoires et les dépenses
-   consolidées de l'ensemble, et celle des niveaux de collectivités locales, pour tous leurs montants et
-   leurs nombres de budgets ;
+3. l'additivité des sous-secteurs, pour les soldes, les prélèvements obligatoires, la dette et les dépenses
+   consolidées de l'ensemble, et pour tous les montants des comptes complets, et celle des niveaux de collectivités
+   locales, pour tous leurs montants et leurs nombres de budgets ;
 4. les passerelles entre tableaux qui présentent autrement les mêmes grandeurs, dont les grandeurs que la
-   consolidation des comptes des collectivités locales laisse inchangées ;
+   consolidation des comptes des collectivités locales laisse inchangées, la dette trimestrielle contre la dette de fin
+   d'année, et les comptes complets contre les dépenses et recettes ;
 5. les ratios, qu'on doit retrouver à partir de leur dénominateur ;
 6. les écarts entre sources pour une même grandeur ;
 7. les comptes de chaque collectivité : montant consolidé, identités comptables de chacune, comptes d'une même
@@ -324,11 +325,15 @@ _LOCAUX += [("DEPENSES_EQUIPEMENT", ["?EQUIPEMENT_CONSTRUCTION", "?EQUIPEMENT_VE
                                                       "?SUBVENTIONS_INVESTISSEMENT_AUTRES"])]
 
 
-def _local(composante):
-    """Le concept d'une composante, sa marque (« ? ») et son signe gardés."""
+def _prefixee(prefixe, composante):
+    """Le concept d'une composante, sa marque (« ? », « ! ») et son signe gardés."""
     marque = composante[0] if composante[0] in "?!" else ""
     terme = composante[len(marque):]
-    return marque + ("-" if terme.startswith("-") else "") + "COMPTES_LOCAUX." + terme.lstrip("-")
+    return marque + ("-" if terme.startswith("-") else "") + prefixe + terme.lstrip("-")
+
+
+def _local(composante):
+    return _prefixee("COMPTES_LOCAUX.", composante)
 
 
 IDENTITES += [(f"COMPTES_LOCAUX.{t}", [_local(c) for c in cs]) for t, cs in _LOCAUX]
@@ -338,16 +343,86 @@ IDENTITES += [_rubrique("INSEE_PASSAGES.ETAT_OPERATIONS_FINANCIERES", "rubrique 
               _rubrique("INSEE_PASSAGES.ETAT_NON_BUDGETAIRES", "rubrique (3) du tableau 3.107"),
               _rubrique("INSEE_PASSAGES.SECU_CORRECTIONS", "rubrique (1) du tableau 3.108")]
 
+# Dette au sens de Maastricht : la somme de ses instruments, que le tableau 3.102 donne sans le total des crédits et sans
+# les dépôts des administrations de sécurité sociale (« ? » : peuvent manquer) ; le passage du total des passifs à la
+# dette (tableau 3.104) et du déficit à la variation de la dette (3.105), chaque rubrique contre la somme de ses lignes.
+IDENTITES += [("PDE.GD", ["?PDE.GD_F2", "PDE.GD_F3", "PDE.GD_F4"]), ("PDE.GD", ["?PDE.GD_F2", "PDE.GD_F3", "PDE.GD_F41",
+                                                                              "PDE.GD_F42"]),
+              ("PDE.GD_F3", ["PDE.GD_F31", "PDE.GD_F32"]), ("PDE.GD_F4", ["PDE.GD_F41", "PDE.GD_F42"])]
+_DETTE = [("GD", ["TOTAL_PASSIFS", "-DIFFERENCE_CHAMP", "-PASSAGE_DETTE_CONSOLIDEE", "-PASSAGE_VALEUR_NOMINALE"]),
+          ("DIFFERENCE_CHAMP", ["COMPTES_A_PAYER_DERIVES", "DEPOTS_GARANTIE"]),
+          ("PASSAGE_DETTE_CONSOLIDEE", ["CONSOLIDATION_DEPOTS", "CONSOLIDATION_TITRES", "CONSOLIDATION_CREDITS"]),
+          ("PASSAGE_VALEUR_NOMINALE", ["ICNE_DEPOTS", "ECART_VALORISATION_OBLIGATIONS", "ICNE_CREDITS"]),
+          ("VARIATION_DETTE", ["DEFICIT", "ACQUISITIONS_NETTES_ACTIFS", "VARIATION_PASSIF_HORS_DETTE",
+                               "CHANGEMENTS_VOLUME", "SOLDE_AUTRES_COMPTES", "ECART_STATISTIQUE"]),
+          ("ACQUISITIONS_NETTES_ACTIFS", ["ACQUISITIONS_F2", "ACQUISITIONS_F3", "ACQUISITIONS_F4", "ACQUISITIONS_F5",
+                                          "ACQUISITIONS_F71", "ACQUISITIONS_F6"]),
+          ("VARIATION_PASSIF_HORS_DETTE", ["VARIATION_ICNE", "VARIATION_AUTRES_PASSIFS"]),
+          ("CHANGEMENTS_VOLUME", ["RECLASSEMENTS", "VALORISATION_DEVISES", "RACHATS_TITRES"])]
+IDENTITES += [(("PDE." if t == "GD" else "INSEE_DETTE.") + t, [_prefixee("INSEE_DETTE.", c) for c in cs])
+              for t, cs in _DETTE]
+
+# Comptes complets des administrations publiques (tableaux 7.301 à 7.306) : le solde de chaque compte est la différence
+# de ses ressources et de ses emplois, chaque opération la somme de ses détails. Les subventions et les transferts en
+# capital versés y sont inscrits en ressources avec un signe négatif, les subventions reçues en emplois avec un signe
+# négatif : ils s'ajoutent. Pour les administrations, la dépense de consommation individuelle est égale aux transferts
+# sociaux en nature, et la consommation finale effective à la dépense de consommation collective. De 1949 à 1977,
+# l'Insee ne ventile pas les transferts courants entre administrations publiques (« ? » : peuvent manquer) ; les
+# sous-secteurs en donnent alors le solde, et les autres transferts courants comptés avec lui (D.7S), qui prennent la
+# place des autres transferts courants dans le revenu disponible (« ! » : l'identité qui ne les compte pas ne
+# s'applique pas les années où ils sont publiés, ni l'autre celles où les transferts entre administrations le sont).
+_COMPTES = [("P1", ["P11", "P12", "P13"]), ("B1G", ["P1", "-P2"]), ("B1N", ["B1G", "-P51C"]),
+            ("D1PAY", ["D11PAY", "D12PAY"]), ("D12PAY", ["D121PAY", "D122PAY"]), ("D29PAY", ["D291PAY", "D292PAY"]),
+            ("B2G", ["B1G", "-D1PAY", "-D29PAY", "-D39REC_EN_EMPLOIS"]), ("B2N", ["B2G", "-P51C"]),
+            ("D2REC", ["D21REC", "D29REC"]), ("D21REC", ["D211REC", "D212REC", "D214REC"]),
+            ("D29REC", ["D291REC", "D292REC"]),
+            ("D3PAY_EN_RESSOURCES", ["D31PAY_EN_RESSOURCES", "D39PAY_EN_RESSOURCES"]),
+            ("D39PAY_EN_RESSOURCES", ["D391PAY_EN_RESSOURCES", "D392PAY_EN_RESSOURCES", "D399PAY_EN_RESSOURCES"]),
+            ("D4REC", ["D41REC", "D42REC", "D43REC", "D44REC", "D45REC"]),
+            ("D4PAY", ["D41PAY", "D42PAY", "D43PAY", "D44PAY", "D45PAY"]),
+            ("D42REC", ["D421REC", "D422REC"]), ("D42PAY", ["D421PAY", "D422PAY"]),
+            ("B5G", ["B2G", "D2REC", "D3PAY_EN_RESSOURCES", "D4REC", "-D4PAY"]), ("B5N", ["B5G", "-P51C"]),
+            ("D5REC", ["D51REC", "D59REC"]), ("D5PAY", ["D51PAY", "D59PAY"]),
+            ("D61REC", ["D611REC", "D612REC", "D613REC"]), ("D613REC", ["D613CEREC", "D613NSIREC"]),
+            ("D62PAY", ["D621PAY", "D622PAY", "D623PAY"]),
+            ("D7REC", ["D71REC", "D72REC", "?D73REC", "D74REC", "D75REC", "D76REC"]),
+            ("D7PAY", ["D71PAY", "D72PAY", "?D73PAY", "D74PAY", "D75PAY", "D76PAY"]),
+            ("D7SREC", ["D71REC", "D72REC", "D73S", "D74REC", "D75REC", "D76REC"]),
+            ("D7SPAY", ["D71PAY", "D72PAY", "D74PAY", "D75PAY", "D76PAY"]),
+            ("D73REC", ["D731REC", "D732REC", "?D733REC"]), ("D73PAY", ["D731PAY", "D732PAY", "?D733PAY"]),
+            ("D75REC", ["D751REC", "D759REC"]), ("D75PAY", ["D751PAY", "D759PAY"]),
+            ("B6G", ["B5G", "D5REC", "D61REC", "D7REC", "-D5PAY", "-D62PAY", "-D7PAY", "!D7SREC"]),
+            ("B6G", ["B5G", "D5REC", "D61REC", "D7SREC", "-D5PAY", "-D62PAY", "-D7SPAY", "!D73REC"]),
+            ("B6N", ["B6G", "-P51C"]),
+            ("P3", ["P31", "P32"]), ("B8G", ["B6G", "-P3"]), ("B8N", ["B8G", "-P51C"]),
+            ("D63PAY", ["D631PAY", "D632PAY"]), ("P31", ["D63PAY"]), ("B7G", ["B6G", "-D63PAY"]), ("B7N", ["B7G", "-P51C"]),
+            ("P4", ["P32"]), ("B8G", ["B7G", "-P4"]),
+            ("D9REC", ["D91REC", "D92REC", "D99REC"]),
+            ("D9PAY_EN_RESSOURCES", ["D91PAY_EN_RESSOURCES", "D92PAY_EN_RESSOURCES", "D99PAY_EN_RESSOURCES"]),
+            ("P5", ["P51G", "P52"]), ("B9", ["B8G", "D9REC", "D9PAY_EN_RESSOURCES", "-P5", "-NP"])]
+IDENTITES += [(f"SEC2010.{t}", [_prefixee("SEC2010.", c) for c in cs]) for t, cs in _COMPTES]
+
 # Ensembles et leurs parties. S'additionnent : les soldes et les prélèvements obligatoires (concepts
-# ADDITIFS), et les parts des sous-secteurs dans la dépense consolidée de l'ensemble des administrations
-# publiques (consolidation « consolide_apu »).
+# ADDITIFS), la dette au sens de Maastricht d'un sous-secteur, qui est sa contribution à la dette consolidée de
+# l'ensemble, comme sa dette nette ; les parts des sous-secteurs dans la dépense consolidée de l'ensemble des
+# administrations publiques (consolidation « consolide_apu ») ; tous les montants des comptes complets (tableaux 7.301
+# à 7.306), qui ne sont pas consolidés.
 DECOMPOSITIONS = [("S13", ["S1311", "S1313", "S1314"]), ("S1311", ["S13111", "S13112"]), ("S1313", ["S13131", "S13132"]),
                   ("S1314", ["S13141", "S13142"]), ("S13131", ["S131311", "S131312", "S131313", "S131314"]),
                   ("S13_S212", ["S13", "S212"]), ("S13_S212", ["S1311", "S1313", "S1314", "S212"]),
                   ("S1314", ["REGIME_GENERAL", "S1314_HORS_RG"]),
                   ("S1314_HORS_RG", ["CADES", "FRR", "AUTRES_REGIMES_SECU", "S13142"]),
-                  ("REGIME_GENERAL", ["REGIME_GENERAL_HORS_FSV", "FSV"]), ("ROBSS_FSV", ["ROBSS", "FSV"])]
-ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO", "COMPTES_SECU.RESULTAT_COMPTABLE"}
+                  ("REGIME_GENERAL", ["REGIME_GENERAL_HORS_FSV", "FSV"]), ("ROBSS_FSV", ["ROBSS", "FSV"]),
+                  # La dette trimestrielle donne l'État et les organismes divers d'administration centrale, sans leur
+                  # ensemble (« ! » : ne s'applique pas si la source publie ce périmètre).
+                  ("S13", ["S13111", "S13112", "S1313", "S1314", "!S1311"])]
+ADDITIFS = {"SEC2010.B9", "INSEE_PO.PO", "COMPTES_SECU.RESULTAT_COMPTABLE", "INSEE_DETTE.DETTE_NETTE",
+            "INSEE_DETTE.AUTRES_ACTIFS_LIQUIDES"} | {f"PDE.GD{i}" for i in ("", "_F2", "_F3", "_F31", "_F32", "_F4", "_F41",
+                                                                          "_F42")}
+# Tableaux de l'Insee qui publient chacun un sous-secteur et qu'on réunit pour les additionner ; les comptes complets ne
+# sont pas consolidés : tous leurs montants s'additionnent.
+FAMILLES_INSEE = {r"insee\.t32(0[1-9]|1[0-4])": "insee.t3201 à t3214", r"insee\.t730[1-6]": "insee.t7301 à t7306"}
+COMPTES_COMPLETS = r"insee\.t730[1-6]"
 # Situation patrimoniale de la sécurité sociale : un poste de l'ensemble contre la somme des lignes de ses entités, que
 # le tableau ne détaille que pour certains postes et n'y donne que pour les entités concernées (« ? » : peut manquer).
 DECOMPOSITIONS_PAR_CONCEPT = {f"COMPTES_SECU.{c}": [("SECU_LFSS", ["?REGIME_GENERAL_HORS_FSV", "?ACOSS", "?ROBSS",
@@ -387,7 +462,8 @@ DECOMPOSITIONS_PAR_CONCEPT.update({c["id"]: _NIVEAUX_LOCAUX + _ENTITES_LOCALES f
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
 # de droite), chaque terme étant (source, périmètre, concept, signe) et, au besoin, (modèle de période, traitement),
-# en montant, pour l'ensemble des fonctions. Une source terminée par « * » désigne toute source qui commence ainsi :
+# en montant, pour l'ensemble des fonctions ; le modèle de période nomme l'année vérifiée {annee}, la précédente
+# {precedente}. Une source terminée par « * » désigne toute source qui commence ainsi :
 # les termes d'un même préfixe viennent d'une même source, l'une après l'autre s'il y en a plusieurs.
 _LOI = "senat.pjl*"  # projets de loi d'approbation des comptes (de règlement, puis relatifs aux résultats de la
 #                       gestion) publiés par le Sénat
@@ -460,7 +536,52 @@ PASSERELLES = [
      [("insee.t3107", "ETAT_LF", "LOLF.RESULTAT_EXECUTION", 1)]
      + [("insee.t3107", "S13111", f"INSEE_PASSAGES.ETAT_{c}", 1) for c in ("OPERATIONS_FINANCIERES", "DROITS_CONSTATES",
                                                                            "NON_BUDGETAIRES")]),
+    ("Déficit des administrations publiques du tableau 3.105 contre leur capacité de financement au sens de Maastricht "
+     "(tableau 3.106), de signe opposé",
+     [("insee.t3105", "S13", "INSEE_DETTE.DEFICIT", 1)], [("insee.t3106", "S13", "SEC2010.B9", -1)]),
+    ("Variation de la dette au sens de Maastricht (tableau 3.105) contre l'écart entre la dette de fin d'année et celle "
+     "de l'année précédente (tableau 3.101)",
+     [("insee.t3105", "S13", "INSEE_DETTE.VARIATION_DETTE", 1)],
+     [("insee.t3101", "S13", "PDE.GD", 1), ("insee.t3101", "S13", "PDE.GD", -1, "{precedente}", "")]),
 ]
+# Dette trimestrielle : l'encours à la fin du quatrième trimestre est celui de la fin de l'année, que donnent les
+# tableaux 3.101 (par sous-secteur), 3.102 (par instrument) et 3.103 (dette nette et actifs liquides).
+_T4 = ("{annee}-T4", "")
+_TRIM = "insee.bdm-dette-trim-apu"
+PASSERELLES += [(f"Dette au sens de Maastricht {nom}, au quatrième trimestre (série trimestrielle), contre la dette de "
+                 "fin d'année du tableau 3.101", [(_TRIM, p, "PDE.GD", 1, *_T4)], [("insee.t3101", p, "PDE.GD", 1)])
+                for p, nom in (("S13", "des administrations publiques"), ("S13111", "de l'État"),
+                               ("S13112", "des organismes divers d'administration centrale"),
+                               ("S1313", "des administrations publiques locales"),
+                               ("S1314", "des administrations de sécurité sociale"))]
+PASSERELLES += [(f"Dette au sens de Maastricht des administrations publiques, {nom}, au quatrième trimestre (série "
+                 "trimestrielle), contre le tableau 3.102", [(_TRIM, "S13", c, 1, *_T4)], [("insee.t3102", "S13", c, 1)])
+                for c, nom in (("PDE.GD_F2", "dépôts"), ("PDE.GD_F3", "titres de créance"),
+                               ("PDE.GD_F31", "titres de créance à court terme"),
+                               ("PDE.GD_F32", "titres de créance à long terme"), ("PDE.GD_F41", "crédits à court terme"),
+                               ("PDE.GD_F42", "crédits à long terme"))]
+PASSERELLES += [(f"{nom}, au quatrième trimestre (série trimestrielle), contre le tableau 3.103",
+                 [(_TRIM, "S13", c, 1, *_T4)], [("insee.t3103", "S13", c, 1)])
+                for c, nom in (("INSEE_DETTE.DETTE_NETTE", "Dette nette des administrations publiques"),
+                               ("INSEE_DETTE.AUTRES_ACTIFS_LIQUIDES", "Actions cotées et parts de fonds d'investissement "
+                                                                       "détenues par les administrations publiques"))]
+
+# Comptes complets (tableaux 7.301 à 7.306) contre dépenses et recettes (3.201 à 3.214), sous-secteur par sous-secteur :
+# (concept des comptes complets, concept des dépenses et recettes, signe). Les seconds consolident les revenus de la
+# propriété et les transferts entre administrations, que les premiers ne consolident pas : ces opérations ne se
+# comparent pas. Les autres doivent être égales ; les subventions, que les comptes complets inscrivent avec un signe
+# négatif, de signe opposé.
+COMPTES_ET_TABLEAUX = {"S13": ("insee.t7301", "insee.t3201"), "S1311": ("insee.t7302", "insee.t3202"),
+                       "S13111": ("insee.t7303", "insee.t3203"), "S13112": ("insee.t7304", "insee.t3204"),
+                       "S1313": ("insee.t7305", "insee.t3205"), "S1314": ("insee.t7306", "insee.t3212")}
+OPERATIONS_COMMUNES = [("SEC2010.P11", "SEC2010.P11", 1), ("SEC2010.P12", "SEC2010.P12", 1), ("SEC2010.P2", "SEC2010.P2", 1),
+                       ("SEC2010.D1PAY", "SEC2010.D1PAY", 1), ("SEC2010.D122PAY", "SEC2010.D122PAY", 1),
+                       ("SEC2010.D29PAY", "SEC2010.D29PAY", 1), ("SEC2010.D39REC_EN_EMPLOIS", "SEC2010.D39REC", -1),
+                       ("SEC2010.D2REC", "SEC2010.D2REC", 1), ("SEC2010.D3PAY_EN_RESSOURCES", "SEC2010.D3PAY", -1),
+                       ("SEC2010.D5REC", "SEC2010.D5REC", 1), ("SEC2010.D5PAY", "SEC2010.D5PAY", 1),
+                       ("SEC2010.D61REC", "SEC2010.D61REC", 1), ("SEC2010.D612REC", "SEC2010.D612REC", 1),
+                       ("SEC2010.D62PAY", "SEC2010.D62PAY", 1), ("SEC2010.D632PAY", "SEC2010.D632PAY", 1),
+                       ("SEC2010.D91REC", "SEC2010.D91REC", 1), ("SEC2010.P51G", "SEC2010.P51G", 1)]
 
 # Comptes consolidés des collectivités locales : la consolidation retire chaque flux croisé, entre les budgets d'un niveau
 # (annexe 2C) ou entre niveaux (2D), des recettes comme des dépenses de la même section ; elle laisse donc inchangées la
@@ -631,18 +752,18 @@ def ventilations(derniers):
 
 
 def additivite(derniers):
-    """Le solde d'un ensemble, ou sa part de la dépense consolidée de l'ensemble des administrations publiques,
-    égale la somme de ceux de ses parties ; de même, un poste de la situation patrimoniale de la sécurité sociale
-    égale la somme de ses lignes par entité, et un montant d'un niveau de collectivités locales la somme de ceux des
-    niveaux qui le composent, en montant comme en nombre de budgets."""
+    """Le solde d'un ensemble, sa dette, ou sa part de la dépense consolidée de l'ensemble des administrations
+    publiques, égale la somme de ceux de ses parties, comme chaque montant de ses comptes complets ; de même, un poste
+    de la situation patrimoniale de la sécurité sociale égale la somme de ses lignes par entité, et un montant d'un
+    niveau de collectivités locales la somme de ceux des niveaux qui le composent, en montant comme en nombre de
+    budgets."""
     apu = {k[0] for k, l in derniers.items() if l["consolidation"] == "consolide_apu"}
     par_annee = collections.defaultdict(dict)
     for k, l in derniers.items():
         if valeur(l)[2] != "euros" and k[6] not in DENOMBREMENTS:
             continue
-        if k[3] in ADDITIFS:
-            # Les tableaux 3.201 à 3.214 de l'Insee publient un sous-secteur chacun : on les réunit.
-            famille = "insee.t3201 à t3214" if re.fullmatch(r"insee\.t32(0[1-9]|1[0-4])", k[0]) else k[0]
+        if k[3] in ADDITIFS or re.fullmatch(COMPTES_COMPLETS, k[0]):
+            famille = next((f for motif, f in FAMILLES_INSEE.items() if re.fullmatch(motif, k[0])), k[0])
         elif k[3] in DECOMPOSITIONS_PAR_CONCEPT:
             famille = k[0]
         elif k[0] in apu and (l["consolidation"] == "consolide_apu" or k[2] == "S13"):
@@ -678,7 +799,8 @@ def passerelles(derniers):
     def lignes(terme, annee):
         source, perimetre, concept = terme[:3]
         modele, traitement = terme[4:6] if len(terme) > 4 else ("{annee}", "")
-        trouvees = index.get((perimetre, concept, traitement, modele.format(annee=annee)), {})
+        periode = modele.format(annee=annee, precedente=str(int(annee) - 1))
+        trouvees = index.get((perimetre, concept, traitement, periode), {})
         return {s: l for s, l in trouvees.items() if (s.startswith(source[:-1]) if source.endswith("*") else s == source)}
 
     resultats = []
@@ -702,6 +824,36 @@ def passerelles(derniers):
     return resultats
 
 
+def comptes_complets(derniers):
+    """Pour chaque opération commune, chaque sous-secteur et chaque année : le montant des comptes complets contre celui
+    des tableaux des dépenses et recettes, au signe près."""
+    index = {(k[0], k[2], k[3], k[7]): l for k, l in derniers.items()
+             if k[1] == "FR" and not k[4] and not k[5] and k[6] == "MD_EUR"}
+    resultats = collections.defaultdict(list)
+    for (source, perimetre, concept, periode), l in sorted(index.items()):
+        if COMPTES_ET_TABLEAUX.get(perimetre, ("",))[0] != source:
+            continue
+        for complets, tableau, signe in OPERATIONS_COMMUNES:
+            autre = index.get((COMPTES_ET_TABLEAUX[perimetre][1], perimetre, tableau, periode))
+            if concept != complets or autre is None:
+                continue
+            ecart = valeur(l)[0] - signe * valeur(autre)[0]
+            resultats[(complets, tableau, signe)].append({
+                "perimetre": perimetre, "annee": periode, "ecart": ecart,
+                "juste": not depasse(ecart, valeur(l)[1] + valeur(autre)[1]),
+                "revisable": l["statut"] in REVISABLES or autre["statut"] in REVISABLES})
+    return resultats
+
+
+def periode_du_pib(periode):
+    """La période du PIB qui sert de dénominateur : l'année, pour un ratio de la fin du quatrième trimestre ; aucune
+    pour un autre trimestre, que l'Insee rapporte au cumul du PIB trimestriel, corrigé des variations saisonnières et
+    des jours ouvrables, des quatre derniers trimestres, que la base n'a pas."""
+    if re.fullmatch(r"[0-9]{4}-T[1-3]", periode):
+        return None
+    return periode[:4] if re.fullmatch(r"[0-9]{4}-T4", periode) else periode
+
+
 def ratios(derniers):
     """Recalcule chaque ratio : le même chiffre en montant, divisé par chacun de ses dénominateurs possibles."""
     par_id = {l["id"]: l for l in derniers.values()}
@@ -711,18 +863,19 @@ def ratios(derniers):
             pib[(k[1], k[7])][k[0]] = valeur(l)[:2]
     resultats = []
     for k, l in sorted(derniers.items()):
-        numerateur = montant(derniers, k) if k[6] in NOMS_RATIOS else None
+        periode = periode_du_pib(k[7])
+        numerateur = montant(derniers, k) if k[6] in NOMS_RATIOS and periode else None
         if numerateur is None:
             continue
         indique = par_id.get(l["denominateur_id"])
         if indique:
-            regle, attendu, candidats = "indique", indique["source_id"], dict(pib[(k[1], k[7])])
+            regle, attendu, candidats = "indique", indique["source_id"], dict(pib[(k[1], periode)])
             candidats[attendu] = valeur(indique)[:2]
         elif k[6] == "PC_DEPENSE":
             total = montant(derniers, k[:4] + ("",) + k[5:])
             regle, attendu, candidats = "depense", k[0], {k[0]: total[:2]} if total else {}
         else:
-            regle, attendu, candidats = "libre", None, dict(pib[(k[1], k[7])])
+            regle, attendu, candidats = "libre", None, dict(pib[(k[1], periode)])
         (n, pn), r, pr = numerateur[:2], float(l["valeur"]), 0.5 * 10 ** -int(l["decimales"])
         par = sorted(s for s, (d, pd) in candidats.items()
                      if d and not depasse(100 * n / d - r, pr + 100 * (pn / d + abs(n) * pd / d ** 2)))
@@ -730,7 +883,7 @@ def ratios(derniers):
         implicite = (100 * max(abs(n) - pn, 0) / (abs(r) + pr), 100 * (abs(n) + pn) / (abs(r) - pr)) if abs(r) > pr else None
         resultats.append({"cle": k, "regle": regle, "attendu": attendu, "par": par,
                           "retrouve": attendu in par if attendu else bool(par), "implicite": implicite,
-                          "pib": pib[(k[1], k[7])] if k[6] == "PC_PIB" else {}})
+                          "pib": pib[(k[1], periode)] if k[6] == "PC_PIB" else {}})
     return resultats
 
 
@@ -1541,7 +1694,10 @@ def partie_additivite(derniers):
     n, ecarts = additivite(derniers)
     lignes = ["## 3. Additivité des sous-secteurs", "",
               "Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble "
-              "des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; pour "
+              "des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; de "
+              "même sa dette au sens de Maastricht, ses instruments et sa dette nette, celles d'un sous-secteur étant "
+              "sa contribution à la dette consolidée de l'ensemble (tableaux 3.101 à 3.104 et dette trimestrielle), "
+              "et chaque montant de ses comptes complets, qui ne sont pas consolidés (tableaux 7.301 à 7.306) ; pour "
               "la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité "
               "vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation "
               "patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les "
@@ -1581,7 +1737,8 @@ def partie_passerelles(derniers):
               "concordent, à l'arrondi près, pour chaque année où figurent tous ses termes. Pour les collectivités "
               "locales, la consolidation des budgets principaux et annexes retire chaque flux croisé des recettes comme "
               "des dépenses de la même section : la variation du fonds de roulement, l'épargne brute, la dette et la "
-              "trésorerie d'un ensemble consolidé égalent la somme de celles de ses parties.", "",
+              "trésorerie d'un ensemble consolidé égalent la somme de celles de ses parties. La dette à la fin du "
+              "quatrième trimestre est celle de la fin de l'année.", "",
               "| Passerelle | Années vérifiées | Années en écart | dont hors chiffres révisables | "
               "Plus grand écart (gauche − droite) |", "|---|---|---|---|---|"]
     par_passerelle = collections.defaultdict(list)
@@ -1598,15 +1755,44 @@ def partie_passerelles(derniers):
         lignes.append(f"| {libelle} | {plage([r['annee'] for r in liste])} | "
                       f"{plage([r['annee'] for r in ecarts]) if ecarts else 'aucune'} | "
                       f"{plage(fermes) if fermes else 'aucune'} | {texte} |")
-    return lignes + [""]
+    lignes.append("")
+    complets = comptes_complets(derniers)
+    if complets:
+        lignes += ["Les comptes complets des tableaux 7.301 à 7.306 et les dépenses et recettes des tableaux 3.201 à 3.214 "
+                   "présentent les mêmes opérations, sous-secteur par sous-secteur. Les premiers ne sont pas consolidés ; "
+                   "les seconds consolident les revenus de la propriété et les transferts entre administrations, qui ne "
+                   "se comparent donc pas. Les autres opérations doivent être égales ; les subventions, que les comptes "
+                   "complets inscrivent avec un signe négatif, de signe opposé. L'épargne brute et la capacité de "
+                   "financement, que la consolidation ne change pas, se comparent à la section 6.", "",
+                   "| Comptes complets | Dépenses et recettes | Comparaisons | En écart | dont hors chiffres révisables | "
+                   "Plus grand écart (comptes complets − dépenses et recettes) |", "|---|---|---|---|---|---|"]
+        for operation in OPERATIONS_COMMUNES:
+            liste = complets.get(operation)
+            if not liste:
+                continue
+            ecarts = [r for r in liste if not r["juste"]]
+            fermes = [r for r in ecarts if not r["revisable"]]
+            plus = plus_grand(ecarts, lambda x: x["ecart"]) if ecarts else None
+            texte = (f"{ecart_lisible(plus['ecart'], 'euros')} ({plus['perimetre']}, {plus['annee']})" if plus
+                     else "aucun")
+            lignes.append(f"| {operation[0]} | {'−' if operation[2] < 0 else ''}{operation[1]} | {len(liste)} | "
+                          f"{len(ecarts)} | {len(fermes)} | {texte} |")
+        lignes.append("")
+    return lignes
 
 
 def partie_ratios(derniers):
     resultats = ratios(derniers)
     lignes = ["## 5. Ratios", "",
               "Chaque ratio est recalculé : le même chiffre en montant, divisé par son dénominateur. Il est retrouvé "
-              "si l'écart ne dépasse pas ce que permettent les arrondis du ratio, du montant et du dénominateur.", "",
-              "| Dénominateur | Ratios | Retrouvés | Non retrouvés |", "|---|---|---|---|"]
+              "si l'écart ne dépasse pas ce que permettent les arrondis du ratio, du montant et du dénominateur.", ""]
+    trimestriels = sum(1 for k in derniers if k[6] in NOMS_RATIOS and periode_du_pib(k[7]) is None)
+    if trimestriels:
+        lignes += [f"La dette trimestrielle en % du PIB rapporte l'encours, à la fin du quatrième trimestre, au PIB de "
+                   f"l'année, et les autres trimestres au cumul du PIB trimestriel, corrigé des variations saisonnières "
+                   f"et des jours ouvrables, des quatre derniers trimestres, que la base n'enregistre pas : ces "
+                   f"{trimestriels} ratios-là ne sont pas recalculés.", ""]
+    lignes += ["| Dénominateur | Ratios | Retrouvés | Non retrouvés |", "|---|---|---|---|"]
     for regle, texte in REGLES.items():
         liste = [x for x in resultats if x["regle"] == regle]
         if liste:
