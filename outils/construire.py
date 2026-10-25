@@ -9,7 +9,8 @@ chacun de vérifier qu'une base reconstruite contient exactement les mêmes donn
 de chaque collectivité y sont lus dans les copies archivées des exports de data.ofgl.fr
 (tables comptes_collectivites et collectivites), ceux des jeux publiés budget par budget dans les
 tables comptes_budgets et budgets, les dépenses de chaque budget des départements par fonction dans
-les tables comptes_fonctions et budgets, et les dotations que l'État notifie à chaque collectivité
+les tables comptes_fonctions et budgets, la fiscalité directe locale de chaque commune dans les
+tables fiscalite et communes_fiscalite, et les dotations que l'État notifie à chaque collectivité
 dans les tables dotations et beneficiaires.
 """
 
@@ -86,6 +87,22 @@ LEFT JOIN budgets p ON p.lot = b.lot AND p.siren = c.siren AND p.type_budget = '
 WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
                    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
 
+-- La fiscalité directe locale sur le territoire de chaque commune, dans la version la plus récente de chaque exercice,
+-- avec la fiche de la commune. Le produit d'une taxe intercommunale est la part que versent les contribuables de la
+-- commune.
+CREATE VIEW v_fiscalite AS
+SELECT f.source_id, f.exercice, f.version, f.statut, f.fichier_id, x.commune, c.nom, c.siren, c.regime_epci,
+       c.commune_2025, c.epci_2025, c.departement, c.region, x.taxe, x.destinataire, x.base, x.taux_net, x.taux_vote,
+       x.produit, x.secret
+FROM fiscalite x
+JOIN fichiers_collectivites f ON f.rowid = x.lot
+LEFT JOIN communes_fiscalite c ON c.commune = x.commune AND c.lot = (
+    SELECT g.rowid FROM fichiers_collectivites g
+    WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'collectivites'
+    ORDER BY g.version DESC LIMIT 1)
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
+                   WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'montants');
+
 -- Les dotations que l'État notifie à chaque collectivité, dans la version la plus récente de chaque exercice, avec le
 -- nom et le territoire de la collectivité.
 CREATE VIEW v_dotations AS
@@ -151,6 +168,18 @@ CHAMPS_BUDGETS = {"siren": "siren", "ident": "budget", "lbudg": "nom", "nom_ccas
 COMPTES_FONCTIONS = [("lot", "INTEGER"), ("siren", "TEXT"), ("budget", "TEXT"), ("nomenclature", "TEXT"),
                      ("niveau", "INTEGER"), ("fonction", "TEXT"), ("libelle", "TEXT"), ("regroupement", "TEXT"),
                      ("concept", "INTEGER"), ("montant", "REAL")]
+# La fiscalité directe locale : une ligne par commune, désignée par son code Insee de l'exercice, par taxe et par
+# bénéficiaire, avec la base, les taux net et voté et le produit (vides si la DGFiP les masque, la ligne portant alors
+# « sec_stat ») ; la table communes_fiscalite donne le nom de chaque commune, chaque exercice, son numéro Siren et le
+# régime fiscal de son groupement, et ses codes de 2025, ceux de son groupement, de son département et de sa région.
+FISCALITE = [("lot", "INTEGER"), ("commune", "TEXT"), ("taxe", "TEXT"), ("destinataire", "TEXT"), ("base", "REAL"),
+             ("taux_net", "REAL"), ("taux_vote", "REAL"), ("produit", "REAL"), ("secret", "TEXT")]
+COMMUNES_FISCALITE = [("lot", "INTEGER"), ("commune", "TEXT"), ("nom", "TEXT"), ("siren", "TEXT"),
+                      ("regime_epci", "TEXT"), ("commune_2025", "TEXT"), ("siren_2025", "TEXT"), ("epci_2025", "TEXT"),
+                      ("departement", "TEXT"), ("region", "TEXT")]
+CHAMPS_COMMUNES_FISCALITE = {"exer": "exercice", "idcom": "commune", "nom": "nom", "siren": "siren",
+                             "optepci": "regime_epci", "insee_n": "commune_2025", "siren_n": "siren_2025",
+                             "epci_code": "epci_2025", "dep_code": "departement", "reg_code": "region"}
 # Les dotations notifiées : une ligne par collectivité, désignée par son code Insee, son numéro Siren ou son code de
 # département (`code`), et par variable ; la table beneficiaires donne le nom de chaque collectivité, chaque exercice,
 # son département, et le groupement d'une commune ou la nature juridique d'un groupement.
@@ -174,9 +203,11 @@ def lignes_collectivites(lots, concepts):
         fichier, lot = fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]]
         par_fonction = inscrit["source_id"] in ofgl.PAR_FONCTION
         par_budget = inscrit["source_id"] in ofgl.PAR_BUDGET or par_fonction
-        dotations = inscrit["source_id"] in ofgl.DOTATIONS
+        dotations, fiscalite = inscrit["source_id"] in ofgl.DOTATIONS, inscrit["source_id"] in ofgl.FISCALITE
         if inscrit["contenu"] == "montants" and dotations:
             yield "dotations", [[lot, *l] for l in ofgl.montants_dotations(fichier)]
+        elif inscrit["contenu"] == "montants" and fiscalite:
+            yield "fiscalite", [[lot, *l[:7], l[7] or None] for l in ofgl.montants_fiscalite(fichier)]
         elif inscrit["contenu"] == "montants" and par_fonction:
             yield "comptes_fonctions", [[lot, s, b, n, len(f), f, l, r, concepts[agregats[a]], v]
                                         for s, b, n, f, l, r, a, v in ofgl.montants_fonctions(fichier, agregats)]
@@ -189,7 +220,9 @@ def lignes_collectivites(lots, concepts):
         elif inscrit["contenu"] == "collectivites":
             fiches, _ = ofgl.collectivites(fichier)
             table, correspondance, nom = ((BENEFICIAIRES, CHAMPS_BENEFICIAIRES[inscrit["source_id"]], "beneficiaires")
-                                          if dotations else (BUDGETS, CHAMPS_BUDGETS, "budgets") if par_budget
+                                          if dotations else
+                                          (COMMUNES_FISCALITE, CHAMPS_COMMUNES_FISCALITE, "communes_fiscalite")
+                                          if fiscalite else (BUDGETS, CHAMPS_BUDGETS, "budgets") if par_budget
                                           else (COLLECTIVITES, CHAMPS_COLLECTIVITES, "collectivites"))
             lues = []
             for _, fiche in sorted(fiches.items()):
@@ -231,8 +264,8 @@ def main():
         empreintes.append({"table": nom, "lignes": len(lignes),
                            "sha256": hashlib.sha256(texte.getvalue().encode("utf-8")).hexdigest()})
     nouvelles = {"comptes_collectivites": COMPTES, "collectivites": COLLECTIVITES, "comptes_budgets": COMPTES_BUDGETS,
-                 "budgets": BUDGETS, "comptes_fonctions": COMPTES_FONCTIONS, "dotations": DOTATIONS,
-                 "beneficiaires": BENEFICIAIRES}
+                 "budgets": BUDGETS, "comptes_fonctions": COMPTES_FONCTIONS, "fiscalite": FISCALITE,
+                 "communes_fiscalite": COMMUNES_FISCALITE, "dotations": DOTATIONS, "beneficiaires": BENEFICIAIRES}
     for table, colonnes in nouvelles.items():
         connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
     lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
@@ -254,6 +287,9 @@ def main():
     connexion.execute("CREATE INDEX budgets_cle ON budgets (lot, budget)")
     connexion.execute("CREATE INDEX comptes_fonctions_lot ON comptes_fonctions (lot, concept, niveau)")
     connexion.execute("CREATE INDEX comptes_fonctions_siren ON comptes_fonctions (siren)")
+    connexion.execute("CREATE INDEX fiscalite_lot ON fiscalite (lot, taxe, destinataire)")
+    connexion.execute("CREATE INDEX fiscalite_commune ON fiscalite (commune)")
+    connexion.execute("CREATE INDEX communes_fiscalite_cle ON communes_fiscalite (lot, commune)")
     connexion.execute("CREATE INDEX dotations_lot ON dotations (lot, variable)")
     connexion.execute("CREATE INDEX dotations_code ON dotations (code)")
     connexion.execute("CREATE INDEX beneficiaires_cle ON beneficiaires (lot, code)")

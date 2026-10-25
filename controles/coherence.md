@@ -1357,3 +1357,64 @@ Fonctions dont le libellé change d'un exercice à l'autre, ou d'un budget à l'
 | M57 | 6312 | Autres (11 années entre 2014 et 2024) ; Marchés alimentaires (2025) |
 
 Regroupements que le portail fait, pour ses visualisations, de fonctions des deux nomenclatures, les autres fonctions étant rangées sous « Autres » : « 221-Collèges » : 221 de la M52, 221 de la M57 ; « 62-Voirie » : 62 de la M52, 84 de la M57.
+
+## 10. Fiscalité directe locale
+
+Le fichier de recensement des éléments d'imposition à la fiscalité directe locale (REI) de la DGFiP, que l'OFGL publie sous une forme simplifiée, donne pour le territoire de chaque commune la base, le taux et le produit des taxes foncières sur les propriétés bâties (TFPB) et non bâties (TFPNB), de la taxe d'enlèvement des ordures ménagères (TEOM) et de la cotisation foncière des entreprises (CFE), pour chacun de leurs bénéficiaires : ce sont les impositions primitives de l'année, sans les rôles supplémentaires. Le produit d'une ligne se compare à sa base multipliée par son taux net, à l'arrondi près ; la source prévient qu'il peut en différer, notamment du fait du lissage de la révision des valeurs locatives des locaux professionnels. Le taux net diffère du taux voté en cas d'intégration fiscale progressive. La TEOM recensée sur l'ensemble des communes se compare à celle qu'inscrivent les comptes consolidés des communes, des groupements à fiscalité propre et des syndicats, le REI ne disant pas lequel la perçoit. Le dernier exercice est provisoire.
+
+| Exercice | Version | Statut | Communes | Lignes | dont sous secret statistique |
+|---|---|---|---|---|---|
+| 2012 | 2026-10-06 | definitif | 36 677 | 256 073 | 8 601 |
+| 2013 | 2026-10-06 | definitif | 36 668 | 256 398 | 7 820 |
+| 2014 | 2026-10-06 | definitif | 36 678 | 255 783 | 7 102 |
+| 2015 | 2026-10-06 | definitif | 36 670 | 258 960 | 6 654 |
+| 2016 | 2026-10-06 | definitif | 36 534 | 258 533 | 6 409 |
+| 2017 | 2026-10-06 | definitif | 35 514 | 249 632 | 5 310 |
+| 2018 | 2026-10-06 | definitif | 35 385 | 282 215 | 6 183 |
+| 2019 | 2026-10-06 | definitif | 35 226 | 292 160 | 8 271 |
+| 2020 | 2026-10-06 | definitif | 34 965 | 293 292 | 8 175 |
+| 2021 | 2026-10-06 | definitif | 34 968 | 299 036 | 6 811 |
+| 2022 | 2026-10-06 | definitif | 34 959 | 314 080 | 7 167 |
+| 2023 | 2026-10-06 | definitif | 34 950 | 320 900 | 6 760 |
+| 2024 | 2026-10-06 | definitif | 34 939 | 325 947 | 6 564 |
+| 2025 | 2026-10-06 | provisoire | 34 906 | 327 553 | 6 447 |
+
+Produit contre base multipliée par le taux net : 3 717 566 lignes comparées, 2 067 182 égales à l'arrondi près, 1 125 260 en écart de moins de 1 %, 525 124 au-delà.
+
+| Taxe | Bénéficiaire | Lignes comparées | Égales à l'arrondi près | Écart de moins de 1 % | Au-delà | Plus grand écart au-delà (produit − base × taux) |
+|---|---|---|---|---|---|---|
+| CFE | Commune | 98 109 | 51 331 | 40 109 | 6 669 | −0,2 M€ (−26,3 %) : Modane (73157), 2019 |
+| CFE | GFP (GEMAPI) | 153 608 | 112 441 | 3 255 | 37 912 | −5 388 € (−2,4 %) : Montpellier (34172), 2018 |
+| CFE | GFP / en ZAE | 2 806 | 1 753 | 481 | 572 | −12 214 € (−12,3 %) : Honfleur (14333), 2017 |
+| CFE | GFP / en zone éolienne | 1 039 | 984 | 55 | 0 | aucun |
+| CFE | GFP / hors zone | 443 333 | 197 076 | 201 775 | 44 482 | +0,7 M€ (+7,5 %) : Saint-Pierre (97416), 2019 |
+| CFE | Région (TASA) | 13 521 | 10 180 | 0 | 3 341 | −9 097 € (−3,5 %) : Le Mesnil-Amelot (77291), 2021 |
+| CFE | Syndicat | 5 470 | 3 328 | 1 133 | 1 009 | +10 546 € (+20,3 %) : Génos (65195), 2020 |
+| TEOM | Divers / zone taux plein | 343 360 | 307 858 | 33 558 | 1 944 | −0,3 M€ (−29,7 %) : Livarot-Pays-d'Auge (14371), 2025 |
+| TEOM | Divers / zone taux réduit A | 12 458 | 12 444 | 9 | 5 | −17 898 € (−3,6 %) : Melle (79174), 2019 |
+| TEOM | Divers / zone taux réduit B | 1 789 | 1 788 | 1 | 0 | aucun |
+| TEOM | Divers / zone taux réduit C | 174 | 174 | 0 | 0 | aucun |
+| TEOM | Divers / zone taux réduit D | 9 | 9 | 0 | 0 | aucun |
+| TFPB | Commune | 497 492 | 322 824 | 166 955 | 7 713 | −1,6 M€ (−8,6 %) : Chessy (77111), 2021 |
+| TFPB | Département | 323 449 | 196 322 | 88 896 | 38 231 | −2,9 M€ (−34,3 %) : Chessy (77111), 2017 |
+| TFPB | GFP | 419 540 | 378 299 | 35 414 | 5 827 | +0,1 M€ (+2,6 %) : Angers (49007), 2019 |
+| TFPB | GFP (GEMAPI) | 169 683 | 162 717 | 373 | 6 593 | +0,3 M€ (+6 308,1 %) : Plouvorn (29210), 2018 |
+| TFPB | Région (TASA) | 13 935 | 13 851 | 0 | 84 | +0,1 M€ (+16,0 %) : Saint-Denis (93066), 2018 |
+| TFPB | Syndicat | 30 985 | 28 921 | 1 000 | 1 064 | +22 503 € (+70,7 %) : Villeneuve-Loubet (06161), 2022 |
+| TFPNB | Commune | 495 660 | 158 313 | 329 876 | 7 471 | −11 199 € (−22,0 %) : Clefs-Val d'Anjou (49101), 2014 |
+| TFPNB | GFP | 491 044 | 93 324 | 209 720 | 188 000 | +12 179 € (+90,9 %) : Val-d'Oire-et-Gartempe (87028), 2019 |
+| TFPNB | GFP (GEMAPI) | 169 369 | 7 886 | 5 657 | 155 826 | −771 € (−29,3 %) : Roquebrune-sur-Argens (83107), 2020 |
+| TFPNB | Syndicat | 30 733 | 5 359 | 6 993 | 18 381 | −705 € (−43,2 %) : Roquebrune-sur-Argens (83107), 2025 |
+
+Lignes dont le taux net diffère du taux voté : CFE, Commune : 381 ; CFE, GFP / en ZAE : 72 ; CFE, GFP / hors zone : 155 490 ; TFPB, Commune : 5 104 ; TFPB, GFP : 67 874 ; TFPNB, Commune : 5 099 ; TFPNB, GFP : 70 257.
+
+| Exercice | TEOM recensée | TEOM des comptes : communes | groupements à fiscalité propre | syndicats | Écart (recensée − comptes) |
+|---|---|---|---|---|---|
+| 2018 | 6 896,0 M€ | 622,0 M€ | 6 299,4 M€ | 271,9 M€ | −297,3 M€ (−4,1 %) |
+| 2019 | 6 981,6 M€ | 628,4 M€ | 6 344,8 M€ | 259,8 M€ | −251,5 M€ (−3,5 %) |
+| 2020 | 7 101,8 M€ | 631,4 M€ | 6 475,8 M€ | 212,6 M€ | −218,0 M€ (−3,0 %) |
+| 2021 | 7 394,1 M€ | 506,8 M€ | 6 879,1 M€ | 222,9 M€ | −214,6 M€ (−2,8 %) |
+| 2022 | 7 876,9 M€ | 518,4 M€ | 7 354,2 M€ | 238,7 M€ | −234,4 M€ (−2,9 %) |
+| 2023 | 8 489,7 M€ | 546,5 M€ | 7 924,2 M€ | 255,7 M€ | −236,7 M€ (−2,7 %) |
+| 2024 | 8 934,3 M€ | 559,6 M€ | 8 362,2 M€ | 259,1 M€ | −246,5 M€ (−2,7 %) |
+| 2025 | 9 156,6 M€ | 571,6 M€ | 8 586,3 M€ | 266,8 M€ | −268,1 M€ (−2,8 %) |

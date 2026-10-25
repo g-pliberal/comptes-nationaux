@@ -207,12 +207,12 @@ def controler_archives(tables, erreurs):
 
 def controler_collectivites(tables, erreurs):
     """Relit chaque copie inscrite dans fichiers_collectivites.csv : son contenu doit donner son inscription. Renvoie
-    les nombres de lignes de montants relues : de comptes, de dépenses par fonction et de dotations."""
+    les nombres de lignes de montants relues : de comptes, de dépenses par fonction, de fiscalité et de dotations."""
     fichiers = {f["id"]: f for f in tables["fichiers"]}
     agregats = {a["agregat"]: a for a in tables["agregats_ofgl"]}
     inscrits = tables["fichiers_collectivites"]
     ordre = {"inventaire": 0, "montants": 1, "collectivites": 2}
-    relues = {"comptes": 0, "fonctions": 0, "dotations": 0}
+    relues = {"comptes": 0, "fonctions": 0, "fiscalite": 0, "dotations": 0}
     for n, inscrit in sorted(enumerate(inscrits, start=2), key=lambda e: (ordre.get(e[1]["contenu"], 3), e[0])):
         lieu = f"tables/fichiers_collectivites.csv, ligne {n}"
         if inscrit["fichier_id"] not in fichiers:
@@ -227,14 +227,16 @@ def controler_collectivites(tables, erreurs):
             erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
         if inscrit["contenu"] == "montants":
             relues["dotations" if inscrit["source_id"] in ofgl.DOTATIONS else "fonctions"
-                   if inscrit["source_id"] in ofgl.PAR_FONCTION else "comptes"] += int(inscrit["lignes"])
-    return relues["comptes"], relues["fonctions"], relues["dotations"]
+                   if inscrit["source_id"] in ofgl.PAR_FONCTION else "fiscalite"
+                   if inscrit["source_id"] in ofgl.FISCALITE else "comptes"] += int(inscrit["lignes"])
+    return relues["comptes"], relues["fonctions"], relues["fiscalite"], relues["dotations"]
 
 
 def lignes_relues(relues):
-    """« 12 lignes de comptes de collectivités, 3 lignes de dépenses par fonction et 4 lignes de dotations »."""
+    """« 12 lignes de comptes de collectivités, 3 lignes de dépenses par fonction, 5 lignes de fiscalité directe locale
+    et 4 lignes de dotations »."""
     textes = [f"{n} lignes de {quoi}" for n, quoi in zip(relues, ("comptes de collectivités", "dépenses par fonction",
-                                                                    "dotations")) if n]
+                                                                    "fiscalité directe locale", "dotations")) if n]
     return textes[0] if len(textes) == 1 else ", ".join(textes[:-1]) + " et " + textes[-1]
 
 
