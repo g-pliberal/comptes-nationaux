@@ -157,7 +157,7 @@ def valeur_archivee(fichier, emplacement, copies):
             return None
         return (float(nombre[0]), "") if nombre else None
     if fichier["chemin"].endswith(".xml"):
-        trouve = re.match(r"idbank=([0-9]+);periode=([0-9T-]+)", emplacement)
+        trouve = re.match(r"idbank=([0-9]+);periode=([0-9TQ-]+)", emplacement)
         if trouve is None:
             return None
         if fichier["id"] not in copies:

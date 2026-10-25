@@ -6,8 +6,15 @@
 Tableaux pris en charge :
 - 3.201 à 3.214 : dépenses et recettes par nature, pour l'ensemble des administrations publiques et
   chacun de leurs sous-secteurs, jusqu'aux communes, départements, régions et syndicats ;
+- 3.215 : dépenses et recettes totales de chaque sous-secteur, en montant et en % du PIB ;
 - 3.106 : déficit au sens de Maastricht par sous-secteur, et PIB utilisé pour le ratio ;
 - 3.101 : dette au sens de Maastricht par sous-secteur, et PIB utilisé pour le ratio ;
+- 3.102 : la même dette, par instrument (dépôts, titres de créance, crédits) ;
+- 3.103 : dette nette par sous-secteur, et actifs liquides que la dette nette ne déduit pas ;
+- 3.104 : passage du total des passifs à la dette au sens de Maastricht, par sous-secteur ;
+- 3.105 : passage du déficit à la variation de la dette au sens de Maastricht ;
+- 7.301 à 7.306 : la séquence complète des comptes de l'ensemble des administrations publiques et de
+  chacun de leurs sous-secteurs, de la production à la capacité de financement ;
 - 3.301 à 3.306 : dépenses par fonction (COFOG, jusqu'aux 69 groupes) et par opération, pour
   l'ensemble des administrations publiques et chacun de leurs sous-secteurs ;
 - 3.307 : répartition par sous-secteur des dépenses consolidées de l'ensemble, par fonction ;
@@ -19,12 +26,15 @@ Tableaux pris en charge :
   sociale au sens de Maastricht.
 
 Chaque libellé ou code de ligne doit avoir une correspondance ci-dessous ou dans les tables de la base :
-une ligne inconnue arrête l'import, pour que rien ne soit écarté en silence. La version d'un chiffre est
+une ligne inconnue arrête l'import, pour que rien ne soit écarté en silence ; seuls les zéros qu'un tableau
+porte sur une ligne sans libellé de chiffre (ligne de séparation, d'unité ou de côté d'un compte) ne sont pas
+des chiffres, et l'import dit combien il en a rencontré. La version d'un chiffre est
 la date de modification que l'Insee inscrit dans le classeur, à défaut sa date de création. Son statut
 suit le calendrier des comptes annuels de l'Insee : la dernière année publiée est provisoire,
 l'avant-dernière semi-définitive, les précédentes définitives.
 """
 
+import collections
 import re
 import sys
 
@@ -332,6 +342,97 @@ LIGNES_3108 = {
     }.items()},
 }
 
+# Tableau 3.215 : en-tête du bloc d'un sous-secteur → périmètre ; ligne → concept. Les dépenses et les recettes d'un
+# sous-secteur sont consolidées en son sein, pas entre sous-secteurs : elles ne s'additionnent pas.
+PERIMETRES_3215 = {"Etat (S13111)": "S13111", "ODAC (S13112)": "S13112", "Administrations publiques locales (S1313)": "S1313",
+                   "Administrations de sécurité sociale (S1314)": "S1314", "Ensemble": "S13"}
+LIGNES_3215 = {"-Dépenses": "SEC2010.TE", "-Recettes": "SEC2010.TR"}
+
+# Tableaux de la dette. 3.102 : code de l'instrument (colonne A) → concept, sous l'en-tête du bloc de chaque sous-secteur ;
+# la dette d'un sous-secteur y est, comme au tableau 3.101, sa contribution à la dette consolidée de l'ensemble.
+INSTRUMENTS_3102 = {"F2N": "PDE.GD_F2", "F31_32": "PDE.GD_F3", "F31": "PDE.GD_F31", "F32": "PDE.GD_F32",
+                    "F41": "PDE.GD_F41", "F42": "PDE.GD_F42", "GD": "PDE.GD"}
+# 3.103 : en-tête de bloc → (concept, unité, consolidation), une ligne par sous-secteur.
+BLOCS_3103 = {"Dette nette en milliards d'euros": ("INSEE_DETTE.DETTE_NETTE", "MD_EUR", "consolide"),
+              "Dette nette en % du PIB": ("INSEE_DETTE.DETTE_NETTE", "PC_PIB", "consolide"),
+              "Autres actifs liquides en milliards d'euros (**)": ("INSEE_DETTE.AUTRES_ACTIFS_LIQUIDES", "MD_EUR",
+                                                                   "non_precise")}
+# 3.104 : libellé → concept, sous l'en-tête du bloc de chaque sous-secteur. Le total des passifs et les lignes qui le
+# rapprochent de la dette portent sur des passifs non consolidés ; la dette au sens de Maastricht est consolidée.
+LIGNES_3104 = {"Total des passifs en comptabilité nationale (TP)": "INSEE_DETTE.TOTAL_PASSIFS",
+               "Différence de champ (1)": "INSEE_DETTE.DIFFERENCE_CHAMP",
+               "Comptes à payer et produits dérivés": "INSEE_DETTE.COMPTES_A_PAYER_DERIVES",
+               "Dépôts de garantie": "INSEE_DETTE.DEPOTS_GARANTIE",
+               "Passage à la dette consolidée (2)": "INSEE_DETTE.PASSAGE_DETTE_CONSOLIDEE",
+               "Consolidation des dépôts": "INSEE_DETTE.CONSOLIDATION_DEPOTS",
+               "Consolidation des titres de créance": "INSEE_DETTE.CONSOLIDATION_TITRES",
+               "Consolidation des crédits": "INSEE_DETTE.CONSOLIDATION_CREDITS",
+               "Passage à la valeur nominale (3)": "INSEE_DETTE.PASSAGE_VALEUR_NOMINALE",
+               "Intérêts courus non échus (ICNE) sur dépôts": "INSEE_DETTE.ICNE_DEPOTS",
+               "Écart de valorisation sur obligations (y.c. ICNE)": "INSEE_DETTE.ECART_VALORISATION_OBLIGATIONS",
+               "Intérêts courus non échus sur crédits": "INSEE_DETTE.ICNE_CREDITS",
+               "Dette au sens de Maastricht = TP - (1) - (2) - (3)": "PDE.GD",
+               "Contribution à la dette au sens de Maastricht = TP - (1) - (2) - (3)": "PDE.GD"}
+# 3.105 : libellé → (concept, consolidation), pour l'ensemble des administrations publiques. Le déficit y est compté
+# positivement.
+LIGNES_3105 = {
+    "Déficit des administrations publiques (*) - D": ("INSEE_DETTE.DEFICIT", "sans_objet"),
+    "Acquisitions d'actifs nettes des cessions et hors autres comptes à recevoir (1)":
+        ("INSEE_DETTE.ACQUISITIONS_NETTES_ACTIFS", "non_precise"),
+    "F2 Numéraires et dépôts": ("INSEE_DETTE.ACQUISITIONS_F2", "non_precise"),
+    "F3 Titres hors actions": ("INSEE_DETTE.ACQUISITIONS_F3", "non_precise"),
+    "F4 Crédits": ("INSEE_DETTE.ACQUISITIONS_F4", "non_precise"),
+    "F5 Actions et autres participations": ("INSEE_DETTE.ACQUISITIONS_F5", "non_precise"),
+    "F71 Produits dérivés financiers": ("INSEE_DETTE.ACQUISITIONS_F71", "non_precise"),
+    "F6 Réserve d'assurances": ("INSEE_DETTE.ACQUISITIONS_F6", "non_precise"),
+    "Variation du passif financier hors dette de Maastricht et hors autres comptes à payer (2)":
+        ("INSEE_DETTE.VARIATION_PASSIF_HORS_DETTE", "non_precise"),
+    "F28, F38, F48 Intérêts courus non échus (y.c étalements des primes et décôtes)":
+        ("INSEE_DETTE.VARIATION_ICNE", "non_precise"),
+    "F1, F5, F6, F7 Autres passifs hors dettes de Maastricht et hors autres comptes à payer":
+        ("INSEE_DETTE.VARIATION_AUTRES_PASSIFS", "non_precise"),
+    "Changements de volume inclus dans la dette de Maastricht (3)": ("INSEE_DETTE.CHANGEMENTS_VOLUME", "non_precise"),
+    "K10, K12 Changement de classement et autres changements de volume": ("INSEE_DETTE.RECLASSEMENTS", "non_precise"),
+    "K11 Valorisation de la dette en devises": ("INSEE_DETTE.VALORISATION_DEVISES", "non_precise"),
+    "K14 Gains/Pertes sur rachats de titres": ("INSEE_DETTE.RACHATS_TITRES", "non_precise"),
+    "F8 Solde des autres comptes à recevoir/à payer (4)": ("INSEE_DETTE.SOLDE_AUTRES_COMPTES", "non_precise"),
+    "Ecart statistique B9nf - B9f (5)": ("INSEE_DETTE.ECART_STATISTIQUE", "non_precise"),
+    "Variation de la dette au sens de Maastricht = D + (1) + (2) + (3) + (4) + (5)": ("INSEE_DETTE.VARIATION_DETTE",
+                                                                                      "consolide"),
+}
+# Libellés de lignes sans chiffre, dont les cellules ne portent que des zéros de mise en page.
+SANS_CHIFFRES = {"", "En milliards d'euros"}
+
+# Tableaux 7.301 à 7.306 : (code de l'opération en colonne A, côté du compte) → concept. Un solde (B…) est l'emploi
+# d'un compte et la ressource du suivant : il a le même concept des deux côtés. Une opération reçue (ressource) prend
+# le suffixe REC, une opération versée (emploi) le suffixe PAY, comme dans les tableaux 3.201 à 3.214 ; les produits
+# (P…) et les acquisitions d'actifs non produits (NP) n'en ont pas. Le SEC 2010 inscrit avec un signe négatif les
+# subventions et les transferts en capital versés, en ressources, et les subventions reçues par les administrations
+# productrices, en emplois : ces lignes ont leurs propres concepts (…_EN_RESSOURCES, …_EN_EMPLOIS).
+PERIMETRES_73XX = {"7301": "S13", "7302": "S1311", "7303": "S13111", "7304": "S13112", "7305": "S1313", "7306": "S1314"}
+_SOLDES_73XX = ["B1G", "B1N", "B2G", "B2N", "B5G", "B5N", "B6G", "B6N", "B7G", "B7N", "B8G", "B8N", "B9"]
+_PRODUITS_73XX = {"Ressources": ["P1", "P11", "P12", "P13"],
+                  "Emplois": ["P2", "P51C", "P3", "P31", "P32", "P4", "P5", "P51G", "P52", "NP"]}
+_OPERATIONS_73XX = {
+    "Ressources": ["D2", "D21", "D211", "D212", "D214", "D29", "D291", "D292", "D4", "D41", "D42", "D421", "D422", "D43",
+                   "D44", "D45", "D5", "D51", "D59", "D61", "D611", "D612", "D613", "D613CE", "D613NSI", "D7", "D7S",
+                   "D71", "D72", "D73", "D731", "D732", "D733", "D74", "D75", "D751", "D759", "D76"],
+    "Emplois": ["D1", "D11", "D12", "D121", "D122", "D29", "D291", "D292", "D4", "D41", "D42", "D421", "D422", "D43",
+                "D44", "D45", "D5", "D51", "D59", "D62", "D621", "D622", "D623", "D7", "D7S", "D71", "D72", "D73", "D731",
+                "D732", "D733", "D74", "D75", "D751", "D759", "D76", "D63", "D631", "D632"]}
+LIGNES_73XX = {(code, cote): f"SEC2010.{code}" for code in _SOLDES_73XX for cote in ("Ressources", "Emplois")}
+LIGNES_73XX.update({(code, cote): f"SEC2010.{code}" for cote, codes in _PRODUITS_73XX.items() for code in codes})
+LIGNES_73XX.update({(code, cote): f"SEC2010.{code}{'REC' if cote == 'Ressources' else 'PAY'}"
+                    for cote, codes in _OPERATIONS_73XX.items() for code in codes})
+LIGNES_73XX.update({(f"D9{c}R", "Ressources"): f"SEC2010.D9{c}REC" for c in ("", "1", "2", "9")})
+LIGNES_73XX.update({(f"D9{c}P", "Ressources"): f"SEC2010.D9{c}PAY_EN_RESSOURCES" for c in ("", "1", "2", "9")})
+LIGNES_73XX.update({(f"D3{c}", "Ressources"): f"SEC2010.D3{c}PAY_EN_RESSOURCES" for c in ("", "1", "9", "91", "92", "99")})
+LIGNES_73XX.update({("D39", "Emplois"): "SEC2010.D39REC_EN_EMPLOIS", ("D73S", "Ressources"): "SEC2010.D73S"})
+# De 1949 à 1977, l'Insee ne ventile pas les transferts courants entre administrations publiques : les autres
+# transferts courants de ces années ne les comprennent pas.
+NOTE_D7_1949_1977 = ("De 1949 à 1977, hors transferts courants entre administrations publiques (D.73), que l'Insee ne "
+                     "ventile pas pour ces années.")
+
 
 def libelle(cellules, colonne, n):
     return " ".join(str(cellules.get(f"{colonne}{n}", "")).split())
@@ -510,12 +611,172 @@ def tableau_passage(numero, cellules, annees):
                    "ratio": False}
 
 
+def tableau_3215(cellules, annees):
+    """Tableau 3.215 : dépenses et recettes de chaque sous-secteur, en milliards d'euros puis en % du PIB, que le tableau
+    ne donne pas."""
+    unite = perimetre = None
+    for n in sorted({position(ref)[0] for ref in cellules}):
+        texte = libelle(cellules, "B", n)
+        if texte.startswith(("En milliards d'euros", "En % du produit intérieur brut")):
+            unite = "MD_EUR" if texte.startswith("En milliards") else "PC_PIB"
+            continue
+        if texte in PERIMETRES_3215:
+            perimetre, bloc = PERIMETRES_3215[texte], texte
+            continue
+        valeurs = valeurs_de_la_ligne(cellules, n, annees)
+        if not valeurs:
+            continue
+        if texte not in LIGNES_3215 or perimetre is None or unite is None:
+            sys.exit(f"tableau 3215, ligne {n} : ligne non reconnue (« {texte} »)")
+        for colonne, valeur in valeurs.items():
+            yield {"perimetre_id": perimetre, "concept_id": LIGNES_3215[texte], "unite_id": unite, "valeur": valeur,
+                   "cellule": f"{colonne}{n}", "libelle": f"{bloc} / {texte}", "annee": annees[colonne],
+                   "consolidation": "consolide", "ratio": False}
+
+
+def bloc_de_secteur(texte):
+    """Le sous-secteur qu'annonce l'en-tête d'un bloc (« S1311 - Administration publique centrale »), ou rien."""
+    code = texte.split(" - ")[0]
+    return code if " - " in texte and code in SECTEURS else None
+
+
+def tableau_3102(cellules, annees):
+    """Tableau 3.102 : la dette au sens de Maastricht de chaque sous-secteur, par instrument, en milliards d'euros."""
+    if libelle(cellules, "A", 2) != "Unité : Milliard d'euros":
+        sys.exit(f"tableau 3102 : unité inattendue (« {libelle(cellules, 'A', 2)} »)")
+    perimetre = None
+    for n in sorted({position(ref)[0] for ref in cellules}):
+        code, texte = libelle(cellules, "A", n), libelle(cellules, "B", n)
+        if not code and bloc_de_secteur(texte):
+            perimetre, bloc = bloc_de_secteur(texte), texte
+            continue
+        valeurs = valeurs_de_la_ligne(cellules, n, annees)
+        if not valeurs:
+            continue
+        if code not in INSTRUMENTS_3102 or perimetre is None:
+            sys.exit(f"tableau 3102, ligne {n} : ligne non reconnue (« {code} », « {texte} »)")
+        for colonne, valeur in valeurs.items():
+            yield {"perimetre_id": perimetre, "concept_id": INSTRUMENTS_3102[code], "unite_id": "MD_EUR",
+                   "valeur": valeur, "cellule": f"{colonne}{n}", "libelle": f"{bloc} / {code}", "annee": annees[colonne],
+                   "consolidation": "consolide", "ratio": False}
+
+
+def tableau_3103(cellules, annees):
+    """Tableau 3.103 : dette nette de chaque sous-secteur, en milliards d'euros et en % du PIB, que le tableau ne
+    donne pas, puis les actifs liquides que la dette nette ne déduit pas."""
+    bloc = None
+    for n in sorted({position(ref)[0] for ref in cellules}):
+        texte = libelle(cellules, "B", n)
+        if texte in BLOCS_3103:
+            bloc = texte
+            continue
+        valeurs = valeurs_de_la_ligne(cellules, n, annees)
+        if not valeurs:
+            continue
+        secteur = bloc_de_secteur(texte)
+        if bloc is None or secteur is None:
+            sys.exit(f"tableau 3103, ligne {n} : ligne non reconnue (« {texte} »)")
+        concept, unite, consolidation = BLOCS_3103[bloc]
+        for colonne, valeur in valeurs.items():
+            yield {"perimetre_id": secteur, "concept_id": concept, "unite_id": unite, "valeur": valeur,
+                   "cellule": f"{colonne}{n}", "libelle": f"{bloc} / {texte}", "annee": annees[colonne],
+                   "consolidation": consolidation, "ratio": False}
+
+
+def tableau_3104(cellules, annees):
+    """Tableau 3.104 : pour chaque sous-secteur, du total de ses passifs à sa dette au sens de Maastricht, en milliards
+    d'euros."""
+    perimetre = None
+    for n in sorted({position(ref)[0] for ref in cellules}):
+        texte = libelle(cellules, "B", n)
+        if bloc_de_secteur(texte):
+            perimetre, bloc = bloc_de_secteur(texte), texte
+            continue
+        valeurs = valeurs_de_la_ligne(cellules, n, annees)
+        if not valeurs:
+            continue
+        if texte not in LIGNES_3104 or perimetre is None:
+            sys.exit(f"tableau 3104, ligne {n} : ligne non reconnue (« {texte} »)")
+        concept = LIGNES_3104[texte]
+        for colonne, valeur in valeurs.items():
+            yield {"perimetre_id": perimetre, "concept_id": concept, "unite_id": "MD_EUR", "valeur": valeur,
+                   "cellule": f"{colonne}{n}", "libelle": f"{bloc} / {texte}", "annee": annees[colonne],
+                   "consolidation": "consolide" if concept == "PDE.GD" else "non_consolide", "ratio": False}
+
+
+def zeros_de_mise_en_page(numero, n, valeurs, ignores):
+    """Les cellules d'une ligne sans libellé de chiffre : des zéros de mise en page, comptés, ou l'import s'arrête."""
+    if any(v != 0 for v in valeurs.values()):
+        sys.exit(f"tableau {numero}, ligne {n} : valeurs sur une ligne sans libellé de chiffre")
+    ignores["zéros de mise en page"] += len(valeurs)
+
+
+def tableau_3105(cellules, annees, ignores):
+    """Tableau 3.105 : du déficit de l'ensemble des administrations publiques à la variation de sa dette au sens de
+    Maastricht, en milliards d'euros. Ses lignes de séparation portent des zéros."""
+    for n in sorted({position(ref)[0] for ref in cellules}):
+        texte = libelle(cellules, "B", n)
+        valeurs = valeurs_de_la_ligne(cellules, n, annees)
+        if not valeurs:
+            continue
+        if texte in SANS_CHIFFRES:
+            zeros_de_mise_en_page("3105", n, valeurs, ignores)
+            continue
+        if texte not in LIGNES_3105:
+            sys.exit(f"tableau 3105, ligne {n} : libellé sans correspondance (« {texte} »)")
+        concept, consolidation = LIGNES_3105[texte]
+        for colonne, valeur in valeurs.items():
+            yield {"perimetre_id": "S13", "concept_id": concept, "unite_id": "MD_EUR", "valeur": valeur,
+                   "cellule": f"{colonne}{n}", "libelle": texte, "annee": annees[colonne],
+                   "consolidation": consolidation, "ratio": False}
+
+
+def tableau_comptes(numero, cellules, annees, ignores):
+    """Tableaux 7.301 à 7.306 : la séquence des comptes d'un sous-secteur, compte par compte, ressources puis emplois,
+    une ligne par opération (code en colonne A), en milliards d'euros. Les comptes ne sont pas consolidés. Un solde,
+    emploi d'un compte puis ressource du suivant, n'est lu qu'une fois : ses autres lignes doivent redonner les mêmes
+    valeurs."""
+    if libelle(cellules, "A", 2) != "Unité : Milliard d'euros":
+        sys.exit(f"tableau {numero} : unité inattendue (« {libelle(cellules, 'A', 2)} »)")
+    perimetre, compte, cote, soldes = PERIMETRES_73XX[numero], None, None, {}
+    for n in sorted({position(ref)[0] for ref in cellules}):
+        code, texte = libelle(cellules, "A", n), libelle(cellules, "B", n)
+        valeurs = valeurs_de_la_ligne(cellules, n, annees)
+        if not code:
+            if texte.startswith("Compte "):
+                compte, cote = texte, None
+            elif texte in ("Ressources", "Emplois"):
+                cote = texte
+            if valeurs:
+                zeros_de_mise_en_page(numero, n, valeurs, ignores)
+            continue
+        if not valeurs:
+            continue
+        concept = LIGNES_73XX.get((code, cote))
+        if concept is None or compte is None:
+            sys.exit(f"tableau {numero}, ligne {n} : opération sans correspondance ({compte}, {cote}, « {code} »)")
+        if code in _SOLDES_73XX:
+            if concept in soldes:
+                if valeurs != soldes[concept]:
+                    sys.exit(f"tableau {numero}, ligne {n} : le solde {code} n'a pas les valeurs de sa première ligne")
+                ignores["valeurs de soldes repris d'un compte au suivant, vérifiées"] += len(valeurs)
+                continue
+            soldes[concept] = valeurs
+        for colonne, valeur in valeurs.items():
+            annee = annees[colonne]
+            yield {"perimetre_id": perimetre, "concept_id": concept, "unite_id": "MD_EUR", "valeur": valeur,
+                   "cellule": f"{colonne}{n}", "libelle": f"{compte} / {cote} / {code}", "annee": annee,
+                   "consolidation": "sans_objet" if code in _SOLDES_73XX else "non_consolide", "ratio": False,
+                   "notes": NOTE_D7_1949_1977 if code == "D7" and int(annee) <= 1977 else ""}
+
+
 def statut(annee, derniere):
     return {derniere: "provisoire", derniere - 1: "semi_definitif"}.get(annee, "definitif")
 
 
 def lignes_du_fichier(fichier):
-    """Les chiffres d'une copie archivée, et le nombre de cellules qui y sont marquées non disponibles."""
+    """Les chiffres d'une copie archivée, le nombre de cellules qui y sont marquées non disponibles, et le compte des
+    cellules lues qui ne sont pas des chiffres (zéros de mise en page, soldes repris d'un compte au suivant)."""
     numero = fichier["source_id"].removeprefix("insee.t")
     version = fichier["mis_a_jour_source"][:10]
     if not version:
@@ -526,10 +787,23 @@ def lignes_du_fichier(fichier):
     nom, cellules = lire_xlsx(chemin, nom)
     annees = entete_des_annees(cellules)
     derniere = max(int(a) for a in annees.values())
+    ignores = collections.Counter()
     if numero in PERIMETRES_32XX:
         brutes = tableau_32xx(numero, cellules, annees)
+    elif numero == "3215":
+        brutes = tableau_3215(cellules, annees)
     elif numero in ("3101", "3106"):
         brutes = tableau_dette_ou_deficit(numero, cellules, annees)
+    elif numero == "3102":
+        brutes = tableau_3102(cellules, annees)
+    elif numero == "3103":
+        brutes = tableau_3103(cellules, annees)
+    elif numero == "3104":
+        brutes = tableau_3104(cellules, annees)
+    elif numero == "3105":
+        brutes = tableau_3105(cellules, annees, ignores)
+    elif numero in PERIMETRES_73XX:
+        brutes = tableau_comptes(numero, cellules, annees, ignores)
     elif numero in PERIMETRES_33XX or numero == "3307":
         brutes = tableau_cofog(numero, cellules, annees)
     elif numero in ("3216", "3217"):
@@ -555,14 +829,15 @@ def lignes_du_fichier(fichier):
             "fonction_id": brute.get("fonction_id", ""), "traitements": "", "unite_id": brute["unite_id"],
             "periode": brute["annee"], "valeur": valeur, "decimales": decimales, "statut": statut(int(brute["annee"]), derniere),
             "drapeau_source": "", "version": version, "consolidation": brute["consolidation"],
-            "denominateur_id": "", "nature": "publie", "calcul_id": "", "saisi_le": aujourdhui(), "notes": "",
+            "denominateur_id": "", "nature": "publie", "calcul_id": "", "saisi_le": aujourdhui(),
+            "notes": brute.get("notes", ""),
         }
         if brute["ratio"]:  # le PIB utilisé pour le ratio figure dans le même tableau
             ligne["denominateur_id"] = identifiant({**ligne, "perimetre_id": "S1", "concept_id": "SEC2010.B1GQ",
                                                     "unite_id": "MD_EUR"})
         ligne["id"] = identifiant(ligne)
         lignes.append(ligne)
-    return lignes, non_disponibles(cellules, annees)
+    return lignes, non_disponibles(cellules, annees), ignores
 
 
 def resoudre_denominateurs(existants):
@@ -584,12 +859,13 @@ def main():
         sys.exit(f"copie archivée inconnue : {sys.argv[1]}")
     cible = table_des_chiffres(fichier["source_id"])
     existants = {l["id"]: l for l in lire(cible)}
-    lignes, nd = lignes_du_fichier(fichier)
+    lignes, nd, ignores = lignes_du_fichier(fichier)
     ajoutes, inchanges = fusionner(existants, lignes, fichier["id"])
     resoudre_denominateurs(existants)
     ecrire(cible, champs_chiffres(), existants.values())
     print(f"{fichier['id']} : {ajoutes} chiffres ajoutés, {inchanges} déjà enregistrés"
-          + (f", {nd} cellules marquées non disponibles" if nd else "") + f" ; {cible} en compte {len(existants)}")
+          + (f", {nd} cellules marquées non disponibles" if nd else "")
+          + "".join(f", {n} {quoi}" for quoi, n in sorted(ignores.items())) + f" ; {cible} en compte {len(existants)}")
 
 
 if __name__ == "__main__":
