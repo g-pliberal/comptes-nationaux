@@ -19,6 +19,9 @@ La présentation fonctionnelle des comptes des départements est publiée budget
 chaque ligne des montants donne, pour un budget, une fonction de la nomenclature fonctionnelle de son instruction
 budgétaire et comptable (M52, puis M57), à l'un de ses quatre niveaux, et un agrégat des dépenses, le montant de ce
 budget, avec le libellé de la fonction et le regroupement que le portail en fait ; la liste est celle des budgets.
+La fiscalité directe locale, d'après le fichier de recensement des éléments d'imposition (REI) de la DGFiP, est publiée
+commune par commune : chaque ligne des montants donne, pour le territoire d'une commune, une taxe et un bénéficiaire, la
+base, le taux et le produit ; la liste est celle des communes.
 Le portail publie aussi, d'après les fichiers de répartition de la DGCL, les dotations que l'État notifie à chaque
 commune, à chaque groupement à fiscalité propre et à chaque département : une ligne par collectivité et par variable. On
 en lit le montant notifié de la dotation globale de fonctionnement et celui de chacune de ses parts ; la collectivité y
@@ -62,6 +65,9 @@ JEUX = {
     "ofgl.base-departements-fonctionnelle": ("ofgl-base-departements-fonctionnelle", ["siren", "ident", "lbudg", "cbudg",
                                                                                       "categ", "dep_code", "reg_code",
                                                                                       "ptot"]),
+    "ofgl.base-fiscale-simplifiee": ("base-fiscale-simplifiee", ["exer", "idcom", "nom", "siren", "optepci",
+                                                                 "insee_n", "siren_n", "epci_code", "dep_code",
+                                                                 "reg_code"]),
     "ofgl.dotations-communes": ("dotations-communes", ["exercice", "code_insee", "commune", "code_departement",
                                                        "siren_epci"]),
     "ofgl.dotations-gfp": ("dotations-gfp", ["exercice", "siren", "nom_epci", "nature_juridique", "code_departement"]),
@@ -99,6 +105,16 @@ PAR_FONCTION = {"ofgl.base-departements-fonctionnelle"}
 MONTANTS_FONCTIONS = ["siren", "ident", "nomen", "niveau_hierarchique", "fonction", "nom_fonction",
                       "classement_fonctionnel_2", "agregat", "montant"]
 NOMENCLATURES = r"M52|M57"
+# Jeux de la fiscalité directe locale : une ligne par commune, désignée par son code Insee de l'exercice, par taxe
+# (« dispositif fiscal ») et par bénéficiaire, avec la base, le taux net, le taux voté (en %) et le produit, en euros ;
+# une valeur que la DGFiP masque au titre du secret statistique est vide, et la ligne porte alors « sec_stat ». Leur
+# exercice est un texte, non une date ; leur liste est celle des communes, et porte l'exercice, pour que deux listes
+# identiques d'une année à l'autre restent deux copies.
+FISCALITE = {"ofgl.base-fiscale-simplifiee"}
+MONTANTS_FISCALITE = ["idcom", "dispositif_fiscal", "destinataire", "base", "taux_net", "taux_vote", "produit",
+                      "secret_statistique"]
+TAXES = {"CFE", "TFPB", "TFPNB", "TEOM"}
+COMMUNE = r"[0-9][0-9AB][0-9]{3}"  # code Insee d'une commune
 INVENTAIRE = ["exer", "lignes"]
 # Champs qu'une collectivité peut avoir plusieurs fois, une ligne par valeur : un groupement s'étend sur plusieurs
 # départements, voire plusieurs régions.
@@ -123,6 +139,12 @@ def requetes(source_id, exercice):
                                     order_by=f"{cle},variable"),
                 "collectivites": requete(jeu, select=",".join(champs_collectivites), where=f"{filtre} and {lues}",
                                          group_by=",".join(champs_collectivites), order_by=",".join(champs_collectivites))}
+    if source_id in FISCALITE:
+        filtre, liste = f'exer="{exercice}"', ",".join(champs_collectivites)
+        return {"inventaire": requete(jeu, select="exer,count(*) as lignes", group_by="exer", order_by="exer"),
+                "montants": requete(jeu, select=",".join(MONTANTS_FISCALITE), where=filtre,
+                                    order_by="idcom,dispositif_fiscal,destinataire"),
+                "collectivites": requete(jeu, select=liste, where=filtre, group_by=liste, order_by=liste)}
     filtre = f"exer=date'{exercice}'"
     if source_id in PAR_FONCTION:
         champs_montants, ordre = MONTANTS_FONCTIONS, "siren,ident,fonction,agregat"
@@ -140,7 +162,7 @@ def nature(fichier):
     """(contenu, exercice) de la requête qui a produit la copie : l'une de celles que cet import sait lire."""
     if fichier["source_id"] not in JEUX:
         sys.exit(f"{fichier['id']} : la source {fichier['source_id']} n'est pas lue par cet import")
-    trouve = re.search(r"where=exer(?:cice)?%3Ddate%27([0-9]{4})%27", fichier["url"])
+    trouve = re.search(r"where=exer(?:cice)?%3D(?:date%27|%22)([0-9]{4})(?:%27|%22)", fichier["url"])
     exercice = trouve.group(1) if trouve else "0000"
     for contenu, url in requetes(fichier["source_id"], exercice).items():
         if url == fichier["url"]:
@@ -253,6 +275,32 @@ def montants_fonctions(fichier, agregats, marges=False):
     return resultat
 
 
+def valeur_masquee(texte, lieu):
+    """Un nombre, ou rien pour une valeur vide (masquée, ou sans objet comme le taux voté d'une part de taxe)."""
+    return None if texte == "" else montant(texte, lieu)
+
+
+def montants_fiscalite(fichier, marges=False):
+    """Les lignes de montants d'un jeu de la fiscalité directe locale : [(commune, taxe, bénéficiaire, base, taux net,
+    taux voté, produit, secret statistique)], une valeur vide valant None, et, si `marges`, la marge d'arrondi de la
+    base, du taux net et du produit à la suite (None pour une valeur vide)."""
+    resultat, vues = [], set()
+    for n, (commune, taxe, destinataire, *valeurs, secret) in enumerate(lignes(fichier, MONTANTS_FISCALITE), start=2):
+        lieu = f"{fichier['id']}, ligne {n}"
+        if not re.fullmatch(COMMUNE, commune):
+            sys.exit(f"{lieu} : code Insee de commune illisible « {commune} »")
+        if taxe not in TAXES or not destinataire or secret not in ("", "sec_stat"):
+            sys.exit(f"{lieu} : taxe, bénéficiaire ou secret statistique inattendu « {taxe} », « {destinataire} », "
+                     f"« {secret} »")
+        if (commune, taxe, destinataire) in vues:
+            sys.exit(f"{lieu} : deuxième ligne pour {commune}, {taxe} et « {destinataire} »")
+        vues.add((commune, taxe, destinataire))
+        base, taux_net, taux_vote, produit = (valeur_masquee(v, lieu) for v in valeurs)
+        resultat.append((commune, taxe, destinataire, base, taux_net, taux_vote, produit, secret)
+                        + (tuple(None if valeurs[k] == "" else marge(valeurs[k]) for k in (0, 1, 3)) if marges else ()))
+    return resultat
+
+
 def montants_dotations(fichier, marges=False):
     """Les lignes de montants d'un jeu des dotations : [(collectivité, variable, montant)], et, si `marges`, la marge
     d'arrondi du montant à la suite."""
@@ -274,16 +322,19 @@ def montants_dotations(fichier, marges=False):
 def collectivites(fichier):
     """({siren: {champ: valeur}}, nombre de lignes), les valeurs d'un champ multiple réunies, triées, séparées par
     « ; » ; pour un jeu publié budget par budget, ou fonction par fonction, la fiche de chaque budget, sous son SIRET ;
-    pour un jeu des dotations, celle de chaque collectivité, sous le champ qui la désigne."""
+    pour un jeu des dotations, celle de chaque collectivité, sous le champ qui la désigne ; pour un jeu de la fiscalité
+    directe locale, celle de chaque commune, sous son code Insee."""
     source = fichier["source_id"]
     champs_ = JEUX[source][1]
-    cle = DOTATIONS[source][0] if source in DOTATIONS else "ident" if source in PAR_BUDGET | PAR_FONCTION else "siren"
+    cle = (DOTATIONS[source][0] if source in DOTATIONS else "idcom" if source in FISCALITE
+           else "ident" if source in PAR_BUDGET | PAR_FONCTION else "siren")
     par_cle = collections.defaultdict(list)
     contenu = lignes(fichier, champs_)
     for n, ligne in enumerate(contenu, start=2):
         valeurs = dict(zip(champs_, ligne))
-        if source in DOTATIONS:
-            if not re.fullmatch(DOTATIONS[source][1], valeurs[cle]):
+        if source in DOTATIONS or source in FISCALITE:
+            forme = DOTATIONS[source][1] if source in DOTATIONS else COMMUNE
+            if not re.fullmatch(forme, valeurs[cle]):
                 sys.exit(f"{fichier['id']}, ligne {n} : collectivité illisible « {valeurs[cle]} »")
         elif not re.fullmatch(r"[0-9]{9}", valeurs["siren"]) or cle == "ident" and \
                 not re.fullmatch(valeurs["siren"] + r"[0-9]{5}", valeurs["ident"]):
@@ -306,9 +357,12 @@ def collectivites(fichier):
 
 def cles_montants(fichier, agregats):
     """Les numéros Siren, ou pour un jeu publié budget par budget, ou fonction par fonction, les SIRET des budgets, pour
-    un jeu des dotations les collectivités, d'une copie de montants."""
+    un jeu des dotations les collectivités, pour un jeu de la fiscalité directe locale les communes, d'une copie de
+    montants."""
     if fichier["source_id"] in DOTATIONS:
         return {l[0] for l in montants_dotations(fichier)}
+    if fichier["source_id"] in FISCALITE:
+        return {l[0] for l in montants_fiscalite(fichier)}
     if fichier["source_id"] in PAR_BUDGET:
         return {l[1] for l in montants_budgets(fichier, agregats)}
     if fichier["source_id"] in PAR_FONCTION:
@@ -344,18 +398,20 @@ def inscription(fichier, inscrits, fichiers, agregats):
     if exercice not in exercices:
         sys.exit(f"{fichier['id']} : l'exercice {exercice} manque à l'inventaire")
     par_budget, dotations = fichier["source_id"] in PAR_BUDGET | PAR_FONCTION, fichier["source_id"] in DOTATIONS
+    fiscalite = fichier["source_id"] in FISCALITE
     if contenu == "montants":
-        lues = (montants_dotations(fichier) if dotations else montants_fonctions(fichier, agregats)
-                if fichier["source_id"] in PAR_FONCTION else montants_budgets(fichier, agregats) if par_budget
-                else montants(fichier, agregats))
+        lues = (montants_dotations(fichier) if dotations else montants_fiscalite(fichier) if fiscalite
+                else montants_fonctions(fichier, agregats) if fichier["source_id"] in PAR_FONCTION
+                else montants_budgets(fichier, agregats) if par_budget else montants(fichier, agregats))
         if len(lues) != exercices[exercice]:
             sys.exit(f"{fichier['id']} : {len(lues)} lignes, l'inventaire en annonce {exercices[exercice]}")
         nombre, sirens = len(lues), {l[0] for l in lues}
         CLES[fichier["id"]] = {l[1] for l in lues} if par_budget else sirens
     else:
         fiches, nombre = collectivites(fichier)
-        sirens = set(fiches) if dotations else {f["siren"] for f in fiches.values()}
-        if dotations and any(not f["exercice"].startswith(exercice) for f in fiches.values()):
+        sirens = set(fiches) if dotations or fiscalite else {f["siren"] for f in fiches.values()}
+        if (dotations or fiscalite) and any(not f["exercice" if dotations else "exer"].startswith(exercice)
+                                            for f in fiches.values()):
             sys.exit(f"{fichier['id']} : la liste porte un autre exercice que {exercice}")
         temoin = controleur(fichier, inscrits, "montants", exercice)
         if temoin not in CLES:

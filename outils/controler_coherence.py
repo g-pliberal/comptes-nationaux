@@ -22,7 +22,10 @@ vérifie ce que disent les sources elles-mêmes :
    recevoir, pour la dotation globale de fonctionnement que l'État notifie à chaque collectivité et pour les
    contributions des départements aux SDIS ;
 9. les dépenses de chaque département par fonction : chaque fonction contre la somme de ses sous-fonctions,
-   les identités comptables dans chaque fonction, et les fonctions réunies contre les comptes consolidés.
+   les identités comptables dans chaque fonction, et les fonctions réunies contre les comptes consolidés ;
+10. la fiscalité directe locale de chaque commune : le produit de chaque taxe contre sa base multipliée par son
+   taux, le taux net contre le taux voté, et la taxe d'enlèvement des ordures ménagères recensée contre celle des
+   comptes.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -823,6 +826,14 @@ RUBRIQUES_SDIS = {"200046977": (_GFP, _AUTRES), "200055507": (_DEP, _GFP, _AUTRE
 # collectivité, puis celle de ses budgets annexes réunis, se compare à ses comptes consolidés.
 FONCTIONNELLE = "ofgl.base-departements-fonctionnelle"
 BUDGET_PRINCIPAL = "1"  # « cbudg » du budget principal, « 3 » pour un budget annexe
+# Fiscalité directe locale (fichier REI de la DGFiP, d'après l'OFGL) : le produit de chaque ligne qui donne sa base et
+# son taux net contre leur produit ; le taux net contre le taux voté ; la taxe d'enlèvement des ordures ménagères
+# recensée sur l'ensemble des communes contre celle qu'inscrivent les comptes consolidés des communes, des groupements
+# à fiscalité propre et des syndicats, le REI ne disant pas lequel la perçoit.
+FISCALE = "ofgl.base-fiscale-simplifiee"
+TEOM = "COMPTES_LOCAUX.TEOM"
+COMPTES_TEOM = (COMMUNES, GFP, SYNDICATS)
+SEUIL_PRODUIT = 0.01  # écart relatif du produit à la base multipliée par le taux au-delà duquel une ligne est citée
 
 
 def listes_collectivites():
@@ -880,11 +891,13 @@ def collectivites(derniers, listes):
     reçoivent."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
-    # Le jeu fonctionnel des départements a ses propres contrôles (fonctions_departements).
-    retenus = {cle: i for cle, i in montants_retenus().items() if cle[0] not in ofgl.PAR_FONCTION}
+    # Le jeu fonctionnel des départements et celui de la fiscalité directe locale ont leurs propres contrôles
+    # (fonctions_departements, fiscalite_locale).
+    a_part = ofgl.PAR_FONCTION | ofgl.FISCALITE
+    retenus = {cle: i for cle, i in montants_retenus().items() if cle[0] not in a_part}
     presences = collections.defaultdict(list)  # (exercice, siren) → jeux dont la liste porte la collectivité
     for (source, exercice), fiches in listes.items():
-        if source in ofgl.DOTATIONS or source in ofgl.PAR_FONCTION:
+        if source in ofgl.DOTATIONS or source in a_part:
             continue
         for siren in sorted({f["siren"] for f in fiches.values()}) if source in ofgl.PAR_BUDGET else fiches:
             presences[(exercice, siren)].append(source)
@@ -893,6 +906,7 @@ def collectivites(derniers, listes):
     exercices, sommes_controlees, fiches_controlees, comptes_doubles = [], [], [], {}
     controles = collections.defaultdict(lambda: [0, 0, None])  # (source, total, budget) → [vérifiées, en écart, pire]
     contributions = {}  # (exercice, source, siren) → (contribution aux SDIS, tous budgets, marge d'arrondi)
+    teom = collections.defaultdict(lambda: [0.0, 0.0])  # (exercice, source) → [TEOM, tous budgets, marge d'arrondi]
     # (exercice, département du SDIS, concept) → [participation reçue au budget principal, marge] ; (exercice,
     # département) → nom du SDIS
     participations, noms_sdis = collections.defaultdict(lambda: [0.0, 0.0]), {}
@@ -942,6 +956,11 @@ def collectivites(derniers, listes):
             contributions.update({(exercice, source, s): (m[CONTRIBUTIONS_SDIS][3], m[CONTRIBUTIONS_SDIS][7])
                                   for s, m in par_siren.items() if CONTRIBUTIONS_SDIS in m})
         inscrites.update({(exercice, source, s): (m[DGF][3], m[DGF][7]) for s, m in par_siren.items() if DGF in m})
+        if source in COMPTES_TEOM:
+            for m in par_siren.values():
+                if TEOM in m:
+                    teom[(exercice, source)][0] += m[TEOM][3]
+                    teom[(exercice, source)][1] += m[TEOM][7]
         if source in FICHES_DGCL and fiches is not None:
             # Un agrégat que le jeu publie pour d'autres collectivités de l'exercice, mais pas pour celle-ci, y vaut zéro.
             publication, modele = FICHES_DGCL[source]
@@ -993,7 +1012,8 @@ def collectivites(derniers, listes):
                       if depasse(a[c][k] - b[c][k], a[c][4 + k] + b[c][4 + k])]
             memes.append((exercice, siren, (ja, jb), 4 * len(communs), ecarts, set(a) - set(b), set(b) - set(a)))
     return (exercices, controles, sommes_controlees, memes, fiches_controlees,
-            (dotations_dgf(listes, notifiees, inscrites), flux_sdis(listes, contributions, participations, noms_sdis)))
+            (dotations_dgf(listes, notifiees, inscrites), flux_sdis(listes, contributions, participations, noms_sdis)),
+            teom)
 
 
 def unite_dgf(listes, insee, exercice, source, code):
@@ -1217,6 +1237,47 @@ def fonctions_departements(listes):
                 consolides.append((exercice, *cle, somme, publie, not depasse(somme - publie, marge_somme + marge_publie)))
     return (exercices, sous_fonctions, ecarts_sous_fonctions, identites, consolides, absents, libelles,
             regroupements)
+
+
+def fiscalite_locale():
+    """Pour chaque exercice du jeu de la fiscalité directe locale, dans sa version la plus récente : les communes, les
+    lignes et celles que masque le secret statistique ; pour chaque taxe et chaque bénéficiaire, le produit contre la
+    base multipliée par le taux net, et le taux net contre le taux voté ; la taxe d'enlèvement des ordures ménagères
+    recensée sur l'ensemble des communes."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    exercices = []  # (exercice, version, statut, communes, lignes, lignes sous secret statistique)
+    # (taxe, bénéficiaire) → [lignes comparées, égales à l'arrondi près, écart de moins de SEUIL_PRODUIT, au-delà, pire
+    # écart au-delà (écart, base multipliée par le taux, exercice, commune)]
+    produits = collections.defaultdict(lambda: [0, 0, 0, 0, None])
+    taux = collections.Counter()  # (taxe, bénéficiaire) → lignes dont le taux net n'est pas le taux voté
+    teom = collections.defaultdict(lambda: [0.0, 0.0])  # exercice → [TEOM recensée, marge d'arrondi]
+    for (source, exercice), inscrit in sorted(montants_retenus().items()):
+        if source != FISCALE:
+            continue
+        lues = ofgl.montants_fiscalite(fichiers[inscrit["fichier_id"]], marges=True)
+        exercices.append((exercice, inscrit["version"], inscrit["statut"], len({l[0] for l in lues}), len(lues),
+                          sum(1 for l in lues if l[7])))
+        for commune, taxe, destinataire, base, net, vote, produit, _, marge_base, marge_taux, marge_produit in lues:
+            if taxe == "TEOM" and produit is not None:
+                teom[exercice][0] += produit
+                teom[exercice][1] += marge_produit
+            if net is not None and vote is not None and depasse(net - vote, 1e-6):
+                taux[(taxe, destinataire)] += 1
+            if base is None or net is None or produit is None:
+                continue
+            calcule = base * net / 100
+            ecart = produit - calcule
+            entree = produits[(taxe, destinataire)]
+            entree[0] += 1
+            if not depasse(ecart, marge_produit + base * marge_taux / 100 + net * marge_base / 100):
+                entree[1] += 1
+            elif abs(ecart) < SEUIL_PRODUIT * abs(calcule):
+                entree[2] += 1
+            else:
+                entree[3] += 1
+                if entree[4] is None or abs(ecart) > abs(entree[4][0]):
+                    entree[4] = (ecart, calcule, exercice, commune)
+    return exercices, produits, taux, teom
 
 
 # --- Le rapport ----------------------------------------------------------------------------------------
@@ -1513,14 +1574,14 @@ def partie_concordances(derniers):
 
 def nom(listes, source, exercice, siren):
     """Le libellé d'une collectivité dans la liste la plus récente de l'exercice, ou son nom dans celle d'un jeu des
-    dotations."""
+    dotations ou de la fiscalité directe locale."""
     fiche = listes.get((source, exercice), {}).get(siren, {})
-    return next((fiche[c] for c in ("lbudg", "commune", "nom_epci", "nom_departement") if fiche.get(c)), "")
+    return next((fiche[c] for c in ("lbudg", "commune", "nom_epci", "nom_departement", "nom") if fiche.get(c)), "")
 
 
 def partie_collectivites(derniers):
     listes = listes_collectivites()
-    exercices, controles, sommes, memes, fiches, flux = collectivites(derniers, listes)
+    exercices, controles, sommes, memes, fiches, flux, teom = collectivites(derniers, listes)
     if not exercices:
         return []
     lignes = ["## 7. Comptes de chaque collectivité", "",
@@ -1599,7 +1660,8 @@ def partie_collectivites(derniers):
             lignes.append(f"| {source} | {budget} | {concept} | {plage([x[3] for x in liste])} | "
                           f"{ecart_lisible(e[4], 'euros')} en {e[3]} |")
         lignes.append("")
-    return lignes + partie_fiches_dgcl(listes, fiches) + partie_flux(listes, flux) + partie_fonctions(listes)
+    return (lignes + partie_fiches_dgcl(listes, fiches) + partie_flux(listes, flux) + partie_fonctions(listes)
+            + partie_fiscalite(listes, teom))
 
 
 def concepts_lisibles(concepts):
@@ -2029,6 +2091,62 @@ def partie_fonctions(listes):
                    + " ; ".join(f"« {r} » : {', '.join(fs)}" for r, fs in sorted(groupes.items()))
                    + (f". Fonctions rangées dans plusieurs regroupements : {', '.join(melanges)}." if melanges else "."),
                    ""]
+    return lignes
+
+
+def partie_fiscalite(listes, teom_comptes):
+    """La fiscalité directe locale : communes et lignes de chaque exercice, produit contre base multipliée par le taux,
+    taux net contre taux voté, taxe d'enlèvement des ordures ménagères recensée contre celle des comptes."""
+    exercices, produits, taux, teom = fiscalite_locale()
+    if not exercices:
+        return []
+    lignes = ["## 10. Fiscalité directe locale", "",
+              "Le fichier de recensement des éléments d'imposition à la fiscalité directe locale (REI) de la DGFiP, que "
+              "l'OFGL publie sous une forme simplifiée, donne pour le territoire de chaque commune la base, le taux et "
+              "le produit des taxes foncières sur les propriétés bâties (TFPB) et non bâties (TFPNB), de la taxe "
+              "d'enlèvement des ordures ménagères (TEOM) et de la cotisation foncière des entreprises (CFE), pour "
+              "chacun de leurs bénéficiaires : ce sont les impositions primitives de l'année, sans les rôles "
+              "supplémentaires. Le produit d'une ligne se compare à sa base multipliée par son taux net, à l'arrondi "
+              "près ; la source prévient qu'il peut en différer, notamment du fait du lissage de la révision des "
+              "valeurs locatives des locaux professionnels. Le taux net diffère du taux voté en cas d'intégration "
+              "fiscale progressive. La TEOM recensée sur l'ensemble des communes se compare à celle qu'inscrivent les "
+              "comptes consolidés des communes, des groupements à fiscalité propre et des syndicats, le REI ne disant "
+              "pas lequel la perçoit. Le dernier exercice est provisoire.", "",
+              "| Exercice | Version | Statut | Communes | Lignes | dont sous secret statistique |", "|---|---|---|---|---|---|"]
+    for exercice, version, statut, communes, nombre, secrets in exercices:
+        lignes.append(f"| {exercice} | {version} | {statut} | {fr(communes, 0)} | {fr(nombre, 0)} | {fr(secrets, 0)} |")
+    comparees = sum(e[0] for e in produits.values())
+    lignes += ["", f"Produit contre base multipliée par le taux net : {fr(comparees, 0)} lignes comparées, "
+               f"{fr(sum(e[1] for e in produits.values()), 0)} égales à l'arrondi près, "
+               f"{fr(sum(e[2] for e in produits.values()), 0)} en écart de moins de {fr(100 * SEUIL_PRODUIT, 0)} %, "
+               f"{fr(sum(e[3] for e in produits.values()), 0)} au-delà.", "",
+               f"| Taxe | Bénéficiaire | Lignes comparées | Égales à l'arrondi près | Écart de moins de "
+               f"{fr(100 * SEUIL_PRODUIT, 0)} % | Au-delà | Plus grand écart au-delà (produit − base × taux) |",
+               "|---|---|---|---|---|---|---|"]
+    for (taxe, destinataire), (n, egales, faibles, fortes, pire) in sorted(produits.items()):
+        texte = "aucun"
+        if pire:
+            ecart, calcule, exercice, commune = pire
+            texte = (f"{ecart_lisible(ecart, 'euros')} ({pour_cent(ecart / calcule) if calcule else 'base nulle'}) : "
+                     f"{nom(listes, FISCALE, exercice, commune)} ({commune}), {exercice}")
+        lignes.append(f"| {taxe} | {destinataire} | {fr(n, 0)} | {fr(egales, 0)} | {fr(faibles, 0)} | {fr(fortes, 0)} | "
+                      f"{texte} |")
+    lignes.append("")
+    if taux:
+        lignes += ["Lignes dont le taux net diffère du taux voté : "
+                   + " ; ".join(f"{taxe}, {destinataire} : {fr(n, 0)}" for (taxe, destinataire), n in sorted(taux.items()))
+                   + ".", ""]
+    annees = sorted(e for e in teom if any((e, s) in teom_comptes for s in COMPTES_TEOM))
+    if annees:
+        lignes += ["| Exercice | TEOM recensée | TEOM des comptes : communes | groupements à fiscalité propre | syndicats | "
+                   "Écart (recensée − comptes) |", "|---|---|---|---|---|---|"]
+        for exercice in annees:
+            comptes = [teom_comptes.get((exercice, s), [0.0, 0.0])[0] for s in COMPTES_TEOM]
+            ecart = teom[exercice][0] - sum(comptes)
+            lignes.append(f"| {exercice} | {millions(teom[exercice][0])} | "
+                          + " | ".join(millions(c) for c in comptes)
+                          + f" | {ecart_lisible(ecart, 'euros')} ({pour_cent(ecart / sum(comptes)) if sum(comptes) else '—'}) |")
+        lignes.append("")
     return lignes
 
 
