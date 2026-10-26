@@ -800,3 +800,5 @@ SEC2010.P52_P53_NP,Autres acquisitions moins cessions d'actifs non financiers,SE
 SEC2010.TE,Dépenses totales,SEC2010,TE,depense,Total des dépenses des administrations publiques au sens du SEC 2010.
 SEC2010.TR,Recettes totales,SEC2010,TR,recette,Total des recettes des administrations publiques au sens du SEC 2010.
 SOCX.PUBLIC,Dépenses sociales publiques,SOCX,ES10,depense,"Prestations et dépenses sociales financées par les administrations publiques, au sens de l'OCDE."
+UNITES_PUBLIQUES.NOMBRE_1ER_JANVIER,Nombre de collectivités ou de groupements au 1er janvier,UNITES_PUBLIQUES,nombre au 1er janvier,stock,"Nombre de collectivités territoriales, de collectivités à statut particulier ou de groupements de communes qui existent au 1er janvier de l'année, en France métropolitaine et dans les départements d'outre-mer."
+UNITES_PUBLIQUES.NOMBRE_DANS_LE_CHAMP,Nombre d'organismes du champ de l'année,UNITES_PUBLIQUES,nombre d'organismes,stock,"Nombre d'organismes que l'Insee range, pour une année de comptes, dans un sous-secteur des administrations publiques ou dans une catégorie de celui-ci."

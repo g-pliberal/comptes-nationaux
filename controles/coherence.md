@@ -10,6 +10,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 | Source | Titre | Version la plus récente | Chiffres |
 |---|---|---|---|
+| dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
 | dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
 | dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4070 |
 | eurostat.gov_10a_exp | Dépenses des administrations publiques par fonction (COFOG) | 2026-10-21 | 1290 |
@@ -17,6 +18,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | eurostat.nama_10_gdp | PIB et principaux agrégats | 2026-10-21 | 102 |
 | insee.bdm-comptes-etat | Situation mensuelle du budget de l'État : dépenses, recettes, solde des comptes spéciaux et solde général d'exécution, cumulés depuis le début de l'année (Banque de données macro-économiques, jeu COMPTES-ETAT) | 2026-10-06 | 848 |
 | insee.bdm-dette-trim-apu | Dette trimestrielle des administrations publiques : dette au sens de Maastricht par sous-secteur et par instrument, dette nette, actions cotées et titres d'OPC détenus, dette brute au sens du FMI (Banque de données macro-économiques, jeu DETTE-TRIM-APU-2020) | 2026-09-29 | 2583 |
+| insee.liste-odal | Liste des organismes divers d'administration locale (ODAL) : nombre d'organismes par catégorie | 2026-05-18 | 24 |
 | insee.t3101 | Tableau 3.101 : Dette des administrations publiques (S13) au sens de Maastricht et sa répartition par sous-secteur | 2026-07-28 | 624 |
 | insee.t3102 | Tableau 3.102 : Dette des administrations publiques (S13) au sens de Maastricht et sa répartition par sous-secteurs : décomposition par instrument | 2026-07-28 | 1271 |
 | insee.t3103 | Tableau 3.103 : Dette nette des administrations publiques (S13) et autres actifs liquides détenus par les administrations publiques | 2026-08-04 | 558 |
@@ -240,9 +242,9 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 
 ## 3. Additivité des sous-secteurs
 
-Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; de même sa dette au sens de Maastricht, ses instruments et sa dette nette, celles d'un sous-secteur étant sa contribution à la dette consolidée de l'ensemble (tableaux 3.101 à 3.104 et dette trimestrielle), et chaque montant de ses comptes complets, qui ne sont pas consolidés (tableaux 7.301 à 7.306) ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions.
+Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; de même sa dette au sens de Maastricht, ses instruments et sa dette nette, celles d'un sous-secteur étant sa contribution à la dette consolidée de l'ensemble (tableaux 3.101 à 3.104 et dette trimestrielle), et chaque montant de ses comptes complets, qui ne sont pas consolidés (tableaux 7.301 à 7.306) ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions ; pour les décomptes d'organismes et de collectivités, chaque catégorie contre la somme de ses sous-catégories (organismes divers d'administration locale de l'Insee, collectivités et groupements de la DGCL).
 
-17365 additions vérifiées : 17294 justes, 71 en écart.
+17411 additions vérifiées : 17340 justes, 71 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
@@ -1785,3 +1787,97 @@ TEOM recensée de chaque niveau, part fixe et part incitative, contre celle de s
 | 2023 | 550,3 M€ | 546,5 M€ | 7 922,9 M€ | 7 924,2 M€ | 66,2 M€ | 255,7 M€ | −187,0 M€ (−2,1 %) |
 | 2024 | 563,3 M€ | 559,6 M€ | 8 359,9 M€ | 8 362,2 M€ | 68,9 M€ | 259,1 M€ | −188,6 M€ (−2,1 %) |
 | 2025 | 577,1 M€ | 571,6 M€ | 8 582,5 M€ | 8 586,3 M€ | 70,7 M€ | 266,8 M€ | −194,4 M€ (−2,1 %) |
+
+## 12. Organismes publics : ce que la base couvre
+
+Le secteur des administrations publiques, unité par unité, d'après les listes et décomptes officiels : la liste des organismes divers d'administration centrale (ODAC) et le nombre d'organismes divers d'administration locale (ODAL) par catégorie, que l'Insee établit pour les comptes nationaux, le nombre de collectivités territoriales et de groupements au 1er janvier que publie la DGCL. Ils se comparent aux unités dont la base a les comptes une à une, d'après les listes des jeux de l'OFGL (numéros Siren distincts). Un écart n'est pas une erreur : un décompte à une date et la liste des comptes d'un exercice ne retiennent pas toujours les mêmes unités.
+
+### Les sous-secteurs en 2024
+
+| Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
+|---|---|---|---|
+| État (S13111) | l'État | l'État, d'après son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 20 sources (pjl06-389 … pjl25-726) |
+| Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
+| Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
+| Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
+| Administrations de sécurité sociale (S1314) | pas de liste dans la documentation des comptes nationaux de l'Insee | aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, CADES, FRR | eurostat : gov_10a_main ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3108, t3212 à t3216, t3306, t3307, t7306 ; senat : 22 sources (pjl06-051 … tas22-018) |
+
+### Collectivités territoriales et groupements
+
+Pour chaque catégorie, le nombre que la DGCL décompte au 1er janvier (tableaux 2.2 et 2.5a de « Les collectivités locales en chiffres »), puis le nombre d'unités dont la base a les comptes de l'exercice, et leur écart.
+
+| Catégorie | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|
+| Communes | 34 955 / 34 955 | 34 945 / 34 945 | 34 935 / 34 932 (−3) | 34 875 / 34 778 (−97) |
+| Départements | 95 / 95 | 95 / 95 | 95 / 95 | 95 / 95 |
+| Régions | 14 / 14 | 14 / 14 | 14 / 14 | 14 / 14 |
+| Collectivités à statut particulier | 5 / 4 (−1) | 5 / 4 (−1) | 5 / 4 (−1) | 5 / 4 (−1) |
+| Groupements à fiscalité propre | 1 254 / 1 254 | 1 254 / 1 254 | 1 254 / 1 254 | 1 254 / 1 250 (−4) |
+| Syndicats | 8 882 / 8 940 (+58) | 8 777 / 8 820 (+43) | 8 629 / 8 652 (+23) | 8 322 / 8 435 (+113) |
+| Ensemble | 45 205 / 45 262 (+57) | 45 090 / 45 132 (+42) | 44 932 / 44 951 (+19) | 44 565 / 44 576 (+11) |
+
+Unités retenues dans la base :
+
+- Communes : le jeu des communes, Ville de Paris comprise.
+- Départements : la catégorie « DEPT » du jeu des départements, qui comprend le Département de Mayotte.
+- Régions : la catégorie « REG » du jeu des régions.
+- Collectivités à statut particulier : les collectivités territoriales uniques du jeu des régions (Corse, Martinique, Guyane) et la métropole de Lyon ; le Département de Mayotte est compté avec les départements.
+- Groupements à fiscalité propre : la catégorie « GFP » du jeu des groupements, sans la métropole de Lyon ni les établissements publics territoriaux.
+- Syndicats : le jeu des syndicats sans les maisons départementales des personnes handicapées, et les établissements publics territoriaux du jeu des groupements, que la DGCL compte parmi les syndicats.
+
+### Organismes divers d'administration locale en 2024
+
+Pour chaque catégorie de la liste de l'Insee, le nombre de ses organismes, puis celui des unités dont la base a les comptes de l'exercice 2024, pour les catégories que publie un jeu de l'OFGL.
+
+| Catégorie | Organismes (Insee) | Dans la base |
+|---|---|---|
+| Agences d'urbanisme | 50 | — |
+| Centre de gestion de la propriété forestière | 1 | — |
+| Chambres consulaires | 274 | — |
+| Établissements publics fonciers | 40 | — |
+| ODAL divers | 145 | — |
+| Services départementaux d'incendie et de secours | 97 | 97 |
+| Électricité de Mayotte | 1 | — |
+| Établissements publics d'aménagement | 11 | — |
+| Île-de-France Mobilités | 1 | — |
+| Offices de tourisme | 433 | — |
+| Société de la ligne nouvelle Montpellier Perpignan | 1 | — |
+| Société de la ligne nouvelle Provence Côte d'Azur | 1 | — |
+| Société de livraison des ouvrages olympiques | 1 | — |
+| Société du canal Seine-Nord Europe | 1 | — |
+| Sociétés d'aménagement foncier et d'établissement rural | 18 | — |
+| Sociétés de grands projets | 2 | — |
+| Agences et offices de l'eau | 10 | — |
+| Établissements publics culturels locaux | 248 | — |
+| Caisses des écoles | 1 113 | — |
+| Centres de gestion de la fonction publique territoriale | 98 | — |
+| Établissements publics locaux d'enseignement | 7 967 | — |
+| Centres communaux d'action sociale | 12 085 | 11 394 |
+| Maisons départementales des personnes handicapées | 99 | 102 |
+| Établissements publics locaux (jeu de l'OFGL), hors MDPH | — | 1 111 |
+| Ensemble | 22 697 | 12 704 |
+
+Unités retenues dans la base :
+
+- Services départementaux d'incendie et de secours : le jeu des SDIS.
+- Centres communaux d'action sociale : le jeu des centres d'action sociale : centres communaux et intercommunaux, et celui de la Ville de Paris.
+- Maisons départementales des personnes handicapées : les maisons départementales des personnes handicapées des jeux des syndicats et des établissements publics locaux.
+- Établissements publics locaux : établissements publics administratifs, régies personnalisées et groupements d'intérêt public, que l'Insee range dans plusieurs de ses catégories ; par activité : tourisme 420, activités culturelles 230, activités diverses 169, production et distribution d'énergie 64, activités sportives 33, nouvelles technologies de l'information et de la communication 19, et 176 dans 26 autres activités.
+
+### Organismes divers d'administration centrale en 2024
+
+La liste de l'Insee, que la table des organismes reprend organisme par organisme : 701 organismes, par fonction (premier niveau de la COFOG). La base n'a les comptes d'aucun d'eux un à un.
+
+| Fonction | Organismes |
+|---|---|
+| GF01 Services généraux des administrations publiques | 119 |
+| GF02 Défense | 5 |
+| GF03 Ordre et sécurité publics | 5 |
+| GF04 Affaires économiques | 60 |
+| GF05 Protection de l'environnement | 16 |
+| GF06 Logements et équipements collectifs | 6 |
+| GF07 Santé | 82 |
+| GF08 Loisirs, culture et culte | 115 |
+| GF09 Enseignement | 286 |
+| GF10 Protection sociale | 7 |
+| Ensemble | 701 |

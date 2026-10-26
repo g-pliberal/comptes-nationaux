@@ -30,8 +30,8 @@ import time
 import urllib.error
 import urllib.request
 
-from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_xlsx, date_zip, ecrire, lire, lire_sdmx,
-                    maintenant, texte_html)
+from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_pdf, date_xlsx, date_zip, ecrire, lire,
+                    lire_sdmx, maintenant, texte_html)
 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
 
@@ -83,7 +83,8 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
         return f"déjà archivé : {deja['id']}"
     extension = ("json" if "json" in type_contenu else "xlsx" if "spreadsheetml" in type_contenu
                  else "csv" if "csv" in type_contenu else "html" if "html" in type_contenu
-                 else "xml" if "xml" in type_contenu else "zip" if "zip" in type_contenu else "bin")
+                 else "xml" if "xml" in type_contenu else "zip" if "zip" in type_contenu
+                 else "pdf" if "pdf" in type_contenu else "bin")
     if compresser and extension != "csv":
         sys.exit("seul un fichier csv s'archive compressé")
     if compresser and decouper:
@@ -100,12 +101,13 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     # modification inscrite dans le classeur pour un fichier xlsx, date d'enregistrement, de transmission ou
     # d'adoption d'un texte publié par le Sénat, dernière mise à jour des séries SDMX de l'Insee, date de
     # modification du jeu de données pour un export de data.ofgl.fr, date la plus récente des fichiers que porte une
-    # archive zip.
+    # archive zip, date de modification inscrite dans un PDF.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(contenu.decode("utf-8"))),
                                 "xml": lambda: max(a.get("LAST_UPDATE", "") for a, _ in lire_sdmx(BASE / chemin).values()),
-                                "zip": lambda: date_zip(contenu)
+                                "zip": lambda: date_zip(contenu),
+                                "pdf": lambda: date_pdf(contenu)
                                 }.get(extension, lambda: "")()
     identifiant = f"{source_id}@{date}-{sha256[:8]}"
     fichiers.append({"id": identifiant, "source_id": source_id, "url": url, "telecharge_le": maintenant(),
