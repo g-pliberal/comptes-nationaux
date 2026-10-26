@@ -96,14 +96,17 @@ FICHES = {
               ("mpoid_bp", "population", 2008, 2025), ("strate", "strate", 2008, 2025)],
 }
 CLES = {COMMUNES: ["dep", "icom"], GFP: ["siren"], DEPARTEMENTS: ["dep"], REGIONS: ["reg"]}
-FORMES = {"dep": r"0[0-9]{2}|02[AB]|10[1-46]", "icom": r"[0-9]{3}", "siren": r"[0-9]{9}", "reg": r"[0-9]{3}"}
+FORMES = {"dep": r"0[0-9]{2}|02[AB]|10[1-6]|143|16[1-3]", "icom": r"[0-9]{3}", "siren": r"[0-9]{9}", "reg": r"[0-9]{3}"}
 # Nombres entiers, ou rien ; l'export écrit parfois un entier comme un nombre décimal (« 718.0 »).
 POPULATIONS = {"pop1", "pop2", "mpoid", "mpoid_bp", "nbtotba", "nbbaspic"}
 ENTIER = re.compile(r"[0-9]+(?:\.0+)?")
-# Le code Insee d'une commune : son département sans le zéro de tête, puis son numéro ; outre-mer, « 97 » puis son
-# numéro, dont le premier chiffre est celui du département (la DGFiP numérote 101 la Guadeloupe, 102 la Guyane, 103 la
-# Martinique, 104 La Réunion et 106 Mayotte, que l'Insee numérote 971, 973, 972, 974 et 976).
-OUTRE_MER = {"101": "1", "102": "3", "103": "2", "104": "4", "106": "6"}
+# Le code Insee d'une commune : son département sans le zéro de tête, puis son numéro ; outre-mer, le code de l'Insee
+# du département ou de la collectivité, puis les deux derniers chiffres du numéro, dont le premier dit le territoire.
+# La DGFiP numérote 101 la Guadeloupe, 102 la Guyane, 103 la Martinique, 104 La Réunion, 106 Mayotte, et, en 2011
+# seulement, 105 Saint-Pierre-et-Miquelon, 143 Mayotte, 161 la Polynésie française, 162 la Nouvelle-Calédonie et 163
+# Wallis-et-Futuna : (code de l'Insee, premier chiffre du numéro).
+OUTRE_MER = {"101": ("971", "1"), "102": ("973", "3"), "103": ("972", "2"), "104": ("974", "4"), "106": ("976", "6"),
+             "105": ("975", "5"), "143": ("976", "5"), "161": ("987", "7"), "162": ("988", "8"), "163": ("986", "6")}
 ABSENTES = {"-", ""}  # marques d'une valeur absente
 GRANDEURS = ("montant", "base", "reduction", "taux")
 # Sorte d'un en-tête de colonne de la maquette, dans l'ordre où on les cherche : un titre de partie (« Les taux et les
@@ -269,9 +272,10 @@ def collectivite(source, valeurs, lieu):
         return valeurs[CLES[source][0]]
     dep, icom = valeurs["dep"], valeurs["icom"]
     if dep in OUTRE_MER:
-        if icom[0] != OUTRE_MER[dep]:
+        territoire, chiffre = OUTRE_MER[dep]
+        if icom[0] != chiffre:
             sys.exit(f"{lieu} : commune {icom} hors de son département {dep}")
-        return "97" + icom
+        return territoire + icom[1:]
     return dep[1:] + icom
 
 
