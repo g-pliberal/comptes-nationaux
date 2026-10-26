@@ -9,7 +9,7 @@
     {"name": "version", "type": "date", "description": "Date de modification du jeu de données qu'annonçait le portail lors de l'export ; pour une maquette, date de modification inscrite dans le classeur.", "constraints": {"required": true}},
     {"name": "lignes", "type": "integer", "description": "Comptes : nombre de collectivités, une ligne chacune ; inventaire : nombre d'exercices ; maquette : nombre de feuilles.", "constraints": {"required": true}},
     {"name": "variables", "type": "integer", "description": "Comptes : nombre de variables lues ; maquette : nombre de variables qu'elle donne en montant, en base, en réduction ou en taux, toutes feuilles confondues ; vide pour un inventaire."},
-    {"name": "valeurs_absentes", "type": "integer", "description": "Comptes : nombre de valeurs absentes (« - », ou rien) des variables lues, que la base ne retient pas ; vide pour une maquette ou un inventaire."}
+    {"name": "valeurs_absentes", "type": "integer", "description": "Comptes : nombre de valeurs absentes des variables lues, que la base ne retient pas : « - », rien, ou 9 999 999 999 999 998, que l'export des communes de 2003 donne à trois variables et qui n'est pas un montant ; vide pour une maquette ou un inventaire."}
   ],
   "primaryKey": ["fichier_id"],
   "foreignKeys": [

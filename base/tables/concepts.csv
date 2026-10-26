@@ -146,8 +146,8 @@ COMPTES_INDIVIDUELS.APA,Aide aux personnes âgées (APA),COMPTES_INDIVIDUELS,fon
 COMPTES_INDIVIDUELS.AUTRES_DOTATIONS_PARTICIPATIONS,Autres dotations et participations,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
 COMPTES_INDIVIDUELS.AUTRES_IMPOTS_TAXES,Autres impôts et taxes,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
 COMPTES_INDIVIDUELS.AVANCES_TRESOR,Avances du Trésor au 31 décembre,COMPTES_INDIVIDUELS,endettement,stock,
-COMPTES_INDIVIDUELS.BESOIN_FINANCEMENT_INVESTISSEMENT,Besoin ou capacité de financement de la section d'investissement (E),COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,"Positif pour un besoin. Jusqu'en 2024, besoin résiduel (D − C) plus solde des opérations pour compte de tiers ; la maquette de 2025 le définit comme D − C, dont ce solde."
-COMPTES_INDIVIDUELS.BESOIN_FINANCEMENT_RESIDUEL,Besoin ou capacité de financement résiduel de la section d'investissement (D − C),COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,"Emplois moins ressources d'investissement, hors solde des opérations pour compte de tiers ; positif pour un besoin. La maquette de 2025 ne le donne plus."
+COMPTES_INDIVIDUELS.BESOIN_FINANCEMENT_INVESTISSEMENT,Besoin ou capacité de financement de la section d'investissement (E),COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,"Positif pour un besoin. Jusqu'en 2024, le besoin résiduel plus le solde des opérations pour compte de tiers ; la maquette de 2025 le définit comme D − C, dont ce solde, ce que les montants de 2024 vérifient aussi."
+COMPTES_INDIVIDUELS.BESOIN_FINANCEMENT_RESIDUEL,Besoin ou capacité de financement résiduel de la section d'investissement,COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,"Besoin de financement de la section d'investissement hors solde des opérations pour compte de tiers, positif pour un besoin : les emplois moins les ressources d'investissement (D − C) jusqu'en 2023 ; en 2024, D − C moins ce solde. La maquette de 2025 ne le donne plus."
 COMPTES_INDIVIDUELS.CAF,Capacité d'autofinancement (CAF),COMPTES_INDIVIDUELS,autofinancement,solde,
 COMPTES_INDIVIDUELS.CAF_NETTE,Capacité d'autofinancement nette du remboursement en capital des emprunts,COMPTES_INDIVIDUELS,autofinancement,solde,
 COMPTES_INDIVIDUELS.CFE,Cotisation foncière des entreprises,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
@@ -176,7 +176,7 @@ COMPTES_INDIVIDUELS.DGF,Dotation globale de fonctionnement,COMPTES_INDIVIDUELS,f
 COMPTES_INDIVIDUELS.DOTATIONS_FORMATION_PROFESSIONNELLE,Dotations d'apprentissage et de formation professionnelle,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
 COMPTES_INDIVIDUELS.DOTATIONS_PARTICIPATIONS,Dotations et participations,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
 COMPTES_INDIVIDUELS.EFFET_COEFFICIENT_CORRECTEUR,"Effet du coefficient correcteur (positif pour une commune sous-compensée, négatif pour une commune surcompensée)",COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
-COMPTES_INDIVIDUELS.EMPLOIS_INVESTISSEMENT,Total des emplois d'investissement (D),COMPTES_INDIVIDUELS,investissement : emplois,depense,
+COMPTES_INDIVIDUELS.EMPLOIS_INVESTISSEMENT,Total des emplois d'investissement (D),COMPTES_INDIVIDUELS,investissement : emplois,depense,Voir le total des ressources d'investissement (C) : leur différence ne s'entend pas de la même façon jusqu'en 2023 et depuis 2024.
 COMPTES_INDIVIDUELS.EMPRUNTS_DETTES_ASSIMILEES,Emprunts bancaires et dettes assimilées,COMPTES_INDIVIDUELS,investissement : ressources,recette,
 COMPTES_INDIVIDUELS.EMPRUNTS_SOUSCRITS,Emprunts souscrits,COMPTES_INDIVIDUELS,investissement : ressources,recette,Intitulé des maquettes des départements et des régions jusqu'en 2012.
 COMPTES_INDIVIDUELS.ENCOURS_DETTE,Encours total de la dette au 31 décembre,COMPTES_INDIVIDUELS,endettement,stock,
@@ -205,7 +205,7 @@ COMPTES_INDIVIDUELS.PRODUITS_FONCTIONNEMENT_REELS,Produits de fonctionnement ré
 COMPTES_INDIVIDUELS.PRODUITS_SERVICES_DOMAINE,Produits des services et du domaine,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
 COMPTES_INDIVIDUELS.REMBOURSEMENTS_CAPITAL_EMPRUNTS,Remboursement en capital des emprunts,COMPTES_INDIVIDUELS,investissement : emplois,depense,Intitulé des maquettes des départements et des régions jusqu'en 2012.
 COMPTES_INDIVIDUELS.REMBOURSEMENTS_EMPRUNTS_DETTES,Remboursement d'emprunts et dettes assimilées,COMPTES_INDIVIDUELS,investissement : emplois,depense,
-COMPTES_INDIVIDUELS.RESSOURCES_INVESTISSEMENT,Total des ressources d'investissement (C),COMPTES_INDIVIDUELS,investissement : ressources,recette,
+COMPTES_INDIVIDUELS.RESSOURCES_INVESTISSEMENT,Total des ressources d'investissement (C),COMPTES_INDIVIDUELS,investissement : ressources,recette,"Jusqu'en 2023, les emplois moins les ressources d'investissement (D − C) donnent le besoin résiduel, sans le solde des opérations pour compte de tiers ; en 2024 et 2025, ils donnent le besoin de financement de la section d'investissement (E), ce solde compris, comme le montrent les identités vérifiées collectivité par collectivité (section 13 du rapport de cohérence), quand la feuille 2023-2024 de la maquette dit encore le besoin résiduel égal à D − C."
 COMPTES_INDIVIDUELS.RESULTAT_COMPTABLE,Résultat comptable (R = A − B),COMPTES_INDIVIDUELS,fonctionnement : résultat,solde,
 COMPTES_INDIVIDUELS.RESULTAT_ENSEMBLE,Résultat d'ensemble (R − E),COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,Résultat comptable moins besoin de financement de la section d'investissement.
 COMPTES_INDIVIDUELS.RETOUR_BIENS_AFFECTES,"Retour de biens affectés, concédés…",COMPTES_INDIVIDUELS,investissement : ressources,recette,

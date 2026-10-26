@@ -26,8 +26,8 @@ Trois sortes de copies sont archivées, et s'importent dans cet ordre :
 L'import vérifie que les variables que ce référentiel retient pour un exercice sont exactement celles que la feuille de
 la maquette qui le couvre donne en montant, en base, en réduction ou en taux, avec le libellé et la grandeur qu'il leur
 prête ; que chaque ligne de la copie est de l'exercice et désigne une collectivité et une seule ; que chaque valeur est
-un nombre, ou la marque d'une valeur absente (« - », ou rien) ; et que la copie a le nombre de lignes que l'inventaire
-annonce. Il inscrit la copie dans tables/fichiers_comptes_individuels.csv. La version d'une copie d'un export est la date
+un nombre, ou la marque d'une valeur absente (« - », rien, ou une valeur hors de toute grandeur) ; et que la copie a le
+nombre de lignes que l'inventaire annonce. Il inscrit la copie dans tables/fichiers_comptes_individuels.csv. La version d'une copie d'un export est la date
 de modification du jeu de données qu'annonce le portail, celle d'une maquette la date de modification inscrite dans le
 classeur ; l'inventaire qui contrôle des comptes est le plus récent du même jeu dont la version ne dépasse pas la leur.
 Ces copies sont les chiffres eux-mêmes : la base ne les recopie pas, elle les lit.
@@ -107,7 +107,9 @@ ENTIER = re.compile(r"[0-9]+(?:\.0+)?")
 # Wallis-et-Futuna : (code de l'Insee, premier chiffre du numéro).
 OUTRE_MER = {"101": ("971", "1"), "102": ("973", "3"), "103": ("972", "2"), "104": ("974", "4"), "106": ("976", "6"),
              "105": ("975", "5"), "143": ("976", "5"), "161": ("987", "7"), "162": ("988", "8"), "163": ("986", "6")}
-ABSENTES = {"-", ""}  # marques d'une valeur absente
+# Marques d'une valeur absente : « - », rien, ou 9 999 999 999 999 998, que l'export des communes de 2003 donne à trois
+# variables et qui n'est pas un montant (dix mille milliards de milliards d'euros).
+ABSENTES = {"-", "", "9999999999999998.0"}
 GRANDEURS = ("montant", "base", "reduction", "taux")
 # Sorte d'un en-tête de colonne de la maquette, dans l'ordre où on les cherche : un titre de partie (« Les taux et les
 # produits de la fiscalité directe locale ») n'en est pas un.

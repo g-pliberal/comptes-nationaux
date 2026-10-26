@@ -444,6 +444,9 @@ def main():
     connexion.execute("CREATE INDEX fiches_individuelles_cle ON fiches_individuelles (lot, collectivite)")
     empreintes += [{"table": t, "lignes": n, "sha256": h.hexdigest()} for t, (h, n) in hachages.items()]
     connexion.executescript(VUES)
+    # Les statistiques des tables et de leurs index, pour que SQLite choisisse son chemin : sans elles, une requête sur la
+    # vue des comptes individuels parcourt leurs cinquante millions de lignes.
+    connexion.execute("ANALYZE")
     connexion.commit()
     connexion.close()
 

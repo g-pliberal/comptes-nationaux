@@ -2963,6 +2963,7 @@ def comptes_individuels_controles(listes):
     retenus_ofgl = montants_retenus()
     exercices = []  # (source, exercice, collectivités, valeurs lues, valeurs absentes)
     identites = collections.defaultdict(lambda: [0, 0, None])  # (source, total, parties, budget) → [vérifiées, en écart, pire]
+    annees_en_ecart = collections.defaultdict(set)  # (source, total, parties, budget) → exercices où l'identité est en écart
     # (source, exercice) → (collectivités, rapprochées, collectivités de l'OFGL qu'aucune ne rejoint)
     rapprochees = {}
     # (source, concept de la DGFiP, concept de l'OFGL) → [comparés, égaux, plus grand écart (écart, collectivité, exercice), exercices]
@@ -2984,6 +2985,7 @@ def comptes_individuels_controles(listes):
                                                        if source == individuels.DEPARTEMENTS else set())
             ofgl_par_jeu = {j: montants_ofgl(fichiers, agregats, retenus_ofgl, j, exercice, k, concepts_ofgl) for j in jeux}
         trouves = set()
+        avant = {cle: v[1] for cle, v in identites.items() if cle[0] == source}
         for code, fiche, valeurs in lues:
             montants = {montants_par_variable[v]: (m, 0.5 * 10 ** -decimales[v]) for v, m in valeurs.items()
                         if v in montants_par_variable}
@@ -3013,6 +3015,9 @@ def comptes_individuels_controles(listes):
                         entree[2] = (ecart, code, exercice)
                 else:
                     entree[1] += 1
+        for cle, v in identites.items():
+            if cle[0] == source and v[1] > avant.get(cle, 0):
+                annees_en_ecart[cle].add(exercice)
         # Le nom des collectivités que citent les plus grands écarts de cet exercice.
         cites = {e[2][1] for cle, e in itertools.chain(identites.items(), comparaisons.items())
                  if cle[0] == source and e[2] is not None and e[2][2] == exercice}
@@ -3026,11 +3031,11 @@ def comptes_individuels_controles(listes):
             if source == individuels.DEPARTEMENTS:
                 sans = {(j, s) for j, s in sans if listes[(j, exercice)][s].get("categ") == "DEPT"}
             rapprochees[(source, exercice)] = (len(lues), len(trouves), len(sans))
-    return exercices, identites, rapprochees, comparaisons, noms
+    return exercices, identites, annees_en_ecart, rapprochees, comparaisons, noms
 
 
 def partie_comptes_individuels(listes):
-    exercices, identites, rapprochees, comparaisons, noms = comptes_individuels_controles(listes)
+    exercices, identites, annees_en_ecart, rapprochees, comparaisons, noms = comptes_individuels_controles(listes)
     if not exercices:
         return []
     lignes = ["## 13. Comptes individuels de la DGFiP", "",
@@ -3056,16 +3061,18 @@ def partie_comptes_individuels(listes):
                "des opérations pour compte de tiers, et en 2025 D − C ; le résultat d'ensemble, R − E ; la capacité "
                "d'autofinancement nette, la capacité d'autofinancement moins le remboursement des emprunts et dettes "
                f"assimilées. {fr(n, 0)} vérifiées, {fr(n - faux, 0)} justes, {fr(faux, 0)} en écart.", ""]
-    lignes += ["| Niveau | Total | Parties | Vérifiées | En écart | Plus grand écart |", "|---|---|---|---|---|---|"]
+    lignes += ["| Niveau | Total | Parties | Vérifiées | En écart | Exercices en écart | Plus grand écart |",
+               "|---|---|---|---|---|---|---|"]
     rangs = {(t, tuple(c.lstrip("-?") for c in cs if not c.startswith("!"))): i
              for i, (t, cs) in enumerate(IDENTITES_INDIVIDUELLES)}
     for (source, total, parties, _), (verifiees, nombre, pire) in sorted(
             identites.items(), key=lambda e: (list(NIVEAUX_INDIVIDUELS).index(e[0][0]), rangs[e[0][1:3]])):
         texte = "aucun" if pire is None else (f"{fr(pire[0], 2, True)} k€ : {noms.get((source, pire[2], pire[1]), '')} "
                                               f"({pire[1]}), {pire[2]}")
+        annees = annees_en_ecart.get((source, total, parties, _))
         lignes.append(f"| {NIVEAUX_INDIVIDUELS[source]} | {total.removeprefix('COMPTES_INDIVIDUELS.')} | "
                       f"{formule(total, parties)} | {fr(verifiees, 0)} | "
-                      f"{fr(nombre, 0)} | {texte} |")
+                      f"{fr(nombre, 0)} | {plage(sorted(annees)) if annees else 'aucun'} | {texte} |")
     lignes.append("")
     if rapprochees:
         lignes += ["### Les mêmes collectivités dans les comptes de l'OFGL", "",
@@ -3073,7 +3080,9 @@ def partie_comptes_individuels(listes):
                    "la sienne : une commune par son code Insee, un groupement par son numéro Siren, un département ou une "
                    "région par son code, une collectivité territoriale unique, que l'OFGL range parmi les régions, par son "
                    "code de région. Le budget principal, ou, pour les groupements, le montant consolidé des budgets "
-                   "principal et annexes.", "",
+                   "principal et annexes. Un code que l'OFGL donne à plusieurs collectivités ne se rapproche pas : "
+                   "jusqu'en 2015, celui de la région qui a absorbé chacune des régions fusionnées en 2016 ; jusqu'en "
+                   "2020, « 67A », celui du Bas-Rhin et du Haut-Rhin.", "",
                    "| Niveau | Exercices | Collectivités | Rapprochées | Sans correspondant | Collectivités de l'OFGL sans "
                    "correspondant |", "|---|---|---|---|---|---|"]
         par_source = collections.defaultdict(list)
