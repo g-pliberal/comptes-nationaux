@@ -2017,3 +2017,162 @@ Agrégats de même intitulé, ou de même objet, des deux publications, établie
 | régions | ENCOURS_DETTE | DETTE | 13 années entre 2013 et 2025 | 172 | 172 | 100,0 % | aucun |
 | régions | ENCOURS_DETTES_BANCAIRES | DETTE_BANCAIRE | 10 années entre 2012 et 2025 | 137 | 131 | 95,6 % | +41,3 M€ : REG CENTRE (024), 2012 |
 | régions | FONDS_ROULEMENT | FONDS_ROULEMENT | 13 années entre 2013 et 2025 | 172 | 98 | 57,0 % | +146,9 M€ : REG PROVENCE-ALPES-COTE-D'AZUR (093), 2022 |
+
+## 14. Balances des comptes de l'État
+
+Les balances générales des comptes de l'État que publie la DGFiP, telles qu'à la clôture de chaque exercice elles ont servi à produire le compte général de l'État : une ligne par compte, mission, programme et nature budgétaire, avec son solde de sortie, au centime, un solde créditeur étant négatif. Les comptes de charges et de produits n'y sont pas soldés : leur somme est le résultat de l'exercice, ici un déficit quand elle est positive. Chaque balance doit s'équilibrer, et les engagements hors bilan (classe 8) avec leur contrepartie.
+
+| Exercice | Lignes | Comptes | Comptes absents du plan comptable joint | Somme des soldes | Somme des engagements hors bilan | Charges et produits réunis |
+|---|---|---|---|---|---|---|
+| 2016 | 48 517 | 1 913 | 0 | 0,00 € | 0,00 € | +75 602,5 M€ |
+| 2017 | 49 327 | 1 919 | 0 | 0,00 € | 0,00 € | +60 958,0 M€ |
+| 2018 | 50 156 | 1 952 | 0 | 0,00 € | 0,00 € | +51 873,3 M€ |
+| 2019 | 51 433 | 1 971 | 0 | 0,00 € | 0,00 € | +84 637,8 M€ |
+| 2020 | 50 903 | 1 991 | 0 | 0,00 € | 0,00 € | +165 601,4 M€ |
+| 2021 | 52 111 | 1 986 | 0 | 0,00 € | 0,00 € | +142 088,2 M€ |
+| 2022 | 53 181 | 1 992 | 0 | 0,00 € | 0,00 € | +160 027,5 M€ |
+| 2023 | 53 352 | 1 993 | 0 | 0,00 € | 0,00 € | +124 929,9 M€ |
+| 2024 | 54 414 | 2 006 | 0 | 0,00 € | 0,00 € | +123 703,9 M€ |
+| 2025 | 54 095 | 2 050 | 9 | 0,00 € | 0,00 € | +129 467,1 M€ |
+
+Engagements hors bilan de l'État, en milliards d'euros, au signe de leur présentation (un engagement donné, solde créditeur, est positif) :
+
+| Indicateur | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| S801_Dette garantie par l'Etat | 195,2 | 204,4 | 210,6 | 205,4 | 319,7 | 319,1 | 302,1 | 281,2 | 257,5 | 237,1 |
+| S802_Garanties liées à des missions d'int gén | 11,9 | 10,9 | 519,0 | 530,8 | 566,0 | 591,1 | 642,5 | 728,2 | 770,4 | 794,4 |
+| S803_Garanties de passif | 43,7 | 42,0 | 37,2 | 38,2 | 37,7 | 35,8 | 29,6 | 28,2 | 27,6 | 26,1 |
+| S804_Engagements financiers de l'Etat | 68,2 | 65,8 | 87,5 | 135,2 | 112,5 | 122,8 | 147,4 | 240,0 | 189,8 | 198,5 |
+| S805_Dispositifs d'intervention | 570,9 | 616,3 | 639,0 | 720,6 | 871,9 | 933,0 | 609,2 | 678,8 | 571,0 | 461,0 |
+| S806_Engagements reçus | 15,6 | 16,7 | 21,3 | 24,5 | 27,2 | 58,2 | 70,1 | 53,2 | 45,4 | 45,8 |
+| S899_Contrepartie des engagements | 874,2 | 922,7 | 1 472,0 | 1 605,7 | 1 880,5 | 1 943,6 | 1 660,6 | 1 903,3 | 1 770,9 | 1 671,5 |
+
+Le bilan et le compte de résultat que donne chaque balance, par les indicateurs de synthèse que la DGFiP rattache aux lignes des états financiers (tables/indicateurs_balances_etat.csv), contre ceux de la loi d'approbation des comptes de l'exercice, ligne par ligne et total par total, en millions d'euros. Une ligne de la loi est exacte au demi-million près ; la situation nette que donne la balance est l'actif moins le passif. 1 251 lignes comparées, 1 108 égales à l'arrondi près.
+
+| Exercice | Lignes comparées | Égales | Autres |
+|---|---|---|---|
+| 2016 | 124 | 106 | 18 |
+| 2017 | 124 | 107 | 17 |
+| 2018 | 124 | 107 | 17 |
+| 2019 | 124 | 112 | 12 |
+| 2020 | 124 | 114 | 10 |
+| 2021 | 126 | 107 | 19 |
+| 2022 | 127 | 107 | 20 |
+| 2023 | 127 | 111 | 16 |
+| 2024 | 127 | 120 | 7 |
+| 2025 | 124 | 117 | 7 |
+
+Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le report des exercices antérieurs de la loi qui comprend le solde des opérations de l'exercice (le bilan y est présenté après son affectation) ; un reclassement entre les lignes d'un même total, que la loi donne alors égal à celui de la balance ; une compensation de créances et de dettes, quand l'actif et le passif de la loi sont moindres d'un même montant, la situation nette restant juste ; une ligne que la balance ne distingue pas. Le montant brut d'un actif n'est pas répété quand sa ligne nette porte le même écart.
+
+| Exercice | Ligne | Loi | Balance | Écart (loi − balance) | Explication |
+|---|---|---|---|---|---|
+| 2016 | AUTRES_CREANCES | 17 087 | 17 084,9 | +2,1 | reclassement entre les composantes de CREANCES, total juste |
+| 2016 | AUTRES_DETTES_NON_FINANCIERES | 121 646 | 121 972,7 | −326,7 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2016 | CREANCES_CLIENTS | 2 938 | 2 457,2 | +480,8 | reclassement entre les composantes de CREANCES, total juste |
+| 2016 | CREANCES_REDEVABLES | 64 791 | 64 783,9 | +7,1 | reclassement entre les composantes de CREANCES, total juste |
+| 2016 | DETTES_FONCTIONNEMENT | 7 753 | 7 945,0 | −192,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2016 | DETTES_INTERVENTION | 16 790 | 16 247,9 | +542,1 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2016 | FONDS_BANCAIRES_CAISSE | 12 162 | 12 213,9 | −51,9 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
+| 2016 | REPORT_EXERCICES_ANTERIEURS | −1 549 863 | −1 474 260,7 | −75 602,3 | la loi y ajoute le solde des opérations de l'exercice |
+| 2016 | RESSOURCE_PROPRE_UE_RNB | −15 722 | — | — | la balance ne distingue pas cette ligne |
+| 2016 | RESSOURCE_PROPRE_UE_TVA | −4 720 | — | — | la balance ne distingue pas cette ligne |
+| 2016 | TRANSFERTS_AUTRES_COLLECTIVITES | 25 370 | 25 372,7 | −2,7 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2016 | TRANSFERTS_ENTREPRISES | 16 270 | 16 267,5 | +2,5 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2016 | VALEURS_ESCOMPTEES | −2 751 | −2 803,4 | +52,4 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
+| 2017 | AUTRES_CREANCES | 15 908 | 15 907,4 | +0,6 | reclassement entre les composantes de CREANCES, total juste |
+| 2017 | AUTRES_DETTES_NON_FINANCIERES | 137 685 | 138 212,0 | −527,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2017 | CREANCES_CLIENTS | 2 135 | 2 031,3 | +103,7 | reclassement entre les composantes de CREANCES, total juste |
+| 2017 | CREANCES_REDEVABLES | 67 112 | 67 104,1 | +7,9 | reclassement entre les composantes de CREANCES, total juste |
+| 2017 | DETTES_FONCTIONNEMENT | 7 619 | 7 606,4 | +12,6 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2017 | DETTES_INTERVENTION | 16 122 | 15 591,0 | +531,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2017 | FONDS_BANCAIRES_CAISSE | 20 763 | 21 242,8 | −479,8 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
+| 2017 | REPORT_EXERCICES_ANTERIEURS | −1 611 274 | −1 550 315,9 | −60 958,1 | la loi y ajoute le solde des opérations de l'exercice |
+| 2017 | RESSOURCE_PROPRE_UE_RNB | −11 953 | — | — | la balance ne distingue pas cette ligne |
+| 2017 | RESSOURCE_PROPRE_UE_TVA | −4 422 | — | — | la balance ne distingue pas cette ligne |
+| 2017 | TRANSFERTS_AUTRES_COLLECTIVITES | 24 305 | 24 307,5 | −2,5 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2017 | TRANSFERTS_ENTREPRISES | 18 750 | 18 747,7 | +2,3 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2017 | VALEURS_ESCOMPTEES | −1 934 | −2 413,5 | +479,5 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
+| 2018 | AUTRES_CREANCES_BRUT | 17 169 | 17 168,4 | +0,6 | reclassement entre les composantes de CREANCES_BRUT, total juste |
+| 2018 | AUTRES_DETTES_NON_FINANCIERES | 138 759 | 139 305,6 | −546,6 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2018 | CREANCES_CLIENTS | 1 764 | 1 682,1 | +81,9 | reclassement entre les composantes de CREANCES, total juste |
+| 2018 | CREANCES_REDEVABLES | 69 354 | 69 341,5 | +12,5 | reclassement entre les composantes de CREANCES, total juste |
+| 2018 | DETTES_FONCTIONNEMENT | 7 552 | 7 543,8 | +8,2 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2018 | DETTES_INTERVENTION | 13 195 | 12 644,3 | +550,7 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2018 | FONDS_BANCAIRES_CAISSE | 31 464 | 32 514,3 | −1 050,3 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
+| 2018 | REPORT_EXERCICES_ANTERIEURS | −1 663 382 | −1 611 508,6 | −51 873,4 | la loi y ajoute le solde des opérations de l'exercice |
+| 2018 | RESSOURCE_PROPRE_UE_RNB | −16 124 | — | — | la balance ne distingue pas cette ligne |
+| 2018 | RESSOURCE_PROPRE_UE_TVA | −4 518 | — | — | la balance ne distingue pas cette ligne |
+| 2018 | TRANSFERTS_AUTRES_COLLECTIVITES | 23 033 | 23 037,2 | −4,2 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2018 | TRANSFERTS_ENTREPRISES | 18 051 | 18 046,3 | +4,7 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2018 | VALEURS_ESCOMPTEES | 8 | −1 043,2 | +1 051,2 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
+| 2019 | AUTRES_DETTES_NON_FINANCIERES | 154 497 | 155 232,6 | −735,6 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2019 | CREANCES_CLIENTS | 1 521 | 1 427,9 | +93,1 | reclassement entre les composantes de CREANCES, total juste |
+| 2019 | CREANCES_REDEVABLES | 76 179 | 76 170,7 | +8,3 | reclassement entre les composantes de CREANCES, total juste |
+| 2019 | DETTES_FONCTIONNEMENT | 7 943 | 7 938,2 | +4,8 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2019 | DETTES_INTERVENTION | 9 528 | 8 787,4 | +740,6 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2019 | REPORT_EXERCICES_ANTERIEURS | −1 748 246 | −1 663 608,1 | −84 637,9 | la loi y ajoute le solde des opérations de l'exercice |
+| 2019 | RESSOURCE_PROPRE_UE_RNB | −16 373 | — | — | la balance ne distingue pas cette ligne |
+| 2019 | RESSOURCE_PROPRE_UE_TVA | −4 649 | — | — | la balance ne distingue pas cette ligne |
+| 2019 | TRANSFERTS_AUTRES_COLLECTIVITES | 23 905 | 23 909,6 | −4,6 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2019 | TRANSFERTS_ENTREPRISES | 17 042 | 17 037,7 | +4,3 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2020 | AUTRES_DETTES_NON_FINANCIERES | 140 682 | 141 691,9 | −1 009,9 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2020 | CREANCES_CLIENTS | 1 217 | 1 219,3 | −2,3 | reclassement entre les composantes de CREANCES, total juste |
+| 2020 | DETTES_FONCTIONNEMENT | 7 351 | 7 343,1 | +7,9 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2020 | DETTES_INTERVENTION | 15 086 | 14 071,6 | +1 014,4 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2020 | REPORT_EXERCICES_ANTERIEURS | −1 913 987 | −1 748 385,9 | −165 601,1 | la loi y ajoute le solde des opérations de l'exercice |
+| 2020 | RESSOURCE_PROPRE_UE_RNB | −18 893 | — | — | la balance ne distingue pas cette ligne |
+| 2020 | RESSOURCE_PROPRE_UE_TVA | −4 796 | — | — | la balance ne distingue pas cette ligne |
+| 2020 | TRANSFERTS_AUTRES_COLLECTIVITES | 25 165 | 25 263,4 | −98,4 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2020 | TRANSFERTS_ENTREPRISES | 57 765 | 57 666,0 | +99,0 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2021 | ACTIF | 1 223 749 | 1 223 791,2 | −42,2 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 42,2 M€ |
+| 2021 | ACTIF_CIRCULANT | 146 781 | 146 822,3 | −41,3 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 42,2 M€ |
+| 2021 | AUTRES_CREANCES | 28 281 | 28 323,1 | −42,1 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 42,2 M€ |
+| 2021 | AUTRES_DETTES_NON_FINANCIERES | 151 291 | 152 314,5 | −1 023,5 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2021 | CREANCES | 107 872 | 107 914,0 | −42,0 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 42,2 M€ |
+| 2021 | CREANCES_CLIENTS | 2 560 | 2 563,7 | −3,7 | reclassement entre les composantes de CREANCES, qui porte la compensation |
+| 2021 | CREANCES_REDEVABLES | 77 031 | 77 030,3 | +0,7 | reclassement entre les composantes de CREANCES, qui porte la compensation |
+| 2021 | DETTES_FONCTIONNEMENT | 7 352 | 7 345,6 | +6,4 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2021 | DETTES_INTERVENTION | 12 854 | 11 869,0 | +985,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2021 | DETTES_NON_FINANCIERES | 297 656 | 297 697,7 | −41,7 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 42,2 M€ |
+| 2021 | PASSIF | 2 881 375 | 2 881 417,1 | −42,1 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 42,2 M€ |
+| 2021 | REPORT_EXERCICES_ANTERIEURS | −2 058 376 | −1 916 287,9 | −142 088,1 | la loi y ajoute le solde des opérations de l'exercice |
+| 2021 | TRANSFERTS_AUTRES_COLLECTIVITES | 28 109 | 28 533,6 | −424,6 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2021 | TRANSFERTS_ENTREPRISES | 68 787 | 68 362,5 | +424,5 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2022 | ACTIF | 1 284 166 | 1 284 187,0 | −21,0 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 21,0 M€ |
+| 2022 | ACTIF_CIRCULANT | 171 233 | 171 253,4 | −20,4 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 21,0 M€ |
+| 2022 | AUTRES_CREANCES | 35 203 | 35 223,9 | −20,9 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 21,0 M€ |
+| 2022 | AUTRES_DETTES_NON_FINANCIERES | 159 066 | 160 048,4 | −982,4 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2022 | CREANCES | 114 757 | 114 777,2 | −20,2 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 21,0 M€ |
+| 2022 | CREANCES_CLIENTS | 2 894 | 2 893,1 | +0,9 | reclassement entre les composantes de CREANCES, qui porte la compensation |
+| 2022 | CREANCES_REDEVABLES | 76 659 | 76 664,6 | −5,6 | reclassement entre les composantes de CREANCES, qui porte la compensation |
+| 2022 | DETTES_FONCTIONNEMENT | 8 246 | 8 240,1 | +5,9 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2022 | DETTES_INTERVENTION | 10 974 | 10 005,7 | +968,3 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2022 | DETTES_NON_FINANCIERES | 298 304 | 298 324,6 | −20,6 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 21,0 M€ |
+| 2022 | PASSIF | 3 042 097 | 3 042 118,2 | −21,2 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 21,0 M€ |
+| 2022 | REPORT_EXERCICES_ANTERIEURS | −2 076 536 | −1 916 508,9 | −160 027,1 | la loi y ajoute le solde des opérations de l'exercice |
+| 2022 | TRANSFERTS_AUTRES_COLLECTIVITES | 30 969 | 31 183,8 | −214,8 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2022 | TRANSFERTS_ENTREPRISES | 39 547 | 39 332,2 | +214,8 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
+| 2023 | ACTIF | 1 294 468 | 1 294 478,2 | −10,2 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 10,2 M€ |
+| 2023 | ACTIF_CIRCULANT | 204 259 | 204 269,3 | −10,3 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 10,2 M€ |
+| 2023 | AUTRES_CREANCES | 25 912 | 25 922,1 | −10,1 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 10,2 M€ |
+| 2023 | AUTRES_DETTES_NON_FINANCIERES | 153 185 | 154 196,1 | −1 011,1 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2023 | CREANCES | 113 344 | 113 354,5 | −10,5 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 10,2 M€ |
+| 2023 | CREANCES_CLIENTS | 8 533 | 8 533,8 | −0,8 | reclassement entre les composantes de CREANCES, qui porte la compensation |
+| 2023 | DETTES_FONCTIONNEMENT | 10 218 | 10 213,3 | +4,7 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2023 | DETTES_INTERVENTION | 10 961 | 9 955,9 | +1 005,1 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
+| 2023 | DETTES_NON_FINANCIERES | 283 189 | 283 199,8 | −10,8 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 10,2 M€ |
+| 2023 | PASSIF | 3 169 568 | 3 169 578,1 | −10,1 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 10,2 M€ |
+| 2023 | REPORT_EXERCICES_ANTERIEURS | −2 041 365 | −1 916 435,1 | −124 929,9 | la loi y ajoute le solde des opérations de l'exercice |
+| 2024 | AUTRES_DETTES_NON_FINANCIERES | 150 648 | 151 536,6 | −888,6 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2024 | CREANCES_CLIENTS | 2 642 | 2 640,0 | +2,0 | reclassement entre les composantes de CREANCES, total juste |
+| 2024 | CREANCES_REDEVABLES | 81 308 | 81 309,0 | −1,0 | reclassement entre les composantes de CREANCES, total juste |
+| 2024 | DETTES_FONCTIONNEMENT | 11 391 | 11 386,3 | +4,7 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2024 | DETTES_INTERVENTION | 11 122 | 10 229,0 | +893,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2024 | REPORT_EXERCICES_ANTERIEURS | −2 047 770 | −1 924 066,3 | −123 703,7 | la loi y ajoute le solde des opérations de l'exercice |
+| 2025 | AUTRES_CREANCES_BRUT | 33 145 | 33 144,1 | +0,9 | reclassement entre les composantes de CREANCES_BRUT, total juste |
+| 2025 | AUTRES_DETTES_NON_FINANCIERES | 163 563 | 163 559,1 | +3,9 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2025 | CREANCES_CLIENTS | 3 033 | 3 032,0 | +1,0 | reclassement entre les composantes de CREANCES, total juste |
+| 2025 | CREANCES_REDEVABLES | 80 229 | 80 223,0 | +6,0 | reclassement entre les composantes de CREANCES, total juste |
+| 2025 | DETTES_FONCTIONNEMENT | 11 513 | 11 501,0 | +12,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+
+En 2025, la situation nette de la loi comprend le solde des opérations de l'exercice (−129 467 M€) sans qu'aucune de ses lignes le porte : la balance, dont la situation nette (l'actif moins le passif) est celle de la loi, le laisse dans les comptes de charges et de produits, et la somme des lignes de la loi s'écarte de son total d'autant (section 1).

@@ -1,0 +1,95 @@
+indicateur,premier_exercice,dernier_exercice,categorie,poste,concept_id,signe,notes
+R001_Impôt sur le revenu,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.IMPOT_REVENU,-1,Produits bruts (comptes 7711).
+R002_Impôt sur les sociétés,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.IMPOT_SOCIETES,-1,Produits bruts (comptes 7712).
+R003_TICPE,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.TICPE,-1,Produits bruts (comptes 7713).
+R004_Taxe sur la valeur ajoutée,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.TVA,-1,Produits bruts (comptes 7714).
+"R005_Enr., timbre, autres contr. et taxes ind",2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.ENREGISTREMENT_TIMBRE,-1,Produits bruts (comptes 7715).
+R006_Autres pdts de nature fisc. et assimilés,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.AUTRES_PRODUITS_FISCAUX,-1,Produits bruts.
+"R007_Amendes, prél. div. et autres pénalités",2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.AMENDES,-1,Produits bruts (comptes 772 et 773).
+R008_Ressources propres de l'UE,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.RESSOURCES_PROPRES_UE,-1,"Prélèvements sur les recettes de l'État au profit du budget de l'Union européenne (comptes 6543), que le compte de résultat présente en montant négatif."
+R010_Impôt sur le revenu,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.IMPOT_REVENU,-1,"Diminution des produits fiscaux : obligations fiscales, restituées ou non (comptes 77911)."
+R011_Impôt sur les sociétés,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.IMPOT_SOCIETES,-1,"Diminution des produits fiscaux : obligations fiscales, restituées ou non (comptes 77911)."
+R012_TICPE,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.TICPE,-1,"Diminution des produits fiscaux : obligations fiscales, restituées ou non (comptes 77911)."
+R013_Taxe sur la valeur ajoutée,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.TVA,-1,"Diminution des produits fiscaux : obligations fiscales, restituées ou non (comptes 77911)."
+"R014_Enr., timbre, autres contr. et taxes ind",2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.ENREGISTREMENT_TIMBRE,-1,"Diminution des produits fiscaux : obligations fiscales, restituées ou non (comptes 77911)."
+R015_Autres pdts de nature fisc. et assimilés,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.AUTRES_PRODUITS_FISCAUX,-1,"Diminution des produits fiscaux : obligations fiscales, restituées ou non (comptes 77911)."
+R016_Impôt sur le revenu,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.IMPOT_REVENU,-1,"Diminution des produits fiscaux : décisions qui remettent en cause le bien-fondé de la créance, annulations, dégrèvements, restitutions et remboursements (comptes 77912)."
+R017_Impôt sur les sociétés,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.IMPOT_SOCIETES,-1,"Diminution des produits fiscaux : décisions qui remettent en cause le bien-fondé de la créance, annulations, dégrèvements, restitutions et remboursements (comptes 77912)."
+R018_TICPE,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.TICPE,-1,"Diminution des produits fiscaux : décisions qui remettent en cause le bien-fondé de la créance, annulations, dégrèvements, restitutions et remboursements (comptes 77912)."
+R019_Taxe sur la valeur ajoutée,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.TVA,-1,"Diminution des produits fiscaux : décisions qui remettent en cause le bien-fondé de la créance, annulations, dégrèvements, restitutions et remboursements (comptes 77912)."
+"R020_Enr., timbre, autres contr. et taxes ind",2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.ENREGISTREMENT_TIMBRE,-1,"Diminution des produits fiscaux : décisions qui remettent en cause le bien-fondé de la créance, annulations, dégrèvements, restitutions et remboursements (comptes 77912)."
+R021_Autres pdts de nature fisc. et assimilés,2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.AUTRES_PRODUITS_FISCAUX,-1,"Diminution des produits fiscaux : décisions qui remettent en cause le bien-fondé de la créance, annulations, dégrèvements, restitutions et remboursements (comptes 77912)."
+"R022_Amendes, prél. div. et autres pénalités",2016,2025,Produits,Produits régaliens nets,COMPTES_ETAT.AMENDES,-1,Annulations et remboursements des amendes et des produits divers (comptes 7792 et 7793).
+S001_Immobilisations incorporelles,2016,2025,Actif,Immobilisations incorporelles,COMPTES_ETAT.IMMOBILISATIONS_INCORPORELLES_BRUT,1,Montant brut.
+S002_Immobilisations corporelles,2016,2025,Actif,Immobilisations corporelles,COMPTES_ETAT.IMMOBILISATIONS_CORPORELLES_BRUT,1,Montant brut.
+S003_Immobilisations financières,2016,2025,Actif,Immobilisations financières,COMPTES_ETAT.IMMOBILISATIONS_FINANCIERES_BRUT,1,Montant brut.
+S004_Stocks,2016,2025,Actif,Stocks,COMPTES_ETAT.STOCKS_BRUT,1,Montant brut.
+S005_Redevables,2016,2025,Actif,Créances,COMPTES_ETAT.CREANCES_REDEVABLES_BRUT,1,Montant brut.
+S006_Clients,2016,2025,Actif,Créances,COMPTES_ETAT.CREANCES_CLIENTS_BRUT,1,Montant brut.
+S007_Autres créances,2016,2025,Actif,Créances,COMPTES_ETAT.AUTRES_CREANCES_BRUT,1,Montant brut.
+S008_Charges constatées d'avance,2016,2025,Actif,Charges constatées d'avance,COMPTES_ETAT.CHARGES_CONSTATEES_AVANCE_BRUT,1,
+S009_Fonds bancaires et fonds en caisse,2016,2025,Actif,Trésorerie active,COMPTES_ETAT.FONDS_BANCAIRES_CAISSE_BRUT,1,
+S010_Valeurs esc. en cours d'enc. de déc.,2016,2025,Actif,Trésorerie active,COMPTES_ETAT.VALEURS_ESCOMPTEES_BRUT,1,
+S011_Autres composantes de trésorerie,2016,2025,Actif,Trésorerie active,COMPTES_ETAT.AUTRES_COMPOSANTES_TRESORERIE_BRUT,1,
+S012_Valeurs mobilières de placement,2016,2025,Actif,Trésorerie active,COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT_BRUT,1,Montant brut.
+S013_Comptes de régularisation - Actif,2016,2025,Actif,Comptes de régularisation - Actif,COMPTES_ETAT.COMPTES_REGULARISATION_ACTIF_BRUT,1,
+S014_Immobilisations incorporelles,2016,2025,Actif,Immobilisations incorporelles,COMPTES_ETAT.IMMOBILISATIONS_INCORPORELLES_AMORTISSEMENTS,-1,Amortissements et dépréciations.
+S015_Immobilisations corporelles,2016,2025,Actif,Immobilisations corporelles,COMPTES_ETAT.IMMOBILISATIONS_CORPORELLES_AMORTISSEMENTS,-1,Amortissements et dépréciations.
+S016_Immobilisations financières,2016,2025,Actif,Immobilisations financières,COMPTES_ETAT.IMMOBILISATIONS_FINANCIERES_AMORTISSEMENTS,-1,Dépréciations.
+S017_Stocks,2016,2025,Actif,Stocks,COMPTES_ETAT.STOCKS_AMORTISSEMENTS,-1,Dépréciations.
+S018_Redevables,2016,2025,Actif,Créances,COMPTES_ETAT.CREANCES_REDEVABLES_AMORTISSEMENTS,-1,Dépréciations.
+S019_Clients,2016,2025,Actif,Créances,COMPTES_ETAT.CREANCES_CLIENTS_AMORTISSEMENTS,-1,Dépréciations.
+S020_Autres créances,2016,2025,Actif,Créances,COMPTES_ETAT.AUTRES_CREANCES_AMORTISSEMENTS,-1,Dépréciations.
+S021_Valeurs mobilières de placement,2016,2025,Actif,Trésorerie active,COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT_AMORTISSEMENTS,-1,Dépréciations.
+S022_Titres négociables,2016,2025,Passif,Dettes financières,COMPTES_ETAT.TITRES_NEGOCIABLES,-1,
+S023_Titres non négociables,2016,2025,Passif,Dettes financières,COMPTES_ETAT.TITRES_NON_NEGOCIABLES,-1,
+S024_Autres emprunts,2016,2025,Passif,Dettes financières,COMPTES_ETAT.DETTES_FINANCIERES_AUTRES_EMPRUNTS,-1,Ligne « Dettes financières et autres emprunts » des lois de 2016 à 2025.
+S025_Produits constatés d'avance,2016,2025,Passif,Dettes non financières,COMPTES_ETAT.PRODUITS_CONSTATES_AVANCE,-1,
+S027_Provisions pour risques,2016,2025,Passif,Provisions,COMPTES_ETAT.PROVISIONS_RISQUES,-1,
+S028_Provisions pour charges,2016,2025,Passif,Provisions,COMPTES_ETAT.PROVISIONS_CHARGES,-1,
+S029_Autres passifs (hors trésorerie),2016,2025,Passif,Autres passifs (hors trésorerie),COMPTES_ETAT.AUTRES_PASSIFS,-1,
+S030_Corr. du Trésor et personnes habilitées,2016,2025,Passif,Trésorerie passive,COMPTES_ETAT.CORRESPONDANTS_TRESOR,-1,
+S031_Autres,2016,2025,Passif,Trésorerie passive,COMPTES_ETAT.AUTRES_TRESORERIE_PASSIF,-1,
+S032_Comptes de régularisation - Passif,2016,2025,Passif,Comptes de régularisation - Passif,COMPTES_ETAT.COMPTES_REGULARISATION_PASSIF,-1,
+S033_Report des exerices antérieurs,2016,2025,Situation nette,Report des exercices antérieurs,COMPTES_ETAT.REPORT_EXERCICES_ANTERIEURS,-1,Comptes 11.
+S034_Ecarts de réévaluation et d'intégration,2016,2025,Situation nette,Ecarts de réévaluation et d'intégration,COMPTES_ETAT.ECARTS_REEVALUATION_INTEGRATION,-1,Comptes 10.
+S035_Solde des opérations de l'exercice,2016,2025,Situation nette,Solde des opérations de l'exercice,COMPTES_ETAT.SOLDE_EXERCICE_BILAN,-1,"Compte 12, qui reçoit le solde des charges et des produits quand ils sont soldés ; la balance ne les solde pas."
+S036_Charges de personnel,2016,2025,Charges,Charges de fonctionnement direct,COMPTES_ETAT.CHARGES_PERSONNEL,1,
+S037_Achats var. de stocks et presta. ext.,2016,2025,Charges,Charges de fonctionnement direct,COMPTES_ETAT.ACHATS_PRESTATIONS_EXTERNES,1,
+"S038_Dot. aux amort., aux prov. et aux dép.",2016,2025,Charges,Charges de fonctionnement direct,COMPTES_ETAT.DOTATIONS_FONCTIONNEMENT,1,
+S039_Autres charges de fonctionnement,2016,2025,Charges,Charges de fonctionnement direct,COMPTES_ETAT.AUTRES_CHARGES_FONCTIONNEMENT,1,
+S040_Subv. pour charges de service public,2016,2025,Charges,Charges de fonctionnement indirect,COMPTES_ETAT.SUBVENTIONS_CHARGES_SERVICE_PUBLIC,1,
+S042_Ventes de pdts et prestations de service,2016,2025,Produits,Produits de fonctionnement,COMPTES_ETAT.VENTES_PRESTATIONS,-1,
+S043_Production stockée et immobilisée,2016,2025,Produits,Produits de fonctionnement,COMPTES_ETAT.PRODUCTION_STOCKEE_IMMOBILISEE,-1,
+S044_Reprises sur provisions et dépréciations,2016,2025,Produits,Produits de fonctionnement,COMPTES_ETAT.REPRISES_FONCTIONNEMENT,-1,
+S045_Autres produits de fonctionnement,2016,2025,Produits,Produits de fonctionnement,COMPTES_ETAT.AUTRES_PRODUITS_FONCTIONNEMENT,-1,
+S046_Transferts aux ménages,2016,2025,Charges,Charges d'intervention,COMPTES_ETAT.TRANSFERTS_MENAGES,1,
+S047_Transferts aux entreprises,2016,2025,Charges,Charges d'intervention,COMPTES_ETAT.TRANSFERTS_ENTREPRISES,1,
+S048_Transferts aux collect. territoriales,2016,2025,Charges,Charges d'intervention,COMPTES_ETAT.TRANSFERTS_COLLECTIVITES_TERRITORIALES,1,
+S049_Transferts aux autres collectivités,2016,2025,Charges,Charges d'intervention,COMPTES_ETAT.TRANSFERTS_AUTRES_COLLECTIVITES,1,
+S050_Autres charges de fonct indirect,2016,2025,Charges,Charges de fonctionnement indirect,COMPTES_ETAT.AUTRES_CHARGES_FONCTIONNEMENT_INDIRECT,1,
+S051_Ch. rés. de la mise en jeu de garanties,2016,2025,Charges,Charges d'intervention,COMPTES_ETAT.CHARGES_GARANTIES,1,
+S052_Dotations aux prov. et aux dépréciations,2016,2025,Charges,Charges d'intervention,COMPTES_ETAT.DOTATIONS_INTERVENTION,1,
+S053_Contributions reçues de tiers,2016,2025,Produits,Produits d'intervention,COMPTES_ETAT.CONTRIBUTIONS_TIERS,-1,
+S054_Reprises sur provisions et dépréciations,2016,2025,Produits,Produits d'intervention,COMPTES_ETAT.REPRISES_INTERVENTION,-1,
+S055_Intérêts,2016,2025,Charges,Charges financières,COMPTES_ETAT.INTERETS,1,
+S056_Pertes de change liées aux opé. fin.,2016,2025,Charges,Charges financières,COMPTES_ETAT.PERTES_CHANGE,1,
+"S057_Dotations aux amort., prov. et dép.",2016,2025,Charges,Charges financières,COMPTES_ETAT.DOTATIONS_FINANCIERES,1,
+S058_Autres charges financières,2016,2025,Charges,Charges financières,COMPTES_ETAT.AUTRES_CHARGES_FINANCIERES,1,
+S059_Produits des immobilisations financières,2016,2025,Produits,Produits financiers,COMPTES_ETAT.PRODUITS_IMMOBILISATIONS_FINANCIERES,-1,
+S060_Gains de change liés aux opérations fin.,2016,2025,Produits,Produits financiers,COMPTES_ETAT.GAINS_CHANGE,-1,
+S061_Reprises sur provisions et dépréciations,2016,2025,Produits,Produits financiers,COMPTES_ETAT.REPRISES_FINANCIERES,-1,
+S062_Autres intérêts et produits assimilés,2016,2025,Produits,Produits financiers,COMPTES_ETAT.AUTRES_INTERETS_PRODUITS,-1,
+S064_Créances à ventiler manuellement,2016,2025,Actif,Créances,COMPTES_ETAT.CREANCES_BRUT,1,Montant que la DGFiP n'a pas rattaché à une ligne ; l'État le répartit entre les lignes du poste.
+S065_Solde ex. ant. en attente d'affectation,2016,2025,Situation nette,Solde des opérations d'exercices antérieurs en attente d'affectation,COMPTES_ETAT.SOLDE_EXERCICES_ANTERIEURS_ATTENTE,-1,Compte 88.
+S801_Dette garantie par l'Etat,2016,2025,EHB,Engagements hors bilan,,-1,Engagement donné.
+S802_Garanties liées à des missions d'int gén,2016,2025,EHB,Engagements hors bilan,,-1,Engagement donné.
+S803_Garanties de passif,2016,2025,EHB,Engagements hors bilan,,-1,Engagement donné.
+S804_Engagements financiers de l'Etat,2016,2025,EHB,Engagements hors bilan,,-1,Engagement donné.
+S805_Dispositifs d'intervention,2016,2025,EHB,Engagements hors bilan,,-1,Engagement donné.
+S806_Engagements reçus,2016,2025,EHB,Engagements hors bilan,,1,Engagement reçu.
+S899_Contrepartie des engagements,2016,2025,EHB,Engagements hors bilan,,1,Contrepartie des engagements donnés et reçus : elle équilibre les comptes de la classe 8.
+S901_Dettes de fonctionnement,2016,2025,Passif,Dettes non financières,COMPTES_ETAT.DETTES_FONCTIONNEMENT,-1,
+S902_Dettes d'intervention,2016,2025,Passif,Dettes non financières,COMPTES_ETAT.DETTES_INTERVENTION,-1,
+S903_Autres dettes non financières,2016,2025,Passif,Dettes non financières,COMPTES_ETAT.AUTRES_DETTES_NON_FINANCIERES,-1,
+S905_Dettes non financières à ventiler manuellement,2016,2025,Passif,Dettes non financières,COMPTES_ETAT.DETTES_NON_FINANCIERES,-1,Montant que la DGFiP n'a pas rattaché à une ligne ; l'État le répartit entre les lignes du poste.

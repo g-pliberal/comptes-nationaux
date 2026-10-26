@@ -4,8 +4,8 @@
 Vérifie que chaque table respecte son schéma, que chaque référence existe, que chaque
 identifiant de chiffre correspond à sa fiche et que chaque copie archivée est intacte ; relit
 chaque copie des comptes de chaque collectivité, de l'OFGL comme de la DGFiP (comptes individuels),
-chaque fichier du recensement des éléments d'imposition (REI) et chaque liste d'organismes publics,
-qui doit donner son inscription.
+chaque balance des comptes de l'État, chaque fichier du recensement des éléments d'imposition (REI) et
+chaque liste d'organismes publics, qui doit donner son inscription.
 
     python3 outils/valider.py
 """
@@ -16,6 +16,7 @@ import math
 import re
 import sys
 
+import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
@@ -277,6 +278,31 @@ def controler_comptes_individuels(tables, erreurs):
     return relues, lignes
 
 
+def controler_balances_etat(tables, erreurs):
+    """Relit chaque copie inscrite dans fichiers_balances_etat.csv, avec le référentiel des indicateurs : son contenu doit
+    donner son inscription. Renvoie le nombre de balances relues et celui de leurs lignes."""
+    fichiers = {f["id"]: f for f in tables["fichiers"]}
+    inscrits, referentiel = tables["fichiers_balances_etat"], tables["indicateurs_balances_etat"]
+    ordre = {"guide": 0, "plan": 1, "inventaire": 2, "balance": 3}
+    relues = lignes = 0
+    for n, inscrit in sorted(enumerate(inscrits, start=2), key=lambda e: (ordre.get(e[1]["contenu"], 4), e[0])):
+        lieu = f"tables/fichiers_balances_etat.csv, ligne {n}"
+        if inscrit["fichier_id"] not in fichiers:
+            continue  # référence déjà signalée
+        try:
+            attendue = balances.inscription(fichiers[inscrit["fichier_id"]], [i for i in inscrits if i is not inscrit],
+                                            fichiers, referentiel)
+        except SystemExit as e:
+            erreurs.append(f"{lieu} : {e}")
+            continue
+        if attendue != inscrit:
+            erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
+        if inscrit["contenu"] == "balance":
+            relues += 1
+            lignes += int(inscrit["lignes"])
+    return relues, lignes
+
+
 def controler_rei(tables, erreurs):
     """Relit chaque copie inscrite dans fichiers_rei.csv, avec ce qu'en retient le référentiel des variables : son
     contenu doit donner son inscription. Renvoie le nombre de copies relues et celui de leurs communes."""
@@ -351,6 +377,7 @@ def main():
     relus, sans_lecteur = controler_valeurs(tables, erreurs)
     relues = controler_collectivites(tables, erreurs)
     copies_individuelles, lignes_individuelles = controler_comptes_individuels(tables, erreurs)
+    copies_balances, lignes_balances = controler_balances_etat(tables, erreurs)
     copies_rei, communes_rei = controler_rei(tables, erreurs)
     listes, nombre_organismes = controler_organismes(tables, erreurs)
     for e in erreurs:
@@ -363,6 +390,8 @@ def main():
           + (f" ; {lignes_relues(relues)} relues dans les leurs" if any(relues) else "")
           + (f" ; {copies_individuelles} copies des comptes individuels de la DGFiP relues, soit "
              f"{lignes_individuelles} lignes de collectivités" if copies_individuelles else "")
+          + (f" ; {copies_balances} balances des comptes de l'État relues, soit {lignes_balances} lignes de comptes"
+             if copies_balances else "")
           + (f" ; {copies_rei} fichiers du REI relus, soit {communes_rei} lignes de communes" if copies_rei else "")
           + (f" ; {listes} liste{'s' if listes > 1 else ''} d'organismes relue{'s' if listes > 1 else ''}, soit "
              f"{nombre_organismes} organismes." if listes else "."))

@@ -1,0 +1,17 @@
+{
+  "description": "Indicateurs de synthèse des balances des comptes de l'État : la DGFiP en donne un à chaque ligne d'une balance, sous une catégorie et un poste des états financiers du compte général de l'État. Le référentiel rattache chacun, pour une suite d'exercices, à la ligne du bilan ou du compte de résultat qu'il alimente. L'import arrête une balance dont une ligne porte un indicateur qu'il ne rattache pas, ou sous une autre catégorie ou un autre poste.",
+  "fields": [
+    {"name": "indicateur", "type": "string", "description": "L'indicateur de synthèse tel que la balance l'écrit : son code, puis son libellé abrégé (« S002_Immobilisations corporelles »).", "constraints": {"required": true}},
+    {"name": "premier_exercice", "type": "string", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "dernier_exercice", "type": "string", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "categorie", "type": "string", "description": "La catégorie que la balance donne aux lignes de l'indicateur : Actif, Passif, Situation nette, Charges, Produits, ou EHB (engagements hors bilan).", "constraints": {"required": true}},
+    {"name": "poste", "type": "string", "description": "Le poste des états financiers que la balance donne aux lignes de l'indicateur.", "constraints": {"required": true}},
+    {"name": "concept_id", "type": "string", "description": "La ligne du bilan ou du compte de résultat de l'État qu'alimente l'indicateur, telle que les lois d'approbation des comptes la présentent ; vide pour un engagement hors bilan, que ces états ne présentent pas. Un indicateur de créances ou de dettes « à ventiler » alimente le total des créances brutes ou des dettes non financières, que l'État répartit entre leurs lignes."},
+    {"name": "signe", "type": "integer", "description": "Le signe qui passe de la somme des soldes de l'indicateur, un solde créditeur étant négatif, au montant de la ligne des états financiers : 1 pour un actif brut ou une charge, -1 pour des amortissements et dépréciations, un passif, une ligne de la situation nette ou un produit. Pour un engagement hors bilan, -1 pour un engagement donné, 1 pour un engagement reçu ou leur contrepartie.", "constraints": {"required": true, "enum": ["1", "-1"]}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["indicateur", "premier_exercice"],
+  "foreignKeys": [
+    {"fields": ["concept_id"], "reference": {"resource": "concepts", "fields": ["id"]}}
+  ]
+}
