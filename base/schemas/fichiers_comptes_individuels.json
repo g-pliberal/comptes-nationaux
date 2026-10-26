@@ -1,0 +1,19 @@
+{
+  "description": "Copies archivées des maquettes et des exports des comptes individuels des collectivités locales que publie la DGFiP sur data.economie.gouv.fr. L'import les contrôle et les inscrit ici ; la base lit leurs chiffres dans ces copies, sans les recopier.",
+  "fields": [
+    {"name": "fichier_id", "type": "string", "constraints": {"required": true}},
+    {"name": "source_id", "type": "string", "constraints": {"required": true}},
+    {"name": "jeu", "type": "string", "description": "Jeu de données du portail dont vient la copie : un ou plusieurs exercices d'un niveau de collectivités.", "constraints": {"required": true}},
+    {"name": "contenu", "type": "string", "description": "maquette : le classeur joint au jeu, qui décrit ses variables, une feuille par suite d'exercices ; inventaire : le nombre de lignes de chaque exercice du jeu ; comptes : une ligne par collectivité, avec les champs qui la désignent et la décrivent et les variables que retient tables/variables_comptes_individuels.csv pour l'exercice.", "constraints": {"required": true, "enum": ["maquette", "inventaire", "comptes"]}},
+    {"name": "exercice", "type": "string", "description": "Exercice des comptes ; vide pour une maquette ou un inventaire.", "constraints": {"pattern": "[0-9]{4}"}},
+    {"name": "version", "type": "date", "description": "Date de modification du jeu de données qu'annonçait le portail lors de l'export ; pour une maquette, date de modification inscrite dans le classeur.", "constraints": {"required": true}},
+    {"name": "lignes", "type": "integer", "description": "Comptes : nombre de collectivités, une ligne chacune ; inventaire : nombre d'exercices ; maquette : nombre de feuilles.", "constraints": {"required": true}},
+    {"name": "variables", "type": "integer", "description": "Comptes : nombre de variables lues ; maquette : nombre de variables qu'elle donne en montant, en base, en réduction ou en taux, toutes feuilles confondues ; vide pour un inventaire."},
+    {"name": "valeurs_absentes", "type": "integer", "description": "Comptes : nombre de valeurs absentes des variables lues, que la base ne retient pas : « - », rien, ou 9 999 999 999 999 998, que l'export des communes de 2003 donne à trois variables et qui n'est pas un montant ; vide pour une maquette ou un inventaire."}
+  ],
+  "primaryKey": ["fichier_id"],
+  "foreignKeys": [
+    {"fields": ["fichier_id"], "reference": {"resource": "fichiers", "fields": ["id"]}},
+    {"fields": ["source_id"], "reference": {"resource": "sources", "fields": ["id"]}}
+  ]
+}

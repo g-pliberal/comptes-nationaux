@@ -1,0 +1,19 @@
+{
+  "description": "Variables des comptes individuels de la DGFiP que la base retient : pour chaque niveau de collectivités et chaque variable, de son premier à son dernier exercice, la grandeur qu'elle donne, son libellé dans la maquette et le concept qu'elle mesure. Une variable a une ligne par suite d'exercices où son libellé et sa grandeur ne changent pas. Ce sont toutes celles que la maquette donne en montant, en base, en réduction ou en taux voté ; ses montants par habitant, moyennes de strate et ratios de structure, qui se déduisent des montants ou portent sur d'autres collectivités, ne sont pas retenus, ni les champs d'un jeu que sa maquette ne décrit pas.",
+  "fields": [
+    {"name": "source_id", "type": "string", "constraints": {"required": true}},
+    {"name": "variable", "type": "string", "description": "Nom de la variable dans les jeux de données.", "constraints": {"required": true, "pattern": "[a-z][a-z0-9_]*"}},
+    {"name": "premier_exercice", "type": "string", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "dernier_exercice", "type": "string", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "grandeur", "type": "string", "description": "montant : en milliers d'euros (le produit d'un impôt en est un) ; base : base nette imposée au profit de la collectivité, en milliers d'euros ; reduction : réductions de base accordées sur délibération (exonérations, abattements), en milliers d'euros ; taux : taux voté, en pour cent.", "constraints": {"required": true, "enum": ["montant", "base", "reduction", "taux"]}},
+    {"name": "concept_id", "type": "string", "constraints": {"required": true}},
+    {"name": "libelle", "type": "string", "description": "Libellé de la rubrique dans la feuille de la maquette, ses blancs réduits.", "constraints": {"required": true}},
+    {"name": "variable_maquette", "type": "string", "description": "Nom de la variable dans la maquette, quand il diffère de celui du jeu."},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["source_id", "variable", "premier_exercice"],
+  "foreignKeys": [
+    {"fields": ["source_id"], "reference": {"resource": "sources", "fields": ["id"]}},
+    {"fields": ["concept_id"], "reference": {"resource": "concepts", "fields": ["id"]}}
+  ]
+}

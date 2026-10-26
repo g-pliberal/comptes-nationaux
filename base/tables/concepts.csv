@@ -136,6 +136,103 @@ COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT,Valeurs mobilières de placement,COMPT
 COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT_AMORTISSEMENTS,Valeurs mobilières de placement : amortissements et dépréciations,COMPTES_ETAT,bilan : actif,stock,Montant à retrancher du brut pour obtenir le net.
 COMPTES_ETAT.VALEURS_MOBILIERES_PLACEMENT_BRUT,Valeurs mobilières de placement : montant brut,COMPTES_ETAT,bilan : actif,stock,Avant amortissements et dépréciations.
 COMPTES_ETAT.VENTES_PRESTATIONS,Ventes de produits et prestations de service,COMPTES_ETAT,compte de résultat : charges de fonctionnement,recette,Produit de fonctionnement.
+COMPTES_INDIVIDUELS.ACHATS_CHARGES_EXTERNES,Achats et charges externes,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.AIDES_PERSONNE,Aides à la personne,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.ALLOCATION_COMPENSATRICE_CFE_INDUSTRIELS,Allocation compensatrice de cotisation foncière des entreprises : réduction de 50 % de la valeur locative des établissements industriels,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.ALLOCATION_COMPENSATRICE_TFB_INDUSTRIELS,Allocation compensatrice de taxe foncière sur les propriétés bâties : réduction de 50 % de la valeur locative des établissements industriels,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.ANNUITE_DETTE,Annuité de la dette,COMPTES_INDIVIDUELS,endettement,depense,
+COMPTES_INDIVIDUELS.ANNUITE_DETTES_BANCAIRES,Annuité des dettes bancaires et assimilées,COMPTES_INDIVIDUELS,endettement,depense,Intitulé des maquettes des départements et des régions jusqu'en 2012.
+COMPTES_INDIVIDUELS.APA,Aide aux personnes âgées (APA),COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.AUTRES_DOTATIONS_PARTICIPATIONS,Autres dotations et participations,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.AUTRES_IMPOTS_TAXES,Autres impôts et taxes,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.AVANCES_TRESOR,Avances du Trésor au 31 décembre,COMPTES_INDIVIDUELS,endettement,stock,
+COMPTES_INDIVIDUELS.BESOIN_FINANCEMENT_INVESTISSEMENT,Besoin ou capacité de financement de la section d'investissement (E),COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,"Positif pour un besoin. Jusqu'en 2024, le besoin résiduel plus le solde des opérations pour compte de tiers ; la maquette de 2025 le définit comme D − C, dont ce solde, ce que les montants de 2024 vérifient aussi."
+COMPTES_INDIVIDUELS.BESOIN_FINANCEMENT_RESIDUEL,Besoin ou capacité de financement résiduel de la section d'investissement,COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,"Besoin de financement de la section d'investissement hors solde des opérations pour compte de tiers, positif pour un besoin : les emplois moins les ressources d'investissement (D − C) jusqu'en 2023 ; en 2024, D − C moins ce solde. La maquette de 2025 ne le donne plus."
+COMPTES_INDIVIDUELS.CAF,Capacité d'autofinancement (CAF),COMPTES_INDIVIDUELS,autofinancement,solde,
+COMPTES_INDIVIDUELS.CAF_NETTE,Capacité d'autofinancement nette du remboursement en capital des emprunts,COMPTES_INDIVIDUELS,autofinancement,solde,
+COMPTES_INDIVIDUELS.CFE,Cotisation foncière des entreprises,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.CFE_ADDITIONNELLE,Cotisation foncière des entreprises (fiscalité additionnelle),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,« hors GEMAPI » depuis 2020.
+COMPTES_INDIVIDUELS.CFE_EOLIENNES,Cotisation foncière des entreprises (fiscalité des éoliennes),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,« hors GEMAPI » depuis 2020.
+COMPTES_INDIVIDUELS.CFE_ETAT_2010,Cotisation foncière des entreprises perçue au profit de l'État en 2010,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,"En 2010, la cotisation foncière des entreprises est perçue par l'État ; la collectivité reçoit la compensation relais."
+COMPTES_INDIVIDUELS.CFE_ETAT_2010_ADDITIONNELLE,Cotisation foncière des entreprises perçue au profit de l'État en 2010 (fiscalité additionnelle),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.CFE_ETAT_2010_EOLIENNES,Cotisation foncière des entreprises perçue au profit de l'État en 2010 (fiscalité des éoliennes),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.CFE_ETAT_2010_UNIQUE_ZONE,Cotisation foncière des entreprises perçue au profit de l'État en 2010 (fiscalité professionnelle unique ou de zone),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.CFE_UNIQUE_ZONE,Cotisation foncière des entreprises (fiscalité professionnelle unique ou de zone),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,« hors GEMAPI » depuis 2020.
+COMPTES_INDIVIDUELS.CHARGES_A_REPARTIR,Charges à répartir,COMPTES_INDIVIDUELS,investissement : emplois,depense,
+COMPTES_INDIVIDUELS.CHARGES_FINANCIERES,Charges financières,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.CHARGES_FONCTIONNEMENT,Total des charges de fonctionnement (B),COMPTES_INDIVIDUELS,fonctionnement : charges,depense,Ligne B de l'analyse des équilibres financiers fondamentaux : ensemble des charges de la section de fonctionnement.
+COMPTES_INDIVIDUELS.CHARGES_FONCTIONNEMENT_CAF,Charges de fonctionnement retenues pour la capacité d'autofinancement (charges CAF),COMPTES_INDIVIDUELS,fonctionnement : charges,depense,"Charges de fonctionnement dont la maquette déduit la capacité d'autofinancement, données depuis 2017."
+COMPTES_INDIVIDUELS.CHARGES_FONCTIONNEMENT_REELLES,Charges de fonctionnement réelles,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,"Charges de la section de fonctionnement hors opérations d'ordre, que les maquettes des départements et des régions donnent jusqu'en 2012."
+COMPTES_INDIVIDUELS.CHARGES_PERSONNEL,Charges de personnel,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.COEFFICIENT_CORRECTEUR_SOUS_COMPENSEES,Effet du coefficient correcteur pour une commune sous-compensée,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.COEFFICIENT_CORRECTEUR_SURCOMPENSEES,Effet du coefficient correcteur pour une commune surcompensée,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.COMPENSATION_RELAIS,Compensation relais de la taxe professionnelle (2010),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.CONTINGENTS,Contingents,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.CONTRIBUTIONS_OBLIGATOIRES,Contributions obligatoires et participations,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.CVAE,Cotisation sur la valeur ajoutée des entreprises,COMPTES_INDIVIDUELS,impôts de répartition et fractions de TVA,recette,
+COMPTES_INDIVIDUELS.DEPENSES_EQUIPEMENT,Dépenses d'équipement,COMPTES_INDIVIDUELS,investissement : emplois,depense,
+COMPTES_INDIVIDUELS.DEPENSES_INVESTISSEMENT_DIRECTES,Dépenses d'investissement directes,COMPTES_INDIVIDUELS,investissement : emplois,depense,Intitulé des maquettes des départements et des régions jusqu'en 2012.
+COMPTES_INDIVIDUELS.DGF,Dotation globale de fonctionnement,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.DOTATIONS_FORMATION_PROFESSIONNELLE,Dotations d'apprentissage et de formation professionnelle,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.DOTATIONS_PARTICIPATIONS,Dotations et participations,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.EFFET_COEFFICIENT_CORRECTEUR,"Effet du coefficient correcteur (positif pour une commune sous-compensée, négatif pour une commune surcompensée)",COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.EMPLOIS_INVESTISSEMENT,Total des emplois d'investissement (D),COMPTES_INDIVIDUELS,investissement : emplois,depense,Voir le total des ressources d'investissement (C) : leur différence ne s'entend pas de la même façon jusqu'en 2023 et depuis 2024.
+COMPTES_INDIVIDUELS.EMPRUNTS_DETTES_ASSIMILEES,Emprunts bancaires et dettes assimilées,COMPTES_INDIVIDUELS,investissement : ressources,recette,
+COMPTES_INDIVIDUELS.EMPRUNTS_SOUSCRITS,Emprunts souscrits,COMPTES_INDIVIDUELS,investissement : ressources,recette,Intitulé des maquettes des départements et des régions jusqu'en 2012.
+COMPTES_INDIVIDUELS.ENCOURS_DETTE,Encours total de la dette au 31 décembre,COMPTES_INDIVIDUELS,endettement,stock,
+COMPTES_INDIVIDUELS.ENCOURS_DETTES_BANCAIRES,Encours des dettes bancaires et assimilées au 31 décembre,COMPTES_INDIVIDUELS,endettement,stock,
+COMPTES_INDIVIDUELS.ENCOURS_DETTES_BANCAIRES_NET_FONDS_SOUTIEN,Encours des dettes bancaires net de l'aide du fonds de soutien pour la sortie des emprunts toxiques,COMPTES_INDIVIDUELS,endettement,stock,
+COMPTES_INDIVIDUELS.EXCEDENT_BRUT_FONCTIONNEMENT,Excédent brut de fonctionnement,COMPTES_INDIVIDUELS,autofinancement,solde,
+COMPTES_INDIVIDUELS.FCTVA,Fonds de compensation de la TVA (FCTVA),COMPTES_INDIVIDUELS,investissement : ressources,recette,Attributions du FCTVA inscrites dans les ressources d'investissement.
+COMPTES_INDIVIDUELS.FCTVA_FONCTIONNEMENT,Fonds de compensation de la TVA perçu en section de fonctionnement,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,"Attributions du FCTVA au titre des dépenses d'entretien des bâtiments, de la voirie et des réseaux, inscrites en fonctionnement."
+COMPTES_INDIVIDUELS.FISCALITE_REVERSEE,Fiscalité reversée,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,"Fiscalité qu'une collectivité reçoit d'une autre ou lui reverse ; montant négatif quand la collectivité reverse plus qu'elle ne reçoit, comme un groupement à fiscalité propre qui verse des attributions de compensation à ses communes."
+COMPTES_INDIVIDUELS.FONDS_ROULEMENT,Fonds de roulement,COMPTES_INDIVIDUELS,endettement,stock,
+COMPTES_INDIVIDUELS.FRACTIONS_TVA_FONCTIONNEMENT,Fractions de TVA comprises dans les produits de fonctionnement,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,Ligne « dont fraction de TVA » des produits de fonctionnement des régions.
+COMPTES_INDIVIDUELS.FRACTION_TVA,Fraction de TVA,COMPTES_INDIVIDUELS,impôts de répartition et fractions de TVA,recette,"Part du produit de la TVA que l'État attribue à la collectivité en compensation d'impôts supprimés ; « montant net N » depuis 2023, et pour la seule Ville de Paris parmi les communes en 2021 et 2022."
+COMPTES_INDIVIDUELS.FRACTION_TVA_CVAE,Fraction de TVA compensant la perte de la cotisation sur la valeur ajoutée des entreprises,COMPTES_INDIVIDUELS,impôts de répartition et fractions de TVA,recette,
+COMPTES_INDIVIDUELS.FRAIS_SEJOUR_HEBERGEMENT,Frais de séjour et d'hébergement,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.IFER,Imposition forfaitaire sur les entreprises de réseaux,COMPTES_INDIVIDUELS,impôts de répartition et fractions de TVA,recette,
+COMPTES_INDIVIDUELS.IMMOBILISATIONS_AFFECTEES,"Immobilisations affectées, concédées…",COMPTES_INDIVIDUELS,investissement : emplois,depense,
+COMPTES_INDIVIDUELS.IMPOTS_DIRECTS,Impôts directs,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,"Intitulé des maquettes des départements et des régions jusqu'en 2012, que celles de 2013 et des années suivantes remplacent par « Impôts locaux »."
+COMPTES_INDIVIDUELS.IMPOTS_LOCAUX,Impôts locaux,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.PCH,Prestation de compensation du handicap (PCH),COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.PEREQUATION_COMPENSATION,Attributions de péréquation et de compensation,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.POTENTIEL_FISCAL,Potentiel fiscal,COMPTES_INDIVIDUELS,fiscalité directe locale,agregat,"Produit qu'obtiendrait la commune en appliquant à ses bases les taux moyens nationaux, que la maquette donne jusqu'en 2010 ; il n'est pas une recette."
+COMPTES_INDIVIDUELS.PRODUITS_CESSIONS,Produits des cessions d'immobilisations,COMPTES_INDIVIDUELS,investissement : ressources,recette,
+COMPTES_INDIVIDUELS.PRODUITS_FONCTIONNEMENT,Total des produits de fonctionnement (A),COMPTES_INDIVIDUELS,fonctionnement : produits,recette,Ligne A de l'analyse des équilibres financiers fondamentaux : ensemble des produits de la section de fonctionnement.
+COMPTES_INDIVIDUELS.PRODUITS_FONCTIONNEMENT_CAF,Produits de fonctionnement retenus pour la capacité d'autofinancement (produits CAF),COMPTES_INDIVIDUELS,fonctionnement : produits,recette,"Produits de fonctionnement dont la maquette déduit la capacité d'autofinancement, donnés depuis 2017."
+COMPTES_INDIVIDUELS.PRODUITS_FONCTIONNEMENT_REELS,Produits de fonctionnement réels,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,"Produits de la section de fonctionnement hors opérations d'ordre, que les maquettes des départements et des régions donnent jusqu'en 2012."
+COMPTES_INDIVIDUELS.PRODUITS_SERVICES_DOMAINE,Produits des services et du domaine,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.REMBOURSEMENTS_CAPITAL_EMPRUNTS,Remboursement en capital des emprunts,COMPTES_INDIVIDUELS,investissement : emplois,depense,Intitulé des maquettes des départements et des régions jusqu'en 2012.
+COMPTES_INDIVIDUELS.REMBOURSEMENTS_EMPRUNTS_DETTES,Remboursement d'emprunts et dettes assimilées,COMPTES_INDIVIDUELS,investissement : emplois,depense,
+COMPTES_INDIVIDUELS.RESSOURCES_INVESTISSEMENT,Total des ressources d'investissement (C),COMPTES_INDIVIDUELS,investissement : ressources,recette,"Jusqu'en 2023, les emplois moins les ressources d'investissement (D − C) donnent le besoin résiduel, sans le solde des opérations pour compte de tiers ; en 2024 et 2025, ils donnent le besoin de financement de la section d'investissement (E), ce solde compris, comme le montrent les identités vérifiées collectivité par collectivité (section 13 du rapport de cohérence), quand la feuille 2023-2024 de la maquette dit encore le besoin résiduel égal à D − C."
+COMPTES_INDIVIDUELS.RESULTAT_COMPTABLE,Résultat comptable (R = A − B),COMPTES_INDIVIDUELS,fonctionnement : résultat,solde,
+COMPTES_INDIVIDUELS.RESULTAT_ENSEMBLE,Résultat d'ensemble (R − E),COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,Résultat comptable moins besoin de financement de la section d'investissement.
+COMPTES_INDIVIDUELS.RETOUR_BIENS_AFFECTES,"Retour de biens affectés, concédés…",COMPTES_INDIVIDUELS,investissement : ressources,recette,
+COMPTES_INDIVIDUELS.RSA,Revenu de solidarité active (RSA),COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.SOLDE_OPERATIONS_TIERS,Solde des opérations pour compte de tiers,COMPTES_INDIVIDUELS,investissement : financement et résultat d'ensemble,solde,"Jusqu'en 2024, ajouté au besoin résiduel pour former le besoin de financement de la section d'investissement (E) ; dans la maquette de 2025, compris dans ce besoin (« dont »)."
+COMPTES_INDIVIDUELS.SUBVENTIONS_CONTINGENTS,Subventions et contingents,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,
+COMPTES_INDIVIDUELS.SUBVENTIONS_EQUIPEMENT_VERSEES,Subventions d'équipement versées,COMPTES_INDIVIDUELS,investissement : emplois,depense,
+COMPTES_INDIVIDUELS.SUBVENTIONS_RECUES,Subventions d'investissement reçues,COMPTES_INDIVIDUELS,investissement : ressources,recette,Ligne « Subventions reçues » des ressources d'investissement.
+COMPTES_INDIVIDUELS.SUBVENTIONS_VERSEES,Subventions de fonctionnement versées,COMPTES_INDIVIDUELS,fonctionnement : charges,depense,"Ligne « Subventions versées » des communes et des groupements, « Subventions » des départements et des régions."
+COMPTES_INDIVIDUELS.TAFNB,Taxe additionnelle à la taxe foncière sur les propriétés non bâties,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.TASA_CFE,Taxe additionnelle spéciale annuelle de la région d'Île-de-France (part de cotisation foncière des entreprises),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.TASA_TFB,Taxe additionnelle spéciale annuelle de la région d'Île-de-France (part de taxe foncière sur les propriétés bâties),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.TASCOM,Taxe sur les surfaces commerciales,COMPTES_INDIVIDUELS,impôts de répartition et fractions de TVA,recette,
+COMPTES_INDIVIDUELS.TAXE_AMENAGEMENT,Taxe d'aménagement,COMPTES_INDIVIDUELS,ressources de fonctionnement ou d'investissement,recette,"Les maquettes des communes et des groupements la rangent dans les ressources d'investissement, celles des départements parmi les autres impôts et taxes."
+COMPTES_INDIVIDUELS.TAXE_PUBLICITE_FONCIERE,Taxe départementale de publicité foncière et droits d'enregistrement,COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.TFB,Taxe foncière sur les propriétés bâties,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,"Pour les communes, depuis 2021, avant application du coefficient correcteur, la part départementale leur étant transférée ; « dont GEMAPI » pour les groupements depuis 2020."
+COMPTES_INDIVIDUELS.TFB_APRES_COEFFICIENT_CORRECTEUR,Taxe foncière sur les propriétés bâties après application du coefficient correcteur,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.TFNB,Taxe foncière sur les propriétés non bâties,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,« dont GEMAPI » pour les groupements depuis 2020.
+COMPTES_INDIVIDUELS.TH,Taxe d'habitation,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,"Jusqu'en 2020 ; la maquette des communes la dit « y compris THLV » de 2009 à 2020, celle des groupements « dont THLV et GEMAPI » en 2020."
+COMPTES_INDIVIDUELS.THLV,Taxe d'habitation sur les logements vacants (THLV),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.TH_RESIDENCES_SECONDAIRES,Taxe d'habitation sur les résidences secondaires,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.TH_RESIDENCES_SECONDAIRES_LOGEMENTS_VACANTS,Taxe d'habitation sur les résidences secondaires et les logements vacants,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,"Depuis 2021, la taxe d'habitation sur les résidences principales n'étant plus perçue par les collectivités ; « dont GEMAPI » pour les groupements."
+COMPTES_INDIVIDUELS.TICPE,"Taxe intérieure de consommation sur les produits énergétiques (TIPP, puis TICPE)",COMPTES_INDIVIDUELS,fonctionnement : produits,recette,
+COMPTES_INDIVIDUELS.TP,Taxe professionnelle,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,"Jusqu'en 2009 ; « hors produits écrêtés », ou « hors bases écrêtées », dans la maquette des communes de 2009."
+COMPTES_INDIVIDUELS.TP_ADDITIONNELLE,Taxe professionnelle (fiscalité additionnelle),COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.TP_EOLIENNES,Taxe professionnelle des éoliennes,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
+COMPTES_INDIVIDUELS.TP_UNIQUE_ZONE,Taxe professionnelle unique ou de zone,COMPTES_INDIVIDUELS,fiscalité directe locale,recette,
 COMPTES_LOCAUX.ACHATS_CHARGES_EXTERNES,Achats et charges externes,COMPTES_LOCAUX,fonctionnement : dépenses,depense,"Débit net des comptes 60, 61 et 62, sauf 621."
 COMPTES_LOCAUX.ALLOCATIONS_APA,Allocation personnalisée d'autonomie (APA),COMPTES_LOCAUX,fonctionnement : dépenses,depense,"Comprise dans les dépenses d'intervention : montants versés aux personnes âgées dépendantes, débit net du compte 65114 (M52 et M57)."
 COMPTES_LOCAUX.ALLOCATIONS_PCH,Prestation de compensation du handicap (PCH),COMPTES_LOCAUX,fonctionnement : dépenses,depense,"Comprise dans les dépenses d'intervention : montants versés aux personnes handicapées, débit net des comptes 651121 et 651122 (M52 et M57)."

@@ -1881,3 +1881,139 @@ La liste de l'Insee, que la table des organismes reprend organisme par organisme
 | GF09 Enseignement | 286 |
 | GF10 Protection sociale | 7 |
 | Ensemble | 701 |
+
+## 13. Comptes individuels de la DGFiP
+
+Les comptes individuels que la DGFiP publie pour chaque commune depuis 2000, chaque groupement à fiscalité propre depuis 2007, chaque département et chaque région depuis 2008 : l'analyse des équilibres financiers fondamentaux du budget principal (budgets annexes compris pour les groupements) et les éléments de la fiscalité directe locale, en milliers d'euros, dans la version la plus récente de chaque exercice. Une valeur est exacte à la demi-unité de la dernière décimale que sa variable publie dans l'exercice.
+
+| Niveau | Exercices | Collectivités au dernier exercice | Collectivités-exercices | Valeurs lues | Valeurs absentes |
+|---|---|---|---|---|---|
+| communes | 26 années entre 2000 et 2025 | 34 860 | 937 985 | 48 609 722 | 13 |
+| groupements à fiscalité propre | 19 années entre 2007 et 2025 | 1 273 | 35 745 | 1 787 515 | 0 |
+| départements et collectivités territoriales uniques | 18 années entre 2008 et 2025 | 98 | 1 792 | 76 385 | 0 |
+| régions | 18 années entre 2008 et 2025 | 14 | 350 | 13 437 | 0 |
+
+Identités que les maquettes énoncent, de chaque collectivité : le résultat comptable (R) est la différence des produits (A) et des charges (B) de fonctionnement ; le besoin de financement de la section d'investissement (E), jusqu'en 2024, le besoin résiduel (D − C, emplois moins ressources) plus le solde des opérations pour compte de tiers, et en 2025 D − C ; le résultat d'ensemble, R − E ; la capacité d'autofinancement nette, la capacité d'autofinancement moins le remboursement des emprunts et dettes assimilées. 4 736 523 vérifiées, 4 734 762 justes, 1 761 en écart.
+
+| Niveau | Total | Parties | Vérifiées | En écart | Exercices en écart | Plus grand écart |
+|---|---|---|---|---|---|---|
+| communes | RESULTAT_COMPTABLE | PRODUITS_FONCTIONNEMENT − CHARGES_FONCTIONNEMENT | 937 985 | 0 | aucun | aucun |
+| communes | BESOIN_FINANCEMENT_RESIDUEL | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 903 125 | 1 139 | 2005, 2007 et 2024 | +5 035,20 k€ : GONESSE (95277), 2024 |
+| communes | BESOIN_FINANCEMENT_INVESTISSEMENT | BESOIN_FINANCEMENT_RESIDUEL + SOLDE_OPERATIONS_TIERS | 903 125 | 0 | aucun | aucun |
+| communes | BESOIN_FINANCEMENT_INVESTISSEMENT | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 34 860 | 0 | aucun | aucun |
+| communes | RESULTAT_ENSEMBLE | RESULTAT_COMPTABLE − BESOIN_FINANCEMENT_INVESTISSEMENT | 937 985 | 2 | 2005 | −0,36 k€ : ROANNE (42187), 2005 |
+| communes | CAF_NETTE | CAF − REMBOURSEMENTS_EMPRUNTS_DETTES | 937 985 | 194 | 14 années entre 2000 et 2025 | −2 900,00 k€ : WATTRELOS (59650), 2012 |
+| groupements à fiscalité propre | RESULTAT_COMPTABLE | PRODUITS_FONCTIONNEMENT − CHARGES_FONCTIONNEMENT | 35 745 | 0 | aucun | aucun |
+| groupements à fiscalité propre | CAF_NETTE | CAF − REMBOURSEMENTS_EMPRUNTS_DETTES | 35 745 | 344 | 2023, 2024 et 2025 | −9 826,00 k€ : AIX MARSEILLE PROVENCE BP MET (200054807), 2025 |
+| départements et collectivités territoriales uniques | RESULTAT_COMPTABLE | PRODUITS_FONCTIONNEMENT − CHARGES_FONCTIONNEMENT | 1 792 | 0 | aucun | aucun |
+| départements et collectivités territoriales uniques | BESOIN_FINANCEMENT_RESIDUEL | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 1 694 | 72 | 2024 | +4 463,69 k€ : DEP CHARENTE-MARITIME (017), 2024 |
+| départements et collectivités territoriales uniques | BESOIN_FINANCEMENT_INVESTISSEMENT | BESOIN_FINANCEMENT_RESIDUEL + SOLDE_OPERATIONS_TIERS | 1 694 | 0 | aucun | aucun |
+| départements et collectivités territoriales uniques | BESOIN_FINANCEMENT_INVESTISSEMENT | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 98 | 0 | aucun | aucun |
+| départements et collectivités territoriales uniques | RESULTAT_ENSEMBLE | RESULTAT_COMPTABLE − BESOIN_FINANCEMENT_INVESTISSEMENT | 1 792 | 0 | aucun | aucun |
+| départements et collectivités territoriales uniques | CAF_NETTE | CAF − REMBOURSEMENTS_EMPRUNTS_DETTES | 1 292 | 0 | aucun | aucun |
+| régions | RESULTAT_COMPTABLE | PRODUITS_FONCTIONNEMENT − CHARGES_FONCTIONNEMENT | 350 | 0 | aucun | aucun |
+| régions | BESOIN_FINANCEMENT_RESIDUEL | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 336 | 10 | 2024 | +15 062,50 k€ : REG HAUTS DE FRANCE (032), 2024 |
+| régions | BESOIN_FINANCEMENT_INVESTISSEMENT | BESOIN_FINANCEMENT_RESIDUEL + SOLDE_OPERATIONS_TIERS | 336 | 0 | aucun | aucun |
+| régions | BESOIN_FINANCEMENT_INVESTISSEMENT | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 14 | 0 | aucun | aucun |
+| régions | RESULTAT_ENSEMBLE | RESULTAT_COMPTABLE − BESOIN_FINANCEMENT_INVESTISSEMENT | 350 | 0 | aucun | aucun |
+| régions | CAF_NETTE | CAF − REMBOURSEMENTS_EMPRUNTS_DETTES | 220 | 0 | aucun | aucun |
+
+### Les mêmes collectivités dans les comptes de l'OFGL
+
+Chaque exercice que publient aussi les jeux de l'OFGL (section 7), chaque collectivité rapprochée de la sienne : une commune par son code Insee, un groupement par son numéro Siren, un département ou une région par son code, une collectivité territoriale unique, que l'OFGL range parmi les régions, par son code de région. Le budget principal, ou, pour les groupements, le montant consolidé des budgets principal et annexes. Un code que l'OFGL donne à plusieurs collectivités ne se rapproche pas : jusqu'en 2015, celui de la région qui a absorbé chacune des régions fusionnées en 2016 ; jusqu'en 2020, « 67A », celui du Bas-Rhin et du Haut-Rhin.
+
+| Niveau | Exercices | Collectivités | Rapprochées | Sans correspondant | Collectivités de l'OFGL sans correspondant |
+|---|---|---|---|---|---|
+| communes | 8 années entre 2018 et 2025 | 279 943 | 279 857 | 86 | 8 |
+| groupements à fiscalité propre | 8 années entre 2018 et 2025 | 10 163 | 10 138 | 25 | 7 |
+| départements et collectivités territoriales uniques | 14 années entre 2012 et 2025 | 1 392 | 1 369 | 23 | 25 |
+| régions | 14 années entre 2012 et 2025 | 246 | 182 | 64 | 64 |
+
+Agrégats de même intitulé, ou de même objet, des deux publications, établies d'après les mêmes comptes de gestion. L'OFGL définit les siens compte par compte, en opérations réelles et hors gestion active de la dette (définitions de la DGCL) ; les maquettes de la DGFiP ne disent pas les leurs. Un agrégat que le jeu de l'OFGL publie pour d'autres collectivités de l'exercice, mais pas pour celle-ci, y vaut zéro. La part d'égaux mesure combien les deux définitions se recouvrent.
+
+| Niveau | Comptes individuels | Comptes de l'OFGL | Exercices | Comparés | Égaux à l'arrondi près | Part | Plus grand écart (DGFiP − OFGL) |
+|---|---|---|---|---|---|---|---|
+| communes | CHARGES_PERSONNEL | FRAIS_PERSONNEL | 8 années entre 2018 et 2025 | 279 857 | 279 855 | 100,0 % | −2 023 € : SUZAN (09304), 2020 |
+| communes | ACHATS_CHARGES_EXTERNES | ACHATS_CHARGES_EXTERNES | 8 années entre 2018 et 2025 | 279 857 | 279 832 | 100,0 % | +0,9 M€ : RAMATUELLE (83101), 2023 |
+| communes | CHARGES_FINANCIERES | CHARGES_FINANCIERES | 8 années entre 2018 et 2025 | 279 857 | 279 021 | 99,7 % | +34,1 M€ : MARSEILLE (13055), 2021 |
+| communes | DGF | DGF | 8 années entre 2018 et 2025 | 279 857 | 279 855 | 100,0 % | −18 530 € : SUZAN (09304), 2021 |
+| communes | PRODUITS_SERVICES_DOMAINE | VENTES_BIENS_SERVICES | 8 années entre 2018 et 2025 | 279 857 | 279 850 | 100,0 % | −311 € : SAINT-JULIEN-DE-TOURSAC (15194), 2020 |
+| communes | FCTVA | FCTVA | 8 années entre 2018 et 2025 | 279 857 | 279 854 | 100,0 % | +24 248 € : MEYRIEU-LES-ETANGS (38231), 2019 |
+| communes | IMPOTS_LOCAUX | IMPOTS_LOCAUX | 8 années entre 2018 et 2025 | 279 857 | 7 834 | 2,8 % | −1 042,8 M€ : VILLE DE PARIS (75056), 2023 |
+| communes | AUTRES_IMPOTS_TAXES | AUTRES_IMPOTS_TAXES | 8 années entre 2018 et 2025 | 279 857 | 44 975 | 16,1 % | −365,3 M€ : PARIS 01 (75056), 2018 |
+| communes | FISCALITE_REVERSEE | FISCALITE_REVERSEE | 5 années entre 2021 et 2025 | 174 572 | 153 737 | 88,1 % | +110,9 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | PRODUITS_FONCTIONNEMENT_CAF | REC_FONCTIONNEMENT | 8 années entre 2018 et 2025 | 279 857 | 250 504 | 89,5 % | +101,5 M€ : VILLE DE PARIS (75056), 2020 |
+| communes | CHARGES_FONCTIONNEMENT_CAF | DEP_FONCTIONNEMENT | 8 années entre 2018 et 2025 | 279 857 | 277 717 | 99,2 % | +52,7 M€ : BOULOGNE-BILLANCOURT (92012), 2018 |
+| communes | EXCEDENT_BRUT_FONCTIONNEMENT | EPARGNE_GESTION_COURANTE | 8 années entre 2018 et 2025 | 279 857 | 251 779 | 90,0 % | +11,9 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | CAF | EPARGNE_BRUTE | 8 années entre 2018 et 2025 | 279 857 | 250 579 | 89,5 % | +101,5 M€ : VILLE DE PARIS (75056), 2020 |
+| communes | CAF_NETTE | EPARGNE_NETTE | 8 années entre 2018 et 2025 | 279 857 | 164 813 | 58,9 % | +125,9 M€ : VILLE DE PARIS (75056), 2020 |
+| communes | DEPENSES_EQUIPEMENT | DEPENSES_EQUIPEMENT | 8 années entre 2018 et 2025 | 279 857 | 155 359 | 55,5 % | +481,5 M€ : PARIS 01 (75056), 2019 |
+| communes | EMPRUNTS_DETTES_ASSIMILEES | EMPRUNTS | 8 années entre 2018 et 2025 | 279 857 | 185 386 | 66,2 % | −335,3 M€ : VILLE DE PARIS (75056), 2022 |
+| communes | REMBOURSEMENTS_EMPRUNTS_DETTES | REMBOURSEMENTS_DETTE | 8 années entre 2018 et 2025 | 279 857 | 179 570 | 64,2 % | +70,6 M€ : LEVALLOIS-PERRET (92044), 2018 |
+| communes | ANNUITE_DETTE | ANNUITE_DETTE_CHARGES_FINANCIERES | 8 années entre 2018 et 2025 | 279 857 | 159 043 | 56,8 % | −76,2 M€ : PARIS 01 (75056), 2019 |
+| communes | ENCOURS_DETTE | DETTE | 8 années entre 2018 et 2025 | 279 857 | 279 836 | 100,0 % | −1,0 M€ : KUNHEIM (68172), 2018 |
+| communes | ENCOURS_DETTES_BANCAIRES | DETTE_BANCAIRE | 8 années entre 2018 et 2025 | 279 857 | 279 831 | 100,0 % | −2,1 M€ : VENCE (06157), 2020 |
+| communes | FONDS_ROULEMENT | FONDS_ROULEMENT | 8 années entre 2018 et 2025 | 279 857 | 272 364 | 97,3 % | −34,9 M€ : MARSEILLE (13055), 2023 |
+| groupements à fiscalité propre | CHARGES_PERSONNEL | FRAIS_PERSONNEL | 8 années entre 2018 et 2025 | 10 138 | 9 847 | 97,1 % | −7,6 M€ : CA BASSIN BRIVE (200043172), 2024 |
+| groupements à fiscalité propre | ACHATS_CHARGES_EXTERNES | ACHATS_CHARGES_EXTERNES | 8 années entre 2018 et 2025 | 10 138 | 6 400 | 63,1 % | +19,2 M€ : CA GRD PARIS SUD SEINE ESS SEN (200059228), 2025 |
+| groupements à fiscalité propre | CHARGES_FINANCIERES | CHARGES_FINANCIERES | 8 années entre 2018 et 2025 | 10 138 | 9 963 | 98,3 % | +16,8 M€ : CA GRD PARIS SUD SEINE ESS SEN (200059228), 2018 |
+| groupements à fiscalité propre | DGF | DGF | 8 années entre 2018 et 2025 | 10 138 | 10 138 | 100,0 % | aucun |
+| groupements à fiscalité propre | PRODUITS_SERVICES_DOMAINE | VENTES_BIENS_SERVICES | 8 années entre 2018 et 2025 | 10 138 | 2 819 | 27,8 % | +77,4 M€ : BORDEAUX METROPOLE (243300316), 2025 |
+| groupements à fiscalité propre | FCTVA | FCTVA | 8 années entre 2018 et 2025 | 10 138 | 9 972 | 98,4 % | −0,3 M€ : CC VALLEE DES BAUX - ALPILLES (241300375), 2019 |
+| groupements à fiscalité propre | IMPOTS_LOCAUX | IMPOTS_LOCAUX | 8 années entre 2018 et 2025 | 10 138 | 95 | 0,9 % | +3 413,5 M€ : METROPOLE DU GRAND PARIS (200054781), 2023 |
+| groupements à fiscalité propre | AUTRES_IMPOTS_TAXES | AUTRES_IMPOTS_TAXES | 8 années entre 2018 et 2025 | 10 138 | 4 686 | 46,2 % | +361,0 M€ : MET AIX MARSEILLE PROVENCE (200054807), 2021 |
+| groupements à fiscalité propre | FISCALITE_REVERSEE | FISCALITE_REVERSEE | 8 années entre 2018 et 2025 | 10 138 | 769 | 7,6 % | −345,7 M€ : MET AIX MARSEILLE PROVENCE (200054807), 2021 |
+| groupements à fiscalité propre | PRODUITS_FONCTIONNEMENT_CAF | REC_FONCTIONNEMENT | 8 années entre 2018 et 2025 | 10 138 | 2 805 | 27,7 % | −115,5 M€ : METROPOLE NCA (200030195), 2023 |
+| groupements à fiscalité propre | CHARGES_FONCTIONNEMENT_CAF | DEP_FONCTIONNEMENT | 8 années entre 2018 et 2025 | 10 138 | 6 061 | 59,8 % | −115,6 M€ : METROPOLE NCA (200030195), 2023 |
+| groupements à fiscalité propre | CAF | EPARGNE_BRUTE | 8 années entre 2018 et 2025 | 10 138 | 2 953 | 29,1 % | +71,2 M€ : METROPOLE DU GRAND PARIS (200054781), 2025 |
+| groupements à fiscalité propre | CAF_NETTE | EPARGNE_NETTE | 8 années entre 2018 et 2025 | 10 138 | 1 486 | 14,7 % | −98,7 M€ : Metropole europ de Lille (200093201), 2025 |
+| groupements à fiscalité propre | DEPENSES_EQUIPEMENT | DEPENSES_EQUIPEMENT | 8 années entre 2018 et 2025 | 10 138 | 755 | 7,4 % | +319,5 M€ : AIX MARSEILLE PROVENCE BP MET (200054807), 2025 |
+| groupements à fiscalité propre | EMPRUNTS_DETTES_ASSIMILEES | EMPRUNTS | 8 années entre 2018 et 2025 | 10 138 | 4 469 | 44,1 % | +99,9 M€ : Metropole europ de Lille (200093201), 2025 |
+| groupements à fiscalité propre | REMBOURSEMENTS_EMPRUNTS_DETTES | REMBOURSEMENTS_DETTE | 8 années entre 2018 et 2025 | 10 138 | 3 635 | 35,9 % | +98,8 M€ : Metropole europ de Lille (200093201), 2025 |
+| groupements à fiscalité propre | ANNUITE_DETTE | ANNUITE_DETTE_CHARGES_FINANCIERES | 8 années entre 2018 et 2025 | 10 138 | 2 545 | 25,1 % | +90,2 M€ : Metropole europ de Lille (200093201), 2025 |
+| groupements à fiscalité propre | ENCOURS_DETTE | DETTE | 8 années entre 2018 et 2025 | 10 138 | 9 854 | 97,2 % | −46,9 M€ : AIX MARSEILLE PROVENCE BP MET (200054807), 2025 |
+| groupements à fiscalité propre | ENCOURS_DETTES_BANCAIRES | DETTE_BANCAIRE | 8 années entre 2018 et 2025 | 10 138 | 10 103 | 99,7 % | −1,5 M€ : CC LAUTRECOIS-PAYS D'AGOUT (200034056), 2018 |
+| départements et collectivités territoriales uniques | CHARGES_PERSONNEL | FRAIS_PERSONNEL | 14 années entre 2012 et 2025 | 1 369 | 1 368 | 99,9 % | −522 € : CTU COLLECTIVITE DE CORSE (02A), 2018 |
+| départements et collectivités territoriales uniques | ACHATS_CHARGES_EXTERNES | ACHATS_CHARGES_EXTERNES | 14 années entre 2012 et 2025 | 1 369 | 1 301 | 95,0 % | +1,0 M€ : DEP HAUTE-SAVOIE (074), 2017 |
+| départements et collectivités territoriales uniques | CHARGES_FINANCIERES | CHARGES_FINANCIERES | 14 années entre 2012 et 2025 | 1 369 | 1 311 | 95,8 % | +149,7 M€ : DEP RHONE (069), 2016 |
+| départements et collectivités territoriales uniques | DGF | DGF | 14 années entre 2012 et 2025 | 1 369 | 1 369 | 100,0 % | aucun |
+| départements et collectivités territoriales uniques | FCTVA | FCTVA | 14 années entre 2012 et 2025 | 1 369 | 1 369 | 100,0 % | aucun |
+| départements et collectivités territoriales uniques | IMPOTS_LOCAUX | IMPOTS_LOCAUX | 13 années entre 2013 et 2025 | 1 271 | 779 | 61,3 % | +898,2 M€ : DEP PARIS (075), 2013 |
+| départements et collectivités territoriales uniques | AUTRES_IMPOTS_TAXES | AUTRES_IMPOTS_TAXES | 14 années entre 2012 et 2025 | 1 369 | 967 | 70,6 % | +55,4 M€ : DEP PARIS (075), 2016 |
+| départements et collectivités territoriales uniques | TICPE | TICPE | 2012 | 98 | 98 | 100,0 % | aucun |
+| départements et collectivités territoriales uniques | CVAE | CVAE | 11 années entre 2012 et 2022 | 1 078 | 103 | 9,6 % | +15,6 M€ : CTG COLLECTIVITE TERRITORIALE GUYANE (102), 2016 |
+| départements et collectivités territoriales uniques | PRODUITS_FONCTIONNEMENT_CAF | REC_FONCTIONNEMENT | 9 années entre 2017 et 2025 | 876 | 433 | 49,4 % | +73,7 M€ : DEP BOUCHES-DU-RHONE (013), 2020 |
+| départements et collectivités territoriales uniques | CHARGES_FONCTIONNEMENT_CAF | DEP_FONCTIONNEMENT | 9 années entre 2017 et 2025 | 876 | 754 | 86,1 % | +48,8 M€ : COLLECTIVITE DE CORSE (02A), 2020 |
+| départements et collectivités territoriales uniques | EXCEDENT_BRUT_FONCTIONNEMENT | EPARGNE_GESTION_COURANTE | 13 années entre 2013 et 2025 | 1 271 | 640 | 50,4 % | −52,1 M€ : DEP VAR (083), 2025 |
+| départements et collectivités territoriales uniques | CAF | EPARGNE_BRUTE | 14 années entre 2012 et 2025 | 1 369 | 645 | 47,1 % | +112,9 M€ : DEP REUNION (104), 2013 |
+| départements et collectivités territoriales uniques | CAF_NETTE | EPARGNE_NETTE | 13 années entre 2013 et 2025 | 1 271 | 358 | 28,2 % | −187,5 M€ : DEP RHONE (069), 2016 |
+| départements et collectivités territoriales uniques | DEPENSES_EQUIPEMENT | DEPENSES_EQUIPEMENT | 13 années entre 2013 et 2025 | 1 271 | 118 | 9,3 % | +185,5 M€ : DEP HAUTS-DE-SEINE (092), 2015 |
+| départements et collectivités territoriales uniques | SUBVENTIONS_EQUIPEMENT_VERSEES | SUBVENTIONS_EQUIPEMENT_VERSEES | 14 années entre 2012 et 2025 | 1 369 | 779 | 56,9 % | +74,3 M€ : DEP GARD (030), 2013 |
+| départements et collectivités territoriales uniques | EMPRUNTS_DETTES_ASSIMILEES | EMPRUNTS | 13 années entre 2013 et 2025 | 1 271 | 811 | 63,8 % | +298,6 M€ : DEP RHONE (069), 2016 |
+| départements et collectivités territoriales uniques | REMBOURSEMENTS_EMPRUNTS_DETTES | REMBOURSEMENTS_DETTE | 13 années entre 2013 et 2025 | 1 271 | 755 | 59,4 % | +187,5 M€ : DEP RHONE (069), 2016 |
+| départements et collectivités territoriales uniques | ANNUITE_DETTE | ANNUITE_DETTE_CHARGES_FINANCIERES | 13 années entre 2013 et 2025 | 1 271 | 139 | 10,9 % | +181,2 M€ : DEP RHONE (069), 2016 |
+| départements et collectivités territoriales uniques | ENCOURS_DETTE | DETTE | 9 années entre 2017 et 2025 | 876 | 876 | 100,0 % | aucun |
+| départements et collectivités territoriales uniques | ENCOURS_DETTES_BANCAIRES | DETTE_BANCAIRE | 14 années entre 2012 et 2025 | 1 369 | 1 324 | 96,7 % | −236,9 M€ : DEP SEINE-SAINT-DENIS (093), 2014 |
+| départements et collectivités territoriales uniques | FONDS_ROULEMENT | FONDS_ROULEMENT | 13 années entre 2013 et 2025 | 1 271 | 668 | 52,6 % | +237,7 M€ : CTU COLLECTIVITE TERRITORIALE GUYANE (102), 2018 |
+| régions | CHARGES_PERSONNEL | FRAIS_PERSONNEL | 14 années entre 2012 et 2025 | 182 | 182 | 100,0 % | aucun |
+| régions | ACHATS_CHARGES_EXTERNES | ACHATS_CHARGES_EXTERNES | 14 années entre 2012 et 2025 | 182 | 182 | 100,0 % | aucun |
+| régions | CHARGES_FINANCIERES | CHARGES_FINANCIERES | 14 années entre 2012 et 2025 | 182 | 163 | 89,6 % | +82,4 M€ : COLLECTIVITE TERRITORIALE DE CORSE (094), 2015 |
+| régions | DGF | DGF | 14 années entre 2012 et 2025 | 182 | 182 | 100,0 % | aucun |
+| régions | FCTVA | FCTVA | 14 années entre 2012 et 2025 | 182 | 182 | 100,0 % | aucun |
+| régions | IMPOTS_LOCAUX | IMPOTS_LOCAUX | 13 années entre 2013 et 2025 | 172 | 111 | 64,5 % | +674,8 M€ : REG ILE-DE-FRANCE (011), 2013 |
+| régions | AUTRES_IMPOTS_TAXES | AUTRES_IMPOTS_TAXES | 14 années entre 2012 et 2025 | 182 | 160 | 87,9 % | −9,4 M€ : REGION REUNION (104), 2021 |
+| régions | TICPE | TICPE | 14 années entre 2012 et 2025 | 182 | 142 | 78,0 % | −102,2 M€ : REG ILE-DE-FRANCE (011), 2015 |
+| régions | CVAE | CVAE | 9 années entre 2012 et 2020 | 112 | 12 | 10,7 % | +8,5 M€ : REG GUADELOUPE (101), 2012 |
+| régions | PRODUITS_FONCTIONNEMENT_CAF | REC_FONCTIONNEMENT | 9 années entre 2017 et 2025 | 127 | 82 | 64,6 % | +37,0 M€ : REG PROVENCE-ALPES-COTE-D'AZUR (093), 2020 |
+| régions | CHARGES_FONCTIONNEMENT_CAF | DEP_FONCTIONNEMENT | 9 années entre 2017 et 2025 | 127 | 107 | 84,3 % | +6,1 M€ : REG OCCITANIE (076), 2024 |
+| régions | EXCEDENT_BRUT_FONCTIONNEMENT | EPARGNE_GESTION_COURANTE | 13 années entre 2013 et 2025 | 172 | 117 | 68,0 % | +7,3 M€ : REG HAUTS DE FRANCE (032), 2025 |
+| régions | CAF | EPARGNE_BRUTE | 13 années entre 2013 et 2025 | 172 | 96 | 55,8 % | +35,8 M€ : REG PROVENCE-ALPES-COTE-D'AZUR (093), 2020 |
+| régions | CAF_NETTE | EPARGNE_NETTE | 13 années entre 2013 et 2025 | 172 | 66 | 38,4 % | −81,7 M€ : REG OCCITANIE (076), 2022 |
+| régions | DEPENSES_EQUIPEMENT | DEPENSES_EQUIPEMENT | 13 années entre 2013 et 2025 | 172 | 23 | 13,4 % | +427,9 M€ : REG PROVENCE-ALPES-COTE-D'AZUR (093), 2025 |
+| régions | SUBVENTIONS_EQUIPEMENT_VERSEES | SUBVENTIONS_EQUIPEMENT_VERSEES | 14 années entre 2012 et 2025 | 182 | 111 | 61,0 % | −102,2 M€ : REG NORMANDIE (028), 2022 |
+| régions | EMPRUNTS_DETTES_ASSIMILEES | EMPRUNTS | 13 années entre 2013 et 2025 | 172 | 82 | 47,7 % | +127,3 M€ : COLLECTIVITE TERRITORIALE DE CORSE (094), 2015 |
+| régions | REMBOURSEMENTS_EMPRUNTS_DETTES | REMBOURSEMENTS_DETTE | 13 années entre 2013 et 2025 | 172 | 100 | 58,1 % | +81,7 M€ : REG OCCITANIE (076), 2022 |
+| régions | ANNUITE_DETTE | ANNUITE_DETTE_CHARGES_FINANCIERES | 13 années entre 2013 et 2025 | 172 | 11 | 6,4 % | −146,3 M€ : REG PROVENCE-ALPES-COTE-D'AZUR (093), 2024 |
+| régions | ENCOURS_DETTE | DETTE | 13 années entre 2013 et 2025 | 172 | 172 | 100,0 % | aucun |
+| régions | ENCOURS_DETTES_BANCAIRES | DETTE_BANCAIRE | 10 années entre 2012 et 2025 | 137 | 131 | 95,6 % | +41,3 M€ : REG CENTRE (024), 2012 |
+| régions | FONDS_ROULEMENT | FONDS_ROULEMENT | 13 années entre 2013 et 2025 | 172 | 98 | 57,0 % | +146,9 M€ : REG PROVENCE-ALPES-COTE-D'AZUR (093), 2022 |

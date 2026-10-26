@@ -13,8 +13,10 @@ les tables comptes_fonctions et budgets, la fiscalité directe locale de chaque 
 tables fiscalite et communes_fiscalite, et les dotations que l'État notifie à chaque collectivité
 dans les tables dotations et beneficiaires. Les impositions que recense la DGFiP sur le territoire de
 chaque commune (REI) y sont lues dans les copies archivées de ses fichiers : tables impositions_rei,
-postes_rei, communes_rei et traces_rei. La vue v_organismes donne les organismes que nomment les listes
-officielles, avec les libellés de leur sous-secteur et de leur fonction.
+postes_rei, communes_rei et traces_rei. Les comptes individuels de chaque commune, groupement à fiscalité
+propre, département et région que publie la DGFiP y sont lus dans les copies archivées de leurs exports :
+tables comptes_individuels et fiches_individuelles. La vue v_organismes donne les organismes que nomment
+les listes officielles, avec les libellés de leur sous-secteur et de leur fonction.
 """
 
 import csv
@@ -23,6 +25,7 @@ import io
 import itertools
 import sqlite3
 
+import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_rei as rei
 from commun import BASE, lire, paquet
@@ -146,6 +149,20 @@ FROM traces_rei v
 JOIN fichiers_rei f ON f.rowid = v.lot
 LEFT JOIN variables_rei r ON r.code = v.code AND f.exercice BETWEEN r.premier_exercice AND r.dernier_exercice;
 
+-- Les comptes individuels que publie la DGFiP, dans la version la plus récente de chaque exercice de chaque niveau, avec
+-- le libellé de chaque variable dans la maquette, sa grandeur (montant, base et réduction en milliers d'euros, taux en
+-- %), le concept qu'elle mesure, et la fiche de la collectivité.
+CREATE VIEW v_comptes_individuels AS
+SELECT f.source_id, f.exercice, f.version, f.fichier_id, c.collectivite, k.nom, k.departement, k.region, k.population,
+       k.strate, k.groupement, v.variable, v.grandeur, v.concept_id, co.libelle AS concept_libelle, v.libelle, c.valeur
+FROM comptes_individuels c
+JOIN fichiers_comptes_individuels f ON f.rowid = c.lot
+JOIN variables_comptes_individuels v ON v.rowid = c.variable
+JOIN concepts co ON co.id = v.concept_id
+LEFT JOIN fiches_individuelles k ON k.lot = c.lot AND k.collectivite = c.collectivite
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_comptes_individuels g
+                   WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'comptes');
+
 -- Les organismes que nomment les listes officielles, avec les libellés de leur sous-secteur et de leur fonction, et la
 -- source et la version de leur liste.
 CREATE VIEW v_organismes AS
@@ -246,6 +263,19 @@ POSTES_REI = [("taxe", "TEXT"), ("destinataire", "TEXT")]
 COMMUNES_REI = [("lot", "INTEGER"), ("commune", "TEXT")] + [(c, "TEXT") for c in rei.FICHE]
 TRACES_REI = [("lot", "INTEGER"), ("rang", "INTEGER"), ("code", "TEXT"), ("titre", "TEXT"), ("titre_trace", "TEXT"),
               ("format", "TEXT")]
+# Les comptes individuels de la DGFiP : une ligne par collectivité et par variable que retient
+# tables/variables_comptes_individuels.csv, une valeur absente n'ayant pas de ligne. Une ligne ne porte que le numéro de
+# sa copie (`lot`, la ligne de fichiers_comptes_individuels) et celui de sa variable (`variable`, la ligne de
+# variables_comptes_individuels, qui en donne la grandeur, le libellé et le concept) ; la collectivité est désignée par
+# son code Insee pour une commune, son numéro Siren pour un groupement, son numéro de département ou de région selon la
+# DGFiP. La table fiches_individuelles donne la fiche de chaque collectivité, chaque exercice : son nom, son département,
+# sa région, sa population (population légale pour une commune, et population DGF jusqu'en 2009), sa strate, le type de
+# son groupement pour une commune, le nombre de ses budgets annexes pour un groupement.
+COMPTES_INDIVIDUELS = [("lot", "INTEGER"), ("collectivite", "TEXT"), ("variable", "INTEGER"), ("valeur", "REAL")]
+FICHES_INDIVIDUELLES = [("lot", "INTEGER"), ("collectivite", "TEXT"), ("nom", "TEXT"), ("departement", "TEXT"),
+                        ("region", "TEXT"), ("population", "INTEGER"), ("population_dgf", "INTEGER"), ("strate", "TEXT"),
+                        ("groupement", "TEXT"), ("budgets_annexes", "INTEGER"), ("budgets_spic", "INTEGER")]
+ENTIERS_FICHES = {"population", "population_dgf", "budgets_annexes", "budgets_spic"}
 
 
 def lignes_collectivites(lots, concepts):
@@ -305,6 +335,30 @@ def lignes_rei(lots, postes):
         yield "impositions_rei", impositions
 
 
+def lignes_individuelles(lots, variables):
+    """(table, lignes) des comptes individuels, une copie de comptes après l'autre : la fiche de chaque collectivité et
+    ses valeurs ; `lots` et `variables` donnent le numéro de ligne de chaque copie inscrite et de chaque ligne du
+    référentiel des variables, sous (source, variable, premier exercice)."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    referentiel = lire("tables/variables_comptes_individuels.csv")
+    for inscrit in lire("tables/fichiers_comptes_individuels.csv"):
+        if inscrit["contenu"] != "comptes":
+            continue
+        lot, source = lots[inscrit["fichier_id"]], inscrit["source_id"]
+        exercice, lues, _, _ = individuels.comptes(fichiers[inscrit["fichier_id"]], referentiel)
+        numeros = {v: variables[(source, v, l["premier_exercice"])]
+                   for v, l in individuels.retenues(source, exercice, referentiel).items()}
+        colonnes = {c: colonne for c, colonne, _, _ in individuels.FICHES[source] if colonne}
+        fiches, valeurs = [], []
+        for code, decrits, montants in lues:
+            fiche = {colonnes[c]: v for c, v in decrits.items() if c in colonnes}
+            fiches.append([lot, code] + [(int(fiche[c].split(".")[0]) if fiche.get(c) and c in ENTIERS_FICHES
+                                          else fiche.get(c) or None) for c, _ in FICHES_INDIVIDUELLES[2:]])
+            valeurs += [[lot, code, numeros[v], m] for v, m in montants.items()]
+        yield "fiches_individuelles", fiches
+        yield "comptes_individuels", valeurs
+
+
 def valeur_sql(champ, texte):
     if texte == "":
         return None
@@ -341,7 +395,8 @@ def main():
                  "budgets": BUDGETS, "comptes_fonctions": COMPTES_FONCTIONS, "fiscalite": FISCALITE,
                  "communes_fiscalite": COMMUNES_FISCALITE, "dotations": DOTATIONS, "beneficiaires": BENEFICIAIRES,
                  "postes_rei": POSTES_REI, "impositions_rei": IMPOSITIONS_REI, "communes_rei": COMMUNES_REI,
-                 "traces_rei": TRACES_REI}
+                 "traces_rei": TRACES_REI, "comptes_individuels": COMPTES_INDIVIDUELS,
+                 "fiches_individuelles": FICHES_INDIVIDUELLES}
     for table, colonnes in nouvelles.items():
         connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
     lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
@@ -354,7 +409,11 @@ def main():
     texte = io.StringIO()
     csv.writer(texte, lineterminator="\n").writerows(lues_postes)
     hachages["postes_rei"] = [hashlib.sha256(texte.getvalue().encode("utf-8")), len(lues_postes)]
-    for table, lues in itertools.chain(lignes_collectivites(lots, concepts), lignes_rei(lots_rei, postes)):
+    lots_individuels = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_comptes_individuels")}
+    variables = {(s, v, p): r for r, s, v, p in
+                 connexion.execute("SELECT rowid, source_id, variable, premier_exercice FROM variables_comptes_individuels")}
+    for table, lues in itertools.chain(lignes_collectivites(lots, concepts), lignes_rei(lots_rei, postes),
+                                       lignes_individuelles(lots_individuels, variables)):
         if not lues:
             continue
         connexion.executemany(f"INSERT INTO {table} VALUES ({', '.join('?' * len(lues[0]))})", lues)
@@ -380,8 +439,14 @@ def main():
     connexion.execute("CREATE INDEX impositions_rei_commune ON impositions_rei (commune)")
     connexion.execute("CREATE INDEX communes_rei_cle ON communes_rei (lot, commune)")
     connexion.execute("CREATE INDEX traces_rei_cle ON traces_rei (lot, code)")
+    connexion.execute("CREATE INDEX comptes_individuels_lot ON comptes_individuels (lot, variable)")
+    connexion.execute("CREATE INDEX comptes_individuels_collectivite ON comptes_individuels (collectivite)")
+    connexion.execute("CREATE INDEX fiches_individuelles_cle ON fiches_individuelles (lot, collectivite)")
     empreintes += [{"table": t, "lignes": n, "sha256": h.hexdigest()} for t, (h, n) in hachages.items()]
     connexion.executescript(VUES)
+    # Les statistiques des tables et de leurs index, pour que SQLite choisisse son chemin : sans elles, une requête sur la
+    # vue des comptes individuels parcourt leurs cinquante millions de lignes.
+    connexion.execute("ANALYZE")
     connexion.commit()
     connexion.close()
 

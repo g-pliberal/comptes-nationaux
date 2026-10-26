@@ -11,9 +11,9 @@ fichier trop gros pour le dépôt (GitHub refuse les fichiers de plus de 100 Mo)
 (« .partie01 », « .partie02 »…), que la lecture recolle : son empreinte et sa taille restent celles du
 contenu reçu. Une connexion
 coupée avant la fin du téléchargement est réessayée ; une erreur renvoyée par le serveur ne l'est pas.
-Pour un export de data.ofgl.fr, la date de modification du jeu de données est lue avant son premier
-fichier et après chacun : si elle change, l'archivage s'arrête, et les fichiers déjà inscrits gardent
-la date sous laquelle ils ont été téléchargés. Plusieurs archivages peuvent tourner en même temps :
+Pour un export de data.ofgl.fr ou de data.economie.gouv.fr, la date de modification du jeu de données est
+lue avant son premier fichier et après chacun : si elle change, l'archivage s'arrête, et les fichiers déjà
+inscrits gardent la date sous laquelle ils ont été téléchargés. Plusieurs archivages peuvent tourner en même temps :
 chacun inscrit ses copies dans la table des fichiers à son tour.
 """
 
@@ -30,8 +30,8 @@ import time
 import urllib.error
 import urllib.request
 
-from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_pdf, date_xlsx, date_zip, ecrire, lire,
-                    lire_sdmx, maintenant, texte_html)
+from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_ods, date_pdf, date_xlsx, date_zip,
+                    ecrire, lire, lire_sdmx, maintenant, texte_html)
 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
 
@@ -58,12 +58,14 @@ def telecharger(url):
             time.sleep(5)
 
 
-def date_ofgl(url):
-    """Pour un export de data.ofgl.fr, la date de modification du jeu de données qu'annonce le portail."""
-    jeu = re.match(r"https://data\.ofgl\.fr/api/explore/v2\.1/catalog/datasets/([^/]+)/exports/", url)
+def date_portail(url):
+    """Pour un export de data.ofgl.fr ou de data.economie.gouv.fr, la date de modification du jeu de données
+    qu'annonce le portail."""
+    jeu = re.match(r"(https://(?:data\.ofgl\.fr|data\.economie\.gouv\.fr)/api/explore/v2\.1/catalog/datasets/[^/]+)/exports/",
+                   url)
     if jeu is None:
         return ""
-    fiche = json.loads(telecharger(f"https://data.ofgl.fr/api/explore/v2.1/catalog/datasets/{jeu.group(1)}")[0])
+    fiche = json.loads(telecharger(jeu.group(1))[0])
     return fiche["metas"]["default"]["modified"]
 
 
@@ -82,6 +84,7 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     if deja:
         return f"déjà archivé : {deja['id']}"
     extension = ("json" if "json" in type_contenu else "xlsx" if "spreadsheetml" in type_contenu
+                 else "ods" if "opendocument.spreadsheet" in type_contenu
                  else "csv" if "csv" in type_contenu else "html" if "html" in type_contenu
                  else "xml" if "xml" in type_contenu else "zip" if "zip" in type_contenu
                  else "pdf" if "pdf" in type_contenu else "bin")
@@ -100,14 +103,15 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     # Date de mise à jour annoncée par la source : champ « updated » du JSON-stat d'Eurostat, date de
     # modification inscrite dans le classeur pour un fichier xlsx, date d'enregistrement, de transmission ou
     # d'adoption d'un texte publié par le Sénat, dernière mise à jour des séries SDMX de l'Insee, date de
-    # modification du jeu de données pour un export de data.ofgl.fr, date la plus récente des fichiers que porte une
-    # archive zip, date de modification inscrite dans un PDF.
+    # modification du jeu de données pour un export de data.ofgl.fr ou de data.economie.gouv.fr, date la plus récente
+    # des fichiers que porte une archive zip, date de modification inscrite dans un PDF ou dans un classeur ods.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(contenu.decode("utf-8"))),
                                 "xml": lambda: max(a.get("LAST_UPDATE", "") for a, _ in lire_sdmx(BASE / chemin).values()),
                                 "zip": lambda: date_zip(contenu),
-                                "pdf": lambda: date_pdf(contenu)
+                                "pdf": lambda: date_pdf(contenu),
+                                "ods": lambda: date_ods(BASE / chemin)
                                 }.get(extension, lambda: "")()
     identifiant = f"{source_id}@{date}-{sha256[:8]}"
     fichiers.append({"id": identifiant, "source_id": source_id, "url": url, "telecharge_le": maintenant(),
@@ -127,13 +131,13 @@ def main():
     if args.source_id not in {s["id"] for s in lire("tables/sources.csv")}:
         sys.exit(f"source inconnue : {args.source_id} (la déclarer d'abord dans tables/sources.csv)")
 
-    dates = {}  # jeu de données de data.ofgl.fr → date de modification lue avant son premier fichier
+    dates = {}  # jeu de données d'un portail → date de modification lue avant son premier fichier
     for url in args.urls:
         jeu = url.split("/exports/")[0]
         if jeu not in dates:
-            dates[jeu] = date_ofgl(url)
+            dates[jeu] = date_portail(url)
         contenu, type_contenu = telecharger(url)
-        if date_ofgl(url) != dates[jeu]:
+        if date_portail(url) != dates[jeu]:
             sys.exit(f"le jeu de données a été modifié pendant le téléchargement de {url} : recommencer")
         print(archiver(args.source_id, url, contenu, type_contenu, dates[jeu], args.compresser, args.decouper), flush=True)
 
