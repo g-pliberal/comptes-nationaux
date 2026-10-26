@@ -1,0 +1,17 @@
+{
+  "description": "Copies archivées des exports et des pièces jointes du jeu de données des balances des comptes de l'État que publie la DGFiP sur data.economie.gouv.fr. L'import les contrôle et les inscrit ici ; la base lit leurs chiffres dans ces copies, sans les recopier.",
+  "fields": [
+    {"name": "fichier_id", "type": "string", "constraints": {"required": true}},
+    {"name": "source_id", "type": "string", "constraints": {"required": true}},
+    {"name": "contenu", "type": "string", "description": "guide : le guide de lecture des balances joint au jeu, qui en énonce la convention de signe ; plan : le plan comptable de l'État joint au jeu, qui donne le libellé de chaque compte ; inventaire : le nombre de lignes de chaque exercice du jeu ; balance : la balance d'un exercice, une ligne par compte, mission, programme et nature budgétaire, avec son solde.", "constraints": {"required": true, "enum": ["guide", "plan", "inventaire", "balance"]}},
+    {"name": "exercice", "type": "string", "description": "Exercice de la balance ; vide pour une autre copie.", "constraints": {"pattern": "[0-9]{4}"}},
+    {"name": "version", "type": "date", "description": "Date de modification du jeu de données qu'annonçait le portail lors de l'export ; pour une pièce jointe, date de modification inscrite dans le fichier.", "constraints": {"required": true}},
+    {"name": "lignes", "type": "integer", "description": "Balance : nombre de lignes ; inventaire : nombre d'exercices ; plan : nombre de comptes et de regroupements de comptes (classes, comptes de moins de dix chiffres) ; guide : nombre de pages.", "constraints": {"required": true}},
+    {"name": "comptes", "type": "integer", "description": "Balance : nombre de comptes distincts ; plan : nombre de comptes de dix chiffres ; vide pour une autre copie."}
+  ],
+  "primaryKey": ["fichier_id"],
+  "foreignKeys": [
+    {"fields": ["fichier_id"], "reference": {"resource": "fichiers", "fields": ["id"]}},
+    {"fields": ["source_id"], "reference": {"resource": "sources", "fields": ["id"]}}
+  ]
+}

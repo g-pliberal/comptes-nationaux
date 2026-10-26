@@ -35,7 +35,9 @@ vérifie ce que disent les sources elles-mêmes :
 12. les organismes publics : les listes et décomptes officiels des unités publiques, de l'Insee et de la DGCL, contre
    les unités dont la base a les comptes une à une ;
 13. les comptes individuels de la DGFiP : les identités que leurs maquettes énoncent, collectivité par collectivité, et
-   chaque collectivité contre ses comptes de l'OFGL, pour les agrégats de même objet.
+   chaque collectivité contre ses comptes de l'OFGL, pour les agrégats de même objet ;
+14. les balances des comptes de l'État : l'équilibre de chacune, celui des engagements hors bilan, et le bilan et le
+   compte de résultat qu'on en tire contre ceux des lois d'approbation des comptes, ligne par ligne.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -45,10 +47,12 @@ d'exécution, pour qu'un rapport à jour ne change pas.
 """
 
 import collections
+import decimal
 import itertools
 import math
 import re
 
+import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
@@ -3110,6 +3114,208 @@ def partie_comptes_individuels(listes):
     return lignes
 
 
+# 14. Balances des comptes de l'État. Le bilan et le compte de résultat qu'on tire d'une balance, par les indicateurs de
+# synthèse que la DGFiP donne à ses lignes : chaque ligne des états financiers est la somme des lignes de ses
+# indicateurs, chacune au signe de l'indicateur, plus celle de ses composantes ; la situation nette est l'actif moins le
+# passif, et non la somme de ses lignes, la balance laissant le solde de l'exercice dans les comptes de charges et de
+# produits.
+COMPOSITIONS_ETAT = dict(_RESULTAT)
+COMPOSITIONS_ETAT.update({t + s: [c + s for c in cs] for t, cs in _ACTIF for s in ("_BRUT", "_AMORTISSEMENTS")})
+COMPOSITIONS_ETAT.update({t: cs for t, cs in _PASSIF if t != "SITUATION_NETTE"})
+# La ligne dont chacune est une composante, dans la présentation des états financiers.
+PARENTS_ETAT = {c.lstrip("-"): t for t, cs in _RESULTAT + _ACTIF + _PASSIF for c in cs}
+PARENTS_ETAT.update({c + s: t + s for t, cs in _ACTIF for c in cs for s in ("_BRUT", "_AMORTISSEMENTS")})
+ENGAGEMENTS = "EHB"
+COMPOSITIONS_ETAT_SITUATION = dict(_PASSIF)["SITUATION_NETTE"]
+
+
+def etats_depuis_balance(directs):
+    """La fonction qui donne, en millions d'euros (decimal.Decimal), chaque ligne du bilan et du compte de résultat de
+    l'État que donne une balance, d'après `directs`, {ligne: somme des lignes de ses indicateurs} ; rien pour une ligne
+    dont la balance n'a ni indicateur ni composante."""
+    memoire = {}
+
+    def ligne(x):
+        if x not in memoire:
+            if x == "SITUATION_NETTE":
+                memoire[x] = ligne("ACTIF") - ligne("PASSIF")
+            elif x in _LIGNES_ACTIF:
+                brut, amortissements = ligne(x + "_BRUT"), ligne(x + "_AMORTISSEMENTS")
+                memoire[x] = (None if brut is None and amortissements is None
+                              else (brut or 0) - (amortissements or 0))
+            else:
+                parties = [(ligne(c.lstrip("-")), -1 if c.startswith("-") else 1) for c in COMPOSITIONS_ETAT.get(x, [])]
+                presentes = [s * v for v, s in parties if v is not None]
+                memoire[x] = (directs.get(x) if not presentes
+                              else directs.get(x, decimal.Decimal(0)) + sum(presentes))
+        return memoire[x]
+    return ligne
+
+
+def balances_etat_controlees(derniers):
+    """Pour chaque exercice, la balance inscrite la plus récente, et ce qu'elle donne : (exercice, inscription, comptes
+    absents du plan comptable, somme des soldes, {indicateur d'engagements hors bilan: somme}, résultat, {ligne des
+    états financiers: (loi, marge, balance)})."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    inscrits = lire("tables/fichiers_balances_etat.csv")
+    referentiel = lire("tables/indicateurs_balances_etat.csv")
+    plans = [i for i in inscrits if i["contenu"] == "plan"]
+    plan = balances.plan(fichiers[max(plans, key=lambda i: i["version"])["fichier_id"]]) if plans else {}
+    retenues = {}
+    for i in inscrits:
+        if i["contenu"] == "balance" and (i["exercice"] not in retenues or i["version"] > retenues[i["exercice"]]["version"]):
+            retenues[i["exercice"]] = i
+    # Les lignes des lois d'approbation des comptes : pour chaque exercice, la première version publiée, comme la balance.
+    lois = {}
+    for l in derniers.values():
+        if l["perimetre_id"] == "ETAT_CGE" and l["concept_id"].startswith("COMPTES_ETAT.") and l["unite_id"] == "MIO_EUR":
+            k = (l["periode"], l["concept_id"].removeprefix("COMPTES_ETAT."))
+            if k not in lois or l["version"] < lois[k]["version"]:
+                lois[k] = l
+    resultat = []
+    for exercice, inscrit in sorted(retenues.items()):
+        _, decrites, soldes = balances.balance(fichiers[inscrit["fichier_id"]], referentiel)
+        rattaches = balances.indicateurs_de(exercice, referentiel)
+        directs, engagements = collections.defaultdict(decimal.Decimal), collections.defaultdict(decimal.Decimal)
+        resultat_exercice = decimal.Decimal(0)
+        for d, solde in zip(decrites, soldes):
+            indicateur = rattaches[d["indicateurs_de_synthese"]]
+            if indicateur["categorie"] == ENGAGEMENTS:
+                engagements[indicateur["indicateur"]] += solde
+            if indicateur["categorie"] in ("Charges", "Produits"):
+                resultat_exercice += solde
+            if indicateur["concept_id"]:
+                directs[indicateur["concept_id"].removeprefix("COMPTES_ETAT.")] += int(indicateur["signe"]) * solde / 10 ** 6
+        ligne = etats_depuis_balance(directs)
+        etats = {concept: (decimal.Decimal(l["valeur"]), decimal.Decimal(valeur(l)[1]) / 10 ** 6, ligne(concept))
+                 for (periode, concept), l in lois.items() if periode == exercice}
+        absents = len({d["compte"] for d in decrites} - set(plan))
+        resultat.append((exercice, inscrit, absents, sum(soldes), dict(engagements), resultat_exercice, etats))
+    return resultat
+
+
+def ecart_etat(etats, concept):
+    """L'écart (loi − balance) d'une ligne des états financiers, quand il dépasse l'arrondi de la loi ; sinon zéro, ou
+    rien si la balance ne la donne pas."""
+    if concept not in etats or etats[concept][2] is None:
+        return None
+    loi, marge, balance_ = etats[concept]
+    return loi - balance_ if abs(loi - balance_) > marge else decimal.Decimal(0)
+
+
+def sous(concept, total):
+    """Vrai si une ligne des états financiers est une composante, directe ou non, d'un total."""
+    while concept in PARENTS_ETAT:
+        concept = PARENTS_ETAT[concept]
+        if concept == total:
+            return True
+    return False
+
+
+def explication_ecart(concept, etats):
+    """Ce qui explique l'écart d'une ligne des états financiers entre la loi et la balance, quand le calcul le montre :
+    le report des exercices antérieurs qui comprend le solde de l'exercice ; un reclassement entre les composantes d'un
+    total juste ; une compensation de créances et de dettes, qui réduit d'un même montant l'actif et le passif de la loi,
+    et laisse la situation nette juste."""
+    loi, marge, balance_ = etats[concept]
+    if balance_ is None:
+        return "la balance ne distingue pas cette ligne"
+    ecart = loi - balance_
+    solde = etats.get("SOLDE_OPERATIONS_EXERCICE")
+    if concept == "REPORT_EXERCICES_ANTERIEURS" and solde is not None and abs(ecart - solde[0]) <= marge + solde[1]:
+        return "la loi y ajoute le solde des opérations de l'exercice"
+    parent = PARENTS_ETAT.get(concept)
+    if ecart_etat(etats, parent) == 0:
+        return f"reclassement entre les composantes de {parent}, total juste"
+    actif, passif = ecart_etat(etats, "ACTIF"), ecart_etat(etats, "PASSIF")
+    if actif and passif and abs(actif - passif) <= 1 and (concept in ("ACTIF", "PASSIF") or sous(concept, "ACTIF")
+                                                          or sous(concept, "PASSIF")):
+        if abs(ecart - actif) <= 1:
+            return f"compensation de créances et de dettes : la loi a l'actif et le passif moindres de {fr(-actif, 1)} M€"
+        if parent and ecart_etat(etats, parent) and abs(ecart_etat(etats, parent) - actif) <= 1:
+            return f"reclassement entre les composantes de {parent}, qui porte la compensation"
+    return ""
+
+
+def partie_balances_etat(derniers):
+    exercices = balances_etat_controlees(derniers)
+    if not exercices:
+        return []
+    lignes = ["## 14. Balances des comptes de l'État", "",
+              "Les balances générales des comptes de l'État que publie la DGFiP, telles qu'à la clôture de chaque exercice "
+              "elles ont servi à produire le compte général de l'État : une ligne par compte, mission, programme et nature "
+              "budgétaire, avec son solde de sortie, au centime, un solde créditeur étant négatif. Les comptes de charges "
+              "et de produits n'y sont pas soldés : leur somme est le résultat de l'exercice, ici un déficit quand elle "
+              "est positive. Chaque balance doit s'équilibrer, et les engagements hors bilan (classe 8) avec leur "
+              "contrepartie.", "",
+              "| Exercice | Lignes | Comptes | Comptes absents du plan comptable joint | Somme des soldes | "
+              "Somme des engagements hors bilan | Charges et produits réunis |", "|---|---|---|---|---|---|---|"]
+    for exercice, inscrit, absents, total, engagements, resultat, _ in exercices:
+        lignes.append(f"| {exercice} | {fr(int(inscrit['lignes']), 0)} | {fr(int(inscrit['comptes']), 0)} | "
+                      f"{fr(absents, 0)} | {fr(total + 0, 2)} € | {fr(sum(engagements.values()) + 0, 2)} € | "
+                      f"{fr(resultat / 10 ** 6, 1, True)} M€ |")
+    indicateurs = sorted({i for *_, engagements, _, _ in exercices for i in engagements})
+    referentiel = {i["indicateur"]: i for i in lire("tables/indicateurs_balances_etat.csv")}
+    lignes += ["", "Engagements hors bilan de l'État, en milliards d'euros, au signe de leur présentation (un engagement "
+               "donné, solde créditeur, est positif) :", "",
+               "| Indicateur | " + " | ".join(e[0] for e in exercices) + " |",
+               "|---|" + "---|" * len(exercices)]
+    for i in indicateurs:
+        signe = int(referentiel[i]["signe"])
+        lignes.append(f"| {i} | " + " | ".join(fr(signe * e[4][i] / 10 ** 9, 1) if i in e[4] else "—"
+                                               for e in exercices) + " |")
+    comparees = [(e[0], concept, *v) for e in exercices for concept, v in e[6].items()]
+    # Une ligne que la balance n'alimente pas et que la loi donne nulle est égale.
+    egales = [c for c in comparees if abs(c[2] - (c[4] or 0)) <= c[3] and (c[4] is not None or c[2] == 0)]
+    lignes += ["", "Le bilan et le compte de résultat que donne chaque balance, par les indicateurs de synthèse que la DGFiP "
+               "rattache aux lignes des états financiers (tables/indicateurs_balances_etat.csv), contre ceux de la loi "
+               "d'approbation des comptes de l'exercice, ligne par ligne et total par total, en millions d'euros. Une "
+               "ligne de la loi est exacte au demi-million près ; la situation nette que donne la balance est l'actif "
+               f"moins le passif. {fr(len(comparees), 0)} lignes comparées, {fr(len(egales), 0)} égales à l'arrondi "
+               f"près.", "",
+               "| Exercice | Lignes comparées | Égales | Autres |", "|---|---|---|---|"]
+    for exercice in [e[0] for e in exercices]:
+        n = sum(1 for c in comparees if c[0] == exercice)
+        k = sum(1 for c in egales if c[0] == exercice)
+        lignes.append(f"| {exercice} | {fr(n, 0)} | {fr(k, 0)} | {fr(n - k, 0)} |")
+    autres = [c for c in comparees if c not in egales]
+    # Le montant brut d'un actif qui n'a ni amortissement ni dépréciation n'est pas répété : sa ligne nette, de même écart à
+    # l'arrondi près, le donne.
+    nets = {(c[0], c[1]): c[2] - (c[4] or 0) for c in autres}
+    autres = [c for c in autres if not (c[1].endswith("_BRUT") and (c[0], c[1].removesuffix("_BRUT")) in nets
+                                        and abs(nets[(c[0], c[1].removesuffix("_BRUT"))] - (c[2] - (c[4] or 0))) <= 1)]
+    if autres:
+        lignes += ["", "Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le report des exercices "
+                   "antérieurs de la loi qui comprend le solde des opérations de l'exercice (le bilan y est présenté après "
+                   "son affectation) ; un reclassement entre les lignes d'un même total, que la loi donne alors égal à "
+                   "celui de la balance ; une compensation de créances et de dettes, quand l'actif et le passif de la loi "
+                   "sont moindres d'un même montant, la situation nette restant juste ; une ligne que la balance ne "
+                   "distingue pas. Le montant brut d'un actif n'est pas répété quand sa ligne nette porte le même écart.",
+                   "",
+                   "| Exercice | Ligne | Loi | Balance | Écart (loi − balance) | Explication |",
+                   "|---|---|---|---|---|---|"]
+        etats = {e[0]: e[6] for e in exercices}
+        for exercice, concept, loi, _, balance_ in sorted(autres):
+            lignes.append(f"| {exercice} | {concept} | {fr(loi, 0)} | "
+                          f"{'—' if balance_ is None else fr(balance_, 1)} | "
+                          f"{'—' if balance_ is None else fr(loi - balance_, 1, True)} | "
+                          f"{explication_ecart(concept, etats[exercice])} |")
+    # Un exercice où la loi compte le solde de l'exercice dans la situation nette sans le porter sur aucune de ses lignes.
+    for exercice, *_, etats in exercices:
+        lignes_sn = [etats[c][0] for c in COMPOSITIONS_ETAT_SITUATION if c in etats]
+        if "SITUATION_NETTE" in etats and "SOLDE_OPERATIONS_EXERCICE" in etats and lignes_sn:
+            reste = etats["SITUATION_NETTE"][0] - sum(lignes_sn)
+            solde = etats["SOLDE_OPERATIONS_EXERCICE"][0]
+            if abs(reste) > len(lignes_sn) and abs(reste - solde) <= len(lignes_sn) + 1:
+                lignes += ["", f"En {exercice}, la situation nette de la loi comprend le solde des opérations de "
+                           f"l'exercice ({fr(solde, 0, True)} M€) sans qu'aucune de ses lignes le porte : la balance, "
+                           f"dont la situation nette (l'actif moins le passif) est celle de la loi, le laisse dans les "
+                           f"comptes de charges et de produits, et la somme des lignes de la loi s'écarte de son total "
+                           f"d'autant (section 1)."]
+    lignes.append("")
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -3122,7 +3328,7 @@ def ecrire_rapport(derniers):
     lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)
     listes = listes_collectivites()
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
-    lignes += partie_comptes_individuels(listes)
+    lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")
