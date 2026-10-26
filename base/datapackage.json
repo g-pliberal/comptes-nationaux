@@ -25,6 +25,8 @@
     {"name": "taxes_rei", "path": "tables/taxes_rei.csv", "schema": "schemas/taxes_rei.json"},
     {"name": "variables_rei", "path": "tables/variables_rei.csv", "schema": "schemas/variables_rei.json"},
     {"name": "organismes", "path": "tables/organismes.csv", "schema": "schemas/organismes.json"},
+    {"name": "variables_comptes_individuels", "path": "tables/variables_comptes_individuels.csv", "schema": "schemas/variables_comptes_individuels.json"},
+    {"name": "fichiers_comptes_individuels", "path": "tables/fichiers_comptes_individuels.csv", "schema": "schemas/fichiers_comptes_individuels.json"},
     {"name": "chiffres-dgcl-collectivites-locales-en-chiffres", "path": "tables/chiffres/dgcl/collectivites-locales-en-chiffres.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-dgcl-finances-departements", "path": "tables/chiffres/dgcl/finances-departements.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-dgcl-finances-regions", "path": "tables/chiffres/dgcl/finances-regions.csv", "schema": "schemas/chiffres.json"},

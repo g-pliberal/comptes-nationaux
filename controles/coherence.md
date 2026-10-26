@@ -1881,3 +1881,90 @@ La liste de l'Insee, que la table des organismes reprend organisme par organisme
 | GF09 Enseignement | 286 |
 | GF10 Protection sociale | 7 |
 | Ensemble | 701 |
+
+## 13. Comptes individuels de la DGFiP
+
+Les comptes individuels que la DGFiP publie pour chaque commune depuis 2000, chaque groupement à fiscalité propre depuis 2007, chaque département et chaque région depuis 2008 : l'analyse des équilibres financiers fondamentaux du budget principal (budgets annexes compris pour les groupements) et les éléments de la fiscalité directe locale, en milliers d'euros, dans la version la plus récente de chaque exercice. Une valeur est exacte à la demi-unité de la dernière décimale que sa variable publie dans l'exercice.
+
+| Niveau | Exercices | Collectivités au dernier exercice | Collectivités-exercices | Valeurs lues | Valeurs absentes |
+|---|---|---|---|---|---|
+| communes | 2000, 2001, 2002 et 2025 | 34 860 | 144 792 | 6 773 112 | 0 |
+| groupements à fiscalité propre | 2007, 2008, 2009 et 2010 | 2 611 | 10 380 | 425 756 | 0 |
+| départements et collectivités territoriales uniques | 7 années entre 2008 et 2014 | 101 | 701 | 32 738 | 0 |
+| régions | 2008 | 26 | 26 | 1 118 | 0 |
+
+Identités que les maquettes énoncent, de chaque collectivité : le résultat comptable (R) est la différence des produits (A) et des charges (B) de fonctionnement ; le besoin de financement de la section d'investissement (E), jusqu'en 2024, le besoin résiduel (D − C, emplois moins ressources) plus le solde des opérations pour compte de tiers, et en 2025 D − C ; le résultat d'ensemble, R − E ; la capacité d'autofinancement nette, la capacité d'autofinancement moins le remboursement des emprunts et dettes assimilées. 712 969 vérifiées, 712 923 justes, 46 en écart.
+
+| Niveau | Total | Parties | Vérifiées | En écart | Plus grand écart |
+|---|---|---|---|---|---|
+| communes | RESULTAT_COMPTABLE | PRODUITS_FONCTIONNEMENT − CHARGES_FONCTIONNEMENT | 144 792 | 0 | aucun |
+| communes | BESOIN_FINANCEMENT_RESIDUEL | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 109 932 | 0 | aucun |
+| communes | BESOIN_FINANCEMENT_INVESTISSEMENT | BESOIN_FINANCEMENT_RESIDUEL + SOLDE_OPERATIONS_TIERS | 109 932 | 0 | aucun |
+| communes | BESOIN_FINANCEMENT_INVESTISSEMENT | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 34 860 | 0 | aucun |
+| communes | RESULTAT_ENSEMBLE | RESULTAT_COMPTABLE − BESOIN_FINANCEMENT_INVESTISSEMENT | 144 792 | 0 | aucun |
+| communes | CAF_NETTE | CAF − REMBOURSEMENTS_EMPRUNTS_DETTES | 144 792 | 46 | +21,51 k€ : CHAVAGNE (35076), 2025 |
+| groupements à fiscalité propre | RESULTAT_COMPTABLE | PRODUITS_FONCTIONNEMENT − CHARGES_FONCTIONNEMENT | 10 380 | 0 | aucun |
+| groupements à fiscalité propre | CAF_NETTE | CAF − REMBOURSEMENTS_EMPRUNTS_DETTES | 10 380 | 0 | aucun |
+| départements et collectivités territoriales uniques | RESULTAT_COMPTABLE | PRODUITS_FONCTIONNEMENT − CHARGES_FONCTIONNEMENT | 701 | 0 | aucun |
+| départements et collectivités territoriales uniques | BESOIN_FINANCEMENT_RESIDUEL | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 701 | 0 | aucun |
+| départements et collectivités territoriales uniques | BESOIN_FINANCEMENT_INVESTISSEMENT | BESOIN_FINANCEMENT_RESIDUEL + SOLDE_OPERATIONS_TIERS | 701 | 0 | aucun |
+| départements et collectivités territoriales uniques | RESULTAT_ENSEMBLE | RESULTAT_COMPTABLE − BESOIN_FINANCEMENT_INVESTISSEMENT | 701 | 0 | aucun |
+| départements et collectivités territoriales uniques | CAF_NETTE | CAF − REMBOURSEMENTS_EMPRUNTS_DETTES | 201 | 0 | aucun |
+| régions | RESULTAT_COMPTABLE | PRODUITS_FONCTIONNEMENT − CHARGES_FONCTIONNEMENT | 26 | 0 | aucun |
+| régions | BESOIN_FINANCEMENT_RESIDUEL | EMPLOIS_INVESTISSEMENT − RESSOURCES_INVESTISSEMENT | 26 | 0 | aucun |
+| régions | BESOIN_FINANCEMENT_INVESTISSEMENT | BESOIN_FINANCEMENT_RESIDUEL + SOLDE_OPERATIONS_TIERS | 26 | 0 | aucun |
+| régions | RESULTAT_ENSEMBLE | RESULTAT_COMPTABLE − BESOIN_FINANCEMENT_INVESTISSEMENT | 26 | 0 | aucun |
+
+### Les mêmes collectivités dans les comptes de l'OFGL
+
+Chaque exercice que publient aussi les jeux de l'OFGL (section 7), chaque collectivité rapprochée de la sienne : une commune par son code Insee, un groupement par son numéro Siren, un département ou une région par son code, une collectivité territoriale unique, que l'OFGL range parmi les régions, par son code de région. Le budget principal, ou, pour les groupements, le montant consolidé des budgets principal et annexes.
+
+| Niveau | Exercices | Collectivités | Rapprochées | Sans correspondant | Collectivités de l'OFGL sans correspondant |
+|---|---|---|---|---|---|
+| communes | 2025 | 34 860 | 34 777 | 83 | 1 |
+| départements et collectivités territoriales uniques | 2012, 2013 et 2014 | 301 | 295 | 6 | 8 |
+
+Agrégats de même intitulé, ou de même objet, des deux publications, établies d'après les mêmes comptes de gestion. L'OFGL définit les siens compte par compte, en opérations réelles et hors gestion active de la dette (définitions de la DGCL) ; les maquettes de la DGFiP ne disent pas les leurs. Un agrégat que le jeu de l'OFGL publie pour d'autres collectivités de l'exercice, mais pas pour celle-ci, y vaut zéro. La part d'égaux mesure combien les deux définitions se recouvrent.
+
+| Niveau | Comptes individuels | Comptes de l'OFGL | Exercices | Comparés | Égaux à l'arrondi près | Part | Plus grand écart (DGFiP − OFGL) |
+|---|---|---|---|---|---|---|---|
+| communes | CHARGES_PERSONNEL | FRAIS_PERSONNEL | 2025 | 34 777 | 34 777 | 100,0 % | aucun |
+| communes | ACHATS_CHARGES_EXTERNES | ACHATS_CHARGES_EXTERNES | 2025 | 34 777 | 34 774 | 100,0 % | +0,1 M€ : PORT-JEROME-SUR-SEINE (76476), 2025 |
+| communes | CHARGES_FINANCIERES | CHARGES_FINANCIERES | 2025 | 34 777 | 34 754 | 99,9 % | +1,6 M€ : MELUN (77288), 2025 |
+| communes | DGF | DGF | 2025 | 34 777 | 34 777 | 100,0 % | aucun |
+| communes | PRODUITS_SERVICES_DOMAINE | VENTES_BIENS_SERVICES | 2025 | 34 777 | 34 777 | 100,0 % | aucun |
+| communes | FCTVA | FCTVA | 2025 | 34 777 | 34 777 | 100,0 % | aucun |
+| communes | IMPOTS_LOCAUX | IMPOTS_LOCAUX | 2025 | 34 777 | 597 | 1,7 % | −938,1 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | AUTRES_IMPOTS_TAXES | AUTRES_IMPOTS_TAXES | 2025 | 34 777 | 4 629 | 13,3 % | −40,3 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | FISCALITE_REVERSEE | FISCALITE_REVERSEE | 2025 | 34 777 | 29 343 | 84,4 % | +110,9 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | PRODUITS_FONCTIONNEMENT_CAF | REC_FONCTIONNEMENT | 2025 | 34 777 | 32 139 | 92,4 % | +54,4 M€ : BOULOGNE-BILLANCOURT (92012), 2025 |
+| communes | CHARGES_FONCTIONNEMENT_CAF | DEP_FONCTIONNEMENT | 2025 | 34 777 | 34 600 | 99,5 % | +52,4 M€ : BOULOGNE-BILLANCOURT (92012), 2025 |
+| communes | EXCEDENT_BRUT_FONCTIONNEMENT | EPARGNE_GESTION_COURANTE | 2025 | 34 777 | 32 206 | 92,6 % | +11,9 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | CAF | EPARGNE_BRUTE | 2025 | 34 777 | 32 192 | 92,6 % | +11,9 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | CAF_NETTE | EPARGNE_NETTE | 2025 | 34 777 | 21 456 | 61,7 % | +28,1 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | DEPENSES_EQUIPEMENT | DEPENSES_EQUIPEMENT | 2025 | 34 777 | 18 260 | 52,5 % | +427,5 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | EMPRUNTS_DETTES_ASSIMILEES | EMPRUNTS | 2025 | 34 777 | 23 554 | 67,7 % | −104,2 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | REMBOURSEMENTS_EMPRUNTS_DETTES | REMBOURSEMENTS_DETTE | 2025 | 34 777 | 22 743 | 65,4 % | −16,2 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | ANNUITE_DETTE | ANNUITE_DETTE_CHARGES_FINANCIERES | 2025 | 34 777 | 20 512 | 59,0 % | −27,4 M€ : VILLE DE PARIS (75056), 2025 |
+| communes | ENCOURS_DETTE | DETTE | 2025 | 34 777 | 34 777 | 100,0 % | aucun |
+| communes | ENCOURS_DETTES_BANCAIRES | DETTE_BANCAIRE | 2025 | 34 777 | 34 776 | 100,0 % | +1,3 M€ : KANI KELI (97609), 2025 |
+| communes | FONDS_ROULEMENT | FONDS_ROULEMENT | 2025 | 34 777 | 34 684 | 99,7 % | +26,4 M€ : LEVALLOIS-PERRET (92044), 2025 |
+| départements et collectivités territoriales uniques | CHARGES_PERSONNEL | FRAIS_PERSONNEL | 2012, 2013 et 2014 | 295 | 295 | 100,0 % | aucun |
+| départements et collectivités territoriales uniques | ACHATS_CHARGES_EXTERNES | ACHATS_CHARGES_EXTERNES | 2012, 2013 et 2014 | 295 | 287 | 97,3 % | +0,7 M€ : DEP ARDECHE (007), 2013 |
+| départements et collectivités territoriales uniques | CHARGES_FINANCIERES | CHARGES_FINANCIERES | 2012, 2013 et 2014 | 295 | 285 | 96,6 % | +104,7 M€ : DEP SEINE-SAINT-DENIS (093), 2014 |
+| départements et collectivités territoriales uniques | DGF | DGF | 2012, 2013 et 2014 | 295 | 295 | 100,0 % | aucun |
+| départements et collectivités territoriales uniques | FCTVA | FCTVA | 2012, 2013 et 2014 | 295 | 295 | 100,0 % | aucun |
+| départements et collectivités territoriales uniques | IMPOTS_LOCAUX | IMPOTS_LOCAUX | 2013 et 2014 | 197 | 1 | 0,5 % | +898,2 M€ : DEP PARIS (075), 2013 |
+| départements et collectivités territoriales uniques | AUTRES_IMPOTS_TAXES | AUTRES_IMPOTS_TAXES | 2012, 2013 et 2014 | 295 | 142 | 48,1 % | +12,5 M€ : DEP MAYOTTE (106), 2014 |
+| départements et collectivités territoriales uniques | TICPE | TICPE | 2012 | 98 | 98 | 100,0 % | aucun |
+| départements et collectivités territoriales uniques | CVAE | CVAE | 2012, 2013 et 2014 | 295 | 55 | 18,6 % | +8,0 M€ : DEPARTEMENT DE LA GUYANE (102), 2013 |
+| départements et collectivités territoriales uniques | EXCEDENT_BRUT_FONCTIONNEMENT | EPARGNE_GESTION_COURANTE | 2013 et 2014 | 197 | 120 | 60,9 % | +4,7 M€ : DEP SOMME (080), 2014 |
+| départements et collectivités territoriales uniques | CAF | EPARGNE_BRUTE | 2012, 2013 et 2014 | 295 | 149 | 50,5 % | +112,9 M€ : DEP REUNION (104), 2013 |
+| départements et collectivités territoriales uniques | CAF_NETTE | EPARGNE_NETTE | 2013 et 2014 | 197 | 64 | 32,5 % | +112,9 M€ : DEP REUNION (104), 2013 |
+| départements et collectivités territoriales uniques | DEPENSES_EQUIPEMENT | DEPENSES_EQUIPEMENT | 2013 et 2014 | 197 | 21 | 10,7 % | +55,9 M€ : DEP SEINE-SAINT-DENIS (093), 2013 |
+| départements et collectivités territoriales uniques | SUBVENTIONS_EQUIPEMENT_VERSEES | SUBVENTIONS_EQUIPEMENT_VERSEES | 2012, 2013 et 2014 | 295 | 128 | 43,4 % | +74,3 M€ : DEP GARD (030), 2013 |
+| départements et collectivités territoriales uniques | EMPRUNTS_DETTES_ASSIMILEES | EMPRUNTS | 2013 et 2014 | 197 | 132 | 67,0 % | +39,3 M€ : DEP TARN (081), 2014 |
+| départements et collectivités territoriales uniques | REMBOURSEMENTS_EMPRUNTS_DETTES | REMBOURSEMENTS_DETTE | 2013 et 2014 | 197 | 123 | 62,4 % | +38,9 M€ : DEP TARN (081), 2013 |
+| départements et collectivités territoriales uniques | ANNUITE_DETTE | ANNUITE_DETTE_CHARGES_FINANCIERES | 2013 et 2014 | 197 | 23 | 11,7 % | +38,5 M€ : DEP TARN (081), 2013 |
+| départements et collectivités territoriales uniques | ENCOURS_DETTES_BANCAIRES | DETTE_BANCAIRE | 2012, 2013 et 2014 | 295 | 275 | 93,2 % | −236,9 M€ : DEP SEINE-SAINT-DENIS (093), 2014 |
+| départements et collectivités territoriales uniques | FONDS_ROULEMENT | FONDS_ROULEMENT | 2013 et 2014 | 197 | 61 | 31,0 % | −92,3 M€ : DEP SEINE-SAINT-DENIS (093), 2013 |

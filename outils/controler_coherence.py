@@ -33,7 +33,9 @@ vérifie ce que disent les sources elles-mêmes :
    commune, le produit de chaque taxe et de chaque niveau qui perçoit, et la taxe d'enlèvement des ordures
    ménagères recensée de chaque niveau contre celle de ses comptes ;
 12. les organismes publics : les listes et décomptes officiels des unités publiques, de l'Insee et de la DGCL, contre
-   les unités dont la base a les comptes une à une.
+   les unités dont la base a les comptes une à une ;
+13. les comptes individuels de la DGFiP : les identités que leurs maquettes énoncent, collectivité par collectivité, et
+   chaque collectivité contre ses comptes de l'OFGL, pour les agrégats de même objet.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -47,6 +49,7 @@ import itertools
 import math
 import re
 
+import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
@@ -2818,6 +2821,286 @@ def partie_organismes(derniers, listes):
     return lignes
 
 
+# --- Comptes individuels de la DGFiP -------------------------------------------------------------------------------
+
+def _ci(composante):
+    """« -CHARGES_FONCTIONNEMENT » → « -COMPTES_INDIVIDUELS.CHARGES_FONCTIONNEMENT »."""
+    signe = composante[0] if composante[0] in "-?!" else ""
+    return signe + "COMPTES_INDIVIDUELS." + composante.lstrip("-?!")
+
+
+# Identités que les maquettes des comptes individuels énoncent dans leurs libellés (« Résultat comptable = A - B = R »,
+# « Résultat d'ensemble = R - E »…) : jusqu'en 2024, le besoin de financement de la section d'investissement (E) est le
+# besoin résiduel (D − C) plus le solde des opérations pour compte de tiers ; la maquette de 2025, qui ne donne plus le
+# besoin résiduel, le dit égal à D − C (« ! » : cette identité-là ne s'applique pas quand le besoin résiduel est
+# publié). La capacité d'autofinancement nette l'est « du remboursement en capital des emprunts ».
+IDENTITES_INDIVIDUELLES = [(_ci(t), [_ci(c) for c in cs]) for t, cs in [
+    ("RESULTAT_COMPTABLE", ["PRODUITS_FONCTIONNEMENT", "-CHARGES_FONCTIONNEMENT"]),
+    ("BESOIN_FINANCEMENT_RESIDUEL", ["EMPLOIS_INVESTISSEMENT", "-RESSOURCES_INVESTISSEMENT"]),
+    ("BESOIN_FINANCEMENT_INVESTISSEMENT", ["BESOIN_FINANCEMENT_RESIDUEL", "SOLDE_OPERATIONS_TIERS"]),
+    ("BESOIN_FINANCEMENT_INVESTISSEMENT", ["EMPLOIS_INVESTISSEMENT", "-RESSOURCES_INVESTISSEMENT",
+                                           "!BESOIN_FINANCEMENT_RESIDUEL"]),
+    ("RESULTAT_ENSEMBLE", ["RESULTAT_COMPTABLE", "-BESOIN_FINANCEMENT_INVESTISSEMENT"]),
+    ("CAF_NETTE", ["CAF", "-REMBOURSEMENTS_EMPRUNTS_DETTES"])]]
+NIVEAUX_INDIVIDUELS = {individuels.COMMUNES: "communes", individuels.GFP: "groupements à fiscalité propre",
+                       individuels.DEPARTEMENTS: "départements et collectivités territoriales uniques",
+                       individuels.REGIONS: "régions"}
+# Les comptes de l'OFGL auxquels se comparent ceux de chaque niveau : son jeu, et son montant, celui du budget principal
+# (0), ou, pour les groupements, que la DGFiP donne budgets annexes compris, le montant consolidé (3). Les collectivités
+# territoriales uniques, que les comptes individuels rangent parmi les départements, sont dans le jeu des régions de
+# l'OFGL.
+RAPPROCHEMENTS_OFGL = {individuels.COMMUNES: ("ofgl.base-communes-consolidee", 0),
+                       individuels.GFP: ("ofgl.base-gfp-consolidee", 3),
+                       individuels.DEPARTEMENTS: ("ofgl.base-departements-consolidee", 0),
+                       individuels.REGIONS: ("ofgl.base-regions-consolidee", 0)}
+# Les codes de département et de région de la DGFiP outre-mer, et ceux de l'Insee et de l'OFGL ; les codes de région
+# des collectivités territoriales uniques de Guyane, de Martinique et de Corse (« 02A » depuis 2018), à défaut d'un
+# département de même code.
+OUTRE_MER_INSEE = {"101": ("971", "01"), "102": ("973", "03"), "103": ("972", "02"), "104": ("974", "04"),
+                   "106": ("976", "06")}
+CTU_INDIVIDUELLES = {"102": "03", "103": "02", "02A": "94"}
+# Agrégats de même intitulé, ou de même objet, des deux publications : (concept des comptes individuels, concept des
+# comptes locaux). Elles sont établies d'après les mêmes comptes de gestion ; l'OFGL définit ses agrégats compte par
+# compte, en opérations réelles et hors gestion active de la dette (définitions de la DGCL), quand la maquette de la
+# DGFiP ne dit pas les siens.
+PAIRES_OFGL = [(_ci(i), "COMPTES_LOCAUX." + o) for i, o in [
+    ("CHARGES_PERSONNEL", "FRAIS_PERSONNEL"), ("ACHATS_CHARGES_EXTERNES", "ACHATS_CHARGES_EXTERNES"),
+    ("CHARGES_FINANCIERES", "CHARGES_FINANCIERES"), ("DGF", "DGF"), ("PRODUITS_SERVICES_DOMAINE", "VENTES_BIENS_SERVICES"),
+    ("FCTVA", "FCTVA"), ("IMPOTS_LOCAUX", "IMPOTS_LOCAUX"), ("AUTRES_IMPOTS_TAXES", "AUTRES_IMPOTS_TAXES"),
+    ("FISCALITE_REVERSEE", "FISCALITE_REVERSEE"), ("TICPE", "TICPE"), ("CVAE", "CVAE"),
+    ("PRODUITS_FONCTIONNEMENT_CAF", "REC_FONCTIONNEMENT"), ("CHARGES_FONCTIONNEMENT_CAF", "DEP_FONCTIONNEMENT"),
+    ("EXCEDENT_BRUT_FONCTIONNEMENT", "EPARGNE_GESTION_COURANTE"), ("CAF", "EPARGNE_BRUTE"), ("CAF_NETTE", "EPARGNE_NETTE"),
+    ("DEPENSES_EQUIPEMENT", "DEPENSES_EQUIPEMENT"), ("SUBVENTIONS_EQUIPEMENT_VERSEES", "SUBVENTIONS_EQUIPEMENT_VERSEES"),
+    ("EMPRUNTS_DETTES_ASSIMILEES", "EMPRUNTS"), ("REMBOURSEMENTS_EMPRUNTS_DETTES", "REMBOURSEMENTS_DETTE"),
+    ("ANNUITE_DETTE", "ANNUITE_DETTE_CHARGES_FINANCIERES"), ("ENCOURS_DETTE", "DETTE"),
+    ("ENCOURS_DETTES_BANCAIRES", "DETTE_BANCAIRE"), ("FONDS_ROULEMENT", "FONDS_ROULEMENT")]]
+
+
+def formule(total, parties):
+    """Les parties d'une identité des comptes individuels, avec leurs signes : « PRODUITS_FONCTIONNEMENT −
+    CHARGES_FONCTIONNEMENT »."""
+    for t, composantes in IDENTITES_INDIVIDUELLES:
+        signes = [("−" if c.startswith("-") else "+", c.lstrip("-?")) for c in composantes if not c.startswith("!")]
+        if t == total and tuple(c for _, c in signes) == parties:
+            texte = " ".join(f"{s} {c.removeprefix('COMPTES_INDIVIDUELS.')}" for s, c in signes)
+            return texte[2:] if texte.startswith("+ ") else texte
+    return " + ".join(parties)
+
+
+def comptes_individuels_retenus():
+    """{(source, exercice): inscription} : la copie de comptes la plus récente de chaque exercice de chaque niveau."""
+    retenus = {}
+    for i in lire("tables/fichiers_comptes_individuels.csv"):
+        cle = (i["source_id"], i["exercice"])
+        if i["contenu"] == "comptes" and (cle not in retenus or i["version"] > retenus[cle]["version"]):
+            retenus[cle] = i
+    return retenus
+
+
+def uniques(fiches, champ, filtre=lambda f: True):
+    """{code: siren} des collectivités d'une liste de l'OFGL, pour les codes qu'une seule porte."""
+    par_code = collections.defaultdict(list)
+    for siren, f in fiches.items():
+        if filtre(f):
+            par_code[f.get(champ, "")].append(siren)
+    return {code: s[0] for code, s in par_code.items() if len(s) == 1}
+
+
+def rapprochement(listes, source, exercice):
+    """{collectivité des comptes individuels: (jeu de l'OFGL, siren)} pour un niveau et un exercice : une commune par son
+    code Insee, un groupement par son numéro Siren, un département par son code (« 001 » → « 01 », « 101 » → « 971 »),
+    ou, à défaut, une collectivité territoriale unique par son code de région, une région par le sien (« 011 » → « 11 »).
+    Un code que l'OFGL donne à plusieurs collectivités ne se rapproche pas (« 67A », au Bas-Rhin et au Haut-Rhin jusqu'en
+    2020)."""
+    jeu = RAPPROCHEMENTS_OFGL[source][0]
+    fiches = listes.get((jeu, exercice))
+    if fiches is None:
+        return None
+    if source == individuels.COMMUNES:
+        return {code: (jeu, s) for code, s in uniques(fiches, "insee").items()}
+    if source == individuels.GFP:
+        return {s: (jeu, s) for s in fiches}
+    regions = listes.get((RAPPROCHEMENTS_OFGL[individuels.REGIONS][0], exercice), {})
+    if source == individuels.REGIONS:
+        par_region = uniques(regions, "reg_code")
+        return lambda code: ((jeu, par_region[r]) if (r := OUTRE_MER_INSEE[code][1] if code in OUTRE_MER_INSEE
+                                                      else code[1:]) in par_region else None)
+    par_departement = uniques(fiches, "dep_code")
+    ctu = uniques(regions, "reg_code", lambda f: f.get("categ") == "CTU")
+
+    def correspondant(code):
+        d = OUTRE_MER_INSEE[code][0] if code in OUTRE_MER_INSEE else code[1:]
+        if d in par_departement:
+            return jeu, par_departement[d]
+        if CTU_INDIVIDUELLES.get(code) in ctu:
+            return RAPPROCHEMENTS_OFGL[individuels.REGIONS][0], ctu[CTU_INDIVIDUELLES[code]]
+        return None
+    return correspondant
+
+
+def montants_ofgl(fichiers, agregats, retenus, jeu, exercice, k, concepts):
+    """{siren: {concept: (montant, marge)}} d'un exercice d'un jeu de l'OFGL, pour les concepts demandés et le montant
+    de rang `k`, et les concepts que le jeu publie cet exercice ; rien si le jeu n'a pas l'exercice."""
+    inscrit = retenus.get((jeu, exercice))
+    if inscrit is None:
+        return None, set()
+    par_siren, publies = collections.defaultdict(dict), set()
+    for siren, agregat, *m in ofgl.montants(fichiers[inscrit["fichier_id"]], agregats, marges=True):
+        concept = agregats[agregat]["concept_id"]
+        if concept in concepts:
+            par_siren[siren][concept] = (m[k], m[4 + k])
+            publies.add(concept)
+    return par_siren, publies
+
+
+def comptes_individuels_controles(listes):
+    """Pour chaque niveau des comptes individuels et chaque exercice, dans sa version la plus récente : le nombre de
+    collectivités, de valeurs lues et absentes ; les identités de la maquette, collectivité par collectivité ; et,
+    chaque exercice que publie aussi l'OFGL, chaque collectivité rapprochée de la sienne, agrégat par agrégat."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    referentiel = lire("tables/variables_comptes_individuels.csv")
+    agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
+    retenus_ofgl = montants_retenus()
+    exercices = []  # (source, exercice, collectivités, valeurs lues, valeurs absentes)
+    identites = collections.defaultdict(lambda: [0, 0, None])  # (source, total, parties, budget) → [vérifiées, en écart, pire]
+    # (source, exercice) → (collectivités, rapprochées, collectivités de l'OFGL qu'aucune ne rejoint)
+    rapprochees = {}
+    # (source, concept de la DGFiP, concept de l'OFGL) → [comparés, égaux, plus grand écart (écart, collectivité, exercice), exercices]
+    comparaisons = collections.defaultdict(lambda: [0, 0, None, set()])
+    noms = {}  # (source, exercice, collectivité) → nom, pour les collectivités citées
+    concepts_ofgl = {o for _, o in PAIRES_OFGL}
+    for (source, exercice), inscrit in sorted(comptes_individuels_retenus().items()):
+        _, lues, absentes, decimales = individuels.comptes(fichiers[inscrit["fichier_id"]], referentiel)
+        variables = individuels.retenues(source, exercice, referentiel)
+        montants_par_variable = {v: l["concept_id"] for v, l in variables.items() if l["grandeur"] == "montant"}
+        if len(set(montants_par_variable.values())) != len(montants_par_variable):
+            raise SystemExit(f"{source}, {exercice} : deux montants de même concept")
+        exercices.append((source, exercice, len(lues), sum(len(v) for _, _, v in lues), absentes))
+        correspondant = rapprochement(listes, source, exercice)
+        ofgl_par_jeu = {}
+        if correspondant is not None:
+            k = RAPPROCHEMENTS_OFGL[source][1]
+            jeux = {RAPPROCHEMENTS_OFGL[source][0]} | ({RAPPROCHEMENTS_OFGL[individuels.REGIONS][0]}
+                                                       if source == individuels.DEPARTEMENTS else set())
+            ofgl_par_jeu = {j: montants_ofgl(fichiers, agregats, retenus_ofgl, j, exercice, k, concepts_ofgl) for j in jeux}
+        trouves = set()
+        for code, fiche, valeurs in lues:
+            montants = {montants_par_variable[v]: (m, 0.5 * 10 ** -decimales[v]) for v, m in valeurs.items()
+                        if v in montants_par_variable}
+            identites_comptables(identites, IDENTITES_INDIVIDUELLES, source, exercice, code, montants,
+                                 [("budget principal", 0, 1)])
+            if correspondant is None:
+                continue
+            cible = correspondant(code) if callable(correspondant) else correspondant.get(code)
+            if cible is None:
+                continue
+            jeu, siren = cible
+            trouves.add(cible)
+            par_siren, publies = ofgl_par_jeu.get(jeu, (None, set()))
+            if par_siren is None:
+                continue
+            for concept_dgfip, concept_ofgl in PAIRES_OFGL:
+                if concept_dgfip not in montants or concept_ofgl not in publies:
+                    continue
+                v, m = montants[concept_dgfip]
+                o, mo = par_siren.get(siren, {}).get(concept_ofgl, (0.0, 0.0))
+                ecart = 1000 * v - o
+                entree = comparaisons[(source, concept_dgfip, concept_ofgl)]
+                entree[0] += 1
+                entree[3].add(exercice)
+                if depasse(ecart, 1000 * m + mo):
+                    if entree[2] is None or abs(ecart) > abs(entree[2][0]):
+                        entree[2] = (ecart, code, exercice)
+                else:
+                    entree[1] += 1
+        # Le nom des collectivités que citent les plus grands écarts de cet exercice.
+        cites = {e[2][1] for cle, e in itertools.chain(identites.items(), comparaisons.items())
+                 if cle[0] == source and e[2] is not None and e[2][2] == exercice}
+        noms.update({(source, exercice, code): fiche.get("inom") or fiche.get("lbudg") or ""
+                     for code, fiche, _ in lues if code in cites})
+        if correspondant is not None:
+            jeu = RAPPROCHEMENTS_OFGL[source][0]
+            sans = {(jeu, s) for s in listes.get((jeu, exercice), {})} - trouves
+            if source == individuels.REGIONS:
+                sans = {(j, s) for j, s in sans if listes[(j, exercice)][s].get("categ") != "CTU"}
+            if source == individuels.DEPARTEMENTS:
+                sans = {(j, s) for j, s in sans if listes[(j, exercice)][s].get("categ") == "DEPT"}
+            rapprochees[(source, exercice)] = (len(lues), len(trouves), len(sans))
+    return exercices, identites, rapprochees, comparaisons, noms
+
+
+def partie_comptes_individuels(listes):
+    exercices, identites, rapprochees, comparaisons, noms = comptes_individuels_controles(listes)
+    if not exercices:
+        return []
+    lignes = ["## 13. Comptes individuels de la DGFiP", "",
+              "Les comptes individuels que la DGFiP publie pour chaque commune depuis 2000, chaque groupement à fiscalité "
+              "propre depuis 2007, chaque département et chaque région depuis 2008 : l'analyse des équilibres financiers "
+              "fondamentaux du budget principal (budgets annexes compris pour les groupements) et les éléments de la "
+              "fiscalité directe locale, en milliers d'euros, dans la version la plus récente de chaque exercice. Une "
+              "valeur est exacte à la demi-unité de la dernière décimale que sa variable publie dans l'exercice.", "",
+              "| Niveau | Exercices | Collectivités au dernier exercice | Collectivités-exercices | Valeurs lues | "
+              "Valeurs absentes |", "|---|---|---|---|---|---|"]
+    par_source = collections.defaultdict(list)
+    for e in exercices:
+        par_source[e[0]].append(e)
+    for source, liste in sorted(par_source.items(), key=lambda e: list(NIVEAUX_INDIVIDUELS).index(e[0])):
+        dernier = max(liste, key=lambda e: e[1])
+        lignes.append(f"| {NIVEAUX_INDIVIDUELS[source]} | {plage([e[1] for e in liste])} | {fr(dernier[2], 0)} | "
+                      f"{fr(sum(e[2] for e in liste), 0)} | {fr(sum(e[3] for e in liste), 0)} | "
+                      f"{fr(sum(e[4] for e in liste), 0)} |")
+    n, faux = sum(v[0] for v in identites.values()), sum(v[1] for v in identites.values())
+    lignes += ["", "Identités que les maquettes énoncent, de chaque collectivité : le résultat comptable (R) est la "
+               "différence des produits (A) et des charges (B) de fonctionnement ; le besoin de financement de la section "
+               "d'investissement (E), jusqu'en 2024, le besoin résiduel (D − C, emplois moins ressources) plus le solde "
+               "des opérations pour compte de tiers, et en 2025 D − C ; le résultat d'ensemble, R − E ; la capacité "
+               "d'autofinancement nette, la capacité d'autofinancement moins le remboursement des emprunts et dettes "
+               f"assimilées. {fr(n, 0)} vérifiées, {fr(n - faux, 0)} justes, {fr(faux, 0)} en écart.", ""]
+    lignes += ["| Niveau | Total | Parties | Vérifiées | En écart | Plus grand écart |", "|---|---|---|---|---|---|"]
+    rangs = {(t, tuple(c.lstrip("-?") for c in cs if not c.startswith("!"))): i
+             for i, (t, cs) in enumerate(IDENTITES_INDIVIDUELLES)}
+    for (source, total, parties, _), (verifiees, nombre, pire) in sorted(
+            identites.items(), key=lambda e: (list(NIVEAUX_INDIVIDUELS).index(e[0][0]), rangs[e[0][1:3]])):
+        texte = "aucun" if pire is None else (f"{fr(pire[0], 2, True)} k€ : {noms.get((source, pire[2], pire[1]), '')} "
+                                              f"({pire[1]}), {pire[2]}")
+        lignes.append(f"| {NIVEAUX_INDIVIDUELS[source]} | {total.removeprefix('COMPTES_INDIVIDUELS.')} | "
+                      f"{formule(total, parties)} | {fr(verifiees, 0)} | "
+                      f"{fr(nombre, 0)} | {texte} |")
+    lignes.append("")
+    if rapprochees:
+        lignes += ["### Les mêmes collectivités dans les comptes de l'OFGL", "",
+                   "Chaque exercice que publient aussi les jeux de l'OFGL (section 7), chaque collectivité rapprochée de "
+                   "la sienne : une commune par son code Insee, un groupement par son numéro Siren, un département ou une "
+                   "région par son code, une collectivité territoriale unique, que l'OFGL range parmi les régions, par son "
+                   "code de région. Le budget principal, ou, pour les groupements, le montant consolidé des budgets "
+                   "principal et annexes.", "",
+                   "| Niveau | Exercices | Collectivités | Rapprochées | Sans correspondant | Collectivités de l'OFGL sans "
+                   "correspondant |", "|---|---|---|---|---|---|"]
+        par_source = collections.defaultdict(list)
+        for (source, exercice), r in sorted(rapprochees.items()):
+            par_source[source].append((exercice, *r))
+        for source, liste in sorted(par_source.items(), key=lambda e: list(NIVEAUX_INDIVIDUELS).index(e[0])):
+            lignes.append(f"| {NIVEAUX_INDIVIDUELS[source]} | {plage([e[0] for e in liste])} | "
+                          f"{fr(sum(e[1] for e in liste), 0)} | {fr(sum(e[2] for e in liste), 0)} | "
+                          f"{fr(sum(e[1] - e[2] for e in liste), 0)} | {fr(sum(e[3] for e in liste), 0)} |")
+        lignes += ["", "Agrégats de même intitulé, ou de même objet, des deux publications, établies d'après les mêmes "
+                   "comptes de gestion. L'OFGL définit les siens compte par compte, en opérations réelles et hors gestion "
+                   "active de la dette (définitions de la DGCL) ; les maquettes de la DGFiP ne disent pas les leurs. Un "
+                   "agrégat que le jeu de l'OFGL publie pour d'autres collectivités de l'exercice, mais pas pour celle-ci, "
+                   "y vaut zéro. La part d'égaux mesure combien les deux définitions se recouvrent.", "",
+                   "| Niveau | Comptes individuels | Comptes de l'OFGL | Exercices | Comparés | Égaux à l'arrondi près | "
+                   "Part | Plus grand écart (DGFiP − OFGL) |", "|---|---|---|---|---|---|---|---|"]
+        for (source, dgfip, ofgl_), (compares, egaux, pire, annees) in sorted(
+                comparaisons.items(), key=lambda e: (list(NIVEAUX_INDIVIDUELS).index(e[0][0]), PAIRES_OFGL.index(e[0][1:]))):
+            texte = "aucun" if pire is None else (f"{ecart_lisible(pire[0], 'euros')} : "
+                                                  f"{noms.get((source, pire[2], pire[1]), '')} ({pire[1]}), {pire[2]}")
+            lignes.append(f"| {NIVEAUX_INDIVIDUELS[source]} | {dgfip.removeprefix('COMPTES_INDIVIDUELS.')} | "
+                          f"{ofgl_.removeprefix('COMPTES_LOCAUX.')} | {plage(annees)} | {fr(compares, 0)} | "
+                          f"{fr(egaux, 0)} | {fr(100 * egaux / compares, 1)} % | {texte} |")
+        lignes.append("")
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -2830,6 +3113,7 @@ def ecrire_rapport(derniers):
     lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)
     listes = listes_collectivites()
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
+    lignes += partie_comptes_individuels(listes)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

@@ -354,6 +354,56 @@ def date_xlsx(chemin):
     return ""
 
 
+# --- Classeurs OpenDocument (ods), lus sans bibliothèque extérieure -------------------------------------
+
+_ODS = {"table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0", "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
+        "office": "urn:oasis:names:tc:opendocument:xmlns:office:1.0", "meta": "urn:oasis:names:tc:opendocument:xmlns:meta:1.0",
+        "dc": "http://purl.org/dc/elements/1.1/"}
+
+
+def lire_ods(chemin):
+    """Les feuilles d'un classeur ods : {nom de la feuille: [ligne, …]}, chaque ligne étant la liste des textes de ses
+    cellules, de gauche à droite (une cellule répétée l'est autant de fois, sans les cellules vides qui finissent la
+    ligne) ; les lignes vides qui finissent une feuille ne sont pas rendues."""
+    t = "{%s}" % _ODS["table"]
+    with zipfile.ZipFile(ouvrir_copie(chemin)) as classeur:
+        racine = ET.fromstring(classeur.read("content.xml"))
+    feuilles = {}
+    for feuille in racine.iter(t + "table"):
+        lignes, vides = [], 0  # vides : lignes vides en attente, rendues seulement si une ligne pleine les suit
+        for rangee in feuille.iter(t + "table-row"):
+            cellules, attente = [], 0  # attente : cellules vides en attente, de même
+            for cellule in rangee:
+                if cellule.tag not in (t + "table-cell", t + "covered-table-cell"):
+                    continue
+                texte = "\n".join("".join(p.itertext()) for p in cellule.findall("text:p", _ODS))
+                repetee = int(cellule.get(t + "number-columns-repeated", "1"))
+                if texte:
+                    cellules += [""] * attente + [texte] * repetee
+                    attente = 0
+                else:
+                    attente += repetee
+            repetee = int(rangee.get(t + "number-rows-repeated", "1"))
+            if cellules:
+                lignes += [[]] * vides + [cellules] * repetee
+                vides = 0
+            else:
+                vides += repetee
+        feuilles[feuille.get(t + "name")] = lignes
+    return feuilles
+
+
+def date_ods(chemin):
+    """Date de dernière modification inscrite dans les propriétés d'un classeur ods, à défaut date de création."""
+    with zipfile.ZipFile(ouvrir_copie(chemin)) as classeur:
+        proprietes = ET.fromstring(classeur.read("meta.xml"))
+    for propriete in ("office:meta/dc:date", "office:meta/meta:creation-date"):
+        date = proprietes.find(propriete, _ODS)
+        if date is not None and date.text:
+            return date.text
+    return ""
+
+
 def position(reference):
     """« BQ7 » → (7, « BQ »)."""
     lettres, chiffres = re.fullmatch(r"([A-Z]+)([0-9]+)", reference).groups()
