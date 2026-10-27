@@ -8,7 +8,10 @@ Séries prises en charge :
   l'administration des finances ; ses montants sont cumulés depuis le début de l'année ;
 - la dette trimestrielle des administrations publiques (jeu DETTE-TRIM-APU-2020) : encours en fin de trimestre de
   la dette au sens de Maastricht, par sous-secteur et par instrument, et en % du PIB, de la dette nette, des actions
-  cotées et titres d'OPC que les administrations détiennent, et de la dette brute au sens du FMI.
+  cotées et titres d'OPC que les administrations détiennent, et de la dette brute au sens du FMI ;
+- la dette négociable de l'État (jeu DETTE-NEGOCIABLE-ETAT), que l'Insee reprend de l'Agence France Trésor : encours en
+  fin de mois, total, en euros et en devises, à court terme et à moyen et long terme, à taux fixe et indexé sur
+  l'inflation, et variations de chacun depuis le début de l'année.
 
 Chaque série et chaque attribut doivent avoir une correspondance ci-dessous : une série, une unité, une nature
 ou une qualité d'observation inconnue arrête l'import. La version d'un chiffre est la date de dernière mise à
@@ -51,8 +54,21 @@ SERIES = {
     "010777614": ("GFSM2014.DETTE_BRUTE_F8", "S13", "non_precise"),       # … autres comptes à payer
     "010777615": ("GFSM2014.DETTE_BRUTE_F12", "S13", "non_precise"),      # … droits de tirage spéciaux
 }
+# La dette négociable de l'État : l'encours de chaque série, et sa variation depuis le début de l'année (nature
+# VARIATIONS_DEBUT_ANNEE), que l'Insee publie pour toutes sauf le total.
+_DETTE_NEGOCIABLE = {"001739081": "ENCOURS",
+                     "001711531": "ENCOURS_EUROS", "001738855": "ENCOURS_EUROS",
+                     "001711532": "COURT_TERME_EUROS", "001738856": "COURT_TERME_EUROS",
+                     "001711533": "MOYEN_LONG_TERME_EUROS", "001738857": "MOYEN_LONG_TERME_EUROS",
+                     "001719708": "ENCOURS_DEVISES", "001738858": "ENCOURS_DEVISES",
+                     "001719709": "COURT_TERME_DEVISES", "001738859": "COURT_TERME_DEVISES",
+                     "001719710": "MOYEN_LONG_TERME_DEVISES", "001738860": "MOYEN_LONG_TERME_DEVISES",
+                     "001738853": "TAUX_FIXE", "001738861": "TAUX_FIXE",
+                     "001738854": "INDEXEE_INFLATION", "001738862": "INDEXEE_INFLATION"}
+SERIES.update({i: (f"DETTE_NEGOCIABLE.{c}", "ETAT_AFT", "non_consolide") for i, c in _DETTE_NEGOCIABLE.items()})
 UNITES = {("EUROS", "6"): "MIO_EUR", ("EUROS", "9"): "MD_EUR", ("POURCENT", "0"): "PC_PIB"}
-NATURES = {"CUMUL_DEBUT_ANNEE": "cumul_depuis_janvier", "VALEUR_ABSOLUE": "", "PROPORTION": ""}
+NATURES = {"CUMUL_DEBUT_ANNEE": "cumul_depuis_janvier", "VALEUR_ABSOLUE": "", "PROPORTION": "", "ENCOURS": "",
+           "VARIATIONS_DEBUT_ANNEE": "variation_depuis_decembre"}
 QUALITES = {"DEF": "definitif", "PROV": "provisoire"}
 ZONES = {"FE": "FR"}  # France entière
 

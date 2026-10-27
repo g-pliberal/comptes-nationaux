@@ -17,6 +17,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | eurostat.gov_10a_main | Recettes, dépenses et principaux agrégats des administrations publiques | 2026-10-21 | 1488 |
 | eurostat.nama_10_gdp | PIB et principaux agrégats | 2026-10-21 | 102 |
 | insee.bdm-comptes-etat | Situation mensuelle du budget de l'État : dépenses, recettes, solde des comptes spéciaux et solde général d'exécution, cumulés depuis le début de l'année (Banque de données macro-économiques, jeu COMPTES-ETAT) | 2026-10-06 | 848 |
+| insee.bdm-dette-negociable-etat | Dette négociable de l'État : encours en fin de mois, total, en euros et en devises, à court terme et à moyen et long terme, à taux fixe et indexé sur l'inflation, et leurs variations depuis le début de l'année (Banque de données macro-économiques, jeu DETTE-NEGOCIABLE-ETAT) | 2026-09-30 | 3604 |
 | insee.bdm-dette-trim-apu | Dette trimestrielle des administrations publiques : dette au sens de Maastricht par sous-secteur et par instrument, dette nette, actions cotées et titres d'OPC détenus, dette brute au sens du FMI (Banque de données macro-économiques, jeu DETTE-TRIM-APU-2020) | 2026-09-29 | 2583 |
 | insee.liste-odal | Liste des organismes divers d'administration locale (ODAL) : nombre d'organismes par catégorie | 2026-05-18 | 24 |
 | insee.t3101 | Tableau 3.101 : Dette des administrations publiques (S13) au sens de Maastricht et sa répartition par sous-secteur | 2026-07-28 | 624 |
@@ -108,7 +109,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-33980 sommes vérifiées avec toutes leurs composantes : 33874 justes, 106 en écart.
+35252 sommes vérifiées avec toutes leurs composantes : 35144 justes, 108 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
@@ -155,7 +156,9 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | dgcl.finances-departements | DEP_84_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,5443 Md€ | 0,5743 Md€ | −30,0 M€ |
 | dgcl.finances-departements | DEP_86_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,3899 Md€ | 0,4059 Md€ | −16,0 M€ |
 | dgcl.finances-departements | DEP_974_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,9592 Md€ | 0,9702 Md€ | −11,0 M€ |
-| insee.bdm-comptes-etat | ETAT_LF | ensemble | 2019-04 | LOLF.RESULTAT_EXECUTION | −67,2150 Md€ | −65,5960 Md€ | −1 619,0 M€ |
+| insee.bdm-comptes-etat | ETAT_LF | ensemble | 2019-04 | LOLF.RESULTAT_EXECUTION (cumul depuis le début de l'année) | −67,2150 Md€ | −65,5960 Md€ | −1 619,0 M€ |
+| insee.bdm-dette-negociable-etat | ETAT_AFT | ensemble | 2017-10 | DETTE_NEGOCIABLE.ENCOURS | 1 680,1960 Md€ | 1 703,8500 Md€ | −23 654,0 M€ |
+| insee.bdm-dette-negociable-etat | ETAT_AFT | ensemble | 2021-03 | DETTE_NEGOCIABLE.ENCOURS_EUROS (variation depuis la fin de l'année précédente) | 62,9400 Md€ | 63,1400 Md€ | −200,0 M€ |
 | insee.t3104 | S13 | ensemble | 2013 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 155,6000 Md€ | 155,3000 Md€ | +300,0 M€ |
 | insee.t3104 | S13 | ensemble | 2015 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 278,7000 Md€ | 277,9000 Md€ | +800,0 M€ |
 | insee.t3104 | S13 | ensemble | 2016 | INSEE_DETTE.PASSAGE_VALEUR_NOMINALE | 320,4000 Md€ | 319,3000 Md€ | +1 100,0 M€ |
@@ -2176,3 +2179,75 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2025 | DETTES_FONCTIONNEMENT | 11 513 | 11 501,0 | +12,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
 
 En 2025, la situation nette de la loi comprend le solde des opérations de l'exercice (−129 467 M€) sans qu'aucune de ses lignes le porte : la balance, dont la situation nette (l'actif moins le passif) est celle de la loi, le laisse dans les comptes de charges et de produits, et la somme des lignes de la loi s'écarte de son total d'autant (section 1).
+
+## 15. Dette négociable de l'État
+
+L'encours de la dette négociable de l'État à la fin de chaque mois, de 2009-01 à 2026-08, que l'Insee reprend de l'Agence France Trésor : les titres à court terme et à moyen et long terme, en euros et en devises, à taux fixe et indexés sur l'inflation ; les titres en devises sont nuls sur toute la période. Chaque encours est la somme de ses parts (section 1), sauf en 2017-10, où TAUX_FIXE et INDEXEE_INFLATION font 1 703 850 M€ et ENCOURS 1 680 196 M€ (leur somme est ENCOURS du mois précédent).
+
+Les variations depuis le début de l'année que l'Insee publie avec l'encours, contre la différence de l'encours de la fin du mois et de celui de la fin de l'année précédente : 1 600 vérifiées, 6 en écart (en millions d'euros) :
+
+| Mois | Encours | Variation publiée | Différence des encours | Écart |
+|---|---|---|---|---|
+| 2021-03 | COURT_TERME_EUROS | +5 298 | +5 098 | +200 |
+| 2023-11 | COURT_TERME_EUROS | +28 064 | +20 654 | +7 410 |
+| 2023-11 | ENCOURS_EUROS | +128 803 | +148 623 | −19 820 |
+| 2023-11 | INDEXEE_INFLATION | +5 809 | +8 043 | −2 234 |
+| 2023-11 | MOYEN_LONG_TERME_EUROS | +100 739 | +127 969 | −27 230 |
+| 2023-11 | TAUX_FIXE | +122 994 | +140 580 | −17 586 |
+
+Le tableau de financement de l'État, dans la loi d'approbation des comptes de chaque année, en milliards d'euros : la variation de l'encours à court terme d'une fin d'année à l'autre, contre la variation nette des titres à court terme ; celle de l'encours à moyen et long terme, contre les émissions nettes des rachats moins les amortissements. L'écart de celle-ci est la revalorisation des titres indexés sur l'inflation : l'encours compte leur supplément d'indexation, que les émissions et les amortissements du tableau ne comptent pas, sauf les suppléments versés à l'échéance des titres, qu'il range dans les amortissements. La revalorisation est donc la variation du différentiel d'indexation de la balance de l'État (section 14), plus les suppléments versés ; elle ne se calcule qu'à partir de 2017, la première balance de la base étant celle de 2016.
+
+| Année | Court terme : variation de l'encours | Variation nette des titres à court terme | Écart | Moyen et long terme : variation de l'encours | Émissions moins amortissements | Écart | Revalorisation des titres indexés | Reste |
+|---|---|---|---|---|---|---|---|---|
+| 2010 | −27,0 | −27,0 | +0,0 | +108,0 | +104,6 | +3,4 | — | — |
+| 2011 | −9,3 | −9,3 | +0,0 | +93,4 | +88,5 | +4,9 | — | — |
+| 2012 | −11,2 | −11,2 | +0,0 | +84,4 | +80,0 | +4,4 | — | — |
+| 2013 | +7,2 | +7,2 | +0,0 | +63,8 | +62,1 | +1,7 | — | — |
+| 2014 | +1,4 | +1,4 | +0,0 | +68,9 | +68,2 | +0,7 | — | — |
+| 2015 | −22,6 | −22,6 | +0,0 | +71,4 | +70,6 | +0,8 | — | — |
+| 2016 | −18,7 | −18,7 | +0,0 | +63,0 | +62,1 | +0,9 | — | — |
+| 2017 | −7,5 | −7,5 | +0,0 | +73,0 | +69,8 | +3,2 | +3,1 | +0,0 |
+| 2018 | −13,6 | −13,6 | +0,0 | +83,9 | +78,4 | +5,5 | +5,4 | +0,0 |
+| 2019 | −6,0 | −6,0 | +0,0 | +72,4 | +69,8 | +2,6 | +2,6 | +0,0 |
+| 2020 | +54,7 | +54,7 | +0,0 | +123,5 | +123,9 | −0,4 | −0,5 | +0,1 |
+| 2021 | −6,2 | −6,2 | +0,0 | +150,3 | +141,7 | +8,6 | +8,7 | +0,0 |
+| 2022 | −6,9 | −6,9 | +0,0 | +139,6 | +114,3 | +25,3 | +25,4 | −0,1 |
+| 2023 | +20,8 | +20,8 | +0,0 | +131,4 | +120,4 | +11,0 | +11,0 | +0,0 |
+| 2024 | +31,9 | +31,9 | +0,0 | +139,7 | +129,9 | +9,8 | +9,8 | +0,0 |
+| 2025 | −5,2 | −5,2 | +0,0 | +140,7 | +132,0 | +8,7 | +8,7 | +0,0 |
+
+La variation de l'encours à court terme est la variation nette des titres à court terme du tableau de financement 16 années sur 16, à l'arrondi près ; à moyen et long terme, la revalorisation des titres indexés explique l'écart à l'arrondi près 9 années sur 9.
+
+L'encours de la fin de chaque exercice contre les titres négociables de la balance de l'État (section 14), que la DGFiP détaille par indicateur : le nominal des OAT, des BTAN et des BTF ; le différentiel d'indexation des titres indexés ; les intérêts courus, les coupons courus, les intérêts capitalisés et les intérêts constatés d'avance. L'encours à court terme est comparé aux BTF ; l'encours indexé sur l'inflation, aux OAT que la balance dit « à taux variable » et aux différentiels d'indexation. En millions d'euros.
+
+| Exercice | Encours | Nominal et indexation (balance) | Écart | Court terme | BTF | Écart | Indexé sur l'inflation | OAT indexées et indexation | Écart |
+|---|---|---|---|---|---|---|---|---|---|
+| 2016 | 1 620 597 | 1 620 589,7 | +7,3 | 133 925 | 133 925,0 | +0,0 | 199 528 | 199 528,2 | −0,2 |
+| 2017 | 1 686 112 | 1 686 099,5 | +12,5 | 126 473 | 126 473,0 | +0,0 | 201 742 | 201 741,9 | +0,1 |
+| 2018 | 1 756 400 | 1 756 383,0 | +17,0 | 112 900 | 112 900,0 | +0,0 | 219 584 | 219 584,4 | −0,4 |
+| 2019 | 1 822 805 | 1 822 823,4 | −18,4 | 106 933 | 106 933,0 | +0,0 | 226 396 | 226 395,9 | +0,1 |
+| 2020 | 2 001 014 | 2 000 986,0 | +28,0 | 161 608 | 161 608,0 | +0,0 | 220 054 | 220 009,5 | +44,5 |
+| 2021 | 2 145 121 | 2 145 136,1 | −15,1 | 155 379 | 155 379,0 | +0,0 | 236 362 | 236 361,6 | +0,4 |
+| 2022 | 2 277 811 | 2 277 823,8 | −12,8 | 148 463 | 148 463,0 | +0,0 | 262 230 | 262 230,2 | −0,2 |
+| 2023 | 2 429 973 | 2 429 984,5 | −11,5 | 169 217 | 169 217,0 | +0,0 | 271 362 | 271 362,1 | −0,1 |
+| 2024 | 2 601 637 | 2 601 645,9 | −8,9 | 201 163 | 201 163,0 | +0,0 | 289 057 | 289 056,6 | +0,4 |
+| 2025 | 2 737 125 | 2 737 131,8 | −6,8 | 195 944 | 195 944,0 | +0,0 | 306 639 | 306 639,4 | −0,4 |
+
+À l'arrondi près, l'encours égale le nominal et l'indexation de la balance 0 exercice sur 10 ; l'encours à court terme, les BTF, 10 exercices sur 10 ; l'encours indexé, les OAT indexées et leur indexation, 9 exercices sur 10. L'écart de l'encours au nominal et à l'indexation va de 7 à 28 millions d'euros, dans un sens ou dans l'autre, soit au plus 0,001 % de l'encours ; ni l'Insee ni la balance n'en donnent la cause.
+
+Les titres négociables du bilan de la loi d'approbation des comptes (sa première version publiée), contre l'encours et les intérêts que la balance range avec les titres, en millions d'euros :
+
+| Exercice | Titres négociables du bilan | Encours | Différence | Intérêts (balance) | Reste |
+|---|---|---|---|---|---|
+| 2016 | 1 638 437 | 1 620 597 | +17 840 | 17 846,9 | −6,9 |
+| 2017 | 1 703 459 | 1 686 112 | +17 347 | 17 359,9 | −12,9 |
+| 2018 | 1 773 621 | 1 756 400 | +17 221 | 17 238,1 | −17,1 |
+| 2019 | 1 839 366 | 1 822 805 | +16 561 | 16 543,0 | +18,0 |
+| 2020 | 2 017 579 | 2 001 014 | +16 565 | 16 593,2 | −28,2 |
+| 2021 | 2 161 398 | 2 145 121 | +16 277 | 16 261,9 | +15,1 |
+| 2022 | 2 292 874 | 2 277 811 | +15 063 | 15 049,8 | +13,2 |
+| 2023 | 2 445 098 | 2 429 973 | +15 125 | 15 113,5 | +11,5 |
+| 2024 | 2 619 706 | 2 601 637 | +18 069 | 18 060,3 | +8,7 |
+| 2025 | 2 759 785 | 2 737 125 | +22 660 | 22 652,8 | +7,2 |
+
+La différence est celle des intérêts ; le reste est, au signe et à l'arrondi du bilan près, l'écart de l'encours au nominal et à l'indexation de la balance, ci-dessus : les titres négociables du bilan sont ceux de la balance.

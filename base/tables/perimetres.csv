@@ -138,6 +138,7 @@ DEP_971_BP,"Guadeloupe (département 971), budget principal",COMPTES_LOCAUX,DEPA
 DEP_974_BP,"La Réunion (département 974), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_OUTRE_MER_BP,
 DEP_976_BP,"Mayotte (département 976), budget principal",COMPTES_LOCAUX,DEPARTEMENTS_OUTRE_MER_BP,Département qui exerce aussi les compétences d'une région.
 EPT,Établissements publics territoriaux de la métropole du Grand Paris,UNITES_PUBLIQUES,SYNDICATS,
+ETAT_AFT,"État, émetteur de la dette négociable",DETTE_NEGOCIABLE,,"L'État comme émetteur des titres de sa dette négociable, dont l'Agence France Trésor gère l'émission et le remboursement. Ce sont les titres que le bilan de l'État (périmètre ETAT_CGE) inscrit parmi ses dettes financières, en titres négociables."
 ETAT_CGE,"État, comptes annuels",COMPTES_ETAT,,"L'État tel que le décrivent ses comptes annuels (compte de résultat et bilan) : l'ensemble de ses opérations, budgétaires ou de trésorerie, et de son patrimoine, en droits constatés."
 ETAT_LF,"État, champ des lois de finances",LOLF,,"Budget général, budgets annexes et comptes spéciaux de l'État, que retracent les lois de finances. L'État de la comptabilité nationale (S13111) en diffère : il comprend aussi certains fonds non budgétaires, et ses opérations sont enregistrées selon d'autres règles."
 FFIPSA,Fonds de financement des prestations sociales des non-salariés agricoles (FFIPSA),COMPTES_SECU,S13141,Organisme concourant au financement des régimes obligatoires de base dans les tableaux d'équilibre des comptes de 2005 à 2008.

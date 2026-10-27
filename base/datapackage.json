@@ -36,6 +36,7 @@
     {"name": "chiffres-eurostat-gov_10a_main", "path": "tables/chiffres/eurostat/gov_10a_main.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-eurostat-nama_10_gdp", "path": "tables/chiffres/eurostat/nama_10_gdp.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-bdm-comptes-etat", "path": "tables/chiffres/insee/bdm-comptes-etat.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-insee-bdm-dette-negociable-etat", "path": "tables/chiffres/insee/bdm-dette-negociable-etat.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-bdm-dette-trim-apu", "path": "tables/chiffres/insee/bdm-dette-trim-apu.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-liste-odal", "path": "tables/chiffres/insee/liste-odal.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-insee-t3101", "path": "tables/chiffres/insee/t3101.csv", "schema": "schemas/chiffres.json"},
