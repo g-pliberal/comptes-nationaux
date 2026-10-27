@@ -3,4 +3,5 @@ croissance_potentielle_lpfp_2014_2019,Croissance potentielle de la loi de progra
 cumul_depuis_janvier,Cumul depuis le début de l'année,Montant cumulé du 1er janvier à la fin du mois indiqué par la période.
 hors_credits_impot,Hors crédits d'impôt,Dépense diminuée des crédits d'impôt que la comptabilité nationale enregistre en dépenses : convention de présentation du gouvernement dans les lois de finances.
 metrique_lpfp_2012_2017,Métrique de la loi de programmation des finances publiques pour 2012 à 2017,Soldes de l'exécution mesurés selon les hypothèses de la loi de programmation des finances publiques pour 2012 à 2017 : le texte des comptes de 2014 donne ces estimations à côté de la mesure principale.
+variation_depuis_decembre,Variation depuis la fin de l'année précédente,Montant à la fin du mois indiqué par la période moins montant au 31 décembre de l'année précédente.
 volume_champ_constant,"En volume, à champ constant","Évolution hors effet des prix (en volume) et à champ constant, telle que la présente l'article liminaire des lois d'approbation des comptes depuis les comptes de 2023."

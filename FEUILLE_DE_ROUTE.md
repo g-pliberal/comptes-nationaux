@@ -14,6 +14,6 @@ Les étapes prévues pour compléter la base, du plus large au plus petit, chacu
 | 8 | Opérateurs de l'État, hôpitaux, sécurité sociale régime par régime | les comptes de chaque organisme sous les totaux de l'Insee : aucun des 701 organismes divers d'administration centrale n'a encore les siens dans la base | à faire ; sources dispersées |
 | 9 | Niches fiscales et sociales, engagements hors bilan, budgets votés | la dépense publique au sens large, et le budget voté face au budget exécuté | à faire ; les balances de l'État donnent déjà ses engagements hors bilan par grande catégorie |
 | 10 | Base prête à télécharger, synthèse lisible, contrôles plus rapides, détection des nouvelles versions des sources | une base utilisable sans la reconstruire, et tenue à jour | à faire ; la base construite pèse plus de 6 gigaoctets, plus que les 2 gigaoctets d'un fichier des « Releases » de GitHub |
-| 11 | Dette négociable de l'État | l'encours de la dette négociable de l'État, mois par mois, d'après l'Insee et l'Agence France Trésor | à faire |
+| 11 | Dette négociable de l'État | l'encours de la dette négociable de l'État, mois par mois, d'après l'Insee et l'Agence France Trésor, recoupé avec le tableau de financement, la balance et le bilan de l'État | fait |
 
 Avant les étapes 5 et 6, il faut décider où ranger les plus gros fichiers. La proposition est de garder dans le dépôt la fiche et l'empreinte de chaque fichier, et de mettre les plus gros dans les « Releases » de GitHub : tout resterait sur GitHub.

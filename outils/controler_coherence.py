@@ -37,7 +37,9 @@ vérifie ce que disent les sources elles-mêmes :
 13. les comptes individuels de la DGFiP : les identités que leurs maquettes énoncent, collectivité par collectivité, et
    chaque collectivité contre ses comptes de l'OFGL, pour les agrégats de même objet ;
 14. les balances des comptes de l'État : l'équilibre de chacune, celui des engagements hors bilan, et le bilan et le
-   compte de résultat qu'on en tire contre ceux des lois d'approbation des comptes, ligne par ligne.
+   compte de résultat qu'on en tire contre ceux des lois d'approbation des comptes, ligne par ligne ;
+15. la dette négociable de l'État : son encours de chaque mois contre les variations publiées avec lui, le tableau de
+   financement des lois d'approbation des comptes, et les titres négociables de la balance et du bilan de l'État.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -244,6 +246,13 @@ _PASSIF = [("DETTES_FINANCIERES", ["TITRES_NEGOCIABLES", "TITRES_NON_NEGOCIABLES
                                 "ECARTS_REEVALUATION_INTEGRATION", "SOLDE_EXERCICE_BILAN"])]
 IDENTITES += [_facultatives("COMPTES_ETAT.", t, cs) for t, cs in _PASSIF]
 IDENTITES += [("COMPTES_ETAT.SITUATION_NETTE", ["COMPTES_ETAT.ACTIF", "-COMPTES_ETAT.PASSIF"])]
+# Dette négociable de l'État (Agence France Trésor) : l'encours est la somme de ses parts en euros et en devises, et celle
+# de ses parts à taux fixe et indexée sur l'inflation ; chaque part en euros ou en devises, la somme de ses parts à court
+# terme et à moyen et long terme.
+_DETTE_NEGOCIABLE = [("ENCOURS", ["ENCOURS_EUROS", "ENCOURS_DEVISES"]), ("ENCOURS", ["TAUX_FIXE", "INDEXEE_INFLATION"]),
+                     ("ENCOURS_EUROS", ["COURT_TERME_EUROS", "MOYEN_LONG_TERME_EUROS"]),
+                     ("ENCOURS_DEVISES", ["COURT_TERME_DEVISES", "MOYEN_LONG_TERME_DEVISES"])]
+IDENTITES += [(f"DETTE_NEGOCIABLE.{t}", [f"DETTE_NEGOCIABLE.{c}" for c in cs]) for t, cs in _DETTE_NEGOCIABLE]
 # Article liminaire, en points de PIB : le solde effectif (au sens de Maastricht) est la somme des soldes structurel et
 # conjoncturel et des mesures ponctuelles et temporaires.
 IDENTITES += [("SEC2010.B9", ["PFP.SOLDE_STRUCTUREL", "PFP.SOLDE_CONJONCTUREL", "PFP.MESURES_PONCTUELLES_TEMPORAIRES"])]
@@ -730,7 +739,7 @@ def sommes(derniers):
                    {c.lstrip("-") for c in termes(autres)[0]} <= publies_ for t, autres in IDENTITES):
                 continue
             resultats.append({"source": source, "perimetre": perimetre, "fonction": fonction, "periode": periode,
-                              "total": total, "unite": valeur(concepts[total])[2],
+                              "traitements": traitements, "total": total, "unite": valeur(concepts[total])[2],
                               "complet": all(c.lstrip("-") in concepts for c in obligatoires),
                               **comparer(concepts[total], parties)})
     return resultats
@@ -1672,10 +1681,17 @@ def partie_sommes(derniers):
         noms = {**NOMS_RATIOS, "PC_PIB_POTENTIEL": "% du PIB potentiel"}
         return f"{fr(x / 1e9, 4)} Md€" if unite == "euros" else f"{fr(x, 1)} {noms.get(unite, unite)}"
 
+    # Un total qu'un traitement définit (un cumul, une variation) le dit, pour qu'on ne le prenne pas pour un encours.
+    libelles = {t["id"]: t["libelle"][0].lower() + t["libelle"][1:] for t in lire("tables/traitements.csv")}
+
+    def total_lisible(r):
+        traitements = [libelles[t] for t in r["traitements"].split(";") if t]
+        return r["total"] + (f" ({', '.join(traitements)})" if traitements else "")
+
     if ecarts:
         lignes += ["| Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |",
                    "|---|---|---|---|---|---|---|---|"]
-        lignes += [f"| {r['source']} | {r['perimetre']} | {r['fonction'] or 'ensemble'} | {r['periode']} | {r['total']} | "
+        lignes += [f"| {r['source']} | {r['perimetre']} | {r['fonction'] or 'ensemble'} | {r['periode']} | {total_lisible(r)} | "
                    f"{montant_lisible(r['valeur'], r['unite'])} | {montant_lisible(r['somme'], r['unite'])} | "
                    f"{ecart_lisible(r['valeur'] - r['somme'], r['unite'])} |" for r in ecarts]
         lignes.append("")
@@ -3152,28 +3168,39 @@ def etats_depuis_balance(directs):
     return ligne
 
 
+def balances_retenues():
+    """{exercice: inscription de sa balance la plus récente}."""
+    retenues = {}
+    for i in lire("tables/fichiers_balances_etat.csv"):
+        if i["contenu"] == "balance" and (i["exercice"] not in retenues or i["version"] > retenues[i["exercice"]]["version"]):
+            retenues[i["exercice"]] = i
+    return retenues
+
+
+def premieres_versions(derniers, perimetre, prefixe, unite):
+    """{(concept sans son préfixe, période): ligne} : pour chaque chiffre d'un périmètre dans une unité, sa première
+    version publiée, celle de la loi d'approbation des comptes de l'exercice, et non celle qu'une loi suivante peut
+    donner en comparaison."""
+    retenues = {}
+    for l in derniers.values():
+        if l["perimetre_id"] == perimetre and l["concept_id"].startswith(prefixe) and l["unite_id"] == unite:
+            k = (l["concept_id"].removeprefix(prefixe), l["periode"])
+            if k not in retenues or l["version"] < retenues[k]["version"]:
+                retenues[k] = l
+    return retenues
+
+
 def balances_etat_controlees(derniers):
     """Pour chaque exercice, la balance inscrite la plus récente, et ce qu'elle donne : (exercice, inscription, comptes
     absents du plan comptable, somme des soldes, {indicateur d'engagements hors bilan: somme}, résultat, {ligne des
     états financiers: (loi, marge, balance)})."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
-    inscrits = lire("tables/fichiers_balances_etat.csv")
     referentiel = lire("tables/indicateurs_balances_etat.csv")
-    plans = [i for i in inscrits if i["contenu"] == "plan"]
+    plans = [i for i in lire("tables/fichiers_balances_etat.csv") if i["contenu"] == "plan"]
     plan = balances.plan(fichiers[max(plans, key=lambda i: i["version"])["fichier_id"]]) if plans else {}
-    retenues = {}
-    for i in inscrits:
-        if i["contenu"] == "balance" and (i["exercice"] not in retenues or i["version"] > retenues[i["exercice"]]["version"]):
-            retenues[i["exercice"]] = i
-    # Les lignes des lois d'approbation des comptes : pour chaque exercice, la première version publiée, comme la balance.
-    lois = {}
-    for l in derniers.values():
-        if l["perimetre_id"] == "ETAT_CGE" and l["concept_id"].startswith("COMPTES_ETAT.") and l["unite_id"] == "MIO_EUR":
-            k = (l["periode"], l["concept_id"].removeprefix("COMPTES_ETAT."))
-            if k not in lois or l["version"] < lois[k]["version"]:
-                lois[k] = l
+    lois = premieres_versions(derniers, "ETAT_CGE", "COMPTES_ETAT.", "MIO_EUR")
     resultat = []
-    for exercice, inscrit in sorted(retenues.items()):
+    for exercice, inscrit in sorted(balances_retenues().items()):
         _, decrites, soldes = balances.balance(fichiers[inscrit["fichier_id"]], referentiel)
         rattaches = balances.indicateurs_de(exercice, referentiel)
         directs, engagements = collections.defaultdict(decimal.Decimal), collections.defaultdict(decimal.Decimal)
@@ -3188,7 +3215,7 @@ def balances_etat_controlees(derniers):
                 directs[indicateur["concept_id"].removeprefix("COMPTES_ETAT.")] += int(indicateur["signe"]) * solde / 10 ** 6
         ligne = etats_depuis_balance(directs)
         etats = {concept: (decimal.Decimal(l["valeur"]), decimal.Decimal(valeur(l)[1]) / 10 ** 6, ligne(concept))
-                 for (periode, concept), l in lois.items() if periode == exercice}
+                 for (concept, periode), l in lois.items() if periode == exercice}
         absents = len({d["compte"] for d in decrites} - set(plan))
         resultat.append((exercice, inscrit, absents, sum(soldes), dict(engagements), resultat_exercice, etats))
     return resultat
@@ -3316,6 +3343,236 @@ def partie_balances_etat(derniers):
     return lignes
 
 
+# 15. Dette négociable de l'État. L'encours que l'Insee reprend de l'Agence France Trésor, contre les variations que
+# l'Insee publie avec lui, le tableau de financement des lois d'approbation des comptes et les titres négociables de la
+# balance de l'État, que la DGFiP détaille par indicateur : le nominal des titres, le différentiel d'indexation des
+# titres indexés sur l'inflation, et des intérêts, que l'encours ne compte pas. Un indicateur de détail que
+# DETAILS_TITRES ne classe pas est signalé dans le rapport.
+DETTE_NEGOCIABLE = "insee.bdm-dette-negociable-etat"
+DETAILS_TITRES = {"P001": "nominal", "P002": "nominal", "P009": "nominal", "P012": "nominal",
+                  "P005": "indexation", "P014": "indexation",
+                  "P004": "interets", "P008": "interets", "P016": "interets", "P017": "interets", "P084": "interets",
+                  "P085": "interets"}
+BTF = "P012"
+# Les OAT que la balance dit « à taux variable », qui sont les OAT indexées, et les différentiels d'indexation.
+INDEXES = ("P002", "P005", "P014")
+COURT_TERME = ["COURT_TERME_EUROS", "COURT_TERME_DEVISES"]
+MOYEN_LONG_TERME = ["MOYEN_LONG_TERME_EUROS", "MOYEN_LONG_TERME_DEVISES"]
+
+
+def titres_negociables_des_balances():
+    """{exercice: {indicateur de détail: montant, en euros}} : les lignes de chaque balance dont l'indicateur de
+    synthèse alimente les titres négociables du bilan, au signe du bilan."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    referentiel = lire("tables/indicateurs_balances_etat.csv")
+    resultat = {}
+    for exercice, inscrit in sorted(balances_retenues().items()):
+        _, decrites, soldes = balances.balance(fichiers[inscrit["fichier_id"]], referentiel)
+        rattaches = balances.indicateurs_de(exercice, referentiel)
+        detail = collections.defaultdict(decimal.Decimal)
+        for d, solde in zip(decrites, soldes):
+            indicateur = rattaches[d["indicateurs_de_synthese"]]
+            if indicateur["concept_id"] == "COMPTES_ETAT.TITRES_NEGOCIABLES":
+                detail[d["indicateurs_de_detail"]] += int(indicateur["signe"]) * solde
+        resultat[exercice] = dict(detail)
+    return resultat
+
+
+def code_detail(indicateur):
+    """Le code d'un indicateur de détail, tel que la balance l'écrit avant son libellé (« P012_BTF »)."""
+    return indicateur.partition("_")[0]
+
+
+def signe_arrondi(x, decimales):
+    """Un écart arrondi, signé, sans « −0 »."""
+    return fr(round(x, decimales) + 0.0, decimales, True)
+
+
+def sur(n, total, mot):
+    """« 9 années sur 10 », « 0 exercice sur 10 »."""
+    return f"{fr(n, 0)} {mot}{'s' if n >= 2 else ''} sur {fr(total, 0)}"
+
+
+def partie_dette_negociable(derniers):
+    encours, variations = {}, {}
+    for l in derniers.values():
+        if l["source_id"] == DETTE_NEGOCIABLE:
+            cible = variations if l["traitements"] == "variation_depuis_decembre" else encours
+            cible[(l["concept_id"].removeprefix("DETTE_NEGOCIABLE."), l["periode"])] = l
+    if not encours:
+        return []
+
+    def fin(concepts, mois_):
+        """(euros, marge) de la somme des encours de la fin d'un mois, ou rien s'il en manque un."""
+        lus = [encours.get((c, mois_)) for c in concepts]
+        return None if None in lus else (sum(valeur(l)[0] for l in lus), sum(valeur(l)[1] for l in lus))
+
+    mois = sorted({m for _, m in encours})
+    # Les mois où un encours n'est pas la somme de ses parts (section 1), et ceux où cette somme est l'encours du mois
+    # précédent.
+    exceptions = []
+    for precedent, m in zip([None] + mois, mois):
+        for total, parts in _DETTE_NEGOCIABLE:
+            t, s = fin([total], m), fin(parts, m)
+            if t is not None and s is not None and depasse(t[0] - s[0], t[1] + s[1]):
+                avant = fin([total], precedent) if precedent else None
+                exceptions.append((m, total, parts, t[0], s[0],
+                                   avant is not None and not depasse(s[0] - avant[0], s[1] + avant[1])))
+    devises = [valeur(l)[0] for (c, _), l in encours.items() if c.endswith("_DEVISES")]
+    lignes = ["## 15. Dette négociable de l'État", "",
+              f"L'encours de la dette négociable de l'État à la fin de chaque mois, de {mois[0]} à {mois[-1]}, que l'Insee "
+              "reprend de l'Agence France Trésor : les titres à court terme et à moyen et long terme, en euros et en "
+              "devises, à taux fixe et indexés sur l'inflation"
+              + (" ; les titres en devises sont nuls sur toute la période" if devises and not any(devises) else "")
+              + ". Chaque encours est la somme de ses parts (section 1)"
+              + ("" if not exceptions else ", sauf " + " ; ".join(
+                  f"en {m}, où {' et '.join(parts)} font {fr(s / 1e6, 0)} M€ et {total} {fr(t / 1e6, 0)} M€"
+                  + (f" (leur somme est {total} du mois précédent)" if avant else "")
+                  for m, total, parts, t, s, avant in exceptions)) + ".", ""]
+    # Les variations depuis le début de l'année, contre la différence des encours.
+    ecarts, verifiees = [], 0
+    for (concept, m), l in sorted(variations.items()):
+        debut, actuel = fin([concept], f"{int(m[:4]) - 1}-12"), fin([concept], m)
+        if debut is not None and actuel is not None:
+            verifiees += 1
+            publiee, marge, _ = valeur(l)
+            if depasse(publiee - (actuel[0] - debut[0]), marge + actuel[1] + debut[1]):
+                ecarts.append((m, concept, publiee, actuel[0] - debut[0]))
+    lignes += [f"Les variations depuis le début de l'année que l'Insee publie avec l'encours, contre la différence de "
+               f"l'encours de la fin du mois et de celui de la fin de l'année précédente : {fr(verifiees, 0)} "
+               f"vérifiées, {fr(len(ecarts), 0)} en écart" + (" (en millions d'euros) :" if ecarts else "."), ""]
+    if ecarts:
+        lignes += ["| Mois | Encours | Variation publiée | Différence des encours | Écart |", "|---|---|---|---|---|"]
+        lignes += [f"| {m} | {c} | {fr(v / 1e6, 0, True)} | {fr(d / 1e6, 0, True)} | {signe_arrondi((v - d) / 1e6, 0)} |"
+                   for m, c, v, d in ecarts]
+        lignes.append("")
+    # Le tableau de financement : la variation de chaque encours d'une fin d'année à l'autre, contre ses flux.
+    tf = {k: valeur(l)[:2] for k, l in premieres_versions(derniers, "ETAT_LF", "LOLF.", "MD_EUR").items()}
+    titres = titres_negociables_des_balances()
+
+    def part(exercice, classes):
+        """En euros, la part des titres négociables d'une balance que des classes de DETAILS_TITRES réunissent."""
+        return float(sum((v for k, v in titres[exercice].items() if DETAILS_TITRES.get(code_detail(k)) in classes),
+                         decimal.Decimal(0)))
+
+    lignes += ["Le tableau de financement de l'État, dans la loi d'approbation des comptes de chaque année, en milliards "
+               "d'euros : la variation de l'encours à court terme d'une fin d'année à l'autre, contre la variation nette "
+               "des titres à court terme ; celle de l'encours à moyen et long terme, contre les émissions nettes des "
+               "rachats moins les amortissements. L'écart de celle-ci est la revalorisation des titres indexés sur "
+               "l'inflation : l'encours compte leur supplément d'indexation, que les émissions et les amortissements du "
+               "tableau ne comptent pas, sauf les suppléments versés à l'échéance des titres, qu'il range dans les "
+               "amortissements. La revalorisation est donc la variation du différentiel d'indexation de la balance de "
+               "l'État (section 14), plus les suppléments versés"
+               + (f" ; elle ne se calcule qu'à partir de {int(min(titres)) + 1}, la première balance de la base étant "
+                  f"celle de {min(titres)}." if titres else "."), "",
+               "| Année | Court terme : variation de l'encours | Variation nette des titres à court terme | Écart | Moyen et "
+               "long terme : variation de l'encours | Émissions moins amortissements | Écart | Revalorisation des titres "
+               "indexés | Reste |", "|---|---|---|---|---|---|---|---|---|"]
+    courts, restes = [], []
+    for annee in range(int(mois[0][:4]) + 1, int(mois[-1][:4]) + 1):
+        a, p = str(annee), str(annee - 1)
+        c1, c0 = fin(COURT_TERME, f"{a}-12"), fin(COURT_TERME, f"{p}-12")
+        l1, l0 = fin(MOYEN_LONG_TERME, f"{a}-12"), fin(MOYEN_LONG_TERME, f"{p}-12")
+        if None in (c1, c0, l1, l0) or ("EMISSIONS_DETTE_MLT", a) not in tf:
+            continue
+        court, long_ = c1[0] - c0[0], l1[0] - l0[0]
+        cellules = [signe_arrondi(court / 1e9, 1)]
+        variation = tf.get(("VARIATION_TITRES_COURT_TERME", a))
+        if variation is None:
+            cellules += ["—", "—"]
+        else:
+            courts.append(not depasse(court - variation[0], c1[1] + c0[1] + variation[1]))
+            cellules += [signe_arrondi(variation[0] / 1e9, 1), signe_arrondi((court - variation[0]) / 1e9, 1)]
+        amortissements = tf.get(("AMORTISSEMENT_DETTE_MLT", a))
+        if amortissements is None and ("AMORTISSEMENT_DETTE_LT", a) in tf and ("AMORTISSEMENT_DETTE_MT", a) in tf:
+            amortissements = tuple(x + y for x, y in zip(tf[("AMORTISSEMENT_DETTE_LT", a)],
+                                                         tf[("AMORTISSEMENT_DETTE_MT", a)]))
+        supplements = tf.get(("SUPPLEMENTS_INDEXATION", a))
+        cellules.append(signe_arrondi(long_ / 1e9, 1))
+        if amortissements is None:
+            cellules += ["—", "—", "—", "—"]
+        else:
+            flux = tf[("EMISSIONS_DETTE_MLT", a)][0] - amortissements[0]
+            cellules += [signe_arrondi(flux / 1e9, 1), signe_arrondi((long_ - flux) / 1e9, 1)]
+            if a in titres and p in titres and supplements is not None:
+                revalorisation = part(a, ["indexation"]) - part(p, ["indexation"]) + supplements[0]
+                reste = long_ - flux - revalorisation
+                restes.append(not depasse(reste, l1[1] + l0[1] + tf[("EMISSIONS_DETTE_MLT", a)][1] + amortissements[1]
+                                          + supplements[1]))
+                cellules += [signe_arrondi(revalorisation / 1e9, 1), signe_arrondi(reste / 1e9, 1)]
+            else:
+                cellules += ["—", "—"]
+        lignes.append(f"| {a} | " + " | ".join(cellules) + " |")
+    lignes += ["", f"La variation de l'encours à court terme est la variation nette des titres à court terme du tableau "
+               f"de financement {sur(sum(courts), len(courts), 'année')}, à l'arrondi près ; à moyen et long terme, la "
+               f"revalorisation des titres indexés explique l'écart à l'arrondi près "
+               f"{sur(sum(restes), len(restes), 'année')}.", ""]
+    # La balance et le bilan à la fin de l'exercice.
+    inconnus = sorted({k for d in titres.values() for k in d if code_detail(k) not in DETAILS_TITRES})
+    bilan = premieres_versions(derniers, "ETAT_CGE", "COMPTES_ETAT.", "MIO_EUR")
+    lignes += ["L'encours de la fin de chaque exercice contre les titres négociables de la balance de l'État (section 14), "
+               "que la DGFiP détaille par indicateur : le nominal des OAT, des BTAN et des BTF ; le différentiel "
+               "d'indexation des titres indexés ; les intérêts courus, les coupons courus, les intérêts capitalisés et les "
+               "intérêts constatés d'avance. L'encours à court terme est comparé aux BTF ; l'encours indexé sur "
+               "l'inflation, aux OAT que la balance dit « à taux variable » et aux différentiels d'indexation. En millions "
+               "d'euros." + (f" Indicateurs de détail que la base ne classe pas : {', '.join(inconnus)}." if inconnus
+                            else ""), "",
+               "| Exercice | Encours | Nominal et indexation (balance) | Écart | Court terme | BTF | Écart | Indexé sur "
+               "l'inflation | OAT indexées et indexation | Écart |", "|---|---|---|---|---|---|---|---|---|---|"]
+    justes, ecarts_totaux, bilans = collections.defaultdict(list), [], []
+    for exercice, detail in sorted(titres.items()):
+        total = fin(["ENCOURS"], f"{exercice}-12")
+        if total is None:
+            continue
+        nominal = part(exercice, ["nominal", "indexation"])
+        cellules = []
+        for nom_, aft, balance_ in (
+                ("total", total, nominal),
+                ("court", fin(COURT_TERME, f"{exercice}-12"),
+                 float(sum((v for k, v in detail.items() if code_detail(k) == BTF), decimal.Decimal(0)))),
+                ("indexe", fin(["INDEXEE_INFLATION"], f"{exercice}-12"),
+                 float(sum((v for k, v in detail.items() if code_detail(k) in INDEXES), decimal.Decimal(0))))):
+            if aft is None:
+                cellules += ["—", fr(balance_ / 1e6, 1), "—"]
+                continue
+            justes[nom_].append(not depasse(aft[0] - balance_, aft[1]))
+            cellules += [fr(aft[0] / 1e6, 0), fr(balance_ / 1e6, 1), signe_arrondi((aft[0] - balance_) / 1e6, 1)]
+        lignes.append(f"| {exercice} | " + " | ".join(cellules) + " |")
+        ecarts_totaux.append((total[0] - nominal, total[0]))
+        if ("TITRES_NEGOCIABLES", exercice) in bilan:
+            bilans.append((exercice, valeur(bilan[("TITRES_NEGOCIABLES", exercice)]), total[0], nominal,
+                           part(exercice, ["interets"])))
+    lignes += ["", f"À l'arrondi près, l'encours égale le nominal et l'indexation de la balance "
+               f"{sur(sum(justes['total']), len(justes['total']), 'exercice')} ; l'encours à court terme, les BTF, "
+               f"{sur(sum(justes['court']), len(justes['court']), 'exercice')} ; l'encours indexé, les OAT indexées et "
+               f"leur indexation, {sur(sum(justes['indexe']), len(justes['indexe']), 'exercice')}."]
+    if not all(justes["total"]):
+        hors = [abs(e) for e, _ in ecarts_totaux]
+        lignes[-1] += (f" L'écart de l'encours au nominal et à l'indexation va de {fr(min(hors) / 1e6, 0)} à "
+                       f"{fr(max(hors) / 1e6, 0)} millions d'euros"
+                       + (", dans un sens ou dans l'autre" if min(e for e, _ in ecarts_totaux) < 0
+                          < max(e for e, _ in ecarts_totaux) else "")
+                       + f", soit au plus {fr(max(abs(e) / t for e, t in ecarts_totaux) * 100, 3)} % de l'encours ; ni "
+                       "l'Insee ni la balance n'en donnent la cause.")
+    lignes.append("")
+    if bilans:
+        lignes += ["Les titres négociables du bilan de la loi d'approbation des comptes (sa première version publiée), "
+                   "contre l'encours et les intérêts que la balance range avec les titres, en millions d'euros :", "",
+                   "| Exercice | Titres négociables du bilan | Encours | Différence | Intérêts (balance) | Reste |",
+                   "|---|---|---|---|---|---|"]
+        for exercice, (titres_bilan, _, _), total, _, interets in bilans:
+            lignes.append(f"| {exercice} | {fr(titres_bilan / 1e6, 0)} | {fr(total / 1e6, 0)} | "
+                          f"{fr((titres_bilan - total) / 1e6, 0, True)} | {fr(interets / 1e6, 1)} | "
+                          f"{signe_arrondi((titres_bilan - total - interets) / 1e6, 1)} |")
+        # Le reste est l'écart de l'encours à la balance, au signe près, quand le bilan donne les titres de la balance.
+        if all(not depasse(t - nominal - interets, marge) for _, (t, marge, _), _, nominal, interets in bilans):
+            lignes += ["", "La différence est celle des intérêts ; le reste est, au signe et à l'arrondi du bilan près, "
+                       "l'écart de l'encours au nominal et à l'indexation de la balance, ci-dessus : les titres "
+                       "négociables du bilan sont ceux de la balance."]
+        lignes.append("")
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -3328,7 +3585,7 @@ def ecrire_rapport(derniers):
     lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)
     listes = listes_collectivites()
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
-    lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers)
+    lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")
