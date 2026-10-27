@@ -4,6 +4,240 @@ COMPTES_SECU.AUTONOMIE,Autonomie,COMPTES_SECU,
 COMPTES_SECU.FAMILLE,Famille,COMPTES_SECU,
 COMPTES_SECU.MALADIE,Maladie,COMPTES_SECU,
 COMPTES_SECU.VIEILLESSE,Vieillesse,COMPTES_SECU,
+CPS.E11_1,Santé,CPS,
+CPS.E11_11,Maladie,CPS,CPS.E11_1
+CPS.E11_11_1,Remplacement de revenu temporaire,CPS,CPS.E11_11
+CPS.E11_11_1_01,Indemnités journalières (maladie),CPS,CPS.E11_11_1
+CPS.E11_11_1_02,Congés maladie de longue durée des agents de l'État,CPS,CPS.E11_11_1
+CPS.E11_11_1_03,Maintien de salaire / complément d'IJ des organismes d'assurance,CPS,CPS.E11_11_1
+CPS.E11_11_1_11,Indemnités journalières accidents du travail et maladies professionnelles (AT-MP),CPS,CPS.E11_11_1
+CPS.E11_11_1_13,Maintien de salaire / complément d'IJ des organismes d'assurance (AT-MP),CPS,CPS.E11_11_1
+CPS.E11_11_1_14,Maintien de salaire pour les personnes vulnérables arrêtées durant le Covid (via IJ dérogatoires/chômage partiel),CPS,CPS.E11_11_1
+CPS.E11_11_2,Prestations de santé maladie pris en charge par les administrations de sécurité sociale,CPS,CPS.E11_11
+CPS.E11_11_2_11,Soins de ville - Prestations (maladie),CPS,CPS.E11_11_2
+CPS.E11_11_2_12,Soins de ville - Médicaments (maladie),CPS,CPS.E11_11_2
+CPS.E11_11_2_13,Soins de ville - Matériel (maladie),CPS,CPS.E11_11_2
+CPS.E11_11_2_14,Soins de ville - Transports (maladie),CPS,CPS.E11_11_2
+CPS.E11_11_2_15,Soins de ville - Contrats divers (maladie),CPS,CPS.E11_11_2
+CPS.E11_11_2_16,Soins de ville - Cures thermales (maladie),CPS,CPS.E11_11_2
+CPS.E11_11_2_17,Soins de ville - Permanence de soins (maladie),CPS,CPS.E11_11_2
+CPS.E11_11_2_19,Soins de ville - Autres (maladie),CPS,CPS.E11_11_2
+CPS.E11_11_2_21,Prestations de soins du secteur public hospitalier,CPS,CPS.E11_11_2
+CPS.E11_11_2_22,Prestations de soins en USLD du secteur public hospitalier,CPS,CPS.E11_11_2
+CPS.E11_11_2_28,Transferts aux hôpitaux militaires,CPS,CPS.E11_11_2
+CPS.E11_11_2_39,Soins en clinique privée (maladie) [non ventilés],CPS,CPS.E11_11_2
+CPS.E11_11_2_41,Prestations de santé de la Camieg,CPS,CPS.E11_11_2
+CPS.E11_11_2_52,Soins de ville - Médicaments (AT-MP),CPS,CPS.E11_11_2
+CPS.E11_11_2_56,Soins de ville - Cures thermales (AT-MP),CPS,CPS.E11_11_2
+CPS.E11_11_2_59,Soins de ville - Autres (AT-MP),CPS,CPS.E11_11_2
+CPS.E11_11_2_69,Soins en clinique privée (AT-MP) [non ventilés],CPS,CPS.E11_11_2
+CPS.E11_11_2_72,Soins de ville - Médicaments (maternité),CPS,CPS.E11_11_2
+CPS.E11_11_2_73,Soins de ville - Matériel (maternité),CPS,CPS.E11_11_2
+CPS.E11_11_2_79,Soins de ville - Autres (maternité),CPS,CPS.E11_11_2
+CPS.E11_11_2_89,Soins en clinique privée (maternité) [non ventilés],CPS,CPS.E11_11_2
+CPS.E11_11_2_99,Autres prestations de santé nca,CPS,CPS.E11_11_2
+CPS.E11_11_3,Prestations de santé complémentaires,CPS,CPS.E11_11
+CPS.E11_11_3_01,Prestations maladie prises en charge par le Fonds C2S,CPS,CPS.E11_11_3
+CPS.E11_11_3_09,Remboursements des organismes d'assurance - Prestations connexes à la santé,CPS,CPS.E11_11_3
+CPS.E11_11_3_11,Prestations de santé des organismes d'assurance - Hôpital,CPS,CPS.E11_11_3
+CPS.E11_11_3_12,Prestations de santé des organismes d'assurance - Soins de ville,CPS,CPS.E11_11_3
+CPS.E11_11_3_13,Prestations de santé des organismes d'assurance - Médicaments,CPS,CPS.E11_11_3
+CPS.E11_11_4,Prestations médico-sociales (hors personnes handicapées),CPS,CPS.E11_11
+CPS.E11_11_4_01,"Établissement d'hébergement pour personnes âgées, Établissement d'hébergement pour personnes âgées dépendantes",CPS,CPS.E11_11_4
+CPS.E11_11_4_02,Services de soins infirmiers à domicile (Ssiad),CPS,CPS.E11_11_4
+CPS.E11_11_4_81,"Prestations médico-sociales diverses (alcoologie, toxicomanie…)",CPS,CPS.E11_11_4
+CPS.E11_11_4_99,Autres prestations médico-sociales,CPS,CPS.E11_11_4
+CPS.E11_11_9,Autres prestations santé,CPS,CPS.E11_11
+CPS.E11_12,Invalidité,CPS,CPS.E11_1
+CPS.E11_12_1,Remplacement de revenu (pensions et rentes),CPS,CPS.E11_12
+CPS.E11_12_1_10,Allocations temporaires d'invalidité,CPS,CPS.E11_12_1
+CPS.E11_12_1_21,Pensions d'invalidité (y compris majorations enfant et tierce personne),CPS,CPS.E11_12_1
+CPS.E11_12_1_22,Rentes d'invalidité des organismes d'assurance (y compris majorations enfant et tierce personne),CPS,CPS.E11_12_1
+CPS.E11_12_1_23,Allocation temporaire d'invalidité (Fonction publique),CPS,CPS.E11_12_1
+CPS.E11_12_1_31,Pensions militaires d'invalidité - victimes civiles,CPS,CPS.E11_12_1
+CPS.E11_12_2,Autres prestations de ressources,CPS,CPS.E11_12
+CPS.E11_12_2_11,Allocation aux adultes handicapés (AAH),CPS,CPS.E11_12_2
+CPS.E11_12_2_12,Garantie de ressources s'adressant aux travailleurs handicapés (GRTH),CPS,CPS.E11_12_2
+CPS.E11_12_2_13,Allocation supplémentaire d'invalidité (ASI),CPS,CPS.E11_12_2
+CPS.E11_12_3,Prestations de compensation du handicap,CPS,CPS.E11_12
+CPS.E11_12_3_21,Prestation de compensation du handicap (PCH) moins de 60 ans,CPS,CPS.E11_12_3
+CPS.E11_12_3_22,Allocation compensatrice pour tierce personne (ACTP) moins de 60 ans,CPS,CPS.E11_12_3
+CPS.E11_12_3_31,Allocation journalière de présence parentale (AJPP),CPS,CPS.E11_12_3
+CPS.E11_12_3_32,Allocation de présence parentale (APP),CPS,CPS.E11_12_3
+CPS.E11_12_3_33,Allocation d'éducation de l'enfant handicapé (AEEH),CPS,CPS.E11_12_3
+CPS.E11_12_3_35,Crédit d'impôt pour dépenses d'équipement de l'habitation principale (aide aux personnes de moins de 60 ans),CPS,CPS.E11_12_3
+CPS.E11_12_3_36,Crédit d'impôt au titre de l'emploi salarié à domicile (assistance aux personnes handicapées),CPS,CPS.E11_12_3
+CPS.E11_12_3_99,Autres allocations liées au handicap,CPS,CPS.E11_12_3
+CPS.E11_12_4,Accueil et hébergement des personnes handicapées (y compris prestations médico-sociales),CPS,CPS.E11_12
+CPS.E11_12_4_01,Ssiad personnes handicapées et ajustement des prestations médico-sociales,CPS,CPS.E11_12_4
+CPS.E11_12_4_02,Hébergement des enfants handicapés,CPS,CPS.E11_12_4
+CPS.E11_12_4_03,Hébergement des adultes handicapés,CPS,CPS.E11_12_4
+CPS.E11_12_4_04,Accueil et accompagnement sans hébergement des enfants handicapés,CPS,CPS.E11_12_4
+CPS.E11_12_4_05,Accueil et accompagnement sans hébergement des adultes handicapés,CPS,CPS.E11_12_4
+CPS.E11_12_5,"Aide par le travail (Établissement et service d'aide par le travail, etc.)",CPS,CPS.E11_12
+CPS.E11_12_5_01,"Aide par le travail (Établissement et service d'aide par le travail, etc.)",CPS,CPS.E11_12_5
+CPS.E11_12_9,Autres prestations invalidité (y compris organismes d'assurance),CPS,CPS.E11_12
+CPS.E11_13,AT-MP,CPS,CPS.E11_1
+CPS.E11_13_2,Remplacement de revenu définitif,CPS,CPS.E11_13
+CPS.E11_13_2_11,Rentes AT-MP,CPS,CPS.E11_13_2
+CPS.E11_13_2_12,Pensions militaires d'invalidité - victimes militaires,CPS,CPS.E11_13_2
+CPS.E11_13_2_19,"Pensions d'invalidité diverses, suite à accident",CPS,CPS.E11_13_2
+CPS.E11_13_2_32,Indemnisations du Fiva,CPS,CPS.E11_13_2
+CPS.E11_13_2_33,Allocation de cessation anticipée d'activité des travailleurs de l'amiante (Acaata),CPS,CPS.E11_13_2
+CPS.E11_13_2_34,Allocation spécifique de cessation d'activité au titre de l'amiante (Ascaa),CPS,CPS.E11_13_2
+CPS.E11_13_2_35,Prestations du Fonds d'indemnisation des victimes de pesticides,CPS,CPS.E11_13_2
+CPS.E11_13_9,Autres prestations AT-MP,CPS,CPS.E11_13
+CPS.E11_2,Vieillesse-survie,CPS,
+CPS.E11_21,Vieillesse,CPS,CPS.E11_2
+CPS.E11_21_1,Pensions de droit direct,CPS,CPS.E11_21
+CPS.E11_21_1_11,Pensions normales,CPS,CPS.E11_21_1
+CPS.E11_21_1_12,Pensions d'inaptitude,CPS,CPS.E11_21_1
+CPS.E11_21_1_13,Pensions d'invalidité (y compris ATI définitive aux retraités et rentes viagères d'invalidité après 60 ans),CPS,CPS.E11_21_1
+CPS.E11_21_1_14,Retraites du combattant,CPS,CPS.E11_21_1
+CPS.E11_21_1_21,Indemnités temporaires de la Fonction publique,CPS,CPS.E11_21_1
+CPS.E11_21_1_31,Pensions de vieillesse complémentaires,CPS,CPS.E11_21_1
+CPS.E11_21_1_32,Pensions de vieillesse supplémentaires,CPS,CPS.E11_21_1
+CPS.E11_21_1_41,Majorations sur pensions de base - enfant,CPS,CPS.E11_21_1
+CPS.E11_21_1_42,Majorations sur pensions de base - tierce personne,CPS,CPS.E11_21_1
+CPS.E11_21_1_43,Majorations sur pensions de base - conjoint à charge,CPS,CPS.E11_21_1
+CPS.E11_21_1_44,Majorations sur pensions de base - assurés handicapés,CPS,CPS.E11_21_1
+CPS.E11_21_1_45,Majorations sur pensions de base - autres,CPS,CPS.E11_21_1
+CPS.E11_21_1_99,Autres pensions vieillesse,CPS,CPS.E11_21_1
+CPS.E11_21_2,Minimum vieillesse,CPS,CPS.E11_21
+CPS.E11_21_2_01,Allocation de solidarité aux personnes âgées (Aspa),CPS,CPS.E11_21_2
+CPS.E11_21_2_02,Majorations L814-2 ancien,CPS,CPS.E11_21_2
+CPS.E11_21_2_03,Majorations L815-2 ancien (allocation supplémentaire),CPS,CPS.E11_21_2
+CPS.E11_21_2_04,Allocations spéciales,CPS,CPS.E11_21_2
+CPS.E11_21_2_06,Minimum vieillesse associé au versement d'une pension de droit dérivé,CPS,CPS.E11_21_2
+CPS.E11_21_2_99,Autres composantes du minimum vieillesse nca,CPS,CPS.E11_21_2
+CPS.E11_21_3,Indemnités de départ à la retraite (organismes d'assurance…),CPS,CPS.E11_21
+CPS.E11_21_3_01,Indemnités de départ à la retraite des organismes d'assurance,CPS,CPS.E11_21_3
+CPS.E11_21_4,Prestations liées à la dépendance,CPS,CPS.E11_21
+CPS.E11_21_4_11,Allocation compensatrice pour tierce personne (ACTP) plus de 60 ans,CPS,CPS.E11_21_4
+CPS.E11_21_4_13,Allocation personnalisée d'autonomie (APA),CPS,CPS.E11_21_4
+CPS.E11_21_4_14,Prestation de compensation du handicap (PCH) plus de 60 ans,CPS,CPS.E11_21_4
+CPS.E11_21_4_15,Prestations dépendance des organismes d'assurance,CPS,CPS.E11_21_4
+CPS.E11_21_4_16,Crédit d'impôt pour dépenses d'équipement de l'habitation principale (aide aux personnes de plus de 60 ans),CPS,CPS.E11_21_4
+CPS.E11_21_4_17,Crédit d'impôt au titre de l'emploi salarié à domicile (assistance aux personnes âgées),CPS,CPS.E11_21_4
+CPS.E11_21_4_18,Allocation journalière de proche aidant (AJPA),CPS,CPS.E11_21_4
+CPS.E11_21_4_20,Hébergement des personnes âgées dépendantes,CPS,CPS.E11_21_4
+CPS.E11_21_9,Autres prestations vieillesse,CPS,CPS.E11_21
+CPS.E11_22,Survie,CPS,CPS.E11_2
+CPS.E11_22_1,Pensions de droit dérivé,CPS,CPS.E11_22
+CPS.E11_22_1_11,Pensions de réversion sans condition de ressources,CPS,CPS.E11_22_1
+CPS.E11_22_1_12,Pensions de réversion avec condition de ressources,CPS,CPS.E11_22_1
+CPS.E11_22_1_13,Pensions d'accidents du travail (ayants droit),CPS,CPS.E11_22_1
+CPS.E11_22_1_14,Pensions d'invalidité (ayants droit),CPS,CPS.E11_22_1
+CPS.E11_22_1_15,Pensions militaires d'invalidité (ayants droit),CPS,CPS.E11_22_1
+CPS.E11_22_1_16,"Pensions de conjoint survivant, d'orphelins, d'ascendants au titre des retraites et de l'invalidité",CPS,CPS.E11_22_1
+CPS.E11_22_1_19,Autres droits dérivés,CPS,CPS.E11_22_1
+CPS.E11_22_1_20,Majorations sur pensions de réversion de base,CPS,CPS.E11_22_1
+CPS.E11_22_1_21,Indemnités temporaires de la Fonction publique (ayants cause),CPS,CPS.E11_22_1
+CPS.E11_22_1_31,Pensions complémentaires obligatoires,CPS,CPS.E11_22_1
+CPS.E11_22_9,Autres prestations survie,CPS,CPS.E11_22
+CPS.E11_3,Famille,CPS,
+CPS.E11_30,Famille,CPS,CPS.E11_3
+CPS.E11_30_1,Prestations en faveur de la famille,CPS,CPS.E11_30
+CPS.E11_30_1_01,Allocations familiales (AF),CPS,CPS.E11_30_1
+CPS.E11_30_1_02,Complément familial (CF),CPS,CPS.E11_30_1
+CPS.E11_30_1_03,Allocation de soutien familial (ASF),CPS,CPS.E11_30_1
+CPS.E11_30_1_06,Paje - Prime d'adoption,CPS,CPS.E11_30_1
+CPS.E11_30_1_07,Paje - Base,CPS,CPS.E11_30_1
+CPS.E11_30_1_08,Paje - Allocation d'adoption,CPS,CPS.E11_30_1
+CPS.E11_30_1_09,Allocation différentielle,CPS,CPS.E11_30_1
+CPS.E11_30_1_10,Allocation jeune enfant « longue » (APJE longue),CPS,CPS.E11_30_1
+CPS.E11_30_2,Prestations liées à la scolarité,CPS,CPS.E11_30
+CPS.E11_30_2_02,Allocation de rentrée scolaire (ARS),CPS,CPS.E11_30_2
+CPS.E11_30_2_03,Bourses de l'enseignement primaire et secondaire,CPS,CPS.E11_30_2
+CPS.E11_30_2_99,Autres prestations liées à l'éducation nca,CPS,CPS.E11_30_2
+CPS.E11_30_3,Prestations liées à la garde d'enfants,CPS,CPS.E11_30
+CPS.E11_30_3_02,Aide à la famille pour l'emploi d'une assistante maternelle (AFEAMA),CPS,CPS.E11_30_3
+CPS.E11_30_3_03,Paje - CLCA et Colca,CPS,CPS.E11_30_3
+CPS.E11_30_3_04,Paje - Assistante maternelle,CPS,CPS.E11_30_3
+CPS.E11_30_3_05,Paje - Employée à domicile,CPS,CPS.E11_30_3
+CPS.E11_30_3_06,Allocation parentale d'éducation (APE),CPS,CPS.E11_30_3
+CPS.E11_30_3_07,Crédit d'impôt frais de garde d'enfants de moins de 6 ans,CPS,CPS.E11_30_3
+CPS.E11_30_3_08,Paje - Prepare,CPS,CPS.E11_30_3
+CPS.E11_30_3_09,Crédit d'impôt au titre de l'emploi salarié à domicile (garde d'enfant à domicile),CPS,CPS.E11_30_3
+CPS.E11_30_3_20,Accueil des jeunes enfants,CPS,CPS.E11_30_3
+CPS.E11_30_3_30,Maintien de salaire pour les parents en garde d'enfant durant le Covid (via IJ dérogatoires/chômage partiel),CPS,CPS.E11_30_3
+CPS.E11_30_4,Aide sociale à l'enfance (ASE),CPS,CPS.E11_30
+CPS.E11_30_4_01,Prestations d'hébergement et d'accueil,CPS,CPS.E11_30_4
+CPS.E11_30_4_02,"Actions éducatives à domicile (AED), actions éducatives en milieu ouvert (AEMO)",CPS,CPS.E11_30_4
+CPS.E11_30_4_03,Prévention spécialisée,CPS,CPS.E11_30_4
+CPS.E11_30_4_04,"Dépenses diverses liées à l'ASE (bourses, subventions, frais de placement…)",CPS,CPS.E11_30_4
+CPS.E11_30_5,Complément de rémunération,CPS,CPS.E11_30
+CPS.E11_30_5_11,Supplément familial de traitement et supplément familial de solde,CPS,CPS.E11_30_5
+CPS.E11_30_5_12,Majorations familiales,CPS,CPS.E11_30_5
+CPS.E11_30_6,Prestations liées à la maternité,CPS,CPS.E11_30
+CPS.E11_30_6_01,Indemnités journalières,CPS,CPS.E11_30_6
+CPS.E11_30_6_02,Congés de naissance,CPS,CPS.E11_30_6
+CPS.E11_30_6_03,Maintien de salaire / complément d'IJ des organismes d'assurance,CPS,CPS.E11_30_6
+CPS.E11_30_6_05,Paje - Prime de naissance,CPS,CPS.E11_30_6
+CPS.E11_30_6_06,Prestations nuptialité/natalité versées par les organismes d'assurance,CPS,CPS.E11_30_6
+CPS.E11_30_9,Autres prestations famille,CPS,CPS.E11_30
+CPS.E11_4,Emploi,CPS,
+CPS.E11_41,Insertion et réinsertion professionnelles,CPS,CPS.E11_4
+CPS.E11_41_1,Formation professionnelle,CPS,CPS.E11_41
+CPS.E11_41_1_01,Allocation d'aide au retour à l'emploi - Formation (ARE-F),CPS,CPS.E11_41_1
+CPS.E11_41_1_02,Stages de formation professionnelle des régions,CPS,CPS.E11_41_1
+CPS.E11_41_1_04,Rémunération de fin de formation (RFF),CPS,CPS.E11_41_1
+CPS.E11_41_1_99,Autres dépenses de formation,CPS,CPS.E11_41_1
+CPS.E11_41_2,Insertion professionnelle,CPS,CPS.E11_41
+CPS.E11_41_2_01,Aide à la reprise ou à la création d'entreprise,CPS,CPS.E11_41_2
+CPS.E11_41_2_04,Bourses et subventions diverses,CPS,CPS.E11_41_2
+CPS.E11_41_2_06,Insertion professionnelle des jeunes,CPS,CPS.E11_41_2
+CPS.E11_41_2_99,Autres prestations liées à l'insertion professionnelle,CPS,CPS.E11_41_2
+CPS.E11_41_9,Insertion et réinsertion professionnelles nca,CPS,CPS.E11_41
+CPS.E11_42,Chômage,CPS,CPS.E11_4
+CPS.E11_42_1,Allocation chômage,CPS,CPS.E11_42
+CPS.E11_42_1_01,Allocation d'aide au retour à l'emploi (ARE),CPS,CPS.E11_42_1
+CPS.E11_42_1_02,Allocation spécifique de reclassement (ASR),CPS,CPS.E11_42_1
+CPS.E11_42_1_05,"ASS, AER, ASS-F, ASS-ACCRE (anciennement prestations versées par le Fonds de solidarité)",CPS,CPS.E11_42_1
+CPS.E11_42_1_06,Dépenses de placement de Pôle emploi,CPS,CPS.E11_42_1
+CPS.E11_42_1_07,Aides de Pôle emploi et de l'Unedic,CPS,CPS.E11_42_1
+CPS.E11_42_1_08,Prestations chômage versées par les organismes d'assurance,CPS,CPS.E11_42_1
+CPS.E11_42_1_09,Allocation de sécurisation professionnelle (ASP),CPS,CPS.E11_42_1
+CPS.E11_42_1_10,"Aide exceptionnelle de fin d'année (Prime de noël) des bénéficiaires de l'ASS, l'AER et l'ATS (comptabilisée dans les prestations du Fonds de solidarité avant 2013)",CPS,CPS.E11_42_1
+CPS.E11_42_1_20,Prestations de chômage partiel,CPS,CPS.E11_42_1
+CPS.E11_42_1_99,Autres prestations chômage nca,CPS,CPS.E11_42_1
+CPS.E11_42_2,Préretraites,CPS,CPS.E11_42
+CPS.E11_42_2_03,Préretraites d'entreprises,CPS,CPS.E11_42_2
+CPS.E11_42_2_04,"Allocations financées par l'État (Allocation spéciale du fonds national de l'emploi, etc.)",CPS,CPS.E11_42_2
+CPS.E11_42_2_99,Autres préretraites,CPS,CPS.E11_42_2
+CPS.E11_42_9,Autres prestations chômage,CPS,CPS.E11_42
+CPS.E11_5,Logement,CPS,
+CPS.E11_50,Logement,CPS,CPS.E11_5
+CPS.E11_50_1,Allocation de logement familiale (ALF),CPS,CPS.E11_50
+CPS.E11_50_1_01,ALF location,CPS,CPS.E11_50_1
+CPS.E11_50_1_02,ALF accédants,CPS,CPS.E11_50_1
+CPS.E11_50_2,Aide personnalisée au logement (APL),CPS,CPS.E11_50
+CPS.E11_50_2_01,APL location HLM + foyers,CPS,CPS.E11_50_2
+CPS.E11_50_2_02,APL location hors HLM + foyers,CPS,CPS.E11_50_2
+CPS.E11_50_2_03,APL accédants,CPS,CPS.E11_50_2
+CPS.E11_50_3,Allocation de logement sociale (ALS),CPS,CPS.E11_50
+CPS.E11_50_3_01,ALS location,CPS,CPS.E11_50_3
+CPS.E11_50_3_02,ALS accédants,CPS,CPS.E11_50_3
+CPS.E11_50_9,Autres prestations logement,CPS,CPS.E11_50
+CPS.E11_6,Pauvreté et exclusion sociale,CPS,
+CPS.E11_60,Pauvreté et exclusion sociale,CPS,CPS.E11_6
+CPS.E11_60_1,Revenu minimum,CPS,CPS.E11_60
+CPS.E11_60_1_01,Revenu minimum d'insertion (RMI),CPS,CPS.E11_60_1
+CPS.E11_60_1_02,RSA socle,CPS,CPS.E11_60_1
+CPS.E11_60_1_03,Prime de solidarité active (avril 2009) et aide exceptionnelle de fin d'année (Prime de noël),CPS,CPS.E11_60_1
+CPS.E11_60_2,Prime liée à l'activité,CPS,CPS.E11_60
+CPS.E11_60_2_01,Prime d'activité,CPS,CPS.E11_60_2
+CPS.E11_60_3,Prestations versées à titre exceptionnel,CPS,CPS.E11_60
+CPS.E11_60_3_01,Aide exceptionnelle de solidarité,CPS,CPS.E11_60_3
+CPS.E11_60_3_02,Indemnité inflation,CPS,CPS.E11_60_3
+CPS.E11_60_3_04,Mesure exceptionnelle d’aide à l’acquisition du carburant,CPS,CPS.E11_60_3
+CPS.E11_60_4,Prestations liées à l'hébergement,CPS,CPS.E11_60
+CPS.E11_60_4_01,Prestations liées à l'hébergement,CPS,CPS.E11_60_4
+CPS.E11_60_5,Chèque-Énergie,CPS,CPS.E11_60
+CPS.E11_60_5_01,Chèque-Énergie,CPS,CPS.E11_60_5
+CPS.E11_60_6,Bourses de l'enseignement supérieur,CPS,CPS.E11_60
+CPS.E11_60_6_01,Bourses de l'enseignement supérieur,CPS,CPS.E11_60_6
+CPS.E11_60_9,Autres prestations pauvreté-exclusion,CPS,CPS.E11_60
 GF01,Services généraux des administrations publiques,COFOG1999,
 GF0101,"Fonctionnement des organes exécutifs et législatifs, affaires financières et fiscales, affaires étrangères",COFOG1999,GF01
 GF0102,Aide économique extérieure,COFOG1999,GF01

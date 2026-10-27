@@ -11,10 +11,11 @@ fichier trop gros pour le dépôt (GitHub refuse les fichiers de plus de 100 Mo)
 (« .partie01 », « .partie02 »…), que la lecture recolle : son empreinte et sa taille restent celles du
 contenu reçu. Une connexion
 coupée avant la fin du téléchargement est réessayée ; une erreur renvoyée par le serveur ne l'est pas.
-Pour un export de data.ofgl.fr ou de data.economie.gouv.fr, la date de modification du jeu de données est
-lue avant son premier fichier et après chacun : si elle change, l'archivage s'arrête, et les fichiers déjà
-inscrits gardent la date sous laquelle ils ont été téléchargés. Plusieurs archivages peuvent tourner en même temps :
-chacun inscrit ses copies dans la table des fichiers à son tour.
+Pour un export de data.ofgl.fr, de data.economie.gouv.fr ou de data.drees, la date de modification du jeu de données
+est lue avant son premier fichier et après chacun : si elle change, l'archivage s'arrête, et les fichiers déjà
+inscrits gardent la date sous laquelle ils ont été téléchargés. La DREES ne change pas la date de modification de ses
+jeux quand leurs données changent : pour data.drees, la date retenue est celle du dernier traitement des données.
+Plusieurs archivages peuvent tourner en même temps : chacun inscrit ses copies dans la table des fichiers à son tour.
 """
 
 import argparse
@@ -60,13 +61,13 @@ def telecharger(url):
 
 def date_portail(url):
     """Pour un export de data.ofgl.fr ou de data.economie.gouv.fr, la date de modification du jeu de données
-    qu'annonce le portail."""
-    jeu = re.match(r"(https://(?:data\.ofgl\.fr|data\.economie\.gouv\.fr)/api/explore/v2\.1/catalog/datasets/[^/]+)/exports/",
-                   url)
+    qu'annonce le portail ; pour un export de data.drees, la date du dernier traitement de ses données."""
+    jeu = re.match(r"(https://(data\.ofgl\.fr|data\.economie\.gouv\.fr|data\.drees\.solidarites-sante\.gouv\.fr)"
+                   r"/api/explore/v2\.1/catalog/datasets/[^/]+)/exports/", url)
     if jeu is None:
         return ""
-    fiche = json.loads(telecharger(jeu.group(1))[0])
-    return fiche["metas"]["default"]["modified"]
+    fiche = json.loads(telecharger(jeu.group(1))[0])["metas"]["default"]
+    return fiche["data_processed"] if jeu.group(2).startswith("data.drees") else fiche["modified"]
 
 
 def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper):
@@ -103,8 +104,9 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     # Date de mise à jour annoncée par la source : champ « updated » du JSON-stat d'Eurostat, date de
     # modification inscrite dans le classeur pour un fichier xlsx, date d'enregistrement, de transmission ou
     # d'adoption d'un texte publié par le Sénat, dernière mise à jour des séries SDMX de l'Insee, date de
-    # modification du jeu de données pour un export de data.ofgl.fr ou de data.economie.gouv.fr, date la plus récente
-    # des fichiers que porte une archive zip, date de modification inscrite dans un PDF ou dans un classeur ods.
+    # modification du jeu de données pour un export de data.ofgl.fr ou de data.economie.gouv.fr (date du dernier
+    # traitement de ses données pour data.drees), date la plus récente des fichiers que porte une archive zip, date de
+    # modification inscrite dans un PDF ou dans un classeur ods.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(contenu.decode("utf-8"))),
@@ -131,15 +133,16 @@ def main():
     if args.source_id not in {s["id"] for s in lire("tables/sources.csv")}:
         sys.exit(f"source inconnue : {args.source_id} (la déclarer d'abord dans tables/sources.csv)")
 
-    dates = {}  # jeu de données d'un portail → date de modification lue avant son premier fichier
+    dates = {}  # jeu de données d'un portail → date de modification lue avant le premier de ses exports
     for url in args.urls:
-        jeu = url.split("/exports/")[0]
-        if jeu not in dates:
+        jeu = url.split("/exports/")[0] if "/exports/" in url else None  # la fiche d'un jeu n'est pas un export
+        if jeu is not None and jeu not in dates:
             dates[jeu] = date_portail(url)
         contenu, type_contenu = telecharger(url)
-        if date_portail(url) != dates[jeu]:
+        if jeu is not None and date_portail(url) != dates[jeu]:
             sys.exit(f"le jeu de données a été modifié pendant le téléchargement de {url} : recommencer")
-        print(archiver(args.source_id, url, contenu, type_contenu, dates[jeu], args.compresser, args.decouper), flush=True)
+        print(archiver(args.source_id, url, contenu, type_contenu, dates.get(jeu, ""), args.compresser, args.decouper),
+              flush=True)
 
 
 if __name__ == "__main__":

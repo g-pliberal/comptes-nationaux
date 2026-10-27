@@ -21,9 +21,9 @@ import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
-from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_jsonstat, lire_pdf, lire_sdmx,
-                    lire_tableaux_html, lire_xlsx, nombre_de_phrase, nombre_texte, paquet, ressources_chiffres, texte_html,
-                    texte_pdf)
+from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_export_ofgl, lire_jsonstat,
+                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_xlsx, nombre_de_phrase, nombre_texte, paquet,
+                    ressources_chiffres, texte_html, texte_pdf)
 
 
 def erreur_de_type(type_, texte):
@@ -185,6 +185,19 @@ def valeur_archivee(fichier, emplacement, copies):
         lignes = [texte_pdf(m) for _, m in copies[fichier["id"]][page - 1]] if 1 <= page <= len(copies[fichier["id"]]) else []
         nombres = [n for l in lignes if l.startswith(libelle) and (n := nombre_texte(l[len(libelle):])) is not None]
         return (float(nombres[0][0]), "") if len(nombres) == 1 else None
+    if fichier["chemin"].endswith(".csv"):
+        # Un montant d'un export csv d'un portail, désigné par sa ligne (l'en-tête est la première) et sa colonne.
+        trouve = re.fullmatch(r"ligne=([0-9]+);colonne=(.+)", emplacement)
+        if trouve is None:
+            return None
+        if fichier["id"] not in copies:
+            copies[fichier["id"]] = lire_export_ofgl(chemin)
+        entete, lignes = copies[fichier["id"]]
+        n, colonne = int(trouve.group(1)), trouve.group(2)
+        if colonne not in entete or not 2 <= n <= len(lignes) + 1:
+            return None
+        nombre = nombre_texte(lignes[n - 2][entete.index(colonne)])
+        return (float(nombre[0]), "") if nombre else None
     return "sans lecteur"
 
 
