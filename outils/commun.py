@@ -119,7 +119,8 @@ def empreinte(chemin):
 
 
 def lire_export_ofgl(chemin):
-    """Les lignes d'un export csv de data.ofgl.fr (point-virgule, marque d'ordre des octets en tête) : (en-tête, lignes)."""
+    """Les lignes d'un export csv d'un portail Opendatasoft, data.ofgl.fr, data.economie.gouv.fr ou data.drees
+    (point-virgule, marque d'ordre des octets en tête) : (en-tête, lignes)."""
     with ouvrir_copie(chemin) as f:
         lecteur = csv.reader(io.TextIOWrapper(f, encoding="utf-8-sig", newline=""), delimiter=";")
         entete = next(lecteur, [])

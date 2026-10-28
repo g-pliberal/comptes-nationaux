@@ -378,6 +378,27 @@ COMPTES_SECU.RESULTAT_EXERCICE_BILAN,"Résultat de l'exercice, au bilan",COMPTES
 COMPTES_SECU.TOTAL_ACTIF,Total de l'actif,COMPTES_SECU,situation patrimoniale : actif,stock,Total de l'actif de la situation patrimoniale. Montant net.
 COMPTES_SECU.TOTAL_PASSIF,Total du passif,COMPTES_SECU,situation patrimoniale : passif,stock,"Total du passif de la situation patrimoniale, fonds propres compris."
 COMPTES_SECU.VALEURS_MOBILIERES,Valeurs mobilières et titres de placement,COMPTES_SECU,situation patrimoniale : actif,stock,Montant net.
+CPS.AJUSTEMENT_COMPTABLE,Ajustement comptable,CPS,opérations : emplois,depense,"Ligne que le classeur présente parmi les emplois, depuis 2020, sans la compter dans leur total."
+CPS.AUTRES_COTISATIONS,Autres cotisations sociales,CPS,opérations : ressources,recette,
+CPS.AUTRES_EMPLOIS,Autres emplois,CPS,opérations : emplois,depense,Ligne du classeur depuis 1981.
+CPS.AUTRES_RECETTES,Autres recettes,CPS,opérations : ressources,recette,Ligne du classeur depuis 1981.
+CPS.CONTRIBUTIONS_PUBLIQUES,Contributions publiques,CPS,opérations : ressources,recette,
+CPS.COTISATIONS_EMPLOYEURS,Cotisations sociales d'employeurs,CPS,opérations : ressources,recette,
+CPS.COTISATIONS_IMPUTEES,Cotisations sociales imputées,CPS,opérations : ressources,recette,
+CPS.COTISATIONS_SALARIES,Cotisations sociales de salariés,CPS,opérations : ressources,recette,
+CPS.EMPLOIS,"Emplois de la protection sociale, hors transferts entre régimes",CPS,opérations : emplois,depense,"Total des emplois, sans les transferts internes, versés et reçus, entre régimes de protection sociale."
+CPS.EMPLOIS_CAPITAL,Emplois du compte de capital,CPS,opérations : emplois,depense,Ligne du classeur depuis 2006.
+CPS.FRAIS_FINANCIERS,Frais financiers,CPS,opérations : emplois,depense,Ligne du classeur depuis 1981.
+CPS.FRAIS_FINANCIERS_AUTRES_EMPLOIS,Frais financiers et autres emplois,CPS,opérations : emplois,depense,"Ligne du classeur avant 1981, que les frais financiers et les autres emplois remplacent ensuite."
+CPS.FRAIS_NON_FINANCIERS,Frais non financiers,CPS,opérations : emplois,depense,
+CPS.IMPOTS_TAXES_AFFECTES,Impôts et taxes affectés,CPS,opérations : ressources,recette,
+CPS.PRESTATIONS,Prestations de protection sociale,CPS,prestations sociales (E11),depense,"Prestations sociales qu'un régime de protection sociale verse, en espèces ou en nature, ventilées par risque et par prestation selon la nomenclature des comptes de la protection sociale (fonctions de la norme CPS) ; l'ensemble des prestations n'a pas de fonction."
+CPS.PRESTATIONS_ESPECES,Prestations sociales en espèces,CPS,opérations : emplois,depense,
+CPS.PRESTATIONS_NATURE,Prestations sociales en nature,CPS,opérations : emplois,depense,"Ligne du classeur depuis 1990 : avant, ses montants sont compris dans les prestations en espèces."
+CPS.PRODUITS_FINANCIERS,Produits financiers,CPS,opérations : ressources,recette,Ligne du classeur depuis 1981.
+CPS.PRODUITS_FINANCIERS_AUTRES_RECETTES,Produits financiers et autres recettes,CPS,opérations : ressources,recette,"Ligne du classeur avant 1981, que les produits financiers et les autres recettes remplacent ensuite."
+CPS.RECETTES_CAPITAL,Recettes du compte de capital,CPS,opérations : ressources,recette,Ligne du classeur depuis 2006.
+CPS.RESSOURCES,"Ressources de la protection sociale, hors transferts entre régimes",CPS,opérations : ressources,recette,"Total des ressources, sans les transferts internes, versés et reçus, entre régimes de protection sociale."
 DETTE_NEGOCIABLE.COURT_TERME_DEVISES,"Encours de la dette négociable de l'État à court terme, en devises",DETTE_NEGOCIABLE,DNECT_D,stock,
 DETTE_NEGOCIABLE.COURT_TERME_EUROS,"Encours de la dette négociable de l'État à court terme, en euros",DETTE_NEGOCIABLE,DNECT_E,stock,"Titres d'une maturité d'un an et moins, selon l'intitulé de l'Insee : les BTF, comme le montre la balance des comptes de l'État (rapport de cohérence, section 15)."
 DETTE_NEGOCIABLE.ENCOURS,Encours de la dette négociable de l'État,DETTE_NEGOCIABLE,DNTE,stock,"Titres de dette que l'État émet sur les marchés : obligations assimilables du Trésor (OAT), bons du Trésor à intérêts annuels (BTAN) et bons du Trésor à taux fixe et à intérêts précomptés (BTF). Encours en fin de mois, en valeur nominale, supplément d'indexation des titres indexés sur l'inflation compris, sans les intérêts courus : la balance des comptes de l'État le retrouve, à de faibles écarts près, dans les comptes d'OAT, de BTAN et de BTF et dans le différentiel d'indexation des titres indexés (rapport de cohérence, section 15)."

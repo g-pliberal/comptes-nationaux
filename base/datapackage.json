@@ -32,6 +32,7 @@
     {"name": "chiffres-dgcl-collectivites-locales-en-chiffres", "path": "tables/chiffres/dgcl/collectivites-locales-en-chiffres.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-dgcl-finances-departements", "path": "tables/chiffres/dgcl/finances-departements.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-dgcl-finances-regions", "path": "tables/chiffres/dgcl/finances-regions.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-drees-cps", "path": "tables/chiffres/drees/cps.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-eurostat-gov_10a_exp", "path": "tables/chiffres/eurostat/gov_10a_exp.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-eurostat-gov_10a_main", "path": "tables/chiffres/eurostat/gov_10a_main.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-eurostat-nama_10_gdp", "path": "tables/chiffres/eurostat/nama_10_gdp.csv", "schema": "schemas/chiffres.json"},

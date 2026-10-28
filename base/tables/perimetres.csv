@@ -30,6 +30,69 @@ CONSEILS_DEPARTEMENTAUX_OUTRE_MER,Départements d'outre-mer,UNITES_PUBLIQUES,CON
 CONSEILS_REGIONAUX,Régions (conseils régionaux),UNITES_PUBLIQUES,COLLECTIVITES_TERRITORIALES,Hors collectivités à statut particulier.
 CONSEILS_REGIONAUX_METROPOLE,Régions de France métropolitaine,UNITES_PUBLIQUES,CONSEILS_REGIONAUX,Hors collectivité de Corse.
 CONSEILS_REGIONAUX_OUTRE_MER,Régions d'outre-mer,UNITES_PUBLIQUES,CONSEILS_REGIONAUX,Hors collectivités territoriales de Martinique et de Guyane.
+CPS_ACOSS,Agence centrale des organismes de sécurité sociale,CPS,CPS_S13141,Régime « Agence centrale des organismes de Sécurité sociale » du secteur S13141 de l'export.
+CPS_AGIRC,Association générale des institutions de retraite des cadres (Agirc),CPS,CPS_S13141,Régime « Association générale des institutions de retraite des cadres » du secteur S13141 de l'export.
+CPS_AGIRC_ARRCO,Agirc et Arrco réunies,CPS,CPS_S13141,Régime « Association générale des institutions de retraite des cadres et association des régimes de retraite complémentaire des salariés » du secteur S13141 de l'export.
+CPS_APUC_APUL,Régimes des administrations publiques centrales et locales (DREES),CPS,CPS_ENSEMBLE,"Feuilles « APUC_APUL » du classeur : les régimes des secteurs S13111, S13112 et S1313 de l'export."
+CPS_ARRCO,Association des régimes de retraite complémentaire des salariés (Arrco),CPS,CPS_S13141,Régime « Association des régimes de retraite complémentaire des salariés » du secteur S13141 de l'export.
+CPS_ASSO,Régimes des administrations de sécurité sociale (DREES),CPS,CPS_ENSEMBLE,Feuilles « ASSO » du classeur : les régimes des secteurs S13141 et S13142 de l'export.
+CPS_AUTRES_FONDS_SPECIAUX,Autres fonds spéciaux,CPS,CPS_S13141,Régime « Autres fonds spéciaux » du secteur S13141 de l'export.
+CPS_AUTRES_ODASS,Autres organismes dépendant des assurances sociales,CPS,CPS_S13142,Régime « Autres ODASS » du secteur S13142 de l'export.
+CPS_AUTRES_ORGANISMES_REGIME_GENERAL,Autres organismes du régime général,CPS,CPS_S13141,Régime « Autres organismes du régime général » du secteur S13141 de l'export.
+CPS_AUTRES_REGIMES_COMPLEMENTAIRES,Autres régimes complémentaires de salariés,CPS,CPS_S13141,Régime « Autres régimes complémentaires de salariés » du secteur S13141 de l'export.
+CPS_AUTRES_REGIMES_NON_SALARIES,Autres régimes de non-salariés,CPS,CPS_S13141,Régime « Autres régimes non salariés » du secteur S13141 de l'export.
+CPS_AUTRES_REGIMES_PRIVES,Autres régimes privés,CPS,CPS_S11_S12A,Régime « Autres régimes privés » du secteur S11_S12A de l'export.
+CPS_AUTRES_REGIMES_SPECIAUX,Autres régimes spéciaux,CPS,CPS_S13141,Régime « Autres régimes spéciaux » du secteur S13141 de l'export.
+CPS_C2S,Complémentaire santé solidaire,CPS,CPS_S13141,Régime « Complémentaire santé solidaire » du secteur S13141 de l'export.
+CPS_CNAF,Caisse nationale des allocations familiales,CPS,CPS_S13141,Régime « Caisse nationale des allocations familiales » du secteur S13141 de l'export.
+CPS_CNAM,Caisse nationale d'assurance maladie,CPS,CPS_S13141,Régime « Caisse nationale d’assurance maladie » du secteur S13141 de l'export.
+CPS_CNAV,Caisse nationale d'assurance vieillesse,CPS,CPS_S13141,Régime « Caisse nationale d’assurance vieillesse » du secteur S13141 de l'export.
+CPS_CNAVPL,"Caisse nationale d'assurance vieillesse des professions libérales, base et complémentaire",CPS,CPS_S13141,Régime « CNAVPL base complementaire » du secteur S13141 de l'export.
+CPS_CNSA,Caisse nationale de solidarité pour l'autonomie,CPS,CPS_S13141,Régime « Caisse nationale de solidarité pour l'autonomie » du secteur S13141 de l'export.
+CPS_COLLECTIVITES_PRESTATIONS_EXTRA_LEGALES,Prestations extralégales d'employeurs aux agents des collectivités locales,CPS,CPS_S1313,Régime « Régime des prestations extra-légales d'employeurs versées aux agents des collectivités locales » du secteur S1313 de l'export.
+CPS_COMMUNES_INTERVENTION_SOCIALE,Régime d'intervention sociale des communes,CPS,CPS_S1313,Régime « Régime d'intervention sociale des communes » du secteur S1313 de l'export.
+CPS_DEPARTEMENTS_INTERVENTION_SOCIALE,Régime d'intervention sociale des départements,CPS,CPS_S1313,Régime « Régime d'intervention sociale des départements » du secteur S1313 de l'export.
+CPS_ENSEMBLE,Ensemble des régimes de protection sociale (DREES),CPS,,"Tous les régimes que couvrent les comptes de la protection sociale : ceux des administrations de sécurité sociale, de l'État, des organismes divers d'administration centrale et des collectivités, des organismes privés d'assurance et des fonds de pension, des sociétés (régimes directs d'employeurs, prestations extralégales) et des institutions sans but lucratif au service des ménages. L'export le nomme « Total tous régimes » (secteur S1, « Total tous secteurs institutionnels »)."
+CPS_ENTREPRISES_ASSURANCE,"Entreprises d'assurance, contrats collectifs",CPS,CPS_S12_OA,Régime « Entreprises d'assurance - contrats collectifs » du secteur S12_OA de l'export.
+CPS_ETAT_AGENTS,Régimes pour les agents de l'État,CPS,CPS_S13111,Régime « Régimes pour les agents de l'État (y compris ex-L) » du secteur S13111 de l'export.
+CPS_ETAT_CREDITS_IMPOT,Régime des crédits d'impôt de l'État,CPS,CPS_S13111,Régime « Régime des crédits d'impôt de l'État » du secteur S13111 de l'export.
+CPS_ETAT_ENTREPRISES_PUBLIQUES,Régimes de l'État et des entreprises publiques (régime),CPS,CPS_S13_S11,Régime « Régimes de l'État et des entreprises publiques » du secteur S13_S11 de l'export.
+CPS_ETAT_INTERVENTION_SOCIALE,Régime d'intervention sociale de l'État,CPS,CPS_S13111,Régime « Régime d'intervention sociale de l'État » du secteur S13111 de l'export.
+CPS_EXPLOITANTS_AGRICOLES,Régime des exploitants agricoles,CPS,CPS_S13141,Régime « Exploitants agricoles » du secteur S13141 de l'export.
+CPS_FONDS_DE_PENSION,Fonds de pension (régime),CPS,CPS_S12_FP,Régime « Fonds de pension » du secteur S12_FP de l'export.
+CPS_FONDS_SPECIAUX,Fonds spéciaux,CPS,CPS_S13141,Régime « Fonds spéciaux » du secteur S13141 de l'export.
+CPS_HOPITAUX_INTERVENTION_SOCIALE,Régime d'intervention sociale des hôpitaux publics,CPS,CPS_S13142,Régime « Régime d'intervention sociale des hôpitaux publics » du secteur S13142 de l'export.
+CPS_INDEMNISATION_CHOMAGE,Régimes d'indemnisation du chômage,CPS,CPS_S13141,Régime « Régimes d'indemnisation du chômage » du secteur S13141 de l'export.
+CPS_INSTITUTIONS_PREVOYANCE,"Institutions de prévoyance, contrats collectifs",CPS,CPS_S12_OA,Régime « Institutions de prévoyance - contrats collectifs » du secteur S12_OA de l'export.
+CPS_INSTITUTIONS_RETRAITE_SUPPLEMENTAIRE,Institutions de retraite supplémentaire,CPS,CPS_S12_FP,Régime « Institutions de retraite supplémentaire » du secteur S12_FP de l'export.
+CPS_IRCANTEC,Institution de retraite complémentaire des agents non titulaires de l'État et des collectivités publiques (Ircantec),CPS,CPS_S13141,Régime « Institution de retraite complémentaire des agents non titulaires de l’État et des collectivités publiques » du secteur S13141 de l'export.
+CPS_ISBLSM_INTERVENTION_SOCIALE,Régime d'intervention sociale des institutions sans but lucratif au service des ménages,CPS,CPS_S15,Régime « Régime d'intervention sociale des institutions sans but lucratif au service des ménages » du secteur S15 de l'export.
+CPS_MUTUELLES,"Mutuelles, contrats collectifs",CPS,CPS_S12_OA,Régime « Mutuelles - contrats collectifs » du secteur S12_OA de l'export.
+CPS_ODAC,Organismes divers d'administration centrale (régime),CPS,CPS_S13112,Régime « ODAC » du secteur S13112 de l'export.
+CPS_ORGANISMES_ASSURANCE,Organismes d'assurance (régime),CPS,CPS_S12_OA,Régime « Organismes d'assurance » du secteur S12_OA de l'export.
+CPS_ORPS,"Organismes de retraite professionnelle supplémentaire, contrats collectifs",CPS,CPS_S12_FP,Régime « Organismes de retraite professionnelle supplémentaire - contrats collectifs » du secteur S12_FP de l'export.
+CPS_POLE_EMPLOI,Pôle emploi,CPS,CPS_S13142,Régime « Pôle emploi » du secteur S13142 de l'export.
+CPS_RAFP,Régime additionnel de la fonction publique,CPS,CPS_S12_FP,Régime « Régime additionnel de la fonction publique » du secteur S12_FP de l'export.
+CPS_REGIMES_APUC,Régimes issus des administrations publiques centrales,CPS,CPS_S1311,Régime « Régimes issus des administrations publiques centrales » du secteur S1311 de l'export.
+CPS_REGIMES_BASE_NON_SALARIES,Régimes de base des non-salariés,CPS,CPS_S13141,Régime « Régimes de base des non-salariés » du secteur S13141 de l'export.
+CPS_REGIMES_COMPLEMENTAIRES,Régimes complémentaires de salariés,CPS,CPS_S13141,Régime « Régimes complémentaires de salariés » du secteur S13141 de l'export.
+CPS_REGIMES_SPECIAUX,Régimes spéciaux,CPS,CPS_S13141,Régime « Régimes spéciaux » du secteur S13141 de l'export.
+CPS_REGIME_GENERAL,"Régime général de la sécurité sociale (régime, jusqu'en 1989)",CPS,CPS_S13141,Régime « Régime général de la Sécurité sociale » du secteur S13141 de l'export.
+CPS_REGIONS_INTERVENTION_SOCIALE,Régime d'intervention sociale des régions,CPS,CPS_S1313,Régime « Régime d'intervention sociale des régions » du secteur S1313 de l'export.
+CPS_S11_S12A,Autres sociétés financières et non financières (DREES),CPS,CPS_SF_SNF,Secteur S11_S12A de l'export.
+CPS_S12_FP,Fonds de pension (DREES),CPS,CPS_SF_SNF,Secteur S12_FP de l'export.
+CPS_S12_OA,Organismes d'assurance (DREES),CPS,CPS_SF_SNF,"Secteur S12_OA de l'export : mutuelles, institutions de prévoyance et entreprises d'assurance, pour leurs contrats collectifs."
+CPS_S1311,"Administrations publiques centrales, secteur S1311 (DREES)",CPS,CPS_APUC_APUL,"Secteur S1311 de l'export, présent jusqu'en 1989 à côté des secteurs S13111 et S13112, avec un seul régime, « Régimes issus des administrations publiques centrales »."
+CPS_S13111,État (DREES),CPS,CPS_APUC_APUL,Secteur S13111 de l'export.
+CPS_S13112,Organismes divers d'administration centrale (DREES),CPS,CPS_APUC_APUL,"Secteur S13112 de l'export, « ODAC »."
+CPS_S1313,Administrations publiques locales (DREES),CPS,CPS_APUC_APUL,Secteur S1313 de l'export.
+CPS_S13141,Régimes d'assurance sociale (DREES),CPS,CPS_ASSO,"Secteur S13141 de l'export, qu'il nomme « Régime général de la Sécurité sociale » : il réunit tous les régimes d'assurance sociale, du régime général aux régimes agricoles, spéciaux, de non-salariés, complémentaires et d'indemnisation du chômage."
+CPS_S13142,Organismes dépendant des assurances sociales (DREES),CPS,CPS_ASSO,"Secteur S13142 de l'export, « Autres organismes dépendants des assurances sociales » : hôpitaux publics, Pôle emploi et autres organismes."
+CPS_S13_S11,"Régimes de l'État et des entreprises publiques, secteur S13_S11 (DREES)",CPS,CPS_ENSEMBLE,"Secteur S13_S11 de l'export, présent jusqu'en 1989, dont le code associe les administrations publiques (S13) et les sociétés non financières (S11)."
+CPS_S15,Institutions sans but lucratif au service des ménages (DREES),CPS,CPS_ENSEMBLE,"Secteur S15 de l'export, « ISBLSM », et feuilles « ISBLSM » du classeur."
+CPS_SALARIES_AGRICOLES,Régime des salariés agricoles,CPS,CPS_S13141,Régime « Régime des salariés agricoles » du secteur S13141 de l'export.
+CPS_SF_SNF,Régimes des sociétés financières et non financières (DREES),CPS,CPS_ENSEMBLE,"Feuilles « SF_SNF » du classeur : les régimes des secteurs S11_S12A, S12_OA et S12_FP de l'export."
+CPS_UNEDIC,Unédic et autres régimes,CPS,CPS_S13141,Régime « UNEDIC et autres régimes » du secteur S13141 de l'export.
 CTU_GUYANE,Collectivité territoriale de Guyane,UNITES_PUBLIQUES,COLLECTIVITES_STATUT_PARTICULIER,
 CTU_GUYANE_BP,"Collectivité territoriale de Guyane, budget principal",COMPTES_LOCAUX,REGIONS_CTU_BP,"Collectivité territoriale unique, qui exerce depuis 2016 les compétences de la région et du département de Guyane ; comptée avec les régions par l'OFGL."
 CTU_MARTINIQUE,Collectivité territoriale de Martinique,UNITES_PUBLIQUES,COLLECTIVITES_STATUT_PARTICULIER,

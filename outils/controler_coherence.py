@@ -39,7 +39,10 @@ vérifie ce que disent les sources elles-mêmes :
 14. les balances des comptes de l'État : l'équilibre de chacune, celui des engagements hors bilan, et le bilan et le
    compte de résultat qu'on en tire contre ceux des lois d'approbation des comptes, ligne par ligne ;
 15. la dette négociable de l'État : son encours de chaque mois contre les variations publiées avec lui, le tableau de
-   financement des lois d'approbation des comptes, et les titres négociables de la balance et du bilan de l'État.
+   financement des lois d'approbation des comptes, et les titres négociables de la balance et du bilan de l'État ;
+16. les comptes de la protection sociale de la DREES : les prestations de chaque groupe de secteurs dans son classeur
+   contre celles de ses secteurs dans l'export, et l'écart de l'ensemble des régimes contre le double compte d'un
+   secteur.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -56,6 +59,7 @@ import re
 
 import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
+import importer_drees_cps as cps
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
@@ -253,6 +257,18 @@ _DETTE_NEGOCIABLE = [("ENCOURS", ["ENCOURS_EUROS", "ENCOURS_DEVISES"]), ("ENCOUR
                      ("ENCOURS_EUROS", ["COURT_TERME_EUROS", "MOYEN_LONG_TERME_EUROS"]),
                      ("ENCOURS_DEVISES", ["COURT_TERME_DEVISES", "MOYEN_LONG_TERME_DEVISES"])]
 IDENTITES += [(f"DETTE_NEGOCIABLE.{t}", [f"DETTE_NEGOCIABLE.{c}" for c in cs]) for t, cs in _DETTE_NEGOCIABLE]
+# Comptes de la protection sociale (DREES) : les emplois hors transferts entre régimes sont la somme de leurs lignes, sans
+# l'ajustement comptable, que le classeur présente parmi eux sans le compter dans leur total ; les ressources, la somme
+# des leurs ; les prestations, celle des prestations en espèces et en nature. Les lignes changent selon les années et
+# les groupes de régimes (« ? » : peut manquer).
+_CPS_EMPLOIS = ["PRESTATIONS_ESPECES", "PRESTATIONS_NATURE", "FRAIS_NON_FINANCIERS", "FRAIS_FINANCIERS",
+                "FRAIS_FINANCIERS_AUTRES_EMPLOIS", "AUTRES_EMPLOIS", "EMPLOIS_CAPITAL"]
+_CPS_RESSOURCES = ["COTISATIONS_EMPLOYEURS", "COTISATIONS_SALARIES", "AUTRES_COTISATIONS", "COTISATIONS_IMPUTEES",
+                   "IMPOTS_TAXES_AFFECTES", "CONTRIBUTIONS_PUBLIQUES", "PRODUITS_FINANCIERS",
+                   "PRODUITS_FINANCIERS_AUTRES_RECETTES", "AUTRES_RECETTES", "RECETTES_CAPITAL"]
+IDENTITES += [("CPS.EMPLOIS", ["?CPS." + c for c in _CPS_EMPLOIS]),
+              ("CPS.RESSOURCES", ["?CPS." + c for c in _CPS_RESSOURCES]),
+              ("CPS.PRESTATIONS", ["?CPS.PRESTATIONS_ESPECES", "?CPS.PRESTATIONS_NATURE"])]
 # Article liminaire, en points de PIB : le solde effectif (au sens de Maastricht) est la somme des soldes structurel et
 # conjoncturel et des mesures ponctuelles et temporaires.
 IDENTITES += [("SEC2010.B9", ["PFP.SOLDE_STRUCTUREL", "PFP.SOLDE_CONJONCTUREL", "PFP.MESURES_PONCTUELLES_TEMPORAIRES"])]
@@ -486,6 +502,16 @@ _CATEGORIES = [(t, sorted(p for p in _SOUS[t] if p in _UNITES)) for t in sorted(
                if any(p in _UNITES for p in _SOUS[t])]
 DECOMPOSITIONS_PAR_CONCEPT.update({c["id"]: _CATEGORIES for c in lire("tables/concepts.csv")
                                    if c["norme_id"] == "UNITES_PUBLIQUES"})
+# Comptes de la protection sociale (DREES) : les prestations de l'ensemble des régimes contre la somme de celles des
+# secteurs, celles de chaque secteur contre la somme de celles de ses régimes (« ? » : un secteur ou un régime n'existe
+# pas toutes les années) ; les emplois et les ressources de l'ensemble contre la somme de ceux des groupes de secteurs,
+# dont une ligne peut manquer.
+_CPS_SECTEURS = sorted(p for _, p in cps.SECTEURS.values())
+DECOMPOSITIONS_PAR_CONCEPT[cps.PRESTATIONS] = ([("CPS_ENSEMBLE", ["?" + s for s in _CPS_SECTEURS])]
+                                               + [(s, ["?" + r for r in sorted(_SOUS[s])]) for s in _CPS_SECTEURS])
+DECOMPOSITIONS_PAR_CONCEPT.update({c["id"]: [("CPS_ENSEMBLE", ["?CPS_SF_SNF", "?CPS_S15", "?CPS_ASSO", "?CPS_APUC_APUL"])]
+                                   for c in lire("tables/concepts.csv")
+                                   if c["norme_id"] == "CPS" and c["id"] != cps.PRESTATIONS})
 
 # Passerelles entre tableaux qui présentent autrement les mêmes grandeurs : (libellé, termes de gauche, termes
 # de droite), chaque terme étant (source, périmètre, concept, signe) et, au besoin, (modèle de période, traitement),
@@ -3573,6 +3599,100 @@ def partie_dette_negociable(derniers):
     return lignes
 
 
+# 16. Comptes de la protection sociale (DREES). Les sections 1 à 3 vérifient les sommes de l'export et du classeur : chaque
+# prestation contre ses parties, chaque secteur contre ses régimes, l'ensemble des régimes contre ses secteurs, les
+# emplois et les ressources contre leurs lignes et contre leurs groupes de secteurs, les prestations de l'ensemble contre
+# celles en espèces et en nature du classeur. Celle-ci rapproche les prestations de chaque groupe de secteurs du classeur
+# de celles de ses secteurs dans l'export, et explique l'écart de l'ensemble par le double compte d'un secteur.
+GROUPES_CPS = ["CPS_ASSO", "CPS_APUC_APUL", "CPS_SF_SNF"]
+
+
+def partie_protection_sociale(derniers):
+    prestations, especes_nature = {}, collections.defaultdict(lambda: [0.0, 0.0])
+    for l in derniers.values():
+        if not l["concept_id"].startswith("CPS."):
+            continue
+        v, m, _ = valeur(l)
+        if l["concept_id"] == cps.PRESTATIONS and not l["fonction_id"]:
+            prestations[(l["perimetre_id"], l["periode"])] = (v, m)
+        elif l["concept_id"] in ("CPS.PRESTATIONS_ESPECES", "CPS.PRESTATIONS_NATURE"):
+            especes_nature[(l["perimetre_id"], l["periode"])][0] += v
+            especes_nature[(l["perimetre_id"], l["periode"])][1] += m
+    if not prestations:
+        return []
+    parents = {p["id"]: p["parent_id"] for p in lire("tables/perimetres.csv") if p["norme_id"] == "CPS"}
+    regimes = set(cps.REGIMES.values())
+    annees = sorted({a for _, a in prestations})
+    par_annee = collections.Counter(a for p, a in prestations if p in regimes)
+    lignes = ["## 16. Comptes de la protection sociale", "",
+              f"Les comptes de la protection sociale de la DREES : les prestations de l'ensemble des régimes de "
+              f"{annees[0]} à {annees[-1]}, de chaque secteur et de chaque régime depuis {min(par_annee)}, jusqu'à "
+              f"{fr(max(par_annee.values()), 0)} régimes une même année ({fr(len({p for p, _ in prestations if p in regimes}), 0)} "
+              f"en tout, la nomenclature des régimes changeant en 1990), et les emplois et les ressources de l'ensemble "
+              f"des régimes et, depuis {min(a for p, a in especes_nature if p in GROUPES_CPS)}, de chaque groupe de "
+              f"secteurs. Les sections 1 à 3 en vérifient les sommes.", ""]
+    # Les prestations de chaque groupe de secteurs dans le classeur, contre celles de ses secteurs dans l'export.
+    comparees, ecarts = 0, []
+    for (groupe, annee), (v, m) in sorted(especes_nature.items()):
+        if groupe not in GROUPES_CPS:
+            continue
+        parties = [prestations[(s, annee)] for s in _CPS_SECTEURS if parents[s] == groupe and (s, annee) in prestations]
+        comparees += 1
+        somme = sum(x for x, _ in parties)
+        if depasse(v - somme, m + sum(x for _, x in parties)):
+            ecarts.append((groupe, annee, v, somme))
+    lignes += [f"Prestations en espèces et en nature de chaque groupe de secteurs dans le classeur, contre la somme des "
+               f"prestations de ses secteurs dans l'export : {fr(comparees, 0)} comparées, {fr(len(ecarts), 0)} en "
+               f"écart" + (" (en millions d'euros) :" if ecarts else "."), ""]
+    if ecarts:
+        lignes += ["| Groupe | Année | Classeur | Export | Écart |", "|---|---|---|---|---|"]
+        lignes += [f"| {g} | {a} | {fr(v / 1e6, 1)} | {fr(s / 1e6, 1)} | {signe_arrondi((v - s) / 1e6, 1)} |"
+                   for g, a, v, s in ecarts]
+        lignes.append("")
+    # L'ensemble des régimes : l'écart de l'export au classeur, contre l'excédent des secteurs de l'export sur leurs
+    # régimes.
+    rangees = []
+    for annee in annees:
+        if ("CPS_ENSEMBLE", annee) not in prestations or ("CPS_ENSEMBLE", annee) not in especes_nature:
+            continue
+        (total, marge), (classeur, marge_c) = prestations[("CPS_ENSEMBLE", annee)], especes_nature[("CPS_ENSEMBLE", annee)]
+        if not depasse(total - classeur, marge + marge_c):
+            continue
+        excedents = []
+        for s in _CPS_SECTEURS:
+            if (s, annee) in prestations:
+                parties = [prestations[(r, annee)] for r in regimes if parents[r] == s and (r, annee) in prestations]
+                somme = sum(x for x, _ in parties)
+                if parties and depasse(prestations[(s, annee)][0] - somme, prestations[(s, annee)][1]
+                                       + sum(x for _, x in parties)):
+                    excedents.append((s, prestations[(s, annee)][0], somme))
+        rangees.append((annee, total, classeur, excedents))
+    if rangees:
+        lignes += ["Prestations de l'ensemble des régimes, dans l'export et dans le classeur (prestations en espèces et en "
+                   "nature), quand elles diffèrent, et secteurs dont l'export donne un total supérieur à la somme de ses "
+                   "régimes, en millions d'euros :", "",
+                   "| Année | Export | Classeur | Écart | Secteur | Total du secteur | Somme de ses régimes | Excédent |",
+                   "|---|---|---|---|---|---|---|---|"]
+        for annee, total, classeur, excedents in rangees:
+            for k, (s, v, somme) in enumerate(excedents or [("—", None, None)]):
+                debut = (f"| {annee} | {fr(total / 1e6, 1)} | {fr(classeur / 1e6, 1)} | "
+                         f"{signe_arrondi((total - classeur) / 1e6, 1)}") if k == 0 else "| | | |"
+                lignes.append(debut + (f" | {s} | — | — | — |" if v is None else
+                                       f" | {s} | {fr(v / 1e6, 1)} | {fr(somme / 1e6, 1)} | "
+                                       f"{signe_arrondi((v - somme) / 1e6, 1)} |"))
+        doubles = [a for a, total, classeur, e in rangees if len(e) == 1 and abs(e[0][1] - 2 * e[0][2]) <= 1
+                   and abs((total - classeur) - (e[0][1] - e[0][2])) <= 1]
+        if doubles:
+            secteurs_ = sorted({e[0][0] for a, _, _, e in rangees if a in doubles})
+            quand = (f"De {doubles[0]} à {doubles[-1]}" if len(doubles) == int(doubles[-1]) - int(doubles[0]) + 1
+                     else f"En {plage(doubles)}")
+            lignes += ["", f"{quand}, le total de l'export pour {' et '.join(secteurs_)} est le double de la "
+                       f"somme de ses régimes, et l'écart de l'ensemble des régimes au classeur est cet excédent, à "
+                       f"l'euro près : l'export y compte deux fois ce secteur, le classeur une seule."]
+        lignes.append("")
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -3586,6 +3706,7 @@ def ecrire_rapport(derniers):
     listes = listes_collectivites()
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
+    lignes += partie_protection_sociale(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

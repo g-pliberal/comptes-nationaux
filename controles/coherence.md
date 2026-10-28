@@ -13,6 +13,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
 | dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
 | dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4070 |
+| drees.cps | Les comptes de la protection sociale : prestations sociales de chaque régime, par risque et par prestation, et emplois et ressources de la protection sociale (data.drees, jeu 305_les-comptes-de-la-protection-sociale, et son classeur « La protection sociale en France de 1959 à 2024 ») | 2026-10-23 | 16844 |
 | eurostat.gov_10a_exp | Dépenses des administrations publiques par fonction (COFOG) | 2026-10-21 | 1290 |
 | eurostat.gov_10a_main | Recettes, dépenses et principaux agrégats des administrations publiques | 2026-10-21 | 1488 |
 | eurostat.nama_10_gdp | PIB et principaux agrégats | 2026-10-21 | 102 |
@@ -109,7 +110,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-35252 sommes vérifiées avec toutes leurs composantes : 35144 justes, 108 en écart.
+35495 sommes vérifiées avec toutes leurs composantes : 35378 justes, 117 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
@@ -156,6 +157,15 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 | dgcl.finances-departements | DEP_84_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,5443 Md€ | 0,5743 Md€ | −30,0 M€ |
 | dgcl.finances-departements | DEP_86_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,3899 Md€ | 0,4059 Md€ | −16,0 M€ |
 | dgcl.finances-departements | DEP_974_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 0,9592 Md€ | 0,9702 Md€ | −11,0 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1981 | CPS.PRESTATIONS | 127,4109 Md€ | 126,8170 Md€ | +593,9 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1982 | CPS.PRESTATIONS | 151,5257 Md€ | 150,8263 Md€ | +699,4 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1983 | CPS.PRESTATIONS | 169,4277 Md€ | 168,6477 Md€ | +780,0 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1984 | CPS.PRESTATIONS | 186,5731 Md€ | 185,6615 Md€ | +911,6 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1985 | CPS.PRESTATIONS | 201,6810 Md€ | 200,6862 Md€ | +994,7 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1986 | CPS.PRESTATIONS | 214,5000 Md€ | 213,4027 Md€ | +1 097,3 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1987 | CPS.PRESTATIONS | 223,0508 Md€ | 221,9533 Md€ | +1 097,5 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1988 | CPS.PRESTATIONS | 236,7803 Md€ | 235,5906 Md€ | +1 189,6 M€ |
+| drees.cps | CPS_ENSEMBLE | ensemble | 1989 | CPS.PRESTATIONS | 254,5626 Md€ | 253,2803 Md€ | +1 282,3 M€ |
 | insee.bdm-comptes-etat | ETAT_LF | ensemble | 2019-04 | LOLF.RESULTAT_EXECUTION (cumul depuis le début de l'année) | −67,2150 Md€ | −65,5960 Md€ | −1 619,0 M€ |
 | insee.bdm-dette-negociable-etat | ETAT_AFT | ensemble | 2017-10 | DETTE_NEGOCIABLE.ENCOURS | 1 680,1960 Md€ | 1 703,8500 Md€ | −23 654,0 M€ |
 | insee.bdm-dette-negociable-etat | ETAT_AFT | ensemble | 2021-03 | DETTE_NEGOCIABLE.ENCOURS_EUROS (variation depuis la fin de l'année précédente) | 62,9400 Md€ | 63,1400 Md€ | −200,0 M€ |
@@ -234,24 +244,25 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-19649 ventilations vérifiées avec toutes leurs parties : 19647 justes, 2 en écart.
+24157 ventilations vérifiées avec toutes leurs parties : 24155 justes, 2 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_DEPENSES | ensemble | 2016 | +0,6 M€ en 2016 |
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_RECETTES | ensemble | 2016 | +0,6 M€ en 2016 |
 
-834 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
+1571 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
 
 ## 3. Additivité des sous-secteurs
 
 Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; de même sa dette au sens de Maastricht, ses instruments et sa dette nette, celles d'un sous-secteur étant sa contribution à la dette consolidée de l'ensemble (tableaux 3.101 à 3.104 et dette trimestrielle), et chaque montant de ses comptes complets, qui ne sont pas consolidés (tableaux 7.301 à 7.306) ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions ; pour les décomptes d'organismes et de collectivités, chaque catégorie contre la somme de ses sous-catégories (organismes divers d'administration locale de l'Insee, collectivités et groupements de la DGCL).
 
-17411 additions vérifiées : 17340 justes, 71 en écart.
+23306 additions vérifiées : 23217 justes, 89 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
 | dgcl.finances-departements | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | DEPARTEMENTS_METROPOLE_BP | ses 92 parties (CEA_BP … DEP_95_BP) | ensemble | 2022 | +5,8 M€ en 2022 |
+| drees.cps | CPS.PRESTATIONS | CPS_S12_FP | CPS_FONDS_DE_PENSION | CPS.E11_2, ensemble | 9 années entre 1981 et 1989 | +1 282,3 M€ en 1989 |
 | eurostat.gov_10a_main | SEC2010.B9 | S13 | S1311 + S1313 + S1314 | ensemble | 2011 | −0,4 M€ en 2011 |
 | insee.t3101 | PDE.GD | S13 | S1311 + S1313 + S1314 | ensemble | 13 années entre 1996 et 2012 | −1,5 M€ en 2010 |
 | insee.t3101 | PDE.GD | S1311 | S13111 + S13112 | ensemble | 14 années entre 1996 et 2012 | +1,8 M€ en 2002 |
@@ -2251,3 +2262,25 @@ Les titres négociables du bilan de la loi d'approbation des comptes (sa premiè
 | 2025 | 2 759 785 | 2 737 125 | +22 660 | 22 652,8 | +7,2 |
 
 La différence est celle des intérêts ; le reste est, au signe et à l'arrondi du bilan près, l'écart de l'encours au nominal et à l'indexation de la balance, ci-dessus : les titres négociables du bilan sont ceux de la balance.
+
+## 16. Comptes de la protection sociale
+
+Les comptes de la protection sociale de la DREES : les prestations de l'ensemble des régimes de 1959 à 2024, de chaque secteur et de chaque régime depuis 1981, jusqu'à 34 régimes une même année (48 en tout, la nomenclature des régimes changeant en 1990), et les emplois et les ressources de l'ensemble des régimes et, depuis 2020, de chaque groupe de secteurs. Les sections 1 à 3 en vérifient les sommes.
+
+Prestations en espèces et en nature de chaque groupe de secteurs dans le classeur, contre la somme des prestations de ses secteurs dans l'export : 15 comparées, 0 en écart.
+
+Prestations de l'ensemble des régimes, dans l'export et dans le classeur (prestations en espèces et en nature), quand elles diffèrent, et secteurs dont l'export donne un total supérieur à la somme de ses régimes, en millions d'euros :
+
+| Année | Export | Classeur | Écart | Secteur | Total du secteur | Somme de ses régimes | Excédent |
+|---|---|---|---|---|---|---|---|
+| 1981 | 127 410,9 | 126 817,0 | +593,9 | CPS_S12_FP | 1 187,8 | 593,9 | +593,9 |
+| 1982 | 151 525,7 | 150 826,3 | +699,4 | CPS_S12_FP | 1 398,9 | 699,4 | +699,4 |
+| 1983 | 169 427,7 | 168 647,7 | +780,0 | CPS_S12_FP | 1 560,1 | 780,0 | +780,0 |
+| 1984 | 186 573,1 | 185 661,5 | +911,6 | CPS_S12_FP | 1 823,2 | 911,6 | +911,6 |
+| 1985 | 201 681,0 | 200 686,2 | +994,7 | CPS_S12_FP | 1 989,5 | 994,7 | +994,7 |
+| 1986 | 214 500,0 | 213 402,7 | +1 097,3 | CPS_S12_FP | 2 194,7 | 1 097,3 | +1 097,3 |
+| 1987 | 223 050,8 | 221 953,3 | +1 097,5 | CPS_S12_FP | 2 195,0 | 1 097,5 | +1 097,5 |
+| 1988 | 236 780,3 | 235 590,6 | +1 189,6 | CPS_S12_FP | 2 379,3 | 1 189,6 | +1 189,6 |
+| 1989 | 254 562,6 | 253 280,3 | +1 282,3 | CPS_S12_FP | 2 564,6 | 1 282,3 | +1 282,3 |
+
+De 1981 à 1989, le total de l'export pour CPS_S12_FP est le double de la somme de ses régimes, et l'écart de l'ensemble des régimes au classeur est cet excédent, à l'euro près : l'export y compte deux fois ce secteur, le classeur une seule.
