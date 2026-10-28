@@ -22,8 +22,8 @@ import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
 from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_export_ofgl, lire_jsonstat,
-                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_xlsx, nombre_de_phrase, nombre_texte, paquet,
-                    ressources_chiffres, texte_html, texte_pdf)
+                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, nombre_de_phrase, nombre_texte,
+                    paquet, ressources_chiffres, texte_html, texte_pdf)
 
 
 def erreur_de_type(type_, texte):
@@ -146,7 +146,7 @@ def valeur_archivee(fichier, emplacement, copies):
     if fichier["chemin"].endswith(".html") and emplacement.startswith("phrase="):
         # Un montant énoncé dans le texte : la phrase doit figurer telle quelle dans la page.
         if (fichier["id"], "texte") not in copies:
-            copies[(fichier["id"], "texte")] = texte_html(chemin.read_text(encoding="utf-8"))
+            copies[(fichier["id"], "texte")] = texte_html(lire_texte_html(chemin))
         phrase = emplacement[len("phrase="):]
         nombre = nombre_de_phrase(phrase) if phrase in copies[(fichier["id"], "texte")] else None
         return (float(nombre[0]), "") if nombre else None

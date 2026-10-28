@@ -10,6 +10,21 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 | Source | Titre | Version la plus récente | Chiffres |
 |---|---|---|---|
+| an.ta12-0525 | Projet de loi de finances pour 2006, texte adopté n° 525 (12e législature) : conclusions de la commission mixte paritaire, adoptées par l'Assemblée nationale le 20 décembre 2005 | 2005-12-20 | 70 |
+| an.ta13-0808 | Projet de loi de finances pour 2012, texte adopté n° 808 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 588 |
+| an.ta14-0073 | Projet de loi de finances pour 2013, texte adopté n° 73 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2012 | 2012-12-20 | 598 |
+| an.ta14-0267 | Projet de loi de finances pour 2014, texte adopté n° 267 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 628 |
+| an.ta14-0459 | Projet de loi de finances pour 2015, texte adopté n° 459 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 572 |
+| an.ta14-0648 | Projet de loi de finances pour 2016, texte adopté n° 648 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 574 |
+| an.ta14-0865 | Projet de loi de finances pour 2017, texte adopté n° 865 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2016 | 2016-12-20 | 570 |
+| an.ta15-0065 | Projet de loi de finances pour 2018, texte adopté n° 65 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 576 |
+| an.ta15-0213 | Projet de loi de finances pour 2019, texte adopté n° 213 (15e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2018 | 2018-12-20 | 586 |
+| an.ta15-0374 | Projet de loi de finances pour 2020, texte adopté n° 374 (15e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2019 | 2019-12-19 | 574 |
+| an.ta15-0538 | Projet de loi de finances pour 2021, texte adopté n° 538 rectifié (15e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2020 | 2020-12-17 | 604 |
+| an.ta15-0737 | Projet de loi de finances pour 2022, texte adopté n° 737 (15e législature), adopté définitivement par l'Assemblée nationale le 15 décembre 2021 | 2021-12-15 | 614 |
+| an.ta16-0051 | Projet de loi de finances pour 2023, texte adopté n° 51 rectifié (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 17 décembre 2022 | 2022-12-17 | 592 |
+| an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 594 |
+| an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 572 |
 | dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
 | dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
 | dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4070 |
@@ -104,7 +119,13 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 1053 |
 | senat.pjl25-727 | Projet de loi portant approbation des comptes de la sécurité sociale de l'année 2025, texte n° 727 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 214 |
 | senat.tas05-033 | Projet de loi de financement de la sécurité sociale pour 2006, texte définitif n° 33 (2005-2006) adopté par le Sénat le 23 novembre 2005 | 2005-11-23 | 39 |
+| senat.tas06-031 | Projet de loi de finances pour 2007, texte définitif n° 31 (2006-2007) adopté par le Sénat le 19 décembre 2006 | 2006-12-19 | 602 |
+| senat.tas07-034 | Projet de loi de finances pour 2008, texte définitif n° 34 (2007-2008) adopté par le Sénat le 18 décembre 2007 | 2007-12-18 | 596 |
+| senat.tas08-035 | Projet de loi de finances pour 2009, texte définitif n° 35 (2008-2009) adopté par le Sénat le 17 décembre 2008 | 2008-12-17 | 586 |
+| senat.tas09-034 | Projet de loi de finances pour 2010, texte définitif n° 34 (2009-2010) adopté par le Sénat le 18 décembre 2009 | 2009-12-18 | 582 |
+| senat.tas10-032 | Projet de loi de finances pour 2011, texte définitif n° 32 (2010-2011) adopté par le Sénat le 15 décembre 2010 | 2010-12-15 | 572 |
 | senat.tas22-018 | Projet de loi de financement de la sécurité sociale pour 2023, texte n° 18 (2022-2023) adopté par le Sénat en première lecture le 15 novembre 2022 | 2022-11-15 | 230 |
+| senat.tas24-048 | Projet de loi de finances pour 2025, texte définitif n° 48 (2024-2025) adopté par le Sénat le 6 février 2025 | 2025-02-06 | 594 |
 
 ## 1. Sommes comptables
 
@@ -244,10 +265,12 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-24157 ventilations vérifiées avec toutes leurs parties : 24155 justes, 2 en écart.
+26283 ventilations vérifiées avec toutes leurs parties : 26279 justes, 4 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
+| an.ta13-0808 | ETAT_LF | LOLF.CAS_CP_LFI | ensemble | 2012 | −4 617,0 M€ en 2012 |
+| an.ta13-0808 | ETAT_LF | LOLF.CAS_CP_LFI | LOLF.GESTION_DU_PATRIMOINE_IMMOBILIER_DE_LETAT | 2012 | +4 617,0 M€ en 2012 |
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_DEPENSES | ensemble | 2016 | +0,6 M€ en 2016 |
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_RECETTES | ensemble | 2016 | +0,6 M€ en 2016 |
 
@@ -1810,7 +1833,7 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 
 | Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
 |---|---|---|---|
-| État (S13111) | l'État | l'État, d'après son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 20 sources (pjl06-389 … pjl25-726) |
+| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : ta12-0525, ta13-0808, ta14-0073, ta14-0267, ta14-0459, ta14-0648, ta14-0865, ta15-0065, ta15-0213, ta15-0374, ta15-0538, ta15-0737, ta16-0051, ta16-0223, ta17-0227 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 26 sources (pjl06-389 … tas24-048) |
 | Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
@@ -2284,3 +2307,92 @@ Prestations de l'ensemble des régimes, dans l'export et dans le classeur (prest
 | 1989 | 254 562,6 | 253 280,3 | +1 282,3 | CPS_S12_FP | 2 564,6 | 1 282,3 | +1 282,3 |
 
 De 1981 à 1989, le total de l'export pour CPS_S12_FP est le double de la somme de ses régimes, et l'écart de l'ensemble des régimes au classeur est cet excédent, à l'euro près : l'export y compte deux fois ce secteur, le classeur une seule.
+
+## 17. Budget voté et budget exécuté
+
+Les crédits qu'ouvre la loi de finances initiale de chaque année, de 2006 à 2026 (états B, C et D), contre ce que constate la loi d'approbation des comptes de la même année : les dépenses, fonds de concours compris, et les autorisations d'engagement consommées (articles 4 à 6). L'écart vient des lois de finances rectificatives, des décrets d'avance, de virement, de transfert et d'annulation, des reports de crédits de l'année précédente, des fonds de concours et des crédits restés sans emploi : la base ne les a pas encore un à un. Pour 2006, le texte lu ne donne que les crédits du budget général. La section 2 vérifie que chaque mission votée égale la somme de ses programmes.
+
+Budget général, en milliards d'euros :
+
+| Année | Crédits de paiement votés | Dépenses | Écart | Autorisations d'engagement votées | Autorisations d'engagement consommées | Écart |
+|---|---|---|---|---|---|---|
+| 2006 | 334,6 | 345,1 | +10,5 | 344,2 | 364,6 | +20,4 |
+| 2007 | 343,3 | 351,6 | +8,3 | 346,5 | 352,2 | +5,6 |
+| 2008 | 354,5 | 370,4 | +15,9 | 358,4 | 371,8 | +13,3 |
+| 2009 | 379,0 | 402,6 | +23,6 | 392,0 | 415,1 | +23,1 |
+| 2010 | 379,4 | 412,6 | +33,2 | 380,9 | 407,8 | +26,8 |
+| 2011 | 368,5 | 375,6 | +7,1 | 378,5 | 380,2 | +1,7 |
+| 2012 | 376,2 | 390,1 | +13,9 | 380,7 | 388,2 | +7,4 |
+| 2013 | 395,5 | 384,9 | −10,6 | 391,0 | 387,3 | −3,8 |
+| 2014 | 407,4 | 399,0 | −8,4 | 410,4 | 399,2 | −11,2 |
+| 2015 | 395,6 | 404,8 | +9,2 | 411,1 | 410,4 | −0,8 |
+| 2016 | 409,9 | 417,7 | +7,8 | 417,4 | 424,2 | +6,8 |
+| 2017 | 427,4 | 439,3 | +12,0 | 446,3 | 448,8 | +2,6 |
+| 2018 | 446,2 | 455,4 | +9,2 | 450,2 | 456,8 | +6,6 |
+| 2019 | 468,6 | 476,1 | +7,6 | 483,1 | 485,7 | +2,6 |
+| 2020 | 478,5 | 540,7 | +62,2 | 501,8 | 547,7 | +45,9 |
+| 2021 | 514,3 | 557,1 | +42,8 | 562,8 | 608,4 | +45,5 |
+| 2022 | 522,5 | 578,4 | +55,9 | 717,7 | 778,0 | +60,3 |
+| 2023 | 577,0 | 591,9 | +14,8 | 575,8 | 590,8 | +14,9 |
+| 2024 | 582,0 | 585,0 | +3,0 | 586,6 | 575,1 | −11,5 |
+| 2025 | 582,4 | 578,0 | −4,4 | 615,6 | 591,3 | −24,3 |
+| 2026 | 593,9 | — | — | 620,2 | — | — |
+
+Budgets annexes et comptes spéciaux dotés de crédits : crédits de paiement votés contre dépenses, en milliards d'euros :
+
+| Année | Budgets annexes : votés | dépenses | Comptes d'affectation spéciale : votés | dépenses | Comptes de concours financiers : votés | dépenses |
+|---|---|---|---|---|---|---|
+| 2006 | — | 2,0 | — | 66,4 | — | 88,7 |
+| 2007 | 1,8 | 1,9 | 53,0 | 52,1 | 96,3 | 86,8 |
+| 2008 | 1,9 | 2,0 | 54,5 | 50,9 | 94,0 | 90,8 |
+| 2009 | 2,1 | 2,2 | 57,5 | 52,4 | 99,4 | 106,0 |
+| 2010 | 2,1 | 2,3 | 58,0 | 58,7 | 72,2 | 74,6 |
+| 2011 | 2,2 | 2,2 | 60,6 | 55,5 | 105,0 | 102,5 |
+| 2012 | 2,2 | 2,3 | 64,1 | 69,3 | 106,9 | 98,4 |
+| 2013 | 2,3 | 2,3 | 74,5 | 70,9 | 114,9 | 110,9 |
+| 2014 | 2,4 | 2,4 | 70,9 | 67,5 | 124,2 | 118,5 |
+| 2015 | 2,3 | 2,4 | 68,9 | 64,5 | 114,3 | 108,6 |
+| 2016 | 2,3 | 2,4 | 71,2 | 69,0 | 125,0 | 118,1 |
+| 2017 | 2,3 | 2,3 | 76,1 | 77,4 | 126,9 | 120,7 |
+| 2018 | 2,3 | 2,3 | 75,6 | 74,4 | 129,4 | 124,1 |
+| 2019 | 2,3 | 2,3 | 81,0 | 71,7 | 127,3 | 119,5 |
+| 2020 | 2,3 | 2,2 | 81,2 | 80,7 | 128,8 | 124,6 |
+| 2021 | 2,4 | 2,4 | 77,2 | 68,3 | 129,6 | 123,9 |
+| 2022 | 2,5 | 2,5 | 73,2 | 77,1 | 131,3 | 128,7 |
+| 2023 | 2,3 | 2,2 | 83,9 | 82,6 | 140,9 | 136,8 |
+| 2024 | 2,4 | 2,4 | 80,0 | 80,0 | 149,1 | 141,2 |
+| 2025 | 2,5 | 2,4 | 76,4 | 75,4 | 149,9 | 142,0 |
+| 2026 | 2,6 | — | 78,1 | — | 150,7 | — |
+
+Missions, budgets annexes et comptes : 947 des 971 missions votées se retrouvent, sous le même identifiant, dans la loi d'approbation des comptes de l'année, et 3 115 des 3 406 programmes votés. Les missions votées sans aucun crédit n'ont rien à exécuter : Accords monétaires internationaux (19 années entre 2007 et 2025) ; Audiovisuel public (2025). Les crédits des missions « Provisions », puis « Crédits non répartis », n'ont pas d'exécution propre : un décret les répartit en cours d'année entre les programmes des autres missions (article 11 de la loi organique relative aux lois de finances), et la loi d'approbation des comptes n'y constate aucune dépense ; en 2016, elle ne leur donne aucun montant. Les autres missions sans vis-à-vis, votées sans que la loi d'approbation des comptes leur donne de montant sous le même identifiant (« votée seule ») ou l'inverse (« exécutée seule »), avec leurs crédits votés ou ce que cette loi en constate de consommé, en millions d'euros :
+
+| Année | Catégorie | Mission ou compte | Rapprochement | Autorisations d'engagement | Crédits de paiement ou dépenses |
+|---|---|---|---|---|---|
+| 2009 | Budget général | Plan de relance de l’économie | exécutée seule | 8 975,5 | 8 041,6 |
+| 2009 | Comptes d'affectation spéciale | Gestion et valorisation des ressources tirées de l’utilisation du spectre hertzien | votée seule | 600,0 | 600,0 |
+| 2009 | Comptes de concours financiers | Avances à l’audiovisuel | votée seule | 2 997,6 | 2 997,6 |
+| 2009 | Comptes de concours financiers | Avances à l’audiovisuel public | exécutée seule | 2 997,6 | 2 997,6 |
+| 2010 | Comptes d'affectation spéciale | Gestion et valorisation des ressources tirées de l’utilisation du spectre hertzien | votée seule | 600,0 | 600,0 |
+| 2011 | Comptes d'affectation spéciale | Financement national du développement et de la modernisation de l’apprentissage | exécutée seule | 474,0 | 466,3 |
+| 2012 | Comptes d'affectation spéciale | Participation de la France au désendettement de la Grèce | exécutée seule | 198,7 | 198,7 |
+| 2020 | Budget général | Plan d’urgence face à la crise sanitaire | exécutée seule | 41 820,1 | 41 819,5 |
+
+Les 15 plus grands écarts entre les dépenses d'une mission du budget général et ses crédits de paiement votés, en milliards d'euros :
+
+| Année | Mission | Votés | Dépenses | Écart |
+|---|---|---|---|---|
+| 2021 | Plan d’urgence face à la crise sanitaire | 6,0 | 34,4 | +28,3 |
+| 2010 | Recherche et enseignement supérieur | 24,8 | 46,9 | +22,1 |
+| 2022 | Écologie, développement et mobilité durables | 21,2 | 36,0 | +14,8 |
+| 2022 | Économie | 4,0 | 15,3 | +11,2 |
+| 2023 | Remboursements et dégrèvements | 131,6 | 142,4 | +10,8 |
+| 2020 | Remboursements et dégrèvements | 140,8 | 151,0 | +10,2 |
+| 2022 | Engagements financiers de l’État | 44,3 | 54,3 | +10,0 |
+| 2013 | Remboursements et dégrèvements | 96,2 | 86,2 | −9,9 |
+| 2009 | Remboursements et dégrèvements | 102,0 | 111,7 | +9,7 |
+| 2008 | Remboursements et dégrèvements | 83,2 | 92,2 | +9,0 |
+| 2025 | Remboursements et dégrèvements | 148,3 | 141,4 | −6,9 |
+| 2012 | Engagements financiers de l’État | 49,9 | 56,4 | +6,4 |
+| 2022 | Travail et emploi | 14,6 | 20,8 | +6,1 |
+| 2024 | Remboursements et dégrèvements | 140,5 | 146,5 | +6,0 |
+| 2014 | Remboursements et dégrèvements | 102,1 | 96,1 | −5,9 |
