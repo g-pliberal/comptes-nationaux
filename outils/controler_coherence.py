@@ -42,7 +42,9 @@ vérifie ce que disent les sources elles-mêmes :
    financement des lois d'approbation des comptes, et les titres négociables de la balance et du bilan de l'État ;
 16. les comptes de la protection sociale de la DREES : les prestations de chaque groupe de secteurs dans son classeur
    contre celles de ses secteurs dans l'export, et l'écart de l'ensemble des régimes contre le double compte d'un
-   secteur.
+   secteur ;
+17. le budget voté contre le budget exécuté : les crédits qu'ouvre chaque loi de finances initiale, au total et mission
+   par mission, contre les dépenses et les engagements que constate la loi d'approbation des comptes de l'année.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -2796,7 +2798,8 @@ def partie_organismes(derniers, listes):
     selon_ofgl = f"jeux de l'OFGL, exercice {annee}"
     sous_secteurs = [
         ("État (S13111)", "S13111", "l'État",
-         "l'État, d'après son budget exécuté et ses comptes annuels (lois de règlement et de résultats)"),
+         "l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois "
+         "de règlement et de résultats)"),
         ("Organismes divers d'administration centrale (S13112)", "S13112",
          f"{fr(len(odac), 0)} (liste des ODAC, {annee_odac})" if odac else "—", "aucun"),
         ("Collectivités locales (S13131)", "S13131",
@@ -3693,6 +3696,138 @@ def partie_protection_sociale(derniers):
     return lignes
 
 
+# 17. Budget voté et budget exécuté. Les crédits qu'ouvre la loi de finances initiale de chaque année (états B, C et D)
+# contre ce que constate la loi d'approbation des comptes de la même année : dépenses et autorisations d'engagement
+# consommées (articles 4 à 6). La section 2 vérifie que chaque mission votée égale la somme de ses programmes, et chaque
+# total celle de ses missions. Une mission se rapproche de son exécution par son identifiant, formé de son libellé.
+VOTE_EXECUTE = {"BG": ("Budget général", "LOLF.BG_DEPENSES_BRUTES", "LOLF.BG_AE_CONSOMMEES"),
+                "BA": ("Budgets annexes", "LOLF.BA_DEPENSES", "LOLF.BA_AE_CONSOMMEES"),
+                "CAS": ("Comptes d'affectation spéciale", "LOLF.CAS_DEPENSES", "LOLF.CAS_AE_CONSOMMEES"),
+                "CCF": ("Comptes de concours financiers", "LOLF.CCF_DEPENSES", "LOLF.CCF_AE_CONSOMMEES")}
+# La mission des dotations pour dépenses accidentelles et imprévisibles et pour mesures générales de rémunérations
+# (article 7 de la loi organique relative aux lois de finances), qu'un décret répartit entre les programmes des autres
+# missions (article 11) : « Provisions », puis « Crédits non répartis ».
+DOTATIONS = ("LOLF.PROVISIONS", "LOLF.CREDITS_NON_REPARTIS")
+GRANDS_ECARTS = 15  # missions du budget général citées pour leur écart
+
+
+def partie_budget_vote(derniers):
+    votes, executes, arretees = {}, {}, collections.defaultdict(set)
+    concepts_executes = {c for _, d, a in VOTE_EXECUTE.values() for c in (d, a)}
+    for l in derniers.values():
+        if l["perimetre_id"] != "ETAT_LF" or l["unite_id"] != "EUR":
+            continue
+        k = (l["concept_id"], l["fonction_id"], l["periode"])
+        if l["concept_id"].endswith("_LFI"):
+            votes[k] = valeur(l)[0]
+            continue
+        if l["source_id"].startswith(_LOI[:-1]) and l["fonction_id"]:
+            # Les missions et les comptes que la loi d'approbation des comptes arrête, quelle que soit la grandeur.
+            arretees[(l["concept_id"].split(".")[1].split("_")[0], l["periode"])].add(l["fonction_id"])
+        if l["concept_id"] in concepts_executes and l["source_id"].startswith(_LOI[:-1]):
+            # La loi d'approbation des comptes de l'exercice, et non une loi suivante qui le rappellerait.
+            if k not in executes or l["version"] < executes[k]["version"]:
+                executes[k] = l
+    executes = {k: valeur(l)[0] for k, l in executes.items()}
+    if not votes:
+        return []
+    parents = {f["id"]: f["parent_id"] for f in lire("tables/fonctions.csv")}
+    libelles = {f["id"]: f["libelle"] for f in lire("tables/fonctions.csv")}
+    annees = sorted({p for _, _, p in votes})
+    md = lambda x: "—" if x is None else fr(x / 1e9, 1)
+    ecart = lambda a, b: "—" if a is None or b is None else signe_arrondi((b - a) / 1e9, 1)
+    lignes = ["## 17. Budget voté et budget exécuté", "",
+              f"Les crédits qu'ouvre la loi de finances initiale de chaque année, de {annees[0]} à {annees[-1]} (états B, C "
+              f"et D), contre ce que constate la loi d'approbation des comptes de la même année : les dépenses, fonds de "
+              f"concours compris, et les autorisations d'engagement consommées (articles 4 à 6). L'écart vient des lois de "
+              f"finances rectificatives, des décrets d'avance, de virement, de transfert et d'annulation, des reports de "
+              f"crédits de l'année précédente, des fonds de concours et des crédits restés sans emploi : la base ne les a "
+              f"pas encore un à un. Pour {annees[0]}, le texte lu ne donne que les crédits du budget général. La section 2 "
+              f"vérifie que chaque mission votée égale la somme de ses programmes.", ""]
+    v = lambda c, a: votes.get((c, "", a))
+    e = lambda c, a: executes.get((c, "", a))
+    lignes += ["Budget général, en milliards d'euros :", "",
+               "| Année | Crédits de paiement votés | Dépenses | Écart | Autorisations d'engagement votées | "
+               "Autorisations d'engagement consommées | Écart |", "|---|---|---|---|---|---|---|"]
+    for a in annees:
+        cp, dep, ae, cons = v("LOLF.BG_CP_LFI", a), e("LOLF.BG_DEPENSES_BRUTES", a), v("LOLF.BG_AE_LFI", a), \
+            e("LOLF.BG_AE_CONSOMMEES", a)
+        lignes.append(f"| {a} | {md(cp)} | {md(dep)} | {ecart(cp, dep)} | {md(ae)} | {md(cons)} | {ecart(ae, cons)} |")
+    lignes += ["", "Budgets annexes et comptes spéciaux dotés de crédits : crédits de paiement votés contre dépenses, en "
+               "milliards d'euros :", "",
+               "| Année | " + " | ".join(f"{VOTE_EXECUTE[c][0]} : votés | dépenses" for c in ("BA", "CAS", "CCF")) + " |",
+               "|---|" + "---|---|" * 3]
+    for a in annees:
+        lignes.append(f"| {a} | " + " | ".join(f"{md(v(f'LOLF.{c}_CP_LFI', a))} | {md(e(VOTE_EXECUTE[c][1], a))}"
+                                              for c in ("BA", "CAS", "CCF")) + " |")
+    # Les missions (et les budgets annexes, les comptes) votées contre celles que la loi de la même année arrête : une
+    # mission est votée si la loi de finances lui ouvre des autorisations d'engagement ou des crédits de paiement, arrêtée
+    # si la loi d'approbation des comptes lui donne un montant, consommé, ouvert, annulé ou, pour un compte, une recette
+    # ou un solde.
+    sans_vis_a_vis, rapprochees, comptees, ecarts = [], 0, 0, []
+    programmes_votes, programmes_rapproches = 0, 0
+    for a in annees:
+        for c, (nom, depenses, consommees) in VOTE_EXECUTE.items():
+            def par_fonction(concepts, source):
+                return {f: tuple(source.get((k, f, a)) for k in concepts)
+                        for (k, f, p) in source if k in concepts and p == a and f}
+            votees = par_fonction((f"LOLF.{c}_AE_LFI", f"LOLF.{c}_CP_LFI"), votes)
+            executees = par_fonction((consommees, depenses), executes)
+            if not votees or not executees:
+                continue
+            missions_v = {f for f in votees if parents.get(f) == ""}
+            missions_e = {f for f in arretees[(c, a)] if parents.get(f) == ""}
+            executees.update({f: (None, None) for f in missions_e if f not in executees})
+            comptees += len(missions_v)
+            rapprochees += len(missions_v & missions_e)
+            programmes = {f for f in votees if parents.get(f, "") != ""}
+            programmes_votes += len(programmes)
+            programmes_rapproches += len(programmes & arretees[(c, a)])
+            for f in sorted(missions_v - missions_e):
+                sans_vis_a_vis.append((a, nom, f, "votée seule", *votees[f]))
+            for f in sorted(missions_e - missions_v):
+                sans_vis_a_vis.append((a, nom, f, "exécutée seule", *executees[f]))
+            if c == "BG":
+                ecarts += [(a, libelles[f], votees[f][1], executees[f][1]) for f in missions_v & missions_e
+                           if votees[f][1] is not None and executees[f][1] is not None]
+    nulles = collections.defaultdict(list)  # missions votées sans aucun crédit, qui n'ont rien à exécuter
+    for a, nom, f, quoi, ae, cp in sans_vis_a_vis:
+        if quoi == "votée seule" and not ae and not cp:
+            nulles[libelles[f]].append(a)
+    # Les années où la loi d'approbation des comptes ne donne aucun montant à la mission des dotations, et celles où
+    # elle lui constate une dépense ou une consommation.
+    dotations_seules = sorted({a for a, nom, f, quoi, ae, cp in sans_vis_a_vis
+                               if f in DOTATIONS and quoi == "votée seule" and (ae or cp)})
+    depensees = sorted({p for (k, f, p), x in executes.items() if f in DOTATIONS and x})
+    autres = [s for s in sans_vis_a_vis
+              if not (s[3] == "votée seule" and ((not s[4] and not s[5]) or s[2] in DOTATIONS))]
+    millions = lambda x: "—" if x is None else fr(x / 1e6, 1)
+    lignes += ["", f"Missions, budgets annexes et comptes : {fr(rapprochees, 0)} des {fr(comptees, 0)} missions votées se "
+               f"retrouvent, sous le même identifiant, dans la loi d'approbation des comptes de l'année, et "
+               f"{fr(programmes_rapproches, 0)} des {fr(programmes_votes, 0)} programmes votés. "
+               + ("Les missions votées sans aucun crédit n'ont rien à exécuter : "
+                  + " ; ".join(f"{libelle} ({plage(a)})" for libelle, a in sorted(nulles.items())) + ". " if nulles else "")
+               + "Les crédits des missions « Provisions », puis « Crédits non répartis », n'ont pas d'exécution propre : "
+               "un décret les répartit en cours d'année entre les programmes des autres missions (article 11 de la loi "
+               "organique relative aux lois de finances), et la loi d'approbation des comptes "
+               + (f"n'y constate de dépense qu'en {plage(depensees)}" if depensees else "n'y constate aucune dépense")
+               + (f" ; en {plage(dotations_seules)}, elle ne leur donne aucun montant" if dotations_seules else "")
+               + ". Les autres missions sans vis-à-vis, votées sans que la loi d'approbation des comptes leur donne de "
+               "montant sous le même identifiant (« votée seule ») ou l'inverse (« exécutée seule »), avec leurs crédits "
+               "votés ou ce que cette loi en constate de consommé, en millions d'euros :", "",
+               "| Année | Catégorie | Mission ou compte | Rapprochement | Autorisations d'engagement | Crédits de paiement "
+               "ou dépenses |", "|---|---|---|---|---|---|"]
+    lignes += [f"| {a} | {nom} | {libelles[f]} | {quoi} | {millions(ae)} | {millions(cp)} |"
+               for a, nom, f, quoi, ae, cp in autres]
+    ecarts.sort(key=lambda x: -abs(x[3] - x[2]))
+    lignes += ["", f"Les {GRANDS_ECARTS} plus grands écarts entre les dépenses d'une mission du budget général et ses "
+               f"crédits de paiement votés, en milliards d'euros :", "",
+               "| Année | Mission | Votés | Dépenses | Écart |", "|---|---|---|---|---|"]
+    lignes += [f"| {a} | {libelle} | {md(x)} | {md(y)} | {ecart(x, y)} |" for a, libelle, x, y in ecarts[:GRANDS_ECARTS]]
+    lignes.append("")
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -3706,7 +3841,7 @@ def ecrire_rapport(derniers):
     listes = listes_collectivites()
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
-    lignes += partie_protection_sociale(derniers)
+    lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

@@ -32,7 +32,7 @@ import urllib.error
 import urllib.request
 
 from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_ods, date_pdf, date_xlsx, date_zip,
-                    ecrire, lire, lire_sdmx, maintenant, texte_html)
+                    decoder_html, ecrire, lire, lire_sdmx, maintenant, texte_html)
 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
 
@@ -103,13 +103,13 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
         (BASE / chemin).write_bytes(bz2.compress(contenu, 9) if compresser else contenu)
     # Date de mise à jour annoncée par la source : champ « updated » du JSON-stat d'Eurostat, date de
     # modification inscrite dans le classeur pour un fichier xlsx, date d'enregistrement, de transmission ou
-    # d'adoption d'un texte publié par le Sénat, dernière mise à jour des séries SDMX de l'Insee, date de
-    # modification du jeu de données pour un export de data.ofgl.fr ou de data.economie.gouv.fr (date du dernier
-    # traitement de ses données pour data.drees), date la plus récente des fichiers que porte une archive zip, date de
-    # modification inscrite dans un PDF ou dans un classeur ods.
+    # d'adoption d'un texte publié par le Sénat ou par l'Assemblée nationale, dernière mise à jour des séries SDMX
+    # de l'Insee, date de modification du jeu de données pour un export de data.ofgl.fr ou de data.economie.gouv.fr
+    # (date du dernier traitement de ses données pour data.drees), date la plus récente des fichiers que porte une
+    # archive zip, date de modification inscrite dans un PDF ou dans un classeur ods.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
-                                "html": lambda: date_html(texte_html(contenu.decode("utf-8"))),
+                                "html": lambda: date_html(texte_html(decoder_html(contenu))),
                                 "xml": lambda: max(a.get("LAST_UPDATE", "") for a, _ in lire_sdmx(BASE / chemin).values()),
                                 "zip": lambda: date_zip(contenu),
                                 "pdf": lambda: date_pdf(contenu),

@@ -539,12 +539,31 @@ def _grille(lignes):
         {"fusions": fusions, "largeurs": largeurs, "gras": gras}
 
 
+def decoder_html(octets):
+    """Le texte d'une page HTML, décodé selon le jeu de caractères qu'elle déclare, UTF-8 à défaut. Les anciennes pages
+    de l'Assemblée nationale se déclarent en ISO-8859-1 : comme un navigateur, on les lit en windows-1252, qui
+    l'étend (apostrophes typographiques, « œ », « € »)."""
+    declare = re.search(rb"<meta[^>]+charset=[\"']?([A-Za-z0-9_-]+)", octets[:4096], re.I)
+    jeu = declare.group(1).decode("ascii").lower() if declare else "utf-8"
+    if jeu in ("iso-8859-1", "latin-1", "latin1"):
+        try:
+            return octets.decode("cp1252")
+        except UnicodeDecodeError:
+            return octets.decode("latin-1")
+    return octets.decode(jeu)
+
+
+def lire_texte_html(chemin):
+    """Le contenu d'une page HTML archivée, décodé (voir decoder_html)."""
+    return decoder_html(pathlib.Path(chemin).read_bytes())
+
+
 def lire_page_html(chemin):
     """Tableaux d'une page HTML, chacun sous forme de grille (liste de lignes, chacune liste des textes de ses
     colonnes), la mise en forme de chaque tableau (voir _grille) et le texte de la page dans l'ordre de lecture, où
     « ⟦k⟧ » marque l'ouverture du tableau k et « ⟦/k⟧ » sa fermeture."""
     lecteur = _Tableaux()
-    lecteur.feed(pathlib.Path(chemin).read_text(encoding="utf-8"))
+    lecteur.feed(lire_texte_html(chemin))
     lus = [_grille(t) for t in lecteur.tableaux]
     return [g for g, _ in lus], [{**f, "legende": l} for (_, f), l in zip(lus, lecteur.legendes)], \
         " ".join("".join(lecteur.flux).split())
@@ -566,7 +585,9 @@ def nombre_texte(texte):
     """« -3 377 967 838,47 » → (« -3377967838.47 », 2) ; None si le texte n'est pas un nombre. Un appel de note,
     astérisque avant ou après le nombre ou numéro entre parenthèses après lui (« 164,0 (1) »), n'en fait pas
     partie, ni le signe + d'un nombre positif, ni le signe % d'un pourcentage (« 26,7 % » → 26,7)."""
-    t = re.sub(r"[\s\u00a0\u202f]", "", texte).replace("−", "-").replace("–", "-").replace(",", ".")
+    # Les marques de direction du texte, invisibles, que certaines pages laissent dans un nombre n'en font pas partie.
+    t = re.sub(r"[\s\u00a0\u202f\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", texte)
+    t = t.replace("−", "-").replace("–", "-").replace(",", ".")
     t = re.sub(r"^\(?\*\)?|\(?\*\)?$|(?<=[0-9])\([0-9]\)$|(?<=[0-9])%$", "", t)
     if not re.fullmatch(r"[-+]?[0-9]+(\.[0-9]+)?", t):
         return None
@@ -588,15 +609,17 @@ MOIS = {m: i for i, m in enumerate(["janvier", "février", "mars", "avril", "mai
 
 
 def date_html(texte):
-    """Date qu'un texte publié par le Sénat porte lui-même : enregistrement, transmission ou adoption ; à défaut,
-    celle de la séance au procès-verbal de laquelle il est annexé, ou celle qui suit la session dans l'en-tête d'un
-    texte adopté par le Sénat."""
-    date = r"([0-9]{1,2})(?:er)? (" + "|".join(MOIS) + r") ([0-9]{4})"
+    """Date qu'un texte publié par le Sénat ou par l'Assemblée nationale porte lui-même : enregistrement, transmission
+    ou adoption ; à défaut, celle de la séance au procès-verbal de laquelle il est annexé, ou celle qui suit la session
+    dans l'en-tête d'un texte adopté. Les pages de l'Assemblée nationale coupent parfois un nombre en morceaux
+    (« le 1 9 décembre 20 19 ») : la date se lit sans ces blancs."""
+    date = r"([0-9](?: ?[0-9])?)(?: ?er)? (" + "|".join(MOIS) + r") ([0-9](?: ?[0-9]){3})"
     for annonce in (r"(?:Enregistré à la Présidence du Sénat|transmis au Sénat|adopté (?:définitivement )?par le Sénat) le ",
+                    r"considéré comme adopté par l[’']Assemblée nationale le ", r"Délibéré en séance publique, à Paris, le ",
                     r"Annexe au procès-verbal de la séance du ", r"SESSION (?:ORDINAIRE|EXTRAORDINAIRE) DE [0-9]{4}-[0-9]{4} "):
         trouve = re.search(annonce + date, texte)
         if trouve:
-            jour, mois, annee = trouve.groups()
+            jour, mois, annee = (x.replace(" ", "") for x in trouve.groups())
             return f"{annee}-{MOIS[mois]:02d}-{int(jour):02d}"
     return ""
 
