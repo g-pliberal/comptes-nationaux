@@ -1,5 +1,6 @@
 id,libelle,type
 EUR,"euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
+K_EUR,"milliers d'euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
 MD_EUR,"milliards d'euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
 MIO_ECU_EUR,"millions d'écus jusqu'en 1998, puis d'euros (conversion au taux de change de chaque année)",montant
 MIO_EUR,"millions d'euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
