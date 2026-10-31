@@ -605,6 +605,13 @@ def nombre_de_phrase(phrase):
     return nombre_texte(nombres[0]) if len(nombres) == 1 else None
 
 
+def montants_de_case(texte):
+    """Les montants d'une case qui réunit ceux de plusieurs lignes, séparés par des blancs (« 70,6 82,6 -12,0 1,8 »),
+    chacun lu comme par nombre_texte ; None si l'un d'eux n'est pas un nombre."""
+    nombres = [nombre_texte(x) for x in texte.split()]
+    return nombres if nombres and None not in nombres else None
+
+
 MOIS = {m: i for i, m in enumerate(["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre",
                                      "octobre", "novembre", "décembre"], start=1)}
 

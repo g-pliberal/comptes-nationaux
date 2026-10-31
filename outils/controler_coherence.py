@@ -47,7 +47,10 @@ vérifie ce que disent les sources elles-mêmes :
    par mission, contre les dépenses et les engagements que constate la loi d'approbation des comptes de l'année ;
 18. les recettes votées et le solde voté : les recettes qu'évalue chaque loi de finances initiale et les soldes que
    fixe son article d'équilibre, contre ceux que constate la loi d'approbation des comptes de l'année, au total et
-   compte par compte.
+   compte par compte ;
+19. le financement voté : le besoin de financement et les émissions de dette que prévoit chaque loi de finances
+   initiale, et le plafond qu'elle fixe à la variation de la dette négociable à plus d'un an, contre le tableau de
+   financement que constate la loi d'approbation des comptes de l'année.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -3930,6 +3933,73 @@ def partie_recettes_votees(derniers):
     return lignes
 
 
+# 19. Financement voté. Le tableau de financement de l'article d'équilibre de chaque loi de finances initiale et le
+# plafond de la variation de la dette négociable à plus d'un an, contre le tableau de financement que constate la loi
+# d'approbation des comptes de la même année (article 2).
+def amortissement_nominal(x):
+    """L'amortissement du nominal de la dette à moyen et long termes d'un tableau de financement (concept → montant) :
+    sa ligne, depuis 2016 ; à défaut, l'amortissement à moyen et long termes moins les suppléments d'indexation ; à
+    défaut, l'amortissement à long terme et à moyen terme ; None si le tableau ne donne aucun amortissement."""
+    if "LOLF.AMORTISSEMENT_DETTE_NOMINAL" in x:
+        return x["LOLF.AMORTISSEMENT_DETTE_NOMINAL"]
+    if "LOLF.AMORTISSEMENT_DETTE_MLT" in x:
+        return x["LOLF.AMORTISSEMENT_DETTE_MLT"] - x.get("LOLF.SUPPLEMENTS_INDEXATION", 0)
+    if "LOLF.AMORTISSEMENT_DETTE_LT" in x or "LOLF.AMORTISSEMENT_DETTE_MT" in x:
+        return x.get("LOLF.AMORTISSEMENT_DETTE_LT", 0) + x.get("LOLF.AMORTISSEMENT_DETTE_MT", 0)
+    return None
+
+
+def partie_financement_vote(derniers):
+    votes, executes, versions = collections.defaultdict(dict), collections.defaultdict(dict), {}
+    for l in derniers.values():
+        if l["perimetre_id"] != "ETAT_LF" or l["unite_id"] != "MD_EUR" or l["fonction_id"]:
+            continue
+        if l["concept_id"].endswith("_LFI"):
+            votes[l["periode"]][l["concept_id"].removesuffix("_LFI")] = valeur(l)[0]
+        elif l["source_id"].startswith(_LOI[:-1]):
+            # La loi d'approbation des comptes de l'exercice, et non une loi suivante qui le rappellerait.
+            k = (l["concept_id"], l["periode"])
+            if k not in versions or l["version"] < versions[k]:
+                versions[k] = l["version"]
+                executes[l["periode"]][l["concept_id"]] = valeur(l)[0]
+    annees = sorted(a for a in votes if "LOLF.PLAFOND_VARIATION_DETTE" in votes[a])
+    if not annees:
+        return []
+    md = lambda x: "—" if x is None else fr(x / 1e9, 1)
+    variation = lambda x: (x["LOLF.EMISSIONS_DETTE_MLT"] - amortissement_nominal(x)
+                           if "LOLF.EMISSIONS_DETTE_MLT" in x and amortissement_nominal(x) is not None else None)
+    lignes = ["## 19. Financement voté", "",
+              f"Le tableau de financement que prévoit l'article d'équilibre de la loi de finances initiale de chaque année, "
+              f"de {annees[0]} à {annees[-1]}, et le plafond qu'elle fixe à la variation nette, appréciée en fin d'année, de "
+              f"la dette négociable de l'État d'une durée supérieure à un an, contre le tableau de financement que constate "
+              f"la loi d'approbation des comptes de la même année. La variation de la dette est, pour l'un et l'autre, les "
+              f"émissions de dette à moyen et long termes, nettes des rachats, moins l'amortissement du nominal de cette "
+              f"dette. L'import vérifie que le tableau voté s'additionne, que son déficit est l'opposé du solde général de "
+              f"l'article d'équilibre, et que le plafond égale la variation qu'il prévoit. Les lois de finances "
+              f"rectificatives, que la base ne lit pas encore, modifient le tableau et relèvent souvent le plafond en "
+              f"cours d'année.", "", "En milliards d'euros :", "",
+              "| Année | Besoin de financement : voté | exécuté | Émissions de dette à moyen et long termes, nettes des "
+              "rachats : votées | exécutées | Variation de la dette à plus d'un an : plafond voté | exécutée |",
+              "|---|---|---|---|---|---|---|"]
+    au_dessus = []
+    for a in annees:
+        v, e = votes[a], executes.get(a, {})
+        plafond, constatee = v["LOLF.PLAFOND_VARIATION_DETTE"], variation(e)
+        # Au-delà des arrondis au dixième de milliard des montants en jeu.
+        if constatee is not None and constatee - plafond > 0.05e9 * 4:
+            au_dessus.append(a)
+        lignes.append(f"| {a} | {md(v.get('LOLF.BESOIN_FINANCEMENT'))} | {md(e.get('LOLF.BESOIN_FINANCEMENT'))} | "
+                      f"{md(v.get('LOLF.EMISSIONS_DETTE_MLT'))} | {md(e.get('LOLF.EMISSIONS_DETTE_MLT'))} | {md(plafond)} | "
+                      f"{md(constatee)} |")
+    executees = [a for a in annees if variation(executes.get(a, {})) is not None]
+    lignes += ["", f"Sur les {fr(len(executees), 0)} années dont les comptes sont arrêtés, la variation exécutée dépasse le "
+               f"plafond de la loi de finances initiale en {fr(len(au_dessus), 0)} : "
+               f"{', '.join(au_dessus[:-1]) + ' et ' if len(au_dessus) > 1 else ''}{au_dessus[-1] if au_dessus else ''}. "
+               f"La base ne dit pas si le plafond en vigueur en fin d'année, celui de la dernière loi de finances de "
+               f"l'année, a été respecté.", ""]
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -3944,6 +4014,7 @@ def ecrire_rapport(derniers):
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
+    lignes += partie_financement_vote(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

@@ -12,8 +12,10 @@ titre 2 » (« dont charges de personnel » pour un budget annexe, jusqu'aux loi
 qui va aux dépenses de personnel. L'état A évalue les recettes, ligne par ligne : celles du budget général par
 division (« 11. Impôt sur le revenu »), que récapitule un second tableau, puis celles de chaque budget annexe et de
 chaque compte spécial, par section. Le tableau de l'article d'équilibre, en millions d'euros, donne les ressources,
-les charges et les soldes de chaque catégorie, et le solde général. L'état E (les autorisations de découvert), le
-tableau de financement et le plafond des emplois ne sont pas lus.
+les charges et les soldes de chaque catégorie, et le solde général ; son tableau de financement, en milliards d'euros,
+le besoin de financement de l'État et les ressources qui le couvrent, et l'article fixe le plafond de la variation
+nette de la dette négociable à plus d'un an. L'état E (les autorisations de découvert), les plafonds d'encours de dette
+des budgets annexes et le plafond des emplois ne sont pas lus.
 
 Dans l'état A, une division égale la somme de ses lignes, une catégorie de recettes celle de ses divisions, un compte
 celle de ses sections, une section celle de ses lignes, un budget annexe celle de ses lignes, dotations aux
@@ -22,7 +24,10 @@ l'import, sauf s'il est déclaré dans ECARTS_A. Le tableau d'équilibre s'addit
 chacun de ses montants ; un montant qu'il reprend d'un état, recettes de l'état A ou crédits des états B à D, et chaque
 solde que les états permettent de calculer, se vérifient contre eux ; le reste s'enregistre. Les recettes fiscales du
 budget général sont brutes dans l'état A jusqu'à la loi pour 2022, nettes des remboursements et dégrèvements depuis
-(division 18) ; leur concept le dit.
+(division 18) ; leur concept le dit. Le tableau de financement s'additionne exactement, hors lignes « Dont … », qui
+détaillent celle qui les précède et en font la somme ; son déficit est l'opposé du solde général, à l'arrondi près, et
+le plafond de la variation de la dette, exactement ses émissions de dette à moyen et long termes, nettes des rachats,
+moins l'amortissement de leur nominal. Une case qui réunit plusieurs lignes se déclare dans FUSIONS_FINANCEMENT.
 
 Un état se reconnaît à son intitulé (« ÉTAT B (Article 167 de la loi) »), et les catégories de crédits qu'il répartit
 à son titre (« … des crédits du budget général »). Ses tableaux sont ceux qui s'ouvrent entre son intitulé et celui de
@@ -56,7 +61,9 @@ import re
 import sys
 
 from commun import (BASE, aujourdhui, champs, champs_chiffres, ecrire, fusionner, identifiant, lire, lire_page_html,
-                    lire_texte_html, nombre_texte, table_des_chiffres, texte_html)
+                    lire_texte_html, montants_de_case, nombre_de_phrase, nombre_texte, table_des_chiffres,
+                    texte_html)
+import importer_lois_resultats as resultats
 from importer_lois_resultats import code_lolf, colonnes, montants, propre, unite
 
 # Catégories de crédits, telles que le titre d'un état et l'article de la loi les nomment.
@@ -163,6 +170,44 @@ SUBSTITUTS = {"LOLF.BA_CP_LFI", "LOLF.CAS_CP_LFI", "LOLF.CCF_CP_LFI", "LOLF.CAS_
 SUBSTITUTS_PAR_BUDGET = {"LOLF.BA_RECETTES_HORS_FDC_LFI", "LOLF.BA_FDC_RECETTES_LFI"}
 FDC_EQUILIBRE = (r"[ÉE]valuation des fonds de concours(?: et des attributions de produits)?(?: et crédits "
                  r"correspondants)?(?: :)?")
+
+# Tableau de financement de l'article d'équilibre (II, 1°), en milliards d'euros : (rubrique, libellé) → concept de
+# l'exécution, que le voté suit de _LFI ; ceux de l'import des lois d'approbation des comptes, et les libellés propres
+# aux lois de finances. Une ligne « Dont … » détaille celle qui la précède et n'entre pas dans les totaux.
+FINANCEMENT_LFI = resultats.par_forme({**resultats.FINANCEMENT, **{
+    ("besoin", "Amortissement de la dette reprise de SNCF Réseau"): "LOLF.AMORTISSEMENT_SNCF_RESEAU",
+    ("besoin", "Amortissement des autres dettes reprises"): "LOLF.AMORTISSEMENT_AUTRES_DETTES",
+    # loi pour 2018 : la part de l'amortissement qui n'est pas le supplément d'indexation, soit le nominal
+    ("besoin", "Dont amortissement de la dette à moyen et long termes"): "LOLF.AMORTISSEMENT_DETTE_NOMINAL",
+    ("besoin", "Dont suppléments d’indexation versés à l’échéance (titres indexés) (titres indexés)"):
+        "LOLF.SUPPLEMENTS_INDEXATION",
+    ("ressources", "Émissions à moyen et long termes (obligations assimilables du Trésor et bons du Trésor à taux fixe "
+                   "et intérêt annuel), nettes des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émissions à moyen et long termes (obligations assimilables du Trésor et bons du Trésor à taux fixe "
+                   "et intérêt annuel), nettes des rachats effectués par l’État et par la Caisse de la dette publique"):
+        "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émissions à moyen et long terme (obligations assimilables du Trésor et bons du Trésor à taux fixe "
+                   "et intérêt annuel), nettes des rachats effectués par l’État et par la Caisse de la dette publique"):
+        "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émission de dette à moyen et long termes, nette des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émission de dette à moyen et long termes nette des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Variation du compte de Trésor"): "LOLF.VARIATION_COMPTE_TRESOR",
+    ("ressources", "Variation du compte de Trésor et divers"): "LOLF.VARIATION_COMPTE_TRESOR",
+}})
+TOTAUX_FINANCEMENT = {"besoin": "LOLF.BESOIN_FINANCEMENT", "ressources": "LOLF.RESSOURCES_FINANCEMENT"}
+# Case qui réunit les libellés et les montants de plusieurs lignes : (source, libellé de la case) → libellés de ses
+# lignes, dans l'ordre de ses montants.
+FUSIONS_FINANCEMENT = {
+    ("an.ta14-0267", "Déficit à financer Dont déficit budgétaire Dont dotation budgétaire du deuxième programme "
+                     "d’investissements d’avenir Autres besoins de trésorerie"):
+        ("Déficit à financer", "Dont déficit budgétaire",
+         "Dont dotation budgétaire du deuxième programme d’investissements d’avenir", "Autres besoins de trésorerie"),
+}
+# Plafond de la variation nette de la dette négociable de l'État d'une durée supérieure à un an (II, 4°, puis 3° depuis
+# la loi pour 2018), en milliards d'euros.
+PLAFOND_DETTE = (r"Le plafond de la variation nette, appréciée en fin d[’']année(?: et en valeur nominale)?, de la dette "
+                 r"négociable de l[’'][ÉE]tat d[’']une durée supérieure à un an est fixé à [0-9]+(?:,[0-9]+)?\s+"
+                 r"milliards d[’']euros")
 
 
 def concept(categorie, colonne, dont):
@@ -910,6 +955,102 @@ def credits_200(connus, fonctions):
     return trouves[0]
 
 
+def financement(grilles, flux, annee, source_id):
+    """Les lignes du tableau de financement de l'article d'équilibre, en milliards d'euros, dans l'ordre du tableau :
+    [(rubrique, concept, dont, rangée)], dont vrai pour une ligne « Dont … ». Une rangée est {tableau, ligne, colonne,
+    morceau, libelle, nombre, valeur} ; sa valeur est 0 pour une case « néant ». Une case déclarée dans
+    FUSIONS_FINANCEMENT, qui réunit plusieurs lignes, se lit montant par montant, que `morceau` numérote."""
+    trouves = [k for k, t in enumerate(grilles) if any(l and resultats.forme(l[0]) == "besoin de financement" for l in t)]
+    if len(trouves) != 1:
+        sys.exit(f"{len(trouves)} tableaux de financement")
+    k = trouves[0]
+    p = flux.index(f"⟦{k}⟧")
+    # Les marques d'alinéa que la page du Sénat de 2025 tire d'une police de symboles (zone d'usage privé d'Unicode)
+    # ne sont pas du texte.
+    avant = re.sub(r"\s+", " ", re.sub(r"[\ue000-\uf8ff]", " ", flux[max(0, p - 400):p]).replace("'", "’"))
+    if not re.search(rf"Pour {annee}\s*:\s*1° Les ressources et les charges de trésorerie qui concourent à la réalisation "
+                     rf"de l’équilibre financier sont évaluées comme suit", avant):
+        sys.exit(f"tableau de financement : l'article qui le précède n'est pas celui de la loi pour {annee}")
+    t, unite_ = grilles[k], r"\(\s*en milliards d’euros\s*\)"
+    if not re.search(unite_, (avant[-100:] + " ".join(x for l in t[:3] for x in l)).replace("'", "’"), re.I):
+        sys.exit("tableau de financement : unité inconnue")
+    lignes, rubrique = [], None
+    for r, ligne in enumerate(t):
+        textes = [propre(x) for x in ligne if propre(x) and propre(x) != ";"]
+        if not textes or all(re.fullmatch(unite_, x.replace("'", "’"), re.I) for x in textes):
+            continue
+        libelle = propre(nom(ligne[0]))
+        cases = [(c, x.strip()) for c, x in enumerate(ligne) if c and x.strip() and x.strip() != ";"]
+        if resultats.forme(libelle) in resultats.RUBRIQUES_FINANCEMENT_ and not cases:
+            rubrique = resultats.RUBRIQUES_FINANCEMENT_[resultats.forme(libelle)]
+            continue
+        if rubrique is None or len(cases) != 1:
+            sys.exit(f"tableau de financement, ligne {r} : « {libelle} », {len(cases)} montant(s)"
+                     + ("" if rubrique else " hors d'une rubrique"))
+        c, case = cases[0]
+        libelles = FUSIONS_FINANCEMENT.get((source_id, libelle))
+        if libelles is not None:
+            nombres = montants_de_case(case)
+            if " ".join(libelles) != libelle or nombres is None or len(nombres) != len(libelles):
+                sys.exit(f"tableau de financement, ligne {r} : case fusionnée « {case} » autre que déclarée")
+            parties = [(n + 1, l, x) for n, (l, x) in enumerate(zip(libelles, nombres))]
+        else:
+            neant = case.replace("\u2011", "-") in NEANT
+            nombre_ = None if neant else nombre_texte(case)
+            if nombre_ is None and not neant:
+                sys.exit(f"tableau de financement, ligne {r} : montant illisible (« {case} »)")
+            parties = [(None, libelle, nombre_)]
+        for morceau, libelle_, nombre_ in parties:
+            concept_ = FINANCEMENT_LFI.get((rubrique, resultats.forme(libelle_)))
+            if concept_ is None:
+                sys.exit(f"tableau de financement, ligne {r} : « {libelle_} » inconnu ({rubrique})")
+            lignes.append((rubrique, concept_, libelle_.startswith("Dont "),
+                           {"tableau": k, "ligne": r, "colonne": c, "morceau": morceau, "libelle": libelle_,
+                            "nombre": nombre_, "valeur": float(nombre_[0]) if nombre_ else 0.0}))
+    return lignes
+
+
+def verifier_financement(lignes, solde_general, plafond):
+    """Le tableau de financement s'additionne exactement : ses montants sont publiés au dixième de milliard, et les
+    lois pour 2006 à 2026 en donnent des totaux qui en sont la somme exacte. Le besoin et les ressources sont chacun la
+    somme de leurs lignes, hors lignes « Dont … », et sont égaux ; une ligne que des lignes « Dont … » détaillent est
+    leur somme ; le plafond de la variation de la dette (`plafond`, en milliards d'euros) est les émissions de dette à
+    moyen et long termes moins l'amortissement de leur nominal. Le déficit budgétaire est l'opposé du solde général de
+    l'article d'équilibre (`solde_general`, en millions d'euros), à son arrondi au dixième de milliard près."""
+    v = {}
+    for _, concept_, _, g in lignes:
+        if concept_ in v:
+            sys.exit(f"tableau de financement : {concept_} deux fois")
+        v[concept_] = g["valeur"]
+    egal_ = lambda a, b: abs(a - b) < 1e-6  # aux imprécisions du calcul en virgule flottante près
+    for rubrique, total in TOTAUX_FINANCEMENT.items():
+        parties = [g["valeur"] for r, c, dont, g in lignes if r == rubrique and not dont and c != total]
+        if total not in v or not egal_(v[total], sum(parties)):
+            sys.exit(f"tableau de financement : {total} vaut {v.get(total)}, ses lignes {sum(parties):.1f}")
+    if not egal_(v["LOLF.BESOIN_FINANCEMENT"], v["LOLF.RESSOURCES_FINANCEMENT"]):
+        sys.exit("tableau de financement : besoin et ressources diffèrent")
+    detaillee, details = None, []
+    for _, concept_, dont, g in lignes + [(None, None, False, None)]:
+        if dont:
+            details.append(g["valeur"])
+            continue
+        if details and not egal_(v[detaillee], sum(details)):
+            sys.exit(f"tableau de financement : {detaillee} vaut {v[detaillee]}, ses lignes « Dont » {sum(details):.1f}")
+        detaillee, details = concept_, []
+    deficit = v.get("LOLF.DEFICIT_A_FINANCER_DEFICIT_BUDGETAIRE", v.get("LOLF.DEFICIT_A_FINANCER"))
+    if deficit is None or abs(deficit * 1e3 + solde_general) > 50.5:  # 50 M€ d'arrondi, et 0,5 M€ pour le solde
+        sys.exit(f"tableau de financement : déficit budgétaire {deficit} Md€, solde général {solde_general} M€")
+    if "LOLF.AMORTISSEMENT_DETTE_NOMINAL" in v:
+        nominal = v["LOLF.AMORTISSEMENT_DETTE_NOMINAL"]
+    elif "LOLF.AMORTISSEMENT_DETTE_MLT" in v:
+        nominal = v["LOLF.AMORTISSEMENT_DETTE_MLT"] - v.get("LOLF.SUPPLEMENTS_INDEXATION", 0)
+    else:
+        nominal = v.get("LOLF.AMORTISSEMENT_DETTE_LT", 0) + v.get("LOLF.AMORTISSEMENT_DETTE_MT", 0)
+    variation = v.get("LOLF.EMISSIONS_DETTE_MLT", 0) - nominal
+    if not egal_(plafond, variation):
+        sys.exit(f"plafond de la variation de la dette : {plafond} Md€, émissions moins amortissement {variation:.1f}")
+
+
 def chiffre(fichier, annee, concept_, fonction, unite_, nombre, emplacement, note=""):
     ligne = {
         "source_id": fichier["source_id"], "fichier_id": fichier["id"], "emplacement": emplacement,
@@ -1071,6 +1212,22 @@ def lignes_du_fichier(fichier, fonctions):
         if abs(prevu * 1e6 - (exact - depenses)) > marge:
             sys.exit(f"tableau d'équilibre : {cle[0]} de « {cle[1] or 'ensemble'} », {prevu} M€ quand les états en "
                      f"donnent {exact - depenses:,.0f} €")
+    # Tableau de financement (II, 1°) et plafond de la variation de la dette négociable à plus d'un an, en milliards
+    # d'euros : ils se vérifient l'un par l'autre, et contre le solde général.
+    plafonds = list(re.finditer(PLAFOND_DETTE, texte))
+    plafond = nombre_de_phrase(plafonds[0].group(0)) if len(plafonds) == 1 else None
+    if plafond is None:
+        sys.exit(f"{len(plafonds)} plafond(s) de la variation de la dette négociable, ou montant illisible")
+    lignes_financement = financement(grilles, flux, annee, fichier["source_id"])
+    verifier_financement(lignes_financement, enregistres[("LOLF.RESULTAT_BUDGETAIRE_LFI", "")], float(plafond[0]))
+    for _, concept_, _, g in lignes_financement:
+        if g["nombre"]:
+            morceau = f"morceau={g['morceau']};" if g["morceau"] else ""
+            yield chiffre(fichier, annee, f"{concept_}_LFI", "", "MD_EUR", g["nombre"],
+                          f"tableau={g['tableau']};ligne={g['ligne']};colonne={g['colonne']};{morceau}"
+                          f"libelle={g['libelle']}")
+    yield chiffre(fichier, annee, "LOLF.PLAFOND_VARIATION_DETTE_LFI", "", "MD_EUR", plafond,
+                  f"phrase={plafonds[0].group(0)}")
 
 
 def main():
