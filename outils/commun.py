@@ -598,10 +598,11 @@ def nombre_texte(texte):
 
 def nombre_de_phrase(phrase):
     """Le montant qu'énonce une phrase d'un texte (« …, s'élevant à 2,2 milliards d'euros ») : son seul nombre, lu
-    comme par nombre_texte, ou zéro si elle le dit nul (« …, lesquelles sont nulles ») ; None sinon."""
+    comme par nombre_texte, ou zéro si elle le dit nul (« …, lesquelles sont nulles ») ; None sinon. Un nombre dont
+    les milliers sont séparés par des blancs (« 2 351 034 ») compte pour un."""
     if re.search(r"\bnul(?:le)?s?$", phrase):
         return None if re.search(r"[0-9]", phrase) else ("0", 0)
-    nombres = re.findall(r"[0-9]+(?:,[0-9]+)?", phrase)
+    nombres = re.findall(r"[0-9]{1,3}(?:[ \u00a0\u202f][0-9]{3})+(?:,[0-9]+)?|[0-9]+(?:,[0-9]+)?", phrase)
     return nombre_texte(nombres[0]) if len(nombres) == 1 else None
 
 

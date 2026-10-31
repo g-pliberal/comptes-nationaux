@@ -495,8 +495,11 @@ def cle(libelle):
 
 
 def code_lolf(libelle):
-    """Identifiant formé d'un libellé : « Action extérieure de l’État » → ACTION_EXTERIEURE_DE_LETAT."""
-    ascii_ = unicodedata.normalize("NFKD", libelle).encode("ascii", "ignore").decode()
+    """Identifiant formé d'un libellé : « Action extérieure de l’État » → ACTION_EXTERIEURE_DE_LETAT ; les ligatures
+    s'écrivent en deux lettres (« œuvres » → OEUVRES)."""
+    ligatures = {"œ": "oe", "Œ": "OE", "æ": "ae", "Æ": "AE"}
+    ascii_ = unicodedata.normalize("NFKD", re.sub("[œŒæÆ]", lambda m: ligatures[m.group(0)], libelle))
+    ascii_ = ascii_.encode("ascii", "ignore").decode()
     return re.sub(r"[^A-Z0-9]+", "_", ascii_.upper()).strip("_")
 
 

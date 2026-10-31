@@ -14,8 +14,10 @@ division (« 11. Impôt sur le revenu »), que récapitule un second tableau, pu
 chaque compte spécial, par section. Le tableau de l'article d'équilibre, en millions d'euros, donne les ressources,
 les charges et les soldes de chaque catégorie, et le solde général ; son tableau de financement, en milliards d'euros,
 le besoin de financement de l'État et les ressources qui le couvrent, et l'article fixe le plafond de la variation
-nette de la dette négociable à plus d'un an. L'état E (les autorisations de découvert), les plafonds d'encours de dette
-des budgets annexes et le plafond des emplois ne sont pas lus.
+nette de la dette négociable à plus d'un an et celui des emplois de l'État. La seconde partie de la loi répartit ce
+dernier par ministère et par budget annexe, et fixe les plafonds d'emplois des opérateurs de l'État, des agents de droit
+local des établissements à autonomie financière et des autorités publiques indépendantes. L'état E (les autorisations
+de découvert) et les plafonds d'encours de dette des budgets annexes ne sont pas lus.
 
 Dans l'état A, une division égale la somme de ses lignes, une catégorie de recettes celle de ses divisions, un compte
 celle de ses sections, une section celle de ses lignes, un budget annexe celle de ses lignes, dotations aux
@@ -27,7 +29,10 @@ budget général sont brutes dans l'état A jusqu'à la loi pour 2022, nettes de
 (division 18) ; leur concept le dit. Le tableau de financement s'additionne exactement, hors lignes « Dont … », qui
 détaillent celle qui les précède et en font la somme ; son déficit est l'opposé du solde général, à l'arrondi près, et
 le plafond de la variation de la dette, exactement ses émissions de dette à moyen et long termes, nettes des rachats,
-moins l'amortissement de leur nominal. Une case qui réunit plusieurs lignes se déclare dans FUSIONS_FINANCEMENT.
+moins l'amortissement de leur nominal. Une case qui réunit plusieurs lignes se déclare dans FUSIONS_FINANCEMENT. Un
+plafond d'emplois égale exactement la somme de ses lignes, et le total de son tableau celui de la phrase qui l'annonce ;
+la répartition des emplois de l'État égale le plafond de l'article d'équilibre, à l'écart déclaré dans ECARTS_EMPLOIS
+près, et chaque programme des tableaux par mission doit être un programme des états de la loi.
 
 Un état se reconnaît à son intitulé (« ÉTAT B (Article 167 de la loi) »), et les catégories de crédits qu'il répartit
 à son titre (« … des crédits du budget général »). Ses tableaux sont ceux qui s'ouvrent entre son intitulé et celui de
@@ -52,9 +57,10 @@ Les missions, les budgets annexes, les comptes spéciaux et leurs programmes son
 l'identifiant que leur donne l'import des lois d'approbation des comptes (outils/importer_lois_resultats.py) : le
 budget voté se compare ainsi, mission par mission, au budget exécuté. Les divisions de recettes du budget général sont
 les fonctions LOLF.RECETTES.<numéro et libellé>, leurs lignes, celles de leur division suivies du numéro et du libellé
-de la ligne ; une section ou une ligne de compte prend l'identifiant du compte suivi du sien. La version d'un chiffre
-est la date que le texte porte ; les crédits ouverts sont des autorisations, et les recettes des évaluations, sans
-statut de prévision ou d'exécution.
+de la ligne ; une section ou une ligne de compte prend l'identifiant du compte suivi du sien. Un ministère ou une
+autorité publique indépendante des plafonds d'emplois est la fonction LOLF.EMPLOIS.<nom>. La version d'un chiffre est la
+date que le texte porte ; les crédits ouverts sont des autorisations, et les recettes des évaluations, sans statut de
+prévision ou d'exécution.
 """
 
 import re
@@ -208,6 +214,39 @@ FUSIONS_FINANCEMENT = {
 PLAFOND_DETTE = (r"Le plafond de la variation nette, appréciée en fin d[’']année(?: et en valeur nominale)?, de la dette "
                  r"négociable de l[’'][ÉE]tat d[’']une durée supérieure à un an est fixé à [0-9]+(?:,[0-9]+)?\s+"
                  r"milliards d[’']euros")
+
+# Plafonds des autorisations d'emplois. L'article d'équilibre (III) fixe celui des emplois rémunérés par l'État ; la
+# seconde partie de la loi le répartit par ministère et par budget annexe, et fixe, chacun annoncé par la phrase qui
+# précède son tableau, celui des opérateurs de l'État, par mission et par programme (depuis la loi pour 2009), celui des
+# agents de droit local des établissements à autonomie financière, par programme (depuis 2010), et celui des autorités
+# publiques indépendantes, autorité par autorité (depuis 2012).
+PLAFOND_EMPLOIS = (r"le plafond d[’']autorisation des emplois rémunérés par l[’'][ÉE]tat, exprimé en équivalents? temps "
+                   r"plein travaillé, est fixé au nombre de [0-9]{1,3}(?:[ \u00a0\u202f][0-9]{3})*")
+EMPLOIS = {"ETAT": r"plafond des autorisations d’emplois(?: de l’État)?,? pour [0-9]{4}",
+           "OPERATEURS": r"plafond des autorisations d’emplois des opérateurs de l’État",
+           "EAF": r"établissements à autonomie financière",
+           "API": r"autorités publiques (?:et administratives )?indépendantes|diverses autorités publiques"}
+DEBUT_EMPLOIS = {"ETAT": 2006, "OPERATEURS": 2009, "EAF": 2010, "API": 2012}  # première loi où paraît chaque tableau
+UNITES_EMPLOIS = {"équivalent temps plein travaillé": "ETPT", "équivalents temps plein travaillé": "ETPT",
+                  "équivalents temps plein": "ETP"}
+CONCEPTS_EMPLOIS = {"OPERATEURS": "LOLF.OPERATEURS_PLAFOND_EMPLOIS_LFI", "EAF": "LOLF.EAF_PLAFOND_EMPLOIS_LFI",
+                    "API": "LOLF.API_PLAFOND_EMPLOIS_LFI"}
+# Écart du texte entre le plafond des emplois de l'État que fixe l'article d'équilibre et le total du tableau qui le
+# répartit par ministère et par budget annexe : source → total du tableau moins plafond. Le chiffre du plafond en porte
+# la note ; tout autre écart arrête l'import.
+ECARTS_EMPLOIS = {"an.ta17-0227": 500}
+# Libellé d'un programme qui, dans un tableau de plafonds d'emplois, diffère de celui des états de la même loi :
+# (source, libellé du tableau) → libellé des états. Trois coquilles en 2009 ; en 2019, l'ancien nom du programme 159,
+# avant que l'économie sociale et solidaire y entre.
+LIBELLES_EMPLOIS = {
+    ("senat.tas08-035", "Transmissions des savoirs et démocratisation de la culture"):
+        "Transmission des savoirs et démocratisation de la culture",
+    ("senat.tas08-035", "Soutien de la politique de défense"): "Soutien de la politique de la défense",
+    ("senat.tas08-035", "Conduite et pilotage de la politique de justice"):
+        "Conduite et pilotage de la politique de la justice",
+    ("an.ta15-0213", "Expertise, information géographique et météorologie"):
+        "Expertise, économie sociale et solidaire, information géographique et météorologie",
+}
 
 
 def concept(categorie, colonne, dont):
@@ -1051,6 +1090,167 @@ def verifier_financement(lignes, solde_general, plafond):
         sys.exit(f"plafond de la variation de la dette : {plafond} Md€, émissions moins amortissement {variation:.1f}")
 
 
+def tableaux_emplois(grilles, formes, flux, annee):
+    """{sorte : (tableau, phrase, unité)} : le tableau de chaque plafond d'emplois de la seconde partie de la loi,
+    reconnu à la phrase qui l'annonce, entre le tableau qui porte des nombres avant lui et son début ; un tableau sans
+    nombre (un intitulé d'article mis en tableau) ne compte pas."""
+    trouves, fin = {}, 0
+    for m in re.finditer(r"⟦([0-9]+)⟧", flux):
+        k = int(m.group(1))
+        if not any(nombre_texte(x) for l in grilles[k] for x in l[1:]):
+            continue
+        entre = re.sub(r"\s+", " ", re.sub(r"[\ue000-\uf8ff]|⟦/?[0-9]+⟧", " ", flux[fin:m.start()])).replace("'", "’")
+        fin = flux.index(f"⟦/{k}⟧", m.start())
+        i = entre.rfind("Article ")
+        phrase = entre[i:].strip() if i >= 0 else ""
+        if "plafond des autorisations d’emplois" not in phrase or not re.search(r"comme suit\s*:$", phrase):
+            continue
+        sortes = [s for s, motif in EMPLOIS.items() if re.search(motif, phrase)]
+        unites = {UNITES_EMPLOIS[u] for u in re.findall(r"en (équivalents? temps plein(?: travaillé)?)", phrase)}
+        if len(sortes) != 1 or len(unites) != 1 or not re.search(rf"\b[Pp]our {annee}\b", phrase):
+            sys.exit(f"tableau {k} : plafond d'emplois de sorte, d'unité ou d'année inconnue (« {phrase[:160]} »)")
+        if sortes[0] in trouves:
+            sys.exit(f"plafond d'emplois {sortes[0]} : deux tableaux")
+        trouves[sortes[0]] = (k, phrase, unites.pop())
+    attendus = {s for s, a in DEBUT_EMPLOIS.items() if int(annee) >= a}
+    if set(trouves) != attendus:
+        sys.exit(f"plafonds d'emplois : {sorted(trouves)} au lieu de {sorted(attendus)}")
+    return trouves
+
+
+def rangees_emplois(tableau, forme, k):
+    """Les lignes d'un tableau de plafonds d'emplois : [(ligne, libellé, nombre ou None, en gras)], hors en-têtes ; un
+    tableau a une colonne de plafond, et une ligne au plus un nombre."""
+    rangees = []
+    for r, ligne in enumerate(tableau):
+        libelle = re.sub(r"\s+", " ", propre(nom(ligne[0]))).strip(" .…") if ligne else ""  # points de conduite
+        nombres = [(c, n) for c, x in enumerate(ligne) if c and (n := nombre_texte(x))]
+        if len(nombres) > 1 or any(n[1] for _, n in nombres):
+            sys.exit(f"tableau {k}, ligne {r} : plusieurs plafonds, ou un plafond qui n'est pas un nombre entier")
+        if not nombres and (not libelle or re.match(r"(?i)\(en équivalents|désignation|missions?\s*(?:/|et)\s*programmes?|"
+                                                    r"autorité$|plafond", libelle)):
+            continue  # en-tête, ligne vide
+        if any(x.strip() and not nombre_texte(x) and x.strip().replace("\u2011", "-") not in NEANT
+               and not re.match(r"(?i)plafond|\(en", x.strip()) for x in ligne[1:]):
+            sys.exit(f"tableau {k}, ligne {r} : plafond illisible ({ligne[1:]})")
+        c, nombre_ = nombres[0] if nombres else (None, None)
+        rangees.append({"ligne": r, "colonne": c, "libelle": libelle, "nombre": nombre_, "gras": (r, 0) in forme["gras"]})
+    return rangees
+
+
+def total_emplois(rangees, k, total_phrase=None):
+    """La dernière rangée d'un tableau de plafonds d'emplois, son total, et les autres ; le total doit avoir un nombre,
+    et égaler celui de la phrase qui annonce le tableau quand elle en donne un."""
+    if not rangees or not re.fullmatch(r"Total(?: général)?", rangees[-1]["libelle"]) or not rangees[-1]["nombre"]:
+        sys.exit(f"tableau {k} : plafonds d'emplois sans total en dernière ligne")
+    total = rangees[-1]
+    if total_phrase is not None and int(total["nombre"][0]) != total_phrase:
+        sys.exit(f"tableau {k} : total {total['nombre'][0]}, la phrase qui l'annonce {total_phrase}")
+    return total, rangees[:-1]
+
+
+def somme_emplois(total, parties, quoi, k):
+    """Un plafond d'emplois égale exactement la somme de ses parties (des rangées, une case vide valant zéro)."""
+    somme = sum(int(g["nombre"][0]) for g in parties if g["nombre"])
+    if int(total["nombre"][0]) != somme:
+        sys.exit(f"tableau {k}, ligne {total['ligne']} : {quoi} « {total['libelle']} » vaut {total['nombre'][0]}, "
+                 f"ses lignes {somme}")
+
+
+def emplois_etat(rangees, k, plafond, source_id, fonctions):
+    """Le plafond des emplois de l'État, réparti par ministère (fonction LOLF.EMPLOIS.<ministère>) et par budget annexe
+    (la fonction du budget annexe) : [(concept, fonction, rangée)] et l'écart du total au plafond de l'article
+    d'équilibre. Les ministères font la ligne « I. Budget général », les budgets annexes la ligne « II. Budgets
+    annexes », et les deux, le total général ; un ministère sans plafond (ses emplois sont comptés ailleurs) n'a pas de
+    chiffre. Le total général égale le plafond de l'article d'équilibre, à l'écart déclaré dans ECARTS_EMPLOIS près."""
+    total, corps = total_emplois(rangees, k)
+    parties, partie = {"BG": None, "BA": None}, None
+    lignes = {"BG": [], "BA": []}
+    for g in corps:
+        if re.fullmatch(r"I\.\s*[-–‑]?\s*Budget général", g["libelle"]):
+            partie = "BG"
+        elif re.fullmatch(r"II\.\s*[-–‑]?\s*Budgets annexes", g["libelle"]):
+            partie = "BA"
+        elif partie is None:
+            sys.exit(f"tableau {k}, ligne {g['ligne']} : « {g['libelle']} » avant le budget général")
+        else:
+            lignes[partie].append(g)
+            continue
+        if parties[partie] is not None or not g["nombre"]:
+            sys.exit(f"tableau {k}, ligne {g['ligne']} : « {g['libelle']} » deux fois, ou sans plafond")
+        parties[partie] = g
+    if None in parties.values():
+        sys.exit(f"tableau {k} : budget général ou budgets annexes absents")
+    for p in ("BG", "BA"):
+        somme_emplois(parties[p], lignes[p], "le plafond", k)
+    somme_emplois(total, [parties["BG"], parties["BA"]], "le plafond", k)
+    ecart = int(total["nombre"][0]) - plafond
+    if ecart != ECARTS_EMPLOIS.get(source_id, 0):
+        sys.exit(f"tableau {k} : total général {total['nombre'][0]}, plafond de l'article d'équilibre {plafond} (écart "
+                 f"déclaré : {ECARTS_EMPLOIS.get(source_id, 0)})")
+    resultat = []
+    for p in ("BG", "BA"):
+        resultat.append((f"LOLF.{p}_PLAFOND_EMPLOIS_LFI", "", parties[p]))
+        for g in lignes[p]:
+            if not g["nombre"]:
+                continue
+            f = f"LOLF.{'EMPLOIS.' if p == 'BG' else ''}{code_lolf(g['libelle'])}"
+            if p == "BA" and f not in fonctions:
+                sys.exit(f"tableau {k}, ligne {g['ligne']} : budget annexe « {g['libelle']} » inconnu")
+            resultat.append((f"LOLF.{p}_PLAFOND_EMPLOIS_LFI", f, g))
+    return resultat, ecart
+
+
+def emplois_par_programme(rangees, k, total_phrase, concept_, missions_texte, programmes_texte, source_id):
+    """Un plafond d'emplois réparti par mission et par programme (opérateurs, établissements à autonomie financière) :
+    [(concept, fonction, rangée)]. Une mission est une mission que la loi dote dans ses états B à D (« budget annexe »
+    entre parenthèses ne fait pas partie de son nom), en gras ou qui n'est pas un programme de la mission en cours ; ses
+    programmes, ceux que ces états lui donnent, la suivent et en font le plafond. Une mission
+    sans plafond n'est qu'un intitulé. Sans mission qui le précède, un programme est celui de la seule mission qui en a
+    un de ce nom. Le total est la somme des missions dotées et des programmes des autres."""
+    total, corps = total_emplois(rangees, k, total_phrase)
+    resultat, mission, missions_, programmes_ = [], None, [], {None: []}
+    for g in corps:
+        nom_ = re.sub(r"\s*\(budget annexe\)$", "", LIBELLES_EMPLOIS.get((source_id, g["libelle"]), g["libelle"]))
+        programme = f"{mission}.{code_lolf(nom_)}" if mission else None
+        de_la_mission = programme in programmes_texte.get(mission, ())
+        if f"LOLF.{code_lolf(nom_)}" in missions_texte and (g["gras"] or not de_la_mission):
+            mission = f"LOLF.{code_lolf(nom_)}"
+            missions_.append((mission, g))
+            programmes_[mission] = []
+            continue
+        if mission is None:
+            candidates = [m for m, ps in programmes_texte.items() if f"{m}.{code_lolf(nom_)}" in ps]
+            programme = f"{candidates[0]}.{code_lolf(nom_)}" if len(candidates) == 1 else None
+        if programme is None or programme.rsplit(".", 1)[0] not in programmes_texte or \
+                programme not in programmes_texte[programme.rsplit(".", 1)[0]]:
+            sys.exit(f"tableau {k}, ligne {g['ligne']} : programme « {nom_} » inconnu des états")
+        programmes_[mission].append(g)
+        if g["nombre"]:
+            resultat.append((concept_, programme, g))
+    parties = programmes_[None]
+    for mission_, g in missions_:
+        if g["nombre"]:
+            somme_emplois(g, programmes_[mission_], "la mission", k)
+            resultat.append((concept_, mission_, g))
+            parties.append(g)
+        else:
+            parties += programmes_[mission_]
+    somme_emplois(total, parties, "le total", k)
+    resultat.append((concept_, "", total))
+    return resultat
+
+
+def emplois_api(rangees, k, total_phrase):
+    """Le plafond d'emplois des autorités publiques indépendantes, autorité par autorité (fonction
+    LOLF.EMPLOIS.<autorité>, de son nom sans le sigle entre parenthèses qui le suit) : [(concept, fonction, rangée)]."""
+    total, corps = total_emplois(rangees, k, total_phrase)
+    somme_emplois(total, corps, "le total", k)
+    concept_, sans_sigle = CONCEPTS_EMPLOIS["API"], lambda libelle: re.sub(r"\s*\([^()]*\)$", "", libelle)
+    return [(concept_, f"LOLF.EMPLOIS.{code_lolf(sans_sigle(g['libelle']))}", g) for g in corps if g["nombre"]] + \
+        [(concept_, "", total)]
+
+
 def chiffre(fichier, annee, concept_, fonction, unite_, nombre, emplacement, note=""):
     ligne = {
         "source_id": fichier["source_id"], "fichier_id": fichier["id"], "emplacement": emplacement,
@@ -1101,10 +1301,11 @@ def lignes_du_fichier(fichier, fonctions):
                                                           article(texte, annee, ARTICLES[("CAS", "CCF")]))
                for c in lus):
         sys.exit(f"{fichier['id']} : un état sans l'article qui en ouvre les crédits")
-    missions_connues = {f for f, l in fonctions.items()
-                        if f.startswith("LOLF.") and not l["parent_id"] and not f.startswith("LOLF.RECETTES.")}
+    missions_connues = {f for f, l in fonctions.items() if f.startswith("LOLF.") and not l["parent_id"]
+                        and not f.startswith(("LOLF.RECETTES.", "LOLF.EMPLOIS."))}
     # (concept, fonction) → montant en euros, de chaque chiffre lu dans un état : ce que le tableau d'équilibre reprend.
     connus, missions = {}, {"BG": set(), "BA": set(), "CAS": set(), "CCF": set()}
+    programmes = {}  # mission ou budget annexe → ses programmes dans les états de la loi
     for categorie, bloc in blocs:
         rattache = structure(categorie, bloc, missions_connues)
         for l in bloc["lignes"]:
@@ -1115,6 +1316,7 @@ def lignes_du_fichier(fichier, fonctions):
                 fonction = f"{parent or 'LOLF'}.{code_lolf(libelle)}"
                 if parent:
                     fonctions.setdefault(parent, {"id": parent, "libelle": mission, "norme_id": "LOLF", "parent_id": ""})
+                    programmes.setdefault(parent, set()).add(fonction)
                 else:
                     missions[categorie].add(fonction)
                 fonctions.setdefault(fonction, {"id": fonction, "libelle": libelle, "norme_id": "LOLF",
@@ -1228,6 +1430,38 @@ def lignes_du_fichier(fichier, fonctions):
                           f"libelle={g['libelle']}")
     yield chiffre(fichier, annee, "LOLF.PLAFOND_VARIATION_DETTE_LFI", "", "MD_EUR", plafond,
                   f"phrase={plafonds[0].group(0)}")
+    # Plafonds des autorisations d'emplois : celui de l'article d'équilibre, puis les tableaux de la seconde partie.
+    phrases = list(re.finditer(PLAFOND_EMPLOIS, texte))
+    nombre_ = nombre_de_phrase(phrases[0].group(0)) if len(phrases) == 1 else None
+    if nombre_ is None:
+        sys.exit(f"{len(phrases)} plafond(s) des emplois de l'État dans l'article d'équilibre, ou nombre illisible")
+    sortes = tableaux_emplois(grilles, formes, flux, annee)
+    k, phrase, unite_ = sortes["ETAT"]
+    lus, ecart = emplois_etat(rangees_emplois(grilles[k], formes[k], k), k, int(nombre_[0]), fichier["source_id"],
+                              fonctions)
+    lus = [(k, unite_, *l) for l in lus]
+    for sorte in ("OPERATEURS", "EAF", "API"):
+        if sorte not in sortes:
+            continue
+        k, phrase, unite_ = sortes[sorte]
+        fixe = re.search(r"est fixé à ([0-9]{1,3}(?:[ \u00a0\u202f][0-9]{3})*)", phrase)
+        fixe = int(re.sub(r"\D", "", fixe.group(1))) if fixe else None
+        rangees = rangees_emplois(grilles[k], formes[k], k)
+        if sorte == "API":
+            lus += [(k, unite_, *l) for l in emplois_api(rangees, k, fixe)]
+        else:
+            lus += [(k, unite_, *l) for l in emplois_par_programme(rangees, k, fixe, CONCEPTS_EMPLOIS[sorte],
+                                                                    set().union(*missions.values()), programmes,
+                                                                    fichier["source_id"])]
+    note = (f"Le tableau de l'article qui répartit ce plafond par ministère et par budget annexe en compte "
+            f"{int(nombre_[0]) + ecart:,}".replace(",", "\u202f") + f", {abs(ecart)} de {'plus' if ecart > 0 else 'moins'}, "
+            f"et ses lignes en font la somme exacte." if ecart else "")
+    yield chiffre(fichier, annee, "LOLF.PLAFOND_EMPLOIS_LFI", "", "ETPT", nombre_, f"phrase={phrases[0].group(0)}", note)
+    for k, unite_, concept_, fonction, g in lus:
+        if fonction.startswith("LOLF.EMPLOIS."):
+            fonctions.setdefault(fonction, {"id": fonction, "libelle": g["libelle"], "norme_id": "LOLF", "parent_id": ""})
+        yield chiffre(fichier, annee, concept_, fonction, unite_, g["nombre"],
+                      f"tableau={k};ligne={g['ligne']};colonne={g['colonne']};libelle={g['libelle']}")
 
 
 def main():

@@ -10,21 +10,21 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 | Source | Titre | Version la plus récente | Chiffres |
 |---|---|---|---|
-| an.ta12-0525 | Projet de loi de finances pour 2006, texte adopté n° 525 (12e législature) : conclusions de la commission mixte paritaire, adoptées par l'Assemblée nationale le 20 décembre 2005 | 2005-12-20 | 130 |
-| an.ta13-0808 | Projet de loi de finances pour 2012, texte adopté n° 808 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 960 |
-| an.ta14-0073 | Projet de loi de finances pour 2013, texte adopté n° 73 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2012 | 2012-12-20 | 999 |
-| an.ta14-0267 | Projet de loi de finances pour 2014, texte adopté n° 267 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 1032 |
-| an.ta14-0459 | Projet de loi de finances pour 2015, texte adopté n° 459 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 972 |
-| an.ta14-0648 | Projet de loi de finances pour 2016, texte adopté n° 648 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 973 |
-| an.ta14-0865 | Projet de loi de finances pour 2017, texte adopté n° 865 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2016 | 2016-12-20 | 959 |
-| an.ta15-0065 | Projet de loi de finances pour 2018, texte adopté n° 65 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 970 |
-| an.ta15-0213 | Projet de loi de finances pour 2019, texte adopté n° 213 (15e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2018 | 2018-12-20 | 980 |
-| an.ta15-0374 | Projet de loi de finances pour 2020, texte adopté n° 374 (15e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2019 | 2019-12-19 | 955 |
-| an.ta15-0538 | Projet de loi de finances pour 2021, texte adopté n° 538 rectifié (15e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2020 | 2020-12-17 | 995 |
-| an.ta15-0737 | Projet de loi de finances pour 2022, texte adopté n° 737 (15e législature), adopté définitivement par l'Assemblée nationale le 15 décembre 2021 | 2021-12-15 | 1005 |
-| an.ta16-0051 | Projet de loi de finances pour 2023, texte adopté n° 51 rectifié (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 17 décembre 2022 | 2022-12-17 | 958 |
-| an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 965 |
-| an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 944 |
+| an.ta12-0525 | Projet de loi de finances pour 2006, texte adopté n° 525 (12e législature) : conclusions de la commission mixte paritaire, adoptées par l'Assemblée nationale le 20 décembre 2005 | 2005-12-20 | 151 |
+| an.ta13-0808 | Projet de loi de finances pour 2012, texte adopté n° 808 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 1076 |
+| an.ta14-0073 | Projet de loi de finances pour 2013, texte adopté n° 73 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2012 | 2012-12-20 | 1116 |
+| an.ta14-0267 | Projet de loi de finances pour 2014, texte adopté n° 267 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 1148 |
+| an.ta14-0459 | Projet de loi de finances pour 2015, texte adopté n° 459 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 1088 |
+| an.ta14-0648 | Projet de loi de finances pour 2016, texte adopté n° 648 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 1087 |
+| an.ta14-0865 | Projet de loi de finances pour 2017, texte adopté n° 865 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2016 | 2016-12-20 | 1072 |
+| an.ta15-0065 | Projet de loi de finances pour 2018, texte adopté n° 65 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 1083 |
+| an.ta15-0213 | Projet de loi de finances pour 2019, texte adopté n° 213 (15e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2018 | 2018-12-20 | 1094 |
+| an.ta15-0374 | Projet de loi de finances pour 2020, texte adopté n° 374 (15e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2019 | 2019-12-19 | 1071 |
+| an.ta15-0538 | Projet de loi de finances pour 2021, texte adopté n° 538 rectifié (15e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2020 | 2020-12-17 | 1109 |
+| an.ta15-0737 | Projet de loi de finances pour 2022, texte adopté n° 737 (15e législature), adopté définitivement par l'Assemblée nationale le 15 décembre 2021 | 2021-12-15 | 1121 |
+| an.ta16-0051 | Projet de loi de finances pour 2023, texte adopté n° 51 rectifié (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 17 décembre 2022 | 2022-12-17 | 1073 |
+| an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 1079 |
+| an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 1057 |
 | dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
 | dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
 | dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4070 |
@@ -119,13 +119,13 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 1053 |
 | senat.pjl25-727 | Projet de loi portant approbation des comptes de la sécurité sociale de l'année 2025, texte n° 727 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 214 |
 | senat.tas05-033 | Projet de loi de financement de la sécurité sociale pour 2006, texte définitif n° 33 (2005-2006) adopté par le Sénat le 23 novembre 2005 | 2005-11-23 | 39 |
-| senat.tas06-031 | Projet de loi de finances pour 2007, texte définitif n° 31 (2006-2007) adopté par le Sénat le 19 décembre 2006 | 2006-12-19 | 942 |
-| senat.tas07-034 | Projet de loi de finances pour 2008, texte définitif n° 34 (2007-2008) adopté par le Sénat le 18 décembre 2007 | 2007-12-18 | 881 |
-| senat.tas08-035 | Projet de loi de finances pour 2009, texte définitif n° 35 (2008-2009) adopté par le Sénat le 17 décembre 2008 | 2008-12-17 | 928 |
-| senat.tas09-034 | Projet de loi de finances pour 2010, texte définitif n° 34 (2009-2010) adopté par le Sénat le 18 décembre 2009 | 2009-12-18 | 942 |
-| senat.tas10-032 | Projet de loi de finances pour 2011, texte définitif n° 32 (2010-2011) adopté par le Sénat le 15 décembre 2010 | 2010-12-15 | 852 |
+| senat.tas06-031 | Projet de loi de finances pour 2007, texte définitif n° 31 (2006-2007) adopté par le Sénat le 19 décembre 2006 | 2006-12-19 | 962 |
+| senat.tas07-034 | Projet de loi de finances pour 2008, texte définitif n° 34 (2007-2008) adopté par le Sénat le 18 décembre 2007 | 2007-12-18 | 902 |
+| senat.tas08-035 | Projet de loi de finances pour 2009, texte définitif n° 35 (2008-2009) adopté par le Sénat le 17 décembre 2008 | 2008-12-17 | 1039 |
+| senat.tas09-034 | Projet de loi de finances pour 2010, texte définitif n° 34 (2009-2010) adopté par le Sénat le 18 décembre 2009 | 2009-12-18 | 1051 |
+| senat.tas10-032 | Projet de loi de finances pour 2011, texte définitif n° 32 (2010-2011) adopté par le Sénat le 15 décembre 2010 | 2010-12-15 | 957 |
 | senat.tas22-018 | Projet de loi de financement de la sécurité sociale pour 2023, texte n° 18 (2022-2023) adopté par le Sénat en première lecture le 15 novembre 2022 | 2022-11-15 | 230 |
-| senat.tas24-048 | Projet de loi de finances pour 2025, texte définitif n° 48 (2024-2025) adopté par le Sénat le 6 février 2025 | 2025-02-06 | 962 |
+| senat.tas24-048 | Projet de loi de finances pour 2025, texte définitif n° 48 (2024-2025) adopté par le Sénat le 6 février 2025 | 2025-02-06 | 1072 |
 
 ## 1. Sommes comptables
 
@@ -265,7 +265,7 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-27311 ventilations vérifiées avec toutes leurs parties : 27306 justes, 5 en écart.
+27841 ventilations vérifiées avec toutes leurs parties : 27836 justes, 5 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
@@ -2526,3 +2526,33 @@ En milliards d'euros :
 | 2026 | 310,0 | — | 310,0 | — | 142,5 | — |
 
 Sur les 20 années dont les comptes sont arrêtés, la variation exécutée dépasse le plafond de la loi de finances initiale en 4 : 2008, 2009, 2010 et 2020. La base ne dit pas si le plafond en vigueur en fin d'année, celui de la dernière loi de finances de l'année, a été respecté.
+
+## 20. Plafonds d'emplois votés
+
+Les plafonds d'emplois que fixe la loi de finances initiale de chaque année, de 2006 à 2026 : celui des emplois rémunérés par l'État, que fixe l'article d'équilibre et que la seconde partie de la loi répartit par ministère et par budget annexe, puis ceux des opérateurs de l'État, des agents de droit local des établissements à autonomie financière et des autorités publiques indépendantes. Les emplois de l'État et des autorités se comptent en équivalents temps plein travaillé (ETPT), ceux des établissements à autonomie financière en équivalents temps plein (ETP), et ceux des opérateurs en ETP jusqu'à la loi pour 2014, en ETPT depuis. L'import vérifie chaque tableau contre ses lignes et contre la phrase qui l'annonce, et la section 2 refait ces sommes. La loi d'approbation des comptes ne constate pas d'emplois : la base n'a pas encore les emplois consommés.
+
+| Année | État (article d'équilibre) | Budget général | Budgets annexes | Opérateurs (ETP) | Opérateurs (ETPT) | Établissements à autonomie financière (ETP) | Autorités publiques indépendantes |
+|---|---|---|---|---|---|---|---|
+| 2006 | 2 351 034 | 2 338 472 | 12 562 | — | — | — | — |
+| 2007 | 2 283 159 | 2 270 840 | 12 319 | — | — | — | — |
+| 2008 | 2 200 924 | 2 188 626 | 12 298 | — | — | — | — |
+| 2009 | 2 120 830 | 2 108 123 | 12 707 | 266 061 | — | — | — |
+| 2010 | 2 019 798 | 2 007 291 | 12 507 | 337 879 | — | 3 400 | — |
+| 2011 | 1 974 461 | 1 962 343 | 12 118 | 365 928 | — | 3 411 | — |
+| 2012 | 1 934 490 | 1 922 505 | 11 985 | 373 518 | — | 3 540 | 2 277 |
+| 2013 | 1 914 921 | 1 903 061 | 11 860 | 385 601 | — | 3 600 | 2 289 |
+| 2014 | 1 906 424 | 1 894 670 | 11 754 | 391 874 | — | 3 564 | 2 269 |
+| 2015 | 1 901 099 | 1 889 490 | 11 609 | — | 397 682 | 3 489 | 2 561 |
+| 2016 | 1 919 744 | 1 908 233 | 11 511 | — | 397 590 | 3 449 | 2 562 |
+| 2017 | 1 944 325 | 1 932 883 | 11 442 | — | 398 680 | 3 449 | 2 573 |
+| 2018 | 1 960 333 | 1 948 952 | 11 381 | — | 404 472 | 3 449 | 2 512 |
+| 2019 | 1 953 516 | 1 942 308 | 11 208 | — | 401 849 | 3 449 | 2 558 |
+| 2020 | 1 943 108 | 1 931 959 | 11 149 | — | 402 113 | 3 411 | 2 589 |
+| 2021 | 1 945 129 | 1 934 021 | 11 108 | — | 405 143 | 3 411 | 2 621 |
+| 2022 | 1 941 470 | 1 930 485 | 10 985 | — | 406 054 | 3 411 | 2 770 |
+| 2023 | 1 961 094 | 1 950 170 | 10 924 | — | 406 986 | 3 411 | 2 797 |
+| 2024 | 1 985 307 | 1 974 384 | 10 923 | — | 404 930 | 3 411 | 1 744 |
+| 2025 | 2 008 200 | 1 997 194 | 11 006 | — | 402 489 | 3 411 | 1 780 |
+| 2026 | 2 016 088 | 2 005 540 | 11 048 | — | 401 389 | 3 411 | 1 786 |
+
+Pour 2026, le tableau qui répartit le plafond des emplois de l'État par ministère et par budget annexe en compte 2 016 588, 500 de plus que l'article d'équilibre (2 016 088) ; ses lignes en font la somme exacte.
