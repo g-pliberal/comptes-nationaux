@@ -89,6 +89,11 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
                  else "csv" if "csv" in type_contenu else "html" if "html" in type_contenu
                  else "xml" if "xml" in type_contenu else "zip" if "zip" in type_contenu
                  else "pdf" if "pdf" in type_contenu else "bin")
+    # Un serveur qui envoie un type générique (« application/octet-stream ») : l'extension est celle de l'adresse,
+    # quand c'est l'une des précédentes.
+    connue = re.search(r"\.(json|xlsx|ods|csv|html|xml|zip|pdf)$", url.split("?")[0])
+    if extension == "bin" and type_contenu == "application/octet-stream" and connue:
+        extension = connue.group(1)
     if compresser and extension != "csv":
         sys.exit("seul un fichier csv s'archive compressé")
     if compresser and decouper:

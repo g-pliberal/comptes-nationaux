@@ -53,7 +53,10 @@ vérifie ce que disent les sources elles-mêmes :
    financement que constate la loi d'approbation des comptes de l'année ;
 20. les plafonds d'emplois votés : celui des emplois de l'État que fixe l'article d'équilibre de chaque loi de finances
    initiale, contre sa répartition par ministère et par budget annexe, et ceux des opérateurs, des établissements à
-   autonomie financière et des autorités publiques indépendantes.
+   autonomie financière et des autorités publiques indépendantes ;
+21. les lois de finances rectificatives : les crédits qu'ouvre et qu'annule chacune, ajoutés à ceux de la loi de finances
+   initiale, contre les dépenses et les engagements que constate la loi d'approbation des comptes de l'année, et leurs
+   missions et programmes contre ceux de ces deux lois.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -958,6 +961,8 @@ def concordances(derniers):
     groupes = collections.defaultdict(lambda: collections.defaultdict(dict))
     retenues = {}
     for k, l in derniers.items():
+        if "_LFR_" in l["concept_id"]:
+            continue  # ce qu'ouvre ou annule une loi de finances rectificative s'ajoute à ce que font les autres lois
         v, precision, unite = valeur(l)
         if unite != "écus puis euros" and retenu(l, retenues.get(k[:6] + (unite, k[7]))):
             retenues[k[:6] + (unite, k[7])] = l
@@ -3751,10 +3756,11 @@ def partie_budget_vote(derniers):
               f"Les crédits qu'ouvre la loi de finances initiale de chaque année, de {annees[0]} à {annees[-1]} (états B, C "
               f"et D), contre ce que constate la loi d'approbation des comptes de la même année : les dépenses, fonds de "
               f"concours compris, et les autorisations d'engagement consommées (articles 4 à 6). L'écart vient des lois de "
-              f"finances rectificatives, des décrets d'avance, de virement, de transfert et d'annulation, des reports de "
-              f"crédits de l'année précédente, des fonds de concours et des crédits restés sans emploi : la base ne les a "
-              f"pas encore un à un. Pour {annees[0]}, le texte lu ne donne que les crédits du budget général. La section 2 "
-              f"vérifie que chaque mission votée égale la somme de ses programmes.", ""]
+              f"finances rectificatives, que la section 21 ajoute aux crédits votés, des décrets d'avance, de virement, de "
+              f"transfert et d'annulation, des reports de crédits de l'année précédente, des fonds de concours et des "
+              f"crédits restés sans emploi : la base n'a pas encore ceux-ci un à un. Pour {annees[0]}, le texte lu ne "
+              f"donne que les crédits du budget général. La section 2 vérifie que chaque mission votée égale la somme de "
+              f"ses programmes.", ""]
     v = lambda c, a: votes.get((c, "", a))
     e = lambda c, a: executes.get((c, "", a))
     lignes += ["Budget général, en milliards d'euros :", "",
@@ -4051,6 +4057,111 @@ def partie_emplois_votes(derniers):
     return lignes
 
 
+# 21. Lois de finances rectificatives. Les crédits qu'ouvre et qu'annule chacune, ajoutés à ceux de la loi de finances
+# initiale de l'année, contre les dépenses et les engagements que constate la loi d'approbation des comptes.
+CATEGORIES_LFR = (("BG", "Budget général"), ("BA", "Budgets annexes"), ("CAS", "Comptes d'affectation spéciale"),
+                  ("CCF", "Comptes de concours financiers"))
+GRANDS_MOUVEMENTS = 15  # missions du budget général citées pour les crédits qu'une loi leur ouvre ou leur annule
+
+
+def partie_lfr(derniers):
+    lfr, lfi, executes = collections.defaultdict(float), {}, {}
+    par_loi = collections.defaultdict(lambda: collections.defaultdict(float))  # (année, source) → (concept, fonction)
+    lois = collections.defaultdict(set)
+    concepts_executes = {c for _, d, a in VOTE_EXECUTE.values() for c in (d, a)}
+    for l in derniers.values():
+        if l["perimetre_id"] != "ETAT_LF" or l["unite_id"] != "EUR":
+            continue
+        c, k = l["concept_id"], (l["concept_id"], l["fonction_id"], l["periode"])
+        if "_LFR_" in c:
+            # Plusieurs lois dans l'année, et dans une même loi deux états d'une même catégorie : leurs crédits
+            # s'ajoutent.
+            lfr[k] += valeur(l)[0]
+            par_loi[(l["periode"], l["source_id"])][(c, l["fonction_id"])] += valeur(l)[0]
+            lois[l["periode"]].add(l["source_id"])
+        elif c.endswith("_LFI"):
+            lfi[k] = valeur(l)[0]
+        elif c in concepts_executes and l["source_id"].startswith(_LOI[:-1]):
+            if k not in executes or l["version"] < executes[k]["version"]:
+                executes[k] = l
+    executes = {k: valeur(l)[0] for k, l in executes.items()}
+    if not lfr:
+        return []
+    titres = {s["id"]: s["titre"] for s in lire("tables/sources.csv")}
+    numero = lambda s: (re.search(r"loi n° ([0-9]{4}-[0-9]+)", titres.get(s, "")) or re.search("(.*)", s)).group(1)
+    libelles = {f["id"]: f["libelle"] for f in lire("tables/fonctions.csv")}
+    parents = {f["id"]: f["parent_id"] for f in lire("tables/fonctions.csv")}
+    annees = sorted(lois)
+    md = lambda x: "—" if x is None else fr(x / 1e9, 1)
+    mio = lambda x: "—" if not x else fr(x / 1e6, 1)
+    ecart = lambda a, b: "—" if a is None or b is None else signe_arrondi((b - a) / 1e9, 1)
+    lignes = ["## 21. Lois de finances rectificatives", "",
+              f"Les crédits qu'ouvrent et qu'annulent, en cours d'année, les lois de finances rectificatives, et depuis "
+              f"2023 les lois de finances de fin de gestion, de {annees[0]} à {annees[-1]} : "
+              f"{fr(sum(len(s) for s in lois.values()), 0)} lois. La loi n° 2010-606 du 7 juin 2010, qui accorde la "
+              f"garantie de l'État au mécanisme européen de stabilisation, n'en ouvre ni n'en annule. L'import vérifie "
+              f"que le total de chaque état égale ce qu'ouvrent et annulent les articles de la loi, et la section 2 "
+              f"refait les sommes des missions et des programmes. Les crédits votés de l'année sont ceux de la loi de "
+              f"finances initiale (section 17), plus les ouvertures et moins les annulations de ces lois ; l'écart qui "
+              f"reste avec les dépenses que constate la loi d'approbation des comptes vient des décrets d'avance et "
+              f"d'annulation, des reports de crédits de l'année précédente, des fonds de concours et des crédits restés "
+              f"sans emploi, que la base ne lit pas encore.", "",
+              "Lois de chaque année : " + " ; ".join(
+                  f"{a} : {', '.join(sorted((numero(s) for s in lois[a]), key=lambda n: int(n.split('-')[1])))}"
+                  for a in annees) + ".", ""]
+    g = lambda c, a: lfr.get((c, "", a))
+    for colonne, quoi, execute in (("CP", "Crédits de paiement", "Dépenses"),
+                                   ("AE", "Autorisations d'engagement", "Autorisations d'engagement consommées")):
+        lignes += [f"Budget général, {quoi[0].lower() + quoi[1:]}, en milliards d'euros :", "",
+                   f"| Année | Loi de finances initiale | Ouverts | Annulés | Crédits votés | {execute} | Écart |",
+                   "|---|---|---|---|---|---|---|"]
+        for a in annees:
+            initiale = lfi.get((f"LOLF.BG_{colonne}_LFI", "", a))
+            ouverts, annules = g(f"LOLF.BG_{colonne}_LFR_OUVERTURES", a), g(f"LOLF.BG_{colonne}_LFR_ANNULATIONS", a)
+            votes = None if initiale is None else initiale + (ouverts or 0) - (annules or 0)
+            depenses = executes.get((VOTE_EXECUTE["BG"][1 if colonne == "CP" else 2], "", a))
+            lignes.append(f"| {a} | {md(initiale)} | {md(ouverts)} | {md(annules)} | {md(votes)} | {md(depenses)} | "
+                          f"{ecart(votes, depenses)} |")
+        lignes.append("")
+    lignes += ["Budgets annexes et comptes spéciaux dotés de crédits, crédits de paiement ouverts et annulés, en millions "
+               "d'euros :", "",
+               "| Année | " + " | ".join(f"{nom} : ouverts | annulés" for c, nom in CATEGORIES_LFR[1:]) + " |",
+               "|---|" + "---|---|" * 3]
+    for a in annees:
+        lignes.append(f"| {a} | " + " | ".join(f"{mio(g(f'LOLF.{c}_CP_LFR_OUVERTURES', a))} | "
+                                              f"{mio(g(f'LOLF.{c}_CP_LFR_ANNULATIONS', a))}"
+                                              for c, _ in CATEGORIES_LFR[1:]) + " |")
+    # Les missions et les programmes de ces lois contre ceux de la loi de finances initiale et de la loi d'approbation
+    # des comptes de la même année.
+    connus = collections.defaultdict(set)
+    for (c, f, a) in list(lfi) + list(executes):
+        connus[a].add(f)
+    for l in derniers.values():
+        if l["perimetre_id"] == "ETAT_LF" and l["source_id"].startswith(_LOI[:-1]) and l["fonction_id"]:
+            connus[l["periode"]].add(l["fonction_id"])
+    fonctions = {(f, a) for (c, f, a) in lfr if f}
+    seules = sorted((a, f) for f, a in fonctions if f not in connus[a])
+    lignes += ["", f"Missions et programmes : {fr(len(fonctions) - len(seules), 0)} des {fr(len(fonctions), 0)} missions, "
+               f"budgets annexes, comptes et programmes que dotent ou annulent ces lois, année par année, se retrouvent "
+               f"sous le même identifiant dans la loi de finances initiale ou dans la loi d'approbation des comptes de "
+               f"l'année. Les autres, souvent des programmes que ces lois créent :", "",
+               "| Année | Mission ou programme |", "|---|---|"]
+    lignes += [f"| {a} | {libelles[f]}" + (f" ({libelles[parents[f]]})" if parents.get(f) else "") + " |"
+               for a, f in seules]
+    mouvements = []
+    for (a, s), montants in par_loi.items():
+        for (c, f), x in montants.items():
+            if c in ("LOLF.BG_CP_LFR_OUVERTURES", "LOLF.BG_CP_LFR_ANNULATIONS") and f and parents.get(f) == "":
+                mouvements.append((a, numero(s), libelles[f], "ouverts" if c.endswith("OUVERTURES") else "annulés", x))
+    mouvements.sort(key=lambda m: -m[4])
+    lignes += ["", f"Les {GRANDS_MOUVEMENTS} plus grandes ouvertures ou annulations de crédits de paiement d'une mission "
+               f"du budget général par une seule loi, en milliards d'euros :", "",
+               "| Année | Loi | Mission | Mouvement | Montant |", "|---|---|---|---|---|"]
+    lignes += [f"| {a} | {n} | {m} | {sens} | {md(x)} |" for a, n, m, sens, x in mouvements[:GRANDS_MOUVEMENTS]]
+    lignes.append("")
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -4065,7 +4176,7 @@ def ecrire_rapport(derniers):
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
-    lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers)
+    lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers) + partie_lfr(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

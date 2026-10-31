@@ -621,11 +621,12 @@ def date_html(texte):
     """Date qu'un texte publié par le Sénat ou par l'Assemblée nationale porte lui-même : enregistrement, transmission
     ou adoption ; à défaut, celle de la séance au procès-verbal de laquelle il est annexé, ou celle qui suit la session
     dans l'en-tête d'un texte adopté. Les pages de l'Assemblée nationale coupent parfois un nombre en morceaux
-    (« le 1 9 décembre 20 19 ») : la date se lit sans ces blancs."""
+    (« le 1 9 décembre 20 19 », « SESSION ORDINAIRE DE 20 17 -20 18 ») : la date se lit sans ces blancs."""
     date = r"([0-9](?: ?[0-9])?)(?: ?er)? (" + "|".join(MOIS) + r") ([0-9](?: ?[0-9]){3})"
     for annonce in (r"(?:Enregistré à la Présidence du Sénat|transmis au Sénat|adopté (?:définitivement )?par le Sénat) le ",
                     r"considéré comme adopté par l[’']Assemblée nationale le ", r"Délibéré en séance publique, à Paris, le ",
-                    r"Annexe au procès-verbal de la séance du ", r"SESSION (?:ORDINAIRE|EXTRAORDINAIRE) DE [0-9]{4}-[0-9]{4} "):
+                    r"Annexe au procès-verbal de la séance du ",
+                    r"SESSION (?:ORDINAIRE|EXTRAORDINAIRE) DE [0-9](?: ?[0-9]){3} ?- ?[0-9](?: ?[0-9]){3} "):
         trouve = re.search(annonce + date, texte)
         if trouve:
             jour, mois, annee = (x.replace(" ", "") for x in trouve.groups())

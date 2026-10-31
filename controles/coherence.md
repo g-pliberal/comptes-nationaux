@@ -12,18 +12,32 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 |---|---|---|---|
 | an.ta12-0525 | Projet de loi de finances pour 2006, texte adopté n° 525 (12e législature) : conclusions de la commission mixte paritaire, adoptées par l'Assemblée nationale le 20 décembre 2005 | 2005-12-20 | 151 |
 | an.ta13-0808 | Projet de loi de finances pour 2012, texte adopté n° 808 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 1076 |
+| an.ta13-0812 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1978), texte adopté n° 812 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 254 |
+| an.ta13-0873 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-354), texte adopté n° 873 (13e législature), adopté définitivement par l'Assemblée nationale le 29 février 2012 | 2012-02-29 | 276 |
+| an.ta14-0071 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-1510), texte adopté n° 71 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2012 | 2012-12-19 | 243 |
 | an.ta14-0073 | Projet de loi de finances pour 2013, texte adopté n° 73 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2012 | 2012-12-20 | 1116 |
 | an.ta14-0267 | Projet de loi de finances pour 2014, texte adopté n° 267 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 1148 |
+| an.ta14-0268 | Projet de loi de finances rectificative pour 2013 (loi n° 2013-1279), texte adopté n° 268 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 480 |
+| an.ta14-0395 | Projet de loi de finances rectificative pour 2014 (loi n° 2014-891), texte adopté n° 395 (14e législature), adopté définitivement par l'Assemblée nationale le 23 juillet 2014 | 2014-07-23 | 272 |
 | an.ta14-0459 | Projet de loi de finances pour 2015, texte adopté n° 459 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 1088 |
+| an.ta14-0460 | Projet de loi de finances rectificative pour 2014 (loi n° 2014-1655), texte adopté n° 460 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 342 |
 | an.ta14-0648 | Projet de loi de finances pour 2016, texte adopté n° 648 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 1087 |
+| an.ta14-0649 | Projet de loi de finances rectificative pour 2015 (loi n° 2015-1786), texte adopté n° 649 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 313 |
 | an.ta14-0865 | Projet de loi de finances pour 2017, texte adopté n° 865 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2016 | 2016-12-20 | 1072 |
+| an.ta14-0877 | Projet de loi de finances rectificative pour 2016 (loi n° 2016-1918), texte adopté n° 877 (14e législature), adopté définitivement par l'Assemblée nationale le 22 décembre 2016 | 2016-12-22 | 311 |
+| an.ta15-0032 | Projet de loi de finances rectificative pour 2017 (loi n° 2017-1640), texte adopté n° 32 (15e législature), adopté définitivement par l'Assemblée nationale le 14 novembre 2017 | 2017-11-14 | 8 |
 | an.ta15-0065 | Projet de loi de finances pour 2018, texte adopté n° 65 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 1083 |
+| an.ta15-0067 | Projet de loi de finances rectificative pour 2017 (loi n° 2017-1775), texte adopté n° 67 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 258 |
+| an.ta15-0195 | Projet de loi de finances rectificative pour 2018 (loi n° 2018-1104), texte adopté n° 195 (15e législature), adopté définitivement par l'Assemblée nationale le 28 novembre 2018 | 2018-11-28 | 416 |
 | an.ta15-0213 | Projet de loi de finances pour 2019, texte adopté n° 213 (15e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2018 | 2018-12-20 | 1094 |
 | an.ta15-0374 | Projet de loi de finances pour 2020, texte adopté n° 374 (15e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2019 | 2019-12-19 | 1071 |
+| an.ta15-0471 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-935), texte adopté n° 471 (15e législature), adopté définitivement par l'Assemblée nationale le 23 juillet 2020 | 2020-07-23 | 128 |
 | an.ta15-0538 | Projet de loi de finances pour 2021, texte adopté n° 538 rectifié (15e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2020 | 2020-12-17 | 1109 |
+| an.ta15-0701 | Projet de loi de finances rectificative pour 2021 (loi n° 2021-1549), texte adopté n° 701 (15e législature), adopté définitivement par l'Assemblée nationale le 24 novembre 2021 | 2021-11-24 | 509 |
 | an.ta15-0737 | Projet de loi de finances pour 2022, texte adopté n° 737 (15e législature), adopté définitivement par l'Assemblée nationale le 15 décembre 2021 | 2021-12-15 | 1121 |
 | an.ta16-0051 | Projet de loi de finances pour 2023, texte adopté n° 51 rectifié (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 17 décembre 2022 | 2022-12-17 | 1073 |
 | an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 1079 |
+| an.ta17-0017 | Projet de loi de finances de fin de gestion pour 2024 (loi n° 2024-1167), texte adopté n° 17 (17e législature), adopté définitivement par l'Assemblée nationale le 4 décembre 2024 | 2024-12-04 | 510 |
 | an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 1057 |
 | dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
 | dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
@@ -120,12 +134,35 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | senat.pjl25-727 | Projet de loi portant approbation des comptes de la sécurité sociale de l'année 2025, texte n° 727 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 214 |
 | senat.tas05-033 | Projet de loi de financement de la sécurité sociale pour 2006, texte définitif n° 33 (2005-2006) adopté par le Sénat le 23 novembre 2005 | 2005-11-23 | 39 |
 | senat.tas06-031 | Projet de loi de finances pour 2007, texte définitif n° 31 (2006-2007) adopté par le Sénat le 19 décembre 2006 | 2006-12-19 | 962 |
+| senat.tas06-037 | Projet de loi de finances rectificative pour 2006 (loi n° 2006-1771), texte définitif n° 37 (2006-2007) adopté par le Sénat le 21 décembre 2006 | 2006-12-21 | 413 |
 | senat.tas07-034 | Projet de loi de finances pour 2008, texte définitif n° 34 (2007-2008) adopté par le Sénat le 18 décembre 2007 | 2007-12-18 | 902 |
+| senat.tas07-043 | Projet de loi de finances rectificative pour 2007 (loi n° 2007-1824), texte définitif n° 43 (2007-2008) adopté par le Sénat le 20 décembre 2007 | 2007-12-20 | 375 |
+| senat.tas08-001 | Projet de loi de finances rectificative pour le financement de l'économie (loi n° 2008-1061), texte définitif n° 1 (2008-2009) adopté par le Sénat le 15 octobre 2008 | 2008-10-15 | 3 |
 | senat.tas08-035 | Projet de loi de finances pour 2009, texte définitif n° 35 (2008-2009) adopté par le Sénat le 17 décembre 2008 | 2008-12-17 | 1039 |
+| senat.tas08-037 | Projet de loi de finances rectificative pour 2008 (loi n° 2008-1443), texte définitif n° 37 (2008-2009) adopté par le Sénat le 22 décembre 2008 | 2008-12-22 | 328 |
+| senat.tas08-042 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-122), texte définitif n° 42 (2008-2009) adopté par le Sénat le 29 janvier 2009 | 2009-01-29 | 20 |
+| senat.tas08-076 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-431), texte définitif n° 76 (2008-2009) adopté par le Sénat le 9 avril 2009 | 2009-04-09 | 259 |
 | senat.tas09-034 | Projet de loi de finances pour 2010, texte définitif n° 34 (2009-2010) adopté par le Sénat le 18 décembre 2009 | 2009-12-18 | 1051 |
+| senat.tas09-050 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-1674), texte définitif n° 50 (2009-2010) adopté par le Sénat le 23 décembre 2009 | 2009-12-23 | 396 |
+| senat.tas09-079 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-237), texte définitif n° 79 (2009-2010) adopté par le Sénat le 25 février 2010 | 2010-02-25 | 290 |
+| senat.tas09-104 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-463), texte définitif n° 104 (2009-2010) adopté par le Sénat le 6 mai 2010 | 2010-05-06 | 187 |
 | senat.tas10-032 | Projet de loi de finances pour 2011, texte définitif n° 32 (2010-2011) adopté par le Sénat le 15 décembre 2010 | 2010-12-15 | 957 |
+| senat.tas10-038 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-1658), texte définitif n° 38 (2010-2011) adopté par le Sénat le 21 décembre 2010 | 2010-12-21 | 320 |
+| senat.tas10-161 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-900), texte définitif n° 161 (2010-2011) adopté par le Sénat le 6 juillet 2011 | 2011-07-06 | 310 |
+| senat.tas10-193 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1117), texte définitif n° 193 (2010-2011) adopté par le Sénat le 8 septembre 2011 | 2011-09-08 | 179 |
+| senat.tas11-007 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1416), texte définitif n° 7 (2011-2012) adopté par le Sénat le 25 octobre 2011 | 2011-10-25 | 22 |
+| senat.tas11-138 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-958), texte définitif n° 138 (2011-2012) adopté par le Sénat le 31 juillet 2012 | 2012-07-31 | 247 |
+| senat.tas19-030 | Projet de loi de finances rectificative pour 2019 (loi n° 2019-1270), texte définitif n° 30 (2019-2020) adopté par le Sénat le 26 novembre 2019 | 2019-11-26 | 470 |
+| senat.tas19-078 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-289), texte définitif n° 78 (2019-2020) adopté par le Sénat le 20 mars 2020 | 2020-03-20 | 30 |
+| senat.tas19-084 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-473), texte définitif n° 84 (2019-2020) adopté par le Sénat le 23 avril 2020 | 2020-04-23 | 50 |
+| senat.tas20-025 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-1473), texte définitif n° 25 (2020-2021) adopté par le Sénat le 24 novembre 2020 | 2020-11-24 | 503 |
+| senat.tas20-136 | Projet de loi de finances rectificative pour 2021 (loi n° 2021-953), texte définitif n° 136 (2020-2021) adopté par le Sénat le 12 juillet 2021 | 2021-07-12 | 265 |
+| senat.tas21-148 | Projet de loi de finances rectificative pour 2022 (loi n° 2022-1157), texte définitif n° 148 (2021-2022) adopté par le Sénat le 4 août 2022 | 2022-08-04 | 333 |
 | senat.tas22-018 | Projet de loi de financement de la sécurité sociale pour 2023, texte n° 18 (2022-2023) adopté par le Sénat en première lecture le 15 novembre 2022 | 2022-11-15 | 230 |
+| senat.tas22-028 | Projet de loi de finances rectificative pour 2022 (loi n° 2022-1499), texte définitif n° 28 (2022-2023) adopté par le Sénat le 25 novembre 2022 | 2022-11-25 | 378 |
+| senat.tas23-024 | Projet de loi de finances de fin de gestion pour 2023 (loi n° 2023-1114), texte définitif n° 24 (2023-2024) adopté par le Sénat le 22 novembre 2023 | 2023-11-22 | 379 |
 | senat.tas24-048 | Projet de loi de finances pour 2025, texte définitif n° 48 (2024-2025) adopté par le Sénat le 6 février 2025 | 2025-02-06 | 1072 |
+| senat.tas25-024 | Projet de loi de finances de fin de gestion pour 2025 (loi n° 2025-1173), texte définitif n° 24 (2025-2026) adopté par le Sénat le 3 décembre 2025 | 2025-12-03 | 339 |
 
 ## 1. Sommes comptables
 
@@ -265,7 +302,7 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-27841 ventilations vérifiées avec toutes leurs parties : 27836 justes, 5 en écart.
+31163 ventilations vérifiées avec toutes leurs parties : 31158 justes, 5 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
@@ -1834,7 +1871,7 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 
 | Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
 |---|---|---|---|
-| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : ta12-0525, ta13-0808, ta14-0073, ta14-0267, ta14-0459, ta14-0648, ta14-0865, ta15-0065, ta15-0213, ta15-0374, ta15-0538, ta15-0737, ta16-0051, ta16-0223, ta17-0227 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 26 sources (pjl06-389 … tas24-048) |
+| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
 | Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
@@ -2311,7 +2348,7 @@ De 1981 à 1989, le total de l'export pour CPS_S12_FP est le double de la somme 
 
 ## 17. Budget voté et budget exécuté
 
-Les crédits qu'ouvre la loi de finances initiale de chaque année, de 2006 à 2026 (états B, C et D), contre ce que constate la loi d'approbation des comptes de la même année : les dépenses, fonds de concours compris, et les autorisations d'engagement consommées (articles 4 à 6). L'écart vient des lois de finances rectificatives, des décrets d'avance, de virement, de transfert et d'annulation, des reports de crédits de l'année précédente, des fonds de concours et des crédits restés sans emploi : la base ne les a pas encore un à un. Pour 2006, le texte lu ne donne que les crédits du budget général. La section 2 vérifie que chaque mission votée égale la somme de ses programmes.
+Les crédits qu'ouvre la loi de finances initiale de chaque année, de 2006 à 2026 (états B, C et D), contre ce que constate la loi d'approbation des comptes de la même année : les dépenses, fonds de concours compris, et les autorisations d'engagement consommées (articles 4 à 6). L'écart vient des lois de finances rectificatives, que la section 21 ajoute aux crédits votés, des décrets d'avance, de virement, de transfert et d'annulation, des reports de crédits de l'année précédente, des fonds de concours et des crédits restés sans emploi : la base n'a pas encore ceux-ci un à un. Pour 2006, le texte lu ne donne que les crédits du budget général. La section 2 vérifie que chaque mission votée égale la somme de ses programmes.
 
 Budget général, en milliards d'euros :
 
@@ -2556,3 +2593,114 @@ Les plafonds d'emplois que fixe la loi de finances initiale de chaque année, de
 | 2026 | 2 016 088 | 2 005 540 | 11 048 | — | 401 389 | 3 411 | 1 786 |
 
 Pour 2026, le tableau qui répartit le plafond des emplois de l'État par ministère et par budget annexe en compte 2 016 588, 500 de plus que l'article d'équilibre (2 016 088) ; ses lignes en font la somme exacte.
+
+## 21. Lois de finances rectificatives
+
+Les crédits qu'ouvrent et qu'annulent, en cours d'année, les lois de finances rectificatives, et depuis 2023 les lois de finances de fin de gestion, de 2006 à 2025 : 37 lois. La loi n° 2010-606 du 7 juin 2010, qui accorde la garantie de l'État au mécanisme européen de stabilisation, n'en ouvre ni n'en annule. L'import vérifie que le total de chaque état égale ce qu'ouvrent et annulent les articles de la loi, et la section 2 refait les sommes des missions et des programmes. Les crédits votés de l'année sont ceux de la loi de finances initiale (section 17), plus les ouvertures et moins les annulations de ces lois ; l'écart qui reste avec les dépenses que constate la loi d'approbation des comptes vient des décrets d'avance et d'annulation, des reports de crédits de l'année précédente, des fonds de concours et des crédits restés sans emploi, que la base ne lit pas encore.
+
+Lois de chaque année : 2006 : 2006-1771 ; 2007 : 2007-1824 ; 2008 : 2008-1061, 2008-1443 ; 2009 : 2009-122, 2009-431, 2009-1674 ; 2010 : 2010-237, 2010-463, 2010-1658 ; 2011 : 2011-900, 2011-1117, 2011-1416, 2011-1978 ; 2012 : 2012-354, 2012-958, 2012-1510 ; 2013 : 2013-1279 ; 2014 : 2014-891, 2014-1655 ; 2015 : 2015-1786 ; 2016 : 2016-1918 ; 2017 : 2017-1640, 2017-1775 ; 2018 : 2018-1104 ; 2019 : 2019-1270 ; 2020 : 2020-289, 2020-473, 2020-935, 2020-1473 ; 2021 : 2021-953, 2021-1549 ; 2022 : 2022-1157, 2022-1499 ; 2023 : 2023-1114 ; 2024 : 2024-1167 ; 2025 : 2025-1173.
+
+Budget général, crédits de paiement, en milliards d'euros :
+
+| Année | Loi de finances initiale | Ouverts | Annulés | Crédits votés | Dépenses | Écart |
+|---|---|---|---|---|---|---|
+| 2006 | 334,6 | 9,4 | 2,1 | 341,9 | 345,1 | +3,2 |
+| 2007 | 343,3 | 5,3 | 1,6 | 346,9 | 351,6 | +4,7 |
+| 2008 | 354,5 | 12,9 | 1,0 | 366,4 | 370,4 | +4,0 |
+| 2009 | 379,0 | 30,3 | 6,8 | 402,5 | 402,6 | +0,1 |
+| 2010 | 379,4 | 38,2 | 8,2 | 409,4 | 412,6 | +3,2 |
+| 2011 | 368,5 | 7,6 | 2,4 | 373,7 | 375,6 | +1,9 |
+| 2012 | 376,2 | 17,0 | 5,3 | 387,9 | 390,1 | +2,2 |
+| 2013 | 395,5 | 1,7 | 13,9 | 383,3 | 384,9 | +1,5 |
+| 2014 | 407,4 | 2,1 | 12,4 | 397,1 | 399,0 | +1,9 |
+| 2015 | 395,6 | 7,1 | 2,6 | 400,0 | 404,8 | +4,7 |
+| 2016 | 409,9 | 10,2 | 3,2 | 416,9 | 417,7 | +0,8 |
+| 2017 | 427,4 | 7,9 | 0,1 | 435,2 | 439,3 | +4,2 |
+| 2018 | 446,2 | 6,8 | 2,1 | 451,0 | 455,4 | +4,5 |
+| 2019 | 468,6 | 10,5 | 4,9 | 474,2 | 476,1 | +1,9 |
+| 2020 | 478,5 | 98,1 | 11,1 | 565,6 | 540,7 | −24,9 |
+| 2021 | 514,3 | 32,3 | 9,0 | 537,6 | 557,1 | +19,5 |
+| 2022 | 522,5 | 59,2 | 5,9 | 575,8 | 578,4 | +2,6 |
+| 2023 | 577,0 | 22,1 | 5,2 | 594,0 | 591,9 | −2,1 |
+| 2024 | 582,0 | 11,5 | 6,5 | 587,1 | 585,0 | −2,1 |
+| 2025 | 582,4 | 3,2 | 10,3 | 575,3 | 578,0 | +2,7 |
+
+Budget général, autorisations d'engagement, en milliards d'euros :
+
+| Année | Loi de finances initiale | Ouverts | Annulés | Crédits votés | Autorisations d'engagement consommées | Écart |
+|---|---|---|---|---|---|---|
+| 2006 | 344,2 | 31,9 | 1,6 | 374,5 | 364,6 | −10,0 |
+| 2007 | 346,5 | 5,4 | 1,6 | 350,3 | 352,2 | +1,9 |
+| 2008 | 358,4 | 13,0 | 3,4 | 368,0 | 371,8 | +3,8 |
+| 2009 | 392,0 | 31,0 | 6,8 | 416,3 | 415,1 | −1,2 |
+| 2010 | 380,9 | 38,8 | 8,5 | 411,2 | 407,8 | −3,5 |
+| 2011 | 378,5 | 9,1 | 2,4 | 385,2 | 380,2 | −5,1 |
+| 2012 | 380,7 | 27,7 | 6,1 | 402,3 | 388,2 | −14,2 |
+| 2013 | 391,0 | 1,7 | 15,5 | 377,3 | 387,3 | +10,0 |
+| 2014 | 410,4 | 2,2 | 12,9 | 399,7 | 399,2 | −0,5 |
+| 2015 | 411,1 | 8,5 | 2,5 | 417,1 | 410,4 | −6,8 |
+| 2016 | 417,4 | 13,9 | 3,2 | 428,0 | 424,2 | −3,9 |
+| 2017 | 446,3 | 8,1 | 0,1 | 454,2 | 448,8 | −5,4 |
+| 2018 | 450,2 | 7,7 | 1,9 | 456,0 | 456,8 | +0,8 |
+| 2019 | 483,1 | 10,2 | 6,2 | 487,2 | 485,7 | −1,5 |
+| 2020 | 501,8 | 102,1 | 10,5 | 593,4 | 547,7 | −45,7 |
+| 2021 | 562,8 | 35,9 | 11,0 | 587,7 | 608,4 | +20,6 |
+| 2022 | 717,7 | 65,6 | 6,1 | 777,2 | 778,0 | +0,8 |
+| 2023 | 575,8 | 23,7 | 5,2 | 594,3 | 590,8 | −3,5 |
+| 2024 | 586,6 | 10,6 | 7,0 | 590,3 | 575,1 | −15,2 |
+| 2025 | 615,6 | 3,0 | 9,8 | 608,8 | 591,3 | −17,5 |
+
+Budgets annexes et comptes spéciaux dotés de crédits, crédits de paiement ouverts et annulés, en millions d'euros :
+
+| Année | Budgets annexes : ouverts | annulés | Comptes d'affectation spéciale : ouverts | annulés | Comptes de concours financiers : ouverts | annulés |
+|---|---|---|---|---|---|---|
+| 2006 | — | — | 3 265,8 | — | — | — |
+| 2007 | 49,5 | — | — | 432,0 | — | — |
+| 2008 | — | — | 1 050,8 | 1 066,0 | — | 1 607,0 |
+| 2009 | — | 30,0 | 3 004,1 | 5 160,3 | 8 147,0 | — |
+| 2010 | 25,6 | 25,6 | 1 960,0 | 620,0 | 8 000,9 | 117,0 |
+| 2011 | 5,0 | 2,0 | 1 070,1 | — | 1 607,5 | — |
+| 2012 | 5,8 | 5,8 | 11 173,6 | 4 891,4 | 3 843,2 | 7 870,2 |
+| 2013 | — | — | 2 100,0 | 4 516,8 | 66,1 | 294,2 |
+| 2014 | — | — | 0,5 | — | 2,1 | 627,0 |
+| 2015 | 2,7 | — | 2 000,0 | 4 148,0 | 21,1 | 1 851,9 |
+| 2016 | — | — | 3 314,4 | 2 822,2 | 200,0 | 385,1 |
+| 2017 | — | 10,0 | 2 795,2 | 907,5 | — | 152,8 |
+| 2018 | 15,9 | 32,4 | 131,9 | 632,9 | — | 491,9 |
+| 2019 | — | 17,5 | 154,2 | 1 080,4 | — | 923,7 |
+| 2020 | — | 62,5 | 20 484,0 | 7 437,8 | 7 100,0 | 1 990,2 |
+| 2021 | — | 65,5 | 10,0 | 5 501,5 | 1 925,0 | 3 528,5 |
+| 2022 | 21,1 | 15,0 | 14 178,0 | 2 007,0 | 2 506,7 | 198,3 |
+| 2023 | — | 14,6 | 178,3 | — | 1 128,6 | 1 665,7 |
+| 2024 | — | 37,7 | 134,3 | 40,7 | 231,7 | 2 016,1 |
+| 2025 | — | 15,4 | 44,3 | 4,8 | 234,7 | 3 466,0 |
+
+Missions et programmes : 3 063 des 3 068 missions, budgets annexes, comptes et programmes que dotent ou annulent ces lois, année par année, se retrouvent sous le même identifiant dans la loi de finances initiale ou dans la loi d'approbation des comptes de l'année. Les autres, souvent des programmes que ces lois créent :
+
+| Année | Mission ou programme |
+|---|---|
+| 2012 | Avances aux organismes de sécurité sociale |
+| 2012 | Avance à l’Agence centrale des organismes de sécurité sociale de la fraction de TVA affectée aux organismes de sécurité sociale par l’article 53 de la loi de finances pour 2008 (Avances aux organismes de sécurité sociale) |
+| 2012 | Avance à l’Agence centrale des organismes de sécurité sociale de la fraction de TVA prévue au 3° de l’article L. 241-2 du code de la sécurité sociale (Avances aux organismes de sécurité sociale) |
+| 2012 | Avance à l’Agence centrale des organismes de sécurité sociale de la fraction de TVA prévue au 9° de l’article L. 241-6 du code de la sécurité sociale (Avances aux organismes de sécurité sociale) |
+| 2020 | Avances remboursables destinées à soutenir les autorités organisatrices de la mobilité à la suite des conséquences de l’épidémie de la Covid-19 (Avances à divers services de l’État ou organismes gérant des services publics) |
+
+Les 15 plus grandes ouvertures ou annulations de crédits de paiement d'une mission du budget général par une seule loi, en milliards d'euros :
+
+| Année | Loi | Mission | Mouvement | Montant |
+|---|---|---|---|---|
+| 2020 | 2020-473 | Plan d’urgence face à la crise sanitaire | ouverts | 37,2 |
+| 2010 | 2010-237 | Recherche et enseignement supérieur | ouverts | 21,9 |
+| 2020 | 2020-1473 | Plan d’urgence face à la crise sanitaire | ouverts | 17,2 |
+| 2022 | 2022-1157 | Économie | ouverts | 15,1 |
+| 2023 | 2023-1114 | Remboursements et dégrèvements | ouverts | 12,5 |
+| 2022 | 2022-1157 | Engagements financiers de l’État | ouverts | 11,9 |
+| 2009 | 2009-1674 | Remboursements et dégrèvements | ouverts | 11,1 |
+| 2009 | 2009-122 | Plan de relance de l’économie | ouverts | 10,3 |
+| 2020 | 2020-1473 | Remboursements et dégrèvements | ouverts | 9,9 |
+| 2021 | 2021-953 | Plan d’urgence face à la crise sanitaire | ouverts | 9,8 |
+| 2013 | 2013-1279 | Remboursements et dégrèvements | annulés | 9,2 |
+| 2020 | 2020-935 | Plan d’urgence face à la crise sanitaire | ouverts | 8,9 |
+| 2019 | 2019-1270 | Remboursements et dégrèvements | ouverts | 7,7 |
+| 2024 | 2024-1167 | Remboursements et dégrèvements | ouverts | 7,7 |
+| 2010 | 2010-237 | Économie | ouverts | 6,6 |
