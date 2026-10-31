@@ -44,7 +44,10 @@ vérifie ce que disent les sources elles-mêmes :
    contre celles de ses secteurs dans l'export, et l'écart de l'ensemble des régimes contre le double compte d'un
    secteur ;
 17. le budget voté contre le budget exécuté : les crédits qu'ouvre chaque loi de finances initiale, au total et mission
-   par mission, contre les dépenses et les engagements que constate la loi d'approbation des comptes de l'année.
+   par mission, contre les dépenses et les engagements que constate la loi d'approbation des comptes de l'année ;
+18. les recettes votées et le solde voté : les recettes qu'évalue chaque loi de finances initiale et les soldes que
+   fixe son article d'équilibre, contre ceux que constate la loi d'approbation des comptes de l'année, au total et
+   compte par compte.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -672,7 +675,7 @@ A_UNE_UNITE_PRES = {"ofgl.annexe-2a", "ofgl.annexe-2b", "ofgl.annexe-2c", "ofgl.
 # Unités de dénombrement : un nombre n'est pas arrondi, il ne laisse aucune marge.
 DENOMBREMENTS = {u["id"] for u in lire("tables/unites.csv") if u["type"] == "nombre"}
 # Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes.
-FAMILLES = {"EUR": ("euros", 1), "MIO_EUR": ("euros", 1e6), "MD_EUR": ("euros", 1e9),
+FAMILLES = {"EUR": ("euros", 1), "K_EUR": ("euros", 1e3), "MIO_EUR": ("euros", 1e6), "MD_EUR": ("euros", 1e9),
             "MIO_ECU_EUR": ("écus puis euros", 1e6)}
 NOMS_RATIOS = {"PC_PIB": "% du PIB", "PC_DEPENSE": "% de la dépense totale"}  # ratios que l'on recalcule
 REGLES = {"indique": "le PIB indiqué par la source, dans le même tableau",
@@ -3828,6 +3831,105 @@ def partie_budget_vote(derniers):
     return lignes
 
 
+# 18. Recettes votées et solde voté. Les recettes qu'évalue la loi de finances initiale de chaque année (état A) et
+# les soldes que fixe son article d'équilibre, contre ceux que constate la loi d'approbation des comptes de la même
+# année (article 1er, et articles 5 et 6 pour chaque budget annexe et compte spécial).
+RECETTES_VOTEES = (("Recettes fiscales nettes : votées | exécutées", "LOLF.BG_RECETTES_FISCALES_NETTES"),
+                   ("Recettes non fiscales : votées | exécutées", "LOLF.BG_RECETTES_NON_FISCALES"),
+                   ("Prélèvements sur recettes : votés | exécutés", "LOLF.BG_PRELEVEMENTS_SUR_RECETTES"))
+COMPTES_VOTES = (("Budgets annexes", "LOLF.BA_RECETTES", "LOLF.BA_RECETTES_HORS_FDC"),
+                 ("Comptes d'affectation spéciale", "LOLF.CAS_RECETTES", "LOLF.CAS_RECETTES"),
+                 ("Comptes de concours financiers", "LOLF.CCF_RECETTES", "LOLF.CCF_RECETTES"))
+GRANDS_ECARTS_RECETTES = 10  # comptes cités pour l'écart entre leurs recettes et leur évaluation
+
+
+def partie_recettes_votees(derniers):
+    votes, executes = {}, {}
+    for l in derniers.values():
+        if l["perimetre_id"] != "ETAT_LF" or valeur(l)[2] != "euros":
+            continue
+        k = (l["concept_id"], l["fonction_id"], l["periode"])
+        if l["concept_id"].endswith("_LFI"):
+            if k not in votes or valeur(l)[1] < valeur(votes[k])[1]:
+                votes[k] = l  # le montant le plus précis, quand deux tableaux le donnent
+        elif l["source_id"].startswith(_LOI[:-1]):
+            # La loi d'approbation des comptes de l'exercice, et non une loi suivante qui le rappellerait.
+            if k not in executes or l["version"] < executes[k]["version"]:
+                executes[k] = l
+    v = lambda c, a, f="": valeur(votes[(c + "_LFI", f, a)])[0] if (c + "_LFI", f, a) in votes else None
+    e = lambda c, a, f="": valeur(executes[(c, f, a)])[0] if (c, f, a) in executes else None
+    annees = sorted({k[2] for k in votes if k[0] == "LOLF.RESULTAT_BUDGETAIRE_LFI"})
+    if not annees:
+        return []
+    md = lambda x: "—" if x is None else fr(x / 1e9, 1)
+    ecart = lambda a, b: "—" if a is None or b is None else signe_arrondi((b - a) / 1e9, 1)
+    lignes = ["## 18. Recettes votées et solde voté", "",
+              f"Les recettes qu'évalue la loi de finances initiale de chaque année, de {annees[0]} à {annees[-1]} (état A), "
+              f"et les soldes que fixe son article d'équilibre, contre ce que constate la loi d'approbation des comptes "
+              f"de la même année. Une évaluation de recettes n'est pas un plafond : l'écart vient de la conjoncture, des "
+              f"mesures votées en cours d'année et de la prévision elle-même. Les recettes fiscales sont nettes des "
+              f"remboursements et dégrèvements ; jusqu'à la loi pour 2022, l'état A les évalue brutes, et le tableau de "
+              f"l'article d'équilibre donne leur total net, en millions d'euros. L'import vérifie chaque division de "
+              f"l'état A contre ses lignes, chaque compte contre ses sections et ses lignes, et les montants du tableau "
+              f"d'équilibre entre eux et contre les états A à D, au million près ; la section 2 refait les sommes de "
+              f"l'état A.", "", "Budget général, en milliards d'euros :", "",
+              "| Année | " + " | ".join(f"{colonnes} | Écart" for colonnes, _ in RECETTES_VOTEES) + " |",
+              "|---|" + "---|---|---|" * len(RECETTES_VOTEES)]
+    for a in annees:
+        lignes.append(f"| {a} | " + " | ".join(f"{md(v(c, a))} | {md(e(c, a))} | {ecart(v(c, a), e(c, a))}"
+                                              for _, c in RECETTES_VOTEES) + " |")
+    lignes += ["", "Soldes, en milliards d'euros ; jusqu'aux comptes de 2012, le solde général exécuté est le solde "
+               "d'exécution des lois de finances, que la loi arrête hors budgets annexes, presque toujours équilibrés :",
+               "", "| Année | Solde du budget général : voté | exécuté | Écart | Solde général : voté | exécuté | Écart |",
+               "|---|---|---|---|---|---|---|"]
+    for a in annees:
+        bg_v, bg_e = v("LOLF.SOLDE_BUDGET_GENERAL", a), e("LOLF.SOLDE_BUDGET_GENERAL", a)
+        sg_v = v("LOLF.RESULTAT_BUDGETAIRE", a)
+        sg_e = e("LOLF.RESULTAT_BUDGETAIRE", a)
+        sg_e = e("LOLF.RESULTAT_EXECUTION", a) if sg_e is None else sg_e
+        lignes.append(f"| {a} | {md(bg_v)} | {md(bg_e)} | {ecart(bg_v, bg_e)} | {md(sg_v)} | {md(sg_e)} | "
+                      f"{ecart(sg_v, sg_e)} |")
+    lignes += ["", "Budgets annexes (fonds de concours compris) et comptes spéciaux : recettes votées contre recettes "
+               "exécutées, en milliards d'euros :", "",
+               "| Année | " + " | ".join(f"{nom} : votées | exécutées" for nom, _, _ in COMPTES_VOTES) + " |",
+               "|---|" + "---|---|" * len(COMPTES_VOTES)]
+    for a in annees:
+        lignes.append(f"| {a} | " + " | ".join(f"{md(v(c, a))} | {md(e(c, a))}" for _, c, _ in COMPTES_VOTES) + " |")
+    # Compte par compte, pour les années dont les comptes sont arrêtés : les recettes de chaque budget annexe (hors
+    # fonds de concours) et de chaque compte spécial, sous l'identifiant que leur donnent les lois d'approbation des
+    # comptes.
+    arretees = [a for a in annees if e("LOLF.RESULTAT_BUDGETAIRE", a) is not None
+                or e("LOLF.RESULTAT_EXECUTION", a) is not None]
+    libelles = {f["id"]: f["libelle"] for f in lire("tables/fonctions.csv")}
+    parents = {f["id"]: f["parent_id"] for f in lire("tables/fonctions.csv")}
+    ecarts, comptes, absents = [], 0, collections.defaultdict(list)
+    for nom, _, c in COMPTES_VOTES:
+        for (k, f, a) in votes:
+            if k != c + "_LFI" or not f or parents.get(f) != "" or a not in arretees:
+                continue
+            comptes += 1
+            x, y = v(c, a, f), e(c, a, f)
+            if y is None:
+                absents[libelles.get(f, f)].append((a, x))
+            else:
+                ecarts.append((a, nom, libelles.get(f, f), x, y))
+    ecarts.sort(key=lambda t: -abs(t[4] - t[3]))
+    autres = [f"« {compte} » ({plage([a for a, _ in l])}{', évaluées à zéro' if not any(x for _, x in l) else ''})"
+              for compte, l in sorted(absents.items(), key=lambda t: (-len(t[1]), t[0]))]
+    lignes += ["", f"Compte par compte : {fr(len(ecarts), 0)} des {fr(comptes, 0)} recettes de budgets annexes et de comptes "
+               f"spéciaux votées pour les années dont les comptes sont arrêtés, de {arretees[0]} à {arretees[-1]}, se "
+               f"retrouvent, sous le même identifiant, dans la loi d'approbation des comptes de l'année."
+               + (f" Les {fr(comptes - len(ecarts), 0)} autres n'y ont pas de recettes sous cet identifiant : "
+                  f"{', '.join(autres[:-1]) + ' et ' if len(autres) > 1 else ''}{autres[-1]}." if autres else "")
+               + f" Les {GRANDS_ECARTS_RECETTES} plus grands écarts entre les recettes d'un compte et leur évaluation, "
+               f"en milliards d'euros :", "", "| Année | Catégorie | Compte | Votées | Exécutées | Écart |",
+               "|---|---|---|---|---|---|"]
+    lignes += [f"| {a} | {nom} | {libelle} | {md(x)} | {md(y)} | {ecart(x, y)} |"
+               for a, nom, libelle, x, y in ecarts[:GRANDS_ECARTS_RECETTES]]
+    lignes.append("")
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -3841,7 +3943,7 @@ def ecrire_rapport(derniers):
     listes = listes_collectivites()
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
-    lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers)
+    lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

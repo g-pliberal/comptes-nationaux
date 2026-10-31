@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Enregistre dans la base les crédits qu'ouvre une loi de finances initiale, à partir de son texte définitif, tel que
-le publie l'assemblée qui l'a adopté en dernier (page HTML archivée du Sénat ou de l'Assemblée nationale).
+"""Enregistre dans la base les crédits qu'ouvre une loi de finances initiale, les recettes qu'elle évalue et les soldes
+qu'elle prévoit, à partir de son texte définitif, tel que le publie l'assemblée qui l'a adopté en dernier (page HTML
+archivée du Sénat ou de l'Assemblée nationale).
 
     python3 outils/importer_lois_finances.py <fichier_id>
 
@@ -8,8 +9,20 @@ Tableaux lus : les états qui répartissent par mission et par programme les aut
 de paiement que la loi ouvre : l'état B pour le budget général, l'état C pour les budgets annexes, l'état D pour les
 comptes d'affectation spéciale puis pour les comptes de concours financiers. Sous un programme, une ligne « dont
 titre 2 » (« dont charges de personnel » pour un budget annexe, jusqu'aux lois pour 2022) donne la part de ses crédits
-qui va aux dépenses de personnel. L'article d'équilibre, l'état A (les recettes) et l'état E (les autorisations de
-découvert) ne sont pas lus.
+qui va aux dépenses de personnel. L'état A évalue les recettes, ligne par ligne : celles du budget général par
+division (« 11. Impôt sur le revenu »), que récapitule un second tableau, puis celles de chaque budget annexe et de
+chaque compte spécial, par section. Le tableau de l'article d'équilibre, en millions d'euros, donne les ressources,
+les charges et les soldes de chaque catégorie, et le solde général. L'état E (les autorisations de découvert), le
+tableau de financement et le plafond des emplois ne sont pas lus.
+
+Dans l'état A, une division égale la somme de ses lignes, une catégorie de recettes celle de ses divisions, un compte
+celle de ses sections, une section celle de ses lignes, un budget annexe celle de ses lignes, dotations aux
+amortissements déduites, aux arrondis près : la demi-unité de la page par montant en jeu ; un écart plus grand arrête
+l'import, sauf s'il est déclaré dans ECARTS_A. Le tableau d'équilibre s'additionne, à l'arrondi au million près de
+chacun de ses montants ; un montant qu'il reprend d'un état, recettes de l'état A ou crédits des états B à D, et chaque
+solde que les états permettent de calculer, se vérifient contre eux ; le reste s'enregistre. Les recettes fiscales du
+budget général sont brutes dans l'état A jusqu'à la loi pour 2022, nettes des remboursements et dégrèvements depuis
+(division 18) ; leur concept le dit.
 
 Un état se reconnaît à son intitulé (« ÉTAT B (Article 167 de la loi) »), et les catégories de crédits qu'il répartit
 à son titre (« … des crédits du budget général »). Ses tableaux sont ceux qui s'ouvrent entre son intitulé et celui de
@@ -32,8 +45,11 @@ coquille de la page que ses propres sommes démontrent, déclarée dans COQUILLE
 
 Les missions, les budgets annexes, les comptes spéciaux et leurs programmes sont les fonctions de la norme LOLF, sous
 l'identifiant que leur donne l'import des lois d'approbation des comptes (outils/importer_lois_resultats.py) : le
-budget voté se compare ainsi, mission par mission, au budget exécuté. La version d'un chiffre est la date que le texte
-porte ; les crédits ouverts sont des autorisations, sans statut de prévision ou d'exécution.
+budget voté se compare ainsi, mission par mission, au budget exécuté. Les divisions de recettes du budget général sont
+les fonctions LOLF.RECETTES.<numéro et libellé>, leurs lignes, celles de leur division suivies du numéro et du libellé
+de la ligne ; une section ou une ligne de compte prend l'identifiant du compte suivi du sien. La version d'un chiffre
+est la date que le texte porte ; les crédits ouverts sont des autorisations, et les recettes des évaluations, sans
+statut de prévision ou d'exécution.
 """
 
 import re
@@ -60,6 +76,93 @@ COQUILLES = {
 }
 NEANT = {"»", "-", "–", "—"}
 ETAT = r"[ÉE][Tt][Aa][Tt]\s+([A-G])\s*\(\s*[Aa]rticles?\s+[0-9]"
+
+# État A, les voies et moyens : ses parties, chacune annoncée par son intitulé avant son premier tableau.
+PARTIES_A = (("BG", r"\bI\.\s*[-–]\s*budget général"),
+             ("RECAPITULATION", r"récapitulation (?:des recettes du budget général|générale)"),
+             ("BA", r"\bII\.\s*[-–]\s*budgets annexes"),
+             ("CAS", r"\bIII\.\s*[-–]\s*comptes d’affectation spéciale"),
+             ("CCF", r"\bIV\.\s*[-–]\s*comptes de concours financiers"))
+UNITE_A = r"\(\s*en\s+(euros|milliers d’euros)\s*\*?\s*\)"
+UNITES_A = {"euros": ("EUR", 1), "milliers d’euros": ("K_EUR", 1000)}
+NUMERO_A = r"[0-9]{1,4}(?: (?:bis|ter|quater))?|[A-Z][0-9]{3}"  # numéro de ligne, de division, ou « A701 »
+CATEGORIE_A = r"([1-4])\.\s*(.+)"  # « 1. Recettes fiscales »
+LETTRE_A = r"([A-D])\.\s*-\s*(.+)"  # « A. - Recettes fiscales », dans le texte pour 2006
+DIVISION_A = r"([0-9]{2}(?: ?(?:bis|ter|quater))?)\.\s*(.+)"  # « 13 bis. Contribution sociale sur les bénéfices »
+# Concept de chaque catégorie de recettes du budget général ; les recettes fiscales sont brutes jusqu'à la loi pour
+# 2022, nettes des remboursements et dégrèvements depuis, quand l'état A les déduit dans sa division 18.
+RECETTES_BG = {"1": "LOLF.BG_RECETTES_FISCALES_{}_LFI", "2": "LOLF.BG_RECETTES_NON_FISCALES_LFI",
+               "3": "LOLF.BG_PRELEVEMENTS_SUR_RECETTES_LFI", "4": "LOLF.BG_FONDS_DE_CONCOURS_RECETTES_LFI"}
+FONDS_DE_CONCOURS_A = r"(?:Évaluation des fonds de concours|Fonds de concours(?: et attributions de produits)?)"
+SECTIONS_BA = r"Section des opérations (?:courantes|en capital)"  # budgets annexes, jusqu'à la loi pour 2008
+TOTAL_BA = r"Total des recettes(?: nettes| et des ressources de financement)?"
+TOTAL_CS = r"Total(?: des recettes| pour les comptes de concours financiers)?"
+SECTION_CS = r"Section(?: [0-9]+)?\s*:\s*(.+)"
+# Écarts d'une page de l'état A entre un total et la somme de ses lignes : (source, total) → écart (total − somme), en
+# euros. Le chiffre du total garde le montant de la page, avec une note, et la section 2 du rapport de cohérence relève
+# l'écart ; tout autre écart arrête l'import.
+ECARTS_A = {
+    ("an.ta14-0267", "Contrôle et exploitation aériens"): 300,
+}
+ECARTS_VUS = set()  # écarts de ECARTS_A que l'import a rencontrés : un écart déclaré absent arrête l'import
+
+# Article d'équilibre : libellé d'une ligne de son tableau (sans ses appels de note) → concepts des montants de ses
+# colonnes de ressources, de charges et de solde. Un montant qu'un état donne déjà, à l'euro, se vérifie contre lui,
+# au million près ; un montant que deux lignes donnent se vérifie de même ; les autres s'enregistrent.
+EQUILIBRE = {
+    "BG": {"Recettes fiscales brutes / dépenses brutes": ("BG_RECETTES_FISCALES_BRUTES", "BG_CP", None),
+           "À déduire : Remboursements et dégrèvements": ("BG_REMBOURSEMENTS_DEGREVEMENTS",
+                                                        "BG_REMBOURSEMENTS_DEGREVEMENTS", None),
+           "Recettes fiscales nettes / dépenses nettes": ("BG_RECETTES_FISCALES_NETTES", "BG_DEPENSES_NETTES_HORS_FDC",
+                                                          None),
+           "Recettes fiscales / dépenses": ("BG_RECETTES_FISCALES_NETTES", "BG_DEPENSES_NETTES_HORS_FDC", None),
+           "Recettes non fiscales": ("BG_RECETTES_NON_FISCALES", None, None),
+           "Recettes totales nettes / dépenses nettes": ("BG_RECETTES_NETTES_HORS_FDC", "BG_DEPENSES_NETTES_HORS_FDC",
+                                                         None),
+           "Recettes totales nettes / dépenses totales nettes": ("BG_RECETTES_NETTES_HORS_FDC",
+                                                                 "BG_DEPENSES_NETTES_HORS_FDC", None),
+           "Recettes totales / dépenses totales": ("BG_RECETTES_NETTES_HORS_FDC", "BG_DEPENSES_NETTES_HORS_FDC", None),
+           "À déduire : Prélèvements sur recettes au profit des collectivités territoriales et de l’Union européenne":
+               ("BG_PRELEVEMENTS_SUR_RECETTES", None, None),
+           "À déduire : Prélèvements sur recettes au profit des collectivités territoriales et des Communautés "
+           "européennes": ("BG_PRELEVEMENTS_SUR_RECETTES", None, None),
+           "Montants nets pour le budget général": ("BG_RECETTES_NETTES_HORS_PSR", "BG_DEPENSES_NETTES_HORS_FDC",
+                                                    "SOLDE_BUDGET_GENERAL"),
+           "Montants nets du budget général": ("BG_RECETTES_NETTES_HORS_PSR", "BG_DEPENSES_NETTES_HORS_FDC",
+                                               "SOLDE_BUDGET_GENERAL"),
+           "Évaluation des fonds de concours et crédits correspondants": ("BG_FONDS_DE_CONCOURS_RECETTES",
+                                                                         "BG_FONDS_DE_CONCOURS_RECETTES", None),
+           "Évaluation des fonds de concours et des attributions de produits et crédits correspondants":
+               ("BG_FONDS_DE_CONCOURS_RECETTES", "BG_FONDS_DE_CONCOURS_RECETTES", None),
+           "Évaluation des fonds de concours et des attributions de produits":
+               ("BG_FONDS_DE_CONCOURS_RECETTES", "BG_FONDS_DE_CONCOURS_RECETTES", None),
+           "Montants nets pour le budget général, y compris fonds de concours": ("BG_RECETTES_NETTES",
+                                                                                 "BG_DEPENSES_NETTES", None),
+           "Montants nets pour le budget général y compris fonds de concours": ("BG_RECETTES_NETTES",
+                                                                                "BG_DEPENSES_NETTES", None)},
+    "BA": {"": ("BA_RECETTES_HORS_FDC", "BA_CP", "BA_SOLDE_HORS_FDC"),  # chaque budget annexe
+           "Totaux pour les budgets annexes": ("BA_RECETTES_HORS_FDC", "BA_CP", "BA_SOLDE_HORS_FDC")},
+    "BA_FDC": {"": ("BA_FDC_RECETTES", "BA_FDC_RECETTES", None),
+               "Totaux pour les budgets annexes, y compris fonds de concours": ("BA_RECETTES", "BA_CHARGES",
+                                                                               "SOLDE_BUDGETS_ANNEXES"),
+               "Totaux pour les budgets annexes y compris fonds de concours": ("BA_RECETTES", "BA_CHARGES",
+                                                                              "SOLDE_BUDGETS_ANNEXES")},
+    "CS": {"Comptes d’affectation spéciale": ("CAS_RECETTES", "CAS_CP", "CAS_SOLDE"),
+           "Comptes de concours financiers": ("CCF_RECETTES", "CCF_CP", "CCF_SOLDE"),
+           "Comptes de commerce (solde)": (None, None, "COMPTES_COMMERCE_SOLDE"),
+           "Comptes d’opérations monétaires (solde)": (None, None, "OPERATIONS_MONETAIRES_SOLDE"),
+           "Solde pour les comptes spéciaux": (None, None, "SOLDE_COMPTES_SPECIAUX"),
+           "Solde général": (None, None, "RESULTAT_BUDGETAIRE")},
+}
+# Montants que le tableau seul donne, et qui ne servent qu'à le vérifier : les charges des budgets annexes, fonds de
+# concours compris.
+VERIFIES_SEULEMENT = {"BA_CHARGES"}
+RUBRIQUES_EQUILIBRE = {"Budget général": "BG", "Budgets annexes": "BA", "Comptes spéciaux": "CS"}
+# Concepts que les états B à D donnent à l'euro, et que le tableau d'équilibre ne donne qu'à leur place.
+SUBSTITUTS = {"LOLF.BA_CP_LFI", "LOLF.CAS_CP_LFI", "LOLF.CCF_CP_LFI", "LOLF.CAS_RECETTES_LFI", "LOLF.CCF_RECETTES_LFI"}
+SUBSTITUTS_PAR_BUDGET = {"LOLF.BA_RECETTES_HORS_FDC_LFI", "LOLF.BA_FDC_RECETTES_LFI"}
+FDC_EQUILIBRE = (r"[ÉE]valuation des fonds de concours(?: et des attributions de produits)?(?: et crédits "
+                 r"correspondants)?(?: :)?")
 
 
 def concept(categorie, colonne, dont):
@@ -299,8 +402,529 @@ def structure(categorie, bloc, missions_connues):
     return rattache
 
 
+def unite_a(texte):
+    """(unité, échelle en euros) qu'annonce un texte (« (En milliers d'euros) »), ou None."""
+    trouvees = {m.group(1).lower() for m in re.finditer(UNITE_A, texte.replace("'", "’"), re.I)}
+    if len(trouvees) > 1:
+        sys.exit(f"état A : unités contradictoires ({', '.join(sorted(trouvees))})")
+    return UNITES_A[trouvees.pop()] if trouvees else None
+
+
+def entete_a(tableau, annee):
+    """(lignes d'en-tête, colonne du numéro de ligne ou None, colonne de l'intitulé, colonne de l'évaluation) d'un
+    tableau de l'état A, ou None s'il ne nomme pas ses colonnes ; l'évaluation est celle de l'année de la loi."""
+    for r, ligne in enumerate(tableau[:4]):
+        textes = [propre(x) for x in ligne]
+        evaluation = [c for c, x in enumerate(textes) if re.match(r"(?i)[ée]valuation pour [0-9]{4}", x)]
+        intitule = [c for c, x in enumerate(textes) if re.match(r"(?i)(?:intitulé|désignation) de", x)]
+        numero = [c for c, x in enumerate(textes) if re.match(r"(?i)numéro de ligne", x)]
+        if evaluation and intitule:
+            if len(evaluation) > 1 or len(intitule) > 1 or len(numero) > 1:
+                sys.exit(f"état A : en-tête ambigu ({textes})")
+            if not re.match(rf"(?i)[ée]valuation pour {annee}\b", textes[evaluation[0]]):
+                sys.exit(f"état A : « {textes[evaluation[0]]} » dans la loi de finances pour {annee}")
+            return r + 1, (numero[0] if numero else None), intitule[0], evaluation[0]
+    return None
+
+
+def tableaux_etat_a(grilles, flux, annee, source_id):
+    """{partie : [rangée]} : les rangées des tableaux de chaque partie de l'état A (PARTIES_A), dans l'ordre. Une rangée
+    est {tableau, ligne, numero, libelle, nombre, valeur, colonne, colonne_libelle, unite, echelle, partiel} ; sa valeur
+    est en euros, 0 pour une case « néant », None pour une case vide ; partiel marque une ligne de points, qui tient
+    la place des lignes qu'un texte ne reproduit pas."""
+    intitules = list(re.finditer(ETAT, flux))
+    a = [n for n, m in enumerate(intitules) if m.group(1) == "A"]
+    if len(a) != 1:
+        sys.exit(f"{len(a)} états A")
+    debut = intitules[a[0]].start()
+    fin = intitules[a[0] + 1].start() if a[0] + 1 < len(intitules) else len(flux)
+    parties, partie, unite_courante, avant = {}, None, None, debut
+    for m in re.finditer(r"⟦([0-9]+)⟧", flux[debut:fin]):
+        k, p = int(m.group(1)), debut + m.start()
+        tableau = grilles[k]
+        if re.search(ETAT, " ".join(x for l in tableau for x in l)):
+            continue  # intitulé de l'état suivant, mis dans un tableau
+        entre, avant = flux[avant:p].replace("'", "’"), flux.index(f"⟦/{k}⟧", p)
+        annonces = sorted((t.start(), nom_) for nom_, motif in PARTIES_A if (t := re.search(motif, entre, re.I)))
+        if annonces:
+            partie, unite_courante = annonces[-1][1], None
+        unite_courante = unite_a(entre) or unite_courante
+        e = entete_a(tableau, annee)
+        textes = [propre(x) for l in tableau for x in l if propre(x)]
+        if e is None:
+            if textes and all(re.fullmatch(UNITE_A, x.replace("'", "’"), re.I) for x in textes):
+                unite_courante = unite_a(" ".join(textes))  # tableau qui ne porte que l'unité des suivants
+                continue
+            sys.exit(f"état A, tableau {k} : ni en-tête ni unité")
+        entete, cn, ci, cv = e
+        unite_ = unite_a(" ".join(x for l in tableau[:entete] for x in l)) or unite_courante
+        if partie is None or unite_ is None:
+            sys.exit(f"état A, tableau {k} : {'partie' if partie is None else 'unité'} inconnue")
+        nom_colonne, unite_courante = propre(tableau[entete - 1][cv]), unite_
+        for r in range(entete, len(tableau)):
+            ligne = tableau[r]
+            cases = [propre(nom(x)) for x in ligne]
+            if cv < len(cases) and re.match(r"(?i)[ée]valuation pour [0-9]{4}", cases[cv]):
+                continue  # en-tête que la page répète au haut d'une nouvelle page
+            numero = cases[cn] if cn is not None and re.fullmatch(NUMERO_A, cases[cn]) else ""
+            # L'intitulé d'une ligne de total tient parfois dans une autre colonne que celle des intitulés.
+            libelle = next((x for c, x in [(ci, cases[ci])] + list(enumerate(cases))
+                            if x and c != cv and not (c == cn and numero)), "")
+            brut = ligne[cv].strip() if cv < len(ligne) else ""
+            nombre = nombre_texte(brut)
+            partiel = any(re.fullmatch(r"\.{3,}", x.strip()) for x in ligne)
+            if nombre is None and brut and brut not in NEANT and not partiel:
+                sys.exit(f"état A, tableau {k}, ligne {r} : montant illisible (« {brut} »)")
+            if [c for c, x in enumerate(ligne) if c not in (cn, ci, cv) and nombre_texte(x)]:
+                sys.exit(f"état A, tableau {k}, ligne {r} : montant hors de la colonne de l'évaluation")
+            valeur = float(nombre[0]) * unite_[1] if nombre else 0 if brut in NEANT and brut else None
+            parties.setdefault(partie, []).append(
+                {"tableau": k, "ligne": r, "numero": numero, "libelle": libelle, "nombre": nombre, "valeur": valeur,
+                 "colonne": cv, "colonne_libelle": nom_colonne, "unite": unite_[0], "echelle": unite_[1],
+                 "partiel": partiel, "source": source_id, "note": ""})
+    return parties
+
+
+def numero_division(numero):
+    """« 13bis » → « 13 bis »."""
+    return re.sub(r"([0-9])(bis|ter|quater)", r"\1 \2", numero)
+
+
+def ou(g):
+    return f"tableau {g['tableau']}, ligne {g['ligne']}"
+
+
+def verifier_somme(total, parties, quoi, nom_=None):
+    """Un total (une rangée) égale la somme de ses parties (des rangées), aux arrondis près : la demi-unité de la page
+    pour chaque montant en jeu, comme dans le rapport de cohérence (une page qui arrondit à l'euro des montants calculés
+    au centime en laisse un écart d'un euro ou deux). Un écart plus grand arrête l'import, sauf s'il est déclaré dans
+    ECARTS_A pour le total `nom_` (son libellé, à défaut), que porte alors la note du total."""
+    somme = sum(g["valeur"] or 0 for g in parties)
+    nom_ = nom_ or total["libelle"]
+    ecart = (total["valeur"] or 0) - somme
+    marge = 0.5 * total["echelle"] * (len(parties) + 1)
+    declare = ECARTS_A.get((total["source"], nom_))
+    if declare is not None and abs(ecart - declare) < 0.5 * total["echelle"]:
+        ECARTS_VUS.add((total["source"], nom_))
+        lisible = lambda x: f"{x:,.0f}".replace(",", "\u202f")
+        total["note"] = (f"La page donne {lisible(total['valeur'])} € pour « {nom_} », et ses lignes en font "
+                         f"{lisible(somme)} €, {lisible(abs(ecart))} € de {'moins' if ecart > 0 else 'plus'}.")
+    elif abs(ecart) > marge:
+        sys.exit(f"état A, {ou(total)} : {quoi} « {nom_} » vaut {total['valeur'] or 0:,.0f} €, ses parties "
+                 f"{somme:,.0f} €")
+
+
+def budget_general_a(rangees):
+    """Divisions du tableau détaillé du budget général, chacune {numero, libelle, categorie, rangee, lignes}, et les
+    rangées de sa catégorie 4 (fonds de concours) ; None si le texte ne reproduit pas le tableau entier (texte de la
+    commission mixte paritaire de 2006, qui n'en garde que les lignes modifiées)."""
+    if any(g["partiel"] for g in rangees):
+        return None, None
+    divisions, categorie, division, fonds = [], None, None, []
+    for g in rangees:
+        libelle, numero = g["libelle"], g["numero"]
+        if not libelle and not numero:
+            if g["nombre"]:
+                sys.exit(f"état A, {ou(g)} : montant sans intitulé")
+            continue
+        if not numero and (m := re.fullmatch(CATEGORIE_A, libelle)):
+            categorie, division = m.group(1), None
+            if categorie == "4" and g["valeur"] is not None:
+                fonds.append(g)
+            continue
+        if categorie == "4" and not numero and re.fullmatch(FONDS_DE_CONCOURS_A, libelle):
+            fonds.append(g)
+            continue
+        if categorie in (None, "4"):
+            sys.exit(f"état A, {ou(g)} : « {libelle} » hors des catégories de recettes")
+        if not numero and (m := re.fullmatch(DIVISION_A, libelle)):
+            if not m.group(1).startswith(categorie):
+                sys.exit(f"état A, {ou(g)} : division « {libelle} » dans la catégorie {categorie}")
+            division = {"numero": numero_division(m.group(1)), "libelle": m.group(2), "categorie": categorie, "rangee": g, "lignes": []}
+            divisions.append(division)
+            continue
+        if division is None or (numero and not re.fullmatch(r"[0-9]{4}", numero)) or \
+                (numero and not numero.startswith(division["numero"][:2])) or (not numero and g["valeur"] is None):
+            sys.exit(f"état A, {ou(g)} : ligne « {numero} {libelle} » inconnue")
+        division["lignes"].append(g)
+    for d in divisions:
+        if d["rangee"]["valeur"] is None or not d["lignes"]:
+            sys.exit(f"état A, {ou(d['rangee'])} : division sans montant ou sans ligne")
+        # Une ligne sans numéro n'est admise que seule dans sa division (la division 18, depuis la loi pour 2023).
+        if len(d["lignes"]) > 1 and any(not g["numero"] for g in d["lignes"]):
+            sys.exit(f"état A, {ou(d['rangee'])} : ligne sans numéro dans la division « {d['libelle']} »")
+        verifier_somme(d["rangee"], d["lignes"], "la division")
+    return divisions, fonds
+
+
+def recapitulation_a(rangees):
+    """Catégories de la récapitulation des recettes du budget général, chacune {rangee, divisions : [(numéro, libellé,
+    rangée)], fonds : [rangée]}, et ses totaux {"1+2", "1+2-3"} ; dans le texte pour 2006, les parties A à D sont les
+    catégories 1 à 4, et la division 1 de la partie A la division 11."""
+    categories, totaux, categorie, finie = {}, {}, None, False
+    for g in rangees:
+        libelle, numero = g["libelle"], g["numero"]
+        if finie or re.match(r"II\.\s*-", libelle):
+            if g["nombre"]:
+                sys.exit(f"état A, {ou(g)} : montant après la récapitulation")
+            finie = True  # texte pour 2006, qui énumère ensuite les autres parties de l'état sans les reproduire
+            continue
+        if not libelle and not numero:
+            continue
+        m = None if numero else re.fullmatch(CATEGORIE_A, libelle) or re.fullmatch(LETTRE_A, libelle)
+        if m:
+            categorie = m.group(1) if m.group(1).isdigit() else str("ABCD".index(m.group(1)) + 1)
+            categories[categorie] = {"rangee": g if g["valeur"] is not None else None, "divisions": [], "fonds": []}
+        elif re.fullmatch(r"Totaux pour la partie [A-D]", libelle) and categorie:
+            categories[categorie]["rangee"] = g
+        elif re.fullmatch(r"Total des recettes (?:brutes|fiscales et non fiscales)(?: \(1 ?\+ ?2\))?", libelle):
+            totaux["1+2"] = g
+        elif re.fullmatch(r"Total des recettes,? nettes des prélèvements(?: \(1 ?\+ ?2 ?- ?3\))?|"
+                          r"Total des recettes A \+ B - C", libelle):
+            totaux["1+2-3"] = g
+        elif categorie == "4" and re.fullmatch(FONDS_DE_CONCOURS_A, libelle):
+            categories["4"]["fonds"].append(g)
+        elif numero and categorie in ("1", "2", "3"):
+            categories[categorie]["divisions"].append((numero_division(numero) if len(numero) > 1 else categorie + numero,
+                                                       libelle, g))
+        elif not numero and categorie in ("1", "2", "3") and (d := re.fullmatch(DIVISION_A, libelle)):
+            categories[categorie]["divisions"].append((numero_division(d.group(1)), d.group(2), g))
+        else:
+            sys.exit(f"état A, {ou(g)} : ligne « {numero} {libelle} » de la récapitulation inconnue")
+    if sorted(categories) != ["1", "2", "3", "4"] or any(c["rangee"] is None for n, c in categories.items() if n != "4"):
+        sys.exit(f"état A : récapitulation incomplète ({', '.join(sorted(categories))})")
+    for n in ("1", "2", "3"):
+        verifier_somme(categories[n]["rangee"], [g for _, _, g in categories[n]["divisions"]], "la catégorie")
+    fonds = [g for g in [categories["4"]["rangee"]] + categories["4"]["fonds"] if g and g["valeur"] is not None]
+    if not fonds or len({g["valeur"] for g in fonds}) > 1:
+        sys.exit("état A : fonds de concours de la récapitulation absents ou discordants")
+    c = {n: categories[n]["rangee"]["valeur"] for n in ("1", "2", "3")}
+    for cle, attendu in (("1+2", c["1"] + c["2"]), ("1+2-3", c["1"] + c["2"] - c["3"])):
+        g = totaux.get(cle)
+        if g and abs(g["valeur"] - attendu) >= 0.5 * g["echelle"]:
+            sys.exit(f"état A, {ou(g)} : « {g['libelle']} » vaut {g['valeur']:,.0f} €, ses catégories {attendu:,.0f} €")
+    return categories, totaux
+
+
+def budgets_annexes_a(rangees, connus):
+    """Chaque budget annexe de l'état A : {nom, rangee, sections : [{nom, rangee, lignes, total}], lignes, deductions,
+    total, fonds}. Un budget annexe s'annonce par son nom, que `connus` (identifiants) doit contenir ; jusqu'à la loi pour
+    2008, ses lignes se rangent en sections, et ses dotations aux amortissements se déduisent de leur somme."""
+    budgets, budget, section, deduire = [], None, None, False
+    for g in rangees:
+        libelle, numero = g["libelle"], g["numero"]
+        if not libelle and not numero:
+            continue
+        if not numero and f"LOLF.{code_lolf(libelle)}" in connus:
+            budget = {"nom": libelle, "rangee": g, "sections": [], "lignes": [], "deductions": [], "total": None,
+                      "fonds": None}
+            budgets.append(budget)
+            section, deduire = None, False
+            continue
+        if budget is None or (budget["total"] and not re.fullmatch(FONDS_DE_CONCOURS_A, libelle)):
+            sys.exit(f"état A, {ou(g)} : « {libelle} » hors d'un budget annexe")
+        if not numero and re.fullmatch(SECTIONS_BA, libelle):
+            section = {"nom": libelle, "rangee": g, "lignes": [], "total": None}
+            budget["sections"].append(section)
+        elif not numero and libelle.startswith("Total des recettes brutes en"):
+            if section is None:
+                sys.exit(f"état A, {ou(g)} : « {libelle} » hors d'une section")
+            section["total"], section = g, None
+        elif not numero and libelle == "À déduire :":
+            section, deduire = None, True
+        elif not numero and re.fullmatch(TOTAL_BA, libelle):
+            budget["total"] = g
+        elif not numero and re.fullmatch(FONDS_DE_CONCOURS_A, libelle):
+            budget["fonds"] = g
+        else:
+            (budget["deductions"] if deduire else section["lignes"] if section else budget["lignes"]).append(g)
+    for b in budgets:
+        if b["total"] is None or any(s["total"] is None for s in b["sections"]):
+            sys.exit(f"état A, budget annexe « {b['nom']} » sans total")
+        for s in b["sections"]:
+            verifier_somme(s["total"], s["lignes"], "la section")
+        verifier_somme(b["total"], [s["total"] for s in b["sections"]] + b["lignes"] + b["deductions"],
+                       "le budget annexe", b["nom"])
+        if b["rangee"]["valeur"] is not None:
+            verifier_somme(b["rangee"], [b["total"]] + ([b["fonds"]] if b["fonds"] else []), "le budget annexe")
+    return budgets
+
+
+def comptes_speciaux_a(rangees, connus, categorie):
+    """Chaque compte d'affectation spéciale ou de concours financiers de l'état A : {nom, rangee, sections : [{nom,
+    rangee, lignes}], lignes}, et la rangée du total de la partie. Un compte s'annonce par son nom, que `connus`
+    (identifiants) doit contenir, une section par « Section : », une ligne par son numéro."""
+    comptes, compte, section, total = [], None, None, None
+    for g in rangees:
+        libelle, numero = g["libelle"], g["numero"]
+        if not libelle and not numero:
+            continue
+        if total:
+            sys.exit(f"état A, {ou(g)} : « {libelle} » après le total des comptes")
+        if not numero and re.fullmatch(TOTAL_CS, libelle):
+            total = g
+        elif not numero and (m := re.fullmatch(SECTION_CS, libelle)):
+            if compte is None:
+                sys.exit(f"état A, {ou(g)} : section hors d'un compte")
+            section = {"nom": m.group(1), "rangee": g, "lignes": []}
+            compte["sections"].append(section)
+        elif numero:
+            if compte is None or (compte["sections"] and section is None):
+                sys.exit(f"état A, {ou(g)} : ligne « {numero} {libelle} » hors d'un compte ou d'une section")
+            (section or compte)["lignes"].append(g)
+        elif f"LOLF.{code_lolf(libelle)}" in connus:
+            compte = {"nom": libelle, "rangee": g, "sections": [], "lignes": []}
+            comptes.append(compte)
+            section = None
+        else:
+            sys.exit(f"état A, {ou(g)} : « {libelle} », compte {categorie} inconnu")
+    if total is None or not comptes:
+        sys.exit(f"état A : comptes {categorie} sans total")
+    for c in comptes:
+        for s in c["sections"]:
+            verifier_somme(s["rangee"], s["lignes"], "la section")
+        verifier_somme(c["rangee"], [s["rangee"] for s in c["sections"]] + c["lignes"], "le compte")
+    verifier_somme(total, [c["rangee"] for c in comptes], "le total")
+    return comptes, total
+
+
+def recettes_a(parties, budgets_connus, comptes_connus):
+    """[(concept, fonction, libellé de la fonction, parent, rangée)] : les montants de l'état A à enregistrer, et
+    "nettes" ou "brutes", selon que les recettes fiscales du budget général s'entendent nettes ou brutes des
+    remboursements et dégrèvements. `budgets_connus`, `comptes_connus` : identifiants des budgets annexes et, par
+    catégorie, des comptes spéciaux."""
+    if "BG" not in parties or "RECAPITULATION" not in parties:
+        sys.exit("état A sans tableau du budget général ou sans récapitulation")
+    divisions, fonds = budget_general_a(parties["BG"])
+    categories, totaux = recapitulation_a(parties["RECAPITULATION"])
+    nettes = any(n == "18" for n, _, _ in categories["1"]["divisions"])
+    if nettes != any(re.search(r"(?i)remboursements et dégrèvements", l) for n, l, _ in categories["1"]["divisions"]):
+        sys.exit("état A : division des remboursements et dégrèvements sans le numéro 18, ou l'inverse")
+    sorte = "NETTES" if nettes else "BRUTES"
+    concept_ = lambda c: RECETTES_BG[c].format(sorte)
+    montants = []
+    if divisions is None:  # la récapitulation seule donne les divisions
+        for c in ("1", "2", "3"):
+            for numero, libelle, g in categories[c]["divisions"]:
+                f = f"LOLF.RECETTES.{code_lolf(numero + ' ' + libelle)}"
+                montants.append((concept_(c), f, f"{numero}. {libelle}", "", g))
+    else:
+        recap = {n: g["valeur"] for c in ("1", "2", "3") for n, _, g in categories[c]["divisions"]}
+        if recap != {d["numero"]: d["rangee"]["valeur"] for d in divisions}:
+            sys.exit("état A : les divisions du tableau détaillé et de la récapitulation diffèrent")
+        if any(g["valeur"] != (categories["4"]["rangee"] or categories["4"]["fonds"][0])["valeur"] for g in fonds):
+            sys.exit("état A : fonds de concours du tableau détaillé et de la récapitulation discordants")
+        for d in divisions:
+            f = f"LOLF.RECETTES.{code_lolf(d['numero'] + ' ' + d['libelle'])}"
+            montants.append((concept_(d["categorie"]), f, f"{d['numero']}. {d['libelle']}", "", d["rangee"]))
+            for g in d["lignes"]:
+                nom_ = f"{g['numero']} {g['libelle']}".strip()
+                montants.append((concept_(d["categorie"]), f"{f}.{code_lolf(nom_)}", nom_, f, g))
+    for c in ("1", "2", "3"):
+        montants.append((concept_(c), "", "", "", categories[c]["rangee"]))
+    fdc = categories["4"]["rangee"] or categories["4"]["fonds"][0]
+    montants.append((concept_("4"), "", "", "", fdc))
+    if nettes:  # les totaux de la récapitulation s'entendent alors comme ceux de l'exécution
+        montants += [("LOLF.BG_RECETTES_NETTES_HORS_FDC_LFI", "", "", "", totaux["1+2"]),
+                     ("LOLF.BG_RECETTES_NETTES_HORS_PSR_LFI", "", "", "", totaux["1+2-3"])]
+    for b in budgets_annexes_a(parties.get("BA", []), budgets_connus):
+        f = f"LOLF.{code_lolf(b['nom'])}"
+        montants.append(("LOLF.BA_RECETTES_HORS_FDC_LFI", f, b["nom"], "", b["total"]))
+        if b["rangee"]["nombre"]:
+            montants.append(("LOLF.BA_RECETTES_LFI", f, b["nom"], "", b["rangee"]))
+        if b["fonds"] and b["fonds"]["nombre"]:
+            montants.append(("LOLF.BA_FDC_RECETTES_LFI", f, b["nom"], "", b["fonds"]))
+        groupes = [(f"{f}.{code_lolf(s['nom'])}", s["nom"], s["lignes"], s["total"]) for s in b["sections"]]
+        for fs, nom_s, lignes, total in groupes:
+            montants.append(("LOLF.BA_RECETTES_HORS_FDC_LFI", fs, nom_s, f, total))
+        for parent, lignes in [(fs, lignes) for fs, _, lignes, _ in groupes] + [(f, b["lignes"])]:
+            for g in lignes:
+                nom_ = f"{g['numero']} {g['libelle']}".strip()
+                montants.append(("LOLF.BA_RECETTES_HORS_FDC_LFI", f"{parent}.{code_lolf(nom_)}", nom_, parent, g))
+        for g in b["deductions"]:
+            nom_ = f"À déduire : {g['numero']} {g['libelle']}".replace("  ", " ")
+            montants.append(("LOLF.BA_RECETTES_HORS_FDC_LFI", f"{f}.{code_lolf(nom_)}", nom_, f, g))
+    for categorie in ("CAS", "CCF"):
+        if categorie not in parties:
+            continue
+        comptes, total = comptes_speciaux_a(parties[categorie], comptes_connus[categorie], categorie)
+        c_ = f"LOLF.{categorie}_RECETTES_LFI"
+        montants.append((c_, "", "", "", total))
+        for compte in comptes:
+            f = f"LOLF.{code_lolf(compte['nom'])}"
+            montants.append((c_, f, compte["nom"], "", compte["rangee"]))
+            for parent, nom_p, lignes, g_p in [(f, None, compte["lignes"], None)] + \
+                    [(f"{f}.{code_lolf(s['nom'])}", s["nom"], s["lignes"], s["rangee"]) for s in compte["sections"]]:
+                if nom_p:
+                    montants.append((c_, parent, nom_p, f, g_p))
+                for g in lignes:
+                    nom_ = f"{g['numero']} {g['libelle']}".strip()
+                    montants.append((c_, f"{parent}.{code_lolf(nom_)}", nom_, parent, g))
+    return [m for m in montants if m[4]["nombre"]], sorte
+
+
+def equilibre(grilles, flux, annee):
+    """Les montants du tableau de l'article d'équilibre, en millions d'euros : [(rubrique, clé de EQUILIBRE, fonction,
+    côté R, C ou S, rangée)]. Une rangée est {tableau, ligne, colonne, libelle, colonne_libelle, nombre, valeur} ; sa
+    valeur est 0 pour une case « néant »."""
+    trouves = [k for k, t in enumerate(grilles)
+               if any(l and re.sub(r"\*+", "", propre(l[0])) == "Solde général" for l in t)]
+    if len(trouves) != 1:
+        sys.exit(f"{len(trouves)} tableaux d'équilibre")
+    k = trouves[0]
+    p = flux.index(f"⟦{k}⟧")
+    if not re.search(rf"Pour {annee},? les ressources affectées au budget", flux[max(0, p - 800):p].replace("'", "’")):
+        sys.exit(f"tableau d'équilibre : l'article qui le précède n'est pas celui de la loi pour {annee}")
+    t = grilles[k]
+    entete, cols = None, {}
+    for r, ligne in enumerate(t[:5]):
+        for c, x in enumerate(ligne):
+            x = propre(x)
+            for cote, motif in (("R", r"Ressources"), ("C", r"Dépenses|Charges"), ("S", r"Soldes?\b")):
+                if re.match(motif, x) and cote not in cols:
+                    cols[cote], entete = (c, x), r
+    annonce = flux[max(0, p - 300):p] + " ".join(x for l in t[:entete + 1] for x in l)
+    if sorted(cols) != ["C", "R", "S"] or not re.search(r"(?i)\(\s*en millions d’euros\s*\*?\s*\)",
+                                                        annonce.replace("'", "’")):
+        sys.exit(f"tableau d'équilibre : colonnes ou unité inconnues ({cols})")
+    # Depuis la loi pour 2023, chaque colonne de ressources et de charges se détaille en fonctionnement et
+    # investissement, sous les numéros 1 (total), 2 et 3 ; seul le total est lu.
+    sous_colonnes = set()
+    if entete + 1 < len(t) and [propre(x) for x in t[entete + 1][cols["R"][0]:cols["R"][0] + 3]] == ["1", "2", "3"]:
+        entete += 1
+        sous_colonnes = {cols[c][0] + d for c in ("R", "C") for d in (1, 2)}
+    montants, rubrique, bloc = [], None, None
+    for r in range(entete + 1, len(t)):
+        ligne = t[r]
+        libelle = re.sub(r"^-\s*", "", re.sub(r"\*+", "", propre(nom(ligne[0])))).strip()
+        libelle = re.sub(r"^A déduire", "À déduire", re.sub(r"^Evaluation", "Évaluation", libelle))
+        nombres = {c: (n, float(n[0])) for c, x in enumerate(ligne) if c and (n := nombre_texte(x))}
+        neants = {c for c, x in enumerate(ligne) if c and x.strip() in NEANT}
+        if not libelle and not nombres:
+            continue
+        if libelle.startswith("Les montants figurant dans le présent tableau"):
+            continue  # note sur les arrondis
+        if libelle in RUBRIQUES_EQUILIBRE:
+            rubrique = bloc = RUBRIQUES_EQUILIBRE[libelle]
+            continue
+        if rubrique == "BA" and re.fullmatch(FDC_EQUILIBRE, libelle) and not nombres:
+            bloc = "BA_FDC"
+            continue
+        if bloc is None:
+            sys.exit(f"tableau d'équilibre, ligne {r} : « {libelle} » hors d'une rubrique")
+        table = EQUILIBRE[bloc]
+        cle_ = {k.lower(): k for k in table}.get(libelle.lower(), "" if bloc in ("BA", "BA_FDC") else None)
+        if cle_ is None:
+            sys.exit(f"tableau d'équilibre, ligne {r} : « {libelle} » inconnu")
+        fonction = f"LOLF.{code_lolf(libelle)}" if cle_ == "" else ""
+        if table[cle_][:2] == (None, None):  # ligne d'un seul solde, où qu'il soit dans la ligne
+            if len(nombres) != 1:
+                sys.exit(f"tableau d'équilibre, ligne {r} : « {libelle} » sans montant unique")
+            c, (n, v) = next(iter(nombres.items()))
+            montants.append((bloc, cle_, fonction, "S", {"tableau": k, "ligne": r, "colonne": c, "libelle": libelle,
+                                                         "colonne_libelle": cols["S"][1], "nombre": n, "valeur": v}))
+            continue
+        hors = set(nombres) - {cols[c][0] for c in cols} - sous_colonnes
+        if hors:
+            sys.exit(f"tableau d'équilibre, ligne {r} : montant hors des colonnes ({sorted(hors)})")
+        for cote in ("R", "C", "S"):
+            c = cols[cote][0]
+            if c in nombres or c in neants:
+                n, v = nombres.get(c, (None, 0))
+                if table[cle_]["RCS".index(cote)] is None:
+                    if v:
+                        sys.exit(f"tableau d'équilibre, ligne {r} : « {libelle} », montant inattendu ({cote})")
+                    continue
+                montants.append((bloc, cle_, fonction, cote, {"tableau": k, "ligne": r, "colonne": c,
+                                                              "libelle": libelle, "colonne_libelle": cols[cote][1],
+                                                              "nombre": n, "valeur": v}))
+    return montants
+
+
+def verifier_equilibre(montants, sorte):
+    """Le tableau d'équilibre s'additionne, à l'arrondi au million près de chacun de ses montants ; un montant que deux
+    lignes donnent y est le même."""
+    v = {}
+    for bloc, cle_, fonction, cote, g in montants:
+        v.setdefault((EQUILIBRE[bloc][cle_]["RCS".index(cote)], fonction, cote), set()).add(g["valeur"])
+    for cle_, valeurs in v.items():
+        if len(valeurs) > 1:
+            sys.exit(f"tableau d'équilibre : {cle_} vaut tour à tour {sorted(valeurs)}")
+    x = {cle_: valeurs.pop() for cle_, valeurs in v.items()}
+    budgets = sorted({f for (_, f, _) in x if f})
+    # (signe, concept, côté, fonction) ; une fonction nulle désigne chaque budget annexe, un « ? » un terme facultatif,
+    # qui vaut zéro quand le tableau ne le donne pas (une ligne sans solde, un budget annexe sans fonds de concours).
+    identites = [
+        ("BG_RECETTES_NETTES_HORS_FDC R", ["BG_RECETTES_FISCALES_NETTES R", "BG_RECETTES_NON_FISCALES R"]),
+        ("BG_RECETTES_NETTES_HORS_PSR R", ["BG_RECETTES_NETTES_HORS_FDC R", "-BG_PRELEVEMENTS_SUR_RECETTES R"]),
+        ("BG_RECETTES_NETTES R", ["BG_RECETTES_NETTES_HORS_PSR R", "BG_FONDS_DE_CONCOURS_RECETTES R"]),
+        ("BG_DEPENSES_NETTES C", ["BG_DEPENSES_NETTES_HORS_FDC C", "BG_FONDS_DE_CONCOURS_RECETTES C"]),
+        ("SOLDE_BUDGET_GENERAL S", ["BG_RECETTES_NETTES_HORS_PSR R", "-BG_DEPENSES_NETTES_HORS_FDC C"]),
+        ("BA_RECETTES_HORS_FDC R", ["BA_RECETTES_HORS_FDC R *"]),
+        ("BA_CP C", ["BA_CP C *"]),
+        ("?BA_SOLDE_HORS_FDC S", ["?BA_SOLDE_HORS_FDC S *"]),
+        ("BA_RECETTES R", ["BA_RECETTES_HORS_FDC R", "?BA_FDC_RECETTES R *"]),
+        ("BA_CHARGES C", ["BA_CP C", "?BA_FDC_RECETTES C *"]),
+        ("?SOLDE_BUDGETS_ANNEXES S", ["BA_RECETTES R", "-BA_CHARGES C"]),
+        ("CAS_SOLDE S", ["CAS_RECETTES R", "-CAS_CP C"]),
+        ("CCF_SOLDE S", ["CCF_RECETTES R", "-CCF_CP C"]),
+        ("SOLDE_COMPTES_SPECIAUX S", ["CAS_SOLDE S", "CCF_SOLDE S", "COMPTES_COMMERCE_SOLDE S",
+                                      "OPERATIONS_MONETAIRES_SOLDE S"]),
+        ("RESULTAT_BUDGETAIRE S", ["SOLDE_BUDGET_GENERAL S", "?BA_SOLDE_HORS_FDC S", "SOLDE_COMPTES_SPECIAUX S"]),
+    ]
+    identites += [(f"?BA_SOLDE_HORS_FDC S {f}", [f"BA_RECETTES_HORS_FDC R {f}", f"-BA_CP C {f}"]) for f in budgets]
+    if sorte == "BRUTES":
+        identites += [("BG_RECETTES_FISCALES_NETTES R", ["BG_RECETTES_FISCALES_BRUTES R",
+                                                         "-BG_REMBOURSEMENTS_DEGREVEMENTS R"]),
+                      ("BG_DEPENSES_NETTES_HORS_FDC C", ["BG_CP C", "-BG_REMBOURSEMENTS_DEGREVEMENTS C"])]
+
+    def termes(spec):
+        signe, facultatif = (-1 if "-" in spec[:2] else 1), "?" in spec[:2]
+        concept_, cote, *fonction = spec.lstrip("-?").split()
+        fonctions = budgets if fonction == ["*"] else fonction or [""]
+        valeurs = [x.get((concept_, f, cote)) for f in fonctions]
+        if None in valeurs and not facultatif:
+            return None
+        return [signe * (v or 0) for v in valeurs]
+
+    for total, parties in identites:
+        t = termes(total)
+        if t is None or (total.startswith("?") and (total.split()[0].lstrip("?"), (total.split()[2:] or [""])[0],
+                                                     total.split()[1]) not in x):
+            continue  # le tableau ne donne pas ce total
+        p = [termes(s) for s in parties]
+        if None in p:
+            sys.exit(f"tableau d'équilibre : un terme de {total} manque ({parties})")
+        somme = sum(sum(q) for q in p)
+        if abs(t[0] - somme) > 0.5 * (sum(len(q) for q in p) + 1) + 1e-9:
+            sys.exit(f"tableau d'équilibre : {total} vaut {t[0]}, ses parties {somme} ({parties})")
+
+
+def credits_200(connus, fonctions):
+    """Crédits de paiement du programme 200, « Remboursements et dégrèvements d'impôts d'État », dans l'état B."""
+    trouves = [v for (c, f), v in connus.items() if c == "LOLF.BG_CP_LFI" and
+               f.startswith("LOLF.REMBOURSEMENTS_ET_DEGREVEMENTS.") and
+               re.match(r"Remboursements et dégrèvements d[’']impôts d[’']État", fonctions[f]["libelle"])]
+    if len(trouves) != 1:
+        sys.exit(f"état B : {len(trouves)} programmes des remboursements et dégrèvements d'impôts d'État")
+    return trouves[0]
+
+
+def chiffre(fichier, annee, concept_, fonction, unite_, nombre, emplacement, note=""):
+    ligne = {
+        "source_id": fichier["source_id"], "fichier_id": fichier["id"], "emplacement": emplacement,
+        "zone": "FR", "perimetre_id": "ETAT_LF", "concept_id": concept_, "fonction_id": fonction, "traitements": "",
+        "unite_id": unite_, "periode": annee, "valeur": nombre[0], "decimales": nombre[1], "statut": "non_precise",
+        "drapeau_source": "", "version": fichier["mis_a_jour_source"][:10], "consolidation": "non_consolide",
+        "denominateur_id": "", "nature": "publie", "calcul_id": "", "saisi_le": aujourdhui(), "notes": note,
+    }
+    ligne["id"] = identifiant(ligne)
+    return ligne
+
+
 def lignes_du_fichier(fichier, fonctions):
-    """Les chiffres d'une copie archivée ; `fonctions` (identifiant → ligne) reçoit les missions et programmes."""
+    """Les chiffres d'une copie archivée ; `fonctions` (identifiant → ligne) reçoit les missions, programmes, comptes et
+    lignes de recettes."""
     chemin = BASE / fichier["chemin"]
     texte = texte_html(lire_texte_html(chemin))
     annees = set(re.findall(r"Il est ouvert aux ministres, pour ([0-9]{4}),? au titre du budget général", texte))
@@ -336,7 +960,10 @@ def lignes_du_fichier(fichier, fonctions):
                                                           article(texte, annee, ARTICLES[("CAS", "CCF")]))
                for c in lus):
         sys.exit(f"{fichier['id']} : un état sans l'article qui en ouvre les crédits")
-    missions_connues = {f for f, l in fonctions.items() if f.startswith("LOLF.") and not l["parent_id"]}
+    missions_connues = {f for f, l in fonctions.items()
+                        if f.startswith("LOLF.") and not l["parent_id"] and not f.startswith("LOLF.RECETTES.")}
+    # (concept, fonction) → montant en euros, de chaque chiffre lu dans un état : ce que le tableau d'équilibre reprend.
+    connus, missions = {}, {"BG": set(), "BA": set(), "CAS": set(), "CCF": set()}
     for categorie, bloc in blocs:
         rattache = structure(categorie, bloc, missions_connues)
         for l in bloc["lignes"]:
@@ -347,23 +974,103 @@ def lignes_du_fichier(fichier, fonctions):
                 fonction = f"{parent or 'LOLF'}.{code_lolf(libelle)}"
                 if parent:
                     fonctions.setdefault(parent, {"id": parent, "libelle": mission, "norme_id": "LOLF", "parent_id": ""})
+                else:
+                    missions[categorie].add(fonction)
                 fonctions.setdefault(fonction, {"id": fonction, "libelle": libelle, "norme_id": "LOLF",
                                                 "parent_id": parent})
             unite_, note = l["unite"]
             for colonne, (c, nombre) in sorted(l["cases"].items()):
-                ligne = {
-                    "source_id": fichier["source_id"], "fichier_id": fichier["id"],
-                    "emplacement": f"tableau={l['tableau']};ligne={l['ligne']};colonne={c};libelle={l['libelle']};"
-                                   f"colonne_libelle={l['noms'][c]}",
-                    "zone": "FR", "perimetre_id": "ETAT_LF", "concept_id": concept(categorie, colonne, l["genre"] == "dont"),
-                    "fonction_id": fonction, "traitements": "", "unite_id": unite_, "periode": annee,
-                    "valeur": nombre[0], "decimales": nombre[1], "statut": "non_precise", "drapeau_source": "",
-                    "version": fichier["mis_a_jour_source"][:10], "consolidation": "non_consolide", "denominateur_id": "",
-                    "nature": "publie", "calcul_id": "", "saisi_le": aujourdhui(),
-                    "notes": " ".join(n for n in (note, l["notes"].get(colonne, "")) if n),
-                }
-                ligne["id"] = identifiant(ligne)
+                ligne = chiffre(fichier, annee, concept(categorie, colonne, l["genre"] == "dont"), fonction, unite_,
+                                nombre, f"tableau={l['tableau']};ligne={l['ligne']};colonne={c};libelle={l['libelle']};"
+                                        f"colonne_libelle={l['noms'][c]}",
+                                " ".join(n for n in (note, l["notes"].get(colonne, "")) if n))
+                connus[(ligne["concept_id"], fonction)] = l["valeurs"][colonne]
                 yield ligne
+    # État A : les recettes de chaque ligne, division, section et compte.
+    parties = tableaux_etat_a(grilles, flux, annee, fichier["source_id"])
+    for rangees in parties.values():
+        for g in rangees:
+            g["libelle"] = recolle(g["libelle"])
+    recettes, sorte = recettes_a(parties, missions["BA"], missions)
+    absents = [n for s, n in ECARTS_A if s == fichier["source_id"] and (s, n) not in ECARTS_VUS]
+    if absents:
+        sys.exit(f"état A : écart déclaré absent ({', '.join(absents)})")
+    for concept_, fonction, libelle, parent, g in recettes:
+        if fonction:
+            fonctions.setdefault(fonction, {"id": fonction, "libelle": libelle, "norme_id": "LOLF", "parent_id": parent})
+        if (concept_, fonction) in connus:
+            sys.exit(f"état A, {ou(g)} : {concept_} de « {fonction or 'ensemble'} » déjà lu")
+        connus[(concept_, fonction)] = g["valeur"]
+        yield chiffre(fichier, annee, concept_, fonction, g["unite"], g["nombre"],
+                      f"tableau={g['tableau']};ligne={g['ligne']};colonne={g['colonne']};"
+                      f"libelle={(g['numero'] + ' ' + g['libelle']).strip()};colonne_libelle={g['colonne_libelle']}",
+                      g["note"])
+    # Tableau de l'article d'équilibre, en millions d'euros : ce qu'il reprend d'un état se vérifie, le reste
+    # s'enregistre.
+    tableau_equilibre = equilibre(grilles, flux, annee)
+    verifier_equilibre(tableau_equilibre, sorte)
+    enregistres = {}
+    for bloc, cle_, fonction, cote, g in tableau_equilibre:
+        c_ = EQUILIBRE[bloc][cle_]["RCS".index(cote)]
+        if c_ in VERIFIES_SEULEMENT:
+            continue
+        concept_, cle = f"LOLF.{c_}_LFI", (f"LOLF.{c_}_LFI", fonction)
+        if cle in connus:  # au million près : le tableau arrondit parfois un total depuis ses montants arrondis
+            if abs(g["valeur"] * 1e6 - connus[cle]) >= 1e6:
+                sys.exit(f"tableau d'équilibre, ligne {g['ligne']} : « {g['libelle']} », {g['valeur']:,.0f} M€ quand "
+                         f"l'état donne {connus[cle]:,.0f} € ({concept_})")
+        elif cle in enregistres:
+            if g["valeur"] != enregistres[cle]:
+                sys.exit(f"tableau d'équilibre, ligne {g['ligne']} : « {g['libelle']} », {g['valeur']} M€ quand une "
+                         f"autre ligne en donne {enregistres[cle]} ({concept_})")
+        else:
+            enregistres[cle] = g["valeur"]
+            if fonction and fonction not in fonctions:
+                if bloc not in ("BA", "BA_FDC"):
+                    sys.exit(f"tableau d'équilibre : fonction {fonction} inconnue")
+                fonctions[fonction] = {"id": fonction, "libelle": g["libelle"], "norme_id": "LOLF", "parent_id": ""}
+            if g["nombre"]:
+                # Un montant qu'un état donnerait à l'euro, quand le texte ne reproduit pas cet état (2006).
+                substitut = concept_ in SUBSTITUTS or (fonction and concept_ in SUBSTITUTS_PAR_BUDGET)
+                yield chiffre(fichier, annee, concept_, fonction, "MIO_EUR", g["nombre"],
+                              f"tableau={g['tableau']};ligne={g['ligne']};colonne={g['colonne']};libelle={g['libelle']};"
+                              f"colonne_libelle={g['colonne_libelle']}",
+                              "Lu dans le tableau de l'article d'équilibre, en millions d'euros : le texte ne reproduit "
+                              "pas l'état qui le donne à l'euro." if substitut else "")
+    # Les remboursements et dégrèvements que le tableau déduit des recettes brutes et des dépenses brutes sont les
+    # crédits de leur mission ; depuis la loi pour 2023, ses dépenses sont nettes de ceux d'impôts d'État (programme 200).
+    mission_rd = "LOLF.REMBOURSEMENTS_ET_DEGREVEMENTS"
+    if sorte == "BRUTES":
+        deduits, credits = enregistres.get(("LOLF.BG_REMBOURSEMENTS_DEGREVEMENTS_LFI", "")), \
+            connus.get(("LOLF.BG_CP_LFI", mission_rd))
+    else:
+        deduits = enregistres.get(("LOLF.BG_DEPENSES_NETTES_HORS_FDC_LFI", ""))
+        credits = connus[("LOLF.BG_CP_LFI", "")] - credits_200(connus, fonctions)
+    if deduits is None or credits is None or abs(deduits * 1e6 - credits) >= 1e6:
+        sys.exit(f"tableau d'équilibre : {deduits} M€ quand l'état B donne {credits} € ({sorte.lower()})")
+    # Chaque solde contre celui que donnent les états : recettes de l'état A moins crédits des états B à D. Le tableau
+    # calcule un solde de ses montants arrondis : il peut s'écarter de l'exact d'un demi-million par montant arrondi
+    # en jeu (recettes brutes, non fiscales, prélèvements et crédits pour le budget général ; recettes et crédits
+    # pour un budget annexe ou une catégorie de comptes), et d'un demi-million de plus pour son propre arrondi.
+    depenses_bg = connus[("LOLF.BG_CP_LFI", "")] - (0 if sorte == "BRUTES" else credits_200(connus, fonctions))
+    soldes = {("LOLF.SOLDE_BUDGET_GENERAL_LFI", ""): ([("LOLF.BG_RECETTES_NETTES_HORS_PSR_LFI", "")]
+                                                     if sorte == "NETTES" else None, depenses_bg)}
+    for f in missions["BA"]:
+        soldes[("LOLF.BA_SOLDE_HORS_FDC_LFI", f)] = ([("LOLF.BA_RECETTES_HORS_FDC_LFI", f)], connus.get(("LOLF.BA_CP_LFI", f)))
+    for c in ("CAS", "CCF"):
+        soldes[(f"LOLF.{c}_SOLDE_LFI", "")] = ([(f"LOLF.{c}_RECETTES_LFI", "")], connus.get((f"LOLF.{c}_CP_LFI", "")))
+    for cle, (recettes_, depenses) in soldes.items():
+        if cle == ("LOLF.SOLDE_BUDGET_GENERAL_LFI", "") and recettes_ is None:
+            exact = sum(connus[(RECETTES_BG[c].format("BRUTES"), "")] * (-1 if c == "3" else 1) for c in "123")
+        elif all(r in connus for r in recettes_) and depenses is not None:
+            exact = sum(connus[r] for r in recettes_)
+        else:
+            continue  # le texte ne reproduit pas l'état
+        prevu = enregistres.get(cle, 0)  # un solde que le tableau laisse vide est nul
+        marge = 0.5e6 * ((4 if cle[0] == "LOLF.SOLDE_BUDGET_GENERAL_LFI" else 2) + 1)
+        if abs(prevu * 1e6 - (exact - depenses)) > marge:
+            sys.exit(f"tableau d'équilibre : {cle[0]} de « {cle[1] or 'ensemble'} », {prevu} M€ quand les états en "
+                     f"donnent {exact - depenses:,.0f} €")
 
 
 def main():

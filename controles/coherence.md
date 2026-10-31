@@ -10,21 +10,21 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 | Source | Titre | Version la plus récente | Chiffres |
 |---|---|---|---|
-| an.ta12-0525 | Projet de loi de finances pour 2006, texte adopté n° 525 (12e législature) : conclusions de la commission mixte paritaire, adoptées par l'Assemblée nationale le 20 décembre 2005 | 2005-12-20 | 70 |
-| an.ta13-0808 | Projet de loi de finances pour 2012, texte adopté n° 808 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 588 |
-| an.ta14-0073 | Projet de loi de finances pour 2013, texte adopté n° 73 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2012 | 2012-12-20 | 598 |
-| an.ta14-0267 | Projet de loi de finances pour 2014, texte adopté n° 267 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 628 |
-| an.ta14-0459 | Projet de loi de finances pour 2015, texte adopté n° 459 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 572 |
-| an.ta14-0648 | Projet de loi de finances pour 2016, texte adopté n° 648 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 574 |
-| an.ta14-0865 | Projet de loi de finances pour 2017, texte adopté n° 865 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2016 | 2016-12-20 | 570 |
-| an.ta15-0065 | Projet de loi de finances pour 2018, texte adopté n° 65 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 576 |
-| an.ta15-0213 | Projet de loi de finances pour 2019, texte adopté n° 213 (15e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2018 | 2018-12-20 | 586 |
-| an.ta15-0374 | Projet de loi de finances pour 2020, texte adopté n° 374 (15e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2019 | 2019-12-19 | 574 |
-| an.ta15-0538 | Projet de loi de finances pour 2021, texte adopté n° 538 rectifié (15e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2020 | 2020-12-17 | 604 |
-| an.ta15-0737 | Projet de loi de finances pour 2022, texte adopté n° 737 (15e législature), adopté définitivement par l'Assemblée nationale le 15 décembre 2021 | 2021-12-15 | 614 |
-| an.ta16-0051 | Projet de loi de finances pour 2023, texte adopté n° 51 rectifié (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 17 décembre 2022 | 2022-12-17 | 592 |
-| an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 594 |
-| an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 572 |
+| an.ta12-0525 | Projet de loi de finances pour 2006, texte adopté n° 525 (12e législature) : conclusions de la commission mixte paritaire, adoptées par l'Assemblée nationale le 20 décembre 2005 | 2005-12-20 | 119 |
+| an.ta13-0808 | Projet de loi de finances pour 2012, texte adopté n° 808 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 947 |
+| an.ta14-0073 | Projet de loi de finances pour 2013, texte adopté n° 73 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2012 | 2012-12-20 | 986 |
+| an.ta14-0267 | Projet de loi de finances pour 2014, texte adopté n° 267 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 1017 |
+| an.ta14-0459 | Projet de loi de finances pour 2015, texte adopté n° 459 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 957 |
+| an.ta14-0648 | Projet de loi de finances pour 2016, texte adopté n° 648 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 960 |
+| an.ta14-0865 | Projet de loi de finances pour 2017, texte adopté n° 865 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2016 | 2016-12-20 | 947 |
+| an.ta15-0065 | Projet de loi de finances pour 2018, texte adopté n° 65 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 957 |
+| an.ta15-0213 | Projet de loi de finances pour 2019, texte adopté n° 213 (15e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2018 | 2018-12-20 | 966 |
+| an.ta15-0374 | Projet de loi de finances pour 2020, texte adopté n° 374 (15e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2019 | 2019-12-19 | 939 |
+| an.ta15-0538 | Projet de loi de finances pour 2021, texte adopté n° 538 rectifié (15e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2020 | 2020-12-17 | 979 |
+| an.ta15-0737 | Projet de loi de finances pour 2022, texte adopté n° 737 (15e législature), adopté définitivement par l'Assemblée nationale le 15 décembre 2021 | 2021-12-15 | 989 |
+| an.ta16-0051 | Projet de loi de finances pour 2023, texte adopté n° 51 rectifié (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 17 décembre 2022 | 2022-12-17 | 942 |
+| an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 949 |
+| an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 928 |
 | dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
 | dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
 | dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4070 |
@@ -119,13 +119,13 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | senat.pjl25-726 | Projet de loi relatif aux résultats de la gestion et portant approbation des comptes de l'année 2025, texte n° 726 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 1053 |
 | senat.pjl25-727 | Projet de loi portant approbation des comptes de la sécurité sociale de l'année 2025, texte n° 727 (2025-2026) transmis au Sénat le 10 juin 2026 | 2026-06-10 | 214 |
 | senat.tas05-033 | Projet de loi de financement de la sécurité sociale pour 2006, texte définitif n° 33 (2005-2006) adopté par le Sénat le 23 novembre 2005 | 2005-11-23 | 39 |
-| senat.tas06-031 | Projet de loi de finances pour 2007, texte définitif n° 31 (2006-2007) adopté par le Sénat le 19 décembre 2006 | 2006-12-19 | 602 |
-| senat.tas07-034 | Projet de loi de finances pour 2008, texte définitif n° 34 (2007-2008) adopté par le Sénat le 18 décembre 2007 | 2007-12-18 | 596 |
-| senat.tas08-035 | Projet de loi de finances pour 2009, texte définitif n° 35 (2008-2009) adopté par le Sénat le 17 décembre 2008 | 2008-12-17 | 586 |
-| senat.tas09-034 | Projet de loi de finances pour 2010, texte définitif n° 34 (2009-2010) adopté par le Sénat le 18 décembre 2009 | 2009-12-18 | 582 |
-| senat.tas10-032 | Projet de loi de finances pour 2011, texte définitif n° 32 (2010-2011) adopté par le Sénat le 15 décembre 2010 | 2010-12-15 | 572 |
+| senat.tas06-031 | Projet de loi de finances pour 2007, texte définitif n° 31 (2006-2007) adopté par le Sénat le 19 décembre 2006 | 2006-12-19 | 930 |
+| senat.tas07-034 | Projet de loi de finances pour 2008, texte définitif n° 34 (2007-2008) adopté par le Sénat le 18 décembre 2007 | 2007-12-18 | 869 |
+| senat.tas08-035 | Projet de loi de finances pour 2009, texte définitif n° 35 (2008-2009) adopté par le Sénat le 17 décembre 2008 | 2008-12-17 | 916 |
+| senat.tas09-034 | Projet de loi de finances pour 2010, texte définitif n° 34 (2009-2010) adopté par le Sénat le 18 décembre 2009 | 2009-12-18 | 929 |
+| senat.tas10-032 | Projet de loi de finances pour 2011, texte définitif n° 32 (2010-2011) adopté par le Sénat le 15 décembre 2010 | 2010-12-15 | 839 |
 | senat.tas22-018 | Projet de loi de financement de la sécurité sociale pour 2023, texte n° 18 (2022-2023) adopté par le Sénat en première lecture le 15 novembre 2022 | 2022-11-15 | 230 |
-| senat.tas24-048 | Projet de loi de finances pour 2025, texte définitif n° 48 (2024-2025) adopté par le Sénat le 6 février 2025 | 2025-02-06 | 594 |
+| senat.tas24-048 | Projet de loi de finances pour 2025, texte définitif n° 48 (2024-2025) adopté par le Sénat le 6 février 2025 | 2025-02-06 | 946 |
 
 ## 1. Sommes comptables
 
@@ -265,12 +265,13 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-26283 ventilations vérifiées avec toutes leurs parties : 26279 justes, 4 en écart.
+27311 ventilations vérifiées avec toutes leurs parties : 27306 justes, 5 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
 | an.ta13-0808 | ETAT_LF | LOLF.CAS_CP_LFI | ensemble | 2012 | −4 617,0 M€ en 2012 |
 | an.ta13-0808 | ETAT_LF | LOLF.CAS_CP_LFI | LOLF.GESTION_DU_PATRIMOINE_IMMOBILIER_DE_LETAT | 2012 | +4 617,0 M€ en 2012 |
+| an.ta14-0267 | ETAT_LF | LOLF.BA_RECETTES_HORS_FDC_LFI | LOLF.CONTROLE_ET_EXPLOITATION_AERIENS | 2014 | +300 € en 2014 |
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_DEPENSES | ensemble | 2016 | +0,6 M€ en 2016 |
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_RECETTES | ensemble | 2016 | +0,6 M€ en 2016 |
 
@@ -2396,3 +2397,100 @@ Les 15 plus grands écarts entre les dépenses d'une mission du budget général
 | 2022 | Travail et emploi | 14,6 | 20,8 | +6,1 |
 | 2024 | Remboursements et dégrèvements | 140,5 | 146,5 | +6,0 |
 | 2014 | Remboursements et dégrèvements | 102,1 | 96,1 | −5,9 |
+
+## 18. Recettes votées et solde voté
+
+Les recettes qu'évalue la loi de finances initiale de chaque année, de 2006 à 2026 (état A), et les soldes que fixe son article d'équilibre, contre ce que constate la loi d'approbation des comptes de la même année. Une évaluation de recettes n'est pas un plafond : l'écart vient de la conjoncture, des mesures votées en cours d'année et de la prévision elle-même. Les recettes fiscales sont nettes des remboursements et dégrèvements ; jusqu'à la loi pour 2022, l'état A les évalue brutes, et le tableau de l'article d'équilibre donne leur total net, en millions d'euros. L'import vérifie chaque division de l'état A contre ses lignes, chaque compte contre ses sections et ses lignes, et les montants du tableau d'équilibre entre eux et contre les états A à D, au million près ; la section 2 refait les sommes de l'état A.
+
+Budget général, en milliards d'euros :
+
+| Année | Recettes fiscales nettes : votées | exécutées | Écart | Recettes non fiscales : votées | exécutées | Écart | Prélèvements sur recettes : votés | exécutés | Écart |
+|---|---|---|---|---|---|---|---|---|---|
+| 2006 | 257,7 | 267,9 | +10,2 | 24,8 | 24,8 | −0,1 | 65,4 | 65,8 | +0,4 |
+| 2007 | 265,7 | 266,7 | +1,0 | 27,0 | 28,7 | +1,7 | 68,1 | 66,8 | −1,4 |
+| 2008 | 271,6 | 260,0 | −11,7 | 28,1 | 28,0 | −0,1 | 69,6 | 69,9 | +0,3 |
+| 2009 | 259,4 | 214,3 | −45,1 | 22,7 | 19,5 | −3,2 | 71,1 | 76,2 | +5,1 |
+| 2010 | 252,1 | 253,6 | +1,5 | 15,0 | 18,2 | +3,1 | 104,0 | 102,9 | −1,1 |
+| 2011 | 254,9 | 255,0 | +0,1 | 16,9 | 16,4 | −0,5 | 73,6 | 74,1 | +0,5 |
+| 2012 | 274,9 | 268,4 | −6,5 | 15,9 | 14,1 | −1,7 | 74,5 | 74,6 | +0,2 |
+| 2013 | 298,6 | 284,0 | −14,6 | 14,2 | 13,7 | −0,5 | 76,1 | 78,0 | +1,9 |
+| 2014 | 284,4 | 274,3 | −10,0 | 13,8 | 13,9 | +0,1 | 74,4 | 74,8 | +0,4 |
+| 2015 | 279,1 | 280,1 | +1,0 | 14,2 | 14,4 | +0,2 | 71,5 | 70,2 | −1,2 |
+| 2016 | 287,9 | 284,1 | −3,8 | 15,6 | 16,2 | +0,6 | 67,5 | 65,5 | −2,0 |
+| 2017 | 292,3 | 295,6 | +3,3 | 14,5 | 13,8 | −0,7 | 63,1 | 60,2 | −2,9 |
+| 2018 | 286,6 | 295,4 | +8,8 | 13,2 | 13,9 | +0,7 | 60,3 | 61,0 | +0,7 |
+| 2019 | 273,5 | 281,3 | +7,8 | 12,5 | 14,0 | +1,5 | 62,0 | 61,9 | −0,1 |
+| 2020 | 293,0 | 256,0 | −37,0 | 14,4 | 14,8 | +0,4 | 62,7 | 65,7 | +3,0 |
+| 2021 | 257,9 | 295,7 | +37,9 | 25,3 | 21,3 | −4,1 | 70,6 | 69,7 | −0,9 |
+| 2022 | 287,6 | 323,3 | +35,7 | 20,2 | 23,9 | +3,8 | 69,6 | 67,3 | −2,3 |
+| 2023 | 328,2 | 322,9 | −5,3 | 30,9 | 25,1 | −5,8 | 70,6 | 68,1 | −2,5 |
+| 2024 | 348,5 | 325,7 | −22,8 | 22,7 | 23,2 | +0,5 | 66,7 | 67,7 | +1,1 |
+| 2025 | 349,6 | 356,4 | +6,8 | 21,0 | 24,0 | +3,0 | 68,3 | 69,0 | +0,7 |
+| 2026 | 363,6 | — | — | 28,9 | — | — | 73,3 | — | — |
+
+Soldes, en milliards d'euros ; jusqu'aux comptes de 2012, le solde général exécuté est le solde d'exécution des lois de finances, que la loi arrête hors budgets annexes, presque toujours équilibrés :
+
+| Année | Solde du budget général : voté | exécuté | Écart | Solde général : voté | exécuté | Écart |
+|---|---|---|---|---|---|---|
+| 2006 | −48,9 | −42,5 | +6,4 | −46,9 | −39,0 | +7,9 |
+| 2007 | −42,3 | −38,2 | +4,1 | −42,0 | −34,7 | +7,3 |
+| 2008 | −41,2 | −57,0 | −15,8 | −41,7 | −56,3 | −14,6 |
+| 2009 | −66,2 | −129,9 | −63,8 | −67,0 | −138,0 | −71,0 |
+| 2010 | −122,1 | −150,8 | −28,7 | −117,4 | −148,8 | −31,4 |
+| 2011 | −88,2 | −90,1 | −1,9 | −91,6 | −90,7 | +0,9 |
+| 2012 | −74,4 | −88,2 | −13,8 | −78,7 | −87,1 | −8,4 |
+| 2013 | −62,6 | −75,4 | −12,8 | −62,3 | −74,9 | −12,6 |
+| 2014 | −81,6 | −85,7 | −4,2 | −82,6 | −85,6 | −3,0 |
+| 2015 | −74,2 | −72,1 | +2,1 | −74,4 | −70,5 | +3,9 |
+| 2016 | −73,7 | −75,9 | −2,2 | −72,3 | −69,1 | +3,2 |
+| 2017 | −74,7 | −73,3 | +1,4 | −69,3 | −67,7 | +1,7 |
+| 2018 | −86,7 | −76,9 | +9,8 | −85,7 | −76,0 | +9,7 |
+| 2019 | −108,7 | −96,9 | +11,8 | −107,7 | −92,7 | +15,0 |
+| 2020 | −93,1 | −172,7 | −79,6 | −93,1 | −178,1 | −84,9 |
+| 2021 | −172,4 | −171,5 | +0,8 | −173,3 | −170,7 | +2,6 |
+| 2022 | −153,8 | −158,2 | −4,4 | −153,8 | −151,4 | +2,4 |
+| 2023 | −161,4 | −168,2 | −6,7 | −164,9 | −173,0 | −8,0 |
+| 2024 | −141,3 | −153,9 | −12,6 | −146,9 | −155,9 | −9,0 |
+| 2025 | −136,6 | −122,5 | +14,1 | −139,0 | −124,2 | +14,8 |
+| 2026 | −133,5 | — | — | −134,6 | — | — |
+
+Budgets annexes (fonds de concours compris) et comptes spéciaux : recettes votées contre recettes exécutées, en milliards d'euros :
+
+| Année | Budgets annexes : votées | exécutées | Comptes d'affectation spéciale : votées | exécutées | Comptes de concours financiers : votées | exécutées |
+|---|---|---|---|---|---|---|
+| 2006 | 2,0 | 2,0 | 61,5 | 68,3 | 92,3 | 89,6 |
+| 2007 | 1,9 | 1,9 | 52,8 | 55,0 | 96,5 | 87,1 |
+| 2008 | 1,9 | 2,0 | 54,4 | 51,6 | 93,2 | 90,7 |
+| 2009 | 2,1 | 2,2 | 57,5 | 54,1 | 98,5 | 95,7 |
+| 2010 | 2,1 | 2,3 | 58,0 | 55,0 | 76,6 | 80,0 |
+| 2011 | 2,2 | 2,2 | 60,4 | 57,0 | 101,8 | 100,0 |
+| 2012 | 2,3 | 2,3 | 63,6 | 69,0 | 102,8 | 99,5 |
+| 2013 | 2,3 | 2,3 | 74,3 | 71,5 | 115,3 | 110,7 |
+| 2014 | 2,4 | 2,4 | 71,4 | 67,7 | 122,6 | 118,2 |
+| 2015 | 2,4 | 2,4 | 69,5 | 65,9 | 113,2 | 108,7 |
+| 2016 | 2,3 | 2,4 | 72,0 | 71,9 | 125,4 | 121,7 |
+| 2017 | 2,4 | 2,5 | 76,8 | 78,7 | 127,2 | 120,9 |
+| 2018 | 2,4 | 2,4 | 77,7 | 74,6 | 128,2 | 124,7 |
+| 2019 | 2,4 | 2,4 | 82,9 | 75,2 | 126,3 | 120,0 |
+| 2020 | 2,3 | 2,3 | 82,4 | 80,8 | 127,4 | 119,0 |
+| 2021 | 2,4 | 2,3 | 77,6 | 67,9 | 128,3 | 124,6 |
+| 2022 | 2,6 | 2,6 | 73,3 | 81,6 | 131,1 | 130,9 |
+| 2023 | 2,4 | 2,5 | 83,3 | 79,2 | 138,2 | 134,6 |
+| 2024 | 2,6 | 2,7 | 77,5 | 75,5 | 145,9 | 142,9 |
+| 2025 | 2,9 | 3,0 | 74,6 | 71,3 | 149,4 | 143,6 |
+| 2026 | 3,0 | — | 77,5 | — | 149,7 | — |
+
+Compte par compte : 298 des 319 recettes de budgets annexes et de comptes spéciaux votées pour les années dont les comptes sont arrêtés, de 2006 à 2025, se retrouvent, sous le même identifiant, dans la loi d'approbation des comptes de l'année. Les 21 autres n'y ont pas de recettes sous cet identifiant : « Accords monétaires internationaux » (16 années entre 2008 et 2025, évaluées à zéro), « Gestion et valorisation des ressources tirées de l’utilisation du spectre hertzien » (2009 et 2010), « Avances à l’audiovisuel » (2009), « Engagements en faveur de la forêt dans le cadre de la lutte contre le changement climatique » (2011) et « Participation de la France au désendettement de la Grèce » (2022, évaluées à zéro). Les 10 plus grands écarts entre les recettes d'un compte et leur évaluation, en milliards d'euros :
+
+| Année | Catégorie | Compte | Votées | Exécutées | Écart |
+|---|---|---|---|---|---|
+| 2021 | Comptes d'affectation spéciale | Participations financières de l’État | 14,0 | 4,8 | −9,2 |
+| 2022 | Comptes d'affectation spéciale | Participations financières de l’État | 9,6 | 17,4 | +7,8 |
+| 2020 | Comptes de concours financiers | Avances aux collectivités territoriales | 112,9 | 105,7 | −7,2 |
+| 2019 | Comptes d'affectation spéciale | Participations financières de l’État | 10,0 | 2,8 | −7,2 |
+| 2007 | Comptes de concours financiers | Avances à divers services de l’État ou organismes gérant des services publics | 14,1 | 7,0 | −7,1 |
+| 2012 | Comptes d'affectation spéciale | Participations financières de l’État | 5,0 | 9,7 | +4,7 |
+| 2011 | Comptes d'affectation spéciale | Participations financières de l’État | 5,0 | 0,6 | −4,4 |
+| 2015 | Comptes de concours financiers | Avances aux collectivités territoriales | 101,3 | 97,1 | −4,1 |
+| 2023 | Comptes d'affectation spéciale | Participations financières de l’État | 17,1 | 13,2 | −3,9 |
+| 2017 | Comptes de concours financiers | Avances aux collectivités territoriales | 106,1 | 102,2 | −3,9 |

@@ -585,9 +585,10 @@ def nombre_texte(texte):
     """« -3 377 967 838,47 » → (« -3377967838.47 », 2) ; None si le texte n'est pas un nombre. Un appel de note,
     astérisque avant ou après le nombre ou numéro entre parenthèses après lui (« 164,0 (1) »), n'en fait pas
     partie, ni le signe + d'un nombre positif, ni le signe % d'un pourcentage (« 26,7 % » → 26,7)."""
-    # Les marques de direction du texte, invisibles, que certaines pages laissent dans un nombre n'en font pas partie.
+    # Les marques de direction du texte, invisibles, que certaines pages laissent dans un nombre n'en font pas partie ;
+    # un trait d'union, insécable ou non, devant un nombre en est le signe moins.
     t = re.sub(r"[\s\u00a0\u202f\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", texte)
-    t = t.replace("−", "-").replace("–", "-").replace(",", ".")
+    t = re.sub(r"^[\u2010\u2011]", "-", t.replace("−", "-").replace("–", "-")).replace(",", ".")
     t = re.sub(r"^\(?\*\)?|\(?\*\)?$|(?<=[0-9])\([0-9]\)$|(?<=[0-9])%$", "", t)
     if not re.fullmatch(r"[-+]?[0-9]+(\.[0-9]+)?", t):
         return None
