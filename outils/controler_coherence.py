@@ -50,7 +50,10 @@ vérifie ce que disent les sources elles-mêmes :
    compte par compte ;
 19. le financement voté : le besoin de financement et les émissions de dette que prévoit chaque loi de finances
    initiale, et le plafond qu'elle fixe à la variation de la dette négociable à plus d'un an, contre le tableau de
-   financement que constate la loi d'approbation des comptes de l'année.
+   financement que constate la loi d'approbation des comptes de l'année ;
+20. les plafonds d'emplois votés : celui des emplois de l'État que fixe l'article d'équilibre de chaque loi de finances
+   initiale, contre sa répartition par ministère et par budget annexe, et ceux des opérateurs, des établissements à
+   autonomie financière et des autorités publiques indépendantes.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -677,9 +680,11 @@ RATIOS_ADDITIFS = {"PC_PIB", "PC_PIB_POTENTIEL"}
 A_UNE_UNITE_PRES = {"ofgl.annexe-2a", "ofgl.annexe-2b", "ofgl.annexe-2c", "ofgl.annexe-2d"}
 # Unités de dénombrement : un nombre n'est pas arrondi, il ne laisse aucune marge.
 DENOMBREMENTS = {u["id"] for u in lire("tables/unites.csv") if u["type"] == "nombre"}
-# Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes.
+# Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes. Seules ces familles
+# se ventilent par fonction : les montants, et les emplois des plafonds votés.
 FAMILLES = {"EUR": ("euros", 1), "K_EUR": ("euros", 1e3), "MIO_EUR": ("euros", 1e6), "MD_EUR": ("euros", 1e9),
-            "MIO_ECU_EUR": ("écus puis euros", 1e6)}
+            "MIO_ECU_EUR": ("écus puis euros", 1e6), "ETPT": ("équivalents temps plein travaillé", 1),
+            "ETP": ("équivalents temps plein", 1)}
 NOMS_RATIOS = {"PC_PIB": "% du PIB", "PC_DEPENSE": "% de la dépense totale"}  # ratios que l'on recalcule
 REGLES = {"indique": "le PIB indiqué par la source, dans le même tableau",
           "depense": "la dépense totale du même périmètre, chez la même source",
@@ -4000,6 +4005,52 @@ def partie_financement_vote(derniers):
     return lignes
 
 
+# 20. Plafonds d'emplois votés : celui des emplois de l'État que fixe l'article d'équilibre de chaque loi de finances
+# initiale, sa répartition par ministère et par budget annexe, et ceux des opérateurs, des établissements à autonomie
+# financière et des autorités publiques indépendantes. La loi d'approbation des comptes ne constate pas d'emplois.
+EMPLOIS_VOTES = ("LOLF.PLAFOND_EMPLOIS_LFI", "LOLF.BG_PLAFOND_EMPLOIS_LFI", "LOLF.BA_PLAFOND_EMPLOIS_LFI",
+                 "LOLF.OPERATEURS_PLAFOND_EMPLOIS_LFI", "LOLF.EAF_PLAFOND_EMPLOIS_LFI", "LOLF.API_PLAFOND_EMPLOIS_LFI")
+
+
+def partie_emplois_votes(derniers):
+    v = {}
+    for l in derniers.values():
+        if l["perimetre_id"] == "ETAT_LF" and l["concept_id"] in EMPLOIS_VOTES and not l["fonction_id"]:
+            v[(l["concept_id"], l["periode"], l["unite_id"])] = int(float(l["valeur"]))
+    annees = sorted({a for _, a, _ in v})
+    if not annees:
+        return []
+    n = lambda c, a, u="ETPT": "—" if (c, a, u) not in v else fr(v[(c, a, u)], 0)
+    etat, bg, ba = EMPLOIS_VOTES[:3]
+    ecarts = [(a, v[(etat, a, "ETPT")], v[(bg, a, "ETPT")] + v[(ba, a, "ETPT")]) for a in annees
+              if (etat, a, "ETPT") in v and v[(etat, a, "ETPT")] != v[(bg, a, "ETPT")] + v[(ba, a, "ETPT")]]
+    lignes = ["## 20. Plafonds d'emplois votés", "",
+              f"Les plafonds d'emplois que fixe la loi de finances initiale de chaque année, de {annees[0]} à {annees[-1]} : "
+              f"celui des emplois rémunérés par l'État, que fixe l'article d'équilibre et que la seconde partie de la loi "
+              f"répartit par ministère et par budget annexe, puis ceux des opérateurs de l'État, des agents de droit local "
+              f"des établissements à autonomie financière et des autorités publiques indépendantes. Les emplois de l'État "
+              f"et des autorités se comptent en équivalents temps plein travaillé (ETPT), ceux des établissements à "
+              f"autonomie financière en équivalents temps plein (ETP), et ceux des opérateurs en ETP jusqu'à la loi pour "
+              f"2014, en ETPT depuis. L'import vérifie chaque tableau contre ses lignes et contre la phrase qui l'annonce, "
+              f"et la section 2 refait ces sommes. La loi d'approbation des comptes ne constate pas d'emplois : la base n'a "
+              f"pas encore les emplois consommés.", "",
+              "| Année | État (article d'équilibre) | Budget général | Budgets annexes | Opérateurs (ETP) | Opérateurs (ETPT) "
+              "| Établissements à autonomie financière (ETP) | Autorités publiques indépendantes |",
+              "|---|---|---|---|---|---|---|---|"]
+    for a in annees:
+        lignes.append(f"| {a} | {n(etat, a)} | {n(bg, a)} | {n(ba, a)} | {n(EMPLOIS_VOTES[3], a, 'ETP')} | "
+                      f"{n(EMPLOIS_VOTES[3], a)} | {n(EMPLOIS_VOTES[4], a, 'ETP')} | {n(EMPLOIS_VOTES[5], a)} |")
+    lignes.append("")
+    if ecarts:
+        lignes += [" ".join(f"Pour {a}, le tableau qui répartit le plafond des emplois de l'État par ministère et par "
+                            f"budget annexe en compte {fr(t, 0)}, {fr(abs(t - e), 0)} de {'plus' if t > e else 'moins'} "
+                            f"que l'article d'équilibre ({fr(e, 0)}) ; ses lignes en font la somme exacte."
+                            for a, e, t in ecarts), ""]
+    else:
+        lignes += ["Chaque année, le tableau qui répartit le plafond des emplois de l'État en fait la somme exacte.", ""]
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -4014,7 +4065,7 @@ def ecrire_rapport(derniers):
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
-    lignes += partie_financement_vote(derniers)
+    lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

@@ -1,4 +1,6 @@
 id,libelle,type
+ETP,équivalents temps plein : emplois pondérés par leur quotité de travail,nombre
+ETPT,équivalents temps plein travaillé : emplois pondérés par leur quotité de travail et par leur durée dans l'année,nombre
 EUR,"euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
 K_EUR,"milliers d'euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
 MD_EUR,"milliards d'euros (avant 1999, francs convertis au taux fixe de 6,55957 francs pour un euro)",montant
