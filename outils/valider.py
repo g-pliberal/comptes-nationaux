@@ -22,8 +22,8 @@ import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
 from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_export_ofgl, lire_jsonstat,
-                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, nombre_de_phrase, nombre_texte,
-                    paquet, ressources_chiffres, texte_html, texte_pdf)
+                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, montants_de_case,
+                    nombre_de_phrase, nombre_texte, paquet, ressources_chiffres, texte_html, texte_pdf)
 
 
 def erreur_de_type(type_, texte):
@@ -158,9 +158,15 @@ def valeur_archivee(fichier, emplacement, copies):
             copies[fichier["id"]] = lire_tableaux_html(chemin)
         t, r, c = (int(x) for x in trouve.groups())
         try:
-            nombre = nombre_texte(copies[fichier["id"]][t][r][c])
+            case = copies[fichier["id"]][t][r][c]
         except IndexError:
             return None
+        rang = re.search(r";morceau=([0-9]+)(?:;|$)", emplacement)
+        if rang:  # une case qui réunit les montants de plusieurs lignes : le rang du montant dans la case
+            nombres, n = montants_de_case(case), int(rang.group(1))
+            nombre = nombres[n - 1] if nombres and 1 <= n <= len(nombres) else None
+        else:
+            nombre = nombre_texte(case)
         return (float(nombre[0]), "") if nombre else None
     if fichier["chemin"].endswith(".xml"):
         trouve = re.match(r"idbank=([0-9]+);periode=([0-9TQ-]+)", emplacement)
