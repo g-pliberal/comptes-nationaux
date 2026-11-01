@@ -33,6 +33,9 @@ moins l'amortissement de leur nominal. Une case qui réunit plusieurs lignes se 
 plafond d'emplois égale exactement la somme de ses lignes, et le total de son tableau celui de la phrase qui l'annonce ;
 la répartition des emplois de l'État égale le plafond de l'article d'équilibre, à l'écart déclaré dans ECARTS_EMPLOIS
 près, et chaque programme des tableaux par mission doit être un programme des états de la loi.
+Les lecteurs de l'état A et du tableau d'équilibre servent aussi à l'import des lois de finances rectificatives
+(outils/importer_lois_rectificatives.py), qui en règle la colonne des montants, la phrase qui annonce le tableau et ses
+libellés, et y lit des variations.
 
 Un état se reconnaît à son intitulé (« ÉTAT B (Article 167 de la loi) »), et les catégories de crédits qu'il répartit
 à son titre (« … des crédits du budget général »). Ses tableaux sont ceux qui s'ouvrent entre son intitulé et celui de
@@ -96,6 +99,8 @@ PARTIES_A = (("BG", r"\bI\.\s*[-–]\s*budget général"),
              ("BA", r"\bII\.\s*[-–]\s*budgets annexes"),
              ("CAS", r"\bIII\.\s*[-–]\s*comptes d’affectation spéciale"),
              ("CCF", r"\bIV\.\s*[-–]\s*comptes de concours financiers"))
+COLONNE_A = r"[ée]valuation pour"  # colonne des montants, suivie de l'année
+NUMERO_COLONNE_A = r"(?i)num[ée]ro ?de ligne|n° (?:de )?ligne"  # « Numéro de ligne », « N° de ligne »
 UNITE_A = r"\(\s*en\s+(euros|milliers d’euros)\s*\*?\s*\)"
 UNITES_A = {"euros": ("EUR", 1), "milliers d’euros": ("K_EUR", 1000)}
 NUMERO_A = r"[0-9]{1,4}(?: (?:bis|ter|quater))?|[A-Z][0-9]{3}"  # numéro de ligne, de division, ou « A701 »
@@ -109,13 +114,22 @@ RECETTES_BG = {"1": "LOLF.BG_RECETTES_FISCALES_{}_LFI", "2": "LOLF.BG_RECETTES_N
 FONDS_DE_CONCOURS_A = r"(?:Évaluation des fonds de concours|Fonds de concours(?: et attributions de produits)?)"
 SECTIONS_BA = r"Section des opérations (?:courantes|en capital)"  # budgets annexes, jusqu'à la loi pour 2008
 TOTAL_BA = r"Total des recettes(?: nettes| et des ressources de financement)?"
-TOTAL_CS = r"Total(?: des recettes| pour les comptes de concours financiers)?"
+TOTAL_CS = r"Total(?: des recettes| pour les comptes de concours financiers| des comptes de concours financiers)?"
 SECTION_CS = r"Section(?: [0-9]+)?\s*:\s*(.+)"
+# Totaux de la récapitulation des recettes du budget général : recettes brutes (1 + 2), nettes des prélèvements
+# (1 + 2 - 3) ; une loi de finances rectificative les dit « des révisions de recettes », et n'y compte que les catégories
+# qu'elle révise (« (1 - 3) »).
+TOTAL_BRUT_A = r"Total des (?:révisions de )?recettes (?:brutes|fiscales et non fiscales)(?: \(1 ?\+ ?2\))?"
+TOTAL_NET_A = (r"Total des (?:révisions de )?recettes,? nettes des prélèvements(?: \((?:1 ?\+ ?2 ?- ?3|1 ?- ?3|1 ?\+ ?2)\))?|"
+               r"Total des recettes A \+ B - C")
 # Écarts d'une page de l'état A entre un total et la somme de ses lignes : (source, total) → écart (total − somme), en
 # euros. Le chiffre du total garde le montant de la page, avec une note, et la section 2 du rapport de cohérence relève
 # l'écart ; tout autre écart arrête l'import.
 ECARTS_A = {
     ("an.ta14-0267", "Contrôle et exploitation aériens"): 300,
+    # État A révisé de la loi de finances rectificative pour 2006 (outils/importer_lois_rectificatives.py) : la division
+    # fait le compte de sa catégorie, de la récapitulation et du tableau d'équilibre ; une de ses lignes ne le fait pas.
+    ("senat.tas06-037", "28. Divers"): -100_000,
 }
 ECARTS_VUS = set()  # écarts de ECARTS_A que l'import a rencontrés : un écart déclaré absent arrête l'import
 
@@ -167,6 +181,7 @@ EQUILIBRE = {
            "Solde pour les comptes spéciaux": (None, None, "SOLDE_COMPTES_SPECIAUX"),
            "Solde général": (None, None, "RESULTAT_BUDGETAIRE")},
 }
+PHRASE_EQUILIBRE = r"Pour {annee},? les ressources affectées au budget"  # la phrase qui annonce le tableau
 # Montants que le tableau seul donne, et qui ne servent qu'à le vérifier : les charges des budgets annexes, fonds de
 # concours compris.
 VERIFIES_SEULEMENT = {"BA_CHARGES"}
@@ -494,18 +509,20 @@ def unite_a(texte):
     return UNITES_A[trouvees.pop()] if trouvees else None
 
 
-def entete_a(tableau, annee):
+def entete_a(tableau, annee, colonne=COLONNE_A):
     """(lignes d'en-tête, colonne du numéro de ligne ou None, colonne de l'intitulé, colonne de l'évaluation) d'un
-    tableau de l'état A, ou None s'il ne nomme pas ses colonnes ; l'évaluation est celle de l'année de la loi."""
+    tableau de l'état A, ou None s'il ne nomme pas ses colonnes ; l'évaluation est celle de l'année de la loi, dans la
+    colonne que nomme `colonne` (« Évaluation pour 2024 », « Révision des évaluations pour 2024 » dans une loi de
+    finances rectificative)."""
     for r, ligne in enumerate(tableau[:4]):
         textes = [propre(x) for x in ligne]
-        evaluation = [c for c, x in enumerate(textes) if re.match(r"(?i)[ée]valuation pour [0-9]{4}", x)]
+        evaluation = [c for c, x in enumerate(textes) if re.match(rf"(?i){colonne} [0-9]{{4}}", x)]
         intitule = [c for c, x in enumerate(textes) if re.match(r"(?i)(?:intitulé|désignation) de", x)]
-        numero = [c for c, x in enumerate(textes) if re.match(r"(?i)numéro de ligne", x)]
+        numero = [c for c, x in enumerate(textes) if re.match(NUMERO_COLONNE_A, x)]
         if evaluation and intitule:
             if len(evaluation) > 1 or len(intitule) > 1 or len(numero) > 1:
                 sys.exit(f"état A : en-tête ambigu ({textes})")
-            if not re.match(rf"(?i)[ée]valuation pour {annee}\b", textes[evaluation[0]]):
+            if not re.match(rf"(?i){colonne} {annee}\b", textes[evaluation[0]]):
                 sys.exit(f"état A : « {textes[evaluation[0]]} » dans la loi de finances pour {annee}")
             return r + 1, (numero[0] if numero else None), intitule[0], evaluation[0]
     return None
@@ -540,33 +557,42 @@ def tableaux_etat_a(grilles, flux, annee, source_id):
                 unite_courante = unite_a(" ".join(textes))  # tableau qui ne porte que l'unité des suivants
                 continue
             sys.exit(f"état A, tableau {k} : ni en-tête ni unité")
-        entete, cn, ci, cv = e
-        unite_ = unite_a(" ".join(x for l in tableau[:entete] for x in l)) or unite_courante
+        unite_ = unite_a(" ".join(x for l in tableau[:e[0]] for x in l)) or unite_courante
         if partie is None or unite_ is None:
             sys.exit(f"état A, tableau {k} : {'partie' if partie is None else 'unité'} inconnue")
-        nom_colonne, unite_courante = propre(tableau[entete - 1][cv]), unite_
-        for r in range(entete, len(tableau)):
-            ligne = tableau[r]
-            cases = [propre(nom(x)) for x in ligne]
-            if cv < len(cases) and re.match(r"(?i)[ée]valuation pour [0-9]{4}", cases[cv]):
-                continue  # en-tête que la page répète au haut d'une nouvelle page
-            numero = cases[cn] if cn is not None and re.fullmatch(NUMERO_A, cases[cn]) else ""
-            # L'intitulé d'une ligne de total tient parfois dans une autre colonne que celle des intitulés.
-            libelle = next((x for c, x in [(ci, cases[ci])] + list(enumerate(cases))
-                            if x and c != cv and not (c == cn and numero)), "")
-            brut = ligne[cv].strip() if cv < len(ligne) else ""
-            nombre = nombre_texte(brut)
-            partiel = any(re.fullmatch(r"\.{3,}", x.strip()) for x in ligne)
-            if nombre is None and brut and brut not in NEANT and not partiel:
-                sys.exit(f"état A, tableau {k}, ligne {r} : montant illisible (« {brut} »)")
-            if [c for c, x in enumerate(ligne) if c not in (cn, ci, cv) and nombre_texte(x)]:
-                sys.exit(f"état A, tableau {k}, ligne {r} : montant hors de la colonne de l'évaluation")
-            valeur = float(nombre[0]) * unite_[1] if nombre else 0 if brut in NEANT and brut else None
-            parties.setdefault(partie, []).append(
-                {"tableau": k, "ligne": r, "numero": numero, "libelle": libelle, "nombre": nombre, "valeur": valeur,
-                 "colonne": cv, "colonne_libelle": nom_colonne, "unite": unite_[0], "echelle": unite_[1],
-                 "partiel": partiel, "source": source_id, "note": ""})
+        unite_courante = unite_
+        rangees = rangees_a(tableau, k, e, unite_, source_id)
+        if rangees:
+            parties.setdefault(partie, []).extend(rangees)
     return parties
+
+
+def rangees_a(tableau, k, e, unite_, source_id, colonne=COLONNE_A):
+    """Les rangées d'un tableau de l'état A (le k-ième de la page), sous son en-tête `e` (entete_a) et dans l'unité
+    `unite_` (unité, échelle en euros) ; voir tableaux_etat_a."""
+    entete, cn, ci, cv = e
+    nom_colonne, rangees = propre(tableau[entete - 1][cv]), []
+    for r in range(entete, len(tableau)):
+        ligne = tableau[r]
+        cases = [propre(nom(x)) for x in ligne]
+        if cv < len(cases) and re.match(rf"(?i){colonne} [0-9]{{4}}", cases[cv]):
+            continue  # en-tête que la page répète au haut d'une nouvelle page
+        numero = cases[cn] if cn is not None and re.fullmatch(NUMERO_A, cases[cn]) else ""
+        # L'intitulé d'une ligne de total tient parfois dans une autre colonne que celle des intitulés.
+        libelle = next((x for c, x in [(ci, cases[ci])] + list(enumerate(cases))
+                        if x and c != cv and not (c == cn and numero)), "")
+        brut = ligne[cv].strip() if cv < len(ligne) else ""
+        nombre = nombre_texte(brut)
+        partiel = any(re.fullmatch(r"\.{3,}", x.strip()) for x in ligne)
+        if nombre is None and brut and brut not in NEANT and not partiel:
+            sys.exit(f"état A, tableau {k}, ligne {r} : montant illisible (« {brut} »)")
+        if [c for c, x in enumerate(ligne) if c not in (cn, ci, cv) and nombre_texte(x)]:
+            sys.exit(f"état A, tableau {k}, ligne {r} : montant hors de la colonne de l'évaluation")
+        valeur = float(nombre[0]) * unite_[1] if nombre else 0 if brut in NEANT and brut else None
+        rangees.append({"tableau": k, "ligne": r, "numero": numero, "libelle": libelle, "nombre": nombre,
+                        "valeur": valeur, "colonne": cv, "colonne_libelle": nom_colonne, "unite": unite_[0],
+                        "echelle": unite_[1], "partiel": partiel, "source": source_id, "note": ""})
+    return rangees
 
 
 def numero_division(numero):
@@ -641,10 +667,12 @@ def budget_general_a(rangees):
     return divisions, fonds
 
 
-def recapitulation_a(rangees):
+def recapitulation_a(rangees, complete=True):
     """Catégories de la récapitulation des recettes du budget général, chacune {rangee, divisions : [(numéro, libellé,
     rangée)], fonds : [rangée]}, et ses totaux {"1+2", "1+2-3"} ; dans le texte pour 2006, les parties A à D sont les
-    catégories 1 à 4, et la division 1 de la partie A la division 11."""
+    catégories 1 à 4, et la division 1 de la partie A la division 11. Une récapitulation `complete` donne les quatre
+    catégories, fonds de concours compris ; sinon (celle d'une loi de finances rectificative, qui ne donne que ce
+    qu'elle révise), une catégorie absente vaut zéro dans les totaux."""
     categories, totaux, categorie, finie = {}, {}, None, False
     for g in rangees:
         libelle, numero = g["libelle"], g["numero"]
@@ -661,10 +689,9 @@ def recapitulation_a(rangees):
             categories[categorie] = {"rangee": g if g["valeur"] is not None else None, "divisions": [], "fonds": []}
         elif re.fullmatch(r"Totaux pour la partie [A-D]", libelle) and categorie:
             categories[categorie]["rangee"] = g
-        elif re.fullmatch(r"Total des recettes (?:brutes|fiscales et non fiscales)(?: \(1 ?\+ ?2\))?", libelle):
+        elif re.fullmatch(TOTAL_BRUT_A, libelle):
             totaux["1+2"] = g
-        elif re.fullmatch(r"Total des recettes,? nettes des prélèvements(?: \(1 ?\+ ?2 ?- ?3\))?|"
-                          r"Total des recettes A \+ B - C", libelle):
+        elif re.fullmatch(TOTAL_NET_A, libelle):
             totaux["1+2-3"] = g
         elif categorie == "4" and re.fullmatch(FONDS_DE_CONCOURS_A, libelle):
             categories["4"]["fonds"].append(g)
@@ -675,14 +702,16 @@ def recapitulation_a(rangees):
             categories[categorie]["divisions"].append((numero_division(d.group(1)), d.group(2), g))
         else:
             sys.exit(f"état A, {ou(g)} : ligne « {numero} {libelle} » de la récapitulation inconnue")
-    if sorted(categories) != ["1", "2", "3", "4"] or any(c["rangee"] is None for n, c in categories.items() if n != "4"):
+    if (complete and sorted(categories) != ["1", "2", "3", "4"]) or not categories or \
+            any(c["rangee"] is None for n, c in categories.items() if n != "4"):
         sys.exit(f"état A : récapitulation incomplète ({', '.join(sorted(categories))})")
-    for n in ("1", "2", "3"):
+    for n in sorted(set(categories) - {"4"}):
         verifier_somme(categories[n]["rangee"], [g for _, _, g in categories[n]["divisions"]], "la catégorie")
-    fonds = [g for g in [categories["4"]["rangee"]] + categories["4"]["fonds"] if g and g["valeur"] is not None]
-    if not fonds or len({g["valeur"] for g in fonds}) > 1:
+    fonds = [g for g in [categories["4"]["rangee"]] + categories["4"]["fonds"] if g and g["valeur"] is not None] \
+        if "4" in categories else []
+    if (complete and not fonds) or len({g["valeur"] for g in fonds}) > 1:
         sys.exit("état A : fonds de concours de la récapitulation absents ou discordants")
-    c = {n: categories[n]["rangee"]["valeur"] for n in ("1", "2", "3")}
+    c = {n: categories[n]["rangee"]["valeur"] if n in categories else 0 for n in ("1", "2", "3")}
     for cle, attendu in (("1+2", c["1"] + c["2"]), ("1+2-3", c["1"] + c["2"] - c["3"])):
         g = totaux.get(cle)
         if g and abs(g["valeur"] - attendu) >= 0.5 * g["echelle"]:
@@ -734,10 +763,11 @@ def budgets_annexes_a(rangees, connus):
     return budgets
 
 
-def comptes_speciaux_a(rangees, connus, categorie):
+def comptes_speciaux_a(rangees, connus, categorie, total_requis=True):
     """Chaque compte d'affectation spéciale ou de concours financiers de l'état A : {nom, rangee, sections : [{nom,
-    rangee, lignes}], lignes}, et la rangée du total de la partie. Un compte s'annonce par son nom, que `connus`
-    (identifiants) doit contenir, une section par « Section : », une ligne par son numéro."""
+    rangee, lignes}], lignes}, et la rangée du total de la partie (None quand la partie n'en a pas et que `total_requis`
+    est faux). Un compte s'annonce par son nom, que `connus` (identifiants) doit contenir, une section par
+    « Section : », une ligne par son numéro."""
     comptes, compte, section, total = [], None, None, None
     for g in rangees:
         libelle, numero = g["libelle"], g["numero"]
@@ -762,13 +792,14 @@ def comptes_speciaux_a(rangees, connus, categorie):
             section = None
         else:
             sys.exit(f"état A, {ou(g)} : « {libelle} », compte {categorie} inconnu")
-    if total is None or not comptes:
+    if (total is None and total_requis) or not comptes:
         sys.exit(f"état A : comptes {categorie} sans total")
     for c in comptes:
         for s in c["sections"]:
             verifier_somme(s["rangee"], s["lignes"], "la section")
         verifier_somme(c["rangee"], [s["rangee"] for s in c["sections"]] + c["lignes"], "le compte")
-    verifier_somme(total, [c["rangee"] for c in comptes], "le total")
+    if total is not None:
+        verifier_somme(total, [c["rangee"] for c in comptes], "le total")
     return comptes, total
 
 
@@ -847,17 +878,20 @@ def recettes_a(parties, budgets_connus, comptes_connus):
     return [m for m in montants if m[4]["nombre"]], sorte
 
 
-def equilibre(grilles, flux, annee):
-    """Les montants du tableau de l'article d'équilibre, en millions d'euros : [(rubrique, clé de EQUILIBRE, fonction,
-    côté R, C ou S, rangée)]. Une rangée est {tableau, ligne, colonne, libelle, colonne_libelle, nombre, valeur} ; sa
-    valeur est 0 pour une case « néant »."""
+def equilibre(grilles, flux, annee, phrase=PHRASE_EQUILIBRE, lignes=None, variations=False):
+    """Les montants du tableau de l'article d'équilibre, en millions d'euros : [(rubrique, clé de `lignes` (EQUILIBRE),
+    fonction, côté R, C ou S, rangée)]. Une rangée est {tableau, ligne, colonne, libelle, colonne_libelle, nombre,
+    valeur} ; sa valeur est 0 pour une case « néant ». Le tableau suit la phrase `phrase` (son année entre accolades).
+    Celui d'une loi de finances rectificative ne donne que des variations (`variations`) : une case vide ou « néant »
+    n'y donne pas de montant, et une ligne d'un seul solde peut n'en donner aucun."""
+    lignes = lignes or EQUILIBRE
     trouves = [k for k, t in enumerate(grilles)
                if any(l and re.sub(r"\*+", "", propre(l[0])) == "Solde général" for l in t)]
     if len(trouves) != 1:
         sys.exit(f"{len(trouves)} tableaux d'équilibre")
     k = trouves[0]
     p = flux.index(f"⟦{k}⟧")
-    if not re.search(rf"Pour {annee},? les ressources affectées au budget", flux[max(0, p - 800):p].replace("'", "’")):
+    if not re.search(phrase.format(annee=annee), flux[max(0, p - 800):p].replace("'", "’")):
         sys.exit(f"tableau d'équilibre : l'article qui le précède n'est pas celui de la loi pour {annee}")
     t = grilles[k]
     entete, cols = None, {}
@@ -865,7 +899,7 @@ def equilibre(grilles, flux, annee):
         for c, x in enumerate(ligne):
             x = propre(x)
             for cote, motif in (("R", r"Ressources"), ("C", r"Dépenses|Charges"), ("S", r"Soldes?\b")):
-                if re.match(motif, x) and cote not in cols:
+                if re.match(motif, x, re.I) and cote not in cols:
                     cols[cote], entete = (c, x), r
     annonce = flux[max(0, p - 300):p] + " ".join(x for l in t[:entete + 1] for x in l)
     if sorted(cols) != ["C", "R", "S"] or not re.search(r"(?i)\(\s*en millions d’euros\s*\*?\s*\)",
@@ -882,8 +916,9 @@ def equilibre(grilles, flux, annee):
         ligne = t[r]
         libelle = re.sub(r"^-\s*", "", re.sub(r"\*+", "", propre(nom(ligne[0])))).strip()
         libelle = re.sub(r"^A déduire", "À déduire", re.sub(r"^Evaluation", "Évaluation", libelle))
+        libelle = re.sub(r"\s*/\s*", " / ", libelle)  # « Recettes fiscales brutes/dépenses brutes »
         nombres = {c: (n, float(n[0])) for c, x in enumerate(ligne) if c and (n := nombre_texte(x))}
-        neants = {c for c, x in enumerate(ligne) if c and x.strip() in NEANT}
+        neants = set() if variations else {c for c, x in enumerate(ligne) if c and x.strip() in NEANT}
         if not libelle and not nombres:
             continue
         if libelle.startswith("Les montants figurant dans le présent tableau"):
@@ -896,12 +931,14 @@ def equilibre(grilles, flux, annee):
             continue
         if bloc is None:
             sys.exit(f"tableau d'équilibre, ligne {r} : « {libelle} » hors d'une rubrique")
-        table = EQUILIBRE[bloc]
+        table = lignes[bloc]
         cle_ = {k.lower(): k for k in table}.get(libelle.lower(), "" if bloc in ("BA", "BA_FDC") else None)
         if cle_ is None:
             sys.exit(f"tableau d'équilibre, ligne {r} : « {libelle} » inconnu")
         fonction = f"LOLF.{code_lolf(libelle)}" if cle_ == "" else ""
         if table[cle_][:2] == (None, None):  # ligne d'un seul solde, où qu'il soit dans la ligne
+            if variations and not nombres:
+                continue
             if len(nombres) != 1:
                 sys.exit(f"tableau d'équilibre, ligne {r} : « {libelle} » sans montant unique")
             c, (n, v) = next(iter(nombres.items()))
@@ -925,12 +962,14 @@ def equilibre(grilles, flux, annee):
     return montants
 
 
-def verifier_equilibre(montants, sorte):
+def verifier_equilibre(montants, sorte, lignes=None, variations=False):
     """Le tableau d'équilibre s'additionne, à l'arrondi au million près de chacun de ses montants ; un montant que deux
-    lignes donnent y est le même."""
+    lignes donnent y est le même. Dans un tableau de `variations` (loi de finances rectificative), un terme que le
+    tableau ne donne pas vaut zéro."""
+    lignes = lignes or EQUILIBRE
     v = {}
     for bloc, cle_, fonction, cote, g in montants:
-        v.setdefault((EQUILIBRE[bloc][cle_]["RCS".index(cote)], fonction, cote), set()).add(g["valeur"])
+        v.setdefault((lignes[bloc][cle_]["RCS".index(cote)], fonction, cote), set()).add(g["valeur"])
     for cle_, valeurs in v.items():
         if len(valeurs) > 1:
             sys.exit(f"tableau d'équilibre : {cle_} vaut tour à tour {sorted(valeurs)}")
@@ -962,8 +1001,8 @@ def verifier_equilibre(montants, sorte):
                                                          "-BG_REMBOURSEMENTS_DEGREVEMENTS R"]),
                       ("BG_DEPENSES_NETTES_HORS_FDC C", ["BG_CP C", "-BG_REMBOURSEMENTS_DEGREVEMENTS C"])]
 
-    def termes(spec):
-        signe, facultatif = (-1 if "-" in spec[:2] else 1), "?" in spec[:2]
+    def termes(spec, partie=False):
+        signe, facultatif = (-1 if "-" in spec[:2] else 1), "?" in spec[:2] or (partie and variations)
         concept_, cote, *fonction = spec.lstrip("-?").split()
         fonctions = budgets if fonction == ["*"] else fonction or [""]
         valeurs = [x.get((concept_, f, cote)) for f in fonctions]
@@ -976,7 +1015,7 @@ def verifier_equilibre(montants, sorte):
         if t is None or (total.startswith("?") and (total.split()[0].lstrip("?"), (total.split()[2:] or [""])[0],
                                                      total.split()[1]) not in x):
             continue  # le tableau ne donne pas ce total
-        p = [termes(s) for s in parties]
+        p = [termes(s, partie=True) for s in parties]
         if None in p:
             sys.exit(f"tableau d'équilibre : un terme de {total} manque ({parties})")
         somme = sum(sum(q) for q in p)

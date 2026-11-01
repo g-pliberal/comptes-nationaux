@@ -74,6 +74,7 @@ import re
 import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
 import importer_drees_cps as cps
+import importer_lois_rectificatives as rectificatives
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
@@ -961,8 +962,8 @@ def concordances(derniers):
     groupes = collections.defaultdict(lambda: collections.defaultdict(dict))
     retenues = {}
     for k, l in derniers.items():
-        if "_LFR_" in l["concept_id"]:
-            continue  # ce qu'ouvre ou annule une loi de finances rectificative s'ajoute à ce que font les autres lois
+        if re.search(r"_LFR(?:_|$)", l["concept_id"]):
+            continue  # ce qu'ouvre, annule ou révise une loi de finances rectificative s'ajoute à ce que font les autres
         v, precision, unite = valeur(l)
         if unite != "écus puis euros" and retenu(l, retenues.get(k[:6] + (unite, k[7]))):
             retenues[k[:6] + (unite, k[7])] = l
@@ -4162,6 +4163,137 @@ def partie_lfr(derniers):
     return lignes
 
 
+# Section 21, suite : les évaluations de recettes révisées (état A) et l'article d'équilibre des lois de finances
+# rectificatives. Chaque loi donne la révision de ce qu'elle change ; celles d'une même année s'additionnent.
+REVISIONS_LFR = (("Recettes fiscales nettes", "LOLF.BG_RECETTES_FISCALES_NETTES"),
+                 ("Recettes non fiscales", "LOLF.BG_RECETTES_NON_FISCALES"),
+                 ("Prélèvements sur recettes", "LOLF.BG_PRELEVEMENTS_SUR_RECETTES"))
+GRANDES_REVISIONS = 10  # divisions de recettes du budget général citées pour la révision qu'une loi leur apporte
+CONCEPTS_ETAT_A_LFR = {"LOLF.BG_RECETTES_FISCALES_BRUTES", "LOLF.BG_RECETTES_FISCALES_NETTES",
+                       "LOLF.BG_RECETTES_NON_FISCALES", "LOLF.BG_PRELEVEMENTS_SUR_RECETTES",
+                       "LOLF.BA_RECETTES_HORS_FDC", "LOLF.CAS_RECETTES", "LOLF.CCF_RECETTES"}
+
+
+def partie_lfr_recettes(derniers):
+    revisions = collections.defaultdict(float)  # (concept sans suffixe, fonction, année) → somme des lois, en euros
+    par_loi = collections.defaultdict(dict)  # (année, source) → {(concept sans suffixe, fonction) : euros}
+    initiales, executes, fonctions_lfi = {}, {}, collections.defaultdict(set)
+    for l in derniers.values():
+        if l["perimetre_id"] != "ETAT_LF" or valeur(l)[2] != "euros":
+            continue
+        c, f, a = l["concept_id"], l["fonction_id"], l["periode"]
+        if c.endswith("_LFR"):
+            revisions[(c[:-4], f, a)] += valeur(l)[0]
+            par_loi[(a, l["source_id"])][(c[:-4], f)] = valeur(l)[0]
+        elif c.endswith("_LFI"):
+            fonctions_lfi[a].add(f)
+            if (c[:-4], f, a) not in initiales or valeur(l)[1] < valeur(initiales[(c[:-4], f, a)])[1]:
+                initiales[(c[:-4], f, a)] = l  # le montant le plus précis, quand deux tableaux le donnent
+        elif l["source_id"].startswith(_LOI[:-1]):
+            if (c, f, a) not in executes or l["version"] < executes[(c, f, a)]["version"]:
+                executes[(c, f, a)] = l
+    if not revisions:
+        return []
+    initiale = lambda c, a: valeur(initiales[(c, "", a)])[0] if (c, "", a) in initiales else None
+    execute = lambda c, a: valeur(executes[(c, "", a)])[0] if (c, "", a) in executes else None
+    titres = {s["id"]: s["titre"] for s in lire("tables/sources.csv")}
+    numero = lambda s: (re.search(r"loi n° ([0-9]{4}-[0-9]+)", titres.get(s, "")) or re.search("(.*)", s)).group(1)
+    libelles = {f["id"]: f["libelle"] for f in lire("tables/fonctions.csv")}
+    parents = {f["id"]: f["parent_id"] for f in lire("tables/fonctions.csv")}
+    md = lambda x: "—" if x is None else fr(x / 1e9, 1)
+    ecart = lambda x, y: "—" if x is None or y is None else signe_arrondi((y - x) / 1e9, 1)
+    # Toutes les lois, crédits compris ; celles dont la base ne lit pas le tableau d'équilibre laissent leur année
+    # incomplète.
+    lois = {l["source_id"]: l["periode"] for l in derniers.values()
+            if l["perimetre_id"] == "ETAT_LF" and re.search(r"_LFR(?:_|$)", l["concept_id"])}
+    equilibres = {s for (a, s), x in par_loi.items() if ("LOLF.RESULTAT_BUDGETAIRE", "") in x}
+    non_lues = sorted(s for s in lois if s in rectificatives.EQUILIBRE_EN_IMAGE or s in rectificatives.SANS_ARTICLES)
+    incompletes = {lois[s] for s in non_lues}
+    annees = sorted(set(lois.values()))
+    lignes = ["### Recettes et soldes révisés", "",
+              f"Ce que ces lois révisent des évaluations de recettes de l'état A et des soldes de l'article d'équilibre : "
+              f"{fr(len(lois), 0)} lois, dont la base lit le tableau d'équilibre de {fr(len(equilibres), 0)}. Chacune "
+              f"ne donne que ce qu'elle change, et celles d'une même année s'additionnent : l'évaluation révisée est "
+              f"celle de la loi de finances initiale (section 18) plus ces révisions. L'import vérifie chaque division "
+              f"de l'état A révisé contre ses lignes, chaque compte contre ses sections et ses lignes, chaque catégorie "
+              f"de la récapitulation contre ses divisions ; le tableau d'équilibre entre ses lignes, ses ressources "
+              f"contre l'état A et ses charges contre les crédits que la loi ouvre et annule, au million près, et "
+              f"chaque solde contre celui que donnent les états. La section 2 refait les sommes de l'état A."]
+    if non_lues:
+        lignes[-1] += (" Années incomplètes, faute du tableau d'équilibre d'une de leurs lois : "
+                       + plage(sorted(incompletes)) + " (" + " ; ".join(
+                           f"loi n° {numero(s)}, " + ("tableau en image dans la page" if s in
+                                                      rectificatives.EQUILIBRE_EN_IMAGE else
+                                                      "page dont des octets nuls recouvrent les articles")
+                           for s in sorted(non_lues, key=lambda s: lois[s])) + ").")
+    lignes += ["", "Budget général et solde général, en milliards d'euros :", "",
+               "| Année | Recettes fiscales nettes : initiale | révisions | révisée | exécutées | Écart | "
+               "Solde général : initial | variations | révisé | exécuté | Écart |",
+               "|---|---|---|---|---|---|---|---|---|---|---|"]
+    for a in annees:
+        r_i, r_r = initiale("LOLF.BG_RECETTES_FISCALES_NETTES", a), revisions.get(("LOLF.BG_RECETTES_FISCALES_NETTES",
+                                                                                    "", a), 0)
+        s_i, s_r = initiale("LOLF.RESULTAT_BUDGETAIRE", a), revisions.get(("LOLF.RESULTAT_BUDGETAIRE", "", a), 0)
+        r_v = None if r_i is None else r_i + r_r
+        s_v = None if s_i is None else s_i + s_r
+        r_e = execute("LOLF.BG_RECETTES_FISCALES_NETTES", a)
+        s_e = execute("LOLF.RESULTAT_BUDGETAIRE", a)
+        s_e = execute("LOLF.RESULTAT_EXECUTION", a) if s_e is None else s_e
+        lignes.append(f"| {a}{' *' if a in incompletes else ''} | {md(r_i)} | {md(r_r)} | {md(r_v)} | {md(r_e)} | "
+                      f"{ecart(r_v, r_e)} | {md(s_i)} | {md(s_r)} | {md(s_v)} | {md(s_e)} | {ecart(s_v, s_e)} |")
+    if incompletes:
+        lignes += ["", "\\* Année incomplète : les révisions n'y comptent pas une loi dont la base ne lit pas le "
+                   "tableau d'équilibre."]
+    lignes += ["", "Loi par loi, révisions du budget général et variation du solde général, en milliards d'euros ; les "
+               "dépenses nettes sont les crédits de paiement ouverts moins annulés, hors remboursements et dégrèvements :",
+               "", "| Année | Loi | " + " | ".join(nom for nom, _ in REVISIONS_LFR) + " | Dépenses nettes | "
+               "Solde général |", "|---|---|" + "---|" * (len(REVISIONS_LFR) + 2)]
+    for s in sorted(lois, key=lambda s: (lois[s], int(numero(s).split("-")[1]) if "-" in numero(s) else 0)):
+        a = lois[s]
+        x = {c: v for (c, f), v in par_loi.get((a, s), {}).items() if f == ""}
+        # Sans tableau d'équilibre, l'état A donne encore les recettes non fiscales et les prélèvements, pas les
+        # recettes fiscales nettes ; une page sans l'état A ne donne rien.
+        lu, etat_a = s in equilibres, s not in rectificatives.SANS_ARTICLES
+        cases = [md(x.get(c, 0)) if lu or (etat_a and c != "LOLF.BG_RECETTES_FISCALES_NETTES") else "—"
+                 for _, c in REVISIONS_LFR]
+        lignes.append(f"| {a} | {numero(s)} | " + " | ".join(cases) + " | "
+                      f"{md(x.get('LOLF.BG_DEPENSES_NETTES_HORS_FDC', 0)) if lu else '—'} | "
+                      f"{md(x.get('LOLF.RESULTAT_BUDGETAIRE', 0)) if lu else '—'} |")
+    # Le solde général de chaque tableau d'équilibre contre la somme de ses soldes, à l'arrondi au million près.
+    justes = [s for (a, s), x in par_loi.items() if s in equilibres and abs(
+        x.get(("LOLF.RESULTAT_BUDGETAIRE", ""), 0) - x.get(("LOLF.SOLDE_BUDGET_GENERAL", ""), 0)
+        - x.get(("LOLF.BA_SOLDE_HORS_FDC", ""), 0) - x.get(("LOLF.SOLDE_COMPTES_SPECIAUX", ""), 0)) <= 2e6]
+    lignes += ["", f"Le solde général égale, à l'arrondi au million près de chacun de ses montants, la somme des soldes "
+               f"du budget général, des budgets annexes et des comptes spéciaux dans {fr(len(justes), 0)} des "
+               f"{fr(len(equilibres), 0)} tableaux d'équilibre."]
+    # Les divisions, les lignes, les comptes et les sections de recettes que révisent ces lois, contre ceux de la loi
+    # de finances initiale de la même année.
+    revises = {(f, a) for (c, f, a) in revisions if f and c in CONCEPTS_ETAT_A_LFR}
+    toutes = set().union(*fonctions_lfi.values())
+    ailleurs = [(a, f) for f, a in revises if f not in fonctions_lfi[a] and f in toutes]
+    seules = sorted((a, f) for f, a in revises if f not in toutes)
+    lignes += ["", f"Divisions, lignes, comptes et sections de recettes : "
+               f"{fr(len(revises) - len(ailleurs) - len(seules), 0)} des {fr(len(revises), 0)} que révisent ces lois, "
+               f"année par année, se retrouvent sous le même identifiant dans la loi de finances initiale de l'année ; "
+               f"{fr(len(ailleurs), 0)} autres, dans celle d'une autre année, dont la page écrit leur libellé comme "
+               f"celle de la loi rectificative (« Retenue » ou « Retenues à la source », « assurance » ou « assurances »)"
+               f". Les {fr(len(seules), 0)} dernières n'ont d'identifiant que dans ces lois : des lignes qu'elles créent, "
+               f"ou que leur page écrit autrement que toute loi de finances initiale (un numéro de ligne que celle-ci "
+               f"n'imprime pas, une section qu'elle omet) :", "", "| Année | Ligne | Rattachée à |", "|---|---|---|"]
+    lignes += [f"| {a} | {libelles.get(f, f)} | {libelles.get(parents.get(f), '') or '—'} |" for a, f in seules]
+    grandes = []
+    for (a, s), x in par_loi.items():
+        for (c, f), v in x.items():
+            if f.startswith("LOLF.RECETTES.") and parents.get(f) == "" and c in CONCEPTS_ETAT_A_LFR:
+                grandes.append((a, numero(s), libelles.get(f, f), v))
+    grandes.sort(key=lambda t: -abs(t[3]))
+    lignes += ["", f"Les {GRANDES_REVISIONS} plus grandes révisions d'une division de recettes du budget général par "
+               f"une seule loi, en milliards d'euros :", "", "| Année | Loi | Division | Révision |", "|---|---|---|---|"]
+    lignes += [f"| {a} | {n} | {d} | {signe_arrondi(v / 1e9, 1)} |" for a, n, d, v in grandes[:GRANDES_REVISIONS]]
+    lignes.append("")
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -4177,6 +4309,7 @@ def ecrire_rapport(derniers):
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
     lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers) + partie_lfr(derniers)
+    lignes += partie_lfr_recettes(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")
