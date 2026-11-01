@@ -12,32 +12,32 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 |---|---|---|---|
 | an.ta12-0525 | Projet de loi de finances pour 2006, texte adopté n° 525 (12e législature) : conclusions de la commission mixte paritaire, adoptées par l'Assemblée nationale le 20 décembre 2005 | 2005-12-20 | 151 |
 | an.ta13-0808 | Projet de loi de finances pour 2012, texte adopté n° 808 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 1076 |
-| an.ta13-0812 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1978), texte adopté n° 812 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 322 |
-| an.ta13-0873 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-354), texte adopté n° 873 (13e législature), adopté définitivement par l'Assemblée nationale le 29 février 2012 | 2012-02-29 | 324 |
-| an.ta14-0071 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-1510), texte adopté n° 71 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2012 | 2012-12-19 | 366 |
+| an.ta13-0812 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1978), texte adopté n° 812 (13e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2011 | 2011-12-21 | 334 |
+| an.ta13-0873 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-354), texte adopté n° 873 (13e législature), adopté définitivement par l'Assemblée nationale le 29 février 2012 | 2012-02-29 | 336 |
+| an.ta14-0071 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-1510), texte adopté n° 71 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2012 | 2012-12-19 | 377 |
 | an.ta14-0073 | Projet de loi de finances pour 2013, texte adopté n° 73 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2012 | 2012-12-20 | 1116 |
 | an.ta14-0267 | Projet de loi de finances pour 2014, texte adopté n° 267 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 1148 |
-| an.ta14-0268 | Projet de loi de finances rectificative pour 2013 (loi n° 2013-1279), texte adopté n° 268 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 663 |
-| an.ta14-0395 | Projet de loi de finances rectificative pour 2014 (loi n° 2014-891), texte adopté n° 395 (14e législature), adopté définitivement par l'Assemblée nationale le 23 juillet 2014 | 2014-07-23 | 336 |
+| an.ta14-0268 | Projet de loi de finances rectificative pour 2013 (loi n° 2013-1279), texte adopté n° 268 (14e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2013 | 2013-12-19 | 675 |
+| an.ta14-0395 | Projet de loi de finances rectificative pour 2014 (loi n° 2014-891), texte adopté n° 395 (14e législature), adopté définitivement par l'Assemblée nationale le 23 juillet 2014 | 2014-07-23 | 351 |
 | an.ta14-0459 | Projet de loi de finances pour 2015, texte adopté n° 459 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 1088 |
-| an.ta14-0460 | Projet de loi de finances rectificative pour 2014 (loi n° 2014-1655), texte adopté n° 460 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 439 |
+| an.ta14-0460 | Projet de loi de finances rectificative pour 2014 (loi n° 2014-1655), texte adopté n° 460 (14e législature), adopté définitivement par l'Assemblée nationale le 18 décembre 2014 | 2014-12-18 | 455 |
 | an.ta14-0648 | Projet de loi de finances pour 2016, texte adopté n° 648 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 1087 |
-| an.ta14-0649 | Projet de loi de finances rectificative pour 2015 (loi n° 2015-1786), texte adopté n° 649 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 449 |
+| an.ta14-0649 | Projet de loi de finances rectificative pour 2015 (loi n° 2015-1786), texte adopté n° 649 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 464 |
 | an.ta14-0865 | Projet de loi de finances pour 2017, texte adopté n° 865 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2016 | 2016-12-20 | 1072 |
-| an.ta14-0877 | Projet de loi de finances rectificative pour 2016 (loi n° 2016-1918), texte adopté n° 877 (14e législature), adopté définitivement par l'Assemblée nationale le 22 décembre 2016 | 2016-12-22 | 455 |
+| an.ta14-0877 | Projet de loi de finances rectificative pour 2016 (loi n° 2016-1918), texte adopté n° 877 (14e législature), adopté définitivement par l'Assemblée nationale le 22 décembre 2016 | 2016-12-22 | 467 |
 | an.ta15-0032 | Projet de loi de finances rectificative pour 2017 (loi n° 2017-1640), texte adopté n° 32 (15e législature), adopté définitivement par l'Assemblée nationale le 14 novembre 2017 | 2017-11-14 | 8 |
 | an.ta15-0065 | Projet de loi de finances pour 2018, texte adopté n° 65 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 1083 |
-| an.ta15-0067 | Projet de loi de finances rectificative pour 2017 (loi n° 2017-1775), texte adopté n° 67 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 322 |
-| an.ta15-0195 | Projet de loi de finances rectificative pour 2018 (loi n° 2018-1104), texte adopté n° 195 (15e législature), adopté définitivement par l'Assemblée nationale le 28 novembre 2018 | 2018-11-28 | 649 |
+| an.ta15-0067 | Projet de loi de finances rectificative pour 2017 (loi n° 2017-1775), texte adopté n° 67 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 334 |
+| an.ta15-0195 | Projet de loi de finances rectificative pour 2018 (loi n° 2018-1104), texte adopté n° 195 (15e législature), adopté définitivement par l'Assemblée nationale le 28 novembre 2018 | 2018-11-28 | 663 |
 | an.ta15-0213 | Projet de loi de finances pour 2019, texte adopté n° 213 (15e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2018 | 2018-12-20 | 1094 |
 | an.ta15-0374 | Projet de loi de finances pour 2020, texte adopté n° 374 (15e législature), adopté définitivement par l'Assemblée nationale le 19 décembre 2019 | 2019-12-19 | 1071 |
-| an.ta15-0471 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-935), texte adopté n° 471 (15e législature), adopté définitivement par l'Assemblée nationale le 23 juillet 2020 | 2020-07-23 | 176 |
+| an.ta15-0471 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-935), texte adopté n° 471 (15e législature), adopté définitivement par l'Assemblée nationale le 23 juillet 2020 | 2020-07-23 | 191 |
 | an.ta15-0538 | Projet de loi de finances pour 2021, texte adopté n° 538 rectifié (15e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2020 | 2020-12-17 | 1109 |
-| an.ta15-0701 | Projet de loi de finances rectificative pour 2021 (loi n° 2021-1549), texte adopté n° 701 (15e législature), adopté définitivement par l'Assemblée nationale le 24 novembre 2021 | 2021-11-24 | 748 |
+| an.ta15-0701 | Projet de loi de finances rectificative pour 2021 (loi n° 2021-1549), texte adopté n° 701 (15e législature), adopté définitivement par l'Assemblée nationale le 24 novembre 2021 | 2021-11-24 | 764 |
 | an.ta15-0737 | Projet de loi de finances pour 2022, texte adopté n° 737 (15e législature), adopté définitivement par l'Assemblée nationale le 15 décembre 2021 | 2021-12-15 | 1121 |
 | an.ta16-0051 | Projet de loi de finances pour 2023, texte adopté n° 51 rectifié (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 17 décembre 2022 | 2022-12-17 | 1073 |
 | an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 1079 |
-| an.ta17-0017 | Projet de loi de finances de fin de gestion pour 2024 (loi n° 2024-1167), texte adopté n° 17 (17e législature), adopté définitivement par l'Assemblée nationale le 4 décembre 2024 | 2024-12-04 | 752 |
+| an.ta17-0017 | Projet de loi de finances de fin de gestion pour 2024 (loi n° 2024-1167), texte adopté n° 17 (17e législature), adopté définitivement par l'Assemblée nationale le 4 décembre 2024 | 2024-12-04 | 767 |
 | an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 1057 |
 | dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
 | dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
@@ -137,32 +137,32 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | senat.tas06-037 | Projet de loi de finances rectificative pour 2006 (loi n° 2006-1771), texte définitif n° 37 (2006-2007) adopté par le Sénat le 21 décembre 2006 | 2006-12-21 | 528 |
 | senat.tas07-034 | Projet de loi de finances pour 2008, texte définitif n° 34 (2007-2008) adopté par le Sénat le 18 décembre 2007 | 2007-12-18 | 902 |
 | senat.tas07-043 | Projet de loi de finances rectificative pour 2007 (loi n° 2007-1824), texte définitif n° 43 (2007-2008) adopté par le Sénat le 20 décembre 2007 | 2007-12-20 | 515 |
-| senat.tas08-001 | Projet de loi de finances rectificative pour le financement de l'économie (loi n° 2008-1061), texte définitif n° 1 (2008-2009) adopté par le Sénat le 15 octobre 2008 | 2008-10-15 | 18 |
+| senat.tas08-001 | Projet de loi de finances rectificative pour le financement de l'économie (loi n° 2008-1061), texte définitif n° 1 (2008-2009) adopté par le Sénat le 15 octobre 2008 | 2008-10-15 | 30 |
 | senat.tas08-035 | Projet de loi de finances pour 2009, texte définitif n° 35 (2008-2009) adopté par le Sénat le 17 décembre 2008 | 2008-12-17 | 1039 |
-| senat.tas08-037 | Projet de loi de finances rectificative pour 2008 (loi n° 2008-1443), texte définitif n° 37 (2008-2009) adopté par le Sénat le 22 décembre 2008 | 2008-12-22 | 376 |
-| senat.tas08-042 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-122), texte définitif n° 42 (2008-2009) adopté par le Sénat le 29 janvier 2009 | 2009-01-29 | 40 |
-| senat.tas08-076 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-431), texte définitif n° 76 (2008-2009) adopté par le Sénat le 9 avril 2009 | 2009-04-09 | 304 |
+| senat.tas08-037 | Projet de loi de finances rectificative pour 2008 (loi n° 2008-1443), texte définitif n° 37 (2008-2009) adopté par le Sénat le 22 décembre 2008 | 2008-12-22 | 388 |
+| senat.tas08-042 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-122), texte définitif n° 42 (2008-2009) adopté par le Sénat le 29 janvier 2009 | 2009-01-29 | 52 |
+| senat.tas08-076 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-431), texte définitif n° 76 (2008-2009) adopté par le Sénat le 9 avril 2009 | 2009-04-09 | 316 |
 | senat.tas09-034 | Projet de loi de finances pour 2010, texte définitif n° 34 (2009-2010) adopté par le Sénat le 18 décembre 2009 | 2009-12-18 | 1051 |
-| senat.tas09-050 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-1674), texte définitif n° 50 (2009-2010) adopté par le Sénat le 23 décembre 2009 | 2009-12-23 | 529 |
-| senat.tas09-079 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-237), texte définitif n° 79 (2009-2010) adopté par le Sénat le 25 février 2010 | 2010-02-25 | 323 |
-| senat.tas09-104 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-463), texte définitif n° 104 (2009-2010) adopté par le Sénat le 6 mai 2010 | 2010-05-06 | 198 |
+| senat.tas09-050 | Projet de loi de finances rectificative pour 2009 (loi n° 2009-1674), texte définitif n° 50 (2009-2010) adopté par le Sénat le 23 décembre 2009 | 2009-12-23 | 541 |
+| senat.tas09-079 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-237), texte définitif n° 79 (2009-2010) adopté par le Sénat le 25 février 2010 | 2010-02-25 | 336 |
+| senat.tas09-104 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-463), texte définitif n° 104 (2009-2010) adopté par le Sénat le 6 mai 2010 | 2010-05-06 | 210 |
 | senat.tas10-032 | Projet de loi de finances pour 2011, texte définitif n° 32 (2010-2011) adopté par le Sénat le 15 décembre 2010 | 2010-12-15 | 957 |
-| senat.tas10-038 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-1658), texte définitif n° 38 (2010-2011) adopté par le Sénat le 21 décembre 2010 | 2010-12-21 | 445 |
+| senat.tas10-038 | Projet de loi de finances rectificative pour 2010 (loi n° 2010-1658), texte définitif n° 38 (2010-2011) adopté par le Sénat le 21 décembre 2010 | 2010-12-21 | 457 |
 | senat.tas10-161 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-900), texte définitif n° 161 (2010-2011) adopté par le Sénat le 6 juillet 2011 | 2011-07-06 | 342 |
-| senat.tas10-193 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1117), texte définitif n° 193 (2010-2011) adopté par le Sénat le 8 septembre 2011 | 2011-09-08 | 193 |
-| senat.tas11-007 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1416), texte définitif n° 7 (2011-2012) adopté par le Sénat le 25 octobre 2011 | 2011-10-25 | 157 |
-| senat.tas11-138 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-958), texte définitif n° 138 (2011-2012) adopté par le Sénat le 31 juillet 2012 | 2012-07-31 | 295 |
-| senat.tas19-030 | Projet de loi de finances rectificative pour 2019 (loi n° 2019-1270), texte définitif n° 30 (2019-2020) adopté par le Sénat le 26 novembre 2019 | 2019-11-26 | 733 |
-| senat.tas19-078 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-289), texte définitif n° 78 (2019-2020) adopté par le Sénat le 20 mars 2020 | 2020-03-20 | 158 |
-| senat.tas19-084 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-473), texte définitif n° 84 (2019-2020) adopté par le Sénat le 23 avril 2020 | 2020-04-23 | 120 |
-| senat.tas20-025 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-1473), texte définitif n° 25 (2020-2021) adopté par le Sénat le 24 novembre 2020 | 2020-11-24 | 744 |
-| senat.tas20-136 | Projet de loi de finances rectificative pour 2021 (loi n° 2021-953), texte définitif n° 136 (2020-2021) adopté par le Sénat le 12 juillet 2021 | 2021-07-12 | 388 |
-| senat.tas21-148 | Projet de loi de finances rectificative pour 2022 (loi n° 2022-1157), texte définitif n° 148 (2021-2022) adopté par le Sénat le 4 août 2022 | 2022-08-04 | 470 |
+| senat.tas10-193 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1117), texte définitif n° 193 (2010-2011) adopté par le Sénat le 8 septembre 2011 | 2011-09-08 | 205 |
+| senat.tas11-007 | Projet de loi de finances rectificative pour 2011 (loi n° 2011-1416), texte définitif n° 7 (2011-2012) adopté par le Sénat le 25 octobre 2011 | 2011-10-25 | 168 |
+| senat.tas11-138 | Projet de loi de finances rectificative pour 2012 (loi n° 2012-958), texte définitif n° 138 (2011-2012) adopté par le Sénat le 31 juillet 2012 | 2012-07-31 | 307 |
+| senat.tas19-030 | Projet de loi de finances rectificative pour 2019 (loi n° 2019-1270), texte définitif n° 30 (2019-2020) adopté par le Sénat le 26 novembre 2019 | 2019-11-26 | 745 |
+| senat.tas19-078 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-289), texte définitif n° 78 (2019-2020) adopté par le Sénat le 20 mars 2020 | 2020-03-20 | 172 |
+| senat.tas19-084 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-473), texte définitif n° 84 (2019-2020) adopté par le Sénat le 23 avril 2020 | 2020-04-23 | 136 |
+| senat.tas20-025 | Projet de loi de finances rectificative pour 2020 (loi n° 2020-1473), texte définitif n° 25 (2020-2021) adopté par le Sénat le 24 novembre 2020 | 2020-11-24 | 760 |
+| senat.tas20-136 | Projet de loi de finances rectificative pour 2021 (loi n° 2021-953), texte définitif n° 136 (2020-2021) adopté par le Sénat le 12 juillet 2021 | 2021-07-12 | 403 |
+| senat.tas21-148 | Projet de loi de finances rectificative pour 2022 (loi n° 2022-1157), texte définitif n° 148 (2021-2022) adopté par le Sénat le 4 août 2022 | 2022-08-04 | 485 |
 | senat.tas22-018 | Projet de loi de financement de la sécurité sociale pour 2023, texte n° 18 (2022-2023) adopté par le Sénat en première lecture le 15 novembre 2022 | 2022-11-15 | 230 |
-| senat.tas22-028 | Projet de loi de finances rectificative pour 2022 (loi n° 2022-1499), texte définitif n° 28 (2022-2023) adopté par le Sénat le 25 novembre 2022 | 2022-11-25 | 523 |
-| senat.tas23-024 | Projet de loi de finances de fin de gestion pour 2023 (loi n° 2023-1114), texte définitif n° 24 (2023-2024) adopté par le Sénat le 22 novembre 2023 | 2023-11-22 | 565 |
+| senat.tas22-028 | Projet de loi de finances rectificative pour 2022 (loi n° 2022-1499), texte définitif n° 28 (2022-2023) adopté par le Sénat le 25 novembre 2022 | 2022-11-25 | 539 |
+| senat.tas23-024 | Projet de loi de finances de fin de gestion pour 2023 (loi n° 2023-1114), texte définitif n° 24 (2023-2024) adopté par le Sénat le 22 novembre 2023 | 2023-11-22 | 581 |
 | senat.tas24-048 | Projet de loi de finances pour 2025, texte définitif n° 48 (2024-2025) adopté par le Sénat le 6 février 2025 | 2025-02-06 | 1072 |
-| senat.tas25-024 | Projet de loi de finances de fin de gestion pour 2025 (loi n° 2025-1173), texte définitif n° 24 (2025-2026) adopté par le Sénat le 3 décembre 2025 | 2025-12-03 | 588 |
+| senat.tas25-024 | Projet de loi de finances de fin de gestion pour 2025 (loi n° 2025-1173), texte définitif n° 24 (2025-2026) adopté par le Sénat le 3 décembre 2025 | 2025-12-03 | 603 |
 
 ## 1. Sommes comptables
 
@@ -2823,3 +2823,67 @@ Les 10 plus grandes révisions d'une division de recettes du budget général pa
 | 2020 | 2020-1473 | 16. Taxe sur la valeur ajoutée | +10,9 |
 | 2013 | 2013-1279 | 16. Taxe sur la valeur ajoutée | −10,1 |
 | 2021 | 2021-1549 | 13. Impôt sur les sociétés | +8,4 |
+
+### Financement et plafonds révisés
+
+Le tableau de financement de l'article d'équilibre, que chaque loi réécrit, et les plafonds de la variation de la dette négociable de l'État d'une durée supérieure à un an et des emplois rémunérés par l'État, qu'elle change : des niveaux, que la loi suivante de l'année remplace, et non des variations. L'import vérifie que chaque tableau s'additionne, et qu'un plafond de la dette que fixe une loi égale les émissions de dette à moyen et long termes, nettes des rachats, moins l'amortissement de leur nominal, à l'arrondi de ces montants près. Le déficit du tableau est l'évaluation du Gouvernement pour l'année ; il se compare ici au déficit voté, celui de la loi de finances initiale (section 18) et des variations du solde général que donnent les tableaux d'équilibre des lois de l'année jusqu'à celle-ci (partie précédente), à l'arrondi du tableau près (0,05 Md€).
+
+Loi par loi, en milliards d'euros, et en équivalents temps plein travaillé pour les emplois. Un plafond « inchangé » reste celui de la loi précédente de l'année, à défaut celui de la loi de finances initiale ; « non mentionné » : la loi n'en dit rien (ni tableau de financement ni plafond de la dette dans les lois n° 2006-1771 et 2007-1824, pas de plafond des emplois dans les lois n° 2024-1167 et 2025-1173) ; « image » : la page donne le tableau en image (loi n° 2011-900) ; « illisible » : la page ne laisse pas lire les articles (loi n° 2017-1640) :
+
+| Année | Loi | Déficit à financer | Déficit voté | Écart | Plafond de la dette | Plafond des emplois |
+|---|---|---|---|---|---|---|
+| 2006 | 2006-1771 | non mentionné | 45,7 | — | non mentionné | inchangé |
+| 2007 | 2007-1824 | non mentionné | 38,3 | — | non mentionné | inchangé |
+| 2008 | 2008-1061 | 49,4 | 49,4 | +0,0 | 18,9 | inchangé |
+| 2008 | 2008-1443 | 51,5 | 51,5 | +0,0 | 31,3 | inchangé |
+| 2009 | 2009-122 | 86,8 | 86,8 | +0,0 | 34,7 | inchangé |
+| 2009 | 2009-431 | 104,4 | 104,4 | +0,0 | 44,7 | inchangé |
+| 2009 | 2009-1674 | 140,9 | 140,9 | +0,0 | 54,8 | inchangé |
+| 2010 | 2010-237 | 149,0 | 149,0 | +0,0 | 105,0 | inchangé |
+| 2010 | 2010-463 | 152,0 | 152,0 | +0,0 | inchangé | inchangé |
+| 2010 | 2010-1658 | 149,7 | 148,5 | +1,2 | inchangé | 2 028 724 |
+| 2011 | 2011-900 | image | — | — | inchangé | inchangé |
+| 2011 | 2011-1117 | 95,5 | — | — | inchangé | inchangé |
+| 2011 | 2011-1416 | 95,5 | — | — | inchangé | inchangé |
+| 2011 | 2011-1978 | 95,3 | — | — | inchangé | 1 974 451 |
+| 2012 | 2012-354 | 84,8 | 84,8 | +0,0 | inchangé | inchangé |
+| 2012 | 2012-958 | 81,1 | 81,1 | +0,0 | inchangé | 1 936 014 |
+| 2012 | 2012-1510 | 86,1 | 86,2 | −0,1 | inchangé | inchangé |
+| 2013 | 2013-1279 | 72,1 | 72,1 | +0,0 | inchangé | 1 914 920 |
+| 2014 | 2014-891 | 83,9 | 83,9 | +0,0 | inchangé | inchangé |
+| 2014 | 2014-1655 | 89,0 | 89,0 | +0,0 | inchangé | inchangé |
+| 2015 | 2015-1786 | 73,3 | 74,0 | −0,7 | inchangé | 1 903 724 |
+| 2016 | 2016-1918 | 69,9 | 69,9 | +0,0 | inchangé | 1 920 269 |
+| 2017 | 2017-1640 | illisible | — | — | illisible | illisible |
+| 2017 | 2017-1775 | 74,1 | — | — | inchangé | 1 944 683 |
+| 2018 | 2018-1104 | 80,0 | 80,0 | +0,0 | inchangé | 1 949 528 |
+| 2019 | 2019-1270 | 97,7 | 97,7 | +0,0 | inchangé | 1 953 810 |
+| 2020 | 2020-289 | 109,0 | 109,0 | +0,0 | 79,5 | inchangé |
+| 2020 | 2020-473 | 185,5 | 185,5 | +0,0 | 114,5 | inchangé |
+| 2020 | 2020-935 | 225,1 | 225,1 | +0,0 | 129,5 | inchangé |
+| 2020 | 2020-1473 | 223,3 | 223,3 | +0,0 | 129,5 | 1 943 201 |
+| 2021 | 2021-953 | 220,1 | 191,2 | +28,9 | inchangé | inchangé |
+| 2021 | 2021-1549 | 205,1 | 181,2 | +23,9 | inchangé | 1 946 014 |
+| 2022 | 2022-1157 | 178,4 | 169,3 | +9,1 | inchangé | inchangé |
+| 2022 | 2022-1499 | 171,0 | 163,3 | +7,7 | inchangé | 1 942 377 |
+| 2023 | 2023-1114 | 171,2 | 172,4 | −1,2 | inchangé | 1 961 289 |
+| 2024 | 2024-1167 | 162,4 | 168,8 | −6,4 | inchangé | non mentionné |
+| 2025 | 2025-1173 | 131,6 | 133,1 | −1,5 | inchangé | non mentionné |
+
+Le déficit à financer égale le déficit voté dans 19 des 29 lois où les deux se comparent.
+Il s'en écarte dans 10 ; la note du chiffre dit d'où vient l'écart, d'après les documents parlementaires :
+
+- 2010, loi n° 2010-1658 : +1,2 Md€. Le Gouvernement évalue ce déficit en comptant aussi la consommation de reports de crédits, estimée à 1,3 milliard d’euros, issus principalement du plan de relance de l’économie, que ne compte pas le tableau d’équilibre de la loi : exposé général des motifs du projet de loi (Assemblée nationale, XIIIe législature, n° 2944).
+- 2012, loi n° 2012-1510 : −0,1 Md€. Le projet de loi (Assemblée nationale, XIVe législature, n° 403) évaluait ce déficit à 86,1 Md€ pour une variation du solde général de −5 014 M€ ; la loi porte cette variation à −5 045 M€, et son tableau de financement garde le déficit du projet.
+- 2015, loi n° 2015-1786 : −0,7 Md€. Le Gouvernement évalue ce déficit en comptant aussi les annulations de crédits du décret du 9 juin 2015, que ne compte pas le tableau d’équilibre de la loi : exposé général des motifs du projet de loi (Assemblée nationale, XIVe législature, n° 3217).
+- 2021, loi n° 2021-953 : +28,9 Md€. Le Gouvernement évalue ce déficit en comptant aussi la consommation des reports de crédits de la mission « Plan d’urgence face à la crise sanitaire », ouverts par la quatrième loi de finances rectificative pour 2020, que ne compte pas le tableau d’équilibre de la loi : exposé général des motifs du projet de loi (Assemblée nationale, XVe législature, n° 4215).
+- 2021, loi n° 2021-1549 : +23,9 Md€. Le Gouvernement évalue ce déficit en comptant aussi la consommation des reports de crédits de la mission « Plan d’urgence face à la crise sanitaire », que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVe législature, n° 4629).
+- 2022, loi n° 2022-1157 : +9,1 Md€. Le Gouvernement évalue ce déficit en comptant aussi les reports de crédits mobilisés pour les dépenses exceptionnelles liées à la crise sanitaire et à la guerre en Ukraine, et pour les mesures de résilience économique et sociale, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVIe législature, n° 17).
+- 2022, loi n° 2022-1499 : +7,7 Md€. Le Gouvernement évalue ce déficit en comptant aussi les reports de crédits mobilisés, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVIe législature, n° 393).
+- 2023, loi n° 2023-1114 : −1,2 Md€. Selon le rapport de la commission des finances de l’Assemblée nationale sur le projet de loi (XVIe législature, n° 1822), l’écart avec le solde du tableau d’équilibre tiendrait principalement aux moindres dépenses attendues sur des comptes spéciaux, notamment le compte d’affectation spéciale « Participations financières de l’État », sans annulation de leurs crédits.
+- 2024, loi n° 2024-1167 : −6,4 Md€. Le Gouvernement évalue ce déficit en comptant aussi les mouvements réglementaires intervenus en gestion, dont les annulations du décret n° 2024-124 du 21 février 2024, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVIIe législature, n° 538).
+- 2025, loi n° 2025-1173 : −1,5 Md€. Le Gouvernement évalue ce déficit en comptant aussi les mouvements réglementaires intervenus en gestion, dont les annulations du décret n° 2025-374 du 25 avril 2025, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVIIe législature, n° 2068).
+
+Ne se comparent pas, faute de la variation du solde d'une loi précédente de l'année : en 2011, les lois n° 2011-1117, 2011-1416 et 2011-1978 (tableau d’équilibre en image de la loi n° 2011-900) ; en 2017, la loi n° 2017-1775 (page illisible de la loi n° 2017-1640).
+
+Le plafond de la dette est fixé de nouveau par 10 lois, en 2008 (2 lois), 2009 (3 lois), 2010 et 2020 (4 lois) ; celui des emplois par 13, en 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 et 2023. Plusieurs lois modifient aussi, en seconde partie, les plafonds d'emplois par ministère et budget annexe, ou celui des opérateurs de l'État : ceux-là ne sont pas encore lus.

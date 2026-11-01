@@ -1033,11 +1033,13 @@ def credits_200(connus, fonctions):
     return trouves[0]
 
 
-def financement(grilles, flux, annee, source_id):
+def financement(grilles, flux, annee, source_id, libelles_=None):
     """Les lignes du tableau de financement de l'article d'équilibre, en milliards d'euros, dans l'ordre du tableau :
     [(rubrique, concept, dont, rangée)], dont vrai pour une ligne « Dont … ». Une rangée est {tableau, ligne, colonne,
     morceau, libelle, nombre, valeur} ; sa valeur est 0 pour une case « néant ». Une case déclarée dans
-    FUSIONS_FINANCEMENT, qui réunit plusieurs lignes, se lit montant par montant, que `morceau` numérote."""
+    FUSIONS_FINANCEMENT, qui réunit plusieurs lignes, se lit montant par montant, que `morceau` numérote. `libelles_` :
+    (rubrique, forme du libellé) → concept, FINANCEMENT_LFI par défaut."""
+    libelles_ = libelles_ or FINANCEMENT_LFI
     trouves = [k for k, t in enumerate(grilles) if any(l and resultats.forme(l[0]) == "besoin de financement" for l in t)]
     if len(trouves) != 1:
         sys.exit(f"{len(trouves)} tableaux de financement")
@@ -1079,7 +1081,7 @@ def financement(grilles, flux, annee, source_id):
                 sys.exit(f"tableau de financement, ligne {r} : montant illisible (« {case} »)")
             parties = [(None, libelle, nombre_)]
         for morceau, libelle_, nombre_ in parties:
-            concept_ = FINANCEMENT_LFI.get((rubrique, resultats.forme(libelle_)))
+            concept_ = libelles_.get((rubrique, resultats.forme(libelle_)))
             if concept_ is None:
                 sys.exit(f"tableau de financement, ligne {r} : « {libelle_} » inconnu ({rubrique})")
             lignes.append((rubrique, concept_, libelle_.startswith("Dont "),
@@ -1088,13 +1090,17 @@ def financement(grilles, flux, annee, source_id):
     return lignes
 
 
-def verifier_financement(lignes, solde_general, plafond):
+def verifier_financement(lignes, solde_general, plafond, arrondi_plafond=False):
     """Le tableau de financement s'additionne exactement : ses montants sont publiés au dixième de milliard, et les
     lois pour 2006 à 2026 en donnent des totaux qui en sont la somme exacte. Le besoin et les ressources sont chacun la
     somme de leurs lignes, hors lignes « Dont … », et sont égaux ; une ligne que des lignes « Dont … » détaillent est
     leur somme ; le plafond de la variation de la dette (`plafond`, en milliards d'euros) est les émissions de dette à
     moyen et long termes moins l'amortissement de leur nominal. Le déficit budgétaire est l'opposé du solde général de
-    l'article d'équilibre (`solde_general`, en millions d'euros), à son arrondi au dixième de milliard près."""
+    l'article d'équilibre (`solde_general`, en millions d'euros), à son arrondi au dixième de milliard près. Un solde ou
+    un plafond que la loi ne donne pas (None : une loi de finances rectificative ne donne que la variation du solde, et
+    laisse souvent le plafond inchangé) ne se vérifie pas. Avec `arrondi_plafond`, le plafond peut s'écarter des montants
+    du tableau d'un demi-dixième de milliard par montant en jeu, plafond compris, l'écart que peuvent faire leurs
+    arrondis : de 0,1 Md€ dans deux lois de finances rectificatives de 2009."""
     v = {}
     for _, concept_, _, g in lignes:
         if concept_ in v:
@@ -1116,7 +1122,8 @@ def verifier_financement(lignes, solde_general, plafond):
             sys.exit(f"tableau de financement : {detaillee} vaut {v[detaillee]}, ses lignes « Dont » {sum(details):.1f}")
         detaillee, details = concept_, []
     deficit = v.get("LOLF.DEFICIT_A_FINANCER_DEFICIT_BUDGETAIRE", v.get("LOLF.DEFICIT_A_FINANCER"))
-    if deficit is None or abs(deficit * 1e3 + solde_general) > 50.5:  # 50 M€ d'arrondi, et 0,5 M€ pour le solde
+    if deficit is None or (solde_general is not None and abs(deficit * 1e3 + solde_general) > 50.5):
+        # 50 M€ d'arrondi, et 0,5 M€ pour le solde
         sys.exit(f"tableau de financement : déficit budgétaire {deficit} Md€, solde général {solde_general} M€")
     if "LOLF.AMORTISSEMENT_DETTE_NOMINAL" in v:
         nominal = v["LOLF.AMORTISSEMENT_DETTE_NOMINAL"]
@@ -1125,7 +1132,11 @@ def verifier_financement(lignes, solde_general, plafond):
     else:
         nominal = v.get("LOLF.AMORTISSEMENT_DETTE_LT", 0) + v.get("LOLF.AMORTISSEMENT_DETTE_MT", 0)
     variation = v.get("LOLF.EMISSIONS_DETTE_MLT", 0) - nominal
-    if not egal_(plafond, variation):
+    termes = 1 + sum(c in v for c in ("LOLF.EMISSIONS_DETTE_MLT", "LOLF.AMORTISSEMENT_DETTE_NOMINAL",
+                                      "LOLF.AMORTISSEMENT_DETTE_MLT", "LOLF.SUPPLEMENTS_INDEXATION",
+                                      "LOLF.AMORTISSEMENT_DETTE_LT", "LOLF.AMORTISSEMENT_DETTE_MT"))
+    if plafond is not None and not (egal_(plafond, variation) or
+                                    (arrondi_plafond and abs(plafond - variation) <= 0.05 * termes + 1e-9)):
         sys.exit(f"plafond de la variation de la dette : {plafond} Md€, émissions moins amortissement {variation:.1f}")
 
 
