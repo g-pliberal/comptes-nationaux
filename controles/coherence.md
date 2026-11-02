@@ -2926,5 +2926,5 @@ Les 24 tableaux révisés font toutes leurs sommes.
 Les notes des chiffres disent ce que la loi fait d'autre que changer le nombre d'une ligne :
 
 - 2010, loi n° 2010-1658, opérateurs (2 chiffres) : « La loi insère cette ligne dans le tableau. »
-- 2018, loi n° 2018-1104, état (20 chiffres) : « La loi récrit le tableau entier. »
-- 2023, loi n° 2023-1114, état (1 chiffre) : « La loi récrit cette ligne du tableau, « Solidarités, autonomie et personnes handicapées » dans la loi de finances initiale : « Solidarités et familles ». »
+- 2018, loi n° 2018-1104, État (20 chiffres) : « La loi récrit le tableau entier. »
+- 2023, loi n° 2023-1114, État (1 chiffre) : « La loi récrit cette ligne du tableau, « Solidarités, autonomie et personnes handicapées » dans la loi de finances initiale : « Solidarités et familles ». »

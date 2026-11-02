@@ -4429,6 +4429,7 @@ def partie_lfr_financement(derniers):
 PLAFONDS_TABLEAUX = re.compile(r"LOLF\.(BG|BA|OPERATEURS|EAF|API)_PLAFOND_EMPLOIS_(LFI|LFR_REVISE)")
 NOMS_TABLEAUX_EMPLOIS = {"ETAT": "État", "OPERATEURS": "Opérateurs", "EAF": "Établissements à autonomie financière",
                          "API": "Autorités publiques indépendantes"}
+nom_tableau = lambda sorte: NOMS_TABLEAUX_EMPLOIS[sorte] if sorte == "ETAT" else NOMS_TABLEAUX_EMPLOIS[sorte].lower()
 
 
 def ecarts_emplois(sorte, table, plafond, parents):
@@ -4517,7 +4518,7 @@ def partie_lfr_emplois(derniers):
             lignes_.append(f"| {a} | {numero(s)} | {NOMS_TABLEAUX_EMPLOIS[sorte]} ({unites[(a, sorte)]}) | "
                            f"{fr(len(revise[(a, sorte)][s]), 0)} | {fr(avant, 0) if avant is not None else '—'} | "
                            f"{fr(total(sorte, table), 0)} | {'justes' if not ecarts else '**en écart**'} |")
-            remarques += [f"- {a}, loi n° {numero(s)}, {NOMS_TABLEAUX_EMPLOIS[sorte].lower()} ({fr(k, 0)} "
+            remarques += [f"- {a}, loi n° {numero(s)}, {nom_tableau(sorte)} ({fr(k, 0)} "
                           f"chiffre{'s' if k > 1 else ''}) : « {n} »" for n, k in sorted(notes[(s, sorte)].items())]
     lignes = ["### Plafonds d'emplois révisés", "",
               "Les tableaux de la seconde partie de la loi de finances initiale qui répartissent les plafonds d'emplois "
@@ -4535,7 +4536,7 @@ def partie_lfr_emplois(derniers):
     lignes += ["", f"Les {fr(compares, 0)} tableaux révisés font toutes leurs sommes." if justes == compares else
                f"{fr(justes, 0)} des {fr(compares, 0)} tableaux révisés font toutes leurs sommes ; les autres :"]
     if en_ecart:
-        lignes += [""] + [f"- {a}, loi n° {numero(s)}, {NOMS_TABLEAUX_EMPLOIS[t].lower()} : {quoi} "
+        lignes += [""] + [f"- {a}, loi n° {numero(s)}, {nom_tableau(t)} : {quoi} "
                           f"{fr(v, 0) if v is not None else '—'}, ses parties {fr(somme, 0)}."
                           for a, s, t, (quoi, v, somme) in en_ecart]
     if remarques:
