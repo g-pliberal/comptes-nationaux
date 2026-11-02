@@ -14,8 +14,8 @@ budgets annexes) : la catégorie d'un tableau est la dernière que nomment le ti
 précèdent (« I. – Comptes d'affectation spéciale »). Sous un programme, une ligne « dont titre 2 » (« dont charges de
 personnel ») donne la part des crédits qui va aux dépenses de personnel. L'état A révisé donne ce que la loi change
 aux évaluations de recettes, ligne par ligne, et le tableau de son article d'équilibre, en millions d'euros, ce qu'elle
-change aux ressources, aux charges et aux soldes ; le tableau de financement, les plafonds de la dette et des emplois et
-les autorisations de découvert ne sont pas lus.
+change aux ressources, aux charges et aux soldes, et le tableau de financement et les plafonds de la dette et des
+emplois, les niveaux que la loi leur donne ; les autorisations de découvert ne sont pas lues.
 
 Un état se reconnaît à son intitulé (« ÉTAT B (Article 7 de la loi) »). Ses tableaux sont ceux qui s'ouvrent entre son
 intitulé et celui de l'état suivant, hors ceux qui portent l'intitulé d'un état ; un tableau que la page coupe en
@@ -75,6 +75,20 @@ d'impôts d'État depuis, sauf un écart déclaré dans ECARTS_CHARGES ; et chaq
 l'état A donne à l'euro, ou que les états de crédits donnent déjà (VERIFIES_SEULEMENT), ne s'enregistre pas ; le reste
 s'enregistre, en millions d'euros. Une page dont le tableau est une image se déclare dans EQUILIBRE_EN_IMAGE ; quand la
 page ne reproduit pas l'état A (SANS_ETATS), le tableau en donne les recettes. Une case nulle ne donne pas de chiffre.
+
+Le tableau de financement suit la phrase « Les ressources et les charges de trésorerie qui concourent à la réalisation
+de l'équilibre financier sont évaluées comme suit » ; la loi le réécrit en entier, en milliards d'euros, et ses lignes
+sont celles des lois de finances initiales (FINANCEMENT). Il s'additionne exactement, comme celui d'une loi de finances
+initiale. Le plafond de la variation nette de la dette négociable de l'État d'une durée supérieure à un an, quand la loi
+le fixe, égale les émissions de dette à moyen et long termes, nettes des rachats, moins l'amortissement de leur
+nominal, à l'arrondi de ces montants près ; celui des emplois rémunérés par l'État se lit dans sa phrase, de la
+catégorie au montant. Ces chiffres sont des niveaux, que la loi suivante de l'année remplace : un plafond qui « demeure
+inchangé » ne donne pas de chiffre. Chaque texte doit porter le tableau, ou le donner en image (FINANCEMENT_EN_IMAGE),
+et une phrase pour chacun des deux plafonds, sauf une loi déclarée dans SANS_FINANCEMENT (ni tableau ni plafond de la
+dette) ou dans SANS_PLAFOND_EMPLOIS ; une phrase de plafond que l'import ne sait pas lire jusqu'au bout l'arrête. Le
+déficit du tableau est l'évaluation du Gouvernement pour l'année : quand il s'écarte du solde que donnent la loi de
+finances initiale et les tableaux d'équilibre des lois de l'année (rapport de cohérence, section 21), la note du chiffre
+dit d'où vient l'écart, d'après les documents parlementaires (NOTES_DEFICIT).
 """
 
 import re
@@ -83,6 +97,7 @@ import sys
 from commun import (BASE, aujourdhui, champs, champs_chiffres, ecrire, fusionner, identifiant, lire, lire_page_html,
                     lire_texte_html, nombre_de_phrase, nombre_texte, table_des_chiffres, texte_html)
 import importer_lois_finances as lf
+import importer_lois_resultats as resultats
 from importer_lois_finances import cle_titre, montant, nom
 from importer_lois_resultats import code_lolf, colonnes, propre, unite_annoncee
 
@@ -238,6 +253,85 @@ NOTES_EQUILIBRE = {
 }
 # Pages dont le tableau de l'article d'équilibre est une image, que la base ne lit pas : source → image.
 EQUILIBRE_EN_IMAGE = {"senat.tas10-161": "tas10-1611.gif"}
+
+# Tableau de financement (II, 1°) et plafonds de la variation de la dette négociable (II, 2°) et des emplois de l'État
+# (III) : une loi de finances rectificative réécrit tout le tableau, et donne le nouveau montant d'un plafond qu'elle
+# change, ou dit qu'il « demeure inchangé ». Ce sont des niveaux, que la loi suivante remplace, et non des variations.
+# Les libellés du tableau sont ceux des lois de finances initiales, et quelques variantes.
+FINANCEMENT = {**lf.FINANCEMENT_LFI, **resultats.par_forme({
+    ("ressources", "Émissions de dette à moyen et long termes nette des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émissions de dette à moyen et long termes nettes des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émission de dette à moyen et long termes nettes des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    ("ressources", "Émissions de dette à moyen et long termes, nette des rachats"): "LOLF.EMISSIONS_DETTE_MLT",
+    # Un mot que la page de 2018 coupe en deux.
+    ("ressources", "Variation des disponibilités du Trésor à la Banque de France e t des placements de trésorerie de "
+                   "l’État"): "LOLF.VARIATION_DISPONIBILITES_TRESOR",
+})}
+FINANCEMENT_EN_IMAGE = {"senat.tas10-161": "tas10-1612.gif"}  # source → image du tableau de financement
+# Lois dont l'article d'équilibre ne comporte ni tableau de financement ni plafond de la dette, et lois qui ne
+# mentionnent pas le plafond d'autorisation des emplois rémunérés par l'État : le texte ne doit pas en porter la phrase.
+SANS_FINANCEMENT = {
+    "senat.tas06-037": "L’article d’équilibre de la loi ne comporte ni tableau de financement ni plafond de la variation "
+                       "de la dette.",
+    "senat.tas07-043": "L’article d’équilibre de la loi ne comporte ni tableau de financement ni plafond de la variation "
+                       "de la dette.",
+}
+SANS_PLAFOND_EMPLOIS = {
+    "an.ta17-0017": "La loi ne mentionne pas le plafond d’autorisation des emplois rémunérés par l’État.",
+    "senat.tas25-024": "La loi ne mentionne pas le plafond d’autorisation des emplois rémunérés par l’État ; son "
+                       "article 8 modifie celui des opérateurs de l’État, que la base ne lit pas encore.",
+}
+# Le déficit du tableau de financement, quand il s'écarte du solde de l'année que donnent la loi de finances initiale et
+# les tableaux d'équilibre des lois de l'année, au-delà de l'arrondi : d'où vient l'écart, d'après le projet de loi ou le
+# rapport de la commission des finances (Assemblée nationale), que la base n'archive pas. Ces textes distinguent le
+# solde du tableau d'équilibre, qui ne compte que ce que vote la loi, du déficit que le Gouvernement attend de
+# l'exécution.
+_EVALUE = "Le Gouvernement évalue ce déficit en comptant aussi "
+_PAS_AU_TABLEAU = ", que ne compte pas le tableau d’équilibre de la loi"
+NOTES_DEFICIT = {
+    "senat.tas10-038": _EVALUE + "la consommation de reports de crédits, estimée à 1,3 milliard d’euros, issus "
+                       "principalement du plan de relance de l’économie" + _PAS_AU_TABLEAU + " : exposé général des "
+                       "motifs du projet de loi (Assemblée nationale, XIIIe législature, n° 2944).",
+    "an.ta14-0071": "Le projet de loi (Assemblée nationale, XIVe législature, n° 403) évaluait ce déficit à 86,1 Md€ pour "
+                    "une variation du solde général de −5 014 M€ ; la loi porte cette variation à −5 045 M€, et son "
+                    "tableau de financement garde le déficit du projet.",
+    "an.ta14-0649": _EVALUE + "les annulations de crédits du décret du 9 juin 2015" + _PAS_AU_TABLEAU +
+                    " : exposé général des motifs du projet de loi (Assemblée nationale, XIVe législature, n° 3217).",
+    "senat.tas20-136": _EVALUE + "la consommation des reports de crédits de la mission « Plan d’urgence face à la crise "
+                       "sanitaire », ouverts par la quatrième loi de finances rectificative pour 2020" + _PAS_AU_TABLEAU +
+                       " : exposé général des motifs du projet de loi (Assemblée nationale, XVe législature, n° 4215).",
+    "an.ta15-0701": _EVALUE + "la consommation des reports de crédits de la mission « Plan d’urgence face à la crise "
+                    "sanitaire »" + _PAS_AU_TABLEAU + " : exposé des motifs de l’article d’équilibre du projet de loi "
+                    "(Assemblée nationale, XVe législature, n° 4629).",
+    "senat.tas21-148": _EVALUE + "les reports de crédits mobilisés pour les dépenses exceptionnelles liées à la crise "
+                       "sanitaire et à la guerre en Ukraine, et pour les mesures de résilience économique et sociale" +
+                       _PAS_AU_TABLEAU + " : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée "
+                       "nationale, XVIe législature, n° 17).",
+    "senat.tas22-028": _EVALUE + "les reports de crédits mobilisés" + _PAS_AU_TABLEAU + " : exposé des motifs de "
+                       "l’article d’équilibre du projet de loi (Assemblée nationale, XVIe législature, n° 393).",
+    "senat.tas23-024": "Selon le rapport de la commission des finances de l’Assemblée nationale sur le projet de loi "
+                       "(XVIe législature, n° 1822), l’écart avec le solde du tableau d’équilibre tiendrait "
+                       "principalement aux moindres dépenses attendues sur des comptes spéciaux, notamment le compte "
+                       "d’affectation spéciale « Participations financières de l’État », sans annulation de leurs "
+                       "crédits.",
+    "an.ta17-0017": _EVALUE + "les mouvements réglementaires intervenus en gestion, dont les annulations du décret "
+                    "n° 2024-124 du 21 février 2024" + _PAS_AU_TABLEAU + " : exposé des motifs de l’article "
+                    "d’équilibre du projet de loi (Assemblée nationale, XVIIe législature, n° 538).",
+    "senat.tas25-024": _EVALUE + "les mouvements réglementaires intervenus en gestion, dont les annulations du décret "
+                       "n° 2025-374 du 25 avril 2025" + _PAS_AU_TABLEAU + " : exposé des motifs de l’article "
+                       "d’équilibre du projet de loi (Assemblée nationale, XVIIe législature, n° 2068).",
+}
+PHRASE_FINANCEMENT = r"concourent à la réalisation de l’équilibre financier sont évaluées comme suit"
+PLAFOND_DETTE = (r"Le plafond de la variation nette, appréciée en fin d’année(?: et en valeur nominale)?, de la dette "
+                 r"négociable de l’État d’une durée supérieure à un an (?:est fixé à [0-9]+(?:,[0-9]+)? milliards "
+                 r"d’euros|demeure inchangé)")
+DEBUT_PLAFOND_EMPLOIS = (r"[Ll]e plafond d’autorisation des emplois rémunérés par l’État(?:,? exprimé en équivalents? "
+                         r"temps plein travaillé,?)?(?: fixé (?:pour [0-9]{4} )?par [^,;]{0,160}?)? ")
+PLAFOND_EMPLOIS = (DEBUT_PLAFOND_EMPLOIS + r"(?:est (?:porté|ramené|fixé) (?:au nombre de |à )[0-9]{1,3}"
+                   r"(?:[  ][0-9]{3})*(?![  ]?[0-9])|(?:demeure|est) inchangé)")
+# Le début de chaque phrase : une phrase qui commence comme celle d'un plafond, mais que l'import ne sait pas lire
+# jusqu'au bout, arrête l'import.
+DEBUT_PLAFOND_DETTE = PLAFOND_DETTE[:PLAFOND_DETTE.index("(?:est fixé")]
 
 
 def normaliser(texte):
@@ -1026,6 +1120,7 @@ def lignes_du_fichier(fichier, fonctions):
     yield from credits_
     yield from recettes_et_soldes(fichier, annee, grilles, flux, contenu, credits_nets(credits_, fonctions), fonctions,
                                   recolle)
+    yield from financement_et_plafonds(fichier, annee, grilles, flux, texte, texte_brut)
     absents = [x for s, x in LIBELLES if s == source_id and (s, x) not in LIBELLES_VUS]
     if absents:
         sys.exit(f"{fichier['id']} : libellé déclaré absent de la page ({' ; '.join(absents)})")
@@ -1076,6 +1171,84 @@ def credits_des_etats(fichier, annee, grilles, formes, flux, lus, fonctions, rec
                               " ".join(n for n in (note_unite, note_page) if n), traitement)
 
 
+def dans_la_page(morceau, texte_brut):
+    """Un morceau du texte normalisé tel que l'écrit la page, dont les blancs et les apostrophes peuvent différer, s'il
+    y figure une seule fois ; None sinon."""
+    motif = "".join(r"\s*['’]\s*" if x == "’" else r"\s+" if x == " " else re.escape(x) for x in morceau)
+    trouves = [m.group(0) for m in re.finditer(motif, texte_brut)]
+    return trouves[0] if len(trouves) == 1 else None
+
+
+def financement_et_plafonds(fichier, annee, grilles, flux, texte, texte_brut):
+    """Les chiffres du tableau de financement de l'article d'équilibre, en milliards d'euros, et des plafonds de la
+    variation de la dette et des emplois de l'État que la loi change : leurs niveaux révisés. Le tableau s'additionne
+    exactement, comme celui d'une loi de finances initiale (importer_lois_finances.verifier_financement), et un plafond
+    de la dette que la loi fixe égale ses émissions de dette à moyen et long termes, nettes des rachats, moins
+    l'amortissement de leur nominal ; le déficit du tableau se compare au solde révisé de l'année dans le rapport de
+    cohérence. Une phrase de plafond s'enregistre de la catégorie au montant, sans les années qui le précèdent, pour ne
+    porter qu'un nombre."""
+    source_id = fichier["source_id"]
+    if source_id in SANS_ARTICLES:
+        return
+    dettes = [m.group(0) for m in re.finditer(PLAFOND_DETTE, texte)]
+    emplois = [m.group(0) for m in re.finditer(PLAFOND_EMPLOIS, texte)]
+    if len(dettes) > 1 or len(emplois) > 1:
+        sys.exit(f"{fichier['id']} : {len(dettes)} phrases du plafond de la dette, {len(emplois)} du plafond des emplois")
+    if len(re.findall(DEBUT_PLAFOND_DETTE, texte)) != len(dettes) or \
+            len(re.findall(DEBUT_PLAFOND_EMPLOIS + r"(?:est|demeure)\b", texte)) != len(emplois):
+        sys.exit(f"{fichier['id']} : phrase d'un plafond que l'import ne sait pas lire")
+    lignes, annonce = [], re.search(PHRASE_FINANCEMENT, texte)
+    if source_id in SANS_FINANCEMENT:
+        if annonce or dettes or source_id in FINANCEMENT_EN_IMAGE:
+            sys.exit(f"{fichier['id']} : déclaré sans tableau de financement ni plafond de la dette, mais en porte")
+    elif not dettes:
+        sys.exit(f"{fichier['id']} : phrase du plafond de la dette introuvable")
+    elif source_id in FINANCEMENT_EN_IMAGE:
+        if not annonce or not re.search(rf"équilibre financier sont évaluées comme suit.{{0,800}}<img[^>]*src=\""
+                                        rf"{re.escape(FINANCEMENT_EN_IMAGE[source_id])}\"", lire_texte_html(
+                                            BASE / fichier["chemin"]), re.S):
+            sys.exit(f"{fichier['id']} : l'image déclarée du tableau de financement ne suit pas l'article")
+    elif annonce:
+        lignes = lf.financement(grilles, flux, annee, source_id, FINANCEMENT)
+    else:
+        sys.exit(f"{fichier['id']} : tableau de financement introuvable")
+    if bool(emplois) == (source_id in SANS_PLAFOND_EMPLOIS):
+        sys.exit(f"{fichier['id']} : " + ("déclaré sans plafond des emplois, mais en porte la phrase" if emplois
+                                          else "phrase du plafond des emplois introuvable"))
+    plafond = None
+    if dettes and "fixé" in dettes[0]:
+        extrait = dans_la_page(dettes[0], texte_brut)
+        plafond = nombre_de_phrase(extrait) if extrait else None
+        if plafond is None:
+            sys.exit(f"{fichier['id']} : phrase du plafond de la dette introuvable dans la page, ou illisible")
+    if lignes:
+        lf.verifier_financement(lignes, None, float(plafond[0]) if plafond else None, arrondi_plafond=True)
+    # La note d'un écart va au déficit que le tableau compare au solde : la ligne « Dont déficit budgétaire » quand il
+    # en a une, sinon celle du déficit à financer.
+    donnes = {c for _, c, _, g in lignes if g["nombre"]}
+    deficit = next((c for c in ("LOLF.DEFICIT_A_FINANCER_DEFICIT_BUDGETAIRE", "LOLF.DEFICIT_A_FINANCER")
+                    if c in donnes), None)
+    if source_id in NOTES_DEFICIT and deficit is None:
+        sys.exit(f"{fichier['id']} : note déclarée sur un déficit que le tableau ne donne pas")
+    for _, concept_, _, g in lignes:
+        if g["nombre"]:
+            morceau = f"morceau={g['morceau']};" if g["morceau"] else ""
+            yield chiffre(fichier, annee, f"{concept_}_LFR_REVISE", "", "MD_EUR", g["nombre"],
+                          f"tableau={g['tableau']};ligne={g['ligne']};colonne={g['colonne']};{morceau}"
+                          f"libelle={g['libelle']}", NOTES_DEFICIT.get(source_id, "") if concept_ == deficit else "")
+    if plafond:
+        yield chiffre(fichier, annee, "LOLF.PLAFOND_VARIATION_DETTE_LFR_REVISE", "", "MD_EUR", plafond,
+                      f"phrase={dans_la_page(dettes[0], texte_brut)}")
+    if emplois and not emplois[0].endswith("inchangé"):
+        montant_ = re.search(r"[0-9]{1,3}(?:[  ][0-9]{3})*$", emplois[0])
+        debut = max([0] + [m.end() for m in re.finditer(r"[0-9]{4}\b,? ?", emplois[0][:montant_.start()])])
+        extrait = dans_la_page(emplois[0][debut:], texte_brut)
+        nombre_ = nombre_de_phrase(extrait) if extrait else None
+        if nombre_ is None:
+            sys.exit(f"{fichier['id']} : phrase du plafond des emplois introuvable dans la page, ou illisible")
+        yield chiffre(fichier, annee, "LOLF.PLAFOND_EMPLOIS_LFR_REVISE", "", "ETPT", nombre_, f"phrase={extrait}")
+
+
 def totaux_des_articles(fichier, annee, lus, texte_brut):
     """Quand la page ne reproduit pas les états : le total de chaque catégorie, lu dans la phrase de l'article qui
     l'énonce. La phrase retenue va de la catégorie au montant, pour n'en porter qu'un nombre, et doit figurer telle
@@ -1089,11 +1262,7 @@ def totaux_des_articles(fichier, annee, lus, texte_brut):
         # L'extrait commence à la catégorie, ou après l'année quand elle la suit, pour ne porter qu'un nombre.
         debut = max([re.search(r"\bau titre\b|\bau compte\b", phrase).start()] +
                     [m.end() for m in re.finditer(r"pour [0-9]{4},? ", phrase[:montant_.start()])])
-        # Le même extrait, tel que l'écrit la page : ses blancs et ses apostrophes peuvent différer du texte normalisé.
-        motif = "".join(r"\s*['’]\s*" if x == "’" else r"\s+" if x == " " else re.escape(x)
-                        for x in phrase[debut:montant_.end()])
-        trouves = [m.group(0) for m in re.finditer(motif, texte_brut)]
-        extrait = trouves[0] if len(trouves) == 1 else None
+        extrait = dans_la_page(phrase[debut:montant_.end()], texte_brut)
         if extrait is None or nombre_de_phrase(extrait) is None:
             sys.exit(f"{fichier['id']} : phrase introuvable, ou plusieurs fois, dans la page : "
                      f"« {phrase[debut:montant_.end()]} »")

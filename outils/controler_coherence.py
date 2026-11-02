@@ -4074,7 +4074,7 @@ def partie_lfr(derniers):
         if l["perimetre_id"] != "ETAT_LF" or l["unite_id"] != "EUR":
             continue
         c, k = l["concept_id"], (l["concept_id"], l["fonction_id"], l["periode"])
-        if "_LFR_" in c:
+        if re.search(r"_LFR_(?:OUVERTURES|ANNULATIONS)", c):
             # Plusieurs lois dans l'année, et dans une même loi deux états d'une même catégorie : leurs crédits
             # s'ajoutent.
             lfr[k] += valeur(l)[0]
@@ -4294,6 +4294,123 @@ def partie_lfr_recettes(derniers):
     return lignes
 
 
+# Section 21, fin : le tableau de financement que réécrit chaque loi de finances rectificative, et les plafonds de la
+# dette et des emplois qu'elle change : des niveaux, que la loi suivante remplace. Le déficit du tableau se compare à
+# celui que donnent la loi de finances initiale et les variations du solde général des lois de l'année jusqu'à celle-ci,
+# à l'arrondi du tableau (0,05 Md€) et des soldes (0,5 M€ chacun) près ; la note du chiffre dit d'où vient un écart.
+def partie_lfr_financement(derniers):
+    titres = {s["id"]: s["titre"] for s in lire("tables/sources.csv")}
+    numero = lambda s: re.search(r"loi n° ([0-9]{4}-[0-9]+)", titres[s]).group(1)
+    initial, variations, niveaux, notes, lois = {}, {}, collections.defaultdict(dict), {}, {}
+    for l in derniers.values():
+        if l["perimetre_id"] != "ETAT_LF" or l["fonction_id"]:
+            continue
+        c, a, s = l["concept_id"], l["periode"], l["source_id"]
+        if c == "LOLF.RESULTAT_BUDGETAIRE_LFI":
+            initial[a] = valeur(l)[0]
+        if not re.search(r"_LFR(?:_|$)", c):
+            continue
+        lois[s] = (a, l["version"])
+        if c == "LOLF.RESULTAT_BUDGETAIRE_LFR":
+            variations[s] = valeur(l)[0]
+        elif c.endswith("_LFR_REVISE"):
+            niveaux[s][c[:-len("_LFR_REVISE")]] = valeur(l)[0]
+            if c.startswith("LOLF.DEFICIT_A_FINANCER") and l["notes"]:
+                notes[s] = l["notes"]
+    if not any(niveaux.values()):
+        return []
+    illisibles = set(rectificatives.SANS_ARTICLES)
+    sans_equilibre = set(rectificatives.EQUILIBRE_EN_IMAGE) | illisibles  # variation du solde non lue
+    md = lambda x: fr(x / 1e9, 1)
+    ordre = lambda s: tuple(int(x) for x in numero(s).split("-"))
+
+    def liste(ss, article=True):  # « les lois n° 2006-1771 et 2007-1824 », « loi n° 2011-900 »
+        n = [numero(s) for s in sorted(ss, key=ordre)]
+        quoi = ("la " if article else "") + "loi n° " if len(n) == 1 else ("les " if article else "") + "lois n° "
+        return quoi + (", ".join(n[:-1]) + " et " if len(n) > 1 else "") + n[-1]
+
+    absent = lambda s, sans: "illisible" if s in illisibles else "non mentionné" if s in sans else "inchangé"
+    lignes_, compares, ecarts, rompues, dettes, emplois_ = [], 0, [], [], [], []
+    for a in sorted({a for a, _ in lois.values()}):
+        vote, termes, rompu = (-initial[a] if a in initial else None), 1, None
+        for s in sorted((s for s in lois if lois[s][0] == a), key=lambda s: lois[s][1]):
+            if s in sans_equilibre:
+                rompu = rompu or s
+            elif vote is not None and not rompu:
+                vote -= variations.get(s, 0)
+                termes += s in variations
+            x = niveaux.get(s, {})
+            deficit = x.get("LOLF.DEFICIT_A_FINANCER_DEFICIT_BUDGETAIRE", x.get("LOLF.DEFICIT_A_FINANCER"))
+            compare = deficit is not None and vote is not None and not rompu
+            if compare:
+                compares += 1
+                if abs(deficit - vote) > 0.05e9 + 0.5e6 * termes:
+                    ecarts.append((a, s, deficit - vote))
+            elif deficit is not None and rompu:
+                rompues.append((a, s, rompu))
+            dette, emplois = x.get("LOLF.PLAFOND_VARIATION_DETTE"), x.get("LOLF.PLAFOND_EMPLOIS")
+            dettes += [a] if dette is not None else []
+            emplois_ += [a] if emplois is not None else []
+            if deficit is not None:
+                cellule = md(deficit)
+            elif s in rectificatives.FINANCEMENT_EN_IMAGE:
+                cellule = "image"
+            else:
+                cellule = absent(s, rectificatives.SANS_FINANCEMENT)
+            lignes_.append(
+                f"| {a} | {numero(s)} | {cellule} | {md(vote) if vote is not None and not rompu else '—'} | "
+                f"{signe_arrondi((deficit - vote) / 1e9, 1) if compare else '—'} | "
+                f"{md(dette) if dette is not None else absent(s, rectificatives.SANS_FINANCEMENT)} | "
+                f"{fr(emplois, 0) if emplois is not None else absent(s, rectificatives.SANS_PLAFOND_EMPLOIS)} |")
+    lignes = ["### Financement et plafonds révisés", "",
+              "Le tableau de financement de l'article d'équilibre, que chaque loi réécrit, et les plafonds de la "
+              "variation de la dette négociable de l'État d'une durée supérieure à un an et des emplois rémunérés par "
+              "l'État, qu'elle change : des niveaux, que la loi suivante de l'année remplace, et non des variations. "
+              "L'import vérifie que chaque tableau s'additionne, et qu'un plafond de la dette que fixe une loi égale "
+              "les émissions de dette à moyen et long termes, nettes des rachats, moins l'amortissement de leur "
+              "nominal, à l'arrondi de ces montants près. Le déficit du tableau est l'évaluation du Gouvernement pour "
+              "l'année ; il se compare ici au déficit voté, celui de la loi de finances initiale (section 18) et des "
+              "variations du solde général que donnent les tableaux d'équilibre des lois de l'année jusqu'à celle-ci "
+              "(partie précédente), à l'arrondi du tableau près (0,05 Md€).",
+              "", "Loi par loi, en milliards d'euros, et en équivalents temps plein travaillé pour les emplois. Un "
+              "plafond « inchangé » reste celui de la loi précédente de l'année, à défaut celui de la loi de finances "
+              "initiale ; « non mentionné » : la loi n'en dit rien (ni tableau de financement ni plafond de la dette "
+              f"dans {liste(rectificatives.SANS_FINANCEMENT)}, pas de plafond des emplois dans "
+              f"{liste(rectificatives.SANS_PLAFOND_EMPLOIS)}) ; « image » : la page donne le tableau en image "
+              f"({liste(rectificatives.FINANCEMENT_EN_IMAGE, False)}) ; « illisible » : la page ne laisse pas lire "
+              f"les articles ({liste(illisibles, False)}) :",
+              "", "| Année | Loi | Déficit à financer | Déficit voté | Écart | Plafond de la dette | "
+              "Plafond des emplois |", "|---|---|---|---|---|---|---|"] + lignes_
+    lignes += ["", f"Le déficit à financer égale le déficit voté dans {fr(compares - len(ecarts), 0)} des "
+               f"{fr(compares, 0)} lois où les deux se comparent."]
+    if ecarts:
+        lignes += [f"Il s'en écarte dans {fr(len(ecarts), 0)} ; la note du chiffre dit d'où vient l'écart, d'après les "
+                   "documents parlementaires :", ""]
+        lignes += [f"- {a}, loi n° {numero(s)} : {signe_arrondi(e / 1e9, 1)} Md€. "
+                   + (notes[s] if s in notes else "**Écart sans explication déclarée.**") for a, s, e in ecarts]
+    if rompues:
+        par_cause = collections.defaultdict(list)
+        for a, s, r in rompues:
+            par_cause[(a, r)].append(s)
+        causes = [f"en {a}, {liste(ss)} ({'page illisible' if r in illisibles else 'tableau d’équilibre en image'} "
+                  f"de la loi n° {numero(r)})" for (a, r), ss in sorted(par_cause.items())]
+        lignes += ["", "Ne se comparent pas, faute de la variation du solde d'une loi précédente de l'année : "
+                   + " ; ".join(causes) + "."]
+    sans_ecart = sorted(s for s in notes if s not in {s for _, s, _ in ecarts})
+    if sans_ecart:
+        lignes += ["", "**Note d'écart sur un déficit qui ne s'écarte pas du déficit voté** : "
+                   + ", ".join(f"loi n° {numero(s)}" for s in sans_ecart) + "."]
+    def compte(annees):  # « 2008 (2 lois), 2009 (3 lois), 2010 et 2020 (4 lois) »
+        n = [f"{a}{f' ({fr(annees.count(a), 0)} lois)' if annees.count(a) > 1 else ''}" for a in sorted(set(annees))]
+        return (", ".join(n[:-1]) + " et " if len(n) > 1 else "") + n[-1]
+
+    lignes += ["", f"Le plafond de la dette est fixé de nouveau par {fr(len(dettes), 0)} lois, en {compte(dettes)} ; "
+               f"celui des emplois par {fr(len(emplois_), 0)}, en {compte(emplois_)}. Plusieurs lois modifient aussi, "
+               "en seconde partie, les plafonds d'emplois par ministère et budget annexe, ou celui des opérateurs de "
+               "l'État : ceux-là ne sont pas encore lus.", ""]
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -4309,7 +4426,7 @@ def ecrire_rapport(derniers):
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
     lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers) + partie_lfr(derniers)
-    lignes += partie_lfr_recettes(derniers)
+    lignes += partie_lfr_recettes(derniers) + partie_lfr_financement(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")
