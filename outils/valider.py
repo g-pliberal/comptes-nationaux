@@ -150,6 +150,16 @@ def valeur_archivee(fichier, emplacement, copies):
         phrase = emplacement[len("phrase="):]
         nombre = nombre_de_phrase(phrase) if phrase in copies[(fichier["id"], "texte")] else None
         return (float(nombre[0]), "") if nombre else None
+    if fichier["chemin"].endswith(".html") and emplacement.startswith("remplacement="):
+        # Un nombre qu'une loi met à la place d'un autre (« À la cinquième ligne, le nombre : « 31 035 » est remplacé
+        # par le nombre : « 31 375 » ») : la phrase doit figurer telle quelle dans la page, et le chiffre est le nombre
+        # qui remplace l'autre.
+        if (fichier["id"], "texte") not in copies:
+            copies[(fichier["id"], "texte")] = texte_html(lire_texte_html(chemin))
+        phrase = emplacement[len("remplacement="):]
+        trouve = re.search(r"le nombre : « [^«»]+ » est remplacé par le nombre : « ([^«»]+) »$", phrase)
+        nombre = nombre_texte(trouve.group(1)) if trouve and phrase in copies[(fichier["id"], "texte")] else None
+        return (float(nombre[0]), "") if nombre else None
     if fichier["chemin"].endswith(".html"):
         trouve = re.match(r"tableau=([0-9]+);ligne=([0-9]+);colonne=([0-9]+)", emplacement)
         if trouve is None:
