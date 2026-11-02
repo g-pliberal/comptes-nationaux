@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Enregistre dans la base les crédits qu'ouvre et qu'annule une loi de finances rectificative, ou de fin de gestion,
-les évaluations de recettes qu'elle révise et les soldes qu'elle modifie, à partir de son texte définitif, tel que le
-publie l'assemblée qui l'a adopté en dernier (page HTML archivée du Sénat ou de l'Assemblée nationale).
+les évaluations de recettes qu'elle révise, les soldes qu'elle modifie, son tableau de financement et les plafonds qu'elle
+fixe, à partir de son texte définitif, tel que le publie l'assemblée qui l'a adopté en dernier (page HTML archivée du
+Sénat ou de l'Assemblée nationale).
 
     python3 outils/importer_lois_rectificatives.py <fichier_id>
 
@@ -15,7 +16,8 @@ précèdent (« I. – Comptes d'affectation spéciale »). Sous un programme, u
 personnel ») donne la part des crédits qui va aux dépenses de personnel. L'état A révisé donne ce que la loi change
 aux évaluations de recettes, ligne par ligne, et le tableau de son article d'équilibre, en millions d'euros, ce qu'elle
 change aux ressources, aux charges et aux soldes, et le tableau de financement et les plafonds de la dette et des
-emplois, les niveaux que la loi leur donne ; les autorisations de découvert ne sont pas lues.
+emplois, les niveaux que la loi leur donne, comme aux plafonds d'emplois de la seconde partie de la loi de finances
+initiale qu'elle modifie ; les autorisations de découvert ne sont pas lues.
 
 Un état se reconnaît à son intitulé (« ÉTAT B (Article 7 de la loi) »). Ses tableaux sont ceux qui s'ouvrent entre son
 intitulé et celui de l'état suivant, hors ceux qui portent l'intitulé d'un état ; un tableau que la page coupe en
@@ -89,6 +91,22 @@ dette) ou dans SANS_PLAFOND_EMPLOIS ; une phrase de plafond que l'import ne sait
 déficit du tableau est l'évaluation du Gouvernement pour l'année : quand il s'écarte du solde que donnent la loi de
 finances initiale et les tableaux d'équilibre des lois de l'année (rapport de cohérence, section 21), la note du chiffre
 dit d'où vient l'écart, d'après les documents parlementaires (NOTES_DEFICIT).
+
+En seconde partie, une loi modifie les tableaux de la loi de finances initiale de l'année qui répartissent les plafonds
+d'autorisations d'emplois : celui de l'État, par ministère et par budget annexe, celui des opérateurs de l'État, par
+mission et par programme, celui des autorités publiques indépendantes. Elle en change des lignes (« À la cinquième
+ligne, le nombre : « 31 035 » est remplacé par le nombre : « 31 375 » »), en récrit ou en insère, ou récrit le tableau
+entier ; le premier alinéa de l'article qui fixe le plafond en change le total. Chaque article de la loi de finances
+initiale qui fixe un plafond d'emplois, quand le texte le nomme, doit se lire en entier ; la loi de finances initiale de
+l'année se reconnaît à la fiche de sa source, qui donne son numéro. La n-ième ligne d'un tableau est sa n-ième ligne non
+vide, en-tête compris, dans la copie archivée de la loi de finances initiale, et l'ancien nombre d'une ligne doit être
+celui que la base y lit ; une ligne insérée ne change pas le rang des suivantes. Le tableau modifié doit faire les mêmes
+sommes que celui de la loi de finances initiale, son total égaler celui du premier alinéa, et le total général du
+tableau de l'État le plafond des emplois que fixe l'article d'équilibre de la loi. Chaque ligne changée, récrite ou
+insérée donne un chiffre, un niveau : sous le concept de la loi de finances initiale suivi de _LFR_REVISE au lieu de
+_LFI, et la fonction de la ligne ; il se désigne par la phrase qui change la ligne (« remplacement=… »), que valider
+relit, ou par sa case. Le total général du tableau de l'État, qui égale le plafond de l'article d'équilibre, ne
+s'enregistre pas.
 
 Une loi dont la page est abîmée (SANS_ARTICLES) se lit dans le PDF du même texte, archivé comme seconde copie de la
 source et déclaré dans TEXTE_EN_PDF : ses tableaux s'y refont en grilles semblables à celles d'une page HTML, d'après la
@@ -302,7 +320,7 @@ SANS_FINANCEMENT = {
 SANS_PLAFOND_EMPLOIS = {
     "an.ta17-0017": "La loi ne mentionne pas le plafond d’autorisation des emplois rémunérés par l’État.",
     "senat.tas25-024": "La loi ne mentionne pas le plafond d’autorisation des emplois rémunérés par l’État ; son "
-                       "article 8 modifie celui des opérateurs de l’État, que la base ne lit pas encore.",
+                       "article 8 modifie celui des opérateurs de l’État.",
 }
 # Le déficit du tableau de financement, quand il s'écarte du solde de l'année que donnent la loi de finances initiale et
 # les tableaux d'équilibre des lois de l'année, au-delà de l'arrondi : d'où vient l'écart, d'après le projet de loi ou le
@@ -1358,9 +1376,11 @@ def lignes_du_fichier(fichier, fonctions):
         credits_ = list(totaux_des_articles(fichier, annee, lus, texte_brut))
     else:
         credits_ = list(credits_des_etats(fichier, annee, grilles, formes, flux, lus, fonctions, recolle))
+    financement = list(financement_et_plafonds(fichier, annee, grilles, flux, texte, texte_brut))
+    revise = next((l for l in financement if l["concept_id"] == "LOLF.PLAFOND_EMPLOIS_LFR_REVISE"), None)
     lus_ = credits_ + list(recettes_et_soldes(fichier, annee, grilles, flux, contenu, credits_nets(credits_, fonctions),
-                                             fonctions, recolle)) + \
-        list(financement_et_plafonds(fichier, annee, grilles, flux, texte, texte_brut))
+                                             fonctions, recolle)) + financement + \
+        list(plafonds_emplois_modifies(fichier, annee, grilles, texte, texte_brut, revise, fonctions))
     yield from (emplacement_pdf(l, places) for l in lus_) if places is not None else lus_
     absents = [x for s, x in LIBELLES if s == source_id and (s, x) not in LIBELLES_VUS]
     if absents:
@@ -1488,6 +1508,390 @@ def financement_et_plafonds(fichier, annee, grilles, flux, texte, texte_brut):
         if nombre_ is None:
             sys.exit(f"{fichier['id']} : phrase du plafond des emplois introuvable dans la page, ou illisible")
         yield chiffre(fichier, annee, "LOLF.PLAFOND_EMPLOIS_LFR_REVISE", "", "ETPT", nombre_, f"phrase={extrait}")
+
+
+# --- Plafonds d'emplois de la seconde partie -----------------------------------------------------------------------
+#
+# Une loi de finances rectificative modifie les tableaux de la loi de finances initiale de l'année qui répartissent les
+# plafonds d'autorisations d'emplois (importer_lois_finances.tableaux_emplois) : ligne par ligne (« À la cinquième
+# ligne, le nombre : « 31 035 » est remplacé par le nombre : « 31 375 » »), en récrivant une ligne (« La treizième ligne
+# est ainsi rédigée : « Solidarités et familles 5 074 » »), en insérant des lignes, en récrivant le tableau entier, et,
+# pour un plafond que le premier alinéa de l'article énonce, dans cet alinéa.
+
+# Rangs des lignes, tels que les écrit la loi : la valeur de chaque mot d'un ordinal (« soixante et onzième »,
+# « quatre-vingt-troisième », où « quatre-vingt » vaut quatre fois vingt).
+MOTS_ORDINAUX = {"un": 1, "deux": 2, "trois": 3, "quatre": 4, "cinq": 5, "six": 6, "sept": 7, "huit": 8, "neuf": 9,
+                 "dix": 10, "onze": 11, "douze": 12, "treize": 13, "quatorze": 14, "quinze": 15, "seize": 16,
+                 "vingt": 20, "trente": 30, "quarante": 40, "cinquante": 50, "soixante": 60}
+RACINES_ORDINALES = {"un": "un", "deux": "deux", "trois": "trois", "quatr": "quatre", "cinqu": "cinq", "six": "six",
+                     "sept": "sept", "huit": "huit", "neuv": "neuf", "dix": "dix", "onz": "onze", "douz": "douze",
+                     "treiz": "treize", "quatorz": "quatorze", "quinz": "quinze", "seiz": "seize", "vingt": "vingt",
+                     "trent": "trente", "quarant": "quarante", "cinquant": "cinquante", "soixant": "soixante"}
+NOMBRE_CITE = r"« ([0-9]{1,3}(?:[  ][0-9]{3})*) »"
+REMPLACE = rf"le nombre : {NOMBRE_CITE} est remplacé par le nombre : {NOMBRE_CITE}"
+RANGS = r"((?:[\w‑-]+ )*?[\w‑-]+)"
+# Les phrases d'un article qui modifie un tableau de plafonds d'emplois : chacune doit être l'une de celles-ci.
+LIGNES_MODIFIEES = re.compile(rf"(?:À la |À l’|Aux ){RANGS},? lignes?(?: de la seconde colonne du tableau)?, {REMPLACE}")
+ALINEA_MODIFIE = re.compile(rf"(?:À la première phrase du premier alinéa|Au premier alinéa), {REMPLACE}")
+LIGNE_RECRITE = re.compile(rf"La {RANGS} ligne est ainsi rédigée : « (.+) »")
+LIGNES_INSEREES = re.compile(rf"Après la {RANGS} ligne(?: du tableau)?, (?:sont insérées [a-z]+ lignes ainsi rédigées|"
+                             rf"est insérée une ligne ainsi rédigée) : « (.+) »")
+COLONNE_MODIFIEE = re.compile(r"La (?:seconde|deuxième) colonne(?: du tableau(?: du (?:second|deuxième) alinéa| "
+                              r"constituant le second alinéa)?)? est ainsi modifiée")
+# Un article nommé dans le texte (« l’article 54 »), la loi dont il est l'article, et ce qui précède son nom quand la
+# loi en modifie un tableau de plafonds d'emplois : la seconde colonne du tableau, le tableau, ou l'article.
+ARTICLE_CITE = re.compile(r"article ([0-9]+)\b(?! (?:bis|ter|quater)\b)")
+LOI_NOMMEE = re.compile(r"\bloi n° ([0-9]{2,4}) ?[‑-] ?([0-9]+)")
+DE_LA_LOI = re.compile(r"(?: [^,.;]{0,40}?)? de la loi n° ([0-9]{2,4}) ?[‑-] ?([0-9]+) du [^,;]{5,40}? de finances pour "
+                       r"([0-9]{4})")
+EST_MODIFIE = re.compile(r" est ainsi (modifiée?|rédigé) : ")
+OBJET_MODIFIE = re.compile(r"(?:(?P<colonne>La (?:seconde|deuxième) colonne du tableau)|(?P<tableau>Le tableau))(?: du "
+                           r"(?:second|deuxième) alinéa| constituant le second alinéa)? de l’$|(?P<article>Le I de l’|L’)$")
+FIN_ARTICLE = re.compile(r" Article [0-9]+(?: er)? | TITRE | ÉTATS LÉGISLATIFS|Délibéré en| [IVX]+\. [–-] |$")
+
+
+def rangs_lignes(texte):
+    """Les rangs des lignes que nomme une loi (« deuxième », « soixante-dixième et soixante et onzième »,
+    « quatre-vingt-troisième et avant-dernière ») : comptés depuis la première ligne du tableau (1, 2…), ou depuis la
+    dernière (-1, -2) ; None si un mot n'est pas celui d'un ordinal."""
+    rangs, mots = [], []
+    for mot in re.split(r"[\s‑-]+", texte.strip()):
+        if mot == "et" and not mots:
+            continue  # « et » entre deux ordinaux
+        mots.append(mot)
+        if mot not in ("première", "dernière") and not mot.endswith("ième"):
+            continue
+        if mots in (["première"], ["dernière"], ["avant", "dernière"]):
+            rangs.append({"première": 1, "dernière": -1, "avant": -2}[mots[0]])
+        else:
+            valeurs = [MOTS_ORDINAUX.get(RACINES_ORDINALES.get(m[:-4], "?") if m.endswith("ième") else m)
+                       for m in mots if m != "et"]
+            if None in valeurs:
+                return None
+            n = 0
+            for i, v in enumerate(valeurs):
+                n = n - 4 + 80 if v == 20 and i and valeurs[i - 1] == 4 else n + v
+            rangs.append(n)
+        mots = []
+    return rangs if rangs and not mots else None
+
+
+def sans_guillemets(case):
+    """Le texte d'une case, sans les guillemets ni la ponctuation qui ouvrent et ferment une citation."""
+    return case.strip().strip("«»;.  ").strip()
+
+
+LOIS_INITIALES = {}  # numéro de la loi → (année, source)
+TABLEAUX_INITIAUX = {}  # numéro de la loi → tableaux de plafonds d'emplois
+
+
+def lois_initiales():
+    """Les lois de finances initiales de la base, d'après la fiche de leur source (« loi n° 2014-1654 du 29 décembre
+    2014 de finances pour 2015 ») : numéro → (année, source)."""
+    if not LOIS_INITIALES:
+        for s in lire("tables/sources.csv"):
+            m = re.search(r"\bloi n° ([0-9]{4}-[0-9]+) du [^,;.]+? de finances pour ([0-9]{4})\b", s["notes"])
+            if s["titre"].startswith("Projet de loi de finances pour ") and m:
+                if m.group(1) in LOIS_INITIALES:
+                    sys.exit(f"loi n° {m.group(1)} : deux sources de loi de finances initiale")
+                LOIS_INITIALES[m.group(1)] = (m.group(2), s["id"])
+    return LOIS_INITIALES
+
+
+def tableaux_initiaux(loi):
+    """Les tableaux de plafonds d'emplois de la loi de finances initiale n° `loi`, dans sa copie archivée :
+    {"articles": numéro de l'article qui fixe le plafond → (sorte, tableau, unité), "grilles", "formes", "copie",
+    "source"}. Le numéro est celui que la copie donne à l'article (« 57 bis » dans le texte adopté pour 2006, avant la
+    numérotation de la loi promulguée)."""
+    if loi not in TABLEAUX_INITIAUX:
+        annee, source = lois_initiales()[loi]
+        copies = [f for f in lire("tables/fichiers.csv") if f["source_id"] == source and f["chemin"].endswith(".html")]
+        if len(copies) != 1:
+            sys.exit(f"loi n° {loi} de finances pour {annee} : {len(copies)} copies archivées en HTML")
+        grilles, formes, flux = lire_page_html(BASE / copies[0]["chemin"])
+        articles = {re.match(r"Article ([0-9]+(?: [a-z]+)?) ", phrase).group(1): (sorte, k, unite_)
+                    for sorte, (k, phrase, unite_) in lf.tableaux_emplois(grilles, formes, flux, annee).items()}
+        TABLEAUX_INITIAUX[loi] = {"articles": articles, "grilles": grilles, "formes": formes, "copie": copies[0]["id"],
+                                  "source": source}
+    return TABLEAUX_INITIAUX[loi]
+
+
+def lignes_initiales(loi, numero):
+    """Le tableau de plafonds d'emplois de l'article `numero` de la loi de finances initiale n° `loi` : (sorte,
+    lignes). Ses lignes sont celles du tableau qui ne sont pas vides, de son en-tête, la première, à son total, la
+    dernière (une ligne d'unité qui précède l'en-tête n'en est pas une) ; chacune porte son libellé et son nombre, et,
+    quand la base en a lu le nombre, son concept et sa fonction, dont le chiffre doit être celui du tableau."""
+    t = tableaux_initiaux(loi)
+    sorte, k, unite_ = t["articles"][numero]
+    lus = {}
+    for l in lire(table_des_chiffres(t["source"])):
+        m = re.match(r"tableau=([0-9]+);ligne=([0-9]+);", l["emplacement"])
+        if m and int(m.group(1)) == k and l["concept_id"].endswith("_PLAFOND_EMPLOIS_LFI"):
+            lus[int(m.group(2))] = l
+    rangees = {g["ligne"]: g for g in lf.rangees_emplois(t["grilles"][k], t["formes"][k], k)}
+    lignes = []
+    for r, cases in enumerate(t["grilles"][k]):
+        if not any(c.strip() for c in cases) or not lignes and re.match(r"\(En équivalents", cases[0].strip()) \
+                and not any(c.strip() for c in cases[1:]):
+            continue
+        g, l = rangees.get(r), lus.get(r)
+        nombre = int(g["nombre"][0]) if g and g["nombre"] else None
+        if l and (int(l["valeur"]) != nombre or l["unite_id"] != unite_):
+            sys.exit(f"{t['copie']}, tableau {k}, ligne {r} : la base lit {l['valeur']} {l['unite_id']}, le tableau "
+                     f"{nombre} {unite_}")
+        lignes.append({"ligne": r, "libelle": g["libelle"] if g else "", "nombre": nombre,
+                       "concept": l["concept_id"] if l else None, "fonction": l["fonction_id"] if l else None,
+                       "unite": unite_})
+    if not lignes or lignes[0]["ligne"] in rangees or lignes[-1]["nombre"] is None:
+        sys.exit(f"{t['copie']}, tableau {k} : plafonds d'emplois sans en-tête, ou sans total en dernière ligne")
+    return sorte, lignes
+
+
+def articles_emplois(texte, annee):
+    """Les articles de la loi de finances initiale de l'année qui fixent un plafond d'emplois, quand le texte les
+    nomme : [(loi, numéro, place du nom de l'article, fin de la loi qui le suit)]. La loi d'un article est celle qui
+    suit son nom (« de la loi n° 2014-1654 du 29 décembre 2014 de finances pour 2015 »), la dernière que le texte a
+    nommée (« de la même loi »), ou, quand rien ne suit son nom que « est ainsi modifié », celle que modifie l'article
+    du texte où il est nommé (« La loi n° 2012-1509 du 29 décembre 2012 de finances pour 2013 est ainsi modifiée : »)."""
+    trouves = []
+    for m in ARTICLE_CITE.finditer(texte):
+        loi, suite = None, DE_LA_LOI.match(texte, m.end())
+        if suite:
+            loi, fin = f"{suite.group(1)}-{suite.group(2)}", suite.end()
+            if suite.group(3) != annee:
+                continue
+        elif texte.startswith(" de la même loi", m.end()):
+            nommees = list(LOI_NOMMEE.finditer(texte, 0, m.start()))
+            loi, fin = (f"{nommees[-1].group(1)}-{nommees[-1].group(2)}" if nommees else None), m.end() + 15
+        elif EST_MODIFIE.match(texte, m.end()):
+            debut = texte.rfind(" Article ", 0, m.start())
+            englobant = re.match(r" Article [0-9]+(?: er)? La loi n° ([0-9]{4}) ?[‑-] ?([0-9]+) du [^,;]{5,40}? de "
+                                 r"finances pour ([0-9]{4}) est ainsi modifiée : ", texte[debut:]) if debut >= 0 else None
+            if englobant and englobant.group(3) == annee:
+                loi, fin = f"{englobant.group(1)}-{englobant.group(2)}", m.end()
+        if loi and lois_initiales().get(loi, ("",))[0] == annee and m.group(1) in tableaux_initiaux(loi)["articles"]:
+            trouves.append((loi, m.group(1), m.start(), fin))
+    return trouves
+
+
+def lignes_citees(grilles, cite, quoi):
+    """Les lignes de tableau qu'une loi cite (« « Solidarités et familles 5 074 » ») : la grille de la page, seule, dont
+    les rangées non vides portent chacune un libellé et un nombre, guillemets ôtés, et donnent ensemble le texte cité ;
+    (tableau, [(rangée, colonne du nombre, libellé, nombre)])."""
+    trouves = []
+    for k, grille in enumerate(grilles):
+        rangees = [(r, [(c, sans_guillemets(x)) for c, x in enumerate(cases) if sans_guillemets(x)])
+                   for r, cases in enumerate(grille)]
+        rangees = [(r, cases) for r, cases in rangees if cases]
+        if rangees and all(len(cases) == 2 and nombre_texte(cases[1][1]) for _, cases in rangees) and \
+                normaliser(" ".join(f"{cases[0][1]} {cases[1][1]}" for _, cases in rangees)) == normaliser(cite):
+            trouves.append((k, [(r, cases[1][0], cases[0][1], nombre_texte(cases[1][1])) for r, cases in rangees]))
+    if len(trouves) != 1:
+        sys.exit(f"{quoi} : {len(trouves)} tableau(x) de la page donnent les lignes « {cite} »")
+    return trouves[0]
+
+
+def verifier_emplois(sorte, lignes, valeurs, quoi):
+    """Les sommes d'un tableau de plafonds d'emplois, nombres `valeurs` (indice de ligne → nombre) : comme à
+    l'import de la loi de finances initiale, les ministères font le budget général, les budgets annexes leur ligne, et
+    les deux, le total général ; une mission, ses programmes ; le total, les missions qui ont un plafond et les
+    programmes des autres, ou les autorités. Une ligne sans nombre compte pour zéro."""
+    v = lambda i: valeurs.get(i) or 0
+    if sorte == "ETAT":
+        totaux = {}
+        for p in ("BG", "BA"):
+            concept_ = f"LOLF.{p}_PLAFOND_EMPLOIS_LFI"
+            totaux[p] = [i for i, l in enumerate(lignes) if l["concept"] == concept_ and not l["fonction"]]
+            parties = [i for i, l in enumerate(lignes) if l["concept"] == concept_ and l["fonction"]]
+            if len(totaux[p]) != 1 or v(totaux[p][0]) != sum(v(i) for i in parties):
+                sys.exit(f"{quoi} : {'budget général' if p == 'BG' else 'budgets annexes'} absent, ou qui ne fait pas "
+                         f"la somme de ses lignes")
+        if v(len(lignes) - 1) != v(totaux["BG"][0]) + v(totaux["BA"][0]):
+            sys.exit(f"{quoi} : le total général ne fait pas la somme du budget général et des budgets annexes")
+        return
+    fonctions_ = {l["fonction"]: i for i, l in enumerate(lignes) if l["fonction"]}
+    parties = []
+    for f, i in fonctions_.items():
+        mission = f.rsplit(".", 1)[0] if sorte != "API" and f.count(".") == 2 else None
+        if mission is None or v(fonctions_.get(mission)) == 0:
+            parties.append(i)
+        if sorte != "API" and f.count(".") == 1 and \
+                v(i) != sum(v(j) for g, j in fonctions_.items() if g.startswith(f + ".")):
+            sys.exit(f"{quoi}, ligne {i + 1} du tableau modifié : la mission ne fait pas la somme de ses programmes")
+    if v(len(lignes) - 1) != sum(v(i) for i in parties):
+        sys.exit(f"{quoi} : le total ne fait pas la somme de ses lignes")
+
+
+def fonctions_inserees(sorte, lignes, apres, inserees, fonctions, quoi):
+    """Les fonctions des lignes qu'une loi insère dans un tableau de plafonds d'emplois par mission et par programme,
+    après la ligne d'indice `apres` : un programme de la mission en cours (celle de la dernière ligne de mission
+    jusque-là), sinon une mission ; l'un et l'autre doivent être des fonctions de la base."""
+    if sorte not in ("OPERATEURS", "EAF"):
+        sys.exit(f"{quoi} : insertion de lignes dans un tableau de plafonds d'emplois par {sorte.lower()}")
+    mission = next((l["fonction"] for l in reversed(lignes[:apres + 1]) if l["fonction"] and
+                    l["fonction"].count(".") == 1), None)
+    resultat = []
+    for libelle in inserees:
+        code = code_lolf(nom(normaliser(libelle)))
+        if mission and f"{mission}.{code}" in fonctions:
+            resultat.append(f"{mission}.{code}")
+        elif fonctions.get(f"LOLF.{code}", {}).get("parent_id", None) == "":
+            mission = f"LOLF.{code}"
+            resultat.append(mission)
+        else:
+            sys.exit(f"{quoi} : ligne insérée « {libelle} », ni mission de la base ni programme de la mission en cours")
+    return resultat
+
+
+def plafonds_emplois_modifies(fichier, annee, grilles, texte, texte_brut, revise, fonctions):
+    """Les plafonds d'emplois que la loi change dans les tableaux de la loi de finances initiale de l'année, des
+    niveaux : chaque article de cette loi qui fixe un plafond d'emplois, quand le texte le nomme (articles_emplois),
+    doit être modifié par une phrase que l'import sait lire en entier. La n-ième ligne d'un tableau est sa n-ième ligne
+    non vide, en-tête compris (lignes_initiales), et l'ancien nombre d'une ligne, celui que la base y lit ; une ligne
+    insérée ne change pas le rang des suivantes, ce que vérifient les anciens nombres. Le tableau modifié doit faire ses
+    sommes (verifier_emplois), son total égaler celui que donne le premier alinéa de l'article quand la loi le change
+    aussi, sinon rester celui de la loi de finances initiale, et le total général du tableau de l'État égaler le plafond
+    des emplois que fixe l'article d'équilibre de la loi (`revise`, la ligne de son chiffre), ou rester le même quand
+    elle n'en fixe pas. Chaque ligne que la loi change ou insère donne un chiffre, sous le concept de son tableau
+    (…_LFR_REVISE au lieu de …_LFI) et sa fonction, désigné par la phrase qui la change (« remplacement=… ») ou par sa
+    case quand la loi récrit ou insère la ligne, ou récrit le tableau ; le total général du tableau de l'État, qui égale
+    le plafond de l'article d'équilibre, ne s'enregistre pas."""
+    if sans_articles(fichier):
+        return
+    corps_lus = []  # (début, fin) du corps de chaque modification lue
+    for loi, numero, place, fin_nom in articles_emplois(texte, annee):
+        sorte, lignes = lignes_initiales(loi, numero)
+        quoi = f"{fichier['id']}, article {numero} de la loi n° {loi}"
+        objet = OBJET_MODIFIE.search(texte, max(0, place - 80), place)
+        verbe = EST_MODIFIE.match(texte, fin_nom)
+        if objet is None or verbe is None or fichier["chemin"].endswith(".pdf"):
+            sys.exit(f"{quoi} (plafonds d'emplois) : phrase que l'import ne sait pas lire, « "
+                     f"{texte[max(0, place - 80):fin_nom + 40]} »")
+        # Le corps de la modification va jusqu'à la fin de l'article, ou jusqu'à l'alinéa suivant quand elle en est un.
+        debut, marque = verbe.end(), re.search(r"(?:^|\s)([0-9]{1,2}°|[a-z]\)) $", texte[max(0, objet.start() - 6):
+                                                                                          objet.start()])
+        fin = FIN_ARTICLE.search(texte, debut).start()
+        if marque:
+            suivante = re.compile(r"\s[0-9]{1,2}°\s" if marque.group(1).endswith("°") else r"\s[a-z]\)\s")
+            prochaine = suivante.search(texte, debut, fin)
+            fin = prochaine.start() if prochaine else fin
+        corps = texte[debut:fin]
+        corps_lus.append((debut, fin))
+        valeurs = {i: l["nombre"] for i, l in enumerate(lignes) if l["nombre"] is not None}
+        avant, changes, inserees, total_alinea = dict(valeurs), {}, {}, None  # changes : indice → (emplacement, note)
+        if objet.group("tableau") and verbe.group(1) == "rédigé":
+            # Le tableau récrit : ses lignes sont celles de la loi de finances initiale, dans le même ordre.
+            k, cases_ = None, None
+            for k_, grille in enumerate(grilles):
+                rangees = [(i, r) for i, r in enumerate(grille) if any(sans_guillemets(x) for x in r)]
+                if rangees and any("Désignation du ministère" in x for x in rangees[0][1]):
+                    if k is not None:
+                        sys.exit(f"{quoi} : deux tableaux récrits dans la page")
+                    k, cases_ = k_, rangees
+            if k is None or len(cases_) != len(lignes):
+                sys.exit(f"{quoi} : tableau récrit introuvable, ou qui n'a pas les lignes de la loi de finances initiale")
+            for i, ((r, cases), l) in enumerate(zip(cases_[1:], lignes[1:]), start=1):
+                textes = [(c, sans_guillemets(x)) for c, x in enumerate(cases) if sans_guillemets(x)]
+                pareil = lambda x: re.sub(r"\s*[-–‑]\s*", " ", nom(x)).strip(" .")
+                if len(textes) != 2 or pareil(textes[0][1]) != pareil(l["libelle"]):
+                    sys.exit(f"{quoi}, ligne {i + 1} : « {textes[0][1] if textes else ''} » au lieu de « "
+                             f"{l['libelle']} »")
+                nombre = nombre_texte(textes[1][1])
+                if (nombre is None) != (l["nombre"] is None) or nombre and nombre[1]:
+                    sys.exit(f"{quoi}, ligne {i + 1} : plafond « {textes[1][1]} », la loi de finances initiale "
+                             f"{l['nombre']}")
+                if nombre:
+                    valeurs[i] = int(nombre[0])
+                    changes[i] = (f"tableau={k};ligne={r};colonne={textes[1][0]};libelle={textes[0][1]}",
+                                  "La loi récrit le tableau entier.")
+        else:
+            for clause in re.split(r"(?:^|\s)(?:[0-9]{1,2}°|[a-z]\))\s", corps):
+                clause = clause.strip(" ;.:")
+                lues, alinea, recrite, ajout = (motif.fullmatch(clause) for motif in (
+                    LIGNES_MODIFIEES, ALINEA_MODIFIE, LIGNE_RECRITE, LIGNES_INSEREES))
+                if not clause or COLONNE_MODIFIEE.fullmatch(clause) and not objet.group("colonne"):
+                    continue
+                if alinea and objet.group("article"):
+                    if total_alinea or int(re.sub(r"\D", "", alinea.group(1))) != avant[len(lignes) - 1]:
+                        sys.exit(f"{quoi} : premier alinéa modifié deux fois, ou dont l'ancien nombre n'est pas le "
+                                 f"total du tableau")
+                    total_alinea = int(re.sub(r"\D", "", alinea.group(2)))
+                    continue
+                if ajout and not objet.group("colonne"):
+                    rangs = rangs_lignes(ajout.group(1))
+                    if not rangs or len(rangs) != 1 or not 1 <= rangs[0] < len(lignes) or rangs[0] - 1 in inserees:
+                        sys.exit(f"{quoi} : insertion « {clause[:80]} » hors du tableau, ou illisible")
+                    k, citees = lignes_citees(grilles, ajout.group(2), quoi)
+                    inserees[rangs[0] - 1] = [(f"tableau={k};ligne={r};colonne={c};libelle={libelle}", libelle,
+                                               int(nombre[0])) for r, c, libelle, nombre in citees]
+                    continue
+                if lues:
+                    rangs, nombres = rangs_lignes(lues.group(1)), lues.group(2, 3)
+                elif recrite and objet.group("tableau"):
+                    nombre = NOMBRE_FINAL.search(recrite.group(2))
+                    rangs, nombres = rangs_lignes(recrite.group(1)), (None, nombre and nombre.group(0))
+                else:
+                    sys.exit(f"{quoi} : phrase que l'import ne sait pas lire, « {clause[:160]} »")
+                if not rangs or nombres[1] is None or any(not -len(lignes) < n <= len(lignes) or n == 1 for n in rangs):
+                    sys.exit(f"{quoi} : lignes « {clause[:80]} » hors du tableau, ou illisibles")
+                for n in rangs:
+                    i = n - 1 if n > 0 else len(lignes) + n
+                    if i in changes or (nombres[0] is not None and int(re.sub(r"\D", "", nombres[0])) != avant.get(i)):
+                        sys.exit(f"{quoi}, ligne {i + 1} (« {lignes[i]['libelle']} ») : modifiée deux fois, ou ancien "
+                                 f"nombre {nombres[0]}, la loi de finances initiale {avant.get(i)}")
+                    valeurs[i] = int(re.sub(r"\D", "", nombres[1]))
+                    if lues:
+                        extrait = dans_la_page(clause, texte_brut)
+                        if extrait is None:
+                            sys.exit(f"{quoi} : phrase introuvable, ou plusieurs fois, dans la page : « {clause} »")
+                        changes[i] = (f"remplacement={extrait}", "")
+                    else:
+                        k, citees = lignes_citees(grilles, recrite.group(2), quoi)
+                        if len(citees) != 1 or int(citees[0][3][0]) != valeurs[i]:
+                            sys.exit(f"{quoi} : ligne récrite « {recrite.group(2)} » illisible")
+                        r, c, libelle, _ = citees[0]
+                        changes[i] = (f"tableau={k};ligne={r};colonne={c};libelle={libelle}",
+                                      f"La loi récrit cette ligne du tableau, « {lignes[i]['libelle']} » dans la loi "
+                                      f"de finances initiale : « {libelle} ».")
+        if not changes and not inserees:
+            sys.exit(f"{quoi} : article qui ne modifie aucune ligne du tableau")
+        # Le tableau modifié : les lignes insérées prennent place après la ligne que nomme la loi.
+        lignes_, valeurs_, nouvelles = [], {}, []
+        for i, l in enumerate(lignes):
+            if i in valeurs:
+                valeurs_[len(lignes_)] = valeurs[i]
+            lignes_.append(l)
+            if i in inserees:
+                ajoutees = inserees[i]
+                for (emplacement, libelle, nombre), fonction in zip(ajoutees, fonctions_inserees(
+                        sorte, lignes, i, [x[1] for x in ajoutees], fonctions, quoi)):
+                    valeurs_[len(lignes_)] = nombre
+                    lignes_.append({**lignes[-1], "ligne": None, "libelle": libelle, "fonction": fonction})
+                    nouvelles.append((lignes_[-1], nombre, emplacement, "La loi insère cette ligne dans le tableau."))
+        verifier_emplois(sorte, lignes_, valeurs_, quoi)
+        total = valeurs[len(lignes) - 1]
+        if sorte == "ETAT":
+            attendu = int(revise["valeur"]) if revise else avant[len(lignes) - 1]
+            if total != attendu:
+                sys.exit(f"{quoi} : total général {total}, plafond des emplois de l'article d'équilibre {attendu}")
+        elif total != (total_alinea or avant[len(lignes) - 1]):
+            sys.exit(f"{quoi} : total du tableau {total}, premier alinéa de l'article "
+                     f"{total_alinea or avant[len(lignes) - 1]}")
+        for i, (emplacement, note) in sorted(changes.items()):
+            if sorte == "ETAT" and i == len(lignes) - 1:
+                continue  # le total général, qui égale le plafond de l'article d'équilibre
+            if lignes[i]["concept"] is None:
+                sys.exit(f"{quoi}, ligne {i + 1} : « {lignes[i]['libelle']} », ligne dont la base n'a pas lu le plafond")
+            nouvelles.append((lignes[i], valeurs[i], emplacement, note))
+        for l, nombre, emplacement, note in nouvelles:
+            yield chiffre(fichier, annee, l["concept"][:-len("_LFI")] + "_LFR_REVISE", l["fonction"], l["unite"],
+                          (str(nombre), 0), emplacement, note)
+    # Une phrase qui change le nombre d'une ligne de tableau, hors des articles lus, serait celle d'un plafond d'emplois
+    # dont l'import n'a pas reconnu l'article (une loi mal nommée) : elle l'arrête.
+    for m in LIGNES_MODIFIEES.finditer(texte):
+        if not any(debut <= m.start() < fin for debut, fin in corps_lus):
+            sys.exit(f"{fichier['id']} : phrase qui change une ligne de tableau hors des articles de plafonds d'emplois "
+                     f"que l'import reconnaît, « {m.group(0)[:120]} »")
 
 
 def totaux_des_articles(fichier, annee, lus, texte_brut):

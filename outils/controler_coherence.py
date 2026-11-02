@@ -808,6 +808,8 @@ def ventilations(derniers):
     resultats = []
     for cle, par_fonction in sorted(groupes.items()):
         source, zone, perimetre, concept, traitements, unite, periode = cle
+        if PLAFONDS_TABLEAUX.fullmatch(concept) and concept.endswith("_LFR_REVISE"):
+            continue  # une loi rectificative ne donne que les lignes qu'elle change : section 21 refait ses sommes
         for parent, fils in sorted(enfants.items()):
             fils = [f for f in fils if f in publiees[cle[:6]]]
             presents = [f for f in fils if f in par_fonction]
@@ -3988,8 +3990,8 @@ def partie_financement_vote(derniers):
               f"émissions de dette à moyen et long termes, nettes des rachats, moins l'amortissement du nominal de cette "
               f"dette. L'import vérifie que le tableau voté s'additionne, que son déficit est l'opposé du solde général de "
               f"l'article d'équilibre, et que le plafond égale la variation qu'il prévoit. Les lois de finances "
-              f"rectificatives, que la base ne lit pas encore, modifient le tableau et relèvent souvent le plafond en "
-              f"cours d'année.", "", "En milliards d'euros :", "",
+              f"rectificatives réécrivent le tableau et relèvent souvent le plafond en cours d'année (section 21).", "",
+              "En milliards d'euros :", "",
               "| Année | Besoin de financement : voté | exécuté | Émissions de dette à moyen et long termes, nettes des "
               "rachats : votées | exécutées | Variation de la dette à plus d'un an : plafond voté | exécutée |",
               "|---|---|---|---|---|---|---|"]
@@ -4039,8 +4041,9 @@ def partie_emplois_votes(derniers):
               f"et des autorités se comptent en équivalents temps plein travaillé (ETPT), ceux des établissements à "
               f"autonomie financière en équivalents temps plein (ETP), et ceux des opérateurs en ETP jusqu'à la loi pour "
               f"2014, en ETPT depuis. L'import vérifie chaque tableau contre ses lignes et contre la phrase qui l'annonce, "
-              f"et la section 2 refait ces sommes. La loi d'approbation des comptes ne constate pas d'emplois : la base n'a "
-              f"pas encore les emplois consommés.", "",
+              f"et la section 2 refait ces sommes ; les lois de finances rectificatives les modifient en cours d'année "
+              f"(section 21). La loi d'approbation des comptes ne constate pas d'emplois : la base n'a pas encore les "
+              f"emplois consommés.", "",
               "| Année | État (article d'équilibre) | Budget général | Budgets annexes | Opérateurs (ETP) | Opérateurs (ETPT) "
               "| Établissements à autonomie financière (ETP) | Autorités publiques indépendantes |",
               "|---|---|---|---|---|---|---|---|"]
@@ -4413,10 +4416,133 @@ def partie_lfr_financement(derniers):
         return (", ".join(n[:-1]) + " et " if len(n) > 1 else "") + n[-1]
 
     lignes += ["", f"Le plafond de la dette est fixé de nouveau par {fr(len(dettes), 0)} lois, en {compte(dettes)} ; "
-               f"celui des emplois par {fr(len(emplois_), 0)}, en {compte(emplois_)}. Plusieurs lois modifient aussi, "
-               "en seconde partie, les plafonds d'emplois par ministère et budget annexe, ou celui des opérateurs de "
-               "l'État : ceux-là ne sont pas encore lus.", ""]
+               f"celui des emplois par {fr(len(emplois_), 0)}, en {compte(emplois_)}. La plupart de ces lois modifient "
+               "aussi, en seconde partie, sa répartition par ministère et par budget annexe : partie suivante.", ""]
     return lignes
+
+
+# Section 21, fin : les tableaux de la seconde partie de la loi de finances initiale qui répartissent les plafonds
+# d'emplois, que modifient des lois rectificatives. Une loi ne donne que les lignes qu'elle change ou insère : le tableau
+# qu'elle révise est celui de la loi de finances initiale, ou de la loi précédente de l'année qui l'a modifié, dont elle
+# remplace ces lignes. Il doit faire les mêmes sommes que celui de la loi de finances initiale, et le total général du
+# tableau de l'État égaler le plafond des emplois que fixe l'article d'équilibre de la loi, ou celui qui court.
+PLAFONDS_TABLEAUX = re.compile(r"LOLF\.(BG|BA|OPERATEURS|EAF|API)_PLAFOND_EMPLOIS_(LFI|LFR_REVISE)")
+NOMS_TABLEAUX_EMPLOIS = {"ETAT": "État", "OPERATEURS": "Opérateurs", "EAF": "Établissements à autonomie financière",
+                         "API": "Autorités publiques indépendantes"}
+nom_tableau = lambda sorte: NOMS_TABLEAUX_EMPLOIS[sorte] if sorte == "ETAT" else NOMS_TABLEAUX_EMPLOIS[sorte].lower()
+
+
+def ecarts_emplois(sorte, table, plafond, parents):
+    """Les sommes d'un tableau de plafonds d'emplois qui ne tombent pas juste : [(ligne, nombre, somme de ses
+    parties)]. `table` : (partie, fonction) → nombre, la fonction vide pour un total ; `plafond` : celui que le total
+    général du tableau de l'État doit égaler, ou None."""
+    ecarts = []
+    if sorte == "ETAT":
+        for p in ("BG", "BA"):
+            somme = sum(v for (q, f), v in table.items() if q == p and f)
+            if table.get((p, "")) != somme:
+                ecarts.append(("budget général" if p == "BG" else "budgets annexes", table.get((p, "")), somme))
+        total = table.get(("BG", ""), 0) + table.get(("BA", ""), 0)
+        if plafond is not None and total != plafond:
+            ecarts.append(("plafond de l'article d'équilibre", plafond, total))
+        return ecarts
+    fonctions_ = {f: v for (_, f), v in table.items() if f}
+    parties = list(fonctions_.values())
+    if sorte in ("OPERATEURS", "EAF"):
+        for f, v in fonctions_.items():
+            enfants = [w for g, w in fonctions_.items() if parents.get(g) == f]
+            if enfants and v != sum(enfants):
+                ecarts.append((f, v, sum(enfants)))
+        parties = [v for f, v in fonctions_.items() if parents.get(f) not in fonctions_]
+    if table.get((sorte, "")) != sum(parties):
+        ecarts.append(("total", table.get((sorte, "")), sum(parties)))
+    return ecarts
+
+
+def partie_lfr_emplois(derniers):
+    titres = {s["id"]: s["titre"] for s in lire("tables/sources.csv")}
+    numero = lambda s: re.search(r"loi n° ([0-9]{4}-[0-9]+)", titres[s]).group(1)
+    parents = {f["id"]: f["parent_id"] for f in lire("tables/fonctions.csv")}
+    initial, revise = collections.defaultdict(dict), collections.defaultdict(lambda: collections.defaultdict(dict))
+    unites, versions, notes, plafonds_lfi, plafonds_lfr = {}, {}, collections.defaultdict(collections.Counter), {}, {}
+    for l in derniers.values():
+        if l["perimetre_id"] != "ETAT_LF":
+            continue
+        a, s, c = l["periode"], l["source_id"], l["concept_id"]
+        if c == "LOLF.PLAFOND_EMPLOIS_LFI" and not l["fonction_id"]:
+            plafonds_lfi[a] = int(float(l["valeur"]))
+        elif c == "LOLF.PLAFOND_EMPLOIS_LFR_REVISE" and not l["fonction_id"]:
+            plafonds_lfr[s] = (a, int(float(l["valeur"])))
+            versions[s] = l["version"]
+        m = PLAFONDS_TABLEAUX.fullmatch(c)
+        if m is None:
+            continue
+        sorte = "ETAT" if m.group(1) in ("BG", "BA") else m.group(1)
+        if m.group(2) == "LFI":
+            initial[(a, sorte)][(m.group(1), l["fonction_id"])] = int(float(l["valeur"]))
+            unites[(a, sorte)] = l["unite_id"]
+        else:
+            revise[(a, sorte)][s][(m.group(1), l["fonction_id"])] = int(float(l["valeur"]))
+            versions[s] = l["version"]
+            if l["notes"]:
+                notes[(s, sorte)][l["notes"]] += 1
+    if not revise:
+        return []
+    total = lambda sorte, table: table.get(("BG", ""), 0) + table.get(("BA", ""), 0) if sorte == "ETAT" \
+        else table.get((sorte, ""))
+    lignes_, en_ecart, compares, remarques = [], [], 0, []
+    # Une loi qui fixe un nouveau plafond des emplois de l'État sans changer le tableau qui le répartit : le tableau de
+    # l'année doit déjà en faire la somme.
+    for a in {a for a, _ in plafonds_lfr.values()} - {a for a, sorte in revise if sorte == "ETAT"}:
+        revise[(a, "ETAT")] = {}
+    for (a, sorte) in sorted(revise, key=lambda x: (x[0], list(NOMS_TABLEAUX_EMPLOIS).index(x[1]))):
+        table, plafond = dict(initial[(a, sorte)]), plafonds_lfi.get(a)
+        # Les lois rectificatives de l'année, dans l'ordre de leurs textes : chacune peut fixer le plafond de l'État.
+        for s in sorted({s for (b, _), lois in revise.items() if b == a for s in lois} |
+                        {s for s, (b, _) in plafonds_lfr.items() if b == a}, key=lambda s: versions[s]):
+            plafond = plafonds_lfr[s][1] if s in plafonds_lfr else plafond
+            if s not in revise[(a, sorte)]:
+                if sorte == "ETAT" and s in plafonds_lfr and initial[(a, sorte)]:
+                    compares += 1
+                    ecarts = ecarts_emplois(sorte, table, plafond, parents)
+                    en_ecart += [(a, s, sorte, e) for e in ecarts]
+                    lignes_.append(f"| {a} | {numero(s)} | {NOMS_TABLEAUX_EMPLOIS[sorte]} ({unites[(a, sorte)]}) | "
+                                   f"aucun | {fr(total(sorte, table), 0)} | {fr(total(sorte, table), 0)} | "
+                                   f"{'justes' if not ecarts else '**en écart**'} |")
+                continue
+            avant = total(sorte, table)
+            table.update(revise[(a, sorte)][s])
+            ecarts = ecarts_emplois(sorte, table, plafond if sorte == "ETAT" else None, parents)
+            compares += 1
+            en_ecart += [(a, s, sorte, e) for e in ecarts]
+            lignes_.append(f"| {a} | {numero(s)} | {NOMS_TABLEAUX_EMPLOIS[sorte]} ({unites[(a, sorte)]}) | "
+                           f"{fr(len(revise[(a, sorte)][s]), 0)} | {fr(avant, 0) if avant is not None else '—'} | "
+                           f"{fr(total(sorte, table), 0)} | {'justes' if not ecarts else '**en écart**'} |")
+            remarques += [f"- {a}, loi n° {numero(s)}, {nom_tableau(sorte)} ({fr(k, 0)} "
+                          f"chiffre{'s' if k > 1 else ''}) : « {n} »" for n, k in sorted(notes[(s, sorte)].items())]
+    lignes = ["### Plafonds d'emplois révisés", "",
+              "Les tableaux de la seconde partie de la loi de finances initiale qui répartissent les plafonds d'emplois "
+              "(section 20), que modifient des lois rectificatives : celui des emplois de l'État, par ministère et par "
+              "budget annexe, celui des opérateurs de l'État, par mission et par programme, et celui des autorités "
+              "publiques indépendantes. Une loi ne donne que les lignes qu'elle change ou insère, des niveaux : le "
+              "tableau qu'elle révise est celui de la loi de finances initiale, dont elle remplace ces lignes. L'import "
+              "vérifie l'ancien nombre de chaque ligne contre la loi de finances initiale ; le rapport refait ici les "
+              "sommes de chaque tableau révisé (ministères et budget général, budgets annexes, programmes et mission, "
+              "missions et total, autorités et total), et compare le total général du tableau de l'État au plafond des "
+              "emplois que fixe l'article d'équilibre de la même loi (partie précédente).", "",
+              "| Année | Loi | Tableau | Chiffres de la loi | Total initial | Total révisé | Sommes |",
+              "|---|---|---|---|---|---|---|"] + lignes_
+    justes = compares - len({(a, s, t) for a, s, t, _ in en_ecart})
+    lignes += ["", f"Les {fr(compares, 0)} tableaux révisés font toutes leurs sommes." if justes == compares else
+               f"{fr(justes, 0)} des {fr(compares, 0)} tableaux révisés font toutes leurs sommes ; les autres :"]
+    if en_ecart:
+        lignes += [""] + [f"- {a}, loi n° {numero(s)}, {nom_tableau(t)} : {quoi} "
+                          f"{fr(v, 0) if v is not None else '—'}, ses parties {fr(somme, 0)}."
+                          for a, s, t, (quoi, v, somme) in en_ecart]
+    if remarques:
+        lignes += ["", "Les notes des chiffres disent ce que la loi fait d'autre que changer le nombre d'une ligne :", ""]
+        lignes += remarques
+    return lignes + [""]
 
 
 def ecrire_rapport(derniers):
@@ -4434,7 +4560,7 @@ def ecrire_rapport(derniers):
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
     lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers) + partie_lfr(derniers)
-    lignes += partie_lfr_recettes(derniers) + partie_lfr_financement(derniers)
+    lignes += partie_lfr_recettes(derniers) + partie_lfr_financement(derniers) + partie_lfr_emplois(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")
