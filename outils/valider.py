@@ -22,7 +22,7 @@ import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
 from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_export_ofgl, lire_jsonstat,
-                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, montants_de_case,
+                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, montant_pdf, montants_de_case,
                     nombre_de_phrase, nombre_texte, paquet, ressources_chiffres, texte_html, texte_pdf)
 
 
@@ -180,13 +180,23 @@ def valeur_archivee(fichier, emplacement, copies):
             return None
         return float(observation["OBS_VALUE"]), observation.get("OBS_QUAL", "")
     if fichier["chemin"].endswith(".pdf"):
+        if fichier["id"] not in copies:
+            copies[fichier["id"]] = lire_pdf(chemin)
+        # Un montant désigné par sa page, le rang de sa ligne dans la page et l'étendue de ses abscisses : celui qui finit
+        # le texte des morceaux de la ligne dans cette étendue (montant_pdf).
+        trouve = re.match(r"page=([0-9]+);ligne=([0-9]+);x=([0-9.]+)-([0-9.]+)(?:;|$)", emplacement)
+        if trouve:
+            page, ligne = int(trouve.group(1)), int(trouve.group(2))
+            pages = copies[fichier["id"]]
+            if not 1 <= page <= len(pages) or not 1 <= ligne <= len(pages[page - 1]):
+                return None
+            nombre = montant_pdf(pages[page - 1][ligne - 1][1], float(trouve.group(3)), float(trouve.group(4)))
+            return (float(nombre[0]), "") if nombre else None
         # Un nombre au bout d'une ligne de tableau, désignée par sa page et son libellé : une seule ligne de la page doit
         # commencer par ce libellé et ne porter, après lui, qu'un nombre.
         trouve = re.fullmatch(r"page=([0-9]+);libelle=(.+)", emplacement)
         if trouve is None:
             return None
-        if fichier["id"] not in copies:
-            copies[fichier["id"]] = lire_pdf(chemin)
         page, libelle = int(trouve.group(1)), trouve.group(2)
         lignes = [texte_pdf(m) for _, m in copies[fichier["id"]][page - 1]] if 1 <= page <= len(copies[fichier["id"]]) else []
         nombres = [n for l in lignes if l.startswith(libelle) and (n := nombre_texte(l[len(libelle):])) is not None]

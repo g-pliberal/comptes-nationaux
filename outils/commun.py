@@ -979,6 +979,19 @@ def texte_pdf(morceaux):
     return " ".join("".join(t for _, t in morceaux).split())
 
 
+# Un montant qui finit un texte : chiffres groupés par trois, signe moins et décimales compris ; ce qui le précède ne
+# finit pas par un chiffre (les points de conduite d'un libellé, eux, peuvent le toucher).
+NOMBRE_FINAL = re.compile(r"(?<![0-9,])[-\u2011\u2212]?[0-9]{1,3}(?:[ \u00a0][0-9]{3})*(?:,[0-9]+)?$")
+
+
+def montant_pdf(morceaux, debut, fin):
+    """Le montant qui finit le texte des morceaux d'une ligne de PDF dont l'abscisse est dans [debut, fin[, lu comme
+    par nombre_texte ; None s'il n'y en a pas. Un montant que la page coupe en plusieurs morceaux (« 62 », « 888 »,
+    « 000 »), ou qu'elle écrit dans le morceau de son libellé, se lit en entier."""
+    trouve = NOMBRE_FINAL.search(texte_pdf([(x, t) for x, t in sorted(morceaux) if debut <= x < fin]))
+    return nombre_texte(trouve.group(0)) if trouve else None
+
+
 def date_pdf(donnees):
     """Date de dernière modification que le producteur a inscrite dans un PDF, à défaut date de création : « D:2026051815
     4927+02'00' » → « 2026-05-18T15:49:27+02:00 » ; vide s'il n'en porte pas."""

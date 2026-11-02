@@ -25,7 +25,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | an.ta14-0649 | Projet de loi de finances rectificative pour 2015 (loi n° 2015-1786), texte adopté n° 649 (14e législature), adopté définitivement par l'Assemblée nationale le 17 décembre 2015 | 2015-12-17 | 464 |
 | an.ta14-0865 | Projet de loi de finances pour 2017, texte adopté n° 865 (14e législature), adopté définitivement par l'Assemblée nationale le 20 décembre 2016 | 2016-12-20 | 1072 |
 | an.ta14-0877 | Projet de loi de finances rectificative pour 2016 (loi n° 2016-1918), texte adopté n° 877 (14e législature), adopté définitivement par l'Assemblée nationale le 22 décembre 2016 | 2016-12-22 | 467 |
-| an.ta15-0032 | Projet de loi de finances rectificative pour 2017 (loi n° 2017-1640), texte adopté n° 32 (15e législature), adopté définitivement par l'Assemblée nationale le 14 novembre 2017 | 2017-11-14 | 8 |
+| an.ta15-0032 | Projet de loi de finances rectificative pour 2017 (loi n° 2017-1640), texte adopté n° 32 (15e législature), adopté définitivement par l'Assemblée nationale le 14 novembre 2017 | 2017-11-14 | 146 |
 | an.ta15-0065 | Projet de loi de finances pour 2018, texte adopté n° 65 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 1083 |
 | an.ta15-0067 | Projet de loi de finances rectificative pour 2017 (loi n° 2017-1775), texte adopté n° 67 (15e législature), adopté définitivement par l'Assemblée nationale le 21 décembre 2017 | 2017-12-21 | 334 |
 | an.ta15-0195 | Projet de loi de finances rectificative pour 2018 (loi n° 2018-1104), texte adopté n° 195 (15e législature), adopté définitivement par l'Assemblée nationale le 28 novembre 2018 | 2018-11-28 | 663 |
@@ -302,7 +302,7 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-32009 ventilations vérifiées avec toutes leurs parties : 32003 justes, 6 en écart.
+32027 ventilations vérifiées avec toutes leurs parties : 32021 justes, 6 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
@@ -2708,7 +2708,7 @@ Les 15 plus grandes ouvertures ou annulations de crédits de paiement d'une miss
 
 ### Recettes et soldes révisés
 
-Ce que ces lois révisent des évaluations de recettes de l'état A et des soldes de l'article d'équilibre : 37 lois, dont la base lit le tableau d'équilibre de 35. Chacune ne donne que ce qu'elle change, et celles d'une même année s'additionnent : l'évaluation révisée est celle de la loi de finances initiale (section 18) plus ces révisions. L'import vérifie chaque division de l'état A révisé contre ses lignes, chaque compte contre ses sections et ses lignes, chaque catégorie de la récapitulation contre ses divisions ; le tableau d'équilibre entre ses lignes, ses ressources contre l'état A et ses charges contre les crédits que la loi ouvre et annule, au million près, et chaque solde contre celui que donnent les états. La section 2 refait les sommes de l'état A. Années incomplètes, faute du tableau d'équilibre d'une de leurs lois : 2011 et 2017 (loi n° 2011-900, tableau en image dans la page ; loi n° 2017-1640, page dont des octets nuls recouvrent les articles).
+Ce que ces lois révisent des évaluations de recettes de l'état A et des soldes de l'article d'équilibre : 37 lois, dont la base lit le tableau d'équilibre de 36. Chacune ne donne que ce qu'elle change, et celles d'une même année s'additionnent : l'évaluation révisée est celle de la loi de finances initiale (section 18) plus ces révisions. L'import vérifie chaque division de l'état A révisé contre ses lignes, chaque compte contre ses sections et ses lignes, chaque catégorie de la récapitulation contre ses divisions ; le tableau d'équilibre entre ses lignes, ses ressources contre l'état A et ses charges contre les crédits que la loi ouvre et annule, au million près, et chaque solde contre celui que donnent les états. La section 2 refait les sommes de l'état A. Année incomplète, faute du tableau d'équilibre d'une de ses lois : 2011 (loi n° 2011-900, tableau en image dans la page).
 
 Budget général et solde général, en milliards d'euros :
 
@@ -2725,7 +2725,7 @@ Budget général et solde général, en milliards d'euros :
 | 2014 | 284,4 | −12,0 | 272,4 | 274,3 | +1,9 | −82,6 | −6,4 | −89,0 | −85,6 | +3,4 |
 | 2015 | 279,1 | −0,3 | 278,8 | 280,1 | +1,4 | −74,4 | 0,4 | −74,0 | −70,5 | +3,5 |
 | 2016 | 287,9 | −2,6 | 285,3 | 284,1 | −1,2 | −72,3 | 2,4 | −69,9 | −69,1 | +0,9 |
-| 2017 * | 292,3 | 1,7 | 294,0 | 295,6 | +1,6 | −69,3 | 0,4 | −68,9 | −67,7 | +1,3 |
+| 2017 | 292,3 | −1,0 | 291,3 | 295,6 | +4,3 | −69,3 | −3,1 | −72,4 | −67,7 | +4,7 |
 | 2018 | 286,6 | 6,7 | 293,3 | 295,4 | +2,1 | −85,7 | 5,7 | −80,0 | −76,0 | +4,0 |
 | 2019 | 273,5 | 5,7 | 279,2 | 281,3 | +2,1 | −107,7 | 10,0 | −97,7 | −92,7 | +5,0 |
 | 2020 | 293,0 | −43,8 | 249,2 | 256,0 | +6,7 | −93,1 | −130,1 | −223,3 | −178,1 | +45,2 |
@@ -2763,7 +2763,7 @@ Loi par loi, révisions du budget général et variation du solde général, en 
 | 2014 | 2014-1655 | −6,7 | −0,2 | 0,3 | −1,0 | −5,0 |
 | 2015 | 2015-1786 | −0,3 | 0,5 | −1,0 | 2,1 | 0,4 |
 | 2016 | 2016-1918 | −2,6 | 0,9 | −2,0 | 2,4 | 2,4 |
-| 2017 | 2017-1640 | — | — | — | — | — |
+| 2017 | 2017-1640 | −2,7 | −1,5 | −0,7 | 0,0 | −3,5 |
 | 2017 | 2017-1775 | 1,7 | 0,4 | −1,6 | 3,4 | 0,4 |
 | 2018 | 2018-1104 | 6,7 | 0,4 | 0,5 | 0,1 | 5,7 |
 | 2019 | 2019-1270 | 5,7 | 1,9 | 0,0 | −1,5 | 10,0 |
@@ -2779,9 +2779,9 @@ Loi par loi, révisions du budget général et variation du solde général, en 
 | 2024 | 2024-1167 | −25,2 | 1,0 | 0,7 | −1,9 | −21,9 |
 | 2025 | 2025-1173 | 3,7 | 2,1 | 0,8 | −4,0 | 5,9 |
 
-Le solde général égale, à l'arrondi au million près de chacun de ses montants, la somme des soldes du budget général, des budgets annexes et des comptes spéciaux dans 35 des 35 tableaux d'équilibre.
+Le solde général égale, à l'arrondi au million près de chacun de ses montants, la somme des soldes du budget général, des budgets annexes et des comptes spéciaux dans 36 des 36 tableaux d'équilibre.
 
-Divisions, lignes, comptes et sections de recettes : 2 831 des 3 021 que révisent ces lois, année par année, se retrouvent sous le même identifiant dans la loi de finances initiale de l'année ; 167 autres, dans celle d'une autre année, dont la page écrit leur libellé comme celle de la loi rectificative (« Retenue » ou « Retenues à la source », « assurance » ou « assurances »). Les 23 dernières n'ont d'identifiant que dans ces lois : des lignes qu'elles créent, ou que leur page écrit autrement que toute loi de finances initiale (un numéro de ligne que celle-ci n'imprime pas, une section qu'elle omet) :
+Divisions, lignes, comptes et sections de recettes : 2 926 des 3 116 que révisent ces lois, année par année, se retrouvent sous le même identifiant dans la loi de finances initiale de l'année ; 167 autres, dans celle d'une autre année, dont la page écrit leur libellé comme celle de la loi rectificative (« Retenue » ou « Retenues à la source », « assurance » ou « assurances »). Les 23 dernières n'ont d'identifiant que dans ces lois : des lignes qu'elles créent, ou que leur page écrit autrement que toute loi de finances initiale (un numéro de ligne que celle-ci n'imprime pas, une section qu'elle omet) :
 
 | Année | Ligne | Rattachée à |
 |---|---|---|
@@ -2828,7 +2828,7 @@ Les 10 plus grandes révisions d'une division de recettes du budget général pa
 
 Le tableau de financement de l'article d'équilibre, que chaque loi réécrit, et les plafonds de la variation de la dette négociable de l'État d'une durée supérieure à un an et des emplois rémunérés par l'État, qu'elle change : des niveaux, que la loi suivante de l'année remplace, et non des variations. L'import vérifie que chaque tableau s'additionne, et qu'un plafond de la dette que fixe une loi égale les émissions de dette à moyen et long termes, nettes des rachats, moins l'amortissement de leur nominal, à l'arrondi de ces montants près. Le déficit du tableau est l'évaluation du Gouvernement pour l'année ; il se compare ici au déficit voté, celui de la loi de finances initiale (section 18) et des variations du solde général que donnent les tableaux d'équilibre des lois de l'année jusqu'à celle-ci (partie précédente), à l'arrondi du tableau près (0,05 Md€).
 
-Loi par loi, en milliards d'euros, et en équivalents temps plein travaillé pour les emplois. Un plafond « inchangé » reste celui de la loi précédente de l'année, à défaut celui de la loi de finances initiale ; « non mentionné » : la loi n'en dit rien (ni tableau de financement ni plafond de la dette dans les lois n° 2006-1771 et 2007-1824, pas de plafond des emplois dans les lois n° 2024-1167 et 2025-1173) ; « image » : la page donne le tableau en image (loi n° 2011-900) ; « illisible » : la page ne laisse pas lire les articles (loi n° 2017-1640) :
+Loi par loi, en milliards d'euros, et en équivalents temps plein travaillé pour les emplois. Un plafond « inchangé » reste celui de la loi précédente de l'année, à défaut celui de la loi de finances initiale ; « non mentionné » : la loi n'en dit rien (ni tableau de financement ni plafond de la dette dans les lois n° 2006-1771 et 2007-1824, pas de plafond des emplois dans les lois n° 2024-1167 et 2025-1173) ; « image » : la page donne le tableau en image (loi n° 2011-900) :
 
 | Année | Loi | Déficit à financer | Déficit voté | Écart | Plafond de la dette | Plafond des emplois |
 |---|---|---|---|---|---|---|
@@ -2854,8 +2854,8 @@ Loi par loi, en milliards d'euros, et en équivalents temps plein travaillé pou
 | 2014 | 2014-1655 | 89,0 | 89,0 | +0,0 | inchangé | inchangé |
 | 2015 | 2015-1786 | 73,3 | 74,0 | −0,7 | inchangé | 1 903 724 |
 | 2016 | 2016-1918 | 69,9 | 69,9 | +0,0 | inchangé | 1 920 269 |
-| 2017 | 2017-1640 | illisible | — | — | illisible | illisible |
-| 2017 | 2017-1775 | 74,1 | — | — | inchangé | 1 944 683 |
+| 2017 | 2017-1640 | 76,9 | 72,8 | +4,1 | inchangé | inchangé |
+| 2017 | 2017-1775 | 74,1 | 72,4 | +1,7 | inchangé | 1 944 683 |
 | 2018 | 2018-1104 | 80,0 | 80,0 | +0,0 | inchangé | 1 949 528 |
 | 2019 | 2019-1270 | 97,7 | 97,7 | +0,0 | inchangé | 1 953 810 |
 | 2020 | 2020-289 | 109,0 | 109,0 | +0,0 | 79,5 | inchangé |
@@ -2870,12 +2870,14 @@ Loi par loi, en milliards d'euros, et en équivalents temps plein travaillé pou
 | 2024 | 2024-1167 | 162,4 | 168,8 | −6,4 | inchangé | non mentionné |
 | 2025 | 2025-1173 | 131,6 | 133,1 | −1,5 | inchangé | non mentionné |
 
-Le déficit à financer égale le déficit voté dans 19 des 29 lois où les deux se comparent.
-Il s'en écarte dans 10 ; la note du chiffre dit d'où vient l'écart, d'après les documents parlementaires :
+Le déficit à financer égale le déficit voté dans 19 des 31 lois où les deux se comparent.
+Il s'en écarte dans 12 ; la note du chiffre dit d'où vient l'écart, d'après les documents parlementaires :
 
 - 2010, loi n° 2010-1658 : +1,2 Md€. Le Gouvernement évalue ce déficit en comptant aussi la consommation de reports de crédits, estimée à 1,3 milliard d’euros, issus principalement du plan de relance de l’économie, que ne compte pas le tableau d’équilibre de la loi : exposé général des motifs du projet de loi (Assemblée nationale, XIIIe législature, n° 2944).
 - 2012, loi n° 2012-1510 : −0,1 Md€. Le projet de loi (Assemblée nationale, XIVe législature, n° 403) évaluait ce déficit à 86,1 Md€ pour une variation du solde général de −5 014 M€ ; la loi porte cette variation à −5 045 M€, et son tableau de financement garde le déficit du projet.
 - 2015, loi n° 2015-1786 : −0,7 Md€. Le Gouvernement évalue ce déficit en comptant aussi les annulations de crédits du décret du 9 juin 2015, que ne compte pas le tableau d’équilibre de la loi : exposé général des motifs du projet de loi (Assemblée nationale, XIVe législature, n° 3217).
+- 2017, loi n° 2017-1640 : +4,1 Md€. Le Gouvernement évalue ce déficit en comptant aussi la consolidation des annulations nettes de crédits de juillet 2017 (0,3 Md€) et, à titre provisoire, d’autres mouvements de crédits attendus en fin de gestion, qui dégradent le solde de 4,4 Md€, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVe législature, n° 363).
+- 2017, loi n° 2017-1775 : +1,7 Md€. Le Gouvernement évalue ce déficit en comptant aussi la consommation de crédits de 2016 reportés sur 2017, 1,7 Md€ au budget général et 0,3 Md€ aux comptes spéciaux, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVe législature, n° 384).
 - 2021, loi n° 2021-953 : +28,9 Md€. Le Gouvernement évalue ce déficit en comptant aussi la consommation des reports de crédits de la mission « Plan d’urgence face à la crise sanitaire », ouverts par la quatrième loi de finances rectificative pour 2020, que ne compte pas le tableau d’équilibre de la loi : exposé général des motifs du projet de loi (Assemblée nationale, XVe législature, n° 4215).
 - 2021, loi n° 2021-1549 : +23,9 Md€. Le Gouvernement évalue ce déficit en comptant aussi la consommation des reports de crédits de la mission « Plan d’urgence face à la crise sanitaire », que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVe législature, n° 4629).
 - 2022, loi n° 2022-1157 : +9,1 Md€. Le Gouvernement évalue ce déficit en comptant aussi les reports de crédits mobilisés pour les dépenses exceptionnelles liées à la crise sanitaire et à la guerre en Ukraine, et pour les mesures de résilience économique et sociale, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVIe législature, n° 17).
@@ -2884,6 +2886,6 @@ Il s'en écarte dans 10 ; la note du chiffre dit d'où vient l'écart, d'après 
 - 2024, loi n° 2024-1167 : −6,4 Md€. Le Gouvernement évalue ce déficit en comptant aussi les mouvements réglementaires intervenus en gestion, dont les annulations du décret n° 2024-124 du 21 février 2024, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVIIe législature, n° 538).
 - 2025, loi n° 2025-1173 : −1,5 Md€. Le Gouvernement évalue ce déficit en comptant aussi les mouvements réglementaires intervenus en gestion, dont les annulations du décret n° 2025-374 du 25 avril 2025, que ne compte pas le tableau d’équilibre de la loi : exposé des motifs de l’article d’équilibre du projet de loi (Assemblée nationale, XVIIe législature, n° 2068).
 
-Ne se comparent pas, faute de la variation du solde d'une loi précédente de l'année : en 2011, les lois n° 2011-1117, 2011-1416 et 2011-1978 (tableau d’équilibre en image de la loi n° 2011-900) ; en 2017, la loi n° 2017-1775 (page illisible de la loi n° 2017-1640).
+Ne se comparent pas, faute de la variation du solde d'une loi précédente de l'année : en 2011, les lois n° 2011-1117, 2011-1416 et 2011-1978 (tableau d’équilibre en image de la loi n° 2011-900).
 
 Le plafond de la dette est fixé de nouveau par 10 lois, en 2008 (2 lois), 2009 (3 lois), 2010 et 2020 (4 lois) ; celui des emplois par 13, en 2010, 2011, 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 et 2023. Plusieurs lois modifient aussi, en seconde partie, les plafonds d'emplois par ministère et budget annexe, ou celui des opérateurs de l'État : ceux-là ne sont pas encore lus.
