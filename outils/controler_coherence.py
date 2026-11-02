@@ -4042,8 +4042,8 @@ def partie_emplois_votes(derniers):
               f"autonomie financière en équivalents temps plein (ETP), et ceux des opérateurs en ETP jusqu'à la loi pour "
               f"2014, en ETPT depuis. L'import vérifie chaque tableau contre ses lignes et contre la phrase qui l'annonce, "
               f"et la section 2 refait ces sommes ; les lois de finances rectificatives les modifient en cours d'année "
-              f"(section 21). La loi d'approbation des comptes ne constate pas d'emplois : la base n'a pas encore les "
-              f"emplois consommés.", "",
+              f"(section 21). La loi d'approbation des comptes ne constate pas d'emplois : la section 22 compare ces "
+              f"plafonds aux emplois consommés que donne la Cour des comptes.", "",
               "| Année | État (article d'équilibre) | Budget général | Budgets annexes | Opérateurs (ETP) | Opérateurs (ETPT) "
               "| Établissements à autonomie financière (ETP) | Autorités publiques indépendantes |",
               "|---|---|---|---|---|---|---|---|"]
@@ -4545,6 +4545,83 @@ def partie_lfr_emplois(derniers):
     return lignes + [""]
 
 
+# 22. Emplois consommés : ceux de l'État budgets annexes compris, ou ceux du budget général seul, tels que les donne la
+# Cour des comptes, contre le plafond de même champ que fixent la loi de finances initiale de l'année (l'article
+# d'équilibre, ou la ligne « I. Budget général » du tableau qui le répartit) et, s'il y a lieu, la dernière loi
+# rectificative de l'année qui le change.
+EMPLOIS_CONSOMMES = {"LOLF.EMPLOIS_CONSOMMES": ("État, budgets annexes compris", "LOLF.PLAFOND_EMPLOIS"),
+                     "LOLF.BG_EMPLOIS_CONSOMMES": ("budget général", "LOLF.BG_PLAFOND_EMPLOIS")}
+
+
+def suite_annees(annees):
+    """« 2006, 2007, 2010, 2011 et 2016 à 2020 » : des années, celles qui se suivent réunies."""
+    groupes = []
+    for a in sorted(annees):
+        if groupes and a == groupes[-1][-1] + 1:
+            groupes[-1].append(a)
+        else:
+            groupes.append([a])
+    textes = []
+    for g in groupes:
+        textes += [f"{g[0]} à {g[-1]}"] if len(g) > 2 else [str(a) for a in g]
+    return textes[0] if len(textes) == 1 else ", ".join(textes[:-1]) + " et " + textes[-1]
+
+
+def partie_emplois_consommes(derniers):
+    consommes, initiaux, revises = {}, {}, {}
+    for l in derniers.values():
+        if l["perimetre_id"] != "ETAT_LF" or l["fonction_id"] or l["unite_id"] != "ETPT":
+            continue
+        c, a = l["concept_id"], l["periode"]
+        if c in EMPLOIS_CONSOMMES:
+            consommes[(a, c)] = (int(float(l["valeur"])), l["source_id"])
+        for consomme, (_, plafond) in EMPLOIS_CONSOMMES.items():
+            if c == plafond + "_LFI":
+                initiaux[(a, consomme)] = int(float(l["valeur"]))
+            elif c == plafond + "_LFR_REVISE" and ((a, consomme) not in revises
+                                                    or l["version"] > revises[(a, consomme)][0]):
+                revises[(a, consomme)] = (l["version"], int(float(l["valeur"])))  # la dernière loi de l'année
+    if not consommes:
+        return []
+    lignes = ["## 22. Emplois consommés", "",
+              "Les emplois de l'État consommés dans l'année, en équivalents temps plein travaillé (ETPT), tels que les "
+              "donne le rapport de la Cour des comptes sur le budget de l'État de l'année : pour l'État budgets "
+              "annexes compris, ou pour le budget général seul, selon ce que dit le rapport. Chacun se compare au "
+              "plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » du tableau qui "
+              "le répartit, que fixe la loi de finances initiale (section 20) et que peut changer une loi "
+              "rectificative (section 21) : le plafond de l'année est celui de la dernière loi qui le fixe. L'import "
+              "vérifie que chaque plafond que cite la Cour est celui que la base lit dans ces lois.", "",
+              "| Année | Emplois | Consommés | Plafond initial | Plafond rectifié | Consommés − plafond de l'année | "
+              "Rapport |", "|---|---|---|---|---|---|---|"]
+    ecarts, rang = [], lambda x: (x[0][0], list(EMPLOIS_CONSOMMES).index(x[0][1]))
+    for (a, c), (v, source) in sorted(consommes.items(), key=rang):
+        initial, revise = initiaux.get((a, c)), revises.get((a, c), (None, None))[1]
+        plafond = revise if revise is not None else initial
+        if plafond is not None:
+            ecarts.append((a, c, v - plafond))
+        lignes.append(f"| {a} | {EMPLOIS_CONSOMMES[c][0]} | {fr(v, 0)} | "
+                      f"{fr(initial, 0) if initial is not None else '—'} | "
+                      f"{fr(revise, 0) if revise is not None else '—'} | "
+                      f"{fr(v - plafond, 0, True) if plafond is not None else '—'} | {source} |")
+    lignes.append("")
+    dessous = [e for e in ecarts if e[2] < 0]
+    if ecarts and len(dessous) == len(ecarts):
+        petit, grand = min(dessous, key=lambda e: -e[2]), max(dessous, key=lambda e: -e[2])
+        lignes += [f"Chaque année, les emplois consommés restent sous le plafond de l'année : de {fr(-petit[2], 0)} "
+                   f"ETPT de moins ({petit[0]}, {EMPLOIS_CONSOMMES[petit[1]][0]}) à {fr(-grand[2], 0)} "
+                   f"({grand[0]}, {EMPLOIS_CONSOMMES[grand[1]][0]}).", ""]
+    elif ecarts:
+        lignes += [f"Les emplois consommés dépassent ou atteignent le plafond de l'année en "
+                   f"{', '.join(f'{a} ({EMPLOIS_CONSOMMES[c][0]})' for a, c, e in ecarts if e >= 0)}.", ""]
+    votees = {int(a) for a, _ in initiaux}
+    manquantes = set(range(min(votees), max(int(a) for a, _ in consommes) + 1)) - {int(a) for a, _ in consommes}
+    if manquantes:
+        lignes += [f"La base n'a pas d'emplois consommés pour {suite_annees(manquantes)}, faute d'un chiffre qu'elle "
+                   f"sache lire dans les rapports de la Cour : outils/importer_cour_comptes.py dit pourquoi, année par "
+                   f"année.", ""]
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -4561,6 +4638,7 @@ def ecrire_rapport(derniers):
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
     lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers) + partie_lfr(derniers)
     lignes += partie_lfr_recettes(derniers) + partie_lfr_financement(derniers) + partie_lfr_emplois(derniers)
+    lignes += partie_emplois_consommes(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")

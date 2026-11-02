@@ -13,6 +13,7 @@ import math
 import pathlib
 import re
 import sys
+import unicodedata
 import xml.etree.ElementTree as ET
 import zipfile
 import zlib
@@ -647,11 +648,14 @@ def lire_sdmx(chemin):
 
 # --- Fichiers PDF, lus sans bibliothèque extérieure ----------------------------------------------------
 #
-# Le lecteur suffit aux PDF qu'écrivent les traitements de texte, comme les listes d'organismes de l'Insee : flux
-# compressés (FlateDecode), objets rangés dans des flux d'objets, polices simples à l'encodage WinAnsi, polices
-# composites (Identity-H), et toute police munie d'une table ToUnicode. Il rend le texte tel que la page le dessine,
-# morceau par morceau, à la position où commence chacun ; ce qu'il ne sait pas lire l'arrête, plutôt que de lui faire
-# rendre un texte faux. Le texte d'une page faite d'images ne se lit pas.
+# Le lecteur suffit aux PDF qu'écrivent les traitements de texte et les logiciels de mise en page, comme les listes
+# d'organismes de l'Insee ou les rapports de la Cour des comptes : flux compressés (FlateDecode), objets rangés dans des
+# flux d'objets, toute police munie d'une table ToUnicode, polices simples à l'encodage WinAnsi ou standard, ou que
+# leurs « Differences » décrivent par des noms de glyphes, polices de symboles, polices composites (Identity-H) dont la
+# police TrueType embarquée donne ses caractères. Il rend le texte tel que la page le dessine, morceau par morceau, à la
+# position où commence chacun ; ce qu'il ne sait pas lire l'arrête, plutôt que de lui faire rendre un texte faux, et un
+# signe qu'il ne sait pas lire dans une police de symboles (une puce) se lit « � ». Le texte d'une page faite d'images
+# ne se lit pas.
 
 _BLANCS_PDF = b" \t\r\n\f\x00"
 _MOT_PDF = re.compile(rb"[^\s()<>\[\]{}/%]+")
@@ -833,29 +837,220 @@ def _table_tounicode(texte):
     return table
 
 
+# Polices simples sans table ToUnicode. Leur encodage dit, pour chaque code, le nom d'un glyphe (« eacute »), que
+# _unicode_glyphe traduit : l'encodage WinAnsi, l'encodage standard d'Adobe, propre aux polices de texte standard
+# (Times, Helvetica, Courier) qui n'en déclarent pas d'autre, et les noms qu'y substituent ses « Differences ». Une
+# police de symboles (Symbol, ZapfDingbats, Wingdings…) ne rend que ses codes sûrs (chiffres et ponctuation, et pour la
+# police Symbol sans autre encodage, signe moins, puce, ≥…) et ceux que ses « Differences » nomment ; un autre de ses
+# codes, la puce ou la flèche d'une police Wingdings, se lit « � », jamais comme un autre caractère.
+_STANDARD_PDF = dict(zip(range(0x20, 0x7F), (
+    "space exclam quotedbl numbersign dollar percent ampersand quoteright parenleft parenright asterisk plus comma "
+    "hyphen period slash zero one two three four five six seven eight nine colon semicolon less equal greater "
+    "question at " + " ".join("ABCDEFGHIJKLMNOPQRSTUVWXYZ") + " bracketleft backslash bracketright asciicircum "
+    "underscore quoteleft " + " ".join("abcdefghijklmnopqrstuvwxyz") + " braceleft bar braceright asciitilde").split()))
+_STANDARD_PDF.update({
+    0xA1: "exclamdown", 0xA2: "cent", 0xA3: "sterling", 0xA4: "fraction", 0xA5: "yen", 0xA6: "florin", 0xA7: "section",
+    0xA8: "currency", 0xA9: "quotesingle", 0xAA: "quotedblleft", 0xAB: "guillemotleft", 0xAC: "guilsinglleft",
+    0xAD: "guilsinglright", 0xAE: "fi", 0xAF: "fl", 0xB1: "endash", 0xB2: "dagger", 0xB3: "daggerdbl",
+    0xB4: "periodcentered", 0xB6: "paragraph", 0xB7: "bullet", 0xB8: "quotesinglbase", 0xB9: "quotedblbase",
+    0xBA: "quotedblright", 0xBB: "guillemotright", 0xBC: "ellipsis", 0xBD: "perthousand", 0xBF: "questiondown",
+    0xC1: "grave", 0xC2: "acute", 0xC3: "circumflex", 0xC4: "tilde", 0xC5: "macron", 0xC6: "breve", 0xC7: "dotaccent",
+    0xC8: "dieresis", 0xCA: "ring", 0xCB: "cedilla", 0xCD: "hungarumlaut", 0xCE: "ogonek", 0xCF: "caron",
+    0xD0: "emdash", 0xE1: "AE", 0xE3: "ordfeminine", 0xE8: "Lslash", 0xE9: "Oslash", 0xEA: "OE", 0xEB: "ordmasculine",
+    0xF1: "ae", 0xF5: "dotlessi", 0xF8: "lslash", 0xF9: "oslash", 0xFA: "oe", 0xFB: "germandbls"})
+# Noms de glyphes qui ne se déduisent pas d'une lettre et de son accent ; une ligature se lit en ses lettres.
+_GLYPHES_PDF = {
+    "space": " ", "exclam": "!", "quotedbl": '"', "numbersign": "#", "dollar": "$", "percent": "%", "ampersand": "&",
+    "quotesingle": "'", "quoteright": "’", "quoteleft": "‘", "parenleft": "(", "parenright": ")", "asterisk": "*",
+    "plus": "+", "comma": ",", "hyphen": "-", "period": ".", "slash": "/", "zero": "0", "one": "1", "two": "2",
+    "three": "3", "four": "4", "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9", "colon": ":",
+    "semicolon": ";", "less": "<", "equal": "=", "greater": ">", "question": "?", "at": "@", "bracketleft": "[",
+    "backslash": "\\", "bracketright": "]", "asciicircum": "^", "underscore": "_", "grave": "`", "braceleft": "{",
+    "bar": "|", "braceright": "}", "asciitilde": "~", "exclamdown": "¡", "cent": "¢", "sterling": "£", "fraction": "⁄",
+    "yen": "¥", "florin": "ƒ", "section": "§", "currency": "¤", "quotedblleft": "“", "quotedblright": "”",
+    "quotesinglbase": "‚", "quotedblbase": "„", "guillemotleft": "«", "guillemotright": "»", "guilsinglleft": "‹",
+    "guilsinglright": "›", "fi": "fi", "fl": "fl", "ff": "ff", "ffi": "ffi", "ffl": "ffl", "endash": "–",
+    "emdash": "—", "dagger": "†", "daggerdbl": "‡", "periodcentered": "·", "paragraph": "¶", "bullet": "•",
+    "ellipsis": "…", "perthousand": "‰", "questiondown": "¿", "acute": "´", "circumflex": "ˆ", "tilde": "˜",
+    "macron": "¯", "breve": "˘", "dotaccent": "˙", "dieresis": "¨", "ring": "˚", "cedilla": "¸", "hungarumlaut": "˝",
+    "ogonek": "˛", "caron": "ˇ", "AE": "Æ", "ae": "æ", "OE": "Œ", "oe": "œ", "Oslash": "Ø", "oslash": "ø",
+    "Lslash": "Ł", "lslash": "ł", "germandbls": "ß", "dotlessi": "ı", "Eth": "Ð", "eth": "ð", "Thorn": "Þ",
+    "thorn": "þ", "ordfeminine": "ª", "ordmasculine": "º", "degree": "°", "copyright": "©", "registered": "®",
+    "trademark": "™", "plusminus": "±", "multiply": "×", "divide": "÷", "onehalf": "½", "onequarter": "¼",
+    "threequarters": "¾", "onesuperior": "¹", "twosuperior": "²", "threesuperior": "³", "mu": "µ", "Euro": "€",
+    "brokenbar": "¦", "logicalnot": "¬", "minus": "−", "nbspace": " ", "nonbreakingspace": " ",
+    "sfthyphen": "­", "asteriskmath": "∗", "greaterequal": "≥", "lessequal": "≤", "notequal": "≠",
+    "approxequal": "≈", "infinity": "∞", "arrowright": "→", "arrowleft": "←", "arrowboth": "↔", "dotmath": "⋅"}
+_ACCENTS_PDF = {"acute": "ACUTE", "grave": "GRAVE", "circumflex": "CIRCUMFLEX", "dieresis": "DIAERESIS",
+                "tilde": "TILDE", "ring": "RING ABOVE", "cedilla": "CEDILLA", "caron": "CARON", "macron": "MACRON",
+                "breve": "BREVE", "ogonek": "OGONEK", "dotaccent": "DOT ABOVE", "hungarumlaut": "DOUBLE ACUTE"}
+# Codes d'une police de symboles qu'on sait lire : ceux qu'elle partage avec l'ASCII, et ses signes les plus courants
+# (encodage de la police Symbol d'Adobe) ; ZapfDingbats et Wingdings n'en ont pas d'autre que l'espace.
+_SYMBOLES_SURS = set(b" !#%&()+,./0123456789:;<=>?")
+_SYMBOL_PDF = {**{c: chr(c) for c in _SYMBOLES_SURS}, 0x2D: "−", 0xA3: "≤", 0xB0: "°", 0xB1: "±",
+               0xB3: "≥", 0xB4: "×", 0xB7: "•", 0xB8: "÷", 0xB9: "≠", 0xBB: "≈", 0xBC: "…", 0xAC: "←", 0xAE: "→"}
+_POLICES_SYMBOLES = re.compile(r"(?:[A-Z]{6}\+)?(Symbol|ZapfDingbats|Dingbats|Wingdings|Webdings|MonotypeSorts)")
+_POLICES_STANDARD = re.compile(r"(?:[A-Z]{6}\+)?(Times|Helvetica|Courier)(-|$)")
+
+
+def _unicode_glyphe(nom):
+    """Le texte d'un nom de glyphe (« eacute » → « é », « uni00E9 », « f_i » → « fi », « one.numr » → « 1 ») ; None
+    pour un nom qui ne dit pas son caractère (« g123 », « .notdef »)."""
+    texte = []
+    for partie in nom.split(".")[0].split("_") if nom and not nom.startswith(".") else [None]:
+        if partie in _GLYPHES_PDF:
+            texte.append(_GLYPHES_PDF[partie])
+        elif partie and re.fullmatch(r"[A-Za-z]", partie):
+            texte.append(partie)
+        elif partie and (m := re.fullmatch(r"uni((?:[0-9A-F]{4})+)", partie)):
+            texte += [chr(int(m.group(1)[k:k + 4], 16)) for k in range(0, len(m.group(1)), 4)]
+        elif partie and (m := re.fullmatch(r"u([0-9A-F]{4,6})", partie)):
+            texte.append(chr(int(m.group(1), 16)))
+        elif partie and (m := re.fullmatch(r"([A-Za-z])(" + "|".join(_ACCENTS_PDF) + ")", partie)):
+            casse = "CAPITAL" if m.group(1).isupper() else "SMALL"
+            try:
+                texte.append(unicodedata.lookup(f"LATIN {casse} LETTER {m.group(1).upper()} WITH "
+                                                f"{_ACCENTS_PDF[m.group(2)]}"))
+            except KeyError:
+                return None
+        else:
+            return None
+    return "".join(texte)
+
+
+def _table_simple(objets, police):
+    """(table code → texte, symbolique) d'une police simple sans table ToUnicode, d'après son encodage ; None quand le
+    lecteur ne sait pas l'établir (une police embarquée qui ne déclare pas son encodage)."""
+    nom = str(police.get("BaseFont") or "")
+    symboles = _POLICES_SYMBOLES.match(nom)
+    encodage = _resoudre_pdf(objets, police.get("Encoding"))
+    base, differences = (encodage.get("BaseEncoding"), _resoudre_pdf(objets, encodage.get("Differences")) or []) \
+        if isinstance(encodage, dict) else (encodage, [])
+    descripteur = _resoudre_pdf(objets, police.get("FontDescriptor")) or {}
+    embarquee = any(k in descripteur for k in ("FontFile", "FontFile2", "FontFile3"))
+    if base == "WinAnsiEncoding":
+        table = {}
+        for c in range(256):
+            try:
+                table[c] = bytes([c]).decode("cp1252")
+            except UnicodeDecodeError:
+                pass
+    elif base == "StandardEncoding" or base is None and not embarquee and _POLICES_STANDARD.match(nom):
+        table = {c: _unicode_glyphe(g) for c, g in _STANDARD_PDF.items()}
+    elif base is None and symboles:
+        table = dict(_SYMBOL_PDF) if symboles.group(1) == "Symbol" else {0x20: " "}
+    else:
+        return None
+    if symboles and base is not None:
+        # Une police de symboles qui déclare l'encodage d'une police de texte : seuls ses chiffres et sa ponctuation
+        # s'y lisent sûrement ; un autre de ses codes, que ses « Differences » ne nomment pas, se lit « � ».
+        table = {c: t for c, t in table.items() if c in _SYMBOLES_SURS}
+    code = None
+    for element in differences:
+        if isinstance(element, int):
+            code = element
+        elif isinstance(element, str) and code is not None:
+            table[code] = _unicode_glyphe(element)
+            code += 1
+    return {c: t for c, t in table.items() if t is not None}, bool(symboles)
+
+
+def _unicode_truetype(donnees):
+    """La table glyphe → texte d'une police TrueType, d'après ses tables cmap Unicode (formats 4 et 12) : un glyphe
+    que plusieurs caractères désignent se lit comme le premier d'entre eux, hors zone d'usage privé."""
+    nombre = int.from_bytes(donnees[4:6], "big")
+    tables = {donnees[12 + 16 * k:16 + 16 * k]: int.from_bytes(donnees[20 + 16 * k:24 + 16 * k], "big")
+              for k in range(nombre)}
+    if b"cmap" not in tables:
+        return {}
+    debut = tables[b"cmap"]
+    u16 = lambda i: int.from_bytes(donnees[i:i + 2], "big")
+    u32 = lambda i: int.from_bytes(donnees[i:i + 4], "big")
+    glyphes = {}
+    for k in range(u16(debut + 2)):
+        plateforme, codage, decalage = u16(debut + 4 + 8 * k), u16(debut + 6 + 8 * k), u32(debut + 8 + 8 * k)
+        if (plateforme, codage) not in ((3, 1), (3, 10), (0, 3), (0, 4)):
+            continue
+        t = debut + decalage
+        if u16(t) == 4:
+            n = u16(t + 6) // 2
+            fins, debuts = t + 14, t + 16 + 2 * n
+            deltas, plages = debuts + 2 * n, debuts + 4 * n
+            for s in range(n):
+                premier, dernier = u16(debuts + 2 * s), u16(fins + 2 * s)
+                delta, plage = u16(deltas + 2 * s), u16(plages + 2 * s)
+                for c in range(premier, min(dernier, 0xFFFE) + 1):
+                    g = (c + delta) & 0xFFFF if plage == 0 else u16(plages + 2 * s + plage + 2 * (c - premier))
+                    if plage and g:
+                        g = (g + delta) & 0xFFFF
+                    if g:
+                        glyphes.setdefault(g, []).append(c)
+        elif u16(t) == 12:
+            for k2 in range(u32(t + 12)):
+                premier, dernier, g = u32(t + 16 + 12 * k2), u32(t + 20 + 12 * k2), u32(t + 24 + 12 * k2)
+                for c in range(premier, dernier + 1):
+                    glyphes.setdefault(g + c - premier, []).append(c)
+    table = {}
+    for g, codes in glyphes.items():
+        codes = sorted(set(codes), key=lambda c: (0xE000 <= c <= 0xF8FF, c))
+        if not 0xE000 <= codes[0] <= 0xF8FF:
+            table[g] = chr(codes[0])
+    return table
+
+
+def _table_composite(objets, police):
+    """La table code → texte d'une police composite Identity-H sans table ToUnicode, dont la police descendante est
+    une police TrueType embarquée (CIDFontType2) : chaque code est un identifiant, qui désigne un glyphe directement ou
+    par la table CIDToGIDMap ; None sinon."""
+    if police.get("Encoding") not in ("Identity-H", "Identity-V"):
+        return None
+    descendante = _resoudre_pdf(objets, (_resoudre_pdf(objets, police.get("DescendantFonts")) or [None])[0])
+    descripteur = _resoudre_pdf(objets, (descendante or {}).get("FontDescriptor")) or {}
+    if not descendante or descendante.get("Subtype") != "CIDFontType2" or "FontFile2" not in descripteur:
+        return None
+    glyphes = _unicode_truetype(_flux_pdf(objets, descripteur["FontFile2"]))
+    correspondance = descendante.get("CIDToGIDMap", "Identity")
+    if correspondance == "Identity":
+        return glyphes
+    table_cid = _flux_pdf(objets, correspondance)
+    return {cid: glyphes[g] for cid in range(len(table_cid) // 2)
+            if (g := int.from_bytes(table_cid[2 * cid:2 * cid + 2], "big")) in glyphes}
+
+
 def _polices_pdf(objets, ressources):
-    """{nom: (octets par code, table ToUnicode ou None, encodage simple ou None)} des polices de ressources."""
+    """{nom: (octets par code, table code → texte ou None, encodage simple ou None, repli)} des polices de ressources.
+    Le repli vaut « � » pour une police de symboles, dont un code inconnu se lit ainsi ; pour une police que le lecteur
+    ne sait pas lire, c'est le message de l'erreur, qui ne survient qu'au premier texte qu'elle dessine."""
     polices = {}
     for nom, reference in (_resoudre_pdf(objets, ressources.get("Font")) or {}).items():
         police = _resoudre_pdf(objets, reference)
         table = _table_tounicode(_flux_pdf(objets, police["ToUnicode"])) if "ToUnicode" in police else None
         if police.get("Subtype") == "Type0":
-            if police.get("Encoding") not in ("Identity-H", "Identity-V") or table is None:
-                raise ValueError(f"police composite {police.get('BaseFont')} sans table ToUnicode ou à l'encodage "
-                                 f"{police.get('Encoding')}, que le lecteur ne connaît pas")
-            polices[nom] = (2, table, None)
+            if police.get("Encoding") in ("Identity-H", "Identity-V") and table is not None:
+                polices[nom] = (2, table, None, None)
+            elif table is None and (composite := _table_composite(objets, police)) is not None:
+                polices[nom] = (2, composite, None, None)
+            else:
+                polices[nom] = (2, {}, None, f"police composite {police.get('BaseFont')} sans table ToUnicode ou à "
+                                             f"l'encodage {police.get('Encoding')}, que le lecteur ne connaît pas")
             continue
         encodage = _resoudre_pdf(objets, police.get("Encoding"))
         if isinstance(encodage, dict):
             encodage = None if "Differences" in encodage else encodage.get("BaseEncoding")
-        if encodage != "WinAnsiEncoding" and table is None:
-            raise ValueError(f"police {police.get('BaseFont')} à l'encodage {encodage}, que le lecteur ne connaît pas")
-        polices[nom] = (1, table, "cp1252" if encodage == "WinAnsiEncoding" else None)
+        if encodage == "WinAnsiEncoding" or table is not None:
+            # Un code que la table ToUnicode ne donne pas se lit d'après l'encodage de la police, quand il le décrit.
+            simple = _table_simple(objets, police) if table is not None and encodage != "WinAnsiEncoding" else None
+            polices[nom] = (1, {**simple[0], **table} if simple else table,
+                            "cp1252" if encodage == "WinAnsiEncoding" else None, "\ufffd" if simple and simple[1] else None)
+            continue
+        simple = _table_simple(objets, police)
+        polices[nom] = (1, simple[0], None, "\ufffd" if simple[1] else None) if simple else \
+            (1, {}, None, f"police {police.get('BaseFont')} à l'encodage {encodage}, que le lecteur ne connaît pas")
     return polices
 
 
 def _decoder_pdf(octets, police):
-    largeur, table, encodage = police
+    largeur, table, encodage, repli = police
     if len(octets) % largeur:
         raise ValueError("chaîne PDF d'une longueur qui ne convient pas à sa police")
     texte = []
@@ -865,8 +1060,10 @@ def _decoder_pdf(octets, police):
             texte.append(table[code])
         elif encodage is not None:
             texte.append(bytes([code]).decode(encodage))
+        elif repli == "\ufffd":
+            texte.append(repli)
         else:
-            raise ValueError(f"code {code:#x} sans correspondance dans sa police")
+            raise ValueError(repli or f"code {code:#x} sans correspondance dans sa police")
     return "".join(texte)
 
 
@@ -977,6 +1174,36 @@ def lire_pdf(chemin):
 def texte_pdf(morceaux):
     """Le texte de morceaux d'une ligne, (abscisse, texte) : mis bout à bout, ses blancs réduits à une espace."""
     return " ".join("".join(t for _, t in morceaux).split())
+
+
+def texte_page_pdf(page):
+    """Le texte d'une page de PDF (lignes_pdf), ses lignes mises bout à bout."""
+    return " ".join(texte_pdf(m) for _, m in page)
+
+
+def nombre_phrase_pdf(pages, page, phrase):
+    """Le nombre qu'énonce un extrait d'une page de PDF (« page=42;phrase=… ») : l'extrait doit figurer une seule fois
+    dans le texte de la page, sans couper un nombre (_coupe_un_nombre), et ne porter qu'un nombre, lu comme par
+    nombre_de_phrase, où des milliers séparés par des points (« 2.088.767 ») font un seul nombre ; None sinon."""
+    texte = texte_page_pdf(pages[page - 1]) if 1 <= page <= len(pages) else ""
+    if not phrase or texte.count(phrase) != 1:
+        return None
+    i = texte.index(phrase)
+    if _coupe_un_nombre(texte[:i], phrase, texte[i + len(phrase):]):
+        return None
+    return nombre_de_phrase(re.sub(r"(?<![0-9.,])([0-9]{1,3}(?:\.[0-9]{3})+)(?![0-9]|[.,][0-9])",
+                                   lambda m: m.group(1).replace(".", " "), phrase))
+
+
+def _coupe_un_nombre(avant, phrase, apres):
+    """Vrai si un extrait commence ou finit au milieu d'un nombre du texte : un chiffre collé à lui, un groupe de
+    milliers qui le prolonge (« 2 » avant « 166 900 », « 900 » après « 2 166 ») ou des décimales après lui. Un nombre
+    qui ne commence pas par trois chiffres ne peut pas prolonger les milliers d'un autre : « 79 1 954 921 » est l'appel
+    de note 79, puis 1 954 921."""
+    debut, fin = re.match(r"[0-9]+", phrase), re.search(r"[0-9]+$", phrase)
+    if debut and (re.search(r"[0-9]$", avant) or len(debut.group()) == 3 and re.search(r"[0-9][ \u00a0.]$", avant)):
+        return True
+    return bool(fin and re.match(r"[0-9]|[ \u00a0.][0-9]{3}(?![0-9])|,[0-9]", apres))
 
 
 # Un montant qui finit un texte : chiffres groupés par trois, signe moins et décimales compris ; ce qui le précède ne

@@ -1,0 +1,2 @@
+id,source_id,fichier_id,emplacement,zone,perimetre_id,concept_id,fonction_id,traitements,unite_id,periode,valeur,decimales,statut,drapeau_source,version,consolidation,denominateur_id,nature,calcul_id,saisi_le,notes
+ccomptes.rbde-2014:FR:ETAT_LF:LOLF.EMPLOIS_CONSOMMES:-:-:ETPT:2014:2015-11-06,ccomptes.rbde-2014,ccomptes.rbde-2014@2026-11-02-d25ae2bb,page=134;phrase=(1 877 359 ETPT contre,FR,ETAT_LF,LOLF.EMPLOIS_CONSOMMES,,,ETPT,2014,1877359,0,definitif,,2015-11-06,non_consolide,,publie,,2026-11-02,
