@@ -4207,7 +4207,7 @@ def partie_lfr_recettes(derniers):
     lois = {l["source_id"]: l["periode"] for l in derniers.values()
             if l["perimetre_id"] == "ETAT_LF" and re.search(r"_LFR(?:_|$)", l["concept_id"])}
     equilibres = {s for (a, s), x in par_loi.items() if ("LOLF.RESULTAT_BUDGETAIRE", "") in x}
-    non_lues = sorted(s for s in lois if s in rectificatives.EQUILIBRE_EN_IMAGE or s in rectificatives.SANS_ARTICLES)
+    non_lues = sorted(s for s in lois if s in rectificatives.EQUILIBRE_EN_IMAGE or s in illisibles_lfr())
     incompletes = {lois[s] for s in non_lues}
     annees = sorted(set(lois.values()))
     lignes = ["### Recettes et soldes révisés", "",
@@ -4220,7 +4220,8 @@ def partie_lfr_recettes(derniers):
               f"contre l'état A et ses charges contre les crédits que la loi ouvre et annule, au million près, et "
               f"chaque solde contre celui que donnent les états. La section 2 refait les sommes de l'état A."]
     if non_lues:
-        lignes[-1] += (" Années incomplètes, faute du tableau d'équilibre d'une de leurs lois : "
+        lignes[-1] += ((" Années incomplètes, faute du tableau d'équilibre d'une de leurs lois : " if len(incompletes) > 1
+                        else " Année incomplète, faute du tableau d'équilibre d'une de ses lois : ")
                        + plage(sorted(incompletes)) + " (" + " ; ".join(
                            f"loi n° {numero(s)}, " + ("tableau en image dans la page" if s in
                                                       rectificatives.EQUILIBRE_EN_IMAGE else
@@ -4253,7 +4254,7 @@ def partie_lfr_recettes(derniers):
         x = {c: v for (c, f), v in par_loi.get((a, s), {}).items() if f == ""}
         # Sans tableau d'équilibre, l'état A donne encore les recettes non fiscales et les prélèvements, pas les
         # recettes fiscales nettes ; une page sans l'état A ne donne rien.
-        lu, etat_a = s in equilibres, s not in rectificatives.SANS_ARTICLES
+        lu, etat_a = s in equilibres, s not in illisibles_lfr()
         cases = [md(x.get(c, 0)) if lu or (etat_a and c != "LOLF.BG_RECETTES_FISCALES_NETTES") else "—"
                  for _, c in REVISIONS_LFR]
         lignes.append(f"| {a} | {numero(s)} | " + " | ".join(cases) + " | "
@@ -4294,6 +4295,12 @@ def partie_lfr_recettes(derniers):
     return lignes
 
 
+def illisibles_lfr():
+    """Les lois de finances rectificatives dont la base ne lit pas les articles ni l'état A : page déclarée sans articles
+    (SANS_ARTICLES), sauf quand le PDF du même texte les donne (TEXTE_EN_PDF)."""
+    return set(rectificatives.SANS_ARTICLES) - set(rectificatives.TEXTE_EN_PDF)
+
+
 # Section 21, fin : le tableau de financement que réécrit chaque loi de finances rectificative, et les plafonds de la
 # dette et des emplois qu'elle change : des niveaux, que la loi suivante remplace. Le déficit du tableau se compare à
 # celui que donnent la loi de finances initiale et les variations du solde général des lois de l'année jusqu'à celle-ci,
@@ -4319,7 +4326,7 @@ def partie_lfr_financement(derniers):
                 notes[s] = l["notes"]
     if not any(niveaux.values()):
         return []
-    illisibles = set(rectificatives.SANS_ARTICLES)
+    illisibles = illisibles_lfr()
     sans_equilibre = set(rectificatives.EQUILIBRE_EN_IMAGE) | illisibles  # variation du solde non lue
     md = lambda x: fr(x / 1e9, 1)
     ordre = lambda s: tuple(int(x) for x in numero(s).split("-"))
@@ -4377,8 +4384,9 @@ def partie_lfr_financement(derniers):
               "initiale ; « non mentionné » : la loi n'en dit rien (ni tableau de financement ni plafond de la dette "
               f"dans {liste(rectificatives.SANS_FINANCEMENT)}, pas de plafond des emplois dans "
               f"{liste(rectificatives.SANS_PLAFOND_EMPLOIS)}) ; « image » : la page donne le tableau en image "
-              f"({liste(rectificatives.FINANCEMENT_EN_IMAGE, False)}) ; « illisible » : la page ne laisse pas lire "
-              f"les articles ({liste(illisibles, False)}) :",
+              f"({liste(rectificatives.FINANCEMENT_EN_IMAGE, False)})"
+              + (f" ; « illisible » : la page ne laisse pas lire les articles ({liste(illisibles, False)})"
+                 if illisibles else "") + " :",
               "", "| Année | Loi | Déficit à financer | Déficit voté | Écart | Plafond de la dette | "
               "Plafond des emplois |", "|---|---|---|---|---|---|---|"] + lignes_
     lignes += ["", f"Le déficit à financer égale le déficit voté dans {fr(compares - len(ecarts), 0)} des "

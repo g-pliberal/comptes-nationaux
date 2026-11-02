@@ -32,7 +32,7 @@ import urllib.error
 import urllib.request
 
 from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_ods, date_pdf, date_xlsx, date_zip,
-                    decoder_html, ecrire, lire, lire_sdmx, maintenant, texte_html)
+                    decoder_html, ecrire, lire, lire_pdf, lire_sdmx, maintenant, texte_html, texte_pdf)
 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
 
@@ -111,13 +111,15 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     # d'adoption d'un texte publié par le Sénat ou par l'Assemblée nationale, dernière mise à jour des séries SDMX
     # de l'Insee, date de modification du jeu de données pour un export de data.ofgl.fr ou de data.economie.gouv.fr
     # (date du dernier traitement de ses données pour data.drees), date la plus récente des fichiers que porte une
-    # archive zip, date de modification inscrite dans un PDF ou dans un classeur ods.
+    # archive zip, date de modification inscrite dans un classeur ods ; pour un PDF, la date que porte le texte d'un
+    # document du Sénat ou de l'Assemblée nationale, comme pour leurs pages, à défaut sa date de modification.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(decoder_html(contenu))),
                                 "xml": lambda: max(a.get("LAST_UPDATE", "") for a, _ in lire_sdmx(BASE / chemin).values()),
                                 "zip": lambda: date_zip(contenu),
-                                "pdf": lambda: date_pdf(contenu),
+                                "pdf": lambda: date_html(" ".join(texte_pdf(m) for page in lire_pdf(BASE / chemin)
+                                                                  for _, m in page)) or date_pdf(contenu),
                                 "ods": lambda: date_ods(BASE / chemin)
                                 }.get(extension, lambda: "")()
     identifiant = f"{source_id}@{date}-{sha256[:8]}"

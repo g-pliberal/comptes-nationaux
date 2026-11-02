@@ -89,13 +89,22 @@ dette) ou dans SANS_PLAFOND_EMPLOIS ; une phrase de plafond que l'import ne sait
 déficit du tableau est l'évaluation du Gouvernement pour l'année : quand il s'écarte du solde que donnent la loi de
 finances initiale et les tableaux d'équilibre des lois de l'année (rapport de cohérence, section 21), la note du chiffre
 dit d'où vient l'écart, d'après les documents parlementaires (NOTES_DEFICIT).
+
+Une loi dont la page est abîmée (SANS_ARTICLES) se lit dans le PDF du même texte, archivé comme seconde copie de la
+source et déclaré dans TEXTE_EN_PDF : ses tableaux s'y refont en grilles semblables à celles d'une page HTML, d'après la
+position de chaque morceau de texte (grilles_pdf), et se lisent comme les autres, avec les mêmes contrôles ; un montant
+s'y désigne par sa page, le rang de sa ligne et l'étendue de ses abscisses. Un chiffre que les deux copies donnent à
+l'identique ne s'enregistre qu'une fois.
 """
 
+import collections
+import math
 import re
 import sys
 
-from commun import (BASE, aujourdhui, champs, champs_chiffres, ecrire, fusionner, identifiant, lire, lire_page_html,
-                    lire_texte_html, nombre_de_phrase, nombre_texte, table_des_chiffres, texte_html)
+from commun import (BASE, NOMBRE_FINAL, aujourdhui, champs, champs_chiffres, ecrire, fusionner, identifiant, lire,
+                    lire_page_html, lire_pdf, lire_texte_html, nombre_de_phrase, nombre_texte, table_des_chiffres,
+                    texte_html, texte_pdf)
 import importer_lois_finances as lf
 import importer_lois_resultats as resultats
 from importer_lois_finances import cle_titre, montant, nom
@@ -118,8 +127,22 @@ INVISIBLES = re.compile(r"[​-‏‪-‮⁠-⁩﻿-]")
 # Pages qui ne reproduisent pas tout le texte de la loi : source → ce qui manque, dit dans la note de chaque chiffre.
 SANS_ARTICLES = {
     "an.ta15-0032": "Dans la page de l’Assemblée nationale, 245 760 octets nuls recouvrent les articles de la loi et son "
-                    "état A : le total de l’état n’a pas pu être comparé à l’article qui ouvre et annule ces crédits.",
+                    "état A : le total de l’état ne s’y compare pas à l’article qui ouvre ces crédits ; il s’y compare "
+                    "dans le PDF du même texte (TEXTE_EN_PDF).",
 }
+
+# Lois dont la page HTML est déclarée dans SANS_ARTICLES, et dont le texte se lit dans le PDF du même texte, que publie
+# la même assemblée, archivé comme seconde copie de la source : la déclaration ne vaut que pour la page HTML.
+TEXTE_EN_PDF = {
+    "an.ta15-0032": "L’Assemblée nationale publie aussi le texte en PDF, intact : la base y lit les articles, l’état A et "
+                    "l’article d’équilibre, et le total de l’état B y égale l’article qui ouvre ces crédits.",
+}
+
+
+def sans_articles(fichier):
+    """Vrai pour la copie d'une page déclarée dans SANS_ARTICLES ; pas pour le PDF du même texte (TEXTE_EN_PDF)."""
+    return fichier["source_id"] in SANS_ARTICLES and not fichier["chemin"].endswith(".pdf")
+
 # États dont les crédits s'ajoutent à ceux d'un autre état de la même catégorie, sur les mêmes missions : (source,
 # état) → traitement qui les distingue (table des traitements).
 TRAITEMENTS = {("senat.tas08-076", "B''"): "lfr_2009_04_etat_b_seconde"}
@@ -289,6 +312,13 @@ SANS_PLAFOND_EMPLOIS = {
 _EVALUE = "Le Gouvernement évalue ce déficit en comptant aussi "
 _PAS_AU_TABLEAU = ", que ne compte pas le tableau d’équilibre de la loi"
 NOTES_DEFICIT = {
+    "an.ta15-0032": _EVALUE + "la consolidation des annulations nettes de crédits de juillet 2017 (0,3 Md€) et, à titre "
+                    "provisoire, d’autres mouvements de crédits attendus en fin de gestion, qui dégradent le solde de "
+                    "4,4 Md€" + _PAS_AU_TABLEAU + " : exposé des motifs de l’article d’équilibre du projet de loi "
+                    "(Assemblée nationale, XVe législature, n° 363).",
+    "an.ta15-0067": _EVALUE + "la consommation de crédits de 2016 reportés sur 2017, 1,7 Md€ au budget général et 0,3 Md€ "
+                    "aux comptes spéciaux" + _PAS_AU_TABLEAU + " : exposé des motifs de l’article d’équilibre du projet "
+                    "de loi (Assemblée nationale, XVe législature, n° 384).",
     "senat.tas10-038": _EVALUE + "la consommation de reports de crédits, estimée à 1,3 milliard d’euros, issus "
                        "principalement du plan de relance de l’économie" + _PAS_AU_TABLEAU + " : exposé général des "
                        "motifs du projet de loi (Assemblée nationale, XIIIe législature, n° 2944).",
@@ -980,7 +1010,7 @@ def recettes_et_soldes(fichier, annee, grilles, flux, contenu, nets, fonctions, 
     connus = {f for f, l in fonctions.items() if f.startswith("LOLF.") and not l["parent_id"]
               and not f.startswith(("LOLF.RECETTES.", "LOLF.EMPLOIS."))}
     montants, attendus, donnes = [], None, set()
-    if source_id in SANS_ARTICLES:  # la page ne reproduit que les états de crédits
+    if sans_articles(fichier):  # la page ne reproduit que les états de crédits
         if any(m.group(1) == "A" for m in re.finditer(ETAT, flux)):
             sys.exit(f"{fichier['id']} : la page déclarée sans articles a un état A")
     elif source_id not in SANS_ETATS:
@@ -1009,9 +1039,9 @@ def recettes_et_soldes(fichier, annee, grilles, flux, contenu, nets, fonctions, 
     # Tableau de l'article d'équilibre, en millions d'euros.
     texte = normaliser(texte_html(contenu))
     annonce = re.search(PHRASE_EQUILIBRE.format(annee=annee), texte)
-    if source_id in SANS_ARTICLES or source_id in EQUILIBRE_EN_IMAGE:
+    if sans_articles(fichier) or source_id in EQUILIBRE_EN_IMAGE:
         image = EQUILIBRE_EN_IMAGE.get(source_id)
-        if source_id in SANS_ARTICLES and annonce:
+        if sans_articles(fichier) and annonce:
             sys.exit(f"{fichier['id']} : la page déclarée sans articles a un article d'équilibre")
         if image and not re.search(rf"ajustement des ressources.{{0,800}}<img[^>]*src=\"{re.escape(image)}\"",
                                    contenu, re.S):
@@ -1084,14 +1114,225 @@ def recettes_et_soldes(fichier, annee, grilles, flux, contenu, nets, fonctions, 
                       f"colonne_libelle={g['colonne_libelle']}", note)
 
 
+
+# --- Une loi lue dans le PDF de son texte -------------------------------------------------------------------------
+#
+# Quand la page HTML d'une loi est abîmée, l'import la lit dans le PDF du même texte, archivé comme seconde copie de la
+# source (TEXTE_EN_PDF). Ses tableaux s'y refont, d'après la position de chaque morceau de texte, en grilles semblables
+# à celles d'une page HTML, que l'import lit comme les autres, avec tous leurs contrôles. Un tableau commence à sa ligne
+# d'unité (« (En euros) »), sauf un état de crédits, qui commence à son en-tête ; ses lignes d'en-tête se réunissent
+# colonne par colonne. Une rangée de l'état A s'ouvre sur un numéro de ligne, un intitulé numéroté (« 11. Impôt sur le
+# revenu ») ou un total ; une rangée des autres tableaux, sur une ligne qui ne continue pas la précédente : une ligne
+# continue celle qui la précède quand celle-ci n'a ni montant ni points de conduite, et n'est pas un titre (un texte
+# centré, loin de la marge). Un montant est le nombre qui finit sa colonne, sur la ligne qui le porte ; son emplacement
+# dans la base est sa page, le rang de sa ligne dans la page et l'étendue de ses abscisses (« page=11;ligne=12;x=355.0-
+# 10000 »), où valider le relit (commun.montant_pdf).
+
+UNITE_PDF = re.compile(r"\(En (?:euros|millions d’euros ?\*?|milliards d’euros)\)")
+POINTS_PDF = re.compile(r"(?:\s*\.)+\s*$")  # points de conduite qui finissent un libellé
+FIN_PDF = 10000.0  # abscisse au-delà de toute ligne
+
+
+def _debut(morceaux):
+    """Abscisse du premier morceau qui porte du texte."""
+    return min((x for x, t in morceaux if t.strip()), default=None)
+
+
+def _montant_final(morceaux, debut=float("-inf"), fin=FIN_PDF):
+    """(texte qui précède, montant, abscisses) des morceaux d'une ligne dans [debut, fin[ : le montant qui finit leur
+    texte (commun.montant_pdf), sans un point-virgule qui le suivrait, et l'étendue d'abscisses où il se relit ; (texte,
+    None, None) s'il n'y en a pas. Un tiret qui finit le texte est une case « néant »."""
+    zone = sorted((x, t) for x, t in morceaux if debut <= x < fin)
+    while zone and zone[-1][1].strip() in ("", ";"):  # un « ; » ferme la phrase qui porte le tableau
+        fin = zone[-1][0] if zone[-1][1].strip() else fin
+        zone.pop()
+    texte = texte_pdf(zone)
+    trouve = NOMBRE_FINAL.search(texte)
+    if trouve is None:
+        neant = re.search(r"(?:^|\s|\.)([-–—])$", texte)
+        return (texte[:neant.start(1)], "-", None) if neant else (texte, None, None)
+    # Le morceau où commence le montant : le plus à droite d'où le texte finit encore par le montant entier.
+    for k in range(len(zone) - 1, -1, -1):
+        suite = NOMBRE_FINAL.search(texte_pdf(zone[k:]))
+        if suite and suite.group(0) == trouve.group(0):
+            return texte[:trouve.start()], trouve.group(0), (zone[k][0], fin)
+    raise AssertionError(texte)
+
+
+def _libelle(texte):
+    return POINTS_PDF.sub("", texte).strip()
+
+
+def _colonnes_entete(lignes_, bornes):
+    """Les textes de lignes d'en-tête réunis colonne par colonne : la colonne d'un morceau est la première dont la borne
+    droite dépasse son abscisse."""
+    colonnes = [[] for _ in bornes]
+    for _, _, morceaux, _ in lignes_:
+        for c in range(len(bornes)):
+            debut = bornes[c - 1] if c else float("-inf")
+            texte = texte_pdf([(x, t) for x, t in morceaux if debut <= x < bornes[c]])
+            if texte:
+                colonnes[c].append(texte)
+    return [" ".join(c) for c in colonnes]
+
+
+def _separateurs(lignes_, apres):
+    """Les limites droites des colonnes de montants d'un tableau : les abscisses des blancs, au-delà de `apres`, que
+    portent au moins la moitié de ses lignes qui ont un montant, à trois points près."""
+    chiffrees = [m for _, _, m, t in lignes_ if NOMBRE_FINAL.search(texte_pdf([(x, u) for x, u in m if u.strip()]))]
+    blancs = sorted({round(x) for m in chiffrees for x, t in m if not t.strip() and x > apres})
+    groupes = []
+    for x in blancs:
+        if groupes and x - groupes[-1][-1] <= 3:
+            groupes[-1].append(x)
+        else:
+            groupes.append([x])
+    return [max(g) for g in groupes
+            if 2 * sum(any(not t.strip() and g[0] <= round(x) <= g[-1] for x, t in m) for m in chiffrees) >= len(chiffrees)]
+
+
+def _rangees_suivies(lignes_, colonnes, marge):
+    """Les rangées d'un tableau sans numéros de ligne : [(cases, places)], où places donne, pour chaque colonne de
+    montant, (page, ligne, abscisses). `colonnes` : bornes droites des colonnes de montants, la première partageant sa
+    zone avec le libellé."""
+    rangees, ouverte = [], False
+    for p, r, morceaux, texte in lignes_:
+        libelle, montant, place = _montant_final(morceaux, fin=colonnes[0])
+        montants, places = [montant], [place]
+        for c in range(1, len(colonnes)):
+            reste, montant, place = _montant_final(morceaux, colonnes[c - 1], colonnes[c])
+            if reste.strip():
+                sys.exit(f"page {p}, ligne {r} : texte « {reste} » dans une colonne de montants")
+            montants.append(montant)
+            places.append(place)
+        if any(x >= colonnes[-1] and t.strip() not in ("", ";") for x, t in morceaux):
+            sys.exit(f"page {p}, ligne {r} : texte au-delà de la dernière colonne (« {texte} »)")
+        titre = all(m is None for m in montants) and _debut(morceaux) > marge + 30
+        if ouverte and not titre:
+            rangee = rangees[-1]
+            rangee[0][0] = (rangee[0][0] + " " + _libelle(libelle)).strip()
+        else:
+            rangee = ([_libelle(libelle)] + [""] * len(colonnes), [None] * len(colonnes))
+            rangees.append(rangee)
+        for c, (montant, place) in enumerate(zip(montants, places)):
+            if montant is not None:
+                if rangee[0][c + 1]:
+                    sys.exit(f"page {p}, ligne {r} : deux montants dans une même case")
+                rangee[0][c + 1], rangee[1][c] = montant, place and (p, r) + place
+        ouverte = not titre and all(m is None for m in montants) and not POINTS_PDF.search(libelle)
+    return rangees
+
+
+def grilles_pdf(chemin):
+    """(grilles, formes, flux, places, texte) d'un texte de loi en PDF : ses tableaux en grilles, leur mise en forme
+    (sans gras ni fusion), le texte dans l'ordre de lecture où « ⟦k⟧ » et « ⟦/k⟧ » marquent le tableau k, comme
+    commun.lire_page_html, la place de chaque montant, (tableau, rangée, colonne) → (page, ligne, début, fin), et le
+    texte entier, sans marques."""
+    lignes = [(p, r, morceaux, texte_pdf(morceaux)) for p, page in enumerate(lire_pdf(chemin), start=1)
+              for r, (_, morceaux) in enumerate(page, start=1)]
+    lignes = [l for l in lignes if l[3] and not re.fullmatch(r"– [0-9]+ –", l[3])]
+    grilles, formes, places, flux, i = [], [], {}, [], 0
+    while i < len(lignes):
+        p, r, morceaux, texte = lignes[i]
+        suite = " ".join(l[3] for l in lignes[i + 1:i + 7])
+        etat_b = texte == "(En euros)" and "Mission / Programme" in suite
+        if not (UNITE_PDF.fullmatch(texte) and ("Intitulé de la recette" in suite or "Ressources" in suite and
+                                                "Charges" in suite or suite.startswith("Besoin de financement")
+                                                or etat_b)):
+            flux.append(texte)
+            i += 1
+            continue
+        k, avant = len(grilles), flux[-1] if flux else ""
+        if etat_b:
+            flux.append(texte)
+            i += 1
+        debut = i
+        if "Intitulé de la recette" in suite:  # état A : numéro, intitulé, montant
+            j = i + 1
+            while j < len(lignes) and lignes[j][0] == p and not re.match(r"[0-9]{1,4}\.? |Total", lignes[j][3]):
+                j += 1
+            entete = _colonnes_entete(lignes[i + 1:j], [100, 300, FIN_PDF])
+            grille, rangee = [[texte, "", ""], entete], None
+            while j < len(lignes) and lignes[j][0] == p and not UNITE_PDF.fullmatch(lignes[j][3]):
+                pj, rj, mj, tj = lignes[j]
+                libelle, montant, place = _montant_final(mj)
+                numero = re.match(r"([0-9]{2,4}) (?!\.)", libelle) if _debut(mj) < 100 else None
+                if numero or re.match(r"[0-9]{1,2}\. |Total ", libelle):
+                    rangee = [numero.group(1) if numero else "", _libelle(libelle[numero.end():] if numero else
+                                                                           libelle), ""]
+                    grille.append(rangee)
+                elif rangee is None:
+                    sys.exit(f"page {pj}, ligne {rj} : état A, ligne avant toute rangée (« {tj} »)")
+                elif _libelle(libelle):
+                    rangee[1] = (rangee[1] + " " + _libelle(libelle)).strip()
+                if montant is not None:
+                    if rangee[2]:
+                        sys.exit(f"page {pj}, ligne {rj} : état A, deux montants dans une rangée")
+                    rangee[2] = montant
+                    if place:
+                        places[(k, len(grille) - 1, 2)] = (pj, rj) + place
+                j += 1
+        else:
+            fin = next((j for j in range(i + 1, len(lignes)) if lignes[j][0] != p or
+                        re.match(r"\* Les montants|Vu pour être annexé|2° |II\. – ", lignes[j][3])), len(lignes))
+            if etat_b:  # Mission / Programme, puis ouvertures et annulations
+                corps = next(j for j in range(i, fin) if NOMBRE_FINAL.search(lignes[j][3]) or
+                             not re.search(r"Autorisations|Crédits|engagement|paiement|Mission|supplémentaires|ouvert|"
+                                           r"annulé", lignes[j][3]))
+                colonnes = _separateurs(lignes[corps:fin], 150)[:4]
+                entete = _colonnes_entete(lignes[i:corps], [120] + colonnes)
+                grille = [entete]
+            else:  # équilibre (ressources, charges, solde) ou financement
+                corps = i + (2 if "Ressources" in suite else 1)
+                colonnes = _separateurs(lignes[corps:fin], 250)[:3 if "Ressources" in suite else 1]
+                entete = _colonnes_entete(lignes[i + 1:corps], [250] + colonnes) if corps > i + 1 else None
+                grille = [[texte] + [""] * len(colonnes)] + ([entete] if entete else [])
+            marge = min(_debut(l[2]) for l in lignes[corps:fin])
+            for cases, places_ in _rangees_suivies(lignes[corps:fin], colonnes, marge):
+                grille.append(cases)
+                for c, place in enumerate(places_, start=1):
+                    if place:
+                        places[(k, len(grille) - 1, c)] = place
+            j = fin
+            if j < len(lignes) and lignes[j][3].startswith("* Les montants"):
+                note = []
+                while j < len(lignes) and lignes[j][0] == p and (not note or not re.match(r"II\. – ", lignes[j][3])):
+                    note.append(lignes[j][3])
+                    j += 1
+                grille.append([" ".join(note)] + [""] * (len(grille[0]) - 1))
+        grilles.append(grille)
+        formes.append({"fusions": {}, "largeurs": {}, "gras": set(), "legende": avant})
+        flux.append(f"⟦{k}⟧ " + " ".join(x for rangee in grille for x in rangee if x) + f" ⟦/{k}⟧")
+        i = j
+    return grilles, formes, " ".join(flux), places, " ".join(l[3] for l in lignes)
+
+
+def emplacement_pdf(ligne, places):
+    """Un chiffre lu dans une grille refaite d'un PDF : son emplacement devient sa place dans le PDF, page, rang de la
+    ligne dans la page et étendue de ses abscisses, où valider le relit."""
+    trouve = re.match(r"tableau=([0-9]+);ligne=([0-9]+);colonne=([0-9]+);(.*)$", ligne["emplacement"])
+    place = places.get(tuple(int(x) for x in trouve.groups()[:3])) if trouve else None
+    if place is None:
+        sys.exit(f"chiffre sans place dans le PDF : {ligne['concept_id']}, {ligne['emplacement']}")
+    page, rang, debut, fin = place
+    ligne["emplacement"] = f"page={page};ligne={rang};x={math.floor(debut * 10) / 10:.1f}-{fin:g};{trouve.group(4)}"
+    return ligne
+
 def lignes_du_fichier(fichier, fonctions):
     """Les chiffres d'une copie archivée ; `fonctions` (identifiant → ligne) reçoit les missions et les programmes."""
     chemin = BASE / fichier["chemin"]
     source_id = fichier["source_id"]
-    grilles, formes, flux = lire_page_html(chemin)
-    flux = INVISIBLES.sub("", flux)
-    contenu = lire_texte_html(chemin)
-    texte_brut = texte_html(contenu)
+    places = None
+    if fichier["chemin"].endswith(".pdf"):
+        if source_id not in TEXTE_EN_PDF:
+            sys.exit(f"{fichier['id']} : copie en PDF d'une loi que TEXTE_EN_PDF ne déclare pas")
+        grilles, formes, flux, places, texte_brut = grilles_pdf(chemin)
+        contenu = texte_brut
+    else:
+        grilles, formes, flux = lire_page_html(chemin)
+        flux = INVISIBLES.sub("", flux)
+        contenu = lire_texte_html(chemin)
+        texte_brut = texte_html(contenu)
     # Pour lire les articles, une balise de mise en forme ne coupe pas un mot (« financ<span>iers</span> »).
     texte = normaliser(texte_html(re.sub(r"</?(?:span|a|b|i|em|strong|u|font)\b[^>]*>", "", contenu)))
     annees = set(re.findall(r"(?i)crédits?(?: supplémentaires?)?(?: ouverts?)?(?: et annulés)?(?: annulés)? pour "
@@ -1106,7 +1347,7 @@ def lignes_du_fichier(fichier, fonctions):
     if fichier["mis_a_jour_source"][:4] != annee:
         sys.exit(f"{fichier['id']} : loi de finances rectificative pour {annee} dans un texte daté "
                  f"{fichier['mis_a_jour_source']}")
-    lus = [] if source_id in SANS_ARTICLES else articles(texte, annee)
+    lus = [] if sans_articles(fichier) else articles(texte, annee)
     # Une coupure de mot de fin de ligne du texte imprimé, restée dans la page (« dévelop-pement »), se recolle quand
     # le mot entier figure ailleurs dans le texte.
     mots = set(re.findall(r"\w+", texte.lower()))
@@ -1117,10 +1358,10 @@ def lignes_du_fichier(fichier, fonctions):
         credits_ = list(totaux_des_articles(fichier, annee, lus, texte_brut))
     else:
         credits_ = list(credits_des_etats(fichier, annee, grilles, formes, flux, lus, fonctions, recolle))
-    yield from credits_
-    yield from recettes_et_soldes(fichier, annee, grilles, flux, contenu, credits_nets(credits_, fonctions), fonctions,
-                                  recolle)
-    yield from financement_et_plafonds(fichier, annee, grilles, flux, texte, texte_brut)
+    lus_ = credits_ + list(recettes_et_soldes(fichier, annee, grilles, flux, contenu, credits_nets(credits_, fonctions),
+                                             fonctions, recolle)) + \
+        list(financement_et_plafonds(fichier, annee, grilles, flux, texte, texte_brut))
+    yield from (emplacement_pdf(l, places) for l in lus_) if places is not None else lus_
     absents = [x for s, x in LIBELLES if s == source_id and (s, x) not in LIBELLES_VUS]
     if absents:
         sys.exit(f"{fichier['id']} : libellé déclaré absent de la page ({' ; '.join(absents)})")
@@ -1132,12 +1373,12 @@ def credits_des_etats(fichier, annee, grilles, formes, flux, lus, fonctions, rec
     blocs = blocs_des_etats(grilles, formes, flux, source_id)
     if not blocs:
         sys.exit(f"{fichier['id']} : aucun état de crédits")
-    if source_id not in SANS_ARTICLES:
+    if not sans_articles(fichier):
         verifier_articles(blocs, lus, source_id)
     missions_connues = {f for f, l in fonctions.items() if f.startswith("LOLF.") and not l["parent_id"]
                         and not f.startswith(("LOLF.RECETTES.", "LOLF.EMPLOIS."))}
     vus = {}
-    note_page = SANS_ARTICLES.get(source_id, "")
+    note_page = SANS_ARTICLES[source_id] if sans_articles(fichier) else ""
     for bloc in blocs:
         rattache = structure(bloc, missions_connues)
         traitement = TRAITEMENTS.get((source_id, bloc["etat"]), "")
@@ -1188,7 +1429,7 @@ def financement_et_plafonds(fichier, annee, grilles, flux, texte, texte_brut):
     cohérence. Une phrase de plafond s'enregistre de la catégorie au montant, sans les années qui le précèdent, pour ne
     porter qu'un nombre."""
     source_id = fichier["source_id"]
-    if source_id in SANS_ARTICLES:
+    if sans_articles(fichier):
         return
     dettes = [m.group(0) for m in re.finditer(PLAFOND_DETTE, texte)]
     emplois = [m.group(0) for m in re.finditer(PLAFOND_EMPLOIS, texte)]
