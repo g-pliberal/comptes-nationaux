@@ -272,6 +272,12 @@ def lire_xlsx(chemin, feuille=None):
     return nom, cellules
 
 
+def lire_xlsx_dans_zip(chemin, membre, feuille=None):
+    """lire_xlsx d'un classeur que porte une archive zip archivée, désigné par son chemin dans l'archive."""
+    with zipfile.ZipFile(ouvrir_copie(chemin)) as archive:
+        return lire_xlsx(io.BytesIO(archive.read(membre)), feuille)
+
+
 def feuilles_xlsx(chemin):
     with zipfile.ZipFile(chemin) as classeur:
         return [f.get("name") for f in ET.fromstring(classeur.read("xl/workbook.xml")).find("m:sheets", _XLSX)]

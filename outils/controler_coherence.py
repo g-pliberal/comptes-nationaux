@@ -684,11 +684,19 @@ RATIOS_ADDITIFS = {"PC_PIB", "PC_PIB_POTENTIEL"}
 A_UNE_UNITE_PRES = {"ofgl.annexe-2a", "ofgl.annexe-2b", "ofgl.annexe-2c", "ofgl.annexe-2d"}
 # Unités de dénombrement : un nombre n'est pas arrondi, il ne laisse aucune marge.
 DENOMBREMENTS = {u["id"] for u in lire("tables/unites.csv") if u["type"] == "nombre"}
+# Sauf pour ces grandeurs, mesures qu'une source peut donner arrondies, qui ont la marge de toute valeur publiée : des
+# emplois consommés, leur écart au plafond, des effectifs (les classeurs de la DGAFP gardent à l'unité les emplois
+# consommés de 2021, au centième ceux des années suivantes) ; un plafond d'emplois voté, un nombre de budgets restent
+# exacts.
+MESURES = {"LOLF.EMPLOIS_CONSOMMES", "LOLF.BG_EMPLOIS_CONSOMMES", "LOLF.BA_EMPLOIS_CONSOMMES",
+           "LOLF.EMPLOIS_ECART_PLAFOND", "LOLF.BG_EMPLOIS_ECART_PLAFOND", "LOLF.BA_EMPLOIS_ECART_PLAFOND",
+           "FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES_YC_CONTRATS_AIDES"}
 # Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes. Seules ces familles
 # se ventilent par fonction : les montants, et les emplois des plafonds votés.
 FAMILLES = {"EUR": ("euros", 1), "K_EUR": ("euros", 1e3), "MIO_EUR": ("euros", 1e6), "MD_EUR": ("euros", 1e9),
             "MIO_ECU_EUR": ("écus puis euros", 1e6), "ETPT": ("équivalents temps plein travaillé", 1),
             "ETP": ("équivalents temps plein", 1)}
+EMPLOIS_FAMILLES = {"équivalents temps plein travaillé": "ETPT", "équivalents temps plein": "ETP"}
 NOMS_RATIOS = {"PC_PIB": "% du PIB", "PC_DEPENSE": "% de la dépense totale"}  # ratios que l'on recalcule
 REGLES = {"indique": "le PIB indiqué par la source, dans le même tableau",
           "depense": "la dépense totale du même périmètre, chez la même source",
@@ -713,10 +721,11 @@ def charger():
 
 def valeur(ligne):
     """(valeur dans l'unité de base de sa famille, demi-unité de sa dernière décimale, ou unité entière pour une source
-    qui tronque, ou rien pour un nombre, famille d'unités)."""
+    qui tronque, ou rien pour un nombre exact, famille d'unités)."""
     nom, echelle = FAMILLES.get(ligne["unite_id"], (ligne["unite_id"], 1))
-    marge = (0 if ligne["unite_id"] in DENOMBREMENTS else 1 if ligne["source_id"] in A_UNE_UNITE_PRES else 0.5) \
-        * 10 ** -int(ligne["decimales"]) * echelle
+    exact = ligne["unite_id"] in DENOMBREMENTS and ligne["concept_id"] not in MESURES
+    marge = (0 if exact else 1 if ligne["source_id"] in A_UNE_UNITE_PRES else 0.5) * 10 ** -int(ligne["decimales"]) \
+        * echelle
     return float(ligne["valeur"]) * echelle, marge, nom
 
 
@@ -819,6 +828,7 @@ def ventilations(derniers):
                 continue  # l'ensemble et ses parties ne mesurent pas la même chose
             resultats.append({"source": source, "perimetre": perimetre, "concept": concept, "fonction": parent,
                               "periode": periode, "complet": len(presents) == len(fils),
+                              "unite": valeur(par_fonction[parent])[2],
                               **comparer(par_fonction[parent], [(1, par_fonction[f]) for f in presents])})
     return resultats
 
@@ -1648,9 +1658,21 @@ def fr(x, decimales, signe=False):
     return texte.replace(",", " ").replace(".", ",").replace("-", "−")
 
 
+def decimales_utiles(x, au_plus=2):
+    """Les décimales qu'a un nombre, au plus `au_plus` : 1 974 567,6 en a une."""
+    return next((d for d in range(au_plus) if round(x, d) == round(x, 9)), au_plus)
+
+
+def unite_des_ecarts(resultat):
+    """L'unité où écrire l'écart d'une somme ou d'une ventilation : des emplois s'il y a lieu, sinon des euros."""
+    return resultat.get("unite") if resultat.get("unite") in EMPLOIS_FAMILLES else "euros"
+
+
 def ecart_lisible(ecart, unite):
     if unite in DENOMBREMENTS:
         return fr(ecart, 0, True)
+    if unite in EMPLOIS_FAMILLES:
+        return f"{fr(ecart, decimales_utiles(ecart), True)} {EMPLOIS_FAMILLES[unite]}"
     if unite == "euros":
         # Un écart de moins de 50 000 euros s'écrirait « 0,0 M€ » : il s'écrit en euros, en centimes sous l'euro.
         if abs(ecart) < 1:
@@ -1707,8 +1729,8 @@ def partielles(resultats, quoi):
     for (source, perimetre, total, fonction), liste in sorted(regroupes.items()):
         r = plus_grand(liste, lambda x: x["valeur"] - x["somme"])
         lignes.append(f"| {source} | {perimetre} | {total} | {fonction or 'ensemble'} | "
-                      f"{plage([x['periode'] for x in liste])} | {ecart_lisible(r['valeur'] - r['somme'], 'euros')} "
-                      f"en {r['periode']} |")
+                      f"{plage([x['periode'] for x in liste])} | "
+                      f"{ecart_lisible(r['valeur'] - r['somme'], unite_des_ecarts(r))} en {r['periode']} |")
     return lignes + [""]
 
 
@@ -1759,14 +1781,15 @@ def partie_ventilations(derniers):
               f"{len(ecarts)} en écart.", ""]
     regroupes = collections.defaultdict(list)
     for r in ecarts:
-        regroupes[(r["source"], r["perimetre"], r["concept"], r["fonction"])].append((r["periode"], r["valeur"] - r["somme"]))
+        regroupes[(r["source"], r["perimetre"], r["concept"], r["fonction"])].append(
+            (r["periode"], r["valeur"] - r["somme"], unite_des_ecarts(r)))
     if regroupes:
         lignes += ["| Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |",
                    "|---|---|---|---|---|---|"]
         for (source, perimetre, concept, parent), liste in sorted(regroupes.items()):
-            annee, ecart = plus_grand(liste, lambda e: e[1])
+            annee, ecart, unite = plus_grand(liste, lambda e: e[1])
             lignes.append(f"| {source} | {perimetre} | {concept} | {parent or 'ensemble'} | "
-                          f"{plage([a for a, _ in liste])} | {ecart_lisible(ecart, 'euros')} en {annee} |")
+                          f"{plage([a for a, _, _ in liste])} | {ecart_lisible(ecart, unite)} en {annee} |")
         lignes.append("")
     return lignes + partielles(resultats, "ventilations")
 
@@ -4043,7 +4066,7 @@ def partie_emplois_votes(derniers):
               f"2014, en ETPT depuis. L'import vérifie chaque tableau contre ses lignes et contre la phrase qui l'annonce, "
               f"et la section 2 refait ces sommes ; les lois de finances rectificatives les modifient en cours d'année "
               f"(section 21). La loi d'approbation des comptes ne constate pas d'emplois : la section 22 compare ces "
-              f"plafonds aux emplois consommés que donne la Cour des comptes.", "",
+              f"plafonds aux emplois consommés que donnent la Cour des comptes et la DGAFP.", "",
               "| Année | État (article d'équilibre) | Budget général | Budgets annexes | Opérateurs (ETP) | Opérateurs (ETPT) "
               "| Établissements à autonomie financière (ETP) | Autorités publiques indépendantes |",
               "|---|---|---|---|---|---|---|---|"]
@@ -4545,12 +4568,14 @@ def partie_lfr_emplois(derniers):
     return lignes + [""]
 
 
-# 22. Emplois consommés : ceux de l'État budgets annexes compris, ou ceux du budget général seul, tels que les donne la
-# Cour des comptes, contre le plafond de même champ que fixent la loi de finances initiale de l'année (l'article
-# d'équilibre, ou la ligne « I. Budget général » du tableau qui le répartit) et, s'il y a lieu, la dernière loi
-# rectificative de l'année qui le change.
+# 22. Emplois consommés : ceux de l'État budgets annexes compris, du budget général et des budgets annexes, tels que
+# les donnent la Cour des comptes et la DGAFP, contre le plafond de même champ que fixent la loi de finances initiale de
+# l'année (l'article d'équilibre, ou la ligne « I. Budget général » ou « II. Budgets annexes » du tableau qui le
+# répartit) et, s'il y a lieu, la dernière loi rectificative de l'année qui le change.
 EMPLOIS_CONSOMMES = {"LOLF.EMPLOIS_CONSOMMES": ("État, budgets annexes compris", "LOLF.PLAFOND_EMPLOIS"),
-                     "LOLF.BG_EMPLOIS_CONSOMMES": ("budget général", "LOLF.BG_PLAFOND_EMPLOIS")}
+                     "LOLF.BG_EMPLOIS_CONSOMMES": ("budget général", "LOLF.BG_PLAFOND_EMPLOIS"),
+                     "LOLF.BA_EMPLOIS_CONSOMMES": ("budgets annexes", "LOLF.BA_PLAFOND_EMPLOIS")}
+PRODUCTEURS_EMPLOIS = {"ccomptes": "Cour des comptes", "dgafp": "DGAFP"}
 
 
 def suite_annees(annees):
@@ -4567,14 +4592,19 @@ def suite_annees(annees):
     return textes[0] if len(textes) == 1 else ", ".join(textes[:-1]) + " et " + textes[-1]
 
 
+def etpt(x):
+    """Un nombre d'ETPT, avec les décimales qu'il a."""
+    return fr(x, decimales_utiles(x))
+
+
 def partie_emplois_consommes(derniers):
-    consommes, initiaux, revises = {}, {}, {}
+    consommes, initiaux, revises = collections.defaultdict(dict), {}, {}
     for l in derniers.values():
         if l["perimetre_id"] != "ETAT_LF" or l["fonction_id"] or l["unite_id"] != "ETPT":
             continue
         c, a = l["concept_id"], l["periode"]
         if c in EMPLOIS_CONSOMMES:
-            consommes[(a, c)] = (int(float(l["valeur"])), l["source_id"])
+            consommes[(a, c)][l["source_id"].split(".")[0]] = float(l["valeur"])
         for consomme, (_, plafond) in EMPLOIS_CONSOMMES.items():
             if c == plafond + "_LFI":
                 initiaux[(a, consomme)] = int(float(l["valeur"]))
@@ -4584,32 +4614,43 @@ def partie_emplois_consommes(derniers):
     if not consommes:
         return []
     lignes = ["## 22. Emplois consommés", "",
-              "Les emplois de l'État consommés dans l'année, en équivalents temps plein travaillé (ETPT), tels que les "
-              "donne le rapport de la Cour des comptes sur le budget de l'État de l'année : pour l'État budgets "
-              "annexes compris, ou pour le budget général seul, selon ce que dit le rapport. Chacun se compare au "
-              "plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » du tableau qui "
-              "le répartit, que fixe la loi de finances initiale (section 20) et que peut changer une loi "
-              "rectificative (section 21) : le plafond de l'année est celui de la dernière loi qui le fixe. L'import "
-              "vérifie que chaque plafond que cite la Cour est celui que la base lit dans ces lois.", "",
-              "| Année | Emplois | Consommés | Plafond initial | Plafond rectifié | Consommés − plafond de l'année | "
-              "Rapport |", "|---|---|---|---|---|---|---|"]
+              "Les emplois de l'État consommés dans l'année, en équivalents temps plein travaillé (ETPT) : tels que les "
+              "donne le rapport de la Cour des comptes sur le budget de l'année (sur l'année suivante pour 2008), pour "
+              "l'État budgets annexes compris ou pour le budget général seul, selon ce que dit le rapport ; et tels que "
+              "la DGAFP les reprend des lois de règlement et des rapports annuels de performances dans son rapport "
+              "annuel de l'année suivante, depuis 2021, pour l'État, le budget général et les budgets annexes. Chacun se "
+              "compare au plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » ou "
+              "« II. Budgets annexes » du tableau qui le répartit, que fixe la loi de finances initiale (section 20) et "
+              "que peut changer une loi rectificative (section 21) : le plafond de l'année est celui de la dernière loi "
+              "qui le fixe ; l'écart se calcule sur le chiffre de la Cour, à défaut sur celui de la DGAFP. L'import "
+              "vérifie que chaque plafond que cite la Cour est celui que la base lit dans ces lois ; la section 6 "
+              "compare les deux sources.", "",
+              "| Année | Emplois | Cour des comptes | DGAFP | Plafond initial | Plafond rectifié | "
+              "Consommés − plafond de l'année |", "|---|---|---|---|---|---|---|"]
     ecarts, rang = [], lambda x: (x[0][0], list(EMPLOIS_CONSOMMES).index(x[0][1]))
-    for (a, c), (v, source) in sorted(consommes.items(), key=rang):
+    for (a, c), valeurs in sorted(consommes.items(), key=rang):
         initial, revise = initiaux.get((a, c)), revises.get((a, c), (None, None))[1]
         plafond = revise if revise is not None else initial
+        v = valeurs.get("ccomptes", valeurs.get("dgafp"))
         if plafond is not None:
             ecarts.append((a, c, v - plafond))
-        lignes.append(f"| {a} | {EMPLOIS_CONSOMMES[c][0]} | {fr(v, 0)} | "
+        lignes.append(f"| {a} | {EMPLOIS_CONSOMMES[c][0]} | "
+                      + " | ".join(etpt(valeurs[p]) if p in valeurs else "—" for p in PRODUCTEURS_EMPLOIS) + " | "
                       f"{fr(initial, 0) if initial is not None else '—'} | "
                       f"{fr(revise, 0) if revise is not None else '—'} | "
-                      f"{fr(v - plafond, 0, True) if plafond is not None else '—'} | {source} |")
+                      f"{fr(v - plafond, decimales_utiles(v - plafond), True) if plafond is not None else '—'} |")
     lignes.append("")
     dessous = [e for e in ecarts if e[2] < 0]
     if ecarts and len(dessous) == len(ecarts):
-        petit, grand = min(dessous, key=lambda e: -e[2]), max(dessous, key=lambda e: -e[2])
-        lignes += [f"Chaque année, les emplois consommés restent sous le plafond de l'année : de {fr(-petit[2], 0)} "
-                   f"ETPT de moins ({petit[0]}, {EMPLOIS_CONSOMMES[petit[1]][0]}) à {fr(-grand[2], 0)} "
-                   f"({grand[0]}, {EMPLOIS_CONSOMMES[grand[1]][0]}).", ""]
+        champs_ = []
+        for c in EMPLOIS_CONSOMMES:
+            liste = [e for e in dessous if e[1] == c]
+            if liste:
+                petit, grand = min(liste, key=lambda e: -e[2]), max(liste, key=lambda e: -e[2])
+                champs_.append(f"{EMPLOIS_CONSOMMES[c][0]}, de {etpt(-petit[2])} ETPT de moins ({petit[0]}) à "
+                               f"{etpt(-grand[2])} ({grand[0]})")
+        lignes += [f"Chaque année, les emplois consommés restent sous le plafond de l'année : {' ; '.join(champs_)}.",
+                   ""]
     elif ecarts:
         lignes += [f"Les emplois consommés dépassent ou atteignent le plafond de l'année en "
                    f"{', '.join(f'{a} ({EMPLOIS_CONSOMMES[c][0]})' for a, c, e in ecarts if e >= 0)}.", ""]
@@ -4617,8 +4658,134 @@ def partie_emplois_consommes(derniers):
     manquantes = set(range(min(votees), max(int(a) for a, _ in consommes) + 1)) - {int(a) for a, _ in consommes}
     if manquantes:
         lignes += [f"La base n'a pas d'emplois consommés pour {suite_annees(manquantes)}, faute d'un chiffre qu'elle "
-                   f"sache lire dans les rapports de la Cour : outils/importer_cour_comptes.py dit pourquoi, année par "
-                   f"année.", ""]
+                   f"sache lire dans les rapports de la Cour, et la DGAFP ne les donne que depuis 2021 : "
+                   f"outils/importer_cour_comptes.py dit pourquoi, année par année.", ""]
+    return lignes
+
+
+# 23. Fonction publique (DGAFP) : les effectifs physiques au 31 décembre de chaque versant et de ses parties, et leurs
+# sommes ; la consommation des emplois de l'État par ministère, ses sommes, et les ministères que la DGAFP nomme comme la
+# loi de finances initiale de l'année.
+VERSANTS = [("FP", "Ensemble"), ("FPE", "État"), ("FPE_MINISTERES", "dont ministères"), ("FPE_EPA", "dont EPA"),
+            ("FPT", "Territoriale"), ("FPT_COLLECTIVITES", "dont collectivités"), ("FPT_EPA", "dont EPA"),
+            ("FPH", "Hospitalière")]
+SOMMES_VERSANTS = [("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FPE", ("FPE_MINISTERES", "FPE_EPA")),
+                   ("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FPT", ("FPT_COLLECTIVITES", "FPT_EPA")),
+                   ("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FP", ("FPE", "FPT", "FPH")),
+                   ("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES_YC_CONTRATS_AIDES", "FP", ("FPE", "FPT", "FPH"))]
+NOMS_SOMMES = {("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FPE"): "État : ministères + EPA",
+               ("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FPT"): "territoriale : collectivités + EPA",
+               ("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FP"): "ensemble : trois versants",
+               ("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES_YC_CONTRATS_AIDES", "FP"): "ensemble avec contrats aidés : trois "
+                                                                                 "versants avec contrats aidés"}
+CONSOMMATION_DGAFP = {"LOLF.BG_EMPLOIS_CONSOMMES", "LOLF.BA_EMPLOIS_CONSOMMES", "LOLF.EMPLOIS_CONSOMMES",
+                      "LOLF.BG_EMPLOIS_ECART_PLAFOND", "LOLF.BA_EMPLOIS_ECART_PLAFOND", "LOLF.EMPLOIS_ECART_PLAFOND"}
+
+
+def demi_unite(decimales):
+    return 0.5 * 10 ** -decimales
+
+
+def partie_fonction_publique(derniers):
+    effectifs, emplois, decimales = {}, collections.defaultdict(dict), {}
+    for k, l in sorted(derniers.items()):  # pour une même grandeur, la plus récente des éditions l'emporte
+        if l["concept_id"].startswith("FONCTION_PUBLIQUE."):
+            effectifs[(l["concept_id"], l["perimetre_id"], l["periode"])] = (float(l["valeur"]), int(l["decimales"]))
+        elif l["source_id"].startswith("dgafp.") and l["concept_id"] in CONSOMMATION_DGAFP:
+            emplois[l["periode"]][(l["concept_id"], l["fonction_id"])] = (float(l["valeur"]), int(l["decimales"]))
+    if not effectifs and not emplois:
+        return []
+    lignes = ["## 23. Fonction publique : effectifs et emplois de l'État par ministère", ""]
+    annees_ = sorted({a for _, _, a in effectifs})
+    if annees_:
+        hors, avec = "FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES_YC_CONTRATS_AIDES"
+        n = lambda c, p, a: fr(effectifs[(c, p, a)][0], 1) if (c, p, a) in effectifs else "—"
+        lignes += [f"Les effectifs physiques au 31 décembre de la fonction publique, en milliers de personnes, de "
+                   f"{annees_[0]} à {annees_[-1]}, tels que les donne la DGAFP dans son rapport annuel (emplois principaux, "
+                   f"tous statuts, en France hors Mayotte ; Siasp depuis 2009, d'autres sources avant) : hors "
+                   f"bénéficiaires de contrats aidés, pour l'ensemble, chaque versant et leurs parties, et avec eux pour "
+                   f"l'ensemble. Les notes des chiffres disent les ruptures de la série (2004, 2005, 2009, 2023, 2024).",
+                   "", "| Année | " + " | ".join(nom for _, nom in VERSANTS) + " | Ensemble avec contrats aidés |",
+                   "|---" * (len(VERSANTS) + 2) + "|"]
+        for a in annees_:
+            lignes.append(f"| {a} | " + " | ".join(n(hors, p, a) for p, _ in VERSANTS) + f" | {n(avec, 'FP', a)} |")
+        lignes += ["", "Chaque total contre la somme de ses parties, à l'arrondi de leurs décimales près :", "",
+                   "| Somme | Années comparées | Années en écart | Plus grand écart (total − parties) |", "|---|---|---|---|"]
+        for c, total, parties in SOMMES_VERSANTS:
+            comparees, en_ecart = [], []
+            for a in annees_:
+                if (c, total, a) not in effectifs or any((c, p, a) not in effectifs for p in parties):
+                    continue
+                v, d = effectifs[(c, total, a)]
+                somme = sum(effectifs[(c, p, a)][0] for p in parties)
+                marge = demi_unite(d) + sum(demi_unite(effectifs[(c, p, a)][1]) for p in parties)
+                comparees.append(a)
+                if depasse(v - somme, marge):
+                    en_ecart.append((a, v - somme))
+            if comparees:
+                pire = plus_grand(en_ecart, lambda e: e[1]) if en_ecart else None
+                lignes.append(f"| {NOMS_SOMMES[(c, total)]} | {plage(comparees)} | "
+                              f"{suite_annees(int(a) for a, _ in en_ecart) if en_ecart else 'aucune'} | "
+                              f"{fr(pire[1] * 1000, 0, True) + ' personnes en ' + pire[0] if pire else '—'} |")
+        lignes += ["", "La DGAFP rétropole chaque ligne de ces tableaux à part : un total ne fait pas toujours la somme "
+                   "de ses parties, ce que montre ce tableau sans le corriger.", ""]
+    if emplois:
+        fonctions_ = {f["id"]: f["libelle"] for f in lire("tables/fonctions.csv")}
+        plafonds = collections.defaultdict(dict)
+        for l in derniers.values():
+            if l["concept_id"] in ("LOLF.BG_PLAFOND_EMPLOIS_LFI", "LOLF.BG_PLAFOND_EMPLOIS_LFR_REVISE") \
+                    and l["fonction_id"]:
+                cle = (l["periode"], l["fonction_id"])
+                if l["concept_id"].endswith("_LFI"):
+                    plafonds[cle].setdefault("initial", float(l["valeur"]))
+                elif "revise" not in plafonds[cle] or l["version"] > plafonds[cle]["revise"][0]:
+                    plafonds[cle]["revise"] = (l["version"], float(l["valeur"]))
+        lignes += ["La consommation des emplois de l'État par ministère et par budget annexe, en ETPT, et son écart au "
+                   "plafond de la loi de finances rectificative « corrigé des transferts d'emplois intervenus en cours de "
+                   "gestion », tels que les donne la DGAFP (section 22 pour les totaux). Chaque somme du tableau, à "
+                   "l'arrondi de ses lignes près ; et les ministères qui ont une ligne du même nom dans la loi de "
+                   "finances initiale de l'année, seuls à pouvoir se comparer à leur plafond.", "",
+                   "| Année | Ministères | avec une ligne du même nom dans la loi de l'année | Ministères − budget général | "
+                   "Budgets annexes − leur total | Budget général + budgets annexes − total | Écarts au plafond : "
+                   "ministères − budget général |", "|---|---|---|---|---|---|---|"]
+        autrement, au_dessus = [], []
+
+        def ecart_somme(table, concept_total, parties):
+            if (concept_total, "") not in table:
+                return "—"
+            v, d = table[(concept_total, "")]
+            termes = [table[p] for p in parties if p in table]
+            ecart = v - sum(x for x, _ in termes)
+            marge = demi_unite(d) + sum(demi_unite(e) for _, e in termes)
+            return "juste" if not depasse(ecart, marge) else f"**{fr(ecart, 0 if ecart == int(ecart) else 2, True)}**"
+
+        for a in sorted(emplois):
+            table = emplois[a]
+            ministeres = sorted({f for c, f in table if c.startswith("LOLF.BG_") and f})
+            nommes = [f for f in ministeres if "initial" in plafonds.get((a, f), {})]
+            autrement += [f"{a} : {fonctions_.get(f, f)}" for f in ministeres if f not in nommes]
+            for f in nommes:
+                v = table.get(("LOLF.BG_EMPLOIS_CONSOMMES", f))
+                limite = plafonds[(a, f)].get("revise", (None, plafonds[(a, f)]["initial"]))[1]
+                if v is not None and v[0] > limite:
+                    au_dessus.append(f"{a} : {fonctions_.get(f, f)} ({etpt(v[0])} contre {etpt(limite)})")
+            ba = sorted({f for c, f in table if c.startswith("LOLF.BA_") and f})
+            bg, ba_, etat, ecart_bg = ("LOLF.BG_EMPLOIS_CONSOMMES", "LOLF.BA_EMPLOIS_CONSOMMES", "LOLF.EMPLOIS_CONSOMMES",
+                                       "LOLF.BG_EMPLOIS_ECART_PLAFOND")
+            sommes_ = [ecart_somme(table, bg, [(bg, f) for f in ministeres]),
+                       ecart_somme(table, ba_, [(ba_, f) for f in ba]),
+                       ecart_somme(table, etat, [(bg, ""), (ba_, "")]),
+                       ecart_somme(table, ecart_bg, [(ecart_bg, f) for f in ministeres])]
+            lignes.append(f"| {a} | {len(ministeres)} | {len(nommes)} | " + " | ".join(sommes_) + " |")
+        lignes.append("")
+        if autrement:
+            lignes += ["Ministères sans ligne du même nom dans la loi de finances initiale de l'année, qui ne se "
+                       "comparent donc pas à un plafond : " + " ; ".join(autrement) + ".", ""]
+        lignes += [("Ministères dont la consommation dépasse le plafond voté de l'année, celui de la dernière loi "
+                    "rectificative qui change leur ligne, à défaut de la loi de finances initiale : "
+                    + " ; ".join(au_dessus) + ". La DGAFP compare la consommation à un plafond corrigé des transferts "
+                    "d'emplois de la gestion, qui peut être plus haut.") if au_dessus else
+                   "Aucun ministère ne consomme plus que le plafond voté de l'année.", ""]
     return lignes
 
 
@@ -4627,8 +4794,9 @@ def ecrire_rapport(derniers):
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
               "Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la "
               "demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour l'OFGL, qui arrondit "
-              "ou tronque selon les cas ses montants à l'euro ; un nombre de budgets n'est pas arrondi et doit être "
-              "exact. Une incohérence signalée ici est un constat "
+              "ou tronque selon les cas ses montants à l'euro ; un nombre de budgets ou un plafond d'emplois voté "
+              "n'est pas arrondi et doit être exact, à la différence des emplois consommés et des effectifs, mesures "
+              "qu'une source peut donner arrondies. Une incohérence signalée ici est un constat "
               "sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.", ""]
     lignes += partie_sources(derniers) + partie_sommes(derniers) + partie_ventilations(derniers)
     lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)
@@ -4638,7 +4806,7 @@ def ecrire_rapport(derniers):
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)
     lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers) + partie_lfr(derniers)
     lignes += partie_lfr_recettes(derniers) + partie_lfr_financement(derniers) + partie_lfr_emplois(derniers)
-    lignes += partie_emplois_consommes(derniers)
+    lignes += partie_emplois_consommes(derniers) + partie_fonction_publique(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")
