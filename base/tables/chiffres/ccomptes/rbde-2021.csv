@@ -1,0 +1,2 @@
+id,source_id,fichier_id,emplacement,zone,perimetre_id,concept_id,fonction_id,traitements,unite_id,periode,valeur,decimales,statut,drapeau_source,version,consolidation,denominateur_id,nature,calcul_id,saisi_le,notes
+ccomptes.rbde-2021:FR:ETAT_LF:LOLF.BG_EMPLOIS_CONSOMMES:-:-:ETPT:2021:2022-06-27,ccomptes.rbde-2021,ccomptes.rbde-2021@2026-11-02-ee21bab8,page=121;phrase=s’est établi en définitive à 1 914 026 ETPT,FR,ETAT_LF,LOLF.BG_EMPLOIS_CONSOMMES,,,ETPT,2021,1914026,0,definitif,,2022-06-27,non_consolide,,publie,,2026-11-02,

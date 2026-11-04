@@ -1,0 +1,2 @@
+id,source_id,fichier_id,emplacement,zone,perimetre_id,concept_id,fonction_id,traitements,unite_id,periode,valeur,decimales,statut,drapeau_source,version,consolidation,denominateur_id,nature,calcul_id,saisi_le,notes
+ccomptes.rbde-2022:FR:ETAT_LF:LOLF.BG_EMPLOIS_CONSOMMES:-:-:ETPT:2022:2023-04-12,ccomptes.rbde-2022,ccomptes.rbde-2022@2026-11-02-ec94973d,page=114;phrase=budget général s’est établi à 1 903 930 ETPT,FR,ETAT_LF,LOLF.BG_EMPLOIS_CONSOMMES,,,ETPT,2022,1903930,0,definitif,,2023-04-12,non_consolide,,publie,,2026-11-02,

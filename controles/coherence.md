@@ -39,6 +39,16 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 1079 |
 | an.ta17-0017 | Projet de loi de finances de fin de gestion pour 2024 (loi n° 2024-1167), texte adopté n° 17 (17e législature), adopté définitivement par l'Assemblée nationale le 4 décembre 2024 | 2024-12-04 | 767 |
 | an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 1057 |
+| ccomptes.rbde-2009 | Résultats et gestion budgétaire de l'État, exercice 2009 (mai 2010) | 2010-05-26 | 2 |
+| ccomptes.rbde-2012 | Résultats et gestion budgétaire de l'État, exercice 2012 (mai 2013) | 2013-05-28 | 1 |
+| ccomptes.rbde-2013 | Le budget de l'État en 2013 : résultats et gestion (mai 2014) | 2014-05-26 | 1 |
+| ccomptes.rbde-2014 | Le budget de l'État en 2014 : résultats et gestion (mai 2015) | 2015-11-06 | 1 |
+| ccomptes.rbde-2015 | Le budget de l'État en 2015 : résultats et gestion (mai 2016) | 2016-05-23 | 1 |
+| ccomptes.rbde-2021 | Le budget de l'État en 2021 : résultats et gestion (juin 2022) | 2022-06-27 | 1 |
+| ccomptes.rbde-2022 | Le budget de l'État en 2022 : résultats et gestion (avril 2023) | 2023-04-12 | 1 |
+| ccomptes.rbde-2023 | Le budget de l'État en 2023 : résultats et gestion (avril 2024) | 2024-04-18 | 2 |
+| ccomptes.rbde-2024 | Le budget de l'État en 2024 : résultats et gestion (avril 2025) | 2025-04-15 | 2 |
+| ccomptes.rbde-2025 | Le budget de l'État en 2025 : résultats et gestion (avril 2026) | 2026-04-28 | 1 |
 | dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
 | dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
 | dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4070 |
@@ -1872,7 +1882,7 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 
 | Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
 |---|---|---|---|
-| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
+| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; ccomptes : rbde-2009, rbde-2012, rbde-2013, rbde-2014, rbde-2015, rbde-2021, rbde-2022, rbde-2023, rbde-2024, rbde-2025 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
 | Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
@@ -2567,7 +2577,7 @@ Sur les 20 années dont les comptes sont arrêtés, la variation exécutée dép
 
 ## 20. Plafonds d'emplois votés
 
-Les plafonds d'emplois que fixe la loi de finances initiale de chaque année, de 2006 à 2026 : celui des emplois rémunérés par l'État, que fixe l'article d'équilibre et que la seconde partie de la loi répartit par ministère et par budget annexe, puis ceux des opérateurs de l'État, des agents de droit local des établissements à autonomie financière et des autorités publiques indépendantes. Les emplois de l'État et des autorités se comptent en équivalents temps plein travaillé (ETPT), ceux des établissements à autonomie financière en équivalents temps plein (ETP), et ceux des opérateurs en ETP jusqu'à la loi pour 2014, en ETPT depuis. L'import vérifie chaque tableau contre ses lignes et contre la phrase qui l'annonce, et la section 2 refait ces sommes ; les lois de finances rectificatives les modifient en cours d'année (section 21). La loi d'approbation des comptes ne constate pas d'emplois : la base n'a pas encore les emplois consommés.
+Les plafonds d'emplois que fixe la loi de finances initiale de chaque année, de 2006 à 2026 : celui des emplois rémunérés par l'État, que fixe l'article d'équilibre et que la seconde partie de la loi répartit par ministère et par budget annexe, puis ceux des opérateurs de l'État, des agents de droit local des établissements à autonomie financière et des autorités publiques indépendantes. Les emplois de l'État et des autorités se comptent en équivalents temps plein travaillé (ETPT), ceux des établissements à autonomie financière en équivalents temps plein (ETP), et ceux des opérateurs en ETP jusqu'à la loi pour 2014, en ETPT depuis. L'import vérifie chaque tableau contre ses lignes et contre la phrase qui l'annonce, et la section 2 refait ces sommes ; les lois de finances rectificatives les modifient en cours d'année (section 21). La loi d'approbation des comptes ne constate pas d'emplois : la section 22 compare ces plafonds aux emplois consommés que donne la Cour des comptes.
 
 | Année | État (article d'équilibre) | Budget général | Budgets annexes | Opérateurs (ETP) | Opérateurs (ETPT) | Établissements à autonomie financière (ETP) | Autorités publiques indépendantes |
 |---|---|---|---|---|---|---|---|
@@ -2928,3 +2938,27 @@ Les notes des chiffres disent ce que la loi fait d'autre que changer le nombre d
 - 2010, loi n° 2010-1658, opérateurs (2 chiffres) : « La loi insère cette ligne dans le tableau. »
 - 2018, loi n° 2018-1104, État (20 chiffres) : « La loi récrit le tableau entier. »
 - 2023, loi n° 2023-1114, État (1 chiffre) : « La loi récrit cette ligne du tableau, « Solidarités, autonomie et personnes handicapées » dans la loi de finances initiale : « Solidarités et familles ». »
+
+## 22. Emplois consommés
+
+Les emplois de l'État consommés dans l'année, en équivalents temps plein travaillé (ETPT), tels que les donne le rapport de la Cour des comptes sur le budget de l'État de l'année : pour l'État budgets annexes compris, ou pour le budget général seul, selon ce que dit le rapport. Chacun se compare au plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » du tableau qui le répartit, que fixe la loi de finances initiale (section 20) et que peut changer une loi rectificative (section 21) : le plafond de l'année est celui de la dernière loi qui le fixe. L'import vérifie que chaque plafond que cite la Cour est celui que la base lit dans ces lois.
+
+| Année | Emplois | Consommés | Plafond initial | Plafond rectifié | Consommés − plafond de l'année | Rapport |
+|---|---|---|---|---|---|---|
+| 2008 | budget général | 2 166 900 | 2 188 626 | — | −21 726 | ccomptes.rbde-2009 |
+| 2009 | budget général | 2 088 767 | 2 108 123 | — | −19 356 | ccomptes.rbde-2009 |
+| 2012 | État, budgets annexes compris | 1 908 739 | 1 934 490 | 1 936 014 | −27 275 | ccomptes.rbde-2012 |
+| 2013 | État, budgets annexes compris | 1 883 713 | 1 914 921 | 1 914 920 | −31 207 | ccomptes.rbde-2013 |
+| 2014 | État, budgets annexes compris | 1 877 359 | 1 906 424 | — | −29 065 | ccomptes.rbde-2014 |
+| 2015 | État, budgets annexes compris | 1 880 633 | 1 901 099 | 1 903 724 | −23 091 | ccomptes.rbde-2015 |
+| 2021 | budget général | 1 914 026 | 1 934 021 | 1 934 906 | −20 880 | ccomptes.rbde-2021 |
+| 2022 | budget général | 1 903 930 | 1 930 485 | 1 931 392 | −27 462 | ccomptes.rbde-2022 |
+| 2023 | État, budgets annexes compris | 1 924 138 | 1 961 094 | 1 961 289 | −37 151 | ccomptes.rbde-2023 |
+| 2023 | budget général | 1 913 444 | 1 950 170 | 1 950 365 | −36 921 | ccomptes.rbde-2023 |
+| 2024 | État, budgets annexes compris | 1 965 629 | 1 985 307 | — | −19 678 | ccomptes.rbde-2024 |
+| 2024 | budget général | 1 954 921 | 1 974 384 | — | −19 463 | ccomptes.rbde-2024 |
+| 2025 | budget général | 1 974 568 | 1 997 194 | — | −22 626 | ccomptes.rbde-2025 |
+
+Chaque année, les emplois consommés restent sous le plafond de l'année : de 19 356 ETPT de moins (2009, budget général) à 37 151 (2023, État, budgets annexes compris).
+
+La base n'a pas d'emplois consommés pour 2006, 2007, 2010, 2011 et 2016 à 2020, faute d'un chiffre qu'elle sache lire dans les rapports de la Cour : outils/importer_cour_comptes.py dit pourquoi, année par année.

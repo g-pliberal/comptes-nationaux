@@ -1,0 +1,2 @@
+id,source_id,fichier_id,emplacement,zone,perimetre_id,concept_id,fonction_id,traitements,unite_id,periode,valeur,decimales,statut,drapeau_source,version,consolidation,denominateur_id,nature,calcul_id,saisi_le,notes
+ccomptes.rbde-2025:FR:ETAT_LF:LOLF.BG_EMPLOIS_CONSOMMES:-:-:ETPT:2025:2026-04-28,ccomptes.rbde-2025,ccomptes.rbde-2025@2026-11-02-fdc6127d,page=108;phrase=qui s’établissent à 1 974 568 ETPT (hors budgets annexes),FR,ETAT_LF,LOLF.BG_EMPLOIS_CONSOMMES,,,ETPT,2025,1974568,0,definitif,,2026-04-28,non_consolide,,publie,,2026-11-02,
