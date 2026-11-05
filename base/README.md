@@ -156,6 +156,10 @@ D'une statistique officielle :
 python3 outils/archiver.py <source_id> "<url>"     # archive le fichier et l'inscrit dans fichiers.csv ; plusieurs
                                                   # requêtes d'une même source à la suite, --compresser pour un gros csv,
                                                   # --decouper pour une archive trop grosse pour un fichier du dépôt
+python3 outils/archiver.py <source_id> "<url>" --depose <chemin>  # un fichier qu'un site refuse aux robots
+                                                  # (budget.gouv.fr), téléchargé à la main à cette adresse et déposé
+                                                  # dans le dépôt par un commit, seul à le toucher : sa date de
+                                                  # téléchargement est l'heure de ce commit
 python3 outils/importer_insee.py <fichier_id>      # tableaux des comptes nationaux de l'Insee (classeurs xlsx)
 python3 outils/importer_eurostat.py <fichier_id>   # jeux de données d'Eurostat (JSON-stat)
 python3 outils/importer_insee_bdm.py <fichier_id>  # séries de la Banque de données macro-économiques de l'Insee (SDMX)

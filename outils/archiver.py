@@ -3,6 +3,11 @@
 dans la table des fichiers avec leur empreinte.
 
     python3 outils/archiver.py <source_id> "<url>" ["<url>"…] [--compresser] [--decouper]
+    python3 outils/archiver.py <source_id> "<url>" --depose <chemin>
+
+Avec --depose, la copie n'est pas téléchargée : c'est un fichier qu'une personne a téléchargé à la main à l'adresse
+donnée, sur un site qui refuse les robots (budget.gouv.fr), puis déposé dans le dépôt par un commit. Sa date de
+téléchargement est celle de ce commit, que garde l'historique du dépôt.
 
 Un fichier identique à une copie déjà archivée pour la même source n'est pas dupliqué. Avec
 --compresser, pour un gros fichier, la copie est enregistrée compressée (bzip2) : son empreinte et
@@ -20,12 +25,14 @@ Plusieurs archivages peuvent tourner en même temps : chacun inscrit ses copies 
 
 import argparse
 import bz2
+import datetime
 import fcntl
 import gzip
 import hashlib
 import http.client
 import json
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -70,15 +77,39 @@ def date_portail(url):
     return fiche["data_processed"] if jeu.group(2).startswith("data.drees") else fiche["modified"]
 
 
-def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper):
+# Type de contenu d'un fichier déposé à la main, d'après son extension.
+TYPES_DEPOSES = {"pdf": "application/pdf", "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                 "ods": "application/vnd.oasis.opendocument.spreadsheet", "csv": "text/csv", "zip": "application/zip"}
+
+
+def depot(chemin):
+    """(contenu, type de contenu, heure du commit qui l'a déposé, en UTC) d'un fichier déposé à la main dans le dépôt."""
+    extension = chemin.rsplit(".", 1)[-1].lower()
+    if extension not in TYPES_DEPOSES:
+        sys.exit(f"{chemin} : extension inconnue (attendu : {', '.join(TYPES_DEPOSES)})")
+    if subprocess.run(["git", "status", "--porcelain", "--", chemin], capture_output=True, text=True,
+                      check=True).stdout.strip():
+        sys.exit(f"{chemin} : fichier modifié ou absent de l'historique ; il doit être tel que l'a déposé son commit")
+    heures = subprocess.run(["git", "log", "--format=%aI", "--", chemin], capture_output=True, text=True,
+                            check=True).stdout.split()
+    ajouts = subprocess.run(["git", "log", "--diff-filter=A", "--format=%aI", "--", chemin], capture_output=True,
+                            text=True, check=True).stdout.split()
+    if len(heures) != 1 or ajouts != heures:
+        sys.exit(f"{chemin} : {len(heures)} commits le touchent dans l'historique ; il en faut un, celui qui l'ajoute")
+    heure = datetime.datetime.fromisoformat(heures[0]).astimezone(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    with open(chemin, "rb") as f:
+        return f.read(), TYPES_DEPOSES[extension], heure
+
+
+def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, telecharge_le=None):
     """Inscrit une copie dans la table des fichiers ; renvoie son identifiant. La table reste verrouillée de sa
     lecture à son écriture, pour qu'un autre archivage n'y efface pas cette inscription."""
     with (BASE / "tables" / "fichiers.csv").open("a") as verrou:
         fcntl.flock(verrou, fcntl.LOCK_EX)
-        return inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper)
+        return inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, telecharge_le)
 
 
-def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper):
+def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, telecharge_le=None):
     sha256 = hashlib.sha256(contenu).hexdigest()
     fichiers = lire("tables/fichiers.csv")
     deja = next((f for f in fichiers if f["sha256"] == sha256 and f["source_id"] == source_id), None)
@@ -123,7 +154,7 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
                                 "ods": lambda: date_ods(BASE / chemin)
                                 }.get(extension, lambda: "")()
     identifiant = f"{source_id}@{date}-{sha256[:8]}"
-    fichiers.append({"id": identifiant, "source_id": source_id, "url": url, "telecharge_le": maintenant(),
+    fichiers.append({"id": identifiant, "source_id": source_id, "url": url, "telecharge_le": telecharge_le or maintenant(),
                      "mis_a_jour_source": mis_a_jour, "sha256": sha256, "octets": len(contenu), "chemin": chemin})
     ecrire("tables/fichiers.csv", champs("fichiers"), fichiers)
     return identifiant
@@ -135,10 +166,18 @@ def main():
     parser.add_argument("urls", nargs="+", metavar="url", help="requête exacte à archiver")
     parser.add_argument("--compresser", action="store_true", help="archiver les copies compressées (bzip2)")
     parser.add_argument("--decouper", action="store_true", help="archiver en morceaux une copie trop grosse pour le dépôt")
+    parser.add_argument("--depose", metavar="chemin", help="fichier téléchargé à la main à l'adresse donnée et déposé "
+                                                          "dans le dépôt par un commit, à archiver tel quel")
     args = parser.parse_args()
 
     if args.source_id not in {s["id"] for s in lire("tables/sources.csv")}:
         sys.exit(f"source inconnue : {args.source_id} (la déclarer d'abord dans tables/sources.csv)")
+    if args.depose:
+        if len(args.urls) != 1:
+            sys.exit("--depose : une seule adresse, celle d'où vient le fichier déposé")
+        contenu, type_contenu, heure = depot(args.depose)
+        print(archiver(args.source_id, args.urls[0], contenu, type_contenu, "", args.compresser, args.decouper, heure))
+        return
 
     dates = {}  # jeu de données d'un portail → date de modification lue avant le premier de ses exports
     for url in args.urls:
