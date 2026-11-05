@@ -22,8 +22,9 @@ import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
 from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_export_ofgl, lire_jsonstat,
-                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, montant_pdf, montants_de_case,
-                    nombre_de_phrase, nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres, texte_html, texte_pdf)
+                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, lire_xlsx_dans_zip, montant_pdf,
+                    montants_de_case, nombre_de_phrase, nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres,
+                    texte_html, texte_pdf)
 
 
 def erreur_de_type(type_, texte):
@@ -217,6 +218,20 @@ def valeur_archivee(fichier, emplacement, copies):
         lignes = [texte_pdf(m) for _, m in copies[fichier["id"]][page - 1]] if 1 <= page <= len(copies[fichier["id"]]) else []
         nombres = [n for l in lignes if l.startswith(libelle) and (n := nombre_texte(l[len(libelle):])) is not None]
         return (float(nombres[0][0]), "") if len(nombres) == 1 else None
+    if fichier["chemin"].endswith(".zip"):
+        # Une cellule d'un classeur que porte une archive zip : le chemin du classeur dans l'archive, sa feuille et la
+        # cellule.
+        trouve = re.fullmatch(r"classeur=([^;]+);feuille=([^;]+);cellule=([A-Z]+[0-9]+)", emplacement)
+        if trouve is None:
+            return None
+        membre, feuille, cellule = trouve.groups()
+        if (fichier["id"], membre, feuille) not in copies:
+            try:
+                copies[(fichier["id"], membre, feuille)] = lire_xlsx_dans_zip(chemin, membre, feuille)[1]
+            except KeyError:  # un classeur ou une feuille que l'archive n'a pas
+                copies[(fichier["id"], membre, feuille)] = {}
+        valeur = copies[(fichier["id"], membre, feuille)].get(cellule)
+        return (valeur, "") if isinstance(valeur, float) else None
     if fichier["chemin"].endswith(".csv"):
         # Un montant d'un export csv d'un portail, désigné par sa ligne (l'en-tête est la première) et sa colonne.
         trouve = re.fullmatch(r"ligne=([0-9]+);colonne=(.+)", emplacement)
