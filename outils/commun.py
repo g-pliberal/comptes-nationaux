@@ -352,8 +352,11 @@ def date_zip(contenu):
 
 def date_xlsx(chemin):
     """Date de dernière modification inscrite par le producteur dans les propriétés du classeur, à défaut
-    date de création (les classeurs générés par programme n'ont souvent que celle-ci)."""
+    date de création (les classeurs générés par programme n'ont souvent que celle-ci) ; vide pour un classeur sans
+    propriétés."""
     with zipfile.ZipFile(chemin) as classeur:
+        if "docProps/core.xml" not in classeur.namelist():
+            return ""
         proprietes = ET.fromstring(classeur.read("docProps/core.xml"))
     for propriete in ("dcterms:modified", "dcterms:created"):
         date = proprietes.find(propriete, _XLSX)
@@ -1223,6 +1226,38 @@ def montant_pdf(morceaux, debut, fin):
     « 000 »), ou qu'elle écrit dans le morceau de son libellé, se lit en entier."""
     trouve = NOMBRE_FINAL.search(texte_pdf([(x, t) for x, t in sorted(morceaux) if debut <= x < fin]))
     return nombre_texte(trouve.group(0)) if trouve else None
+
+
+# Un nombre entier d'un tableau : chiffres groupés par trois, signe moins compris.
+_ENTIER_GROUPE = re.compile(r"[-\u2011\u2212]?[0-9]{1,3}(?: [0-9]{3})*")
+
+
+def montants_lies_pdf(morceaux, debut, fin):
+    """Les trois montants entiers d'une ligne de tableau de PDF qui donne un montant, celui de la clôture précédente et
+    leur variation, lus dans les morceaux dont l'abscisse est dans [debut, fin[. Si ces morceaux sont trois nombres
+    bien formés dont le premier, moins le deuxième, égale le troisième à une unité près (les trois sont arrondis), ce
+    sont eux. Sinon la page les colle (« 1 590 9321 543 28847 644 »), parfois à la fin du libellé : le seul découpage
+    en trois nombres bien formés de la fin du texte, depuis son dernier caractère qui n'est ni un chiffre, ni un
+    blanc, ni un signe moins, qui se plie à la même égalité les sépare. Renvoie (montant, montant précédent,
+    variation), ou None si aucun découpage ou plusieurs s'y plient."""
+    entier = lambda t: int(t.replace(" ", "").replace("\u2011", "-").replace("\u2212", "-"))
+    choisis = [(x, t) for x, t in sorted(morceaux) if debut <= x < fin]
+    textes = [" ".join(t.split()) for _, t in choisis if t.strip()]
+    if len(textes) == 3 and all(_ENTIER_GROUPE.fullmatch(t) for t in textes) \
+            and abs(entier(textes[0]) - entier(textes[1]) - entier(textes[2])) <= 1:
+        return tuple(entier(t) for t in textes)
+    texte = re.search(r"[-0-9 \u2011\u2212]*$", texte_pdf(choisis)).group(0).strip()
+    lectures = set()
+    for i in range(1, len(texte)):
+        a = texte[:i].strip()
+        if not _ENTIER_GROUPE.fullmatch(a):
+            continue
+        for j in range(i + 1, len(texte)):
+            b, c = texte[i:j].strip(), texte[j:].strip()
+            if _ENTIER_GROUPE.fullmatch(b) and _ENTIER_GROUPE.fullmatch(c) \
+                    and abs(entier(a) - entier(b) - entier(c)) <= 1:
+                lectures.add((entier(a), entier(b), entier(c)))
+    return lectures.pop() if len(lectures) == 1 else None
 
 
 def date_pdf(donnees):

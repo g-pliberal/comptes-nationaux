@@ -23,6 +23,7 @@ import importer_organismes as organismes
 import importer_rei as rei
 from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_export_ofgl, lire_jsonstat,
                     lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, lire_xlsx_dans_zip, montant_pdf,
+                    montants_lies_pdf,
                     montants_de_case, nombre_de_phrase, nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres,
                     texte_html, texte_pdf)
 
@@ -199,6 +200,17 @@ def valeur_archivee(fichier, emplacement, copies):
         if trouve:
             nombre = nombre_phrase_pdf(copies[fichier["id"]], int(trouve.group(1)), trouve.group(2))
             return (float(nombre[0]), "") if nombre else None
+        # Un montant d'une ligne de tableau qui en donne trois, liés entre eux (un montant, celui de la clôture
+        # précédente et leur variation), désigné par sa page, le rang de sa ligne, l'étendue des abscisses des trois et
+        # son rang parmi eux (montants_lies_pdf).
+        trouve = re.fullmatch(r"page=([0-9]+);ligne=([0-9]+);x=([0-9.]+)-([0-9.]+);rang=([123])", emplacement)
+        if trouve:
+            page, ligne = int(trouve.group(1)), int(trouve.group(2))
+            pages = copies[fichier["id"]]
+            if not 1 <= page <= len(pages) or not 1 <= ligne <= len(pages[page - 1]):
+                return None
+            lies = montants_lies_pdf(pages[page - 1][ligne - 1][1], float(trouve.group(3)), float(trouve.group(4)))
+            return (float(lies[int(trouve.group(5)) - 1]), "") if lies else None
         # Un montant désigné par sa page, le rang de sa ligne dans la page et l'étendue de ses abscisses : celui qui finit
         # le texte des morceaux de la ligne dans cette étendue (montant_pdf).
         trouve = re.match(r"page=([0-9]+);ligne=([0-9]+);x=([0-9.]+)-([0-9.]+)(?:;|$)", emplacement)

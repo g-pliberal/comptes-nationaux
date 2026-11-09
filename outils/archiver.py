@@ -26,15 +26,28 @@ import hashlib
 import http.client
 import json
 import re
+import ssl
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_ods, date_pdf, date_xlsx, date_zip,
                     decoder_html, ecrire, lire, lire_pdf, lire_sdmx, maintenant, texte_html, texte_pdf)
 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
+# Serveurs qui ne proposent que des suites de chiffrement que Python écarte par défaut : la connexion les accepte pour
+# eux seuls, et vérifie leur certificat comme celui des autres.
+CHIFFREMENT_ANCIEN = {"www.securite-sociale.fr"}
+
+
+def contexte(url):
+    """Le contexte TLS de la connexion à une adresse : celui de Python, élargi pour les serveurs déclarés."""
+    ctx = ssl.create_default_context()
+    if urllib.parse.urlsplit(url).hostname in CHIFFREMENT_ANCIEN:
+        ctx.set_ciphers("DEFAULT:@SECLEVEL=1")
+    return ctx
 
 
 def telecharger(url):
@@ -42,7 +55,7 @@ def telecharger(url):
     for essai in range(1, ESSAIS + 1):
         try:
             requete = urllib.request.Request(url, headers={"User-Agent": AGENT, "Accept-Encoding": "gzip"})
-            with urllib.request.urlopen(requete, timeout=300) as reponse:
+            with urllib.request.urlopen(requete, timeout=300, context=contexte(url)) as reponse:
                 recu = reponse.read()
                 attendu = reponse.headers.get("Content-Length")
                 if attendu is not None and int(attendu) != len(recu):
