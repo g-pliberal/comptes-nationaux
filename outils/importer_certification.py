@@ -19,19 +19,21 @@ Une ligne du tableau est la fonction COMPTES_ETAT.EHB.<DONNES|RECUS>.<…>, form
 dont elle dépend, créée s'il le faut : les libellés changent d'un rapport à l'autre (« Dette garantie par l'État »,
 puis « Dette garantie par l'État - Encours »), et la base garde ceux de chaque rapport. Le chiffre est le montant de la
 ligne à la clôture de l'exercice du rapport (COMPTES_ETAT.ENGAGEMENTS_HORS_BILAN_DONNES ou _RECUS), dans l'unité que dit
-le tableau (milliards d'euros jusqu'au rapport sur 2016, millions ensuite). Le montant de la clôture précédente, que le
-rapport dit souvent « retraité », est enregistré avec le traitement « retraite_exercice_suivant » quand la page l'écrit
-à part de la variation ; sinon il ne sert qu'au contrôle. Ce contrôle est celui de chaque ligne : son montant, moins
-celui de la clôture précédente, doit égaler sa variation, à une unité près (les trois sont arrondis) ; les lignes où le
-rapport ne donne pas les trois nombres sont déclarées (SANS_VARIATION). Une ligne qui ne s'y plie pas, un nombre mal
-formé, un tableau sans l'une de ses deux parties ou dont l'en-tête ne nomme pas l'exercice arrêtent l'import. Les
-sommes (une ligne et celles qui en dépendent) ne sont pas refaites ici : le rapport de cohérence les fait, et rapproche
-le tableau des balances des comptes de l'État.
+le tableau (milliards d'euros dans le rapport sur 2016, millions ensuite). Le montant de la clôture précédente, que le
+rapport dit souvent « retraité », est enregistré avec le traitement « retraite_exercice_suivant ». Chaque ligne est
+contrôlée : son montant, moins celui de la clôture précédente, doit égaler sa variation, à une unité près (les trois
+sont arrondis). Ce contrôle sépare aussi les trois nombres quand la page les colle, entre eux ou à la fin du libellé
+(commun.montants_lies_pdf) ; les lignes où le rapport ne donne pas les trois nombres sont déclarées (SANS_VARIATION).
+Une ligne dont le montant est remplacé par la marque d'un engagement éteint (« ext ») ou par un appel de note n'a pas
+de chiffre. Une ligne qui ne se plie pas au contrôle, un tableau sans l'une de ses deux parties, sans unité ou dont
+l'en-tête ne nomme pas l'exercice arrêtent l'import. Les sommes (une ligne et celles qui en dépendent) ne sont pas
+refaites ici : le rapport de cohérence les fait, et rapproche le tableau des balances des comptes de l'État.
 
 Les rapports sur 2021 et 2025 donnent ce tableau en image, que la base ne sait pas lire ; ceux sur 2013 et les années
 d'avant ne le reproduisent pas, et la Cour ne publie pas à l'adresse des autres ceux sur 2012, 2014 et 2015. L'exercice
 2021 n'est donc connu que retraité, par le rapport sur 2022, et l'exercice 2015 par celui sur 2016. L'emplacement d'un
-chiffre est sa page, le rang de sa ligne dans la page et l'étendue des abscisses de son montant (commun.montant_pdf) ;
+chiffre est sa page, le rang de sa ligne dans la page et l'étendue des abscisses de son montant (commun.montant_pdf),
+ou celle des trois nombres et son rang parmi eux quand la page les colle ;
 sa période est l'exercice, sa version la date de modification du PDF.
 """
 

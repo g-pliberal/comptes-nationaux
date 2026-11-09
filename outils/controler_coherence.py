@@ -56,7 +56,14 @@ vérifie ce que disent les sources elles-mêmes :
    autonomie financière et des autorités publiques indépendantes ;
 21. les lois de finances rectificatives : les crédits qu'ouvre et qu'annule chacune, ajoutés à ceux de la loi de finances
    initiale, contre les dépenses et les engagements que constate la loi d'approbation des comptes de l'année, et leurs
-   missions et programmes contre ceux de ces deux lois.
+   missions et programmes contre ceux de ces deux lois ;
+22. les dépenses fiscales : le coût que chiffre chaque tome II des « Évaluations des voies et moyens », au total et par
+   impôt, d'un tome au suivant, et face aux recettes fiscales nettes que constate la loi d'approbation des comptes ;
+23. les niches sociales : dans les annexes des projets de loi de financement et d'approbation des comptes de la
+   sécurité sociale, chaque titre contre la somme des mesures rangées sous lui, une édition contre l'autre, et le coût
+   réalisé face aux recettes des régimes obligatoires de base ;
+24. les engagements hors bilan de l'État : dans le tableau du compte général que reproduit la Cour des comptes, chaque
+   ligne contre celles qui en dépendent, et le tableau contre les indicateurs des balances des comptes de l'État.
 
 Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la
 demi-unité de la dernière décimale de chaque valeur en jeu, ou l'unité entière pour une source qui tronque
@@ -4789,6 +4796,447 @@ def partie_fonction_publique(derniers):
     return lignes
 
 
+# 24. Dépenses fiscales : le coût que chiffre chaque tome II des « Évaluations des voies et moyens », au total, par impôt
+# et d'un tome à l'autre, face aux recettes fiscales nettes du budget général.
+SOURCE_DEPENSES_FISCALES = re.compile(r"budget\.depenses-fiscales-plf([0-9]{4})")
+
+
+def md(x, decimales=1, signe=False):
+    """Des millions d'euros écrits en milliards."""
+    return fr(x / 1000, decimales, signe)
+
+
+def partie_depenses_fiscales(derniers):
+    tomes = collections.defaultdict(dict)  # projet de loi → {(numéro, année): ligne}
+    for l in derniers.values():
+        trouve = SOURCE_DEPENSES_FISCALES.fullmatch(l["source_id"])
+        if trouve and l["concept_id"] == "LOLF.DEPENSE_FISCALE":
+            tomes[int(trouve.group(1))][(l["fonction_id"].rsplit(".", 1)[1], int(l["periode"]))] = l
+    if not tomes:
+        return []
+    libelles = {f["id"].rsplit(".", 1)[1]: f["libelle"] for f in lire("tables/fonctions.csv")
+                if f["parent_id"] == "LOLF.DEPENSE_FISCALE"}
+    recettes = {}
+    for l in derniers.values():
+        if l["concept_id"] == "LOLF.BG_RECETTES_FISCALES_NETTES" and l["perimetre_id"] == "ETAT_LF" \
+                and not l["fonction_id"] and not l["traitements"]:
+            recettes[int(l["periode"])] = valeur(l)[0] / 1e6
+    lignes = ["## 24. Dépenses fiscales", "",
+              "Le coût de chaque dépense fiscale, en millions d'euros, tel que le chiffre le tome II de l'annexe "
+              "« Évaluations des voies et moyens » des projets de loi de finances pour "
+              f"{suite_annees(set(tomes))} : pour chaque dépense, l'avant-dernière année (« réalisation », une estimation), "
+              "la dernière et celle du projet de loi (prévisions). La base n'a pas les tomes des autres projets de loi : "
+              "ils ne sont publiés qu'en PDF sur budget.gouv.fr, qui refuse les robots, et le jeu de données du projet de "
+              "loi de finances pour 2024 ne porte que les libellés, sans les montants. Un tome ne chiffre pas toutes les "
+              "dépenses qu'il recense (« nc », non chiffré ; « ε », moins de 0,5 million d'euros ; « - », sans effet "
+              "budgétaire) : la somme ci-dessous est celle des seules dépenses chiffrées, année par année. Elle est "
+              "inférieure au total que le tome annonce pour les années de prévision, où il reprend le dernier montant "
+              "connu d'une dépense qu'il ne chiffre pas ; ce total annoncé n'est pas dans le classeur. Les recettes "
+              "fiscales nettes du budget général sont celles que constate la loi d'approbation des comptes de l'année "
+              "(section 18) : le rapport des deux n'est qu'un ordre de grandeur, une dépense fiscale n'étant pas une "
+              "recette perdue à comportement inchangé, et certaines portant sur des impôts locaux ou affectés.", "",
+              "| Projet de loi de finances | Année | Statut | Dépenses chiffrées | Somme (Md€) | Recettes fiscales nettes "
+              "constatées (Md€) | Somme / recettes |", "|---|---|---|---|---|---|---|"]
+    sommes = {}
+    for plf in sorted(tomes):
+        for annee in sorted({a for _, a in tomes[plf]}):
+            chiffres = [l for (_, a), l in tomes[plf].items() if a == annee]
+            somme = sum(float(l["valeur"]) for l in chiffres)
+            sommes[(plf, annee)] = (somme, {n for (n, a) in tomes[plf] if a == annee})
+            statut = "réalisation" if chiffres[0]["statut"] == "estimation" else "prévision"
+            recette = recettes.get(annee)
+            lignes.append(f"| {plf} | {annee} | {statut} | {len(chiffres)} | {md(somme)} | "
+                          f"{md(recette) if recette is not None else '—'} | "
+                          f"{fr(100 * somme / recette, 1) + ' %' if recette else '—'} |")
+    # D'un tome à l'autre : les dépenses qu'ils chiffrent tous deux pour une même année.
+    lignes += ["", "D'un tome au suivant, le chiffrage d'une même année change : la prévision devient une réalisation, "
+               "et des dépenses entrent dans le chiffrage ou en sortent. Sur les seules dépenses que deux tomes "
+               "successifs chiffrent tous deux pour une année, en milliards d'euros :", "",
+               "| Année | Tome | Tome suivant | Dépenses chiffrées par les deux | Somme, premier tome | Somme, tome suivant "
+               "| Révision | Dépenses révisées |", "|---|---|---|---|---|---|---|---|"]
+    for plf in sorted(tomes):
+        if plf + 1 not in tomes:
+            continue
+        for annee in sorted({a for _, a in tomes[plf]} & {a for _, a in tomes[plf + 1]}):
+            communs = sorted(sommes[(plf, annee)][1] & sommes[(plf + 1, annee)][1])
+            avant = sum(float(tomes[plf][(n, annee)]["valeur"]) for n in communs)
+            apres = sum(float(tomes[plf + 1][(n, annee)]["valeur"]) for n in communs)
+            revisees = sum(1 for n in communs if float(tomes[plf][(n, annee)]["valeur"])
+                           != float(tomes[plf + 1][(n, annee)]["valeur"]))
+            lignes.append(f"| {annee} | {plf} | {plf + 1} | {len(communs)} | {md(avant)} | {md(apres)} | "
+                          f"{md(apres - avant, 1, True)} | {revisees} |")
+    # Par impôt, pour l'année de réalisation de chaque tome.
+    par_impot = collections.defaultdict(dict)
+    for plf in sorted(tomes):
+        for (_, annee), l in tomes[plf].items():
+            if annee == plf - 2:
+                impot = l["notes"].removeprefix("Catégorie : ")
+                par_impot[impot][plf] = par_impot[impot].get(plf, 0) + float(l["valeur"])
+    lignes += ["", "Par impôt, pour l'année de réalisation de chaque tome, sous le nom que le tome donne à l'impôt (la "
+               "taxe intérieure de consommation sur les produits énergétiques devient « Taxes intérieures de "
+               "consommation », puis « Accise sur les énergies »), en milliards d'euros :", "",
+               "| Impôt | " + " | ".join(f"{plf - 2} (tome {plf})" for plf in sorted(tomes)) + " |",
+               "|---|" + "---|" * len(tomes)]
+    for impot in sorted(par_impot, key=lambda i: -max(par_impot[i].values())):
+        lignes.append(f"| {impot} | " + " | ".join(md(par_impot[impot][plf]) if plf in par_impot[impot] else "—"
+                                                    for plf in sorted(tomes)) + " |")
+    lignes.append("| Ensemble | " + " | ".join(md(sum(v.get(plf, 0) for v in par_impot.values()))
+                                               for plf in sorted(tomes)) + " |")
+    dernier = max(tomes)
+    premieres = sorted(((float(l["valeur"]), n) for (n, a), l in tomes[dernier].items() if a == dernier - 2),
+                       reverse=True)[:10]
+    total = sommes[(dernier, dernier - 2)][0]
+    lignes += ["", f"Les dix dépenses fiscales les plus coûteuses en {dernier - 2}, d'après le tome du projet de loi de "
+               f"finances pour {dernier} : elles font {fr(100 * sum(v for v, _ in premieres) / total, 1)} % de la somme "
+               "des dépenses chiffrées.", "", "| Numéro | Dépense fiscale | Coût (M€) |", "|---|---|---|"]
+    for v, n in premieres:
+        lignes.append(f"| {n} | {libelles.get(n, '')} | {fr(v, 0)} |")
+    lignes.append("")
+    return lignes
+
+
+# 25. Niches sociales : le coût des allègements généraux, des exonérations ciblées et des exemptions d'assiette que
+# donnent les annexes des projets de loi de financement et d'approbation des comptes de la sécurité sociale ; les sommes
+# de leurs tableaux, et une édition contre l'autre.
+SOURCE_NICHES = re.compile(r"secu\.(plfss|placss)([0-9]{4})-annexe[0-9]")
+RUBRIQUES_NICHES = [("Allègements généraux", re.compile(r"ALL[EÈ]GEMENTS G[EÉ]N[EÉ]RAUX")),
+                    ("Exonérations ciblées compensées", re.compile(r"EXON[EÉ]RATIONS CIBL[EÉ]ES COMPENS[EÉ]ES")),
+                    ("Exonérations non compensées", re.compile(r"EXON[EÉ]RATIONS NON COMPENS[EÉ]ES"))]
+
+
+def edition_niches(source):
+    sorte, annee = SOURCE_NICHES.fullmatch(source).groups()
+    return f"{'PLFSS' if sorte == 'plfss' else 'PLACSS'} {annee}"
+
+
+def rang_edition(source):
+    """Les éditions dans l'ordre où elles paraissent : le PLACSS d'une année au printemps suivant, avant le PLFSS de
+    l'automne."""
+    sorte, annee = SOURCE_NICHES.fullmatch(source).groups()
+    return (int(annee) + 1, 0) if sorte == "placss" else (int(annee), 1)
+
+
+def partie_niches_sociales(derniers):
+    couts, exemptions = collections.defaultdict(list), collections.defaultdict(dict)
+    for l in derniers.values():
+        if not SOURCE_NICHES.fullmatch(l["source_id"]):
+            continue
+        trouve = re.fullmatch(r"feuille=([^;]+);cellule=([A-Z]+)([0-9]+)", l["emplacement"])
+        if l["concept_id"] == "LFSS.EXONERATION_COUT":
+            couts[(l["source_id"], trouve.group(1), int(l["periode"]))].append((int(trouve.group(3)), l))
+        elif l["concept_id"].startswith("LFSS.EXEMPTION_"):
+            exemptions[(l["source_id"], int(l["periode"]), l["concept_id"])][int(trouve.group(3))] = l
+    if not couts:
+        return []
+    libelles = {f["id"]: f["libelle"] for f in lire("tables/fonctions.csv") if f["id"].startswith("COMPTES_SECU.EX")}
+    sources = sorted({s for s, _, _ in couts}, key=rang_edition)
+    lignes = ["## 25. Niches sociales", "",
+              "Le coût des mesures de réduction et d'exonération de cotisations et de contributions de sécurité sociale, "
+              "d'après les classeurs de l'annexe 4 des projets de loi de financement de la sécurité sociale (PLFSS) et de "
+              "l'annexe 2 des projets de loi d'approbation des comptes (PLACSS) : "
+              f"{', '.join(edition_niches(s) for s in sources)}. Les annexes 5 des PLFSS pour 2007 à 2022 ne sont "
+              "publiées qu'en PDF et ne sont pas lues ; le classeur de l'annexe 2 du PLACSS de 2025 ne donne pas le coût "
+              "des mesures. Les allègements généraux et les exonérations ciblées sont en millions d'euros, en droits "
+              "constatés, sur le champ des régimes obligatoires de base ; les exemptions d'assiette en milliards "
+              "d'euros.", "",
+              "Dans chaque tableau des coûts, une ligne de titre porte la somme des mesures rangées sous elle (les "
+              "lignes « Dont… » précisent une mesure et ne s'y ajoutent pas), le titre des exonérations ciblées "
+              "compensées celle des missions du budget de l'État qui le suivent, et le total, quand le tableau en a un, "
+              "celle des trois rubriques. Un titre est comparé à sa somme à la demi-unité près de chaque montant en jeu.",
+              "", "| Édition | Année | Titres comparés à leur somme | Égaux | Autres |", "|---|---|---|---|---|"]
+    ecarts, rubriques = [], collections.defaultdict(dict)
+    for source in sources:
+        for annee in sorted({a for s, _, a in couts if s == source}):
+            compares = egaux = 0
+            for feuille in sorted({f for s, f, a in couts if s == source and a == annee}):
+                tableau = sorted(couts[(source, feuille, annee)], key=lambda e: e[0])
+                blocs = []  # [titre, [mesures]]
+                for _, l in tableau:
+                    libelle = libelles[l["fonction_id"]]
+                    if l["notes"] == "Ligne de titre du tableau.":
+                        blocs.append([l, []])
+                    elif blocs and not libelle.lower().startswith("dont "):
+                        blocs[-1][1].append(l)
+                controles = []
+                for i, (titre, mesures) in enumerate(blocs):
+                    nom = libelles[titre["fonction_id"]]
+                    for rubrique, motif in RUBRIQUES_NICHES:
+                        if motif.match(nom):
+                            rubriques[(rubrique, annee)].setdefault(source, titre)
+                    if nom.startswith("TOTAL"):
+                        # Chaque rubrique une fois : son premier titre.
+                        parties = [next(t for t, _ in blocs[:i] if m.match(libelles[t["fonction_id"]]))
+                                   for _, m in RUBRIQUES_NICHES
+                                   if any(m.match(libelles[t["fonction_id"]]) for t, _ in blocs[:i])]
+                        rubriques[("Total", annee)][source] = titre
+                    elif mesures:
+                        parties = mesures
+                    else:
+                        parties = []
+                        for t, m in blocs[i + 1:]:
+                            if not libelles[t["fonction_id"]].startswith("MISSION"):
+                                break
+                            parties.append(t)
+                    if parties:
+                        controles.append((titre, parties))
+                for titre, parties in controles:
+                    compares += 1
+                    ecart = float(titre["valeur"]) - sum(float(p["valeur"]) for p in parties)
+                    marge = sum(demi_unite(int(p["decimales"])) for p in parties + [titre])
+                    if abs(ecart) <= marge + 1e-6:
+                        egaux += 1
+                    else:
+                        ecarts.append((source, annee, libelles[titre["fonction_id"]], float(titre["valeur"]), ecart))
+            lignes.append(f"| {edition_niches(source)} | {annee} | {compares} | {egaux} | {compares - egaux} |")
+    if ecarts:
+        lignes += ["", "Titres qui ne sont pas la somme des lignes rangées sous eux, en millions d'euros :", "",
+                   "| Édition | Année | Titre | Montant du titre | Titre − somme |", "|---|---|---|---|---|"]
+        for source, annee, nom, v, ecart in ecarts:
+            lignes.append(f"| {edition_niches(source)} | {annee} | {nom} | {fr(v, 1)} | {fr(ecart, 1, True)} |")
+    lignes += ["", "Une édition contre l'autre : le coût de chaque rubrique pour une année, tel que le donne chaque "
+               "édition, en milliards d'euros ; « p » marque une prévision, les autres montants sont des réalisés. "
+               "Le total est celui que donne l'édition quand son tableau en a un, sinon la somme de ses trois "
+               "rubriques (« = »).", "",
+               "| Année | Rubrique | " + " | ".join(edition_niches(s) for s in sources) + " |",
+               "|---|---|" + "---|" * len(sources)]
+    annees = sorted({a for _, a in rubriques})
+    realises = {}
+    for annee in annees:
+        for rubrique in [r for r, _ in RUBRIQUES_NICHES] + ["Total"]:
+            cases = []
+            for s in sources:
+                l = rubriques.get((rubrique, annee), {}).get(s)
+                if l is None and rubrique == "Total":
+                    parties = [rubriques.get((r, annee), {}).get(s) for r, _ in RUBRIQUES_NICHES]
+                    if all(parties):
+                        somme = sum(float(p["valeur"]) for p in parties)
+                        marque = " p" if parties[0]["statut"] == "prevision" else ""
+                        cases.append(f"= {md(somme)}{marque}")
+                        if not marque:
+                            realises.setdefault(annee, (somme, s))
+                        continue
+                if l is None:
+                    cases.append("—")
+                    continue
+                cases.append(md(float(l["valeur"])) + (" p" if l["statut"] == "prevision" else ""))
+                if rubrique == "Total" and l["statut"] != "prevision":
+                    realises.setdefault(annee, (float(l["valeur"]), s))
+            lignes.append(f"| {annee} | {rubrique} | " + " | ".join(cases) + " |")
+    # Exemptions d'assiette : le total contre ses groupes, et le total de chaque édition.
+    lignes += ["", "Exemptions d'assiette : le total de chaque tableau est comparé à la somme de ses groupes (les lignes "
+               "numérotées en chiffres romains), au dixième ou au centième près de chaque montant selon l'édition ; "
+               "puis, pour chaque année, l'assiette exemptée et les cotisations équivalentes nettes au total, en "
+               "milliards d'euros, d'après chaque édition (« p » : prévision).", ""]
+    compares = egaux = 0
+    ecarts_ex, totaux = [], collections.defaultdict(dict)
+    for (source, annee, concept), tableau in sorted(exemptions.items()):
+        groupes = [l for _, l in sorted(tableau.items()) if re.match(r"[IVX]+\. ", libelles[l["fonction_id"]])]
+        total = [l for l in tableau.values() if libelles[l["fonction_id"]].upper().startswith("TOTAL")]
+        if not total or not groupes:
+            continue
+        totaux[(annee, concept)][source] = total[0]
+        compares += 1
+        ecart = float(total[0]["valeur"]) - sum(float(g["valeur"]) for g in groupes)
+        marge = sum(max(demi_unite(int(g["decimales"])), 0.005) for g in groupes + total)
+        if abs(ecart) <= marge + 1e-9:
+            egaux += 1
+        else:
+            ecarts_ex.append((source, annee, concept, float(total[0]["valeur"]), ecart))
+    lignes += [f"{compares} totaux comparés à la somme de leurs groupes, {egaux} égaux à l'arrondi près."
+               + ("" if not ecarts_ex else " Les autres, en milliards d'euros : "
+                  + " ; ".join(f"{edition_niches(s)}, {a}, {c.removeprefix('LFSS.EXEMPTION_').lower().replace('_', ' ')} "
+                               f"({fr(v, 2)}, {fr(e, 2, True)} par rapport à la somme)" for s, a, c, v, e in ecarts_ex)
+                  + "."), "",
+               "| Année | Grandeur | " + " | ".join(edition_niches(s) for s in sources) + " |",
+               "|---|---|" + "---|" * len(sources)]
+    for annee in sorted({a for a, _ in totaux}):
+        for concept, nom in (("LFSS.EXEMPTION_ASSIETTE", "Assiette exemptée"),
+                             ("LFSS.EXEMPTION_COTISATIONS_NETTES", "Cotisations équivalentes nettes")):
+            cases = [fr(float(l["valeur"]), 1) + (" p" if l["statut"] == "prevision" else "") if l else "—"
+                     for l in (totaux.get((annee, concept), {}).get(s) for s in sources)]
+            lignes.append(f"| {annee} | {nom} | " + " | ".join(cases) + " |")
+    # Face aux recettes des régimes obligatoires de base que constatent les lois.
+    recettes = {}
+    for l in derniers.values():
+        if l["concept_id"] == "COMPTES_SECU.RECETTES" and l["perimetre_id"] == "ROBSS" and not l["fonction_id"] \
+                and not l["traitements"] and l["statut"] != "prevision":
+            if int(l["periode"]) not in recettes or l["version"] > recettes[int(l["periode"])][0]:
+                recettes[int(l["periode"])] = (l["version"], valeur(l)[0] / 1e6)
+    communes = sorted(set(realises) & set(recettes))
+    if communes:
+        lignes += ["", "Le coût réalisé des allègements généraux et des exonérations ciblées, d'après la première "
+                   "édition qui le donne, face aux recettes des régimes obligatoires de base que la base lit dans les "
+                   "lois de financement et d'approbation des comptes de la sécurité sociale, en milliards d'euros. Le "
+                   "rapport n'est qu'un ordre de grandeur : les mesures compensées par l'État sont déjà dans ces "
+                   "recettes, par leur compensation.", "",
+                   "| Année | Coût réalisé | Édition | Recettes des régimes de base | Coût / recettes |",
+                   "|---|---|---|---|---|"]
+        for annee in communes:
+            cout, source = realises[annee]
+            lignes.append(f"| {annee} | {md(cout)} | {edition_niches(source)} | {md(recettes[annee][1])} | "
+                          f"{fr(100 * cout / recettes[annee][1], 1)} % |")
+    lignes.append("")
+    return lignes
+
+
+# 26. Engagements hors bilan de l'État : le tableau du compte général que reproduisent les rapports de certification de
+# la Cour des comptes ; chaque ligne contre celles qui en dépendent, et le tableau contre les balances des comptes.
+SOURCE_CERTIFICATION = re.compile(r"ccomptes\.certification-([0-9]{4})")
+# Indicateur de la balance → (partie du tableau, début du libellé de la ligne, ou None pour l'ensemble de la partie).
+BALANCE_ET_TABLEAU = [("S801_Dette garantie par l'Etat", "DONNES", "Dette garantie par l'État"),
+                      ("S802_Garanties liées à des missions d'int gén", "DONNES",
+                       "Garanties liées à des missions d'intérêt général"),
+                      ("S803_Garanties de passif", "DONNES", "Garanties de passif"),
+                      ("S804_Engagements financiers de l'Etat", "DONNES", "Engagements financiers de l'État"),
+                      ("S805_Dispositifs d'intervention", "DONNES",
+                       "Engagements découlant de la mission de régulateur économique et social de l'État"),
+                      ("S806_Engagements reçus", "RECUS", None)]
+_BALANCES = {}
+
+
+def balances_etat_en_memoire(derniers):
+    """Les balances contrôlées (balances_etat_controlees), lues une seule fois."""
+    if id(derniers) not in _BALANCES:
+        _BALANCES[id(derniers)] = balances_etat_controlees(derniers)
+    return _BALANCES[id(derniers)]
+
+
+def partie_engagements_hors_bilan(derniers):
+    tableaux = collections.defaultdict(dict)  # (exercice du rapport, exercice du montant, retraité) → {fonction: ligne}
+    for l in derniers.values():
+        trouve = SOURCE_CERTIFICATION.fullmatch(l["source_id"])
+        if trouve and l["concept_id"].startswith("COMPTES_ETAT.ENGAGEMENTS_HORS_BILAN_"):
+            tableaux[(int(trouve.group(1)), int(l["periode"]), bool(l["traitements"]))][l["fonction_id"]] = l
+    if not tableaux:
+        return []
+    fonctions = {f["id"]: f for f in lire("tables/fonctions.csv") if f["id"].startswith("COMPTES_ETAT.EHB")}
+    enfants = collections.defaultdict(list)
+    for f in fonctions.values():
+        enfants[f["parent_id"]].append(f["id"])
+    rapports = sorted({r for r, _, _ in tableaux})
+
+    def montant(tableau, fonction):
+        """Le montant d'une ligne, en millions d'euros : le sien, sinon la somme des lignes qui en dépendent et qui
+        sont dans ce tableau (les « dont » ne s'ajoutent pas) ; None si aucune n'en a."""
+        if fonction in tableau:
+            return valeur(tableau[fonction])[0] / 1e6
+        parties = [montant(tableau, e) for e in enfants.get(fonction, [])
+                   if not fonctions[e]["libelle"].lower().startswith("dont ")]
+        parties = [p for p in parties if p is not None]
+        return sum(parties) if parties else None
+
+    lignes = ["## 26. Engagements hors bilan de l'État", "",
+              "Le tableau des principaux engagements hors bilan du compte général de l'État, tel que la Cour des comptes "
+              f"le reproduit en annexe de son rapport de certification des comptes de {suite_annees(set(rapports))} : "
+              "engagements donnés et reçus, ligne par ligne, à la clôture de l'exercice, avec le montant de la clôture "
+              "précédente. Le compte général lui-même est sur budget.gouv.fr, qui refuse les robots ; les rapports sur "
+              "2021 et 2025 donnent ce tableau en image, ceux sur 2013 et les exercices d'avant ne le reproduisent pas, "
+              "et la base n'a pas trouvé ceux sur 2012, 2014 et 2015 à l'adresse des autres. À l'import, chaque ligne a "
+              "été vérifiée : son montant, moins celui de la clôture précédente, égale la variation que donne le "
+              "rapport, à une unité près. Ici, chaque ligne qui a un montant est comparée à la somme des lignes qui en "
+              "dépendent, quand elles en ont (les « dont » ne s'ajoutent pas), à la demi-unité près de chaque montant "
+              "en jeu.", "",
+              "| Rapport sur | Unité | Lignes à la clôture | Lignes de la clôture précédente | Lignes comparées à leur "
+              "somme | Égales | Autres |", "|---|---|---|---|---|---|---|"]
+    ecarts = []
+    for r in rapports:
+        tableau, precedent = tableaux[(r, r, False)], tableaux.get((r, r - 1, True), {})
+        compares = egaux = 0
+        for jeu, exercice in ((tableau, r), (precedent, r - 1)):
+            for f, l in jeu.items():
+                parties = [jeu[e] for e in enfants.get(f, []) if e in jeu
+                           and not fonctions[e]["libelle"].lower().startswith("dont ")]
+                sommes = [montant(jeu, e) for e in enfants.get(f, [])
+                          if not fonctions[e]["libelle"].lower().startswith("dont ")]
+                sommes = [s for s in sommes if s is not None]
+                if not sommes:
+                    continue
+                compares += 1
+                unite = valeur(l)[0] / float(l["valeur"]) / 1e6 if float(l["valeur"]) else 1
+                ecart = valeur(l)[0] / 1e6 - sum(sommes)
+                if abs(ecart) <= 0.5 * unite * (len(sommes) + 1) + 1e-6:
+                    egaux += 1
+                else:
+                    ecarts.append((r, exercice, fonctions[f]["libelle"], f.split(".")[2], valeur(l)[0] / 1e6, ecart))
+        unite = "milliards d'euros" if next(iter(tableau.values()))["unite_id"] == "MD_EUR" else "millions d'euros"
+        lignes.append(f"| {r} | {unite} | {len(tableau)} | {len(precedent)} | {compares} | {egaux} | "
+                      f"{compares - egaux} |")
+    if ecarts:
+        lignes += ["", "Lignes qui ne sont pas la somme de celles qui en dépendent, en millions d'euros : le tableau "
+                   "ne détaille pas toujours tout ce qu'une ligne réunit, et quelques lignes ne s'additionnent pas "
+                   "dans le rapport lui-même.", "",
+                   "| Rapport sur | Clôture | Partie | Ligne | Montant | Ligne − somme |", "|---|---|---|---|---|---|"]
+        for r, exercice, nom, partie, v, ecart in ecarts:
+            lignes.append(f"| {r} | {exercice} | {'donnés' if partie == 'DONNES' else 'reçus'} | {nom} | {fr(v, 0)} | "
+                          f"{fr(ecart, 0, True)} |")
+    # Les grandes lignes de chaque clôture : celles du premier rang de chaque partie.
+    clotures = {}
+    for (r, exercice, retraite), tableau in sorted(tableaux.items()):
+        if not retraite:
+            clotures[exercice] = (tableau, f"rapport sur {r}")
+    for (r, exercice, retraite), tableau in sorted(tableaux.items()):
+        if retraite and exercice not in clotures:
+            clotures[exercice] = (tableau, f"rapport sur {r}, montant de la clôture précédente")
+    rangs = collections.OrderedDict()
+    for exercice in sorted(clotures):
+        for partie in ("DONNES", "RECUS"):
+            for f in sorted(enfants.get(f"COMPTES_ETAT.EHB.{partie}", [])):
+                if montant(clotures[exercice][0], f) is not None:
+                    rangs.setdefault((partie, fonctions[f]["libelle"]), {})[exercice] = montant(clotures[exercice][0], f)
+    exercices = sorted(clotures)
+    lignes += ["", "Les lignes du premier rang du tableau à chaque clôture, en milliards d'euros ; une ligne sans montant "
+               "y est la somme de celles qui en dépendent. "
+               + " ; ".join(f"{e} : {clotures[e][1]}" for e in exercices if "précédente" in clotures[e][1])
+               + (". " if any("précédente" in clotures[e][1] for e in exercices) else "")
+               + "Les engagements de retraite, valeur actualisée de pensions futures, dépendent du taux d'actualisation "
+               "retenu à chaque clôture : leurs variations ne mesurent pas des droits nouveaux.", "",
+               "| Partie | Ligne | " + " | ".join(str(e) for e in exercices) + " |",
+               "|---|---|" + "---|" * len(exercices)]
+    for (partie, nom), valeurs in rangs.items():
+        lignes.append(f"| {'Donnés' if partie == 'DONNES' else 'Reçus'} | {nom} | "
+                      + " | ".join(md(valeurs[e]) if e in valeurs else "—" for e in exercices) + " |")
+    # Contre les balances des comptes de l'État.
+    par_exercice = {e[0]: e[4] for e in balances_etat_en_memoire(derniers)}
+    referentiel = {i["indicateur"]: i for i in lire("tables/indicateurs_balances_etat.csv")}
+    lignes += ["", "Le tableau contre les balances des comptes de l'État (section 14), qui portent en classe 8 les "
+               "engagements que l'État inscrit dans ses comptes, par indicateur : chaque indicateur de la balance d'un "
+               "exercice est rapproché de la ligne de même objet du tableau à la clôture de cet exercice, en milliards "
+               "d'euros. Les engagements de retraite, la mise en jeu de la responsabilité de l'État et les « autres "
+               "informations » du tableau n'ont pas d'indicateur dans les balances : ils ne sont pas inscrits en classe 8.",
+               "", "| Exercice | Indicateur de la balance | Balance | Tableau | Tableau − balance |",
+               "|---|---|---|---|---|"]
+    proches = collections.defaultdict(list)  # indicateur → [(exercice, vrai si le tableau et la balance concordent)]
+    for exercice in exercices:
+        if str(exercice) not in par_exercice or "précédente" in clotures[exercice][1]:
+            continue
+        tableau = clotures[exercice][0]
+        for indicateur, partie, debut in BALANCE_ET_TABLEAU:
+            if indicateur not in par_exercice[str(exercice)]:
+                continue
+            balance = int(referentiel[indicateur]["signe"]) * float(par_exercice[str(exercice)][indicateur]) / 1e6
+            if debut is None:
+                candidats = [f"COMPTES_ETAT.EHB.{partie}"]
+            else:
+                candidats = [f for f in fonctions if f.startswith(f"COMPTES_ETAT.EHB.{partie}.")
+                             and fonctions[f]["libelle"].startswith(debut) and montant(tableau, f) is not None
+                             and f.count(".") <= 4]
+            if len(candidats) != 1:
+                continue
+            v = montant(tableau, candidats[0])
+            proches[indicateur].append((exercice, abs(v - balance) <= max(1000, 0.005 * abs(balance))))
+            lignes.append(f"| {exercice} | {indicateur} | {md(balance)} | {md(v)} | {md(v - balance, 1, True)} |")
+    lignes += ["", "Par indicateur, les exercices où le tableau et la balance concordent à moins d'un milliard d'euros "
+               "ou de 0,5 % : "
+               + " ; ".join(f"{i} : {sum(ok for _, ok in liste)} sur {len(liste)}"
+                            + (f" ({suite_annees({e for e, ok in liste if ok})})"
+                               if 0 < sum(ok for _, ok in liste) < len(liste) else "")
+                            for i, liste in proches.items())
+               + ". Là où ils s'écartent, le tableau est toujours au-dessus de la balance : il range sous ces lignes "
+               "des engagements que la balance ne porte pas sous l'indicateur de même nom, ou ne porte pas en classe 8 ; "
+               "la base ne sait pas dire lesquels sans le compte général lui-même, et les donne tels quels.", ""]
+    return lignes
+
+
 def ecrire_rapport(derniers):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
@@ -4807,6 +5255,8 @@ def ecrire_rapport(derniers):
     lignes += partie_financement_vote(derniers) + partie_emplois_votes(derniers) + partie_lfr(derniers)
     lignes += partie_lfr_recettes(derniers) + partie_lfr_financement(derniers) + partie_lfr_emplois(derniers)
     lignes += partie_emplois_consommes(derniers) + partie_fonction_publique(derniers)
+    lignes += partie_depenses_fiscales(derniers) + partie_niches_sociales(derniers)
+    lignes += partie_engagements_hors_bilan(derniers)
     RAPPORT.parent.mkdir(exist_ok=True)
     RAPPORT.write_text("\n".join(lignes).rstrip("\n") + "\n", encoding="utf-8")
     print(f"écrit : {RAPPORT.relative_to(RACINE)}")
