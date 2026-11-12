@@ -21,10 +21,12 @@ tables balances_etat et plan_comptable_etat. La vue v_organismes donne les organ
 officielles, avec les libellés de leur sous-secteur et de leur fonction.
 """
 
+import concurrent.futures
 import csv
 import hashlib
 import io
-import itertools
+import os
+import pickle
 import sqlite3
 
 import importer_balances_etat as balances
@@ -307,105 +309,166 @@ BALANCES_ETAT = [("lot", "INTEGER"), ("compte", "TEXT"), ("mission", "TEXT"), ("
 PLAN_COMPTABLE_ETAT = [("lot", "INTEGER"), ("compte", "TEXT"), ("libelle", "TEXT")]
 
 
+# Chaque copie archivée est lue à part, par une fonction qui rend ses lignes, table par table : [(table, lignes)]. Les
+# copies se lisent ainsi plusieurs à la fois, chacune dans un processus, et s'inscrivent dans la base dans leur ordre.
+
+def lot_collectivites(inscrit, fichier, lot, concepts, agregats):
+    """Les lignes d'une copie d'un jeu de l'OFGL : les comptes de chaque collectivité, ou la liste des collectivités ;
+    `lot` est le numéro de ligne de la copie inscrite, `concepts` donne celui de chaque concept."""
+    par_fonction = inscrit["source_id"] in ofgl.PAR_FONCTION
+    par_budget = inscrit["source_id"] in ofgl.PAR_BUDGET or par_fonction
+    dotations, fiscalite = inscrit["source_id"] in ofgl.DOTATIONS, inscrit["source_id"] in ofgl.FISCALITE
+    if inscrit["contenu"] == "montants" and dotations:
+        return [("dotations", [[lot, *l] for l in ofgl.montants_dotations(fichier)])]
+    if inscrit["contenu"] == "montants" and fiscalite:
+        return [("fiscalite", [[lot, *l[:7], l[7] or None] for l in ofgl.montants_fiscalite(fichier)])]
+    if inscrit["contenu"] == "montants" and par_fonction:
+        return [("comptes_fonctions", [[lot, s, b, n, len(f), f, l, r, concepts[agregats[a]], v]
+                                       for s, b, n, f, l, r, a, v in ofgl.montants_fonctions(fichier, agregats)])]
+    if inscrit["contenu"] == "montants" and par_budget:
+        return [("comptes_budgets", [[lot, s, b, concepts[agregats[a]], v]
+                                     for s, b, a, v in ofgl.montants_budgets(fichier, agregats)])]
+    if inscrit["contenu"] == "montants":
+        return [("comptes_collectivites", [[lot, s, concepts[agregats[a]], *v]
+                                           for s, a, *v in ofgl.montants(fichier, agregats)])]
+    if inscrit["contenu"] != "collectivites":
+        return []
+    fiches, _ = ofgl.collectivites(fichier)
+    table, correspondance, nom = ((BENEFICIAIRES, CHAMPS_BENEFICIAIRES[inscrit["source_id"]], "beneficiaires")
+                                  if dotations else
+                                  (COMMUNES_FISCALITE, CHAMPS_COMMUNES_FISCALITE, "communes_fiscalite")
+                                  if fiscalite else (BUDGETS, CHAMPS_BUDGETS, "budgets") if par_budget
+                                  else (COLLECTIVITES, CHAMPS_COLLECTIVITES, "collectivites"))
+    lues = []
+    for _, fiche in sorted(fiches.items()):
+        colonnes = {correspondance[c]: v for c, v in fiche.items()}
+        colonnes["population"] = int(colonnes["population"]) if colonnes.get("population") else None
+        lues.append([lot] + [colonnes.get(c) for c, _ in table[1:]])
+    return [(nom, lues)]
+
+
 def lignes_collectivites(lots, concepts):
-    """(table, lignes) des comptes de chaque collectivité et des collectivités, une copie après l'autre ; `lots` et
-    `concepts` donnent le numéro de ligne de chaque copie inscrite et de chaque concept."""
+    """Les lectures (fonction, arguments) des comptes de chaque collectivité et des collectivités, une par copie ; `lots`
+    et `concepts` donnent le numéro de ligne de chaque copie inscrite et de chaque concept."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     agregats = {a["agregat"]: a["concept_id"] for a in lire("tables/agregats_ofgl.csv")}
-    for inscrit in lire("tables/fichiers_collectivites.csv"):
-        fichier, lot = fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]]
-        par_fonction = inscrit["source_id"] in ofgl.PAR_FONCTION
-        par_budget = inscrit["source_id"] in ofgl.PAR_BUDGET or par_fonction
-        dotations, fiscalite = inscrit["source_id"] in ofgl.DOTATIONS, inscrit["source_id"] in ofgl.FISCALITE
-        if inscrit["contenu"] == "montants" and dotations:
-            yield "dotations", [[lot, *l] for l in ofgl.montants_dotations(fichier)]
-        elif inscrit["contenu"] == "montants" and fiscalite:
-            yield "fiscalite", [[lot, *l[:7], l[7] or None] for l in ofgl.montants_fiscalite(fichier)]
-        elif inscrit["contenu"] == "montants" and par_fonction:
-            yield "comptes_fonctions", [[lot, s, b, n, len(f), f, l, r, concepts[agregats[a]], v]
-                                        for s, b, n, f, l, r, a, v in ofgl.montants_fonctions(fichier, agregats)]
-        elif inscrit["contenu"] == "montants" and par_budget:
-            yield "comptes_budgets", [[lot, s, b, concepts[agregats[a]], v]
-                                      for s, b, a, v in ofgl.montants_budgets(fichier, agregats)]
-        elif inscrit["contenu"] == "montants":
-            yield "comptes_collectivites", [[lot, s, concepts[agregats[a]], *v]
-                                            for s, a, *v in ofgl.montants(fichier, agregats)]
-        elif inscrit["contenu"] == "collectivites":
-            fiches, _ = ofgl.collectivites(fichier)
-            table, correspondance, nom = ((BENEFICIAIRES, CHAMPS_BENEFICIAIRES[inscrit["source_id"]], "beneficiaires")
-                                          if dotations else
-                                          (COMMUNES_FISCALITE, CHAMPS_COMMUNES_FISCALITE, "communes_fiscalite")
-                                          if fiscalite else (BUDGETS, CHAMPS_BUDGETS, "budgets") if par_budget
-                                          else (COLLECTIVITES, CHAMPS_COLLECTIVITES, "collectivites"))
-            lues = []
-            for _, fiche in sorted(fiches.items()):
-                colonnes = {correspondance[c]: v for c, v in fiche.items()}
-                colonnes["population"] = int(colonnes["population"]) if colonnes.get("population") else None
-                lues.append([lot] + [colonnes.get(c) for c, _ in table[1:]])
-            yield nom, lues
+    return [(lot_collectivites, (inscrit, fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]], concepts,
+                                 agregats)) for inscrit in lire("tables/fichiers_collectivites.csv")]
+
+
+def lot_rei(inscrit, fichier, lot, postes, referentiel):
+    """Les lignes d'une copie du REI : son tracé, la fiche de chaque commune et ses impositions ; `lot` est le numéro de
+    ligne de la copie inscrite, `postes` donne celui de chaque imposition (taxe, destinataire)."""
+    exercice, variables, _, lignes = rei.lignes_communes(fichier)
+    retenus = rei.postes(exercice, variables, referentiel, inscrit["fichier_id"])
+    communes, impositions = [], []
+    for commune, valeurs in lignes:
+        fiche = rei.fiche(valeurs)
+        communes.append([lot, commune] + [fiche[c] or None for c in rei.FICHE])
+        impositions += [[lot, commune, postes[(t, d)], *g] for t, d, *g in rei.impositions(valeurs, retenus)]
+    return [("traces_rei", [[lot, rang, *v] for rang, v in enumerate(variables, start=1)]),
+            ("communes_rei", communes), ("impositions_rei", impositions)]
 
 
 def lignes_rei(lots, postes):
-    """(table, lignes) du REI, une copie après l'autre : son tracé, la fiche de chaque commune et ses impositions ;
-    `lots` et `postes` donnent le numéro de ligne de chaque copie inscrite et de chaque imposition (taxe, destinataire)."""
+    """Les lectures (fonction, arguments) du REI, une par copie ; `lots` et `postes` donnent le numéro de ligne de
+    chaque copie inscrite et de chaque imposition (taxe, destinataire)."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     referentiel = lire("tables/variables_rei.csv")
-    for inscrit in lire("tables/fichiers_rei.csv"):
-        lot = lots[inscrit["fichier_id"]]
-        exercice, variables, _, lignes = rei.lignes_communes(fichiers[inscrit["fichier_id"]])
-        yield "traces_rei", [[lot, rang, *v] for rang, v in enumerate(variables, start=1)]
-        retenus = rei.postes(exercice, variables, referentiel, inscrit["fichier_id"])
-        communes, impositions = [], []
-        for commune, valeurs in lignes:
-            fiche = rei.fiche(valeurs)
-            communes.append([lot, commune] + [fiche[c] or None for c in rei.FICHE])
-            impositions += [[lot, commune, postes[(t, d)], *g] for t, d, *g in rei.impositions(valeurs, retenus)]
-        yield "communes_rei", communes
-        yield "impositions_rei", impositions
+    return [(lot_rei, (inscrit, fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]], postes, referentiel))
+            for inscrit in lire("tables/fichiers_rei.csv")]
+
+
+def lot_individuel(inscrit, fichier, lot, variables, referentiel):
+    """Les lignes d'une copie de comptes individuels : la fiche de chaque collectivité et ses valeurs ; `lot` est le
+    numéro de ligne de la copie inscrite, `variables` donne celui de chaque ligne du référentiel des variables de la
+    source, sous (variable, premier exercice)."""
+    source = inscrit["source_id"]
+    exercice, lues, _, _ = individuels.comptes(fichier, referentiel)
+    numeros = {v: variables[(v, l["premier_exercice"])]
+               for v, l in individuels.retenues(source, exercice, referentiel).items()}
+    colonnes = {c: colonne for c, colonne, _, _ in individuels.FICHES[source] if colonne}
+    fiches, valeurs = [], []
+    for code, decrits, montants in lues:
+        fiche = {colonnes[c]: v for c, v in decrits.items() if c in colonnes}
+        fiches.append([lot, code] + [(int(fiche[c].split(".")[0]) if fiche.get(c) and c in ENTIERS_FICHES
+                                      else fiche.get(c) or None) for c, _ in FICHES_INDIVIDUELLES[2:]])
+        valeurs += [[lot, code, numeros[v], m] for v, m in montants.items()]
+    return [("fiches_individuelles", fiches), ("comptes_individuels", valeurs)]
 
 
 def lignes_individuelles(lots, variables):
-    """(table, lignes) des comptes individuels, une copie de comptes après l'autre : la fiche de chaque collectivité et
-    ses valeurs ; `lots` et `variables` donnent le numéro de ligne de chaque copie inscrite et de chaque ligne du
-    référentiel des variables, sous (source, variable, premier exercice)."""
+    """Les lectures (fonction, arguments) des comptes individuels, une par copie de comptes ; `lots` et `variables`
+    donnent le numéro de ligne de chaque copie inscrite et de chaque ligne du référentiel des variables, sous (source,
+    variable, premier exercice)."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     referentiel = lire("tables/variables_comptes_individuels.csv")
-    for inscrit in lire("tables/fichiers_comptes_individuels.csv"):
-        if inscrit["contenu"] != "comptes":
-            continue
-        lot, source = lots[inscrit["fichier_id"]], inscrit["source_id"]
-        exercice, lues, _, _ = individuels.comptes(fichiers[inscrit["fichier_id"]], referentiel)
-        numeros = {v: variables[(source, v, l["premier_exercice"])]
-                   for v, l in individuels.retenues(source, exercice, referentiel).items()}
-        colonnes = {c: colonne for c, colonne, _, _ in individuels.FICHES[source] if colonne}
-        fiches, valeurs = [], []
-        for code, decrits, montants in lues:
-            fiche = {colonnes[c]: v for c, v in decrits.items() if c in colonnes}
-            fiches.append([lot, code] + [(int(fiche[c].split(".")[0]) if fiche.get(c) and c in ENTIERS_FICHES
-                                          else fiche.get(c) or None) for c, _ in FICHES_INDIVIDUELLES[2:]])
-            valeurs += [[lot, code, numeros[v], m] for v, m in montants.items()]
-        yield "fiches_individuelles", fiches
-        yield "comptes_individuels", valeurs
+    return [(lot_individuel, (inscrit, fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]],
+                              {(v, p): r for (s, v, p), r in variables.items() if s == inscrit["source_id"]},
+                              referentiel))
+            for inscrit in lire("tables/fichiers_comptes_individuels.csv") if inscrit["contenu"] == "comptes"]
+
+
+def lot_balance(inscrit, fichier, lot, indicateurs, referentiel):
+    """Les lignes d'une copie d'une balance des comptes de l'État, ou du plan comptable ; `lot` est le numéro de ligne
+    de la copie inscrite, `indicateurs` donne celui de chaque ligne du référentiel des indicateurs, sous (indicateur,
+    premier exercice)."""
+    if inscrit["contenu"] == "plan":
+        return [("plan_comptable_etat", [[lot, c, l or None] for c, l in sorted(balances.plan(fichier).items())])]
+    if inscrit["contenu"] != "balance":
+        return []
+    exercice, decrites, soldes = balances.balance(fichier, referentiel)
+    numeros = {i: indicateurs[(i, l["premier_exercice"])]
+               for i, l in balances.indicateurs_de(exercice, referentiel).items()}
+    return [("balances_etat", [[lot, d["compte"]] + [d[c] or None for c in (
+        "mission", "libellemission", "programme", "nature_budgetaire", "libelle_ministere")]
+        + [numeros[d["indicateurs_de_synthese"]], d["sous_postes"] or None, d["indicateurs_de_detail"] or None,
+           float(s)] for d, s in zip(decrites, soldes)])]
 
 
 def lignes_balances(lots, indicateurs):
-    """(table, lignes) des balances des comptes de l'État et du plan comptable, une copie après l'autre ; `lots` et
-    `indicateurs` donnent le numéro de ligne de chaque copie inscrite et de chaque ligne du référentiel des indicateurs,
-    sous (indicateur, premier exercice)."""
+    """Les lectures (fonction, arguments) des balances des comptes de l'État et du plan comptable, une par copie ;
+    `lots` et `indicateurs` donnent le numéro de ligne de chaque copie inscrite et de chaque ligne du référentiel des
+    indicateurs, sous (indicateur, premier exercice)."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     referentiel = lire("tables/indicateurs_balances_etat.csv")
-    for inscrit in lire("tables/fichiers_balances_etat.csv"):
-        lot, fichier = lots[inscrit["fichier_id"]], fichiers[inscrit["fichier_id"]]
-        if inscrit["contenu"] == "plan":
-            yield "plan_comptable_etat", [[lot, c, l or None] for c, l in sorted(balances.plan(fichier).items())]
-        elif inscrit["contenu"] == "balance":
-            exercice, decrites, soldes = balances.balance(fichier, referentiel)
-            numeros = {i: indicateurs[(i, l["premier_exercice"])]
-                       for i, l in balances.indicateurs_de(exercice, referentiel).items()}
-            yield "balances_etat", [[lot, d["compte"]] + [d[c] or None for c in (
-                "mission", "libellemission", "programme", "nature_budgetaire", "libelle_ministere")]
-                + [numeros[d["indicateurs_de_synthese"]], d["sous_postes"] or None, d["indicateurs_de_detail"] or None,
-                   float(s)] for d, s in zip(decrites, soldes)]
+    return [(lot_balance, (inscrit, fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]], indicateurs,
+                           referentiel)) for inscrit in lire("tables/fichiers_balances_etat.csv")]
+
+
+def lire_lot(fonction, arguments):
+    """Les lignes d'une copie, table par table, avec leur texte csv, dont la base garde l'empreinte : [(table, lignes,
+    texte)]. Les lignes sont rendues sérialisées (pickle) : lues d'avance, elles attendent leur tour sous cette forme
+    compacte."""
+    lots = []
+    for table, lues in fonction(*arguments):
+        texte = io.StringIO()
+        csv.writer(texte, lineterminator="\n").writerows(lues)
+        lots.append((table, pickle.dumps(lues, pickle.HIGHEST_PROTOCOL), texte.getvalue().encode("utf-8")))
+    return lots
+
+
+def lots_lus(lectures):
+    """Les lignes de chaque copie, dans l'ordre des lectures, lues plusieurs à la fois : autant de processus que la
+    machine a de processeurs (ou que le dit la variable d'environnement PROCESSUS), et pas plus de copies lues d'avance
+    que de processus, pour que leurs lignes ne s'entassent pas en mémoire."""
+    def lignes(lots):
+        for table, lues, texte in lots:
+            yield table, pickle.loads(lues), texte
+
+    processus = min(int(os.environ.get("PROCESSUS") or os.cpu_count() or 1), len(lectures))
+    if processus < 2:
+        for lecture in lectures:
+            yield from lignes(lire_lot(*lecture))
+        return
+    with concurrent.futures.ProcessPoolExecutor(processus) as bassin:
+        en_cours = []
+        for lecture in lectures:
+            en_cours.append(bassin.submit(lire_lot, *lecture))
+            if len(en_cours) > processus:
+                yield from lignes(en_cours.pop(0).result())
+        for tache in en_cours:
+            yield from lignes(tache.result())
 
 
 def valeur_sql(champ, texte):
@@ -465,15 +528,13 @@ def main():
     lots_balances = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_balances_etat")}
     indicateurs = {(i, p): r for r, i, p in
                    connexion.execute("SELECT rowid, indicateur, premier_exercice FROM indicateurs_balances_etat")}
-    for table, lues in itertools.chain(lignes_collectivites(lots, concepts), lignes_rei(lots_rei, postes),
-                                       lignes_individuelles(lots_individuels, variables),
-                                       lignes_balances(lots_balances, indicateurs)):
+    for table, lues, texte in lots_lus(lignes_collectivites(lots, concepts) + lignes_rei(lots_rei, postes)
+                                       + lignes_individuelles(lots_individuels, variables)
+                                       + lignes_balances(lots_balances, indicateurs)):
         if not lues:
             continue
         connexion.executemany(f"INSERT INTO {table} VALUES ({', '.join('?' * len(lues[0]))})", lues)
-        texte = io.StringIO()
-        csv.writer(texte, lineterminator="\n").writerows(lues)
-        hachages[table][0].update(texte.getvalue().encode("utf-8"))
+        hachages[table][0].update(texte)
         hachages[table][1] += len(lues)
     connexion.execute("CREATE INDEX comptes_collectivites_lot ON comptes_collectivites (lot, concept)")
     connexion.execute("CREATE INDEX comptes_collectivites_siren ON comptes_collectivites (siren)")

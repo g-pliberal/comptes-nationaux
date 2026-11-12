@@ -57,6 +57,7 @@ Les tableaux de l'Insee font foi pour la France : Eurostat reprend les comptes q
 | `tables/chiffres/<producteur>/<tableau>.csv` | les chiffres, un par ligne, avec leur fiche d'identité ; un fichier par source (un tableau de l'Insee, un jeu de données d'Eurostat), et `tiers.csv` pour les chiffres cités par un tiers |
 | `tables/sources.csv` | producteurs et publications : statistiques officielles, documents publics, articles, communications |
 | `tables/fichiers.csv` | copies archivées des fichiers sources : requête exacte, date, empreinte SHA-256 |
+| `tables/verifications.csv` | copies archivées vérifiées à jour : la source annonçait une nouvelle date de mise à jour, mais le fichier reçu était celui de la copie |
 | `tables/concepts.csv` | ce qui est mesuré, défini dans une norme (par exemple la dépense totale au sens du SEC 2010) |
 | `tables/normes.csv` | normes et méthodes de référence |
 | `tables/perimetres.csv` | secteurs et sous-secteurs : administrations publiques, administration centrale, locale, sécurité sociale… |
@@ -182,6 +183,27 @@ python3 outils/controler_coherence.py              # met à jour le rapport de c
 
 Quand l'Insee ou Eurostat publie une nouvelle version, on archive le nouveau fichier et on l'importe : seuls les chiffres qui changent s'ajoutent, sous la nouvelle version.
 
+## Repérer les nouvelles versions des sources
+
+```sh
+python3 outils/surveiller.py                 # compare ce que publie chaque source à sa copie archivée la plus récente
+python3 outils/surveiller.py --source ofgl.  # ne regarde que les sources dont l'identifiant commence ainsi
+python3 outils/surveiller.py --commandes     # écrit les commandes d'archivage de ce qui a changé
+```
+
+La veille ne modifie rien. Elle signale :
+
+- un jeu de données modifié sur son portail (data.ofgl.fr, data.economie.gouv.fr, data.drees) : la date de modification qu'annonce le portail est plus récente que celle sous laquelle ses copies ont été archivées, ou qu'une pièce jointe n'a été téléchargée ; rien n'est téléchargé ;
+- un fichier dont le contenu a changé : toute autre adresse est téléchargée de nouveau, et son empreinte comparée à celle de la copie ; une réponse que le serveur compose à chaque requête (séries SDMX de l'Insee, JSON-stat d'Eurostat) est comparée sans l'heure qu'il y inscrit ;
+- un nouveau millésime : dans une série de jeux millésimés (les comptes individuels de la DGFiP), un jeu d'une année plus récente que celles que la base a archivées ;
+- une adresse qui n'existe plus.
+
+Elle ne voit pas une nouvelle édition publiée à une nouvelle adresse : un tableau de l'Insee change d'adresse à chaque campagne de comptes, une loi de finances est un nouveau texte.
+
+Un jeu de données peut avoir changé sans que chacun de ses exports ait changé. En archivant de nouveau un export identique à sa copie, `archiver.py` n'inscrit pas de doublon : il inscrit dans `tables/verifications.csv` que la copie est encore à jour à la date qu'annonce la source, et la veille ne la signale plus.
+
+GitHub lance la veille chaque lundi (`.github/workflows/veille.yml`) et tient à jour un ticket « Sources à revoir », qu'il ferme quand il n'y a plus rien à revoir.
+
 Cité par un tiers : déclarer la source, puis ajouter la ligne dans `tables/chiffres/tiers.csv` avec l'endroit exact où figure le chiffre, et lancer le contrôle. Le contrôle refuse un identifiant qui ne correspond pas à la fiche.
 
 ## Contrôler la cohérence des sources
@@ -221,8 +243,13 @@ Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis
 ## Interroger la base
 
 ```sh
-python3 outils/construire.py   # écrit base/construite/comptes.sqlite et base/construite/empreintes.csv
+python3 outils/telecharger.py  # télécharge la dernière base publiée : base/construite/comptes.sqlite et empreintes.csv
+python3 outils/construire.py   # ou la construit à partir des tables et des copies archivées : mêmes fichiers
 ```
+
+La base se télécharge sans la reconstruire : chaque fois qu'elle change sur la branche principale et que les contrôles passent, GitHub la publie dans les « Releases » du dépôt, compressée (xz) et découpée en parties de moins de 2 Go, la limite d'un fichier de « Release ». `telecharger.py` prend la dernière publication, ou celle de l'étiquette donnée (`--version base-2026-11-12-e8d2dff`), vérifie l'empreinte de chaque partie, puis celle de la base décompressée. À la main : `cat comptes.sqlite.xz.partie* | xz -d > comptes.sqlite`.
+
+Chaque publication dit de quel commit du dépôt elle vient et donne, dans `empreintes.csv`, l'empreinte du contenu de chaque table. Reconstruire la base au même commit écrit le même fichier : qui veut vérifier la base publiée la reconstruit et compare les deux. `python3 outils/publier.py` prépare les fichiers d'une publication à partir d'une base construite.
 
 La base SQLite s'ouvre avec n'importe quel outil SQLite (par exemple DB Browser for SQLite). Elle contient une table par fichier de `tables/`, toutes les familles de chiffres étant réunies dans `chiffres`, et trois vues :
 
