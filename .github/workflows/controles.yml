@@ -4,8 +4,10 @@ on:
   push:
   pull_request:
 
+# Les trois contrôles tournent en même temps, chacun sur sa machine ; la base n'est publiée que s'ils passent tous.
 jobs:
-  base:
+  valider:
+    name: Contrôler la base
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,9 +16,79 @@ jobs:
           python-version: "3.12"
       - name: Contrôler la base
         run: python3 outils/valider.py
+
+  coherence:
+    name: Rapport de cohérence et synthèse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Vérifier que la synthèse est à jour
+        run: |
+          python3 outils/synthetiser.py
+          git diff --exit-code -- SYNTHESE.md
       - name: Vérifier que le rapport de cohérence est à jour
         run: |
           python3 outils/controler_coherence.py
           git diff --exit-code -- controles
+
+  construire:
+    name: Construire la base
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - name: Construire la base
         run: python3 outils/construire.py
+      - name: Préparer la publication
+        run: python3 outils/publier.py
+      - name: Vérifier que la publication redonne la base
+        run: |
+          rm base/construite/comptes.sqlite
+          python3 outils/telecharger.py --depuis base/publication
+          cmp base/construite/empreintes.csv base/publication/empreintes.csv
+      - name: Garder la publication
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: publication
+          path: base/publication
+          compression-level: 0
+          retention-days: 1
+
+  publier:
+    name: Publier la base
+    needs: [valider, coherence, construire]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency: publication
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: publication
+          path: publication
+      - name: Publier la base dans les « Releases »
+        run: |
+          etiquette=$(jq -r .etiquette publication/publication.json)
+          if gh release view "$etiquette" > /dev/null 2>&1; then
+            echo "Déjà publiée : $etiquette"
+            exit 0
+          fi
+          # Une modification qui ne change aucune table (un texte, un outil) ne donne pas de nouvelle publication.
+          if gh release download --pattern empreintes.csv --dir precedente 2> /dev/null \
+              && cmp -s precedente/empreintes.csv publication/empreintes.csv; then
+            echo "Base inchangée depuis la dernière publication : rien à publier."
+            exit 0
+          fi
+          gh release create "$etiquette" --target "$GITHUB_SHA" --title "$(jq -r .titre publication/publication.json)" \
+            --notes-file publication/notes.md \
+            publication/comptes.sqlite.xz.partie* publication/empreintes.csv publication/publication.json

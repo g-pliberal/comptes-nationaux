@@ -2,6 +2,7 @@
 
 import bisect
 import bz2
+import concurrent.futures
 import csv
 import datetime
 import hashlib
@@ -10,6 +11,7 @@ import io
 import itertools
 import json
 import math
+import os
 import pathlib
 import re
 import sys
@@ -24,8 +26,11 @@ BASE = RACINE / "base"
 PAQUET = BASE / "datapackage.json"
 SCHEMA_CHIFFRES = "schemas/chiffres.json"
 
+# Le dépôt GitHub de la base, où ses « Releases » publient la base construite.
+DEPOT = "g-pliberal/comptes-nationaux"
+
 # Certains serveurs (dont celui de l'OCDE) refusent l'agent par défaut de Python.
-AGENT = "comptes-nationaux (+https://github.com/g-pliberal/comptes-nationaux)"
+AGENT = f"comptes-nationaux (+https://github.com/{DEPOT})"
 
 # Composantes de l'identifiant d'un chiffre, dans l'ordre. Une composante vide s'écrit « - ».
 COMPOSANTES_ID = ["source_id", "zone", "perimetre_id", "concept_id", "fonction_id", "traitements",
@@ -126,6 +131,25 @@ def lire_export_ofgl(chemin):
         lecteur = csv.reader(io.TextIOWrapper(f, encoding="utf-8-sig", newline=""), delimiter=";")
         entete = next(lecteur, [])
         return entete, list(lecteur)
+
+
+def en_parallele(fonction, appels, poids=None):
+    """Les résultats de fonction(*a) pour chaque a de `appels`, dans leur ordre, calculés par autant de processus que la
+    machine a de processeurs (ou que le dit la variable d'environnement PROCESSUS) ; `poids` donne un nombre par appel,
+    et les plus lourds partent d'abord. Avec un seul processus, ou pour un seul appel, tout se calcule ici. La fonction
+    et ses arguments passent d'un processus à l'autre : la fonction est définie au niveau d'un module, et rend son
+    résultat plutôt que d'arrêter le programme."""
+    appels = [tuple(a) for a in appels]
+    processus = min(int(os.environ.get("PROCESSUS") or os.cpu_count() or 1), len(appels))
+    if processus < 2:
+        return [fonction(*a) for a in appels]
+    ordre = sorted(range(len(appels)), key=lambda k: -(poids[k] if poids else 0))
+    resultats = [None] * len(appels)
+    with concurrent.futures.ProcessPoolExecutor(processus) as bassin:
+        taches = {bassin.submit(fonction, *appels[k]): k for k in ordre}
+        for tache in concurrent.futures.as_completed(taches):
+            resultats[taches[tache]] = tache.result()
+    return resultats
 
 
 def maintenant():

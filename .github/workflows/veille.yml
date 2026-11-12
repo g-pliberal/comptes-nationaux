@@ -1,0 +1,49 @@
+name: Veille des sources
+
+# Chaque lundi, compare ce que publient les sources à leurs copies archivées ; ce qui a changé est signalé dans un
+# ticket du dépôt, tenu à jour d'une semaine à l'autre et fermé quand il n'y a plus rien à revoir et que toutes les
+# sources ont répondu.
+on:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  veille:
+    name: Chercher de nouvelles versions des sources
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Comparer les sources à leurs copies archivées
+        id: veille
+        run: |
+          set -o pipefail
+          python3 outils/surveiller.py --rapport veille.md | tee -a "$GITHUB_STEP_SUMMARY"
+          if [ -s veille.md ]; then cat veille.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - name: Tenir à jour le ticket des sources à revoir
+        run: |
+          gh label create veille --description "Sources à revoir, signalées par la veille" --color 0e8a16 --force
+          numero=$(gh issue list --label veille --state open --json number --jq '.[0].number // empty')
+          if [ ! -s veille.md ]; then
+            if [ -n "$numero" ] && [ "${{ steps.veille.outputs.sans_reponse }}" = "0" ]; then
+              gh issue close "$numero" --comment "Plus rien à revoir : les copies archivées sont à jour."
+            fi
+            exit 0
+          fi
+          head -c 60000 veille.md > corps.md
+          if [ -z "$numero" ]; then
+            gh issue create --title "Sources à revoir" --label veille --body-file corps.md
+          elif ! diff -q <(gh issue view "$numero" --json body --jq .body | tr -d '\r') corps.md > /dev/null; then
+            gh issue edit "$numero" --body-file corps.md
+            gh issue comment "$numero" --body "La liste des sources à revoir a changé le $(date -u +%F)."
+          fi
