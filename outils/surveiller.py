@@ -41,7 +41,7 @@ import urllib.error
 import urllib.parse
 
 from archiver import date_annoncee, telecharger
-from commun import BASE, decoder_html, lire, morceaux, ouvrir_copie, texte_html
+from commun import BASE, RELEASES, decoder_html, lire, morceaux, ouvrir_copie, texte_html
 
 ESSAIS = 6  # une veille n'insiste pas autant qu'un archivage : une source muette aujourd'hui sera revue la prochaine fois
 PAUSE = 0.5  # secondes entre deux requêtes à un même serveur
@@ -80,9 +80,11 @@ def date_connue(copie, verifications, jointe=False):
 
 
 def options_archivage(copie):
-    """Les options sous lesquelles la copie a été archivée : compressée, ou découpée."""
+    """Les options sous lesquelles la copie a été archivée : compressée, découpée, ou rangée dans une Release."""
     if copie["chemin"].endswith(".bz2"):
         return " --compresser"
+    if copie["chemin"].startswith(RELEASES + "/"):
+        return " --release"
     return " --decouper" if morceaux(BASE / copie["chemin"]) else ""
 
 

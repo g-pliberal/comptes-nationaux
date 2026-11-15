@@ -5299,8 +5299,17 @@ def partie_engagements_hors_bilan(derniers):
 # la catégorie du jeu de l'OFGL qui la publie, d'après la balance qui la porte, quel que soit le jeu de la DGFiP où elle
 # figure : les collectivités territoriales uniques de Guyane et de Martinique sont dans les balances des départements et
 # dans le jeu des régions de l'OFGL.
-JEUX_RECALCULES = {"ofgl.base-departements-consolidee": "Départements", "ofgl.base-regions-consolidee": "Régions"}
-NIVEAUX_BALANCES = {"dgfip.balances-departements": "Départements", "dgfip.balances-regions": "Régions"}
+JEUX_RECALCULES = {"ofgl.base-departements-consolidee": "Départements", "ofgl.base-regions-consolidee": "Régions",
+                   "ofgl.base-communes-consolidee": "Communes",
+                   "ofgl.base-gfp-consolidee": "Groupements à fiscalité propre",
+                   "ofgl.base-syndicats-consolidee": "Syndicats", "ofgl.base-epl-consolidee": "EPL"}
+NIVEAUX_BALANCES = {"dgfip.balances-departements": "Départements", "dgfip.balances-regions": "Régions",
+                    "dgfip.balances-communes": "Communes", "dgfip.balances-gfp": "Groupements à fiscalité propre",
+                    "dgfip.balances-syndicats": "Syndicats", "dgfip.balances-epl": "Établissements publics locaux"}
+JEU_DES_BALANCES = {"dgfip.balances-communes": "ofgl.base-communes-consolidee",
+                    "dgfip.balances-gfp": "ofgl.base-gfp-consolidee",
+                    "dgfip.balances-syndicats": "ofgl.base-syndicats-consolidee",
+                    "dgfip.balances-epl": "ofgl.base-epl-consolidee"}
 MONTANTS_RECALCULES = ("budget principal", "budgets annexes", "flux croisés")
 ECARTS_CITES = 15  # écarts cités, les plus grands d'abord
 
@@ -5321,69 +5330,112 @@ def balances_collectivites_retenues():
 
 def recalcul_exercice(exercice, balances_, formules, montants, agregats):
     """Pour un exercice : {jeu de l'OFGL: (collectivités du jeu, recalculées, numéros Siren de celles sans balance,
-    montants comparés, égaux, {agrégat: montants non recalculés}, agrégats absents du jeu, [écarts])}, un écart étant (|écart|, siren, nom, agrégat, montant,
-    recalculé, publié), en euros."""
-    fiches, lignes = {}, []
-    for fichier in balances_:
-        _, f, l = balances_collectivites.balance(fichier)
-        fiches.update(f)
-        lignes += l
-    noms = {f["siren"]: f["nom"] for f in fiches.values() if f["type_budget"] == "principal"}
-    resultat = {}
+    montants comparés, égaux, {agrégat: montants non recalculés}, agrégats absents du jeu, [écarts])}, un écart étant
+    (|écart|, siren, nom, agrégat, montant, recalculé, publié), en euros. Les balances se lisent budget par budget, et
+    chaque collectivité se recalcule dès que ses budgets, qui se suivent, sont lus : une balance des communes a plusieurs
+    millions de lignes."""
+    publies, jeux_de, formulaires = {}, collections.defaultdict(list), {}
     for jeu, categorie in JEUX_RECALCULES.items():
         if jeu not in montants:
             continue
-        publies = collections.defaultdict(dict)
+        publies[jeu] = collections.defaultdict(dict)
         for siren, agregat, *valeurs in ofgl.montants(montants[jeu], agregats):
-            publies[siren][agregat] = valeurs[:3]
-        avec = {s for s in publies if s in noms}
-        recalcules = formules_ofgl.recalculer(formules_ofgl.Formulaire(formules, categorie, exercice), fiches, lignes,
-                                              avec)
-        publies_ailleurs = {a for p in publies.values() for a in p}
-        compares = egaux = absents = 0
-        ecarts, non_recalcules = [], collections.Counter()
-        for siren in sorted(avec):
-            for agregat in sorted(publies_ailleurs):
-                calcules = recalcules[siren].get(agregat, [None, None, None])
-                if agregat not in publies[siren]:
-                    absents += any(c for c in calcules)
+            publies[jeu][siren][agregat] = valeurs[:3]
+        for siren in publies[jeu]:
+            jeux_de[siren].append(jeu)
+        formulaires[jeu] = formules_ofgl.Formulaire(formules, categorie, exercice)
+    publies_ailleurs = {jeu: {a for p in liste.values() for a in p} for jeu, liste in publies.items()}
+    stats = {jeu: {"avec": set(), "compares": 0, "egaux": 0, "absents": 0, "ecarts": [],
+                   "non_recalcules": collections.Counter()} for jeu in publies}
+    def comparer(siren, groupe):
+        nom = next((f["nom"] for _, f, _ in groupe if f["type_budget"] == "principal"), None)
+        if nom is None:
+            return
+        for jeu in jeux_de[siren]:
+            s = stats[jeu]
+            s["avec"].add(siren)
+            recalcules = formules_ofgl.recalculer(formulaires[jeu], groupe)
+            for agregat in sorted(publies_ailleurs[jeu]):
+                calcules = recalcules.get(agregat, [None, None, None])
+                if agregat not in publies[jeu][siren]:
+                    s["absents"] += any(c for c in calcules)
                     continue
-                for k, (calcule, publie) in enumerate(zip(calcules, publies[siren][agregat])):
+                for k, (calcule, publie) in enumerate(zip(calcules, publies[jeu][siren][agregat])):
                     if calcule is None and k < 2:
                         if publie != 0:
-                            non_recalcules[agregat] += 1
+                            s["non_recalcules"][agregat] += 1
                         continue
                     calcule = (calcule or 0) / 100
-                    compares += 1
+                    s["compares"] += 1
                     if abs(calcule - publie) <= 1:
-                        egaux += 1
+                        s["egaux"] += 1
                     else:
-                        ecarts.append((abs(calcule - publie), siren, noms[siren], agregat, MONTANTS_RECALCULES[k],
-                                       calcule, publie))
-        sans = sorted(s for s in publies if s not in noms)
-        resultat[jeu] = (len(publies), len(avec), sans, compares, egaux, non_recalcules, absents,
-                         sorted(ecarts, reverse=True))
+                        s["ecarts"].append((abs(calcule - publie), siren, nom, agregat, MONTANTS_RECALCULES[k],
+                                            calcule, publie))
+
+    # Les budgets d'une collectivité se suivent presque toujours : elle se recalcule dès qu'ils sont lus. Ceux des
+    # quelques collectivités dont les budgets sont dispersés, dans un fichier ou d'un fichier à l'autre, attendent la
+    # fin de la lecture.
+    lues, disperses = set(), collections.defaultdict(list)
+    eparses, deja = set(), set()
+    for fichier in balances_:
+        disperses_ici, presents = balances_collectivites.sirens_disperses(fichier)
+        eparses |= disperses_ici | (presents & deja)
+        deja |= presents
+    for fichier in balances_:
+        for siren, groupe in itertools.groupby(balances_collectivites.budgets(fichier, []), key=lambda b: b[1]["siren"]):
+            if siren not in jeux_de:
+                continue
+            if siren in eparses:
+                disperses[siren] += list(groupe)
+                continue
+            if siren in lues:
+                raise ValueError(f"{fichier['id']} : les budgets de la collectivité {siren} ne se suivent pas")
+            lues.add(siren)
+            comparer(siren, list(groupe))
+    for siren, groupe in disperses.items():
+        comparer(siren, groupe)
+    resultat = {}
+    for jeu, s in stats.items():
+        if not s["avec"]:
+            continue  # aucune balance de l'exercice ne porte les collectivités du jeu
+        resultat[jeu] = (len(publies[jeu]), len(s["avec"]), sorted(set(publies[jeu]) - s["avec"]), s["compares"], s["egaux"], s["non_recalcules"],
+                         s["absents"], sorted(s["ecarts"], reverse=True))
     return resultat
+
+
+def exercices_recalcules():
+    """[exercice] qui ont des balances et des formules, et {(source, exercice): inscription} des balances retenues."""
+    retenues, formules_inscrites = balances_collectivites_retenues()
+    if not retenues or not formules_inscrites:
+        return [], retenues
+    exercices = sorted({e for _, e in retenues if 2012 <= int(e)})
+    return exercices, retenues
+
+
+def recalcul_balances_exercice(exercice):
+    """Le recalcul d'un exercice (recalcul_exercice), avec les balances et les formules retenues : chaque exercice se
+    recalcule dans son processus, les balances des communes ayant chacune des millions de lignes."""
+    retenues, formules_inscrites = balances_collectivites_retenues()
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
+    formules = [f for f in formules_ofgl.formules(fichiers[formules_inscrites["fichier_id"]]) if f["annee"] == exercice]
+    montants = montants_retenus()
+    publies = {jeu: fichiers[montants[(jeu, exercice)]["fichier_id"]] for jeu in JEUX_RECALCULES
+               if (jeu, exercice) in montants}
+    # Une balance des communes, des groupements, des syndicats ou des établissements publics locaux ne se lit que si
+    # l'OFGL publie l'exercice pour sa catégorie (depuis 2018) : sinon, rien à recalculer.
+    balances_ = [fichiers[i["fichier_id"]] for (s, e), i in sorted(retenues.items()) if e == exercice
+                 and (s not in JEU_DES_BALANCES or JEU_DES_BALANCES[s] in publies)]
+    return recalcul_exercice(exercice, balances_, formules, publies, agregats)
 
 
 def balances_collectivites_recalculees():
     """[(exercice, {jeu de l'OFGL: résultat du recalcul})] pour chaque exercice qui a des balances et des formules, et
     {(source, exercice): inscription} des balances retenues."""
-    retenues, formules_inscrites = balances_collectivites_retenues()
-    if not retenues:
-        return [], {}
-    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
-    agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
-    formules = formules_ofgl.formules(fichiers[formules_inscrites["fichier_id"]]) if formules_inscrites else []
-    exercices_formules = {f["annee"] for f in formules}
-    montants = montants_retenus()
-    resultat = []
-    for exercice in sorted({e for _, e in retenues} & exercices_formules):
-        balances_ = [fichiers[i["fichier_id"]] for (s, e), i in sorted(retenues.items()) if e == exercice]
-        publies = {jeu: fichiers[montants[(jeu, exercice)]["fichier_id"]] for jeu in JEUX_RECALCULES
-                   if (jeu, exercice) in montants}
-        resultat.append((exercice, recalcul_exercice(exercice, balances_, formules, publies, agregats)))
-    return resultat, retenues
+    exercices, retenues = exercices_recalcules()
+    resultat = [(e, recalcul_balances_exercice(e)) for e in exercices]
+    return [(e, r) for e, r in resultat if r], retenues
 
 
 def partie_balances_collectivites():
@@ -5391,14 +5443,18 @@ def partie_balances_collectivites():
     if not retenues:
         return []
     lignes = ["## 27. Balances comptables des collectivités", "",
-              "Les balances comptables que la DGFiP publie pour chaque budget, principal ou annexe, de chaque département "
-              "et de chaque région depuis 2010 : pour chaque compte, la balance d'entrée, les opérations de l'exercice et "
-              "le solde de sortie, au centime, dans la version la plus récente de chaque exercice. Leur import vérifie, "
-              "au centime, que le solde de sortie de chaque ligne est la balance d'entrée plus les opérations "
-              "budgétaires et non budgétaires de l'exercice, et que chaque budget s'équilibre : la somme de ses soldes "
-              "débiteurs est celle de ses soldes créditeurs.", "",
-              "| Niveau | Exercices | Lignes | Budgets au dernier exercice | Collectivités au dernier exercice |",
-              "|---|---|---|---|---|"]
+              "Les balances comptables que la DGFiP publie pour chaque budget, principal ou annexe, de chaque département, "
+              "de chaque région, de chaque commune, de chaque groupement à fiscalité propre, de chaque syndicat et de "
+              "chaque établissement public local depuis 2010 : pour chaque compte, la balance d'entrée, les opérations "
+              "de l'exercice et le solde de sortie, au centime, dans la version la plus récente de chaque exercice. Leur "
+              "import vérifie, au centime, que le solde de sortie de chaque ligne est la balance d'entrée plus les "
+              "opérations budgétaires et non budgétaires de l'exercice, et compte les budgets qui ne s'équilibrent pas : "
+              "ceux dont la somme des soldes débiteurs n'est pas celle des soldes créditeurs, tels que les publie la "
+              "DGFiP. Les balances de 2016 des groupements, des syndicats et des établissements publics locaux sont des "
+              "archives RAR, que la base garde sans les lire.", "",
+              "| Niveau | Exercices | Lignes | Budgets au dernier exercice | Collectivités au dernier exercice | "
+              "Budgets déséquilibrés |",
+              "|---|---|---|---|---|---|"]
     par_source = collections.defaultdict(list)
     for (source, exercice), inscrit in sorted(retenues.items()):
         par_source[source].append(inscrit)
@@ -5406,7 +5462,8 @@ def partie_balances_collectivites():
         dernier = max(liste, key=lambda i: i["exercice"])
         lignes.append(f"| {NIVEAUX_BALANCES[source]} | {plage([i['exercice'] for i in liste])} | "
                       f"{fr(sum(int(i['lignes']) for i in liste), 0)} | {fr(int(dernier['budgets']), 0)} | "
-                      f"{fr(int(dernier['collectivites']), 0)} |")
+                      f"{fr(int(dernier['collectivites']), 0)} | "
+                      f"{fr(sum(int(i['desequilibres'] or 0) for i in liste), 0)} |")
     if not recalculs:
         return lignes + [""]
     lignes += ["", "### Les agrégats de l'OFGL recalculés", "",
@@ -5416,9 +5473,14 @@ def partie_balances_collectivites():
                "somme de ceux des budgets annexes et les flux croisés entre eux, que l'OFGL retranche de leur somme "
                "pour consolider. Un montant est égal s'il ne s'écarte pas de plus d'un euro du montant publié. Une "
                "collectivité territoriale unique se recalcule avec les formules des régions, où la range l'OFGL, "
-               "même quand ses balances sont parmi celles des départements. Les collectivités de l'OFGL sans balance sont "
-               "celles que la DGFiP range ailleurs : la Ville de Paris parmi les communes, la métropole de Lyon parmi "
-               "les groupements à fiscalité propre. Un montant non recalculé est un montant publié non nul que ne donne "
+               "même quand ses balances sont parmi celles des départements ; la Ville de Paris et la métropole de Lyon, "
+               "que l'OFGL publie aussi parmi les départements, se recalculent avec les formules de chacun des jeux qui "
+               "les publient. Les remarques des formules désignent les collectivités auxquelles elles s'appliquent : la "
+               "Ville de Paris, les communes de la Métropole du Grand Paris, ses établissements publics territoriaux, la "
+               "métropole de Lyon, les collectivités territoriales uniques. Les balances des communes, des groupements, "
+               "des syndicats et des établissements publics locaux ne sont recalculées que pour les exercices que "
+               "l'OFGL publie pour eux, depuis 2018. Les collectivités de l'OFGL sans balance sont celles qu'aucune "
+               "balance lue ne porte (celles des fichiers RAR de 2016, ou que la DGFiP range ailleurs). Un montant non recalculé est un montant publié non nul que ne donne "
                "aucune formule pour la nomenclature du budget ; un agrégat absent du jeu est un agrégat que le jeu "
                "publie pour d'autres collectivités de l'exercice, pas pour celle-ci, et que les balances donnent non "
                "nul.", "",
@@ -5439,7 +5501,22 @@ def partie_balances_collectivites():
     total = sum(j[3] for _, jeux in recalculs for j in jeux.values())
     egaux = sum(j[4] for _, jeux in recalculs for j in jeux.values())
     lignes += ["", f"Au total, {fr(egaux, 0)} montants égaux sur {fr(total, 0)} comparés"
-               + (f" ({fr(100 * egaux / total, 3)} %)." if total else "."), ""]
+               + (f" ({fr(100 * egaux / total, 3)} %)." if total else ".") + " Par jeu :", "",
+               "| Jeu de l'OFGL | Exercices | Montants comparés | Égaux | Part |", "|---|---|---|---|---|"]
+    for jeu in JEUX_RECALCULES:
+        par_jeu = [(e, j[jeu]) for e, j in recalculs if jeu in j]
+        if par_jeu:
+            n, k = sum(r[3] for _, r in par_jeu), sum(r[4] for _, r in par_jeu)
+            lignes.append(f"| {JEUX_RECALCULES[jeu]} | {plage([e for e, _ in par_jeu])} | {fr(n, 0)} | {fr(k, 0)} | "
+                          f"{fr(100 * k / n, 3) if n else '—'} % |")
+    lignes.append("")
+    _, formules_inscrites = balances_collectivites_retenues()
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    ambigues = formules_ofgl.ambigues(formules_ofgl.formules(fichiers[formules_inscrites["fichier_id"]]))
+    if ambigues:
+        lignes += ["Formules que la base n'applique pas : le jeu en donne deux qui s'appliquent aux mêmes "
+                   "collectivités, et qui diffèrent : "
+                   + " ; ".join(f"{c}, {e}, {a} ({n})" for c, e, a, _, n in ambigues) + ".", ""]
     if manquantes:
         lignes += ["Montants non recalculés : le jeu des formules n'en donne aucune pour l'agrégat, la sorte de budget et "
                    "la nomenclature, alors que l'OFGL publie un montant.", "",
@@ -5464,8 +5541,7 @@ TACHES = {}  # nom du calcul → sa tâche, ou la liste de ses tâches pour le r
 # nom du calcul → (ses arguments parmi les entrées, son poids : les plus lourds partent d'abord)
 D_AVANCE = {"collectivites": (("derniers", "listes"), 5), "comptes_individuels_controles": (("listes",), 4),
             "fonctions_departements": (("listes",), 2), "fiscalite_locale": ((), 2),
-            "balances_etat_controlees": (("derniers",), 1), "titres_negociables_des_balances": ((), 1),
-            "balances_collectivites_recalculees": ((), 3)}
+            "balances_etat_controlees": (("derniers",), 1), "titres_negociables_des_balances": ((), 1)}
 
 
 class AvecDefaut:
@@ -5515,6 +5591,10 @@ def deja_calcule(nom, *arguments):
         return globals()[nom](*arguments)
     if nom == "recensement":
         return recensement([deballe(tache.result()) for tache in TACHES[nom]])
+    if nom == "balances_collectivites_recalculees":
+        taches, retenues = TACHES[nom]
+        resultat = [(e, deballe(tache.result())) for e, tache in taches]
+        return [(e, r) for e, r in resultat if r], retenues
     return deballe(TACHES[nom].result())
 
 
@@ -5526,6 +5606,12 @@ def lancer_calculs(bassin):
     recenses = {a[0]: None for a in annees}
     lourds = [(nom, poids * 1e12) for nom, (_, poids) in D_AVANCE.items()]
     lourds += [(a, 3e12 + int(fichiers[a[1]["fichier_id"]]["octets"])) for a in annees]
+    # Le recalcul des balances des collectivités, exercice par exercice, part le premier : c'est le plus lourd, les
+    # exercices les plus récents d'abord, qui ont les montants de l'OFGL de toutes les catégories.
+    exercices, retenues = exercices_recalcules()
+    TACHES["balances_collectivites_recalculees"] = (
+        [(e, bassin.submit(calcul_d_avance, "recalcul_balances_exercice", e)) for e in sorted(exercices, reverse=True)],
+        retenues)
     for calcul, _ in sorted(lourds, key=lambda c: -c[1]):
         if isinstance(calcul, str):
             TACHES[calcul] = bassin.submit(calcul_d_avance, calcul)

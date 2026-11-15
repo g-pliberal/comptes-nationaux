@@ -52,9 +52,60 @@ def morceaux(chemin):
     return sorted(p for p in chemin.parent.iterdir() if motif.fullmatch(p.name))
 
 
+# Une copie trop grosse pour le dépôt lui-même (les balances comptables des communes) est rangée dans la « Release »
+# ARCHIVES du dépôt GitHub : son chemin, « releases/archives/<nom> », est celui de son fichier joint à cette Release, et
+# la table des fichiers garde, comme pour toute copie, son adresse d'origine, son empreinte et sa taille. On la lit dans
+# base/releases/, où elle est téléchargée de la Release à sa première lecture, puis gardée (le dépôt l'ignore). Le
+# contrôle de la base vérifie que la copie téléchargée a bien l'empreinte inscrite.
+ARCHIVES = "archives"
+RELEASES = "releases"
+
+
+def adresse_release(chemin):
+    """L'adresse de téléchargement d'une copie rangée dans une Release, ou None pour une copie du dépôt."""
+    parties = pathlib.PurePosixPath(chemin).parts
+    if len(parties) != 3 or parties[0] != RELEASES:
+        return None
+    return f"https://github.com/{os.environ.get('GITHUB_REPOSITORY') or DEPOT}/releases/download/{parties[1]}/{parties[2]}"
+
+
+def rapatrier(chemin):
+    """Télécharge de sa Release, si elle n'est pas déjà là, une copie rangée dans une Release ; rien pour une autre.
+    Faux si la Release ne l'a pas (encore)."""
+    chemin = pathlib.Path(chemin)
+    try:
+        relatif = chemin.resolve().relative_to(BASE)
+    except ValueError:
+        return True
+    adresse = adresse_release(relatif.as_posix())
+    if adresse is None or chemin.exists():
+        return True
+    import urllib.error
+    import urllib.request
+    chemin.parent.mkdir(parents=True, exist_ok=True)
+    provisoire = chemin.with_name(chemin.name + ".telechargement")
+    for essai in range(1, 6):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(adresse, headers={"User-Agent": AGENT}),
+                                        timeout=300) as reponse, provisoire.open("wb") as f:
+                while bloc := reponse.read(1 << 20):
+                    f.write(bloc)
+            provisoire.replace(chemin)
+            return True
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return False
+            if essai == 5:
+                raise
+        except (urllib.error.URLError, ConnectionError, TimeoutError):
+            if essai == 5:
+                raise
+    return False
+
+
 def copie_presente(chemin):
-    """Vrai si la copie est archivée, d'un seul tenant ou en morceaux."""
-    return pathlib.Path(chemin).exists() or bool(morceaux(chemin))
+    """Vrai si la copie est archivée, d'un seul tenant ou en morceaux, dans le dépôt ou dans une Release."""
+    return rapatrier(chemin) and (pathlib.Path(chemin).exists() or bool(morceaux(chemin)))
 
 
 class _Recollee(io.RawIOBase):
@@ -100,8 +151,9 @@ class _Recollee(io.RawIOBase):
 
 def ouvrir_copie(chemin):
     """Une copie archivée, ouverte en lecture binaire telle que reçue : décompressée si elle a été archivée compressée
-    (« .bz2 »), recollée si elle l'a été en morceaux."""
+    (« .bz2 »), recollée si elle l'a été en morceaux, téléchargée de sa Release si elle y est rangée."""
     chemin = pathlib.Path(chemin)
+    rapatrier(chemin)
     if chemin.suffix == ".bz2":
         return bz2.open(chemin, "rb")
     if not chemin.exists() and (parties := morceaux(chemin)):

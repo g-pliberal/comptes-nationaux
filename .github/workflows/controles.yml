@@ -4,10 +4,30 @@ on:
   push:
   pull_request:
 
-# Les trois contrôles tournent en même temps, chacun sur sa machine ; la base n'est publiée que s'ils passent tous.
+# Une fois les grosses copies rangées, les trois contrôles tournent en même temps, chacun sur sa machine ; la base
+# n'est publiée que s'ils passent tous.
 jobs:
+  # Les copies trop grosses pour le dépôt sont dans la Release « archives » : celles qui viennent d'être archivées y sont
+  # jointes avant que les contrôles ne les lisent.
+  ranger:
+    name: Ranger les grosses copies dans les « Releases »
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Joindre à la Release les copies qui n'y sont pas encore
+        run: python3 outils/ranger.py
+
   valider:
     name: Contrôler la base
+    needs: ranger
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,6 +39,7 @@ jobs:
 
   coherence:
     name: Rapport de cohérence et synthèse
+    needs: ranger
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +57,7 @@ jobs:
 
   construire:
     name: Construire la base
+    needs: ranger
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

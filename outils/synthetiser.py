@@ -331,7 +331,10 @@ def partie_contenu(base):
               for t, c in [("fichiers_collectivites", "montants"), ("fichiers_comptes_individuels", "comptes"),
                            ("fichiers_balances_etat", "balance")]}
     communes = sum(int(f["communes"]) for f in lire("tables/fichiers_rei.csv"))
-    locales = sum(int(f["lignes"]) for f in lire("tables/fichiers_balances_collectivites.csv") if f["contenu"] == "balance")
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    balances = [f for f in lire("tables/fichiers_balances_collectivites.csv") if f["contenu"] == "balance"]
+    locales = sum(int(f["lignes"]) for f in balances if not fichiers[f["fichier_id"]]["chemin"].startswith("releases/"))
+    rangees = sum(int(f["lignes"]) for f in balances if fichiers[f["fichier_id"]]["chemin"].startswith("releases/"))
     lignes += ["", "S'y ajoutent, lus dans les copies archivées quand la base se construit :", "",
                f"- {fr(copies['montants'], 0)} lignes de comptes, de fiscalité et de dotations de chaque collectivité "
                f"locale, d'après l'OFGL ;",
@@ -339,6 +342,9 @@ def partie_contenu(base):
                f"- {fr(copies['balance'], 0)} lignes des balances des comptes de l'État ;",
                f"- {fr(locales, 0)} lignes des balances comptables des départements et des régions, budget par budget "
                f"et compte par compte, d'après la DGFiP ;",
+               f"- {fr(rangees, 0)} lignes des balances comptables des communes, des groupements à fiscalité propre, "
+               f"des syndicats et des établissements publics locaux, que la base ne reprend pas mais qu'elle lit et "
+               f"contrôle dans leurs copies, rangées dans les « Releases » de GitHub ;",
                f"- {fr(communes, 0)} lignes de communes dans le recensement des éléments d'imposition (REI).", "",
                f"Le tout repose sur {fr(len(lire('tables/fichiers.csv')), 0)} copies archivées des sources, dont "
                f"l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans "
