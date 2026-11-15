@@ -21,10 +21,13 @@ import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
-from commun import (BASE, copie_presente, empreinte_et_taille, identifiant, lire, lire_export_ofgl, lire_jsonstat,
-                    lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx, lire_xlsx_dans_zip, montant_pdf,
-                    montants_de_case, nombre_de_phrase, nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres,
-                    texte_html, texte_pdf)
+from commun import (BASE, copie_presente, empreinte_et_taille, en_parallele, identifiant, lire, lire_export_ofgl,
+                    lire_jsonstat, lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx,
+                    lire_xlsx_dans_zip, montant_pdf, montants_de_case, nombre_de_phrase, nombre_phrase_pdf, nombre_texte,
+                    paquet, ressources_chiffres, texte_html, texte_pdf)
+
+# Les lecteurs des copies qu'une table inscrit après contrôle : chacun redonne, d'une copie, son inscription.
+LECTEURS = {"collectivites": ofgl, "comptes_individuels": individuels, "balances_etat": balances, "rei": rei}
 
 
 def erreur_de_type(type_, texte):
@@ -248,41 +251,95 @@ def valeur_archivee(fichier, emplacement, copies):
     return "sans lecteur"
 
 
+def relire_valeurs(chemin, fichiers):
+    """Relit chaque chiffre publié d'une table de chiffres dans sa copie archivée, à son emplacement, et compare :
+    (erreurs, nombre de chiffres relus, nombre de ceux dont la copie n'a pas encore de lecteur automatique)."""
+    erreurs, copies, relus, sans_lecteur = [], {}, 0, 0
+    for n, ligne in enumerate(lire(chemin), start=2):
+        fichier = fichiers.get(ligne["fichier_id"])
+        if ligne["nature"] != "publie" or fichier is None or not copie_presente(BASE / fichier["chemin"]):
+            continue
+        archive = valeur_archivee(fichier, ligne["emplacement"], copies)
+        if archive == "sans lecteur":
+            sans_lecteur += 1
+            continue
+        lieu = f"{chemin}, ligne {n}"
+        if archive is None:
+            erreurs.append(f"{lieu} : emplacement {ligne['emplacement']} introuvable dans {fichier['chemin']}")
+        elif not math.isclose(float(ligne["valeur"]), archive[0], rel_tol=1e-12, abs_tol=1e-9):
+            erreurs.append(f"{lieu} : valeur {ligne['valeur']} différente de la copie archivée ({archive[0]})")
+        elif ligne["drapeau_source"] != archive[1]:
+            erreurs.append(f"{lieu} : indicateur « {ligne['drapeau_source']} » différent de la copie archivée "
+                           f"(« {archive[1]} »)")
+        relus += 1
+    return erreurs, relus, sans_lecteur
+
+
 def controler_valeurs(tables, erreurs):
-    """Relit chaque chiffre publié dans sa copie archivée, à son emplacement, et compare.
+    """Relit chaque chiffre publié dans sa copie archivée, à son emplacement, et compare, une table de chiffres après
+    l'autre, plusieurs à la fois.
 
     Renvoie le nombre de chiffres relus et celui des chiffres dont la copie n'a pas encore de lecteur
     automatique."""
-    fichiers = {f["id"]: f for f in tables["fichiers"]}
-    copies, relus, sans_lecteur = {}, 0, 0
-    for r in ressources_chiffres():
-        for n, ligne in enumerate(tables[r["name"]], start=2):
-            fichier = fichiers.get(ligne["fichier_id"])
-            if ligne["nature"] != "publie" or fichier is None or not copie_presente(BASE / fichier["chemin"]):
-                continue
-            archive = valeur_archivee(fichier, ligne["emplacement"], copies)
-            if archive == "sans lecteur":
-                sans_lecteur += 1
-                continue
-            lieu = f"{r['path']}, ligne {n}"
-            if archive is None:
-                erreurs.append(f"{lieu} : emplacement {ligne['emplacement']} introuvable dans {fichier['chemin']}")
-            elif not math.isclose(float(ligne["valeur"]), archive[0], rel_tol=1e-12, abs_tol=1e-9):
-                erreurs.append(f"{lieu} : valeur {ligne['valeur']} différente de la copie archivée ({archive[0]})")
-            elif ligne["drapeau_source"] != archive[1]:
-                erreurs.append(f"{lieu} : indicateur « {ligne['drapeau_source']} » différent de la copie archivée "
-                               f"(« {archive[1]} »)")
-            relus += 1
+    relus = sans_lecteur = 0
+    ressources = ressources_chiffres()
+    for r, (trouvees, n, sans) in zip(ressources, en_parallele(
+            relire_valeurs, [(r["path"], {f["id"]: f for f in tables["fichiers"] if f["source_id"] in
+                                          {l["source_id"] for l in tables[r["name"]]}}) for r in ressources],
+            poids=[len(tables[r["name"]]) for r in ressources])):
+        erreurs += trouvees
+        relus += n
+        sans_lecteur += sans
     return relus, sans_lecteur
 
 
+def etat_copie(chemin, sha256, octets):
+    """« absente », « modifiée » ou « intacte » : une copie archivée contre l'empreinte et la taille de son inscription."""
+    if not copie_presente(BASE / chemin):
+        return "absente"
+    return "intacte" if empreinte_et_taille(BASE / chemin) == (sha256, int(octets)) else "modifiée"
+
+
 def controler_archives(tables, erreurs):
-    for n, f in enumerate(tables["fichiers"], start=2):
-        chemin = BASE / f["chemin"]
-        if not copie_presente(chemin):
+    etats = en_parallele(etat_copie, [(f["chemin"], f["sha256"], f["octets"]) for f in tables["fichiers"]],
+                         poids=[int(f["octets"]) for f in tables["fichiers"]])
+    for n, (f, etat) in enumerate(zip(tables["fichiers"], etats), start=2):
+        if etat == "absente":
             erreurs.append(f"tables/fichiers.csv, ligne {n} : copie absente ({f['chemin']})")
-        elif empreinte_et_taille(chemin) != (f["sha256"], int(f["octets"])):
+        elif etat == "modifiée":
             erreurs.append(f"tables/fichiers.csv, ligne {n} : la copie {f['chemin']} a été modifiée")
+
+
+def relire_inscriptions(lecteur, copies, *referentiels):
+    """Pour chaque copie d'un groupe, (l'inscription que donne son contenu, None), ou (None, l'erreur qui en arrête la
+    lecture). `copies` donne chaque copie avec les autres copies inscrites, que le lecteur consulte pour la contrôler, ou
+    None pour un lecteur qui n'en consulte pas. Les copies d'un groupe sont lues à la suite, dans le même processus : le
+    lecteur des jeux de l'OFGL retient, des montants d'un exercice, les collectivités que doit donner leur liste."""
+    resultats = []
+    for fichier, autres in copies:
+        try:
+            resultats.append((LECTEURS[lecteur].inscription(fichier, *([] if autres is None else [autres]),
+                                                            *referentiels), None))
+        except SystemExit as e:
+            resultats.append((None, str(e)))
+    return resultats
+
+
+def relire(lecteur, table, inscrits, fichiers, groupes, referentiels, erreurs, seuls=False):
+    """Relit les copies inscrites dans une table, un groupe après l'autre, plusieurs groupes à la fois, et note dans
+    `erreurs` celles dont le contenu ne redonne pas l'inscription. `groupes` donne les rangs des copies de chaque
+    groupe, dans l'ordre où les lire ; les erreurs sont notées dans l'ordre des groupes."""
+    appels = [(lecteur, [(fichiers[inscrits[k]["fichier_id"]],
+                          None if seuls else [i for i in inscrits if i is not inscrits[k]]) for k in groupe],
+               *referentiels) for groupe in groupes]
+    poids = [sum(int(fichiers[inscrits[k]["fichier_id"]]["octets"]) for k in groupe) for groupe in groupes]
+    for groupe, resultats in zip(groupes, en_parallele(relire_inscriptions, appels, poids)):
+        for k, (attendue, erreur) in zip(groupe, resultats):
+            lieu = f"tables/{table}.csv, ligne {k + 2}"
+            if erreur is not None:
+                erreurs.append(f"{lieu} : {erreur}")
+            elif attendue != inscrits[k]:
+                erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
 
 
 def controler_collectivites(tables, erreurs):
@@ -293,19 +350,17 @@ def controler_collectivites(tables, erreurs):
     inscrits = tables["fichiers_collectivites"]
     ordre = {"inventaire": 0, "montants": 1, "collectivites": 2}
     relues = {"comptes": 0, "fonctions": 0, "fiscalite": 0, "dotations": 0}
-    for n, inscrit in sorted(enumerate(inscrits, start=2), key=lambda e: (ordre.get(e[1]["contenu"], 3), e[0])):
-        lieu = f"tables/fichiers_collectivites.csv, ligne {n}"
-        if inscrit["fichier_id"] not in fichiers:
-            continue  # référence déjà signalée
-        try:
-            attendue = ofgl.inscription(fichiers[inscrit["fichier_id"]], [i for i in inscrits if i is not inscrit],
-                                        fichiers, agregats)
-        except SystemExit as e:
-            erreurs.append(f"{lieu} : {e}")
-            continue
-        if attendue != inscrit:
-            erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
-        if inscrit["contenu"] == "montants":
+    # Un groupe par jeu de données et par exercice : les montants, puis la liste des collectivités, qu'ils contrôlent ;
+    # un inventaire se lit seul.
+    groupes = collections.defaultdict(list)
+    for k, inscrit in sorted(enumerate(inscrits), key=lambda e: (ordre.get(e[1]["contenu"], 3), e[0])):
+        if inscrit["fichier_id"] in fichiers:  # sinon, référence déjà signalée
+            groupes[(ordre.get(inscrit["contenu"], 3) > 0, inscrit["source_id"],
+                     inscrit["exercice"] if ordre.get(inscrit["contenu"], 3) else inscrit["fichier_id"])].append(k)
+    relire("collectivites", "fichiers_collectivites", inscrits, fichiers, list(groupes.values()), (fichiers, agregats),
+           erreurs)
+    for inscrit in inscrits:
+        if inscrit["fichier_id"] in fichiers and inscrit["contenu"] == "montants":
             relues["dotations" if inscrit["source_id"] in ofgl.DOTATIONS else "fonctions"
                    if inscrit["source_id"] in ofgl.PAR_FONCTION else "fiscalite"
                    if inscrit["source_id"] in ofgl.FISCALITE else "comptes"] += int(inscrit["lignes"])
@@ -320,19 +375,12 @@ def controler_comptes_individuels(tables, erreurs):
     inscrits, referentiel = tables["fichiers_comptes_individuels"], tables["variables_comptes_individuels"]
     ordre = {"maquette": 0, "inventaire": 1, "comptes": 2}
     relues = lignes = 0
-    for n, inscrit in sorted(enumerate(inscrits, start=2), key=lambda e: (ordre.get(e[1]["contenu"], 3), e[0])):
-        lieu = f"tables/fichiers_comptes_individuels.csv, ligne {n}"
-        if inscrit["fichier_id"] not in fichiers:
-            continue  # référence déjà signalée
-        try:
-            attendue = individuels.inscription(fichiers[inscrit["fichier_id"]], [i for i in inscrits if i is not inscrit],
-                                               fichiers, referentiel)
-        except SystemExit as e:
-            erreurs.append(f"{lieu} : {e}")
-            continue
-        if attendue != inscrit:
-            erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
-        if inscrit["contenu"] == "comptes":
+    groupes = [[k] for k, inscrit in sorted(enumerate(inscrits), key=lambda e: (ordre.get(e[1]["contenu"], 3), e[0]))
+               if inscrit["fichier_id"] in fichiers]  # sinon, référence déjà signalée
+    relire("comptes_individuels", "fichiers_comptes_individuels", inscrits, fichiers, groupes, (fichiers, referentiel),
+           erreurs)
+    for inscrit in inscrits:
+        if inscrit["fichier_id"] in fichiers and inscrit["contenu"] == "comptes":
             relues += 1
             lignes += int(inscrit["lignes"])
     return relues, lignes
@@ -345,19 +393,11 @@ def controler_balances_etat(tables, erreurs):
     inscrits, referentiel = tables["fichiers_balances_etat"], tables["indicateurs_balances_etat"]
     ordre = {"guide": 0, "plan": 1, "inventaire": 2, "balance": 3}
     relues = lignes = 0
-    for n, inscrit in sorted(enumerate(inscrits, start=2), key=lambda e: (ordre.get(e[1]["contenu"], 4), e[0])):
-        lieu = f"tables/fichiers_balances_etat.csv, ligne {n}"
-        if inscrit["fichier_id"] not in fichiers:
-            continue  # référence déjà signalée
-        try:
-            attendue = balances.inscription(fichiers[inscrit["fichier_id"]], [i for i in inscrits if i is not inscrit],
-                                            fichiers, referentiel)
-        except SystemExit as e:
-            erreurs.append(f"{lieu} : {e}")
-            continue
-        if attendue != inscrit:
-            erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
-        if inscrit["contenu"] == "balance":
+    groupes = [[k] for k, inscrit in sorted(enumerate(inscrits), key=lambda e: (ordre.get(e[1]["contenu"], 4), e[0]))
+               if inscrit["fichier_id"] in fichiers]  # sinon, référence déjà signalée
+    relire("balances_etat", "fichiers_balances_etat", inscrits, fichiers, groupes, (fichiers, referentiel), erreurs)
+    for inscrit in inscrits:
+        if inscrit["fichier_id"] in fichiers and inscrit["contenu"] == "balance":
             relues += 1
             lignes += int(inscrit["lignes"])
     return relues, lignes
@@ -367,25 +407,19 @@ def controler_rei(tables, erreurs):
     """Relit chaque copie inscrite dans fichiers_rei.csv, avec ce qu'en retient le référentiel des variables : son
     contenu doit donner son inscription. Renvoie le nombre de copies relues et celui de leurs communes."""
     fichiers = {f["id"]: f for f in tables["fichiers"]}
+    inscrits = tables["fichiers_rei"]
     relues = communes = 0
     vues = {}
-    for n, inscrit in enumerate(tables["fichiers_rei"], start=2):
-        lieu = f"tables/fichiers_rei.csv, ligne {n}"
+    for n, inscrit in enumerate(inscrits, start=2):
         if (inscrit["exercice"], inscrit["version"]) in vues:
-            erreurs.append(f"{lieu} : une copie de même exercice et de même version est inscrite ligne "
-                           f"{vues[(inscrit['exercice'], inscrit['version'])]}")
+            erreurs.append(f"tables/fichiers_rei.csv, ligne {n} : une copie de même exercice et de même version est "
+                           f"inscrite ligne {vues[(inscrit['exercice'], inscrit['version'])]}")
         vues[(inscrit["exercice"], inscrit["version"])] = n
-        if inscrit["fichier_id"] not in fichiers:
-            continue  # référence déjà signalée
-        try:
-            attendue = rei.inscription(fichiers[inscrit["fichier_id"]])
-        except SystemExit as e:
-            erreurs.append(f"{lieu} : {e}")
-            continue
-        if attendue != inscrit:
-            erreurs.append(f"{lieu} : la copie donne une autre inscription ({attendue})")
+    groupes = [[k] for k, inscrit in enumerate(inscrits) if inscrit["fichier_id"] in fichiers]  # sinon, déjà signalée
+    relire("rei", "fichiers_rei", inscrits, fichiers, groupes, (), erreurs, seuls=True)
+    for groupe in groupes:
         relues += 1
-        communes += int(inscrit["communes"])
+        communes += int(inscrits[groupe[0]]["communes"])
     return relues, communes
 
 

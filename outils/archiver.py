@@ -4,7 +4,8 @@ dans la table des fichiers avec leur empreinte.
 
     python3 outils/archiver.py <source_id> "<url>" ["<url>"…] [--compresser] [--decouper]
 
-Un fichier identique à une copie déjà archivée pour la même source n'est pas dupliqué. Avec
+Un fichier identique à une copie déjà archivée pour la même source n'est pas dupliqué : si la source annonce une
+nouvelle date de mise à jour, la table des vérifications inscrit que la copie est encore à jour à cette date. Avec
 --compresser, pour un gros fichier, la copie est enregistrée compressée (bzip2) : son empreinte et
 sa taille restent celles du contenu reçu, que le contrôle retrouve en la décompressant. Avec --decouper, un
 fichier trop gros pour le dépôt (GitHub refuse les fichiers de plus de 100 Mo) est enregistré en morceaux
@@ -37,9 +38,9 @@ from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
 
 
-def telecharger(url):
+def telecharger(url, essais=ESSAIS):
     """(contenu, type de contenu). Le transfert peut être compressé (gzip) : le contenu est celui qu'il porte."""
-    for essai in range(1, ESSAIS + 1):
+    for essai in range(1, essais + 1):
         try:
             requete = urllib.request.Request(url, headers={"User-Agent": AGENT, "Accept-Encoding": "gzip"})
             with urllib.request.urlopen(requete, timeout=300) as reponse:
@@ -53,7 +54,7 @@ def telecharger(url):
             raise
         except (urllib.error.URLError, http.client.HTTPException, ConnectionError, TimeoutError, EOFError,
                 gzip.BadGzipFile) as e:
-            if essai == ESSAIS:
+            if essai == essais:
                 raise
             print(f"essai {essai} : connexion coupée ({type(e).__name__}) ; nouvel essai", file=sys.stderr)
             time.sleep(5)
@@ -66,24 +67,58 @@ def date_portail(url):
                    r"/api/explore/v2\.1/catalog/datasets/[^/]+)/exports/", url)
     if jeu is None:
         return ""
-    fiche = json.loads(telecharger(jeu.group(1))[0])["metas"]["default"]
-    return fiche["data_processed"] if jeu.group(2).startswith("data.drees") else fiche["modified"]
+    return date_annoncee(jeu.group(2), json.loads(telecharger(jeu.group(1))[0]))
 
 
-def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper):
+def date_annoncee(serveur, fiche):
+    """La date de mise à jour d'un jeu de données d'après sa fiche sur le portail : sa date de modification, ou, pour
+    data.drees, qui ne la change pas quand les données changent, la date du dernier traitement de ses données."""
+    metas = fiche["metas"]["default"]
+    return metas["data_processed"] if serveur.startswith("data.drees") else metas["modified"]
+
+
+def date_piece_jointe(url):
+    """Pour une pièce jointe d'un jeu de données d'un portail, la date de modification du jeu ; rien pour une autre
+    adresse."""
+    jeu = re.match(r"https://(data\.ofgl\.fr|data\.economie\.gouv\.fr|data\.drees\.solidarites-sante\.gouv\.fr)"
+                   r"/api/(?:explore/v2\.1|v2)/catalog/datasets/([^/]+)/attachments/", url)
+    if jeu is None:
+        return ""
+    fiche = json.loads(telecharger(f"https://{jeu.group(1)}/api/explore/v2.1/catalog/datasets/{jeu.group(2)}")[0])
+    return fiche["metas"]["default"]["modified"]
+
+
+def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, annoncee=""):
     """Inscrit une copie dans la table des fichiers ; renvoie son identifiant. La table reste verrouillée de sa
-    lecture à son écriture, pour qu'un autre archivage n'y efface pas cette inscription."""
+    lecture à son écriture, pour qu'un autre archivage n'y efface pas cette inscription. `annoncee` est la date de
+    mise à jour qu'annonce la source, sous laquelle une copie déjà archivée est inscrite comme vérifiée : à défaut,
+    `mis_a_jour`."""
     with (BASE / "tables" / "fichiers.csv").open("a") as verrou:
         fcntl.flock(verrou, fcntl.LOCK_EX)
-        return inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper)
+        return inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, annoncee or mis_a_jour)
 
 
-def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper):
+def verifier(copie, mis_a_jour):
+    """Inscrit dans la table des vérifications qu'une copie déjà archivée est encore le contenu que publie sa source, à
+    la date de mise à jour que celle-ci annonce maintenant ; renvoie ce qu'il faut en dire. Rien à inscrire si la source
+    n'annonce pas de date, ou pas d'autre que celles déjà connues de la copie."""
+    verifications = lire("tables/verifications.csv")
+    connues = {copie["mis_a_jour_source"]} | {v["mis_a_jour_source"] for v in verifications
+                                              if v["fichier_id"] == copie["id"]}
+    if not mis_a_jour or mis_a_jour in connues:
+        return ""
+    verifications.append({"fichier_id": copie["id"], "verifie_le": maintenant(), "mis_a_jour_source": mis_a_jour})
+    ecrire("tables/verifications.csv", champs("verifications"), verifications,
+           cle=lambda v: (v["fichier_id"], v["verifie_le"]))
+    return f", vérifié à jour au {mis_a_jour}"
+
+
+def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, annoncee=""):
     sha256 = hashlib.sha256(contenu).hexdigest()
     fichiers = lire("tables/fichiers.csv")
     deja = next((f for f in fichiers if f["sha256"] == sha256 and f["source_id"] == source_id), None)
     if deja:
-        return f"déjà archivé : {deja['id']}"
+        return f"déjà archivé : {deja['id']}" + verifier(deja, annoncee)
     extension = ("json" if "json" in type_contenu else "xlsx" if "spreadsheetml" in type_contenu
                  else "ods" if "opendocument.spreadsheet" in type_contenu
                  else "csv" if "csv" in type_contenu else "html" if "html" in type_contenu
@@ -148,8 +183,8 @@ def main():
         contenu, type_contenu = telecharger(url)
         if jeu is not None and date_portail(url) != dates[jeu]:
             sys.exit(f"le jeu de données a été modifié pendant le téléchargement de {url} : recommencer")
-        print(archiver(args.source_id, url, contenu, type_contenu, dates.get(jeu, ""), args.compresser, args.decouper),
-              flush=True)
+        print(archiver(args.source_id, url, contenu, type_contenu, dates.get(jeu, ""), args.compresser, args.decouper,
+                       date_piece_jointe(url)), flush=True)
 
 
 if __name__ == "__main__":

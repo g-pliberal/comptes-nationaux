@@ -66,9 +66,13 @@ d'exécution, pour qu'un rapport à jour ne change pas.
 """
 
 import collections
+import concurrent.futures
+import copy
 import decimal
 import itertools
 import math
+import multiprocessing
+import os
 import re
 
 import importer_balances_etat as balances
@@ -78,7 +82,7 @@ import importer_lois_rectificatives as rectificatives
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
-from commun import RACINE, lire, ressources_chiffres
+from commun import RACINE, en_parallele, lire, ressources_chiffres
 
 RAPPORT = RACINE / "controles" / "coherence.md"
 
@@ -1086,7 +1090,15 @@ def listes_collectivites():
         cle = (i["source_id"], i["exercice"])
         if i["contenu"] == "collectivites" and (cle not in retenues or i["version"] > retenues[cle]["version"]):
             retenues[cle] = i
-    return {cle: ofgl.collectivites(fichiers[i["fichier_id"]])[0] for cle, i in sorted(retenues.items())}
+    retenues = sorted(retenues.items())
+    listes = en_parallele(fiches_collectivites, [(fichiers[i["fichier_id"]],) for _, i in retenues],
+                          poids=[int(fichiers[i["fichier_id"]]["octets"]) for _, i in retenues])
+    return {cle: liste for (cle, _), liste in zip(retenues, listes)}
+
+
+def fiches_collectivites(fichier):
+    """{siren: fiche} d'une copie de la liste des collectivités d'un exercice."""
+    return ofgl.collectivites(fichier)[0]
 
 
 def montants_retenus():
@@ -1568,65 +1580,52 @@ def copies_rei():
     return retenues
 
 
-def recensement():
-    """Pour chaque année du REI, dans sa copie la plus récente : son inscription et le nombre d'impositions retenues ;
-    pour chaque taxe et chaque destinataire, le produit contre la base multipliée par le taux net ; chaque imposition de
-    la base simplifiée de l'OFGL contre celles du REI dont elle est tirée, commune par commune ; le produit de chaque
-    taxe, celui de chaque niveau de collectivité ou d'organisme, et la TEOM de chaque niveau, chaque année."""
+def recensement_exercice(exercice, inscrit, inscrit_ofgl):
+    """Le recensement d'une année du REI, dans sa copie `inscrit` : ce que rend `recensement`, pour cette seule année ;
+    `inscrit_ofgl` est la copie de la base simplifiée de l'OFGL pour la même année, s'il y en a une."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     referentiel = lire("tables/variables_rei.csv")
-    simplifiee = montants_retenus()
-    annees = []  # (inscription, impositions retenues)
-    # (taxe, destinataire) → [lignes comparées, égales à l'arrondi près, écart de moins de SEUIL_PRODUIT, au-delà, pire
-    # écart au-delà (écart, base multipliée par le taux, exercice, commune, nom)]
     produits = collections.defaultdict(lambda: [0, 0, 0, 0, None])
-    # (taxe, bénéficiaires de l'OFGL) → [exercices, communes comparées, égales, en écart, sous secret statistique dans
-    # la base simplifiée, produit de la base simplifiée, produit du REI, pire écart (écart, exercice, commune, nom)]
     comparaisons = collections.defaultdict(lambda: [set(), 0, 0, 0, 0, 0.0, 0.0, None])
-    par_taxe = collections.defaultdict(float)  # (taxe, exercice) → produit
-    communes_taxe = collections.defaultdict(set)  # (taxe, exercice) → communes où le REI donne un produit de la taxe
-    par_niveau = collections.defaultdict(float)  # (niveau, exercice) → produit
-    teom = collections.defaultdict(float)  # (niveau, exercice) → TEOM, part fixe et part incitative
-    for exercice, inscrit in sorted(copies_rei().items()):
-        _, variables, _, lignes = rei.lignes_communes(fichiers[inscrit["fichier_id"]])
-        retenus = rei.postes(exercice, variables, referentiel, inscrit["fichier_id"])
-        recenses, noms, nombre = {}, {}, 0  # (commune, taxe, destinataire) → produit ; commune → nom
-        for commune, valeurs in lignes:
-            noms[commune] = valeurs["LIBCOM"].strip()
-            teom_niveau = valeurs.get("F71", "").strip()
-            for taxe, destinataire, base, net, _, produit, m_base, m_net, _, m_produit in rei.impositions(
-                    valeurs, retenus, marges=True):
-                nombre += 1
-                if produit is None:
-                    continue
-                recenses[(commune, taxe, destinataire)] = produit
-                niveau = niveau_rei(destinataire, teom_niveau)
-                par_taxe[(taxe, exercice)] += produit
-                communes_taxe[(taxe, exercice)].add(commune)
-                par_niveau[(niveau, exercice)] += produit
-                if taxe == "TEOM":
-                    teom[(niveau, exercice)] += produit
-                if base is None or net is None:
-                    continue
-                calcule = base * net / 100
-                ecart = produit - calcule
-                entree = produits[(taxe, destinataire)]
-                entree[0] += 1
-                if not depasse(ecart, m_produit + base * m_net / 100 + net * m_base / 100):
-                    entree[1] += 1
-                elif abs(ecart) < SEUIL_PRODUIT * abs(calcule):
-                    entree[2] += 1
-                else:
-                    entree[3] += 1
-                    if entree[4] is None or abs(ecart) > abs(entree[4][0]):
-                        entree[4] = (ecart, calcule, exercice, commune, noms[commune])
-        annees.append((inscrit, nombre))
-        inscrit_ofgl = simplifiee.get((FISCALE, exercice))
-        if not inscrit_ofgl:
-            continue
+    par_taxe, communes_taxe = collections.defaultdict(float), collections.defaultdict(set)
+    par_niveau, teom = collections.defaultdict(float), collections.defaultdict(float)
+    _, variables, _, lignes = rei.lignes_communes(fichiers[inscrit["fichier_id"]])
+    retenus = rei.postes(exercice, variables, referentiel, inscrit["fichier_id"])
+    recenses, noms, nombre = {}, {}, 0  # (commune, taxe, destinataire) → produit ; commune → nom
+    for commune, valeurs in lignes:
+        noms[commune] = valeurs["LIBCOM"].strip()
+        teom_niveau = valeurs.get("F71", "").strip()
+        for taxe, destinataire, base, net, _, produit, m_base, m_net, _, m_produit in rei.impositions(
+                valeurs, retenus, marges=True):
+            nombre += 1
+            if produit is None:
+                continue
+            recenses[(commune, taxe, destinataire)] = produit
+            niveau = niveau_rei(destinataire, teom_niveau)
+            par_taxe[(taxe, exercice)] += produit
+            communes_taxe[(taxe, exercice)].add(commune)
+            par_niveau[(niveau, exercice)] += produit
+            if taxe == "TEOM":
+                teom[(niveau, exercice)] += produit
+            if base is None or net is None:
+                continue
+            calcule = base * net / 100
+            ecart = produit - calcule
+            entree = produits[(taxe, destinataire)]
+            entree[0] += 1
+            if not depasse(ecart, m_produit + base * m_net / 100 + net * m_base / 100):
+                entree[1] += 1
+            elif abs(ecart) < SEUIL_PRODUIT * abs(calcule):
+                entree[2] += 1
+            else:
+                entree[3] += 1
+                if entree[4] is None or abs(ecart) > abs(entree[4][0]):
+                    entree[4] = (ecart, calcule, exercice, commune, noms[commune])
+    if inscrit_ofgl:
         publies = {(c, taxe, b): produit for c, taxe, b, _, _, _, produit, _
                    in ofgl.montants_fiscalite(fichiers[inscrit_ofgl["fichier_id"]])}
-        communes = {c for c, _, _ in publies} | {c for c, _, _ in recenses}
+        # Les communes dans l'ordre de leur code : la somme de leurs produits ne dépend pas de l'ordre d'un ensemble.
+        communes = sorted({c for c, _, _ in publies} | {c for c, _, _ in recenses})
         for taxe, beneficiaires, destinataires in COMPARAISONS_REI:
             entree = comparaisons[(taxe, beneficiaires)]
             for commune in communes:
@@ -1648,7 +1647,53 @@ def recensement():
                         entree[7] = (ecart, exercice, commune, noms.get(commune, ""))
                 else:
                     entree[2] += 1
-    return annees, produits, comparaisons, par_taxe, {k: len(v) for k, v in communes_taxe.items()}, par_niveau, teom
+    return ((inscrit, nombre), dict(produits), dict(comparaisons), dict(par_taxe),
+            {k: len(v) for k, v in communes_taxe.items()}, dict(par_niveau), dict(teom))
+
+
+def exercices_du_recensement():
+    """Les appels de `recensement_exercice`, un par année du REI, dans l'ordre des années."""
+    simplifiee = montants_retenus()
+    return [(exercice, inscrit, simplifiee.get((FISCALE, exercice))) for exercice, inscrit in sorted(copies_rei().items())]
+
+
+def recensement(par_exercice=None):
+    """Pour chaque année du REI, dans sa copie la plus récente : son inscription et le nombre d'impositions retenues ;
+    pour chaque taxe et chaque destinataire, le produit contre la base multipliée par le taux net ; chaque imposition de
+    la base simplifiée de l'OFGL contre celles du REI dont elle est tirée, commune par commune ; le produit de chaque
+    taxe, celui de chaque niveau de collectivité ou d'organisme, et la TEOM de chaque niveau, chaque année. Chaque année
+    se recense à part (`recensement_exercice`) ; `par_exercice` donne ces recensements quand ils sont déjà faits, dans
+    l'ordre des années."""
+    if par_exercice is None:
+        par_exercice = [recensement_exercice(*appel) for appel in exercices_du_recensement()]
+    annees = []  # (inscription, impositions retenues)
+    # (taxe, destinataire) → [lignes comparées, égales à l'arrondi près, écart de moins de SEUIL_PRODUIT, au-delà, pire
+    # écart au-delà (écart, base multipliée par le taux, exercice, commune, nom)]
+    produits = collections.defaultdict(lambda: [0, 0, 0, 0, None])
+    # (taxe, bénéficiaires de l'OFGL) → [exercices, communes comparées, égales, en écart, sous secret statistique dans
+    # la base simplifiée, produit de la base simplifiée, produit du REI, pire écart (écart, exercice, commune, nom)]
+    comparaisons = collections.defaultdict(lambda: [set(), 0, 0, 0, 0, 0.0, 0.0, None])
+    par_taxe = collections.defaultdict(float)  # (taxe, exercice) → produit
+    communes_taxe = {}  # (taxe, exercice) → nombre de communes où le REI donne un produit de la taxe
+    par_niveau = collections.defaultdict(float)  # (niveau, exercice) → produit
+    teom = collections.defaultdict(float)  # (niveau, exercice) → TEOM, part fixe et part incitative
+    pire = lambda a, b: b if a is None or (b is not None and abs(b[0]) > abs(a[0])) else a
+    for annee, produits_, comparaisons_, par_taxe_, communes_taxe_, par_niveau_, teom_ in par_exercice:
+        annees.append(annee)
+        for cle, partie in produits_.items():
+            entree = produits[cle]
+            entree[:4] = [a + b for a, b in zip(entree[:4], partie[:4])]
+            entree[4] = pire(entree[4], partie[4])
+        for cle, partie in comparaisons_.items():
+            entree = comparaisons[cle]
+            entree[0] |= partie[0]
+            entree[1:7] = [a + b for a, b in zip(entree[1:7], partie[1:7])]
+            entree[7] = pire(entree[7], partie[7])
+        par_taxe.update(par_taxe_)
+        communes_taxe.update(communes_taxe_)
+        par_niveau.update(par_niveau_)
+        teom.update(teom_)
+    return annees, produits, comparaisons, par_taxe, communes_taxe, par_niveau, teom
 
 
 # --- Le rapport ----------------------------------------------------------------------------------------
@@ -2006,7 +2051,7 @@ def nom(listes, source, exercice, siren):
 
 
 def partie_collectivites(derniers, listes):
-    exercices, controles, sommes, memes, fiches, flux, teom = collectivites(derniers, listes)
+    exercices, controles, sommes, memes, fiches, flux, teom = deja_calcule("collectivites", derniers, listes)
     if not exercices:
         return []
     lignes = ["## 7. Comptes de chaque collectivité", "",
@@ -2380,7 +2425,7 @@ def partie_fonctions(listes):
     sous-fonctions, identités comptables dans chaque fonction, fonctions de premier niveau contre les comptes
     consolidés, libellés des fonctions et regroupements du portail."""
     (exercices, sous_fonctions, ecarts_sous_fonctions, identites, consolides, absents, libelles,
-     regroupements) = fonctions_departements(listes)
+     regroupements) = deja_calcule("fonctions_departements", listes)
     if not exercices:
         return []
     lignes = ["## 9. Dépenses de chaque département par fonction", "",
@@ -2522,7 +2567,7 @@ def partie_fonctions(listes):
 def partie_fiscalite(listes, teom_comptes):
     """La fiscalité directe locale : communes et lignes de chaque exercice, produit contre base multipliée par le taux,
     taux net contre taux voté, taxe d'enlèvement des ordures ménagères recensée contre celle des comptes."""
-    exercices, produits, taux, teom = fiscalite_locale()
+    exercices, produits, taux, teom = deja_calcule("fiscalite_locale")
     if not exercices:
         return []
     lignes = ["## 10. Fiscalité directe locale", "",
@@ -2579,7 +2624,7 @@ def partie_rei(teom_comptes):
     """Le recensement des éléments d'imposition (REI) : les fichiers lus, le produit contre la base multipliée par le
     taux, la base simplifiée de l'OFGL contre le REI, le produit de chaque taxe et de chaque niveau, chaque année, et la
     TEOM recensée de chaque niveau contre celle de ses comptes."""
-    annees, produits, comparaisons, par_taxe, communes_taxe, par_niveau, teom = recensement()
+    annees, produits, comparaisons, par_taxe, communes_taxe, par_niveau, teom = deja_calcule("recensement")
     if not annees:
         return []
     exercices = [i["exercice"] for i, _ in annees]
@@ -3126,7 +3171,8 @@ def comptes_individuels_controles(listes):
 
 
 def partie_comptes_individuels(listes):
-    exercices, identites, annees_en_ecart, rapprochees, comparaisons, noms = comptes_individuels_controles(listes)
+    exercices, identites, annees_en_ecart, rapprochees, comparaisons, noms = deja_calcule(
+        "comptes_individuels_controles", listes)
     if not exercices:
         return []
     lignes = ["## 13. Comptes individuels de la DGFiP", "",
@@ -3336,7 +3382,7 @@ def explication_ecart(concept, etats):
 
 
 def partie_balances_etat(derniers):
-    exercices = balances_etat_controlees(derniers)
+    exercices = deja_calcule("balances_etat_controlees", derniers)
     if not exercices:
         return []
     lignes = ["## 14. Balances des comptes de l'État", "",
@@ -3519,7 +3565,7 @@ def partie_dette_negociable(derniers):
         lignes.append("")
     # Le tableau de financement : la variation de chaque encours d'une fin d'année à l'autre, contre ses flux.
     tf = {k: valeur(l)[:2] for k, l in premieres_versions(derniers, "ETAT_LF", "LOLF.", "MD_EUR").items()}
-    titres = titres_negociables_des_balances()
+    titres = deja_calcule("titres_negociables_des_balances")
 
     def part(exercice, classes):
         """En euros, la part des titres négociables d'une balance que des classes de DETAILS_TITRES réunissent."""
@@ -4789,7 +4835,103 @@ def partie_fonction_publique(derniers):
     return lignes
 
 
+# --- Les calculs lourds, faits d'avance -----------------------------------------------------------------
+#
+# Lire les copies archivées prend l'essentiel du temps du rapport : les comptes de chaque collectivité, le REI, les
+# comptes individuels, les balances de l'État. Ces lectures ne dépendent pas les unes des autres : elles se font
+# d'avance, chacune dans un processus, pendant que le rapport s'écrit, qui prend le résultat de chacune quand il en a
+# besoin. Les processus héritent des chiffres et des listes de collectivités déjà chargés (ENTREES), sans qu'il faille
+# les leur envoyer : là où un processus ne peut pas hériter de son parent, chaque calcul se fait à son tour, comme
+# avec un seul processeur.
+ENTREES = {}  # « derniers », « listes » : les arguments des calculs faits d'avance
+TACHES = {}  # nom du calcul → sa tâche, ou la liste de ses tâches pour le recensement, fait année par année
+# nom du calcul → (ses arguments parmi les entrées, son poids : les plus lourds partent d'abord)
+D_AVANCE = {"collectivites": (("derniers", "listes"), 5), "comptes_individuels_controles": (("listes",), 4),
+            "fonctions_departements": (("listes",), 2), "fiscalite_locale": ((), 2),
+            "balances_etat_controlees": (("derniers",), 1), "titres_negociables_des_balances": ((), 1)}
+
+
+class AvecDefaut:
+    """Un dictionnaire à valeur par défaut (collections.defaultdict), sous une forme qui passe d'un processus à
+    l'autre : son contenu et un modèle de sa valeur par défaut, la fonction qui la fabrique ne passant pas."""
+
+    def __init__(self, modele, contenu):
+        self.modele, self.contenu = modele, contenu
+
+
+def emballe(x):
+    """Un résultat prêt à passer d'un processus à l'autre : ses dictionnaires à valeur par défaut emballés (AvecDefaut),
+    où qu'ils soient dans ses tuples, ses listes et ses dictionnaires."""
+    if isinstance(x, collections.defaultdict):
+        modele = None if x.default_factory is None else emballe(x.default_factory())
+        return AvecDefaut(modele, {k: emballe(v) for k, v in x.items()})
+    if type(x) is dict:  # pas un compteur (collections.Counter), qui passe tel quel
+        return {k: emballe(v) for k, v in x.items()}
+    if type(x) in (list, tuple):
+        return type(x)(emballe(v) for v in x)
+    return x
+
+
+def deballe(x):
+    """Le résultat tel que l'a rendu son calcul : chaque dictionnaire emballé redevient un dictionnaire à valeur par
+    défaut, dont chaque nouvelle valeur est une copie du modèle."""
+    if isinstance(x, AvecDefaut):
+        modele = deballe(x.modele)
+        return collections.defaultdict(None if x.modele is None else (lambda: copy.deepcopy(modele)),
+                                       {k: deballe(v) for k, v in x.contenu.items()})
+    if type(x) is dict:
+        return {k: deballe(v) for k, v in x.items()}
+    if type(x) in (list, tuple):
+        return type(x)(deballe(v) for v in x)
+    return x
+
+
+def calcul_d_avance(nom, *arguments):
+    """Un calcul fait dans un processus à part : la fonction de ce nom, avec les entrées dont le processus a hérité
+    puis ses autres arguments ; son résultat est emballé pour revenir au processus qui écrit le rapport."""
+    return emballe(globals()[nom](*[ENTREES[e] for e in D_AVANCE.get(nom, ((),))[0]], *arguments))
+
+
+def deja_calcule(nom, *arguments):
+    """Le résultat d'un calcul lourd : celui du processus qui l'a fait d'avance, s'il y en a un, sinon fait ici."""
+    if nom not in TACHES:
+        return globals()[nom](*arguments)
+    if nom == "recensement":
+        return recensement([deballe(tache.result()) for tache in TACHES[nom]])
+    return deballe(TACHES[nom].result())
+
+
+def lancer_calculs(bassin):
+    """Lance d'avance les calculs lourds, les plus lourds d'abord ; le recensement, année par année, les plus gros
+    fichiers d'abord."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    annees = exercices_du_recensement()
+    recenses = {a[0]: None for a in annees}
+    lourds = [(nom, poids * 1e12) for nom, (_, poids) in D_AVANCE.items()]
+    lourds += [(a, 3e12 + int(fichiers[a[1]["fichier_id"]]["octets"])) for a in annees]
+    for calcul, _ in sorted(lourds, key=lambda c: -c[1]):
+        if isinstance(calcul, str):
+            TACHES[calcul] = bassin.submit(calcul_d_avance, calcul)
+        else:
+            recenses[calcul[0]] = bassin.submit(calcul_d_avance, "recensement_exercice", *calcul)
+    TACHES["recensement"] = list(recenses.values())
+
+
 def ecrire_rapport(derniers):
+    listes = listes_collectivites()
+    ENTREES.update(derniers=derniers, listes=listes)
+    processus = int(os.environ.get("PROCESSUS") or os.cpu_count() or 1)
+    if processus < 2 or "fork" not in multiprocessing.get_all_start_methods():
+        return rediger_rapport(derniers, listes)
+    with concurrent.futures.ProcessPoolExecutor(processus, mp_context=multiprocessing.get_context("fork")) as bassin:
+        lancer_calculs(bassin)
+        try:
+            return rediger_rapport(derniers, listes)
+        finally:
+            TACHES.clear()
+
+
+def rediger_rapport(derniers, listes):
     lignes = ["# Cohérence des chiffres enregistrés", "",
               "Fichier généré par `outils/controler_coherence.py` à partir de la base : ne pas le modifier à la main.", "",
               "Un écart n'est signalé que s'il dépasse ce que peuvent expliquer les arrondis de publication : la "
@@ -4800,7 +4942,6 @@ def ecrire_rapport(derniers):
               "sur la source, pas une erreur d'enregistrement : chaque chiffre a été relu dans sa copie archivée.", ""]
     lignes += partie_sources(derniers) + partie_sommes(derniers) + partie_ventilations(derniers)
     lignes += partie_additivite(derniers) + partie_passerelles(derniers) + partie_ratios(derniers)
-    listes = listes_collectivites()
     lignes += partie_concordances(derniers) + partie_collectivites(derniers, listes) + partie_organismes(derniers, listes)
     lignes += partie_comptes_individuels(listes) + partie_balances_etat(derniers) + partie_dette_negociable(derniers)
     lignes += partie_protection_sociale(derniers) + partie_budget_vote(derniers) + partie_recettes_votees(derniers)

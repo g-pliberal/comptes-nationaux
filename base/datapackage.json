@@ -18,6 +18,7 @@
     {"name": "traitements", "path": "tables/traitements.csv", "schema": "schemas/traitements.json"},
     {"name": "sources", "path": "tables/sources.csv", "schema": "schemas/sources.json"},
     {"name": "fichiers", "path": "tables/fichiers.csv", "schema": "schemas/fichiers.json"},
+    {"name": "verifications", "path": "tables/verifications.csv", "schema": "schemas/verifications.json"},
     {"name": "calculs", "path": "tables/calculs.csv", "schema": "schemas/calculs.json"},
     {"name": "agregats_ofgl", "path": "tables/agregats_ofgl.csv", "schema": "schemas/agregats_ofgl.json"},
     {"name": "fichiers_collectivites", "path": "tables/fichiers_collectivites.csv", "schema": "schemas/fichiers_collectivites.json"},

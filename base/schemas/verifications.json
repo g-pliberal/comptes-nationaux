@@ -1,0 +1,12 @@
+{
+  "description": "Copies archivées vérifiées à jour : en archivant de nouveau un fichier dont la source annonce une nouvelle date de mise à jour, le contenu reçu était celui d'une copie déjà archivée. La copie n'est pas dupliquée ; la vérification s'inscrit ici, pour que la veille des sources ne la signale plus.",
+  "fields": [
+    {"name": "fichier_id", "type": "string", "description": "Copie archivée dont le contenu a été reçu de nouveau, à l'identique.", "constraints": {"required": true}},
+    {"name": "verifie_le", "type": "datetime", "constraints": {"required": true}},
+    {"name": "mis_a_jour_source", "type": "string", "description": "Date de mise à jour annoncée par la source au moment de la vérification, telle qu'elle l'écrit.", "constraints": {"required": true}}
+  ],
+  "primaryKey": ["fichier_id", "mis_a_jour_source"],
+  "foreignKeys": [
+    {"fields": ["fichier_id"], "reference": {"resource": "fichiers", "fields": ["id"]}}
+  ]
+}
