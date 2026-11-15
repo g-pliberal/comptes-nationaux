@@ -85,7 +85,10 @@ def main():
                 chemin = os.path.join(dossier, nom)
                 with open(chemin, "wb") as f:
                     f.write(contenu)
-                envoi = gh("release", "upload", etiquette, chemin, "--repo", depot, verifier=False)
+                for _ in range(3):
+                    envoi = gh("release", "upload", etiquette, chemin, "--repo", depot, verifier=False)
+                    if envoi.returncode == 0 or (joints(etiquette, depot) or {}).get(nom) == int(copie["octets"]):
+                        break
             if envoi.returncode != 0:
                 # Deux contrôles qui tournent en même temps (une modification et sa demande de fusion) peuvent joindre
                 # le même fichier : il suffit qu'il y soit, entier.

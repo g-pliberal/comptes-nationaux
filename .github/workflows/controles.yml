@@ -12,6 +12,11 @@ jobs:
   ranger:
     name: Ranger les grosses copies dans les « Releases »
     runs-on: ubuntu-latest
+    # Une modification et sa demande de fusion lancent deux contrôles : ils rangent l'un après l'autre, pour ne pas créer
+    # la Release ou joindre le même fichier en même temps.
+    concurrency:
+      group: rangement
+      cancel-in-progress: false
     permissions:
       contents: write
     env:
