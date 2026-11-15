@@ -39,6 +39,18 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 1079 |
 | an.ta17-0017 | Projet de loi de finances de fin de gestion pour 2024 (loi n° 2024-1167), texte adopté n° 17 (17e législature), adopté définitivement par l'Assemblée nationale le 4 décembre 2024 | 2024-12-04 | 767 |
 | an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 1057 |
+| budget.depenses-fiscales-plf2020 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2020 | 2019-10-04 | 853 |
+| budget.depenses-fiscales-plf2021 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2021 | 2020-10-06 | 888 |
+| budget.depenses-fiscales-plf2022 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2022 | 2021-10-07 | 908 |
+| budget.depenses-fiscales-plf2023 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2023 | 2022-10-03 | 951 |
+| ccomptes.certification-2016 | Certification des comptes de l'État, exercice 2016 (mai 2017) | 2017-05-24 | 76 |
+| ccomptes.certification-2017 | Certification des comptes de l'État, exercice 2017 (mai 2018) | 2018-05-24 | 80 |
+| ccomptes.certification-2018 | Certification des comptes de l'État, exercice 2018 (mai 2019) | 2019-05-13 | 92 |
+| ccomptes.certification-2019 | Certification des comptes de l'État, exercice 2019 (avril 2020) | 2020-04-27 | 91 |
+| ccomptes.certification-2020 | Certification des comptes de l'État, exercice 2020 (avril 2021) | 2021-04-09 | 92 |
+| ccomptes.certification-2022 | Certification des comptes de l'État, exercice 2022 (avril 2023) | 2023-04-13 | 124 |
+| ccomptes.certification-2023 | Certification des comptes de l'État, exercice 2023 (avril 2024) | 2024-04-16 | 124 |
+| ccomptes.certification-2024 | Certification des comptes de l'État, exercice 2024 (avril 2025) | 2025-04-15 | 128 |
 | ccomptes.rbde-2009 | Résultats et gestion budgétaire de l'État, exercice 2009 (mai 2010) | 2010-05-26 | 2 |
 | ccomptes.rbde-2012 | Résultats et gestion budgétaire de l'État, exercice 2012 (mai 2013) | 2013-05-28 | 1 |
 | ccomptes.rbde-2013 | Le budget de l'État en 2013 : résultats et gestion (mai 2014) | 2014-05-26 | 1 |
@@ -107,6 +119,13 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | ofgl.annexe-2b | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2B : budgets annexes des collectivités locales, par niveau de collectivité | 2026-08-17 | 2444 |
 | ofgl.annexe-2c | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2C : budgets principaux et annexes consolidés de chaque niveau de collectivité | 2026-04-28 | 1415 |
 | ofgl.annexe-2d | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2D : niveaux consolidés, bloc communal et ensemble des collectivités locales | 2026-04-29 | 566 |
+| secu.placss2023-annexe2 | Annexe 2 du projet de loi d'approbation des comptes de la sécurité sociale de 2023 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2024-06-10 | 288 |
+| secu.placss2024-annexe2 | Annexe 2 du projet de loi d'approbation des comptes de la sécurité sociale de 2024 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2025-06-13 | 353 |
+| secu.plfss2023-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2023 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2022-11-10 | 375 |
+| secu.plfss2024-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2024 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2023-10-19 | 414 |
+| secu.plfss2025-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2025 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2024-11-20 | 399 |
+| secu.plfss2026-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2026 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2025-11-04 | 414 |
+| secu.plfss2027-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2027 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2026-11-09 | 562 |
 | senat.pjl06-051 | Projet de loi de financement de la sécurité sociale pour 2007, texte n° 51 (2006-2007) transmis au Sénat le 6 novembre 2006 | 2006-11-06 | 42 |
 | senat.pjl06-389 | Projet de loi de règlement du budget de l'année 2006, texte n° 389 (2006-2007) transmis au Sénat le 17 juillet 2007 | 2007-07-17 | 1602 |
 | senat.pjl07-067 | Projet de loi de financement de la sécurité sociale pour 2008, texte n° 67 (2007-2008) transmis au Sénat le 6 novembre 2007 | 2007-11-06 | 39 |
@@ -317,13 +336,17 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-32047 ventilations vérifiées avec toutes leurs parties : 32041 justes, 6 en écart.
+32155 ventilations vérifiées avec toutes leurs parties : 32144 justes, 11 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
 | an.ta13-0808 | ETAT_LF | LOLF.CAS_CP_LFI | ensemble | 2012 | −4 617,0 M€ en 2012 |
 | an.ta13-0808 | ETAT_LF | LOLF.CAS_CP_LFI | LOLF.GESTION_DU_PATRIMOINE_IMMOBILIER_DE_LETAT | 2012 | +4 617,0 M€ en 2012 |
 | an.ta14-0267 | ETAT_LF | LOLF.BA_RECETTES_HORS_FDC_LFI | LOLF.CONTROLE_ET_EXPLOITATION_AERIENS | 2014 | +300 € en 2014 |
+| ccomptes.certification-2016 | ETAT_CGE | COMPTES_ETAT.ENGAGEMENTS_HORS_BILAN_DONNES | COMPTES_ETAT.EHB.DONNES.ENGAGEMENTS_PRIS_DANS_LE_CADRE_D_ACCORDS_BIEN_DEFINIS.ENGAGEMENTS_FINANCIERS_DE_L_ETAT.CONTRATS_DE_COFINANCEMENT | 2015 et 2016 | +8 000,0 M€ en 2016 |
+| ccomptes.certification-2022 | ETAT_CGE | COMPTES_ETAT.ENGAGEMENTS_HORS_BILAN_RECUS | COMPTES_ETAT.EHB.RECUS.ENGAGEMENTS_RECUS_DANS_LE_CADRE_D_ACCORDS_BIEN_DEFINIS.ENGAGEMENTS_FINANCIERS_DE_L_ETAT | 2022 | −11 540,0 M€ en 2022 |
+| ccomptes.certification-2023 | ETAT_CGE | COMPTES_ETAT.ENGAGEMENTS_HORS_BILAN_DONNES | COMPTES_ETAT.EHB.DONNES.ENGAGEMENTS_PRIS_DANS_LE_CADRE_D_ACCORDS_BIEN_DEFINIS.GARANTIES_LIEES_A_DES_MISSIONS_D_INTERET_GENERAL_ENCOURS | 2023 | −180,0 M€ en 2023 |
+| ccomptes.certification-2023 | ETAT_CGE | COMPTES_ETAT.ENGAGEMENTS_HORS_BILAN_RECUS | COMPTES_ETAT.EHB.RECUS.ENGAGEMENTS_RECUS_DANS_LE_CADRE_D_ACCORDS_BIEN_DEFINIS.ENGAGEMENTS_FINANCIERS_DE_L_ETAT | 2022 | −2 960,0 M€ en 2022 |
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_DEPENSES | ensemble | 2016 | +0,6 M€ en 2016 |
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_RECETTES | ensemble | 2016 | +0,6 M€ en 2016 |
 | senat.tas06-037 | ETAT_LF | LOLF.BG_RECETTES_NON_FISCALES_LFR | LOLF.RECETTES.28_DIVERS | 2006 | −0,1 M€ en 2006 |
@@ -517,6 +540,11 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 
 | Source A | Source B | Comparaisons | Écarts | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (A − B) | Plus grand écart (A − B) |
 |---|---|---|---|---|---|---|
+| budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2021 | 496 | 282 | 0 | aucun | +895,0 M€ en 2020 |
+| budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2022 | 235 | 160 | 0 | aucun | −960,0 M€ en 2020 |
+| budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2022 | 537 | 309 | 0 | aucun | +992,0 M€ en 2021 |
+| budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2023 | 262 | 182 | 0 | aucun | +1 107,0 M€ en 2021 |
+| budget.depenses-fiscales-plf2022 | budget.depenses-fiscales-plf2023 | 574 | 339 | 0 | aucun | +1 156,0 M€ en 2022 |
 | ccomptes.rbde-2021 | dgafp.raefp-2022 | 1 | 0 | 0 | aucun | aucun |
 | ccomptes.rbde-2022 | dgafp.raefp-2023 | 1 | 1 | 1 | +4,45 ETPT en 2022 | +4,45 ETPT en 2022 |
 | ccomptes.rbde-2023 | dgafp.raefp-2024 | 2 | 2 | 2 | −332,25 ETPT en 2023 | −332,25 ETPT en 2023 |
@@ -673,6 +701,25 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | insee.t3217 | senat.pjl25-726 | 1 | 0 | 0 | aucun | aucun |
 | insee.t3301 | insee.t3307 | 1248 | 408 | 408 | −20 301,0 M€ en 2009 | −20 301,0 M€ en 2009 |
 | ofgl.annexe-2a | ofgl.annexe-2b | 108 | 86 | 0 | aucun | −703,9 M€ en 2022 |
+| secu.placss2023-annexe2 | secu.placss2024-annexe2 | 225 | 33 | 22 | +600,0 M€ en 2022 | −1 200,0 M€ en 2023 |
+| secu.placss2023-annexe2 | secu.plfss2023-annexe4 | 266 | 193 | 38 | +5 190,0 M€ en 2021 | +8 500,0 M€ en 2023 |
+| secu.placss2023-annexe2 | secu.plfss2024-annexe4 | 270 | 147 | 36 | +3 240,0 M€ en 2021 | +3 320,0 M€ en 2022 |
+| secu.placss2023-annexe2 | secu.plfss2025-annexe4 | 161 | 30 | 21 | +600,0 M€ en 2022 | −1 200,0 M€ en 2023 |
+| secu.placss2023-annexe2 | secu.plfss2026-annexe4 | 54 | 20 | 20 | −3 400,0 M€ en 2023 | −3 400,0 M€ en 2023 |
+| secu.placss2024-annexe2 | secu.plfss2023-annexe4 | 214 | 165 | 38 | +5 190,0 M€ en 2021 | +9 300,0 M€ en 2023 |
+| secu.placss2024-annexe2 | secu.plfss2024-annexe4 | 324 | 232 | 31 | +3 240,0 M€ en 2021 | +3 510,0 M€ en 2024 |
+| secu.placss2024-annexe2 | secu.plfss2025-annexe4 | 270 | 51 | 3 | −26,0 M€ en 2023 | −974,3 M€ en 2024 |
+| secu.placss2024-annexe2 | secu.plfss2026-annexe4 | 152 | 51 | 22 | +114,0 M€ en 2024 | −2 600,0 M€ en 2023 |
+| secu.placss2024-annexe2 | secu.plfss2027-annexe4 | 54 | 25 | 0 | aucun | +1 400,0 M€ en 2024 |
+| secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | 271 | 191 | 33 | −4 400,0 M€ en 2021 | −8 950,0 M€ en 2023 |
+| secu.plfss2023-annexe4 | secu.plfss2025-annexe4 | 153 | 115 | 0 | aucun | −9 000,0 M€ en 2023 |
+| secu.plfss2023-annexe4 | secu.plfss2026-annexe4 | 51 | 40 | 0 | aucun | −11 900,0 M€ en 2023 |
+| secu.plfss2024-annexe4 | secu.plfss2025-annexe4 | 277 | 195 | 0 | aucun | −3 410,0 M€ en 2024 |
+| secu.plfss2024-annexe4 | secu.plfss2026-annexe4 | 157 | 115 | 0 | aucun | −3 810,0 M€ en 2024 |
+| secu.plfss2024-annexe4 | secu.plfss2027-annexe4 | 57 | 41 | 0 | aucun | −3 560,0 M€ en 2024 |
+| secu.plfss2025-annexe4 | secu.plfss2026-annexe4 | 259 | 118 | 0 | aucun | +4 668,9 M€ en 2025 |
+| secu.plfss2025-annexe4 | secu.plfss2027-annexe4 | 132 | 67 | 0 | aucun | +3 906,0 M€ en 2025 |
+| secu.plfss2026-annexe4 | secu.plfss2027-annexe4 | 218 | 95 | 0 | aucun | −3 407,1 M€ en 2026 |
 | senat.pjl06-389 | senat.pjl07-429 | 127 | 10 | 10 | +3 761,0 M€ en 2006 | +3 761,0 M€ en 2006 |
 | senat.pjl11-073 | senat.pjl12-103 | 66 | 6 | 6 | −1 000,0 M€ en 2010 | −1 000,0 M€ en 2010 |
 | senat.pjl12-103 | senat.pjl13-117 | 69 | 1 | 1 | +9 800,0 M€ en 2011 | +9 800,0 M€ en 2011 |
@@ -760,6 +807,11 @@ Détail des grandeurs en écart :
 
 | Source A | Source B | Grandeur | Fonctions en écart | Années en écart | dont hors chiffres révisables | Plus grand écart (A − B) |
 |---|---|---|---|---|---|---|
+| budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2021 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 168 groupes | 2019 et 2020 | aucune | +895,0 M€ en 2020 (LOLF.DEPENSE_FISCALE.800210) |
+| budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2022 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 160 groupes | 2020 | aucune | −960,0 M€ en 2020 (LOLF.DEPENSE_FISCALE.200302) |
+| budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2022 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 182 groupes | 2020 et 2021 | aucune | +992,0 M€ en 2021 (LOLF.DEPENSE_FISCALE.210324) |
+| budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2023 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 182 groupes | 2021 | aucune | +1 107,0 M€ en 2021 (LOLF.DEPENSE_FISCALE.210324) |
+| budget.depenses-fiscales-plf2022 | budget.depenses-fiscales-plf2023 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 191 groupes | 2021 et 2022 | aucune | +1 156,0 M€ en 2022 (LOLF.DEPENSE_FISCALE.820203) |
 | ccomptes.rbde-2022 | dgafp.raefp-2023 | FR ETAT_LF LOLF.BG_EMPLOIS_CONSOMMES | ensemble | 2022 | 2022 | +4,45 ETPT en 2022 |
 | ccomptes.rbde-2023 | dgafp.raefp-2024 | FR ETAT_LF LOLF.BG_EMPLOIS_CONSOMMES | ensemble | 2023 | 2023 | −332,25 ETPT en 2023 |
 | ccomptes.rbde-2023 | dgafp.raefp-2024 | FR ETAT_LF LOLF.EMPLOIS_CONSOMMES | ensemble | 2023 | 2023 | −331,97 ETPT en 2023 |
@@ -930,6 +982,77 @@ Détail des grandeurs en écart :
 | ofgl.annexe-2a | ofgl.annexe-2b | FR SYNDICATS_BP COMPTES_LOCAUX.DEP_FONCTIONNEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | +145,4 M€ en 2024 |
 | ofgl.annexe-2a | ofgl.annexe-2b | FR SYNDICATS_BP COMPTES_LOCAUX.DEP_INVESTISSEMENT | ensemble | 5 années entre 2020 et 2024 | aucune | −1,9 M€ en 2024 |
 | ofgl.annexe-2a | ofgl.annexe-2b | FR SYNDICATS_BP COMPTES_LOCAUX.DEP_TOTALES | ensemble | 5 années entre 2020 et 2024 | aucune | +143,8 M€ en 2024 |
+| secu.placss2023-annexe2 | secu.placss2024-annexe2 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 10 groupes | 2022 et 2023 | 2022 | −1 200,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
+| secu.placss2023-annexe2 | secu.placss2024-annexe2 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | COMPTES_SECU.EXEMPTION_IV_INDEMNITES_DE_RUPTURE, COMPTES_SECU.EXEMPTION_PREVOYANCE_COMPLEMENTAIRE et COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE | 2023 | aucune | +200,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_IV_INDEMNITES_DE_RUPTURE) |
+| secu.placss2023-annexe2 | secu.placss2024-annexe2 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | COMPTES_SECU.EXEMPTION_IV_INDEMNITES_DE_RUPTURE | 2023 | aucune | +200,0 M€ en 2023 |
+| secu.placss2023-annexe2 | secu.placss2024-annexe2 | FR ROBSS LFSS.EXONERATION_COUT | 17 groupes | 2023 | 2023 | +121,2 M€ en 2023 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_MALADIE_DES_TRAVAILLEURS_INDEPENDANTS) |
+| secu.placss2023-annexe2 | secu.plfss2023-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 15 groupes | 2021, 2022 et 2023 | 2021 | +8 500,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2023-annexe2 | secu.plfss2023-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 15 groupes | 2021, 2022 et 2023 | 2021 | +6 580,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2023-annexe2 | secu.plfss2023-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 15 groupes | 2021, 2022 et 2023 | 2021 | +5 040,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2023-annexe2 | secu.plfss2023-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 40 groupes | 2022 et 2023 | aucune | +3 674,0 M€ en 2023 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.placss2023-annexe2 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 10 groupes | 2021, 2022 et 2023 | 2021 | +1 540,0 M€ en 2022 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
+| secu.placss2023-annexe2 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 16 groupes | 2021, 2022 et 2023 | 2021 | +3 320,0 M€ en 2022 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2023-annexe2 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 15 groupes | 2021, 2022 et 2023 | 2021 | +3 270,0 M€ en 2022 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2023-annexe2 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 40 groupes | 2022 et 2023 | 2022 | +1 353,0 M€ en 2023 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATION_MALADIE_DE_6_POINTS_L_241_2_1_CSS) |
+| secu.placss2023-annexe2 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 9 groupes | 2022 et 2023 | 2022 | −1 200,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
+| secu.placss2023-annexe2 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | COMPTES_SECU.EXEMPTION_IV_INDEMNITES_DE_RUPTURE | 2023 | aucune | +200,0 M€ en 2023 |
+| secu.placss2023-annexe2 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | COMPTES_SECU.EXEMPTION_IV_INDEMNITES_DE_RUPTURE | 2023 | aucune | +200,0 M€ en 2023 |
+| secu.placss2023-annexe2 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 16 groupes | 2023 | 2023 | +121,0 M€ en 2023 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_MALADIE_DES_TRAVAILLEURS_INDEPENDANTS) |
+| secu.placss2023-annexe2 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 10 groupes | 2023 | 2023 | −3 400,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2023-annexe2 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 5 groupes | 2023 | 2023 | −900,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.placss2023-annexe2 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 5 groupes | 2023 | 2023 | −800,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.placss2024-annexe2 | secu.plfss2023-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 15 groupes | 2021, 2022 et 2023 | 2021 | +9 300,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2024-annexe2 | secu.plfss2023-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 15 groupes | 2021, 2022 et 2023 | 2021 | +6 780,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2024-annexe2 | secu.plfss2023-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 15 groupes | 2021, 2022 et 2023 | 2021 | +5 040,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2024-annexe2 | secu.plfss2023-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 42 groupes | 2023 | aucune | +3 614,2 M€ en 2023 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.placss2024-annexe2 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 15 groupes | 2021, 2022, 2023 et 2024 | 2021 | +1 880,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
+| secu.placss2024-annexe2 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 16 groupes | 2021, 2022, 2023 et 2024 | 2021 | +3 510,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2024-annexe2 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 15 groupes | 2021, 2022, 2023 et 2024 | 2021 | +3 360,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2024-annexe2 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 47 groupes | 2023 et 2024 | aucune | −1 958,3 M€ en 2024 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.placss2024-annexe2 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | COMPTES_SECU.EXEMPTION_II_PROTECTION_SOCIALE_COMPLEMENTAIRE_EN_ENTREPRISE et COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE | 2023 et 2024 | aucune | +300,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_II_PROTECTION_SOCIALE_COMPLEMENTAIRE_EN_ENTREPRISE) |
+| secu.placss2024-annexe2 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE | 2023 | aucune | +200,0 M€ en 2023 |
+| secu.placss2024-annexe2 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 44 groupes | 2023 et 2024 | 2023 | −974,3 M€ en 2024 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.placss2024-annexe2 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 9 groupes | 2023 et 2024 | aucune | −2 600,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.placss2024-annexe2 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 4 groupes | 2023 et 2024 | aucune | −1 000,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.placss2024-annexe2 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 4 groupes | 2023 et 2024 | aucune | −1 000,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.placss2024-annexe2 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 22 groupes | 2024 | 2024 | +114,0 M€ en 2024 (COMPTES_SECU.EXO_EXONERATION_SUR_LES_HEURES_SUPPLEMENTAIRES_PART_SALARIALE) |
+| secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 12 groupes | 2024 | aucune | +1 400,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_AVANTAGES_ACCORDES_PAR_LES_COMITES_D_ENTREPRISES) |
+| secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 6 groupes | 2024 | aucune | +900,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
+| secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 7 groupes | 2024 | aucune | −700,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 15 groupes | 2021, 2022 et 2023 | 2021 | −8 950,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 14 groupes | 2021, 2022 et 2023 | 2021 | −3 480,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 13 groupes | 2021, 2022 et 2023 | 2021 | −1 890,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 42 groupes | 2022 et 2023 | aucune | −2 477,0 M€ en 2023 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.plfss2023-annexe4 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 14 groupes | 2022 et 2023 | aucune | −9 000,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2023-annexe4 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 13 groupes | 2022 et 2023 | aucune | −6 580,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2023-annexe4 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 14 groupes | 2022 et 2023 | aucune | −4 940,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2023-annexe4 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 36 groupes | 2023 | aucune | −3 614,0 M€ en 2023 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.plfss2023-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 13 groupes | 2023 | aucune | −11 900,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2023-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 13 groupes | 2023 | aucune | −7 080,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2023-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 14 groupes | 2023 | aucune | −5 240,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2024-annexe4 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 16 groupes | 2022, 2023 et 2024 | aucune | −1 880,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
+| secu.plfss2024-annexe4 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 17 groupes | 2022, 2023 et 2024 | aucune | −3 410,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2024-annexe4 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 16 groupes | 2022, 2023 et 2024 | aucune | −3 360,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2024-annexe4 | secu.plfss2025-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 40 groupes | 2023 et 2024 | aucune | +1 425,0 M€ en 2024 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
+| secu.plfss2024-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 16 groupes | 2023 et 2024 | aucune | −2 950,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2024-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 14 groupes | 2023 et 2024 | aucune | −3 810,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2024-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 14 groupes | 2023 et 2024 | aucune | −3 660,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2024-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 33 groupes | 2024 | aucune | +1 931,8 M€ en 2024 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.plfss2024-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 16 groupes | 2024 | aucune | −1 620,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2024-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 13 groupes | 2024 | aucune | −3 510,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2024-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 12 groupes | 2024 | aucune | −3 560,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2025-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 11 groupes | 2023, 2024 et 2025 | aucune | −2 900,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2025-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 7 groupes | 2023, 2024 et 2025 | aucune | −1 000,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.plfss2025-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 4 groupes | 2023, 2024 et 2025 | aucune | −1 000,0 M€ en 2025 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.plfss2025-annexe4 | secu.plfss2026-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 37 groupes | 2024 et 2025 | aucune | +4 668,9 M€ en 2025 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.plfss2025-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 14 groupes | 2024 et 2025 | aucune | −1 600,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2025-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 8 groupes | 2024 et 2025 | aucune | +1 000,0 M€ en 2025 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
+| secu.plfss2025-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 8 groupes | 2024 et 2025 | aucune | +800,0 M€ en 2025 (COMPTES_SECU.EXEMPTION_STOCK_OPTIONS_ET_ATTRIBUTIONS_GRATUITES_D_ACTIONS) |
+| secu.plfss2025-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 15 groupes | 2025 | aucune | +3 906,0 M€ en 2025 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.plfss2026-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 11 groupes | 2024, 2025 et 2026 | aucune | +2 400,0 M€ en 2026 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
+| secu.plfss2026-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 8 groupes | 2024, 2025 et 2026 | aucune | +800,0 M€ en 2026 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.plfss2026-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 7 groupes | 2024, 2025 et 2026 | aucune | +600,0 M€ en 2025 (COMPTES_SECU.EXEMPTION_AVANTAGES_ACCORDES_PAR_LES_COMITES_D_ENTREPRISES) |
+| secu.plfss2026-annexe4 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXONERATION_COUT | 17 groupes | 2025 et 2026 | aucune | −3 407,1 M€ en 2026 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.ACTIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 760,0 M€ en 2006 |
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.AUTRES_TRESORERIE_PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
 | senat.pjl06-389 | senat.pjl07-429 | FR ETAT_CGE COMPTES_ETAT.PASSIF | ensemble | 2005 et 2006 | 2005 et 2006 | +3 761,0 M€ en 2006 |
@@ -1897,11 +2020,11 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 
 | Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
 |---|---|---|---|
-| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; ccomptes : rbde-2009, rbde-2012, rbde-2013, rbde-2014, rbde-2015, rbde-2021, rbde-2022, rbde-2023, rbde-2024, rbde-2025 ; dgafp : raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
+| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; budget : depenses-fiscales-plf2020, depenses-fiscales-plf2021, depenses-fiscales-plf2022, depenses-fiscales-plf2023 ; ccomptes : 18 sources (certification-2016 … rbde-2025) ; dgafp : raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
 | Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
-| Administrations de sécurité sociale (S1314) | pas de liste dans la documentation des comptes nationaux de l'Insee | aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, CADES, FRR | eurostat : gov_10a_main ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3108, t3212 à t3216, t3306, t3307, t7306 ; senat : 22 sources (pjl06-051 … tas22-018) |
+| Administrations de sécurité sociale (S1314) | pas de liste dans la documentation des comptes nationaux de l'Insee | aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, CADES, FRR | eurostat : gov_10a_main ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3108, t3212 à t3216, t3306, t3307, t7306 ; secu : placss2023-annexe2, placss2024-annexe2, plfss2023-annexe4, plfss2024-annexe4, plfss2025-annexe4, plfss2026-annexe4, plfss2027-annexe4 ; senat : 22 sources (pjl06-051 … tas22-018) |
 
 ### Collectivités territoriales et groupements
 
@@ -2148,19 +2271,19 @@ Engagements hors bilan de l'État, en milliards d'euros, au signe de leur prése
 | S806_Engagements reçus | 15,6 | 16,7 | 21,3 | 24,5 | 27,2 | 58,2 | 70,1 | 53,2 | 45,4 | 45,8 |
 | S899_Contrepartie des engagements | 874,2 | 922,7 | 1 472,0 | 1 605,7 | 1 880,5 | 1 943,6 | 1 660,6 | 1 903,3 | 1 770,9 | 1 671,5 |
 
-Le bilan et le compte de résultat que donne chaque balance, par les indicateurs de synthèse que la DGFiP rattache aux lignes des états financiers (tables/indicateurs_balances_etat.csv), contre ceux de la loi d'approbation des comptes de l'exercice, ligne par ligne et total par total, en millions d'euros. Une ligne de la loi est exacte au demi-million près ; la situation nette que donne la balance est l'actif moins le passif. 1 251 lignes comparées, 1 108 égales à l'arrondi près.
+Le bilan et le compte de résultat que donne chaque balance, par les indicateurs de synthèse que la DGFiP rattache aux lignes des états financiers (tables/indicateurs_balances_etat.csv), contre ceux de la loi d'approbation des comptes de l'exercice, ligne par ligne et total par total, en millions d'euros. Une ligne de la loi est exacte au demi-million près ; la situation nette que donne la balance est l'actif moins le passif. 1 269 lignes comparées, 1 108 égales à l'arrondi près.
 
 | Exercice | Lignes comparées | Égales | Autres |
 |---|---|---|---|
-| 2016 | 124 | 106 | 18 |
-| 2017 | 124 | 107 | 17 |
-| 2018 | 124 | 107 | 17 |
-| 2019 | 124 | 112 | 12 |
-| 2020 | 124 | 114 | 10 |
-| 2021 | 126 | 107 | 19 |
-| 2022 | 127 | 107 | 20 |
-| 2023 | 127 | 111 | 16 |
-| 2024 | 127 | 120 | 7 |
+| 2016 | 126 | 106 | 20 |
+| 2017 | 126 | 107 | 19 |
+| 2018 | 126 | 107 | 19 |
+| 2019 | 126 | 112 | 14 |
+| 2020 | 126 | 114 | 12 |
+| 2021 | 128 | 107 | 21 |
+| 2022 | 129 | 107 | 22 |
+| 2023 | 129 | 111 | 18 |
+| 2024 | 129 | 120 | 9 |
 | 2025 | 124 | 117 | 7 |
 
 Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le report des exercices antérieurs de la loi qui comprend le solde des opérations de l'exercice (le bilan y est présenté après son affectation) ; un reclassement entre les lignes d'un même total, que la loi donne alors égal à celui de la balance ; une compensation de créances et de dettes, quand l'actif et le passif de la loi sont moindres d'un même montant, la situation nette restant juste ; une ligne que la balance ne distingue pas. Le montant brut d'un actif n'est pas répété quand sa ligne nette porte le même écart.
@@ -2173,6 +2296,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2016 | CREANCES_REDEVABLES | 64 791 | 64 783,9 | +7,1 | reclassement entre les composantes de CREANCES, total juste |
 | 2016 | DETTES_FONCTIONNEMENT | 7 753 | 7 945,0 | −192,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
 | 2016 | DETTES_INTERVENTION | 16 790 | 16 247,9 | +542,1 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2016 | ENGAGEMENTS_HORS_BILAN_DONNES | 5 620 | — | — | la balance ne distingue pas cette ligne |
+| 2016 | ENGAGEMENTS_HORS_BILAN_RECUS | 7 306 | — | — | la balance ne distingue pas cette ligne |
 | 2016 | FONDS_BANCAIRES_CAISSE | 12 162 | 12 213,9 | −51,9 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
 | 2016 | REPORT_EXERCICES_ANTERIEURS | −1 549 863 | −1 474 260,7 | −75 602,3 | la loi y ajoute le solde des opérations de l'exercice |
 | 2016 | RESSOURCE_PROPRE_UE_RNB | −15 722 | — | — | la balance ne distingue pas cette ligne |
@@ -2186,6 +2311,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2017 | CREANCES_REDEVABLES | 67 112 | 67 104,1 | +7,9 | reclassement entre les composantes de CREANCES, total juste |
 | 2017 | DETTES_FONCTIONNEMENT | 7 619 | 7 606,4 | +12,6 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
 | 2017 | DETTES_INTERVENTION | 16 122 | 15 591,0 | +531,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2017 | ENGAGEMENTS_HORS_BILAN_DONNES | 5 720 | — | — | la balance ne distingue pas cette ligne |
+| 2017 | ENGAGEMENTS_HORS_BILAN_RECUS | 7 044 | — | — | la balance ne distingue pas cette ligne |
 | 2017 | FONDS_BANCAIRES_CAISSE | 20 763 | 21 242,8 | −479,8 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
 | 2017 | REPORT_EXERCICES_ANTERIEURS | −1 611 274 | −1 550 315,9 | −60 958,1 | la loi y ajoute le solde des opérations de l'exercice |
 | 2017 | RESSOURCE_PROPRE_UE_RNB | −11 953 | — | — | la balance ne distingue pas cette ligne |
@@ -2199,6 +2326,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2018 | CREANCES_REDEVABLES | 69 354 | 69 341,5 | +12,5 | reclassement entre les composantes de CREANCES, total juste |
 | 2018 | DETTES_FONCTIONNEMENT | 7 552 | 7 543,8 | +8,2 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
 | 2018 | DETTES_INTERVENTION | 13 195 | 12 644,3 | +550,7 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2018 | ENGAGEMENTS_HORS_BILAN_DONNES | 5 762 | — | — | la balance ne distingue pas cette ligne |
+| 2018 | ENGAGEMENTS_HORS_BILAN_RECUS | 4 144 | — | — | la balance ne distingue pas cette ligne |
 | 2018 | FONDS_BANCAIRES_CAISSE | 31 464 | 32 514,3 | −1 050,3 | reclassement entre les composantes de TRESORERIE_ACTIF, total juste |
 | 2018 | REPORT_EXERCICES_ANTERIEURS | −1 663 382 | −1 611 508,6 | −51 873,4 | la loi y ajoute le solde des opérations de l'exercice |
 | 2018 | RESSOURCE_PROPRE_UE_RNB | −16 124 | — | — | la balance ne distingue pas cette ligne |
@@ -2211,6 +2340,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2019 | CREANCES_REDEVABLES | 76 179 | 76 170,7 | +8,3 | reclassement entre les composantes de CREANCES, total juste |
 | 2019 | DETTES_FONCTIONNEMENT | 7 943 | 7 938,2 | +4,8 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
 | 2019 | DETTES_INTERVENTION | 9 528 | 8 787,4 | +740,6 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2019 | ENGAGEMENTS_HORS_BILAN_DONNES | 4 131 | — | — | la balance ne distingue pas cette ligne |
+| 2019 | ENGAGEMENTS_HORS_BILAN_RECUS | 4 135 | — | — | la balance ne distingue pas cette ligne |
 | 2019 | REPORT_EXERCICES_ANTERIEURS | −1 748 246 | −1 663 608,1 | −84 637,9 | la loi y ajoute le solde des opérations de l'exercice |
 | 2019 | RESSOURCE_PROPRE_UE_RNB | −16 373 | — | — | la balance ne distingue pas cette ligne |
 | 2019 | RESSOURCE_PROPRE_UE_TVA | −4 649 | — | — | la balance ne distingue pas cette ligne |
@@ -2220,6 +2351,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2020 | CREANCES_CLIENTS | 1 217 | 1 219,3 | −2,3 | reclassement entre les composantes de CREANCES, total juste |
 | 2020 | DETTES_FONCTIONNEMENT | 7 351 | 7 343,1 | +7,9 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
 | 2020 | DETTES_INTERVENTION | 15 086 | 14 071,6 | +1 014,4 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2020 | ENGAGEMENTS_HORS_BILAN_DONNES | 3 878 | — | — | la balance ne distingue pas cette ligne |
+| 2020 | ENGAGEMENTS_HORS_BILAN_RECUS | 4 195 | — | — | la balance ne distingue pas cette ligne |
 | 2020 | REPORT_EXERCICES_ANTERIEURS | −1 913 987 | −1 748 385,9 | −165 601,1 | la loi y ajoute le solde des opérations de l'exercice |
 | 2020 | RESSOURCE_PROPRE_UE_RNB | −18 893 | — | — | la balance ne distingue pas cette ligne |
 | 2020 | RESSOURCE_PROPRE_UE_TVA | −4 796 | — | — | la balance ne distingue pas cette ligne |
@@ -2235,6 +2368,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2021 | DETTES_FONCTIONNEMENT | 7 352 | 7 345,6 | +6,4 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
 | 2021 | DETTES_INTERVENTION | 12 854 | 11 869,0 | +985,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
 | 2021 | DETTES_NON_FINANCIERES | 297 656 | 297 697,7 | −41,7 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 42,2 M€ |
+| 2021 | ENGAGEMENTS_HORS_BILAN_DONNES | 3 904 | — | — | la balance ne distingue pas cette ligne |
+| 2021 | ENGAGEMENTS_HORS_BILAN_RECUS | 9 517 | — | — | la balance ne distingue pas cette ligne |
 | 2021 | PASSIF | 2 881 375 | 2 881 417,1 | −42,1 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 42,2 M€ |
 | 2021 | REPORT_EXERCICES_ANTERIEURS | −2 058 376 | −1 916 287,9 | −142 088,1 | la loi y ajoute le solde des opérations de l'exercice |
 | 2021 | TRANSFERTS_AUTRES_COLLECTIVITES | 28 109 | 28 533,6 | −424,6 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
@@ -2249,6 +2384,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2022 | DETTES_FONCTIONNEMENT | 8 246 | 8 240,1 | +5,9 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
 | 2022 | DETTES_INTERVENTION | 10 974 | 10 005,7 | +968,3 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
 | 2022 | DETTES_NON_FINANCIERES | 298 304 | 298 324,6 | −20,6 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 21,0 M€ |
+| 2022 | ENGAGEMENTS_HORS_BILAN_DONNES | 3 689 | — | — | la balance ne distingue pas cette ligne |
+| 2022 | ENGAGEMENTS_HORS_BILAN_RECUS | 9 556 | — | — | la balance ne distingue pas cette ligne |
 | 2022 | PASSIF | 3 042 097 | 3 042 118,2 | −21,2 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 21,0 M€ |
 | 2022 | REPORT_EXERCICES_ANTERIEURS | −2 076 536 | −1 916 508,9 | −160 027,1 | la loi y ajoute le solde des opérations de l'exercice |
 | 2022 | TRANSFERTS_AUTRES_COLLECTIVITES | 30 969 | 31 183,8 | −214,8 | reclassement entre les composantes de CHARGES_INTERVENTION, total juste |
@@ -2262,6 +2399,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2023 | DETTES_FONCTIONNEMENT | 10 218 | 10 213,3 | +4,7 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
 | 2023 | DETTES_INTERVENTION | 10 961 | 9 955,9 | +1 005,1 | reclassement entre les composantes de DETTES_NON_FINANCIERES, qui porte la compensation |
 | 2023 | DETTES_NON_FINANCIERES | 283 189 | 283 199,8 | −10,8 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 10,2 M€ |
+| 2023 | ENGAGEMENTS_HORS_BILAN_DONNES | 6 636 | — | — | la balance ne distingue pas cette ligne |
+| 2023 | ENGAGEMENTS_HORS_BILAN_RECUS | 10 783 | — | — | la balance ne distingue pas cette ligne |
 | 2023 | PASSIF | 3 169 568 | 3 169 578,1 | −10,1 | compensation de créances et de dettes : la loi a l'actif et le passif moindres de 10,2 M€ |
 | 2023 | REPORT_EXERCICES_ANTERIEURS | −2 041 365 | −1 916 435,1 | −124 929,9 | la loi y ajoute le solde des opérations de l'exercice |
 | 2024 | AUTRES_DETTES_NON_FINANCIERES | 150 648 | 151 536,6 | −888,6 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
@@ -2269,6 +2408,8 @@ Lignes qui diffèrent, et ce qui l'explique quand le calcul le montre : le repor
 | 2024 | CREANCES_REDEVABLES | 81 308 | 81 309,0 | −1,0 | reclassement entre les composantes de CREANCES, total juste |
 | 2024 | DETTES_FONCTIONNEMENT | 11 391 | 11 386,3 | +4,7 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
 | 2024 | DETTES_INTERVENTION | 11 122 | 10 229,0 | +893,0 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
+| 2024 | ENGAGEMENTS_HORS_BILAN_DONNES | 6 062 | — | — | la balance ne distingue pas cette ligne |
+| 2024 | ENGAGEMENTS_HORS_BILAN_RECUS | 8 001 | — | — | la balance ne distingue pas cette ligne |
 | 2024 | REPORT_EXERCICES_ANTERIEURS | −2 047 770 | −1 924 066,3 | −123 703,7 | la loi y ajoute le solde des opérations de l'exercice |
 | 2025 | AUTRES_CREANCES_BRUT | 33 145 | 33 144,1 | +0,9 | reclassement entre les composantes de CREANCES_BRUT, total juste |
 | 2025 | AUTRES_DETTES_NON_FINANCIERES | 163 563 | 163 559,1 | +3,9 | reclassement entre les composantes de DETTES_NON_FINANCIERES, total juste |
@@ -3046,3 +3187,288 @@ La consommation des emplois de l'État par ministère et par budget annexe, en E
 Ministères sans ligne du même nom dans la loi de finances initiale de l'année, qui ne se comparent donc pas à un plafond : 2021 : Transformation et fonction publiques ; 2021 : Travail, de l'emploi et de l'insertion ; 2022 : Travail, de l'emploi et de l'insertion ; 2023 : Agriculture et alimentation ; 2023 : Cohésion des territoires et relations avec les collectivités territoriales ; 2023 : Économie, finances et relance ; 2023 : Éducation nationale, jeunesse et sports ; 2023 : Enseignement supérieur, recherche et innovation ; 2023 : Intérieur ; 2023 : Outre-mer ; 2023 : Solidarités et santé ; 2023 : Transition écologique ; 2023 : Travail, de l'emploi et de l'insertion ; 2024 : Solidarités, autonomie et personnes handicapées ; 2025 : Agriculture, souveraineté alimentaire et forêt ; 2025 : Armées et anciens combattants ; 2025 : Budget et comptes publics ; 2025 : Economie, finances et industrie ; 2025 : Éducation nationale ; 2025 : Enseignement supérieur et recherche ; 2025 : Fonction publique, simplification et transformation de l'action publique ; 2025 : Logement et rénovation urbaine ; 2025 : Partenariat avec les territoires et décentralisation ; 2025 : Transition écologique, énergie, climat et prévention des risques ; 2025 : Travail et emploi.
 
 Ministères dont la consommation dépasse le plafond voté de l'année, celui de la dernière loi rectificative qui change leur ligne, à défaut de la loi de finances initiale : 2021 : Solidarités et santé (5 083 contre 5 080) ; 2021 : Transition écologique (36 289 contre 36 203) ; 2022 : Solidarités et santé (5 029,25 contre 5 005). La DGAFP compare la consommation à un plafond corrigé des transferts d'emplois de la gestion, qui peut être plus haut.
+
+## 24. Dépenses fiscales
+
+Le coût de chaque dépense fiscale, en millions d'euros, tel que le chiffre le tome II de l'annexe « Évaluations des voies et moyens » des projets de loi de finances pour 2020 à 2023 : pour chaque dépense, l'avant-dernière année (« réalisation », une estimation), la dernière et celle du projet de loi (prévisions). La base n'a pas les tomes des autres projets de loi : ils ne sont publiés qu'en PDF sur budget.gouv.fr, qui refuse les robots, et le jeu de données du projet de loi de finances pour 2024 ne porte que les libellés, sans les montants. Un tome ne chiffre pas toutes les dépenses qu'il recense (« nc », non chiffré ; « ε », moins de 0,5 million d'euros ; « - », sans effet budgétaire) : la somme ci-dessous est celle des seules dépenses chiffrées, année par année. Elle est inférieure au total que le tome annonce pour les années de prévision, où il reprend le dernier montant connu d'une dépense qu'il ne chiffre pas ; ce total annoncé n'est pas dans le classeur. Les recettes fiscales nettes du budget général sont celles que constate la loi d'approbation des comptes de l'année (section 18) : le rapport des deux n'est qu'un ordre de grandeur, une dépense fiscale n'étant pas une recette perdue à comportement inchangé, et certaines portant sur des impôts locaux ou affectés.
+
+| Projet de loi de finances | Année | Statut | Dépenses chiffrées | Somme (Md€) | Recettes fiscales nettes constatées (Md€) | Somme / recettes |
+|---|---|---|---|---|---|---|
+| 2020 | 2018 | réalisation | 317 | 99,0 | 295,4 | 33,5 % |
+| 2020 | 2019 | prévision | 278 | 91,8 | 281,3 | 32,6 % |
+| 2020 | 2020 | prévision | 258 | 79,8 | 256,0 | 31,2 % |
+| 2021 | 2019 | réalisation | 317 | 99,9 | 281,3 | 35,5 % |
+| 2021 | 2020 | prévision | 294 | 81,3 | 256,0 | 31,8 % |
+| 2021 | 2021 | prévision | 277 | 74,6 | 295,7 | 25,2 % |
+| 2022 | 2020 | réalisation | 323 | 92,7 | 256,0 | 36,2 % |
+| 2022 | 2021 | prévision | 298 | 80,7 | 295,7 | 27,3 % |
+| 2022 | 2022 | prévision | 287 | 80,4 | 323,3 | 24,9 % |
+| 2023 | 2021 | réalisation | 333 | 89,6 | 295,7 | 30,3 % |
+| 2023 | 2022 | prévision | 318 | 88,3 | 323,3 | 27,3 % |
+| 2023 | 2023 | prévision | 300 | 75,9 | 322,9 | 23,5 % |
+
+D'un tome au suivant, le chiffrage d'une même année change : la prévision devient une réalisation, et des dépenses entrent dans le chiffrage ou en sortent. Sur les seules dépenses que deux tomes successifs chiffrent tous deux pour une année, en milliards d'euros :
+
+| Année | Tome | Tome suivant | Dépenses chiffrées par les deux | Somme, premier tome | Somme, tome suivant | Révision | Dépenses révisées |
+|---|---|---|---|---|---|---|---|
+| 2019 | 2020 | 2021 | 257 | 88,5 | 88,0 | −0,5 | 167 |
+| 2020 | 2020 | 2021 | 239 | 78,1 | 75,6 | −2,5 | 175 |
+| 2020 | 2021 | 2022 | 280 | 81,3 | 83,2 | +1,9 | 187 |
+| 2021 | 2021 | 2022 | 257 | 74,0 | 76,1 | +2,1 | 182 |
+| 2021 | 2022 | 2023 | 295 | 80,7 | 80,6 | −0,1 | 197 |
+| 2022 | 2022 | 2023 | 279 | 80,4 | 80,9 | +0,6 | 205 |
+
+Par impôt, pour l'année de réalisation de chaque tome, sous le nom que le tome donne à l'impôt (la taxe intérieure de consommation sur les produits énergétiques devient « Taxes intérieures de consommation », puis « Accise sur les énergies »), en milliards d'euros :
+
+| Impôt | 2018 (tome 2020) | 2019 (tome 2021) | 2020 (tome 2022) | 2021 (tome 2023) |
+|---|---|---|---|---|
+| Impôt sur le revenu | 36,1 | 35,2 | 37,3 | 34,7 |
+| Impôt sur le revenu et impôt sur les sociétés | 29,5 | 29,9 | 21,5 | 21,0 |
+| Taxe sur la valeur ajoutée | 17,4 | 17,2 | 16,5 | 19,0 |
+| Taxes intérieures de consommation | — | 8,8 | 8,3 | — |
+| Accise sur les énergies | — | — | — | 8,1 |
+| Taxe intérieure de consommation sur les produits énergétiques | 8,0 | — | — | — |
+| Impôt sur les sociétés | 3,8 | 4,4 | 4,4 | 3,9 |
+| Impôts locaux | 2,5 | 2,8 | 3,1 | 1,0 |
+| Droits d'enregistrement et de timbre | 0,9 | 0,9 | 0,9 | 0,9 |
+| Autres droits | 0,6 | 0,6 | 0,6 | 0,7 |
+| Autres impôts directs | 0,1 | 0,1 | 0,2 | 0,2 |
+| Ensemble | 99,0 | 99,9 | 92,7 | 89,6 |
+
+Les dix dépenses fiscales les plus coûteuses en 2021, d'après le tome du projet de loi de finances pour 2023 : elles font 44,4 % de la somme des dépenses chiffrées.
+
+| Numéro | Dépense fiscale | Coût (M€) |
+|---|---|---|
+| 210324 | Crédit d'impôt en faveur de la compétitivité et de l'emploi | 6 920 |
+| 200302 | Crédit d'impôt en faveur de la recherche | 6 383 |
+| 110246 | Crédit d'impôt au titre de l'emploi d'un salarié à domicile (jusqu'en 2017: pour les contribuables exerçant une activité professionnelle ou demandeurs d'emploi depuis au moins trois mois) | 4 734 |
+| 120401 | Abattement de 10 % sur le montant des pensions (y compris les pensions alimentaires) et des retraites | 4 339 |
+| 730213 | Taux de 10 % pour les travaux d’amélioration, de transformation, d’aménagement et d’entretien, autres que les travaux de rénovation énergétiques soumis au taux de 5,5 % en application de l’article 278-0 bis A, portant sur les logements achevés depuis plus de deux ans | 3 990 |
+| 730221 | Taux de 10% applicable aux ventes à consommer sur place, à l'exception des ventes de boissons alcooliques | 3 605 |
+| 710103 | Régime des départements de la Guadeloupe, de la Martinique et de la Réunion. Fixation des taux à : - 8,5 % pour le taux normal ; - 2,1 % pour le taux réduit | 3 100 |
+| 220107 | Exonération des aides versées par le fonds de solidarité institué par l'ordonnance n° 2020-317 du 25 mars 2020, d’impôt sur le revenu, d’impôt sur les sociétés et de toutes les contributions et cotisations sociales d'origine légale ou conventionnelle | 2 560 |
+| 120146 | Exonération de l’impôt sur le revenu dans une limite annuelle égale à 5 000 € des rémunérations versées à raison des heures supplémentaires et complémentaires réalisées à compter du 1er janvier 2019 | 2 091 |
+| 120108 | Exonération des sommes versées au titre de la participation, de l'intéressement et de l'abondement, volontaire ou par défaut, aux plans d'épargne salariale | 2 060 |
+
+## 25. Niches sociales
+
+Le coût des mesures de réduction et d'exonération de cotisations et de contributions de sécurité sociale, d'après les classeurs de l'annexe 4 des projets de loi de financement de la sécurité sociale (PLFSS) et de l'annexe 2 des projets de loi d'approbation des comptes (PLACSS) : PLFSS 2023, PLACSS 2023, PLFSS 2024, PLACSS 2024, PLFSS 2025, PLFSS 2026, PLFSS 2027. Les annexes 5 des PLFSS pour 2007 à 2022 ne sont publiées qu'en PDF et ne sont pas lues ; le classeur de l'annexe 2 du PLACSS de 2025 ne donne pas le coût des mesures. Les allègements généraux et les exonérations ciblées sont en millions d'euros, en droits constatés, sur le champ des régimes obligatoires de base ; les exemptions d'assiette en milliards d'euros.
+
+Dans chaque tableau des coûts, une ligne de titre porte la somme des mesures rangées sous elle (les lignes « Dont… » précisent une mesure et ne s'y ajoutent pas), le titre des exonérations ciblées compensées celle des missions du budget de l'État qui le suivent, et le total, quand le tableau en a un, celle des trois rubriques. Un titre est comparé à sa somme à la demi-unité près de chaque montant en jeu.
+
+| Édition | Année | Titres comparés à leur somme | Égaux | Autres |
+|---|---|---|---|---|
+| PLFSS 2023 | 2021 | 13 | 12 | 1 |
+| PLFSS 2023 | 2022 | 13 | 12 | 1 |
+| PLFSS 2023 | 2023 | 13 | 12 | 1 |
+| PLACSS 2023 | 2022 | 13 | 13 | 0 |
+| PLACSS 2023 | 2023 | 13 | 13 | 0 |
+| PLFSS 2024 | 2022 | 13 | 10 | 3 |
+| PLFSS 2024 | 2023 | 13 | 11 | 2 |
+| PLFSS 2024 | 2024 | 13 | 11 | 2 |
+| PLACSS 2024 | 2023 | 14 | 14 | 0 |
+| PLACSS 2024 | 2024 | 14 | 14 | 0 |
+| PLFSS 2025 | 2023 | 13 | 13 | 0 |
+| PLFSS 2025 | 2024 | 13 | 13 | 0 |
+| PLFSS 2025 | 2025 | 13 | 13 | 0 |
+| PLFSS 2026 | 2024 | 14 | 13 | 1 |
+| PLFSS 2026 | 2025 | 14 | 13 | 1 |
+| PLFSS 2026 | 2026 | 14 | 13 | 1 |
+| PLFSS 2027 | 2025 | 15 | 14 | 1 |
+| PLFSS 2027 | 2026 | 15 | 14 | 1 |
+| PLFSS 2027 | 2027 | 15 | 14 | 1 |
+| PLFSS 2027 | 2028 | 15 | 14 | 1 |
+| PLFSS 2027 | 2029 | 15 | 14 | 1 |
+| PLFSS 2027 | 2030 | 15 | 14 | 1 |
+
+Titres qui ne sont pas la somme des lignes rangées sous eux, en millions d'euros :
+
+| Édition | Année | Titre | Montant du titre | Titre − somme |
+|---|---|---|---|---|
+| PLFSS 2023 | 2021 | ALLEGEMENTS GENERAUX ET MESURES DE MODULATION DES TAUX | 51 200,0 | −235,0 |
+| PLFSS 2023 | 2022 | ALLEGEMENTS GENERAUX ET MESURES DE MODULATION DES TAUX | 57 206,0 | −256,0 |
+| PLFSS 2023 | 2023 | ALLEGEMENTS GENERAUX ET MESURES DE MODULATION DES TAUX | 61 777,0 | −266,0 |
+| PLFSS 2024 | 2022 | ALLEGEMENTS GENERAUX ET MESURES DE MODULATION DES TAUX | 58 447,0 | −253,0 |
+| PLFSS 2024 | 2022 | MISSION TRAVAIL-EMPLOI | 4 043,0 | −840,0 |
+| PLFSS 2024 | 2022 | MISSION ECOLOGIE, DEVELOPPEMENT ET MOBILITE DURABLES | 71,0 | −71,0 |
+| PLFSS 2024 | 2023 | MISSION TRAVAIL-EMPLOI | 4 285,0 | −1 102,0 |
+| PLFSS 2024 | 2023 | MISSION ECOLOGIE, DEVELOPPEMENT ET MOBILITE DURABLES | 76,0 | −76,0 |
+| PLFSS 2024 | 2024 | MISSION TRAVAIL-EMPLOI | 4 467,0 | −1 132,0 |
+| PLFSS 2024 | 2024 | MISSION ECOLOGIE, DEVELOPPEMENT ET MOBILITE DURABLES | 80,0 | −80,0 |
+| PLFSS 2026 | 2024 | MISSION OUTRE-MER | 1 304,7 | +0,3 |
+| PLFSS 2026 | 2025 | MISSION OUTRE-MER | 1 315,1 | +0,2 |
+| PLFSS 2026 | 2026 | MISSION OUTRE-MER | 1 349,1 | +0,0 |
+| PLFSS 2027 | 2025 | TOTAL | 72 305,1 | −2 463,4 |
+| PLFSS 2027 | 2026 | TOTAL | 67 513,4 | −37,5 |
+| PLFSS 2027 | 2027 | TOTAL | 64 015,9 | −36,8 |
+| PLFSS 2027 | 2028 | TOTAL | 63 484,0 | −36,2 |
+| PLFSS 2027 | 2029 | TOTAL | 63 575,8 | −35,6 |
+| PLFSS 2027 | 2030 | TOTAL | 62 540,5 | −35,0 |
+
+Une édition contre l'autre : le coût de chaque rubrique pour une année, tel que le donne chaque édition, en milliards d'euros ; « p » marque une prévision, les autres montants sont des réalisés. Le total est celui que donne l'édition quand son tableau en a un, sinon la somme de ses trois rubriques (« = »).
+
+| Année | Rubrique | PLFSS 2023 | PLACSS 2023 | PLFSS 2024 | PLACSS 2024 | PLFSS 2025 | PLFSS 2026 | PLFSS 2027 |
+|---|---|---|---|---|---|---|---|---|
+| 2021 | Allègements généraux | 51,2 | — | — | — | — | — | — |
+| 2021 | Exonérations ciblées compensées | 8,4 | — | — | — | — | — | — |
+| 2021 | Exonérations non compensées | 2,3 | — | — | — | — | — | — |
+| 2021 | Total | = 61,9 | — | — | — | — | — | — |
+| 2022 | Allègements généraux | 57,2 p | 58,4 | 58,4 | — | — | — | — |
+| 2022 | Exonérations ciblées compensées | 8,8 p | 8,9 | 8,7 | — | — | — | — |
+| 2022 | Exonérations non compensées | 2,6 p | 2,5 | 2,5 | — | — | — | — |
+| 2022 | Total | = 68,6 p | = 69,8 | = 69,7 | — | — | — | — |
+| 2023 | Allègements généraux | 61,8 p | 65,5 | 64,3 p | 65,4 | 65,4 | — | — |
+| 2023 | Exonérations ciblées compensées | 9,0 p | 9,1 | 9,0 p | 9,1 | 9,2 | — | — |
+| 2023 | Exonérations non compensées | 2,7 p | 2,6 | 2,7 p | 2,6 | 2,6 | — | — |
+| 2023 | Total | = 73,5 p | = 77,1 | = 75,9 p | = 77,1 | = 77,1 | — | — |
+| 2024 | Allègements généraux | — | — | 66,9 p | 64,9 | 65,9 p | 64,9 | — |
+| 2024 | Exonérations ciblées compensées | — | — | 9,3 p | 9,5 | 9,4 p | 9,4 | — |
+| 2024 | Exonérations non compensées | — | — | 2,8 p | 2,7 | 2,7 p | 2,6 | — |
+| 2024 | Total | — | — | = 79,0 p | = 77,1 | = 78,0 p | = 76,9 | — |
+| 2025 | Allègements généraux | — | — | — | — | 66,9 p | 62,2 p | 62,9 |
+| 2025 | Exonérations ciblées compensées | — | — | — | — | 9,7 p | 9,4 p | 9,4 |
+| 2025 | Exonérations non compensées | — | — | — | — | 2,8 p | 2,6 p | 2,5 |
+| 2025 | Total | — | — | — | — | = 79,4 p | = 74,2 p | 72,3 |
+| 2026 | Allègements généraux | — | — | — | — | — | 55,0 p | 58,4 p |
+| 2026 | Exonérations ciblées compensées | — | — | — | — | — | 9,5 p | 9,2 p |
+| 2026 | Exonérations non compensées | — | — | — | — | — | 2,6 p | 0,0 p |
+| 2026 | Total | — | — | — | — | — | = 67,1 p | 67,5 p |
+| 2027 | Allègements généraux | — | — | — | — | — | — | 55,2 p |
+| 2027 | Exonérations ciblées compensées | — | — | — | — | — | — | 8,8 p |
+| 2027 | Exonérations non compensées | — | — | — | — | — | — | 0,0 p |
+| 2027 | Total | — | — | — | — | — | — | 64,0 p |
+| 2028 | Allègements généraux | — | — | — | — | — | — | 54,5 p |
+| 2028 | Exonérations ciblées compensées | — | — | — | — | — | — | 8,9 p |
+| 2028 | Exonérations non compensées | — | — | — | — | — | — | 0,0 p |
+| 2028 | Total | — | — | — | — | — | — | 63,5 p |
+| 2029 | Allègements généraux | — | — | — | — | — | — | 54,5 p |
+| 2029 | Exonérations ciblées compensées | — | — | — | — | — | — | 9,1 p |
+| 2029 | Exonérations non compensées | — | — | — | — | — | — | 0,0 p |
+| 2029 | Total | — | — | — | — | — | — | 63,6 p |
+| 2030 | Allègements généraux | — | — | — | — | — | — | 53,2 p |
+| 2030 | Exonérations ciblées compensées | — | — | — | — | — | — | 9,3 p |
+| 2030 | Exonérations non compensées | — | — | — | — | — | — | 0,0 p |
+| 2030 | Total | — | — | — | — | — | — | 62,5 p |
+
+Exemptions d'assiette : le total de chaque tableau est comparé à la somme de ses groupes (les lignes numérotées en chiffres romains), au dixième ou au centième près de chaque montant selon l'édition ; puis, pour chaque année, l'assiette exemptée et les cotisations équivalentes nettes au total, en milliards d'euros, d'après chaque édition (« p » : prévision).
+
+78 totaux comparés à la somme de leurs groupes, 78 égaux à l'arrondi près.
+
+| Année | Grandeur | PLFSS 2023 | PLACSS 2023 | PLFSS 2024 | PLACSS 2024 | PLFSS 2025 | PLFSS 2026 | PLFSS 2027 |
+|---|---|---|---|---|---|---|---|---|
+| 2021 | Assiette exemptée | 53,8 | 58,3 | 58,2 | 58,3 | — | — | — |
+| 2021 | Cotisations équivalentes nettes | 8,1 | 12,5 | 9,3 | 12,5 | — | — | — |
+| 2022 | Assiette exemptée | 58,6 p | 66,7 | 66,0 p | 66,1 | 66,1 | — | — |
+| 2022 | Cotisations équivalentes nettes | 8,6 p | 13,4 | 10,1 p | 13,3 | 13,3 | — | — |
+| 2023 | Assiette exemptée | 61,3 p | 69,8 | 70,2 p | 70,6 p | 70,3 p | 73,2 | — |
+| 2023 | Cotisations équivalentes nettes | 9,1 p | 14,1 | 10,9 p | 14,1 p | 14,0 p | 14,3 | — |
+| 2024 | Assiette exemptée | — | — | 73,5 p | 73,7 p | 73,5 p | 76,3 p | 75,1 |
+| 2024 | Cotisations équivalentes nettes | — | — | 11,2 p | 14,6 p | 14,6 p | 14,9 p | 14,8 |
+| 2025 | Assiette exemptée | — | — | — | — | 75,6 p | 78,4 p | 77,0 p |
+| 2025 | Cotisations équivalentes nettes | — | — | — | — | 15,1 p | 15,5 p | 15,3 p |
+| 2026 | Assiette exemptée | — | — | — | — | — | 80,5 p | 78,1 p |
+| 2026 | Cotisations équivalentes nettes | — | — | — | — | — | 16,7 p | 16,3 p |
+| 2027 | Assiette exemptée | — | — | — | — | — | — | 79,3 p |
+| 2027 | Cotisations équivalentes nettes | — | — | — | — | — | — | 16,6 p |
+
+Le coût réalisé des allègements généraux et des exonérations ciblées, d'après la première édition qui le donne, face aux recettes des régimes obligatoires de base que la base lit dans les lois de financement et d'approbation des comptes de la sécurité sociale, en milliards d'euros. Le rapport n'est qu'un ordre de grandeur : les mesures compensées par l'État sont déjà dans ces recettes, par leur compensation.
+
+| Année | Coût réalisé | Édition | Recettes des régimes de base | Coût / recettes |
+|---|---|---|---|---|
+| 2021 | 61,9 | PLFSS 2023 | 539,2 | 11,5 % |
+| 2022 | 69,8 | PLACSS 2023 | 570,3 | 12,2 % |
+| 2023 | 77,1 | PLACSS 2023 | 598,5 | 12,9 % |
+| 2024 | 77,1 | PLACSS 2024 | 626,4 | 12,3 % |
+| 2025 | 72,3 | PLFSS 2027 | 643,7 | 11,2 % |
+
+## 26. Engagements hors bilan de l'État
+
+Le tableau des principaux engagements hors bilan du compte général de l'État, tel que la Cour des comptes le reproduit en annexe de son rapport de certification des comptes de 2016 à 2020 et 2022 à 2024 : engagements donnés et reçus, ligne par ligne, à la clôture de l'exercice, avec le montant de la clôture précédente. Le compte général lui-même est sur budget.gouv.fr, qui refuse les robots ; les rapports sur 2021 et 2025 donnent ce tableau en image, ceux sur 2013 et les exercices d'avant ne le reproduisent pas, et la base n'a pas trouvé ceux sur 2012, 2014 et 2015 à l'adresse des autres. À l'import, chaque ligne a été vérifiée : son montant, moins celui de la clôture précédente, égale la variation que donne le rapport, à une unité près. Ici, chaque ligne qui a un montant est comparée à la somme des lignes qui en dépendent, quand elles en ont (les « dont » ne s'ajoutent pas), à la demi-unité près de chaque montant en jeu.
+
+| Rapport sur | Unité | Lignes à la clôture | Lignes de la clôture précédente | Lignes comparées à leur somme | Égales | Autres |
+|---|---|---|---|---|---|---|
+| 2016 | milliards d'euros | 38 | 38 | 0 | 0 | 0 |
+| 2017 | millions d'euros | 40 | 40 | 0 | 0 | 0 |
+| 2018 | millions d'euros | 46 | 46 | 0 | 0 | 0 |
+| 2019 | millions d'euros | 46 | 45 | 0 | 0 | 0 |
+| 2020 | millions d'euros | 46 | 46 | 0 | 0 | 0 |
+| 2022 | millions d'euros | 62 | 62 | 34 | 33 | 1 |
+| 2023 | millions d'euros | 62 | 62 | 36 | 34 | 2 |
+| 2024 | millions d'euros | 64 | 64 | 36 | 36 | 0 |
+
+Lignes qui ne sont pas la somme de celles qui en dépendent, en millions d'euros : le tableau ne détaille pas toujours tout ce qu'une ligne réunit, et quelques lignes ne s'additionnent pas dans le rapport lui-même.
+
+| Rapport sur | Clôture | Partie | Ligne | Montant | Ligne − somme |
+|---|---|---|---|---|---|
+| 2022 | 2022 | reçus | Engagements financiers de l'État | 41 495 | −11 540 |
+| 2023 | 2023 | donnés | Garanties liées à des missions d'intérêt général - Encours | 728 206 | −180 |
+| 2023 | 2022 | reçus | Engagements financiers de l'État | 37 546 | −2 960 |
+
+Les lignes du premier rang du tableau à chaque clôture, en milliards d'euros ; une ligne sans montant y est la somme de celles qui en dépendent. 2015 : rapport sur 2016, montant de la clôture précédente ; 2021 : rapport sur 2022, montant de la clôture précédente. Les engagements de retraite, valeur actualisée de pensions futures, dépendent du taux d'actualisation retenu à chaque clôture : leurs variations ne mesurent pas des droits nouveaux.
+
+| Partie | Ligne | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Donnés | Autres informations | 76,0 | 77,0 | 83,9 | 86,1 | 65,5 | 67,5 | 63,8 | 64,7 | 76,3 | 90,9 |
+| Donnés | Engagements découlant de la mission de régulateur économique et social de l'État | 475,0 | 571,0 | 616,3 | 639,0 | 720,6 | 871,9 | 929,8 | 609,2 | 679,9 | 571,0 |
+| Donnés | Engagements de retraite de l'État | 2 036,0 | 2 352,0 | 2 429,3 | 2 287,0 | 2 480,2 | 2 851,4 | 2 635,3 | 1 684,0 | 1 840,8 | 1 640,9 |
+| Donnés | Engagements pris dans le cadre d'accords bien définis | 1 101,0 | 1 096,0 | 1 120,0 | 1 142,9 | 1 172,2 | 1 307,3 | 1 440,3 | 1 505,9 | 1 590,9 | 1 559,1 |
+| Reçus | Autres informations | 13,0 | 18,0 | 18,8 | 15,8 | 20,1 | 21,3 | 22,3 | 25,2 | 29,8 | 39,5 |
+| Reçus | Engagements de retraite de l'État | 14,0 | 13,0 | 11,8 | 9,7 | 6,0 | 6,2 | 4,8 | 3,5 | 3,5 | 2,7 |
+| Reçus | Engagements reçus dans le cadre d'accords bien définis | 23,0 | 24,0 | 23,3 | 27,7 | 30,8 | 32,0 | 61,8 | 63,4 | 53,8 | 45,7 |
+| Reçus | Mise en jeu de la responsabilité de l'État – Obligations reconnues par l'État | 4,0 | 4,0 | 4,1 | — | — | — | 4,0 | 3,7 | 4,8 | 3,6 |
+| Reçus | Engagements découlant de la mission de régulateur économique et social de l'État | — | — | — | — | — | — | — | — | 4,9 | 0,9 |
+
+Le tableau contre les balances des comptes de l'État (section 14), qui portent en classe 8 les engagements que l'État inscrit dans ses comptes, par indicateur : chaque indicateur de la balance d'un exercice est rapproché de la ligne de même objet du tableau à la clôture de cet exercice, en milliards d'euros. Les engagements de retraite, la mise en jeu de la responsabilité de l'État et les « autres informations » du tableau n'ont pas d'indicateur dans les balances : ils ne sont pas inscrits en classe 8.
+
+| Exercice | Indicateur de la balance | Balance | Tableau | Tableau − balance |
+|---|---|---|---|---|
+| 2016 | S801_Dette garantie par l'Etat | 195,2 | 195,0 | −0,2 |
+| 2016 | S802_Garanties liées à des missions d'int gén | 11,9 | 500,0 | +488,1 |
+| 2016 | S803_Garanties de passif | 43,7 | 230,0 | +186,3 |
+| 2016 | S804_Engagements financiers de l'Etat | 68,2 | 171,0 | +102,8 |
+| 2016 | S805_Dispositifs d'intervention | 570,9 | 571,0 | +0,1 |
+| 2016 | S806_Engagements reçus | 15,6 | 59,0 | +43,4 |
+| 2017 | S801_Dette garantie par l'Etat | 204,4 | 204,4 | −0,0 |
+| 2017 | S802_Garanties liées à des missions d'int gén | 10,9 | 512,5 | +501,6 |
+| 2017 | S803_Garanties de passif | 42,0 | 227,5 | +185,5 |
+| 2017 | S804_Engagements financiers de l'Etat | 65,8 | 175,5 | +109,8 |
+| 2017 | S805_Dispositifs d'intervention | 616,3 | 616,3 | +0,0 |
+| 2017 | S806_Engagements reçus | 16,7 | 58,0 | +41,3 |
+| 2018 | S801_Dette garantie par l'Etat | 210,6 | 210,6 | +0,0 |
+| 2018 | S802_Garanties liées à des missions d'int gén | 519,0 | 519,0 | −0,0 |
+| 2018 | S803_Garanties de passif | 37,2 | 245,3 | +208,0 |
+| 2018 | S804_Engagements financiers de l'Etat | 87,5 | 168,1 | +80,5 |
+| 2018 | S805_Dispositifs d'intervention | 639,0 | 639,0 | +0,0 |
+| 2018 | S806_Engagements reçus | 21,3 | 53,2 | +31,8 |
+| 2019 | S801_Dette garantie par l'Etat | 205,4 | 205,4 | +0,0 |
+| 2019 | S802_Garanties liées à des missions d'int gén | 530,8 | 530,8 | −0,0 |
+| 2019 | S803_Garanties de passif | 38,2 | 223,2 | +185,0 |
+| 2019 | S804_Engagements financiers de l'Etat | 135,2 | 212,7 | +77,5 |
+| 2019 | S805_Dispositifs d'intervention | 720,6 | 720,6 | +0,0 |
+| 2019 | S806_Engagements reçus | 24,5 | 56,9 | +32,4 |
+| 2020 | S801_Dette garantie par l'Etat | 319,7 | 319,7 | −0,0 |
+| 2020 | S802_Garanties liées à des missions d'int gén | 566,0 | 563,9 | −2,1 |
+| 2020 | S803_Garanties de passif | 37,7 | 228,6 | +190,9 |
+| 2020 | S804_Engagements financiers de l'Etat | 112,5 | 195,1 | +82,6 |
+| 2020 | S805_Dispositifs d'intervention | 871,9 | 871,9 | −0,0 |
+| 2020 | S806_Engagements reçus | 27,2 | 59,5 | +32,3 |
+| 2022 | S801_Dette garantie par l'Etat | 302,1 | 302,1 | −0,0 |
+| 2022 | S802_Garanties liées à des missions d'int gén | 642,5 | 642,5 | +0,0 |
+| 2022 | S803_Garanties de passif | 29,6 | 227,3 | +197,8 |
+| 2022 | S804_Engagements financiers de l'Etat | 147,4 | 334,0 | +186,6 |
+| 2022 | S805_Dispositifs d'intervention | 609,2 | 609,2 | −0,0 |
+| 2022 | S806_Engagements reçus | 70,1 | 95,8 | +25,7 |
+| 2023 | S801_Dette garantie par l'Etat | 281,2 | 281,2 | −0,0 |
+| 2023 | S802_Garanties liées à des missions d'int gén | 728,2 | 728,2 | +0,0 |
+| 2023 | S803_Garanties de passif | 28,2 | 28,2 | +0,0 |
+| 2023 | S804_Engagements financiers de l'Etat | 240,0 | 553,3 | +313,3 |
+| 2023 | S805_Dispositifs d'intervention | 678,8 | 679,9 | +1,0 |
+| 2023 | S806_Engagements reçus | 53,2 | 96,9 | +43,7 |
+| 2024 | S801_Dette garantie par l'Etat | 257,5 | 257,5 | +0,0 |
+| 2024 | S802_Garanties liées à des missions d'int gén | 770,4 | 770,4 | −0,0 |
+| 2024 | S803_Garanties de passif | 27,6 | 27,6 | −0,0 |
+| 2024 | S804_Engagements financiers de l'Etat | 189,8 | 503,6 | +313,8 |
+| 2024 | S805_Dispositifs d'intervention | 571,0 | 571,0 | +0,0 |
+| 2024 | S806_Engagements reçus | 45,4 | 92,5 | +47,1 |
+
+Par indicateur, les exercices où le tableau et la balance concordent à moins d'un milliard d'euros ou de 0,5 % : S801_Dette garantie par l'Etat : 8 sur 8 ; S802_Garanties liées à des missions d'int gén : 6 sur 8 (2018 à 2020 et 2022 à 2024) ; S803_Garanties de passif : 2 sur 8 (2023 et 2024) ; S804_Engagements financiers de l'Etat : 0 sur 8 ; S805_Dispositifs d'intervention : 8 sur 8 ; S806_Engagements reçus : 0 sur 8. Là où ils s'écartent, le tableau est toujours au-dessus de la balance : il range sous ces lignes des engagements que la balance ne porte pas sous l'indicateur de même nom, ou ne porte pas en classe 8 ; la base ne sait pas dire lesquels sans le compte général lui-même, et les donne tels quels.
