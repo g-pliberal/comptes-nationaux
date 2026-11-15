@@ -79,8 +79,16 @@ jobs:
       - name: Publier la base dans les « Releases »
         run: |
           etiquette=$(jq -r .etiquette publication/publication.json)
+          # Deux modifications rapprochées font deux exécutions, qui peuvent finir dans le désordre : seule celle de la
+          # dernière modification de la branche principale publie, pour que la dernière publication soit la base à jour.
+          tete=$(gh api "repos/$GH_REPO/commits/main" --jq .sha)
+          if [ "$tete" != "$GITHUB_SHA" ]; then
+            echo "Une modification plus récente ($tete) est arrivée sur la branche principale : c'est elle qui publiera."
+            exit 0
+          fi
           if gh release view "$etiquette" > /dev/null 2>&1; then
             echo "Déjà publiée : $etiquette"
+            gh release edit "$etiquette" --latest
             exit 0
           fi
           # Une modification qui ne change aucune table (un texte, un outil) ne donne pas de nouvelle publication.
@@ -89,6 +97,6 @@ jobs:
             echo "Base inchangée depuis la dernière publication : rien à publier."
             exit 0
           fi
-          gh release create "$etiquette" --target "$GITHUB_SHA" --title "$(jq -r .titre publication/publication.json)" \
+          gh release create "$etiquette" --latest --target "$GITHUB_SHA" --title "$(jq -r .titre publication/publication.json)" \
             --notes-file publication/notes.md \
             publication/comptes.sqlite.xz.partie* publication/empreintes.csv publication/publication.json
