@@ -63,7 +63,8 @@ VERSANTS = [("FPE", "Fonction publique de l'État"), ("FPT", "Fonction publique 
             ("FPH", "Fonction publique hospitalière"), ("FP", "**Ensemble**")]
 PRODUCTEURS = {"insee": "Insee", "eurostat": "Eurostat", "senat": "Sénat (textes de loi)",
                "an": "Assemblée nationale (textes de loi)", "ccomptes": "Cour des comptes", "dgafp": "DGAFP",
-               "dgcl": "DGCL", "drees": "DREES", "ofgl": "OFGL", "tiers": "Chiffres cités par des tiers"}
+               "dgcl": "DGCL", "drees": "DREES", "ofgl": "OFGL", "budget": "Direction du budget",
+               "secu": "Direction de la sécurité sociale", "tiers": "Chiffres cités par des tiers"}
 
 
 def fr(x, decimales=1, signe=False):
