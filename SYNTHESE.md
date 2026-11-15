@@ -275,6 +275,7 @@ S'y ajoutent, lus dans les copies archivées quand la base se construit :
 - 28 837 097 lignes de comptes, de fiscalité et de dotations de chaque collectivité locale, d'après l'OFGL ;
 - 975 872 lignes de collectivités dans les comptes individuels de la DGFiP ;
 - 517 489 lignes des balances des comptes de l'État ;
+- 1 436 292 lignes des balances comptables des départements et des régions, budget par budget et compte par compte, d'après la DGFiP ;
 - 499 080 lignes de communes dans le recensement des éléments d'imposition (REI).
 
-Le tout repose sur 667 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).
+Le tout repose sur 700 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).

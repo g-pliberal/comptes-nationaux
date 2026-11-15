@@ -30,6 +30,7 @@
     {"name": "fichiers_comptes_individuels", "path": "tables/fichiers_comptes_individuels.csv", "schema": "schemas/fichiers_comptes_individuels.json"},
     {"name": "indicateurs_balances_etat", "path": "tables/indicateurs_balances_etat.csv", "schema": "schemas/indicateurs_balances_etat.json"},
     {"name": "fichiers_balances_etat", "path": "tables/fichiers_balances_etat.csv", "schema": "schemas/fichiers_balances_etat.json"},
+    {"name": "fichiers_balances_collectivites", "path": "tables/fichiers_balances_collectivites.csv", "schema": "schemas/fichiers_balances_collectivites.json"},
     {"name": "chiffres-an-ta12-0525", "path": "tables/chiffres/an/ta12-0525.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-an-ta13-0808", "path": "tables/chiffres/an/ta13-0808.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-an-ta13-0812", "path": "tables/chiffres/an/ta13-0812.csv", "schema": "schemas/chiffres.json"},
