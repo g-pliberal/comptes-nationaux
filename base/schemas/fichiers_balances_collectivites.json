@@ -5,11 +5,12 @@
     {"name": "source_id", "type": "string", "constraints": {"required": true}},
     {"name": "contenu", "type": "string", "description": "balance : la balance d'un exercice, une ligne par budget et par compte ; formules : les formules des agrégats financiers de l'OFGL.", "constraints": {"required": true, "enum": ["balance", "formules"]}},
     {"name": "exercice", "type": "string", "description": "Exercice de la balance ; vide pour les formules.", "constraints": {"pattern": "[0-9]{4}"}},
-    {"name": "version", "type": "date", "description": "Date de modification du jeu de données qu'annonçait le portail lors du téléchargement.", "constraints": {"required": true}},
+    {"name": "version", "type": "date", "description": "Date de modification du jeu de données qu'annonçait le portail lors du téléchargement ; pour une archive zip, date la plus récente des fichiers qu'elle porte.", "constraints": {"required": true}},
     {"name": "statut", "type": "string", "description": "Balance : provisoire (publiée en juillet de l'année qui suit l'exercice) ou definitif (publiée en décembre) ; vide pour les formules.", "constraints": {"enum": ["provisoire", "definitif"]}},
     {"name": "lignes", "type": "integer", "description": "Balance : nombre de lignes (budget et compte) ; formules : nombre de formules.", "constraints": {"required": true}},
     {"name": "budgets", "type": "integer", "description": "Balance : nombre de budgets, principaux et annexes ; vide pour les formules."},
-    {"name": "collectivites", "type": "integer", "description": "Balance : nombre de collectivités (numéros Siren) ; vide pour les formules."}
+    {"name": "collectivites", "type": "integer", "description": "Balance : nombre de collectivités (numéros Siren) ; vide pour les formules."},
+    {"name": "desequilibres", "type": "integer", "description": "Balance : nombre de budgets dont la somme des soldes débiteurs n'est pas celle des soldes créditeurs, tels que la DGFiP les publie ; vide pour les formules."}
   ],
   "primaryKey": ["fichier_id"],
   "foreignKeys": [

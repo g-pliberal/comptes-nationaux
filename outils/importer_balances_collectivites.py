@@ -19,24 +19,30 @@ colonnes), que chaque ligne est de l'exercice, que son budget est désigné par 
 collectivité, que chaque budget n'a qu'un type (principal ou annexe), qu'une nomenclature, un libellé et une
 collectivité, que chaque compte n'y figure qu'une fois, que chaque montant est au centime, et deux identités comptables,
 au centime près : pour chaque ligne, le solde de sortie est la balance d'entrée plus les opérations budgétaires et non
-budgétaires de l'exercice ; pour chaque budget, la somme des soldes débiteurs est celle des soldes créditeurs.
-L'import des formules de l'OFGL vérifie que chacune se lit (outils/formules_ofgl.py) et qu'une seule formule s'applique à
-chaque collectivité pour un agrégat, un exercice, une sorte de calcul, une sorte de budget et une nomenclature. Chaque
-copie est inscrite dans tables/fichiers_balances_collectivites.csv. Ces copies sont les chiffres eux-mêmes : la base ne
-les recopie pas, elle les lit. La version d'une copie est la date de modification du jeu de données qu'annonce le
-portail.
+budgétaires de l'exercice ; pour chaque budget, la somme des soldes débiteurs est celle des soldes créditeurs. Quelques
+budgets des syndicats et des établissements publics locaux ne s'équilibrent pas, tels que la DGFiP les publie : l'import
+en inscrit le nombre, que cite le rapport de cohérence. Les lignes d'un budget se suivent : la lecture le vérifie, et
+lit les balances budget par budget, sans les garder entières en mémoire.
+L'import des formules de l'OFGL vérifie que chacune se lit (outils/formules_ofgl.py) et marque celles qui s'appliquent à
+la même collectivité qu'une autre pour un agrégat, un exercice, une sorte de calcul, une sorte de budget et une
+nomenclature. Chaque copie est inscrite dans tables/fichiers_balances_collectivites.csv. Ces copies sont les chiffres
+eux-mêmes : la base ne les recopie pas, elle les lit. La version d'une copie est la date de modification du jeu de
+données qu'annonce le portail, ou, pour une archive zip, la date la plus récente des fichiers qu'elle porte. Les balances
+des communes, des groupements à fiscalité propre, des syndicats et des établissements publics locaux sont rangées dans
+la Release « archives » du dépôt GitHub (archiver.py --release) ; celles de 2016 des trois dernières sont des archives
+RAR, que l'import ne sait pas lire.
 """
 
-import collections
-import io
 import re
 import sys
+import zipfile
 
 import formules_ofgl
 from commun import BASE, champs, ecrire, lire, ouvrir_copie
 
 PORTAIL = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/"
 # Jeux de données des balances : source → (jeu, {exercice: fichier joint}). Les fichiers joints n'ont pas de nom régulier.
+# Les communes ont un jeu par exercice.
 JEUX = {
     "dgfip.balances-departements": ("balances-comptables-des-departements", {
         "2010": "balancedept_2010_csv", "2011": "balancedept_2011_csv", "2012": "balancedept_2012_csv",
@@ -54,6 +60,38 @@ JEUX = {
         "2021": "balance_reg_2021_dec2022_csv", "2022": "balance_reg_2022_dec2023_csv",
         "2023": "balance_reg_2023_dec2024_csv", "2024": "balance_reg_2024_dec2025_csv",
         "2025": "balance_reg_2025_juil2026csv"}),
+    "dgfip.balances-communes": ("balances-comptables-des-communes-en-{exercice}", {
+        "2010": "balancecommune_2010_zip", "2011": "balancecommune_2011_zip", "2012": "balancecommune_2012_zip",
+        "2013": "balancecommune_2013_zip", "2014": "balancecommune_2014_zip", "2015": "balancecommune_2015_zip",
+        "2016": "balance_commune_2016_zip", "2017": "balancecommune_2017_zip",
+        "2018": "balance_commune_2018_dec2019_zip", "2019": "balance_commune_2019_dec2020_zip",
+        "2020": "balance_commune_2020_dec2021_zip", "2021": "balance_commune_2021_dec2022_zip",
+        "2022": "balance_commune_2022_dec2023_zip", "2023": "balance_commune_2023_dec2024_zip",
+        "2024": "balance_commune_2024_dec2025_zip", "2025": "balance_commune_2025_juil2026zip"}),
+    "dgfip.balances-gfp": ("balances-comptables-des-groupements-a-fiscalite-propre-depuis-2010", {
+        "2010": "balancegfp_2010_zip", "2011": "balancegfp_2011_zip", "2012": "balancegfp_2012_zip",
+        "2013": "balancegfp_2013_zip", "2014": "balancegfp_2014_zip", "2015": "balancegfp_2015_zip",
+        "2016": "balance_gfp_2016_rar", "2017": "balance_gfp_2017_zip", "2018": "balance_gfpeptml_2018_dec2019_csv",
+        "2019": "balance_gfpeptml_2019_dec2020_zip", "2020": "balance_gfpeptml_2020_dec2021_zip",
+        "2021": "balance_gfpeptml_2021_dec2022_zip", "2022": "balance_gfpeptml_2022_dec2023_zip",
+        "2023": "balance_gfpeptml_2023_dec2024_zip", "2024": "balance_gfpeptml_2024_dec2025_zip",
+        "2025": "balance_gfpeptml_2025_juil2026zip"}),
+    "dgfip.balances-syndicats": ("balances-comptables-des-syndicats-depuis-2010", {
+        "2010": "balancesynd_2010_zip", "2011": "balancesynd_2011_zip", "2012": "balancesynd_2012_zip",
+        "2013": "balancesynd_2013_zip", "2014": "balancesynd_2014_zip", "2015": "balancesynd_2015_zip",
+        "2016": "balance_synd_2016_rar", "2017": "balance_synd_2017_zip", "2018": "balance_synd_2018_dec2019_zip",
+        "2019": "balance_synd_2019_dec2020_zip", "2020": "balance_synd_2020_dec2021_zip",
+        "2021": "balance_synd_2021_dec2022_zip", "2022": "balance_synd_2022_dec2023_zip",
+        "2023": "balance_synd_2023_dec2024_zip", "2024": "balance_synd_2024_dec2025_zip",
+        "2025": "balance_synd_2025_juil2026zip"}),
+    "dgfip.balances-epl": ("balances-comptables-des-etablissements-publics-locaux-depuis-2010", {
+        "2010": "balanceepl_2010_zip", "2011": "balanceepl_2011_zip", "2012": "balanceepl_2012_zip",
+        "2013": "balanceepl_2013_zip", "2014": "balanceepl_2014_zip", "2015": "balanceepl_2015_zip",
+        "2016": "balance_epl_2016_rar", "2017": "balance_epl_2017_zip", "2018": "balance_epl_2018_dec2019_zip",
+        "2019": "balance_epl_2019_dec2020_zip", "2020": "balance_epl_2020_dec2021_zip",
+        "2021": "balance_epl_2021_dec2022_zip", "2022": "balance_epl_2022_dec2023_zip",
+        "2023": "balance_epl_2023_dec2024_zip", "2024": "balance_epl_2024_dec2025_zip",
+        "2025": "balance_epl_2025_juil2026zip"}),
 }
 FORMULES = "ofgl.formules-agregats"
 URL_FORMULES = ("https://data.ofgl.fr/api/explore/v2.1/catalog/datasets/methodologie-ofgl-formules-des-agregats-financiers"
@@ -85,7 +123,9 @@ ENTETES = {
 PRINCIPAL = {"BP", "1"}  # type du budget principal ; tout autre est annexe
 ANNEXES = {"BA", "2", "3"}
 MONTANT = re.compile(r"-?[0-9]+(?:,[0-9]{1,2})?")
-COMPTE = re.compile(r"[0-9]{1,10}[A-Z0-9]{0,4}")
+MONTANTS_LIGNE = re.compile(r"(?:-?[0-9]+(?:,[0-9]{1,2})?;){%d}-?[0-9]+(?:,[0-9]{1,2})?" % (len(MONTANTS) - 1))
+# Un compte : son numéro, parfois suivi d'un suffixe (« 4513 LOT », « 4518 BAT » dans la balance des communes de 2015).
+COMPTE = re.compile(r"[0-9]{1,10}[A-Z0-9]{0,4}(?: [A-Z]{1,4})?")
 FICHE = ["siren", "nom", "type_budget", "nomenclature", "categorie", "departement", "region"]
 
 
@@ -96,7 +136,8 @@ def requetes(source_id):
     if source_id not in JEUX:
         sys.exit(f"source que cet import ne lit pas : {source_id}")
     jeu, joints = JEUX[source_id]
-    return {f"{PORTAIL}{jeu}/attachments/{joint}": ("balance", exercice) for exercice, joint in joints.items()}
+    return {f"{PORTAIL}{jeu.format(exercice=exercice)}/attachments/{joint}": ("balance", exercice)
+            for exercice, joint in joints.items()}
 
 
 def statut(fichier):
@@ -115,83 +156,161 @@ def nature(fichier):
     return connues[fichier["url"]]
 
 
-def centimes(texte, lieu):
-    """Un montant écrit à la française (« 1234,56 ») en centimes."""
+def centimes(texte, fichier_id, n):
+    """Un montant écrit à la française (« 1234,56 ») en centimes ; la ligne `n` du fichier le porte."""
     if not MONTANT.fullmatch(texte):
-        sys.exit(f"{lieu} : montant illisible « {texte} »")
+        sys.exit(f"{fichier_id}, ligne {n} : montant illisible « {texte} »")
     entier, _, decimales = texte.partition(",")
     signe = -1 if entier.startswith("-") else 1
     return signe * (abs(int(entier)) * 100 + int((decimales + "00")[:2]))
 
 
-def texte_copie(chemin):
-    """Le texte d'une copie : les fichiers de la DGFiP sont en UTF-8 ou, pour certains exercices, en Latin-1."""
+def vite(texte):
+    """Un montant déjà reconnu bien écrit (MONTANTS_LIGNE) en centimes : la lecture rapide des balances de millions de
+    lignes."""
+    virgule = texte.find(",")
+    if virgule < 0:
+        return int(texte) * 100
+    valeur = int(texte[:virgule] + texte[virgule + 1:])
+    return valeur * 10 if len(texte) - virgule == 2 else valeur
+
+
+def lignes_copie(chemin):
+    """Les lignes de texte d'une copie de balance : celles du fichier csv, ou du seul fichier csv d'une archive zip. Les
+    fichiers de la DGFiP sont en UTF-8 ou, pour certains exercices, en Latin-1 : une ligne qui ne se lit pas en UTF-8
+    se lit en Latin-1."""
     with ouvrir_copie(chemin) as f:
-        octets = f.read()
-    try:
-        return octets.decode("utf-8-sig")
-    except UnicodeDecodeError:
-        return octets.decode("latin-1")
+        if str(chemin).endswith(".zip"):
+            archive = zipfile.ZipFile(f)
+            membres = [m for m in archive.infolist() if not m.is_dir()]
+            if len(membres) != 1 or not membres[0].filename.lower().endswith(".csv"):
+                sys.exit(f"{chemin} : l'archive devait porter un seul fichier csv, elle porte "
+                         f"{[m.filename for m in membres]}")
+            flux = archive.open(membres[0])
+        elif str(chemin).endswith(".rar"):
+            sys.exit(f"{chemin} : archive RAR, que la base ne sait pas lire sans outil extérieur")
+        else:
+            flux = f
+        with flux:
+            for n, octets in enumerate(flux):
+                try:
+                    texte = octets.decode("utf-8")
+                except UnicodeDecodeError:
+                    texte = octets.decode("latin-1")
+                yield texte.lstrip("\ufeff") if n == 0 else texte
 
 
-def balance(fichier):
-    """(exercice, {budget: fiche}, [(budget, compte, montants en centimes…)]) d'une copie de balance. La fiche d'un
-    budget donne le numéro Siren de sa collectivité, son libellé, son type (« principal » ou « annexe »), sa
-    nomenclature, la catégorie de sa collectivité, son département et sa région."""
+def budgets(fichier, desequilibres=None):
+    """Les budgets d'une copie de balance, dans l'ordre du fichier : (budget, fiche, {compte: montants en centimes}).
+    La fiche d'un budget donne le numéro Siren de sa collectivité, son libellé, son type (« principal » ou
+    « annexe »), sa nomenclature, la catégorie de sa collectivité, son département et sa région. Les lignes d'un
+    budget se suivent dans les fichiers de la DGFiP : la lecture le vérifie, et contrôle chaque budget dès sa dernière
+    ligne lue, sans garder les autres (une balance des communes a plusieurs millions de lignes). Un budget dont les
+    soldes débiteurs ne sont pas égaux aux soldes créditeurs arrête la lecture, sauf si une liste `desequilibres` est
+    donnée : il y est ajouté, (budget, écart en centimes)."""
     contenu, exercice = nature(fichier)
     if contenu != "balance":
         sys.exit(f"{fichier['id']} : copie de {contenu}, pas de balance")
-    lignes = texte_copie(BASE / fichier["chemin"]).splitlines()
-    entete = lignes[0].split(";") if lignes else []
+    lignes = lignes_copie(BASE / fichier["chemin"])
+    entete = next(lignes, "").rstrip("\r\n").split(";")
     forme = next((f for f, (attendu, _) in ENTETES.items() if entete == attendu), None)
     if forme is None:
         sys.exit(f"{fichier['id']} : en-tête inattendu {entete}")
     retenus = ENTETES[forme][1]
     rangs = {nom: entete.index(champ) for champ, nom in retenus.items()}
-    debut = len(entete) - len(MONTANTS)
-    fiches, resultat, vues = {}, [], set()
-    soldes = collections.Counter()
-    for n, ligne in enumerate(lignes[1:], start=2):
-        lieu = f"{fichier['id']}, ligne {n}"
-        valeurs = ligne.split(";")
-        if len(valeurs) != len(entete):
-            sys.exit(f"{lieu} : {len(valeurs)} champs au lieu de {len(entete)}")
-        v = {nom: valeurs[rang].strip() for nom, rang in rangs.items()}
-        v.setdefault("categorie", "")
-        if v["exercice"] != exercice:
-            sys.exit(f"{lieu} : exercice « {v['exercice']} » au lieu de {exercice}")
-        if not re.fullmatch(r"[0-9]{9}", v["siren"]) or not re.fullmatch(v["siren"] + r"[0-9]{5}", v["budget"]):
-            sys.exit(f"{lieu} : numéro Siren ou SIRET du budget illisible « {v['siren']} », « {v['budget']} »")
-        if v["type_budget"] not in PRINCIPAL | ANNEXES:
-            sys.exit(f"{lieu} : type de budget inattendu « {v['type_budget']} »")
-        if not COMPTE.fullmatch(v["compte"]):
-            sys.exit(f"{lieu} : compte illisible « {v['compte']} »")
-        fiche = {"siren": v["siren"], "nom": v["nom"],
-                 "type_budget": "principal" if v["type_budget"] in PRINCIPAL else "annexe",
-                 "nomenclature": v["nomenclature"], "categorie": v["categorie"], "departement": v["departement"],
-                 "region": v["region"]}
-        if fiches.setdefault(v["budget"], fiche) != fiche:
-            sys.exit(f"{lieu} : le budget {v['budget']} a une autre fiche que sur ses lignes précédentes "
-                     f"({fiches[v['budget']]}, ici {fiche})")
-        if (v["budget"], v["compte"]) in vues:
-            sys.exit(f"{lieu} : deuxième ligne pour le compte {v['compte']} du budget {v['budget']}")
-        vues.add((v["budget"], v["compte"]))
-        m = [centimes(t.strip(), lieu) for t in valeurs[debut:]]
+    rangs.setdefault("categorie", None)
+    champs_fiche = ["exercice", "budget", "siren", "nom", "type_budget", "nomenclature", "categorie", "departement",
+                    "region"]
+    rang_compte, debut, largeur = rangs["compte"], len(entete) - len(MONTANTS), len(entete)
+    vus, principaux = set(), set()
+    courant, brut, comptes, solde = None, None, {}, 0
+
+    def fin_de_budget():
+        if solde and desequilibres is not None:
+            desequilibres.append((courant, solde))
+        elif solde:
+            sys.exit(f"{fichier['id']} : les soldes débiteurs du budget {courant} ne sont pas égaux à ses soldes "
+                     f"créditeurs ({solde / 100:.2f} €)")
+        return courant, fiche, comptes
+
+    n = 1
+    for n, ligne in enumerate(lignes, start=2):
+        valeurs = ligne.rstrip("\r\n").split(";")
+        if len(valeurs) != largeur:
+            sys.exit(f"{fichier['id']}, ligne {n} : {len(valeurs)} champs au lieu de {largeur}")
+        cle = tuple(valeurs[rangs[c]].strip() if rangs[c] is not None else "" for c in champs_fiche)
+        if cle != brut:
+            lieu = f"{fichier['id']}, ligne {n}"
+            v = dict(zip(champs_fiche, cle))
+            if v["budget"] == courant:
+                sys.exit(f"{lieu} : le budget {courant} a une autre fiche que sur ses lignes précédentes ({brut}, "
+                         f"ici {cle})")
+            if courant is not None:
+                yield fin_de_budget()
+            if v["budget"] in vus:
+                sys.exit(f"{lieu} : les lignes du budget {v['budget']} ne se suivent pas")
+            if v["exercice"] != exercice:
+                sys.exit(f"{lieu} : exercice « {v['exercice']} » au lieu de {exercice}")
+            if not re.fullmatch(r"[0-9]{9}", v["siren"]) or not re.fullmatch(v["siren"] + r"[0-9]{5}", v["budget"]):
+                sys.exit(f"{lieu} : numéro Siren ou SIRET du budget illisible « {v['siren']} », « {v['budget']} »")
+            if v["type_budget"] not in PRINCIPAL | ANNEXES:
+                sys.exit(f"{lieu} : type de budget inattendu « {v['type_budget']} »")
+            if v["type_budget"] in PRINCIPAL:
+                if v["siren"] in principaux:
+                    sys.exit(f"{lieu} : la collectivité {v['siren']} a plusieurs budgets principaux")
+                principaux.add(v["siren"])
+            vus.add(v["budget"])
+            courant, brut, comptes, solde = v["budget"], cle, {}, 0
+            fiche = {"siren": v["siren"], "nom": v["nom"],
+                     "type_budget": "principal" if v["type_budget"] in PRINCIPAL else "annexe",
+                     "nomenclature": v["nomenclature"], "categorie": v["categorie"],
+                     "departement": v["departement"], "region": v["region"]}
+        compte = valeurs[rang_compte].strip()
+        if not COMPTE.fullmatch(compte):
+            sys.exit(f"{fichier['id']}, ligne {n} : compte illisible « {compte} »")
+        if compte in comptes:
+            sys.exit(f"{fichier['id']}, ligne {n} : deuxième ligne pour le compte {compte} du budget {courant}")
+        if MONTANTS_LIGNE.fullmatch(";".join(valeurs[debut:])):
+            m = [vite(t) for t in valeurs[debut:]]
+        else:
+            m = [centimes(t.strip(), fichier["id"], n) for t in valeurs[debut:]]
         bedeb, becre, obnetdeb, obnetcre, onbdeb, onbcre, _, _, sd, sc = m
         if sd - sc != bedeb - becre + obnetdeb - obnetcre + onbdeb - onbcre:
-            sys.exit(f"{lieu} : le solde de sortie n'est pas la balance d'entrée plus les opérations de l'exercice")
-        soldes[v["budget"]] += sd - sc
-        resultat.append((v["budget"], v["compte"], *m))
-    if not resultat:
+            sys.exit(f"{fichier['id']}, ligne {n} : le solde de sortie n'est pas la balance d'entrée plus les "
+                     f"opérations de l'exercice")
+        solde += sd - sc
+        comptes[compte] = m
+    if courant is None:
         sys.exit(f"{fichier['id']} : balance vide")
-    desequilibres = [b for b, s in soldes.items() if s]
-    if desequilibres:
-        sys.exit(f"{fichier['id']} : {len(desequilibres)} budgets dont les soldes débiteurs ne sont pas égaux aux soldes "
-                 f"créditeurs, dont {desequilibres[0]} ({soldes[desequilibres[0]] / 100:.2f} €)")
-    if len({f["siren"] for f in fiches.values() if f["type_budget"] == "principal"}) != \
-            sum(1 for f in fiches.values() if f["type_budget"] == "principal"):
-        sys.exit(f"{fichier['id']} : une collectivité a plusieurs budgets principaux")
-    return exercice, fiches, resultat
+    yield fin_de_budget()
+
+
+def sirens_disperses(fichier):
+    """(numéros Siren des collectivités dont les budgets ne se suivent pas dans une copie de balance, ceux de toutes ses
+    collectivités) : une lecture rapide, sans contrôle. Les budgets de quelques établissements publics locaux sont
+    dispersés."""
+    lignes = lignes_copie(BASE / fichier["chemin"])
+    entete = next(lignes, "").rstrip("\r\n").split(";")
+    rang = entete.index("SIREN" if "SIREN" in entete else "siren")
+    vus, disperses, courant = set(), set(), None
+    for ligne in lignes:
+        siren = ligne.split(";", rang + 1)[rang].strip()
+        if siren != courant:
+            if siren in vus:
+                disperses.add(siren)
+            vus.add(siren)
+            courant = siren
+    return disperses, vus
+
+
+def balance(fichier):
+    """(exercice, {budget: fiche}, [(budget, compte, montants en centimes…)]) d'une copie de balance, toute en mémoire :
+    pour les balances des départements et des régions, de quelques centaines de milliers de lignes."""
+    fiches, resultat = {}, []
+    for budget, fiche, comptes in budgets(fichier, []):
+        fiches[budget] = fiche
+        resultat += [(budget, compte, *m) for compte, m in comptes.items()]
+    return nature(fichier)[1], fiches, resultat
 
 
 def inscription(fichier, *_):
@@ -201,13 +320,19 @@ def inscription(fichier, *_):
     if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", version):
         sys.exit(f"{fichier['id']} : la copie ne dit pas la date de modification du jeu de données")
     ligne = {"fichier_id": fichier["id"], "source_id": fichier["source_id"], "contenu": contenu, "exercice": exercice,
-             "version": version, "statut": "", "lignes": "", "budgets": "", "collectivites": ""}
+             "version": version, "statut": "", "lignes": "", "budgets": "", "collectivites": "",
+             "desequilibres": ""}
     if contenu == "formules":
         ligne["lignes"] = str(len(formules_ofgl.formules(fichier)))
         return ligne
-    _, fiches, lignes = balance(fichier)
-    ligne.update(statut=statut(fichier), lignes=str(len(lignes)), budgets=str(len(fiches)),
-                 collectivites=str(len({f["siren"] for f in fiches.values()})))
+    n_lignes = n_budgets = 0
+    sirens, desequilibres = set(), []
+    for _, fiche, comptes in budgets(fichier, desequilibres):
+        n_lignes += len(comptes)
+        n_budgets += 1
+        sirens.add(fiche["siren"])
+    ligne.update(statut=statut(fichier), lignes=str(n_lignes), budgets=str(n_budgets), collectivites=str(len(sirens)),
+                 desequilibres=str(len(desequilibres)))
     return ligne
 
 

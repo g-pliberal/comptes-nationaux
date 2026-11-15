@@ -3475,69 +3475,121 @@ Par indicateur, les exercices où le tableau et la balance concordent à moins d
 
 ## 27. Balances comptables des collectivités
 
-Les balances comptables que la DGFiP publie pour chaque budget, principal ou annexe, de chaque département et de chaque région depuis 2010 : pour chaque compte, la balance d'entrée, les opérations de l'exercice et le solde de sortie, au centime, dans la version la plus récente de chaque exercice. Leur import vérifie, au centime, que le solde de sortie de chaque ligne est la balance d'entrée plus les opérations budgétaires et non budgétaires de l'exercice, et que chaque budget s'équilibre : la somme de ses soldes débiteurs est celle de ses soldes créditeurs.
+Les balances comptables que la DGFiP publie pour chaque budget, principal ou annexe, de chaque département, de chaque région, de chaque commune, de chaque groupement à fiscalité propre, de chaque syndicat et de chaque établissement public local depuis 2010 : pour chaque compte, la balance d'entrée, les opérations de l'exercice et le solde de sortie, au centime, dans la version la plus récente de chaque exercice. Leur import vérifie, au centime, que le solde de sortie de chaque ligne est la balance d'entrée plus les opérations budgétaires et non budgétaires de l'exercice, et compte les budgets qui ne s'équilibrent pas : ceux dont la somme des soldes débiteurs n'est pas celle des soldes créditeurs, tels que les publie la DGFiP. Les balances de 2016 des groupements, des syndicats et des établissements publics locaux sont des archives RAR, que la base garde sans les lire.
 
-| Niveau | Exercices | Lignes | Budgets au dernier exercice | Collectivités au dernier exercice |
-|---|---|---|---|---|
-| Départements | 16 années entre 2010 et 2025 | 1 304 325 | 446 | 98 |
-| Régions | 16 années entre 2010 et 2025 | 131 967 | 28 | 14 |
+| Niveau | Exercices | Lignes | Budgets au dernier exercice | Collectivités au dernier exercice | Budgets déséquilibrés |
+|---|---|---|---|---|---|
+| Départements | 16 années entre 2010 et 2025 | 1 304 325 | 446 | 98 | 0 |
+| Régions | 16 années entre 2010 et 2025 | 131 967 | 28 | 14 | 0 |
+| Communes | 16 années entre 2010 et 2025 | 115 485 305 | 57 309 | 34 778 | 15 |
+| Groupements à fiscalité propre | 15 années entre 2010 et 2025 | 13 600 293 | 8 881 | 1 262 | 0 |
+| Syndicats | 15 années entre 2010 et 2025 | 14 305 031 | 10 138 | 8 523 | 1 |
+| Établissements publics locaux | 15 années entre 2010 et 2025 | 18 899 645 | 24 926 | 21 940 | 8 |
 
 ### Les agrégats de l'OFGL recalculés
 
-Chaque agrégat que l'OFGL publie pour une collectivité (section 7) est recalculé à partir de ses balances, avec les formules que publie l'OFGL pour la catégorie de collectivités, l'exercice, la sorte de budget et la nomenclature de chacun (`outils/formules_ofgl.py`) : le montant du budget principal, la somme de ceux des budgets annexes et les flux croisés entre eux, que l'OFGL retranche de leur somme pour consolider. Un montant est égal s'il ne s'écarte pas de plus d'un euro du montant publié. Une collectivité territoriale unique se recalcule avec les formules des régions, où la range l'OFGL, même quand ses balances sont parmi celles des départements. Les collectivités de l'OFGL sans balance sont celles que la DGFiP range ailleurs : la Ville de Paris parmi les communes, la métropole de Lyon parmi les groupements à fiscalité propre. Un montant non recalculé est un montant publié non nul que ne donne aucune formule pour la nomenclature du budget ; un agrégat absent du jeu est un agrégat que le jeu publie pour d'autres collectivités de l'exercice, pas pour celle-ci, et que les balances donnent non nul.
+Chaque agrégat que l'OFGL publie pour une collectivité (section 7) est recalculé à partir de ses balances, avec les formules que publie l'OFGL pour la catégorie de collectivités, l'exercice, la sorte de budget et la nomenclature de chacun (`outils/formules_ofgl.py`) : le montant du budget principal, la somme de ceux des budgets annexes et les flux croisés entre eux, que l'OFGL retranche de leur somme pour consolider. Un montant est égal s'il ne s'écarte pas de plus d'un euro du montant publié. Une collectivité territoriale unique se recalcule avec les formules des régions, où la range l'OFGL, même quand ses balances sont parmi celles des départements ; la Ville de Paris et la métropole de Lyon, que l'OFGL publie aussi parmi les départements, se recalculent avec les formules de chacun des jeux qui les publient. Les remarques des formules désignent les collectivités auxquelles elles s'appliquent : la Ville de Paris, les communes de la Métropole du Grand Paris, ses établissements publics territoriaux, la métropole de Lyon, les collectivités territoriales uniques. Les balances des communes, des groupements, des syndicats et des établissements publics locaux ne sont recalculées que pour les exercices que l'OFGL publie pour eux, depuis 2018. Les collectivités de l'OFGL sans balance sont celles qu'aucune balance lue ne porte (celles des fichiers RAR de 2016, ou que la DGFiP range ailleurs). Un montant non recalculé est un montant publié non nul que ne donne aucune formule pour la nomenclature du budget ; un agrégat absent du jeu est un agrégat que le jeu publie pour d'autres collectivités de l'exercice, pas pour celle-ci, et que les balances donnent non nul.
 
 | Jeu de l'OFGL | Exercice | Collectivités | Recalculées | Sans balance | Montants comparés | Égaux | Part | Non recalculés | Agrégats absents du jeu |
 |---|---|---|---|---|---|---|---|---|---|
-| Départements | 2012 | 101 | 101 | 0 | 18 724 | 18 724 | 100,00 % | 0 | 0 |
-| Régions | 2012 | 26 | 26 | 0 | 2 987 | 2 987 | 100,00 % | 19 | 0 |
-| Départements | 2013 | 101 | 101 | 0 | 18 776 | 18 776 | 100,00 % | 0 | 0 |
-| Régions | 2013 | 26 | 26 | 0 | 3 033 | 3 033 | 100,00 % | 17 | 0 |
-| Départements | 2014 | 101 | 101 | 0 | 18 930 | 18 930 | 100,00 % | 0 | 0 |
-| Régions | 2014 | 26 | 26 | 0 | 3 073 | 3 073 | 100,00 % | 14 | 0 |
-| Départements | 2015 | 102 | 101 | 1 | 18 933 | 18 933 | 100,00 % | 0 | 0 |
-| Régions | 2015 | 26 | 26 | 0 | 3 081 | 3 081 | 100,00 % | 10 | 0 |
-| Départements | 2016 | 100 | 99 | 1 | 18 557 | 18 557 | 100,00 % | 0 | 0 |
-| Régions | 2016 | 17 | 17 | 0 | 2 186 | 2 176 | 99,54 % | 8 | 0 |
+| Départements | 2025 | 97 | 97 | 0 | 17 880 | 17 847 | 99,82 % | 0 | 0 |
+| Régions | 2025 | 17 | 17 | 0 | 2 355 | 2 355 | 100,00 % | 0 | 5 |
+| Communes | 2025 | 34 778 | 34 778 | 0 | 3 987 854 | 3 987 854 | 100,00 % | 0 | 0 |
+| Groupements à fiscalité propre | 2025 | 1 262 | 1 262 | 0 | 189 253 | 189 253 | 100,00 % | 0 | 0 |
+| Syndicats | 2025 | 8 522 | 8 521 | 1 | 732 401 | 732 401 | 100,00 % | 0 | 2 |
+| EPL | 2025 | 1 197 | 1 197 | 0 | 100 396 | 100 396 | 100,00 % | 0 | 1 |
+| Départements | 2024 | 97 | 97 | 0 | 18 028 | 17 992 | 99,80 % | 0 | 0 |
+| Régions | 2024 | 17 | 17 | 0 | 2 300 | 2 300 | 100,00 % | 0 | 4 |
+| Communes | 2024 | 34 932 | 34 932 | 0 | 4 032 537 | 4 032 523 | 100,00 % | 1 | 0 |
+| Groupements à fiscalité propre | 2024 | 1 266 | 1 266 | 0 | 190 029 | 190 028 | 100,00 % | 0 | 0 |
+| Syndicats | 2024 | 8 743 | 8 740 | 3 | 750 223 | 750 209 | 100,00 % | 0 | 4 |
+| EPL | 2024 | 1 211 | 1 211 | 0 | 101 737 | 101 737 | 100,00 % | 1 | 3 |
+| Départements | 2023 | 97 | 97 | 0 | 17 918 | 17 883 | 99,80 % | 0 | 0 |
+| Régions | 2023 | 17 | 17 | 0 | 2 245 | 2 245 | 100,00 % | 0 | 1 |
+| Communes | 2023 | 34 945 | 34 945 | 0 | 4 042 786 | 4 042 786 | 100,00 % | 0 | 0 |
+| Groupements à fiscalité propre | 2023 | 1 266 | 1 266 | 0 | 189 736 | 189 736 | 100,00 % | 0 | 0 |
+| Syndicats | 2023 | 8 909 | 8 908 | 1 | 764 434 | 764 428 | 100,00 % | 0 | 13 |
+| EPL | 2023 | 1 199 | 1 198 | 1 | 100 420 | 100 416 | 100,00 % | 0 | 3 |
+| Départements | 2022 | 97 | 97 | 0 | 18 194 | 18 159 | 99,81 % | 0 | 0 |
+| Régions | 2022 | 17 | 17 | 0 | 2 251 | 2 251 | 100,00 % | 1 | 0 |
+| Communes | 2022 | 34 955 | 34 955 | 0 | 4 040 858 | 4 040 858 | 100,00 % | 0 | 0 |
+| Groupements à fiscalité propre | 2022 | 1 266 | 1 266 | 0 | 189 739 | 189 739 | 100,00 % | 0 | 0 |
+| Syndicats | 2022 | 9 032 | 9 031 | 1 | 773 844 | 773 842 | 100,00 % | 0 | 9 |
+| EPL | 2022 | 1 190 | 1 189 | 1 | 99 647 | 99 645 | 100,00 % | 0 | 1 |
+| Départements | 2021 | 97 | 97 | 0 | 18 262 | 18 227 | 99,81 % | 0 | 0 |
+| Régions | 2021 | 17 | 17 | 0 | 2 248 | 2 248 | 100,00 % | 1 | 0 |
+| Communes | 2021 | 34 965 | 34 965 | 0 | 4 046 912 | 4 046 912 | 100,00 % | 0 | 0 |
+| Groupements à fiscalité propre | 2021 | 1 265 | 1 265 | 0 | 189 249 | 189 249 | 100,00 % | 0 | 0 |
+| Syndicats | 2021 | 9 173 | 9 172 | 1 | 785 583 | 785 577 | 100,00 % | 0 | 4 |
+| EPL | 2021 | 1 183 | 1 182 | 1 | 98 920 | 98 918 | 100,00 % | 0 | 1 |
+| Départements | 2020 | 98 | 98 | 0 | 18 431 | 18 396 | 99,81 % | 0 | 0 |
+| Régions | 2020 | 17 | 17 | 0 | 2 283 | 2 283 | 100,00 % | 2 | 0 |
+| Communes | 2020 | 34 968 | 34 968 | 0 | 4 055 057 | 4 055 057 | 100,00 % | 0 | 1 |
+| Groupements à fiscalité propre | 2020 | 1 267 | 1 267 | 0 | 185 321 | 185 321 | 100,00 % | 0 | 0 |
+| Syndicats | 2020 | 9 399 | 9 399 | 0 | 804 523 | 804 523 | 100,00 % | 0 | 0 |
+| EPL | 2020 | 1 167 | 1 166 | 1 | 97 676 | 97 676 | 100,00 % | 0 | 1 |
+| Départements | 2019 | 98 | 98 | 0 | 18 505 | 18 470 | 99,81 % | 0 | 0 |
+| Régions | 2019 | 17 | 17 | 0 | 2 287 | 2 287 | 100,00 % | 3 | 0 |
+| Communes | 2019 | 34 966 | 34 966 | 0 | 4 113 478 | 4 113 478 | 100,00 % | 0 | 0 |
+| Groupements à fiscalité propre | 2019 | 1 272 | 1 272 | 0 | 185 746 | 185 746 | 100,00 % | 0 | 0 |
+| Syndicats | 2019 | 9 951 | 9 949 | 2 | 850 726 | 850 726 | 100,00 % | 0 | 0 |
+| EPL | 2019 | 1 174 | 1 170 | 4 | 97 986 | 97 986 | 100,00 % | 0 | 1 |
+| Départements | 2018 | 98 | 98 | 0 | 18 327 | 18 310 | 99,91 % | 0 | 0 |
+| Régions | 2018 | 17 | 17 | 0 | 2 280 | 2 280 | 100,00 % | 3 | 0 |
+| Communes | 2018 | 35 356 | 35 354 | 2 | 4 178 401 | 4 178 401 | 100,00 % | 0 | 0 |
+| Groupements à fiscalité propre | 2018 | 1 281 | 1 281 | 0 | 186 321 | 186 321 | 100,00 % | 0 | 0 |
+| Syndicats | 2018 | 10 492 | 10 489 | 3 | 896 169 | 896 169 | 100,00 % | 0 | 2 |
+| EPL | 2018 | 1 142 | 1 130 | 12 | 94 624 | 94 624 | 100,00 % | 0 | 2 |
 | Départements | 2017 | 100 | 99 | 1 | 18 595 | 18 595 | 100,00 % | 0 | 0 |
 | Régions | 2017 | 17 | 17 | 0 | 2 141 | 2 139 | 99,91 % | 3 | 0 |
-| Départements | 2018 | 98 | 97 | 1 | 18 135 | 18 135 | 100,00 % | 0 | 0 |
-| Régions | 2018 | 17 | 17 | 0 | 2 280 | 2 280 | 100,00 % | 3 | 0 |
-| Départements | 2019 | 98 | 96 | 2 | 18 121 | 18 121 | 100,00 % | 0 | 0 |
-| Régions | 2019 | 17 | 17 | 0 | 2 287 | 2 287 | 100,00 % | 3 | 0 |
-| Départements | 2020 | 98 | 96 | 2 | 18 044 | 18 044 | 100,00 % | 0 | 0 |
-| Régions | 2020 | 17 | 17 | 0 | 2 283 | 2 283 | 100,00 % | 2 | 0 |
-| Départements | 2021 | 97 | 95 | 2 | 17 869 | 17 869 | 100,00 % | 0 | 0 |
-| Régions | 2021 | 17 | 17 | 0 | 2 248 | 2 248 | 100,00 % | 1 | 0 |
-| Départements | 2022 | 97 | 95 | 2 | 17 798 | 17 798 | 100,00 % | 0 | 0 |
-| Régions | 2022 | 17 | 17 | 0 | 2 251 | 2 251 | 100,00 % | 1 | 0 |
-| Départements | 2023 | 97 | 95 | 2 | 17 531 | 17 531 | 100,00 % | 0 | 0 |
-| Régions | 2023 | 17 | 17 | 0 | 2 245 | 2 245 | 100,00 % | 0 | 1 |
-| Départements | 2024 | 97 | 95 | 2 | 17 641 | 17 641 | 100,00 % | 0 | 0 |
-| Régions | 2024 | 17 | 17 | 0 | 2 300 | 2 300 | 100,00 % | 0 | 4 |
-| Départements | 2025 | 97 | 95 | 2 | 17 490 | 17 490 | 100,00 % | 0 | 0 |
-| Régions | 2025 | 17 | 17 | 0 | 2 355 | 2 355 | 100,00 % | 0 | 5 |
+| Départements | 2016 | 100 | 99 | 1 | 18 557 | 18 557 | 100,00 % | 0 | 0 |
+| Régions | 2016 | 17 | 17 | 0 | 2 186 | 2 176 | 99,54 % | 8 | 0 |
+| Départements | 2015 | 102 | 101 | 1 | 18 933 | 18 933 | 100,00 % | 0 | 0 |
+| Régions | 2015 | 26 | 26 | 0 | 3 081 | 3 081 | 100,00 % | 10 | 0 |
+| Départements | 2014 | 101 | 101 | 0 | 18 930 | 18 930 | 100,00 % | 0 | 0 |
+| Régions | 2014 | 26 | 26 | 0 | 3 073 | 3 073 | 100,00 % | 14 | 0 |
+| Départements | 2013 | 101 | 101 | 0 | 18 776 | 18 776 | 100,00 % | 0 | 0 |
+| Régions | 2013 | 26 | 26 | 0 | 3 033 | 3 033 | 100,00 % | 17 | 0 |
+| Départements | 2012 | 101 | 101 | 0 | 18 724 | 18 724 | 100,00 % | 0 | 0 |
+| Régions | 2012 | 26 | 26 | 0 | 2 987 | 2 987 | 100,00 % | 19 | 0 |
 
-Au total, 289 882 montants égaux sur 289 894 comparés (99,996 %).
+Au total, 41 445 072 montants égaux sur 41 445 396 comparés (99,999 %). Par jeu :
+
+| Jeu de l'OFGL | Exercices | Montants comparés | Égaux | Part |
+|---|---|---|---|---|
+| Départements | 14 années entre 2012 et 2025 | 258 060 | 257 799 | 99,899 % |
+| Régions | 14 années entre 2012 et 2025 | 34 750 | 34 738 | 99,965 % |
+| Communes | 8 années entre 2018 et 2025 | 32 497 883 | 32 497 869 | 100,000 % |
+| Groupements à fiscalité propre | 8 années entre 2018 et 2025 | 1 505 394 | 1 505 393 | 100,000 % |
+| Syndicats | 8 années entre 2018 et 2025 | 6 357 903 | 6 357 875 | 100,000 % |
+| EPL | 8 années entre 2018 et 2025 | 791 406 | 791 398 | 99,999 % |
+
+Formules que la base n'applique pas : le jeu en donne deux qui s'appliquent aux mêmes collectivités, et qui diffèrent : EPL, 2016, Fiscalité reversée (M14) ; Syndicats, 2016, Fiscalité reversée (M14).
 
 Montants non recalculés : le jeu des formules n'en donne aucune pour l'agrégat, la sorte de budget et la nomenclature, alors que l'OFGL publie un montant.
 
 | Jeu | Agrégat | Exercices | Montants |
 |---|---|---|---|
+| Communes | Fonds de roulement | 2024 | 1 |
+| EPL | Dépôts au Trésor | 2024 | 1 |
 | Régions | DMTO après péreq. | 11 années entre 2012 et 2022 | 81 |
 
-Les 12 plus grands écarts, sur 12 :
+Les 15 plus grands écarts, sur 324 :
 
 | Jeu | Exercice | Collectivité | Agrégat | Montant | Recalculé | Publié |
 |---|---|---|---|---|---|---|
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | DMTO après péreq. | budget principal | 38 017 922,49 € | 16 908 723,49 € |
-| Régions | 2017 | CTU COLL TERRITORIALE MARTINIQUE (200055507) | DMTO après péreq. | budget principal | 37 281 426,01 € | 20 544 340,01 € |
-| Régions | 2016 | CTG COLLECTIVITE TERRITORIALE GUYANE (200052678) | DMTO après péreq. | budget principal | 17 604 489,87 € | 8 592 706,87 € |
-| Régions | 2017 | CTU COLLECTIVITE TERRITORIALE GUYANE (200052678) | DMTO après péreq. | budget principal | 10 629 397,14 € | 6 791 342,14 € |
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Subventions reçues et participations | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Recettes totales hors emprunts | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Recettes totales | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Recettes de fonctionnement | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Dépenses totales hors remb | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Dépenses totales | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Dépenses de fonctionnement | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
-| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Dépenses d'intervention | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
+| Départements | 2021 | VILLE DE PARIS (217500016) | DMTO avant péreq. | budget principal | 1 351 209 609,78 € | 1 733 976 555,05 € |
+| Départements | 2021 | VILLE DE PARIS (217500016) | DMTO après péreq. | budget principal | 1 126 208 090,78 € | 1 508 975 036,05 € |
+| Départements | 2022 | VILLE DE PARIS (217500016) | DMTO avant péreq. | budget principal | 1 371 572 536,91 € | 1 745 605 598,30 € |
+| Départements | 2022 | VILLE DE PARIS (217500016) | DMTO après péreq. | budget principal | 1 115 452 664,91 € | 1 489 485 726,30 € |
+| Départements | 2019 | VILLE DE PARIS (217500016) | DMTO après péreq. | budget principal | 1 070 321 509,15 € | 1 418 538 479,05 € |
+| Départements | 2019 | VILLE DE PARIS (217500016) | DMTO avant péreq. | budget principal | 1 238 549 603,15 € | 1 586 766 573,05 € |
+| Départements | 2020 | VILLE DE PARIS (217500016) | DMTO avant péreq. | budget principal | 1 156 509 295,24 € | 1 480 057 236,44 € |
+| Départements | 2020 | VILLE DE PARIS (217500016) | DMTO après péreq. | budget principal | 911 620 158,24 € | 1 235 168 099,44 € |
+| Départements | 2025 | VILLE DE PARIS (217500016) | DMTO avant péreq. | budget principal | 1 161 020 432,26 € | 1 468 305 789,37 € |
+| Départements | 2025 | VILLE DE PARIS (217500016) | DMTO après péreq. | budget principal | 956 462 920,26 € | 1 263 748 277,37 € |
+| Départements | 2023 | VILLE DE PARIS (217500016) | DMTO avant péreq. | budget principal | 1 038 629 318,03 € | 1 327 782 029,27 € |
+| Départements | 2023 | VILLE DE PARIS (217500016) | DMTO après péreq. | budget principal | 772 377 538,03 € | 1 061 530 249,27 € |
+| Départements | 2024 | VILLE DE PARIS (217500016) | DMTO avant péreq. | budget principal | 908 476 014,32 € | 1 164 659 438,30 € |
+| Départements | 2024 | VILLE DE PARIS (217500016) | DMTO après péreq. | budget principal | 673 774 933,32 € | 929 958 357,30 € |
+| Départements | 2020 | VILLE DE PARIS (217500016) | Recettes totales hors emprunts | flux croisés | 10 560 200,00 € | 164 430 204,34 € |

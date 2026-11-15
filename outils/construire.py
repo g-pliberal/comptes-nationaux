@@ -35,7 +35,7 @@ import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_rei as rei
-from commun import BASE, lire, paquet
+from commun import BASE, RELEASES, lire, paquet
 
 SORTIE = BASE / "construite"
 TYPES_SQL = {"integer": "INTEGER", "number": "REAL"}
@@ -462,8 +462,10 @@ def lignes_balances(lots, indicateurs):
 
 def lot_balance_collectivites(inscrit, fichier, lot):
     """Les lignes d'une copie d'une balance comptable de collectivités : la fiche de chaque budget et ses comptes ; `lot`
-    est le numéro de ligne de la copie inscrite."""
-    if inscrit["contenu"] != "balance":
+    est le numéro de ligne de la copie inscrite. Les balances rangées dans une Release (celles des communes, des
+    groupements à fiscalité propre, des syndicats et des établissements publics locaux, des dizaines de millions de
+    lignes) n'entrent pas dans la base construite : on les lit dans leurs copies."""
+    if inscrit["contenu"] != "balance" or fichier["chemin"].startswith(RELEASES + "/"):
         return []
     _, fiches, lignes = balances_collectivites.balance(fichier)
     return [("budgets_balances", [[lot, b] + [f[c] or None for c in balances_collectivites.FICHE]

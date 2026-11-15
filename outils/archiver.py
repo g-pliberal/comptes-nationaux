@@ -2,7 +2,7 @@
 """Télécharge des fichiers d'une source, en archive une copie dans base/archives/ et les inscrit
 dans la table des fichiers avec leur empreinte.
 
-    python3 outils/archiver.py <source_id> "<url>" ["<url>"…] [--compresser] [--decouper]
+    python3 outils/archiver.py <source_id> "<url>" ["<url>"…] [--compresser] [--decouper] [--release]
     python3 outils/archiver.py <source_id> "<url>" --depose <chemin>
 
 Avec --depose, la copie n'est pas téléchargée : c'est un fichier qu'une personne a téléchargé à la main à l'adresse
@@ -15,7 +15,11 @@ nouvelle date de mise à jour, la table des vérifications inscrit que la copie 
 sa taille restent celles du contenu reçu, que le contrôle retrouve en la décompressant. Avec --decouper, un
 fichier trop gros pour le dépôt (GitHub refuse les fichiers de plus de 100 Mo) est enregistré en morceaux
 (« .partie01 », « .partie02 »…), que la lecture recolle : son empreinte et sa taille restent celles du
-contenu reçu. Une connexion
+contenu reçu. Avec --release, la copie, trop grosse même en morceaux (les balances comptables des communes), n'entre pas
+dans le dépôt : elle est rangée dans la « Release » « archives » du dépôt GitHub, sous le chemin
+« releases/archives/<source>_<date>-<empreinte>.<extension> » ; en attendant, elle est gardée dans base/releases/, que
+le dépôt ignore. Le contrôle de la base, sur GitHub, la télécharge de nouveau à son adresse d'origine, vérifie qu'elle a
+l'empreinte et la taille inscrites et la joint à la Release (outils/ranger.py). Une connexion
 coupée avant la fin du téléchargement est réessayée ; une erreur renvoyée par le serveur ne l'est pas.
 Pour un export de data.ofgl.fr, de data.economie.gouv.fr ou de data.drees, la date de modification du jeu de données
 est lue avant son premier fichier et après chacun : si elle change, l'archivage s'arrête, et les fichiers déjà
@@ -41,8 +45,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from commun import (AGENT, BASE, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_ods, date_pdf, date_xlsx, date_zip,
-                    decoder_html, ecrire, lire, lire_pdf, lire_sdmx, maintenant, texte_html, texte_pdf)
+from commun import (AGENT, ARCHIVES, BASE, RELEASES, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_ods, date_pdf,
+                    date_xlsx, date_zip, decoder_html, ecrire, lire, lire_pdf, lire_sdmx, maintenant, texte_html, texte_pdf)
 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
 # Serveurs qui ne proposent que des suites de chiffrement que Python écarte par défaut : la connexion les accepte pour
@@ -133,7 +137,7 @@ def depot(chemin):
 
 
 def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, annoncee="",
-             telecharge_le=None):
+             telecharge_le=None, release=False):
     """Inscrit une copie dans la table des fichiers ; renvoie son identifiant. La table reste verrouillée de sa
     lecture à son écriture, pour qu'un autre archivage n'y efface pas cette inscription. `annoncee` est la date de
     mise à jour qu'annonce la source, sous laquelle une copie déjà archivée est inscrite comme vérifiée : à défaut,
@@ -141,7 +145,7 @@ def archiver(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     with (BASE / "tables" / "fichiers.csv").open("a") as verrou:
         fcntl.flock(verrou, fcntl.LOCK_EX)
         return inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, annoncee or mis_a_jour,
-                        telecharge_le)
+                        telecharge_le, release)
 
 
 def verifier(copie, mis_a_jour):
@@ -159,7 +163,8 @@ def verifier(copie, mis_a_jour):
     return f", vérifié à jour au {mis_a_jour}"
 
 
-def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, annoncee="", telecharge_le=None):
+def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, annoncee="", telecharge_le=None,
+             release=False):
     sha256 = hashlib.sha256(contenu).hexdigest()
     fichiers = lire("tables/fichiers.csv")
     deja = next((f for f in fichiers if f["sha256"] == sha256 and f["source_id"] == source_id), None)
@@ -169,18 +174,20 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
                  else "ods" if "opendocument.spreadsheet" in type_contenu
                  else "csv" if "csv" in type_contenu else "html" if "html" in type_contenu
                  else "xml" if "xml" in type_contenu else "zip" if "zip" in type_contenu
-                 else "pdf" if "pdf" in type_contenu else "bin")
+                 else "pdf" if "pdf" in type_contenu else "rar" if "rar" in type_contenu else "bin")
     # Un serveur qui envoie un type générique (« application/octet-stream ») : l'extension est celle de l'adresse,
     # quand c'est l'une des précédentes.
-    connue = re.search(r"\.(json|xlsx|ods|csv|html|xml|zip|pdf)$", url.split("?")[0])
+    connue = re.search(r"[._](json|xlsx|ods|csv|html|xml|zip|pdf|rar)$", url.split("?")[0])
     if extension == "bin" and type_contenu == "application/octet-stream" and connue:
         extension = connue.group(1)
     if compresser and extension != "csv":
         sys.exit("seul un fichier csv s'archive compressé")
-    if compresser and decouper:
-        sys.exit("une copie s'archive compressée ou découpée, pas les deux")
+    if sum((compresser, decouper, release)) > 1:
+        sys.exit("une copie s'archive compressée, découpée ou rangée dans une Release, pas plusieurs à la fois")
     date = aujourdhui()
     chemin = f"archives/{source_id}/{date}-{sha256[:8]}.{extension}" + (".bz2" if compresser else "")
+    if release:
+        chemin = f"{RELEASES}/{ARCHIVES}/{source_id}_{date}-{sha256[:8]}.{extension}"
     (BASE / chemin).parent.mkdir(parents=True, exist_ok=True)
     if decouper and len(contenu) > TAILLE_MORCEAU:
         for k in range(0, len(contenu), TAILLE_MORCEAU):
@@ -219,6 +226,8 @@ def main():
     parser.add_argument("urls", nargs="+", metavar="url", help="requête exacte à archiver")
     parser.add_argument("--compresser", action="store_true", help="archiver les copies compressées (bzip2)")
     parser.add_argument("--decouper", action="store_true", help="archiver en morceaux une copie trop grosse pour le dépôt")
+    parser.add_argument("--release", action="store_true", help="ranger la copie dans la Release « archives » du dépôt "
+                                                                "GitHub, et non dans le dépôt lui-même")
     parser.add_argument("--depose", metavar="chemin", help="fichier téléchargé à la main à l'adresse donnée et déposé "
                                                           "dans le dépôt par un commit, à archiver tel quel")
     args = parser.parse_args()
@@ -242,7 +251,7 @@ def main():
         if jeu is not None and date_portail(url) != dates[jeu]:
             sys.exit(f"le jeu de données a été modifié pendant le téléchargement de {url} : recommencer")
         print(archiver(args.source_id, url, contenu, type_contenu, dates.get(jeu, ""), args.compresser, args.decouper,
-                       date_piece_jointe(url)), flush=True)
+                       date_piece_jointe(url), release=args.release), flush=True)
 
 
 if __name__ == "__main__":

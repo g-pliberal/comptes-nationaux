@@ -46,24 +46,63 @@ GRANDEURS = {
     "OOC": lambda m: m[7],
 }
 TERME_COMPTE = re.compile(r"(SDN|SCN|OOC|DN|CN|SD|SC|D|C)([0-9]+[0-9A-Z]*)(?![\w'])")
-# Collectivités que désignent les remarques des formules des départements et des régions, par numéro Siren.
+# Collectivités que désignent les remarques des formules, par numéro Siren.
 CTU_GUYANE_MARTINIQUE = {"200052678", "200055507"}
 CORSE = {"200076958"}
 ILE_DE_FRANCE = {"237500079"}
+PARIS = {"217500016"}
+METROPOLE_DE_LYON = {"200046977"}
+# Les onze établissements publics territoriaux de la Métropole du Grand Paris.
+EPT = {"200057867", "200057875", "200057941", "200057966", "200057974", "200057982", "200057990", "200058006",
+       "200058014", "200058097", "200058790"}
+# Les communes de la Métropole du Grand Paris : celles de Paris et des trois départements de la petite couronne, et sept
+# communes de l'Essonne et du Val-d'Oise (Athis-Mons, Juvisy-sur-Orge, Morangis, Paray-Vieille-Poste, Savigny-sur-Orge,
+# Viry-Châtillon, Argenteuil).
+PETITE_COURONNE = {"75", "92", "93", "94"}
+GRAND_PARIS_AU_DELA = {"219100278", "219103264", "219104320", "219104791", "219105897", "219106879", "219500188"}
+
+
+def grand_paris(fiche):
+    """Vrai pour une commune de la Métropole du Grand Paris ; les balances écrivent le département sur deux ou trois
+    chiffres (« 92 », « 092 »)."""
+    departement = fiche["departement"]
+    if len(departement) == 3 and departement.startswith("0"):
+        departement = departement[1:]
+    return departement in PETITE_COURONNE or fiche["siren"] in GRAND_PARIS_AU_DELA
+
+
+# Remarque → la condition, sur la fiche d'un budget (son numéro Siren, son département), d'une collectivité à qui la
+# formule s'applique.
 REMARQUES = {
-    "": lambda siren: True,
+    "": lambda fiche: True,
     "formule spécifique aux CTU de Guyane et de Martinique et à la Collectivité Corse":
-        lambda siren: siren in CTU_GUYANE_MARTINIQUE | CORSE,
+        lambda fiche: fiche["siren"] in CTU_GUYANE_MARTINIQUE | CORSE,
     "formule applicable aux régions à l'exclusion des CTU de Guyane et de Martinique et de la Collectivité Corse":
-        lambda siren: siren not in CTU_GUYANE_MARTINIQUE | CORSE,
-    "formule spécifique aux CTU de Guyane et de Martinique": lambda siren: siren in CTU_GUYANE_MARTINIQUE,
+        lambda fiche: fiche["siren"] not in CTU_GUYANE_MARTINIQUE | CORSE,
+    "formule spécifique aux CTU de Guyane et de Martinique": lambda fiche: fiche["siren"] in CTU_GUYANE_MARTINIQUE,
     "formule applicable aux régions à l'exclusion des CTU de Guyane et de Martinique":
-        lambda siren: siren not in CTU_GUYANE_MARTINIQUE,
-    "formule spécifique à la région Ile-de-France": lambda siren: siren in ILE_DE_FRANCE,
-    "formule applicable aux régions à l'exclusion de la région Ile-de-France": lambda siren: siren not in ILE_DE_FRANCE,
+        lambda fiche: fiche["siren"] not in CTU_GUYANE_MARTINIQUE,
+    "formule spécifique à la région Ile-de-France": lambda fiche: fiche["siren"] in ILE_DE_FRANCE,
+    "formule applicable aux régions à l'exclusion de la région Ile-de-France":
+        lambda fiche: fiche["siren"] not in ILE_DE_FRANCE,
+    "formule spécifique à la Ville de Paris": lambda fiche: fiche["siren"] in PARIS,
+    "formule spécifique aux communes de la Métropole du Grand Paris": grand_paris,
+    "formule applicable aux communes à l'exclusion des communes appartenant à la Métropole du Grand Paris":
+        lambda fiche: not grand_paris(fiche),
+    "formule spécifique à la Métropole de Lyon": lambda fiche: fiche["siren"] in METROPOLE_DE_LYON,
+    "formule spécifique aux établissements publics territoriaux de la Métropole du Grand Paris":
+        lambda fiche: fiche["siren"] in EPT,
+    "formule applicable aux Groupements à fiscalité propre à l'exclusion des établissements publics territoriaux de "
+    "la Métropole du Grand Paris": lambda fiche: fiche["siren"] not in EPT,
 }
+# Fiches témoins sur lesquelles se vérifie qu'une seule formule s'applique : une collectivité de chaque groupe que nomme
+# une remarque, et une autre.
+TEMOINS = [{"siren": s, "departement": d} for s, d in
+           [("200052678", "973"), ("200055507", "972"), ("200076958", "2A"), ("237500079", "75"),
+            ("217500016", "75"), ("219200045", "92"), ("219100278", "91"), ("200046977", "69"), ("200057867", "93"),
+            ("000000000", "01")]]
 # Catégories de collectivités dont la base recalcule les agrégats : celles dont elle a les balances.
-RECALCULEES = {"Départements", "Régions"}
+RECALCULEES = {"Départements", "Régions", "Communes", "Groupements à fiscalité propre", "Syndicats", "EPL"}
 
 
 def analyser(texte, noms, lieu):
@@ -128,8 +167,8 @@ def analyser(texte, noms, lieu):
 def formules(fichier):
     """Les formules d'une copie du jeu : [{champ: valeur, "sortes": ensemble des sortes de budget, "nomenclatures":
     ensemble, "arbre": arbre, ou None pour une formule illisible}], après contrôle : pour les catégories que la base
-    recalcule, chaque formule se lit, et une seule s'applique à chaque collectivité pour un exercice, un agrégat, une sorte de calcul, une sorte de budget et
-    une nomenclature."""
+    recalcule, chaque formule se lit ; deux formules qui s'appliquent à la même collectivité pour un exercice, un agrégat,
+    une sorte de calcul, une sorte de budget et une nomenclature sont marquées « ambigue »."""
     entete, lignes = lire_export_ofgl(BASE / fichier["chemin"])
     if entete != ENTETE:
         sys.exit(f"{fichier['id']} : en-tête {entete}, attendu {ENTETE}")
@@ -157,7 +196,8 @@ def formules(fichier):
             if f["type_collectivite"] in RECALCULEES:
                 raise
             arbre = None
-        f.update(sortes=sortes, nomenclatures=set(f["nomenclatures"].split(",")), arbre=arbre)
+        f.update(sortes=sortes, nomenclatures=set(f["nomenclatures"].split(",")), nomenclatures_texte=f["nomenclatures"],
+                 arbre=arbre)
         if f["type_collectivite"] in RECALCULEES:
             if f["remarques"] not in REMARQUES:
                 sys.exit(f"{lieu} : remarque que la base ne sait pas appliquer « {f['remarques']} »")
@@ -168,14 +208,23 @@ def formules(fichier):
         resultat.append(f)
     # Deux formules pour la même clé doivent se partager les collectivités : l'une pour celles que nomme la remarque,
     # l'autre pour les autres ; on le vérifie sur les collectivités que désignent les remarques et sur une autre.
-    temoins = CTU_GUYANE_MARTINIQUE | CORSE | ILE_DE_FRANCE | {"000000000"}
+    # Le jeu en a parfois deux qui se contredisent (celles des syndicats et des établissements publics locaux de 2016
+    # pour la fiscalité reversée, l'une retranchant un compte que l'autre ne retranche pas) : la base n'en applique
+    # aucune, et le rapport de cohérence les cite.
     for cle, rangs in cles.items():
-        for siren in temoins:
-            applicables = [n for n, remarque in rangs if REMARQUES[remarque](siren)]
+        for temoin in TEMOINS:
+            applicables = [n for n, remarque in rangs if REMARQUES[remarque](temoin)]
             if len(applicables) > 1:
-                sys.exit(f"{fichier['id']}, lignes {', '.join(map(str, applicables))} : plusieurs formules pour "
-                         f"{' / '.join(cle)} et la collectivité {siren}")
+                for n in applicables:
+                    resultat[n - 2]["ambigue"] = True
     return resultat
+
+
+def ambigues(toutes):
+    """[(catégorie, exercice, agrégat, sorte de calcul, nomenclatures)] des formules que la base n'applique pas parce
+    qu'une autre formule s'applique aux mêmes collectivités."""
+    return sorted({(f["type_collectivite"], f["annee"], f["agregat"], f["type_calcul"], f["nomenclatures_texte"])
+                   for f in toutes if f.get("ambigue")})
 
 
 class Formulaire:
@@ -185,7 +234,8 @@ class Formulaire:
         self.index = collections.defaultdict(list)
         self.agregats = set()
         for f in toutes:
-            if f["type_collectivite"] == categorie and f["annee"] == exercice and f["type_calcul"] in (BRUT, FLUX):
+            if f["type_collectivite"] == categorie and f["annee"] == exercice and f["type_calcul"] in (BRUT, FLUX) \
+                    and not f.get("ambigue"):
                 for sorte in f["sortes"]:
                     for nomenclature in f["nomenclatures"]:
                         self.index[(f["type_calcul"], sorte, nomenclature, f["agregat"])].append(
@@ -193,9 +243,9 @@ class Formulaire:
                 if f["type_calcul"] == BRUT:
                     self.agregats.add(f["agregat"])
 
-    def arbre(self, calcul, sorte, nomenclature, agregat, siren):
-        """L'arbre de la formule qui s'applique, ou None."""
-        return next((a for s, a in self.index.get((calcul, sorte, nomenclature, agregat), []) if s(siren)), None)
+    def arbre(self, calcul, sorte, nomenclature, agregat, fiche):
+        """L'arbre de la formule qui s'applique au budget de fiche `fiche`, ou None."""
+        return next((a for s, a in self.index.get((calcul, sorte, nomenclature, agregat), []) if s(fiche)), None)
 
     def budget(self, fiche, comptes):
         """{agrégat: (montant brut, flux croisés)} d'un budget, en centimes, d'après ses comptes ({compte: montants en
@@ -218,7 +268,7 @@ class Formulaire:
             memoire = memoires[calcul]
             if nom not in memoire:
                 memoire[nom] = None  # garde contre une formule qui se nommerait elle-même
-                arbre = self.arbre(calcul, fiche["type_budget"], fiche["nomenclature"], nom, fiche["siren"])
+                arbre = self.arbre(calcul, fiche["type_budget"], fiche["nomenclature"], nom, fiche)
                 memoire[nom] = None if arbre is None else evaluer(calcul, arbre)
             return memoire[nom]
 
@@ -239,21 +289,16 @@ class Formulaire:
         return {nom: (agregat(BRUT, nom), agregat(FLUX, nom)) for nom in self.agregats}
 
 
-def recalculer(formulaire, fiches, lignes, sirens):
-    """{siren: {agrégat: [budget principal, budgets annexes, flux croisés]}} pour les collectivités `sirens`, en centimes,
-    d'après les lignes d'une balance ; le montant des budgets annexes est la somme de ceux auxquels une formule
+def recalculer(formulaire, budgets):
+    """{agrégat: [budget principal, budgets annexes, flux croisés]} d'une collectivité, en centimes, d'après ses budgets
+    [(budget, fiche, {compte: montants})] ; le montant des budgets annexes est la somme de ceux auxquels une formule
     s'applique, celui des flux croisés la somme de ceux de tous les budgets ; un montant est None si aucune formule ne
     s'applique."""
-    comptes = collections.defaultdict(dict)
-    for budget, compte, *montants in lignes:
-        if fiches[budget]["siren"] in sirens:
-            comptes[budget][compte] = montants
-    resultat = collections.defaultdict(lambda: collections.defaultdict(lambda: [None, None, None]))
-    for budget, c in comptes.items():
-        fiche = fiches[budget]
+    resultat = collections.defaultdict(lambda: [None, None, None])
+    for _, fiche, comptes in budgets:
         k = 0 if fiche["type_budget"] == "principal" else 1
-        for nom, (brut, flux) in formulaire.budget(fiche, c).items():
-            ligne = resultat[fiche["siren"]][nom]
+        for nom, (brut, flux) in formulaire.budget(fiche, comptes).items():
+            ligne = resultat[nom]
             if brut is not None:
                 ligne[k] = (ligne[k] or 0) + brut
             if flux is not None:
