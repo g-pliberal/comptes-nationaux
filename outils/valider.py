@@ -4,8 +4,9 @@
 Vérifie que chaque table respecte son schéma, que chaque référence existe, que chaque
 identifiant de chiffre correspond à sa fiche et que chaque copie archivée est intacte ; relit
 chaque copie des comptes de chaque collectivité, de l'OFGL comme de la DGFiP (comptes individuels),
-chaque balance des comptes de l'État, chaque fichier du recensement des éléments d'imposition (REI) et
-chaque liste d'organismes publics, qui doit donner son inscription.
+chaque balance des comptes de l'État, chaque balance comptable des collectivités et les formules des
+agrégats de l'OFGL, chaque fichier du recensement des éléments d'imposition (REI) et chaque liste
+d'organismes publics, qui doit donner son inscription.
 
     python3 outils/valider.py
 """
@@ -16,6 +17,7 @@ import math
 import re
 import sys
 
+import importer_balances_collectivites as balances_collectivites
 import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
@@ -27,7 +29,8 @@ from commun import (BASE, copie_presente, empreinte_et_taille, en_parallele, ide
                     nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres, texte_html, texte_pdf)
 
 # Les lecteurs des copies qu'une table inscrit après contrôle : chacun redonne, d'une copie, son inscription.
-LECTEURS = {"collectivites": ofgl, "comptes_individuels": individuels, "balances_etat": balances, "rei": rei}
+LECTEURS = {"collectivites": ofgl, "comptes_individuels": individuels, "balances_etat": balances, "rei": rei,
+            "balances_collectivites": balances_collectivites}
 
 
 def erreur_de_type(type_, texte):
@@ -414,6 +417,18 @@ def controler_balances_etat(tables, erreurs):
     return relues, lignes
 
 
+def controler_balances_collectivites(tables, erreurs):
+    """Relit chaque copie inscrite dans fichiers_balances_collectivites.csv : son contenu doit donner son inscription.
+    Renvoie le nombre de balances relues et celui de leurs lignes."""
+    fichiers = {f["id"]: f for f in tables["fichiers"]}
+    inscrits = tables["fichiers_balances_collectivites"]
+    groupes = [[k] for k, inscrit in enumerate(inscrits) if inscrit["fichier_id"] in fichiers]  # sinon, déjà signalée
+    relire("balances_collectivites", "fichiers_balances_collectivites", inscrits, fichiers, groupes, (), erreurs,
+           seuls=True)
+    balances_ = [i for i in inscrits if i["fichier_id"] in fichiers and i["contenu"] == "balance"]
+    return len(balances_), sum(int(i["lignes"]) for i in balances_)
+
+
 def controler_rei(tables, erreurs):
     """Relit chaque copie inscrite dans fichiers_rei.csv, avec ce qu'en retient le référentiel des variables : son
     contenu doit donner son inscription. Renvoie le nombre de copies relues et celui de leurs communes."""
@@ -484,6 +499,7 @@ def main():
     copies_individuelles, lignes_individuelles = controler_comptes_individuels(tables, erreurs)
     copies_balances, lignes_balances = controler_balances_etat(tables, erreurs)
     copies_rei, communes_rei = controler_rei(tables, erreurs)
+    copies_locales, lignes_locales = controler_balances_collectivites(tables, erreurs)
     listes, nombre_organismes = controler_organismes(tables, erreurs)
     for e in erreurs:
         print(e)
@@ -498,6 +514,8 @@ def main():
           + (f" ; {copies_balances} balances des comptes de l'État relues, soit {lignes_balances} lignes de comptes"
              if copies_balances else "")
           + (f" ; {copies_rei} fichiers du REI relus, soit {communes_rei} lignes de communes" if copies_rei else "")
+          + (f" ; {copies_locales} balances comptables de collectivités relues, soit {lignes_locales} lignes de comptes"
+             if copies_locales else "")
           + (f" ; {listes} liste{'s' if listes > 1 else ''} d'organismes relue{'s' if listes > 1 else ''}, soit "
              f"{nombre_organismes} organismes." if listes else "."))
 

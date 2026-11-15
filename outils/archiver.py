@@ -193,7 +193,9 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     # de l'Insee, date de modification du jeu de données pour un export de data.ofgl.fr ou de data.economie.gouv.fr
     # (date du dernier traitement de ses données pour data.drees), date la plus récente des fichiers que porte une
     # archive zip, date de modification inscrite dans un classeur ods ; pour un PDF, la date que porte le texte d'un
-    # document du Sénat ou de l'Assemblée nationale, comme pour leurs pages, à défaut sa date de modification.
+    # document du Sénat ou de l'Assemblée nationale, comme pour leurs pages, à défaut sa date de modification ; pour une
+    # pièce jointe d'un jeu de données d'un portail qui ne porte pas de date (un fichier csv), la date de modification du
+    # jeu.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(decoder_html(contenu))),
@@ -203,6 +205,7 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
                                                                   for _, m in page)) or date_pdf(contenu),
                                 "ods": lambda: date_ods(BASE / chemin)
                                 }.get(extension, lambda: "")()
+    mis_a_jour = mis_a_jour or annoncee
     identifiant = f"{source_id}@{date}-{sha256[:8]}"
     fichiers.append({"id": identifiant, "source_id": source_id, "url": url, "telecharge_le": telecharge_le or maintenant(),
                      "mis_a_jour_source": mis_a_jour, "sha256": sha256, "octets": len(contenu), "chemin": chemin})

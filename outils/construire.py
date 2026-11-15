@@ -17,7 +17,8 @@ postes_rei, communes_rei et traces_rei. Les comptes individuels de chaque commun
 propre, département et région que publie la DGFiP y sont lus dans les copies archivées de leurs exports :
 tables comptes_individuels et fiches_individuelles. Les balances des comptes de l'État que publie la DGFiP y
 sont lues dans les copies archivées de leurs exports, et le plan comptable de l'État dans celle de son classeur :
-tables balances_etat et plan_comptable_etat. La vue v_organismes donne les organismes que nomment les listes
+tables balances_etat et plan_comptable_etat. Les balances comptables des départements et des régions que publie la DGFiP
+y sont lues dans les copies archivées de leurs fichiers : tables balances_collectivites et budgets_balances. La vue v_organismes donne les organismes que nomment les listes
 officielles, avec les libellés de leur sous-secteur et de leur fonction.
 """
 
@@ -29,6 +30,7 @@ import os
 import pickle
 import sqlite3
 
+import importer_balances_collectivites as balances_collectivites
 import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
@@ -185,6 +187,18 @@ LEFT JOIN plan_comptable_etat p ON p.compte = b.compte
 WHERE f.version = (SELECT MAX(g.version) FROM fichiers_balances_etat g
                    WHERE g.contenu = 'balance' AND g.exercice = f.exercice);
 
+-- Les balances comptables des collectivités, dans la version la plus récente de chaque exercice de chaque jeu : chaque
+-- ligne avec la fiche de son budget ; le solde est le solde débiteur moins le solde créditeur.
+CREATE VIEW v_balances_collectivites AS
+SELECT f.source_id, f.exercice, f.version, f.fichier_id, k.siren, k.nom, k.categorie, k.departement, k.region,
+       b.budget, k.type_budget, k.nomenclature, b.compte, b.bedeb, b.becre, b.obnetdeb, b.obnetcre, b.onbdeb, b.onbcre,
+       b.oobdeb, b.oobcre, b.sd, b.sc, b.sd - b.sc AS solde
+FROM balances_collectivites b
+JOIN fichiers_balances_collectivites f ON f.rowid = b.lot
+JOIN budgets_balances k ON k.lot = b.lot AND k.budget = b.budget
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_balances_collectivites g
+                   WHERE g.source_id = f.source_id AND g.exercice = f.exercice AND g.contenu = 'balance');
+
 -- Les organismes que nomment les listes officielles, avec les libellés de leur sous-secteur et de leur fonction, et la
 -- source et la version de leur liste.
 CREATE VIEW v_organismes AS
@@ -307,6 +321,16 @@ BALANCES_ETAT = [("lot", "INTEGER"), ("compte", "TEXT"), ("mission", "TEXT"), ("
                  ("programme", "TEXT"), ("nature_budgetaire", "TEXT"), ("ministere", "TEXT"), ("indicateur", "INTEGER"),
                  ("sous_poste", "TEXT"), ("indicateur_detail", "TEXT"), ("solde", "REAL")]
 PLAN_COMPTABLE_ETAT = [("lot", "INTEGER"), ("compte", "TEXT"), ("libelle", "TEXT")]
+# Les balances comptables des collectivités : une ligne par budget, désigné par son SIRET, et par compte, avec le numéro
+# de sa copie (`lot`, la ligne de fichiers_balances_collectivites) et ses montants en euros, au centime : balance
+# d'entrée, opérations budgétaires (nettes des annulations, opérations d'ordre budgétaires comprises), opérations non
+# budgétaires, opérations d'ordre budgétaires, au débit et au crédit, et solde de sortie débiteur et créditeur. La table
+# budgets_balances donne la fiche de chaque budget, chaque exercice : le numéro Siren de sa collectivité, son libellé,
+# son type (« principal » ou « annexe »), sa nomenclature, la catégorie de sa collectivité (depuis 2017, et jusqu'en
+# 2015), son département et sa région selon la DGFiP.
+BALANCES_COLLECTIVITES = [("lot", "INTEGER"), ("budget", "TEXT"), ("compte", "TEXT")] + [
+    (m, "REAL") for m in balances_collectivites.MONTANTS]
+BUDGETS_BALANCES = [("lot", "INTEGER"), ("budget", "TEXT")] + [(c, "TEXT") for c in balances_collectivites.FICHE]
 
 
 # Chaque copie archivée est lue à part, par une fonction qui rend ses lignes, table par table : [(table, lignes)]. Les
@@ -436,6 +460,25 @@ def lignes_balances(lots, indicateurs):
                            referentiel)) for inscrit in lire("tables/fichiers_balances_etat.csv")]
 
 
+def lot_balance_collectivites(inscrit, fichier, lot):
+    """Les lignes d'une copie d'une balance comptable de collectivités : la fiche de chaque budget et ses comptes ; `lot`
+    est le numéro de ligne de la copie inscrite."""
+    if inscrit["contenu"] != "balance":
+        return []
+    _, fiches, lignes = balances_collectivites.balance(fichier)
+    return [("budgets_balances", [[lot, b] + [f[c] or None for c in balances_collectivites.FICHE]
+                                  for b, f in sorted(fiches.items())]),
+            ("balances_collectivites", [[lot, b, c] + [m / 100 for m in montants] for b, c, *montants in lignes])]
+
+
+def lignes_balances_collectivites(lots):
+    """Les lectures (fonction, arguments) des balances comptables des collectivités, une par copie ; `lots` donne le
+    numéro de ligne de chaque copie inscrite."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    return [(lot_balance_collectivites, (inscrit, fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]]))
+            for inscrit in lire("tables/fichiers_balances_collectivites.csv")]
+
+
 def lire_lot(fonction, arguments):
     """Les lignes d'une copie, table par table, avec leur texte csv, dont la base garde l'empreinte : [(table, lignes,
     texte)]. Les lignes sont rendues sérialisées (pickle) : lues d'avance, elles attendent leur tour sous cette forme
@@ -509,7 +552,8 @@ def main():
                  "postes_rei": POSTES_REI, "impositions_rei": IMPOSITIONS_REI, "communes_rei": COMMUNES_REI,
                  "traces_rei": TRACES_REI, "comptes_individuels": COMPTES_INDIVIDUELS,
                  "fiches_individuelles": FICHES_INDIVIDUELLES, "balances_etat": BALANCES_ETAT,
-                 "plan_comptable_etat": PLAN_COMPTABLE_ETAT}
+                 "plan_comptable_etat": PLAN_COMPTABLE_ETAT, "balances_collectivites": BALANCES_COLLECTIVITES,
+                 "budgets_balances": BUDGETS_BALANCES}
     for table, colonnes in nouvelles.items():
         connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
     lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
@@ -528,9 +572,12 @@ def main():
     lots_balances = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_balances_etat")}
     indicateurs = {(i, p): r for r, i, p in
                    connexion.execute("SELECT rowid, indicateur, premier_exercice FROM indicateurs_balances_etat")}
+    lots_balances_collectivites = {f: r for r, f in
+                                   connexion.execute("SELECT rowid, fichier_id FROM fichiers_balances_collectivites")}
     for table, lues, texte in lots_lus(lignes_collectivites(lots, concepts) + lignes_rei(lots_rei, postes)
                                        + lignes_individuelles(lots_individuels, variables)
-                                       + lignes_balances(lots_balances, indicateurs)):
+                                       + lignes_balances(lots_balances, indicateurs)
+                                       + lignes_balances_collectivites(lots_balances_collectivites)):
         if not lues:
             continue
         connexion.executemany(f"INSERT INTO {table} VALUES ({', '.join('?' * len(lues[0]))})", lues)
@@ -560,6 +607,10 @@ def main():
     connexion.execute("CREATE INDEX balances_etat_lot ON balances_etat (lot, indicateur)")
     connexion.execute("CREATE INDEX balances_etat_compte ON balances_etat (compte)")
     connexion.execute("CREATE INDEX plan_comptable_etat_cle ON plan_comptable_etat (lot, compte)")
+    connexion.execute("CREATE INDEX balances_collectivites_lot ON balances_collectivites (lot, budget, compte)")
+    connexion.execute("CREATE INDEX balances_collectivites_compte ON balances_collectivites (compte)")
+    connexion.execute("CREATE INDEX budgets_balances_cle ON budgets_balances (lot, budget)")
+    connexion.execute("CREATE INDEX budgets_balances_siren ON budgets_balances (siren)")
     empreintes += [{"table": t, "lignes": n, "sha256": h.hexdigest()} for t, (h, n) in hachages.items()]
     connexion.executescript(VUES)
     # Les statistiques des tables et de leurs index, pour que SQLite choisisse son chemin : sans elles, une requête sur la

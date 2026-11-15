@@ -3472,3 +3472,72 @@ Le tableau contre les balances des comptes de l'État (section 14), qui portent 
 | 2024 | S806_Engagements reçus | 45,4 | 92,5 | +47,1 |
 
 Par indicateur, les exercices où le tableau et la balance concordent à moins d'un milliard d'euros ou de 0,5 % : S801_Dette garantie par l'Etat : 8 sur 8 ; S802_Garanties liées à des missions d'int gén : 6 sur 8 (2018 à 2020 et 2022 à 2024) ; S803_Garanties de passif : 2 sur 8 (2023 et 2024) ; S804_Engagements financiers de l'Etat : 0 sur 8 ; S805_Dispositifs d'intervention : 8 sur 8 ; S806_Engagements reçus : 0 sur 8. Là où ils s'écartent, le tableau est toujours au-dessus de la balance : il range sous ces lignes des engagements que la balance ne porte pas sous l'indicateur de même nom, ou ne porte pas en classe 8 ; la base ne sait pas dire lesquels sans le compte général lui-même, et les donne tels quels.
+
+## 27. Balances comptables des collectivités
+
+Les balances comptables que la DGFiP publie pour chaque budget, principal ou annexe, de chaque département et de chaque région depuis 2010 : pour chaque compte, la balance d'entrée, les opérations de l'exercice et le solde de sortie, au centime, dans la version la plus récente de chaque exercice. Leur import vérifie, au centime, que le solde de sortie de chaque ligne est la balance d'entrée plus les opérations budgétaires et non budgétaires de l'exercice, et que chaque budget s'équilibre : la somme de ses soldes débiteurs est celle de ses soldes créditeurs.
+
+| Niveau | Exercices | Lignes | Budgets au dernier exercice | Collectivités au dernier exercice |
+|---|---|---|---|---|
+| Départements | 16 années entre 2010 et 2025 | 1 304 325 | 446 | 98 |
+| Régions | 16 années entre 2010 et 2025 | 131 967 | 28 | 14 |
+
+### Les agrégats de l'OFGL recalculés
+
+Chaque agrégat que l'OFGL publie pour une collectivité (section 7) est recalculé à partir de ses balances, avec les formules que publie l'OFGL pour la catégorie de collectivités, l'exercice, la sorte de budget et la nomenclature de chacun (`outils/formules_ofgl.py`) : le montant du budget principal, la somme de ceux des budgets annexes et les flux croisés entre eux, que l'OFGL retranche de leur somme pour consolider. Un montant est égal s'il ne s'écarte pas de plus d'un euro du montant publié. Une collectivité territoriale unique se recalcule avec les formules des régions, où la range l'OFGL, même quand ses balances sont parmi celles des départements. Les collectivités de l'OFGL sans balance sont celles que la DGFiP range ailleurs : la Ville de Paris parmi les communes, la métropole de Lyon parmi les groupements à fiscalité propre. Un montant non recalculé est un montant publié non nul que ne donne aucune formule pour la nomenclature du budget ; un agrégat absent du jeu est un agrégat que le jeu publie pour d'autres collectivités de l'exercice, pas pour celle-ci, et que les balances donnent non nul.
+
+| Jeu de l'OFGL | Exercice | Collectivités | Recalculées | Sans balance | Montants comparés | Égaux | Part | Non recalculés | Agrégats absents du jeu |
+|---|---|---|---|---|---|---|---|---|---|
+| Départements | 2012 | 101 | 101 | 0 | 18 724 | 18 724 | 100,00 % | 0 | 0 |
+| Régions | 2012 | 26 | 26 | 0 | 2 987 | 2 987 | 100,00 % | 19 | 0 |
+| Départements | 2013 | 101 | 101 | 0 | 18 776 | 18 776 | 100,00 % | 0 | 0 |
+| Régions | 2013 | 26 | 26 | 0 | 3 033 | 3 033 | 100,00 % | 17 | 0 |
+| Départements | 2014 | 101 | 101 | 0 | 18 930 | 18 930 | 100,00 % | 0 | 0 |
+| Régions | 2014 | 26 | 26 | 0 | 3 073 | 3 073 | 100,00 % | 14 | 0 |
+| Départements | 2015 | 102 | 101 | 1 | 18 933 | 18 933 | 100,00 % | 0 | 0 |
+| Régions | 2015 | 26 | 26 | 0 | 3 081 | 3 081 | 100,00 % | 10 | 0 |
+| Départements | 2016 | 100 | 99 | 1 | 18 557 | 18 557 | 100,00 % | 0 | 0 |
+| Régions | 2016 | 17 | 17 | 0 | 2 186 | 2 176 | 99,54 % | 8 | 0 |
+| Départements | 2017 | 100 | 99 | 1 | 18 595 | 18 595 | 100,00 % | 0 | 0 |
+| Régions | 2017 | 17 | 17 | 0 | 2 141 | 2 139 | 99,91 % | 3 | 0 |
+| Départements | 2018 | 98 | 97 | 1 | 18 135 | 18 135 | 100,00 % | 0 | 0 |
+| Régions | 2018 | 17 | 17 | 0 | 2 280 | 2 280 | 100,00 % | 3 | 0 |
+| Départements | 2019 | 98 | 96 | 2 | 18 121 | 18 121 | 100,00 % | 0 | 0 |
+| Régions | 2019 | 17 | 17 | 0 | 2 287 | 2 287 | 100,00 % | 3 | 0 |
+| Départements | 2020 | 98 | 96 | 2 | 18 044 | 18 044 | 100,00 % | 0 | 0 |
+| Régions | 2020 | 17 | 17 | 0 | 2 283 | 2 283 | 100,00 % | 2 | 0 |
+| Départements | 2021 | 97 | 95 | 2 | 17 869 | 17 869 | 100,00 % | 0 | 0 |
+| Régions | 2021 | 17 | 17 | 0 | 2 248 | 2 248 | 100,00 % | 1 | 0 |
+| Départements | 2022 | 97 | 95 | 2 | 17 798 | 17 798 | 100,00 % | 0 | 0 |
+| Régions | 2022 | 17 | 17 | 0 | 2 251 | 2 251 | 100,00 % | 1 | 0 |
+| Départements | 2023 | 97 | 95 | 2 | 17 531 | 17 531 | 100,00 % | 0 | 0 |
+| Régions | 2023 | 17 | 17 | 0 | 2 245 | 2 245 | 100,00 % | 0 | 1 |
+| Départements | 2024 | 97 | 95 | 2 | 17 641 | 17 641 | 100,00 % | 0 | 0 |
+| Régions | 2024 | 17 | 17 | 0 | 2 300 | 2 300 | 100,00 % | 0 | 4 |
+| Départements | 2025 | 97 | 95 | 2 | 17 490 | 17 490 | 100,00 % | 0 | 0 |
+| Régions | 2025 | 17 | 17 | 0 | 2 355 | 2 355 | 100,00 % | 0 | 5 |
+
+Au total, 289 882 montants égaux sur 289 894 comparés (99,996 %).
+
+Montants non recalculés : le jeu des formules n'en donne aucune pour l'agrégat, la sorte de budget et la nomenclature, alors que l'OFGL publie un montant.
+
+| Jeu | Agrégat | Exercices | Montants |
+|---|---|---|---|
+| Régions | DMTO après péreq. | 11 années entre 2012 et 2022 | 81 |
+
+Les 12 plus grands écarts, sur 12 :
+
+| Jeu | Exercice | Collectivité | Agrégat | Montant | Recalculé | Publié |
+|---|---|---|---|---|---|---|
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | DMTO après péreq. | budget principal | 38 017 922,49 € | 16 908 723,49 € |
+| Régions | 2017 | CTU COLL TERRITORIALE MARTINIQUE (200055507) | DMTO après péreq. | budget principal | 37 281 426,01 € | 20 544 340,01 € |
+| Régions | 2016 | CTG COLLECTIVITE TERRITORIALE GUYANE (200052678) | DMTO après péreq. | budget principal | 17 604 489,87 € | 8 592 706,87 € |
+| Régions | 2017 | CTU COLLECTIVITE TERRITORIALE GUYANE (200052678) | DMTO après péreq. | budget principal | 10 629 397,14 € | 6 791 342,14 € |
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Subventions reçues et participations | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Recettes totales hors emprunts | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Recettes totales | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Recettes de fonctionnement | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Dépenses totales hors remb | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Dépenses totales | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Dépenses de fonctionnement | flux croisés | 1 550 000,00 € | 2 464 500,00 € |
+| Régions | 2016 | COLL TERRITORIALE MARTINIQUE (200055507) | Dépenses d'intervention | flux croisés | 1 550 000,00 € | 2 464 500,00 € |

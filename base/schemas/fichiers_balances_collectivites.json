@@ -1,0 +1,19 @@
+{
+  "description": "Copies archivées des balances comptables des collectivités que publie la DGFiP sur data.economie.gouv.fr (fichiers joints aux jeux de données, un par exercice), et de l'export du jeu des formules par lesquelles l'OFGL en tire ses agrégats financiers. L'import les contrôle et les inscrit ici ; la base lit leurs chiffres dans ces copies, sans les recopier.",
+  "fields": [
+    {"name": "fichier_id", "type": "string", "constraints": {"required": true}},
+    {"name": "source_id", "type": "string", "constraints": {"required": true}},
+    {"name": "contenu", "type": "string", "description": "balance : la balance d'un exercice, une ligne par budget et par compte ; formules : les formules des agrégats financiers de l'OFGL.", "constraints": {"required": true, "enum": ["balance", "formules"]}},
+    {"name": "exercice", "type": "string", "description": "Exercice de la balance ; vide pour les formules.", "constraints": {"pattern": "[0-9]{4}"}},
+    {"name": "version", "type": "date", "description": "Date de modification du jeu de données qu'annonçait le portail lors du téléchargement.", "constraints": {"required": true}},
+    {"name": "statut", "type": "string", "description": "Balance : provisoire (publiée en juillet de l'année qui suit l'exercice) ou definitif (publiée en décembre) ; vide pour les formules.", "constraints": {"enum": ["provisoire", "definitif"]}},
+    {"name": "lignes", "type": "integer", "description": "Balance : nombre de lignes (budget et compte) ; formules : nombre de formules.", "constraints": {"required": true}},
+    {"name": "budgets", "type": "integer", "description": "Balance : nombre de budgets, principaux et annexes ; vide pour les formules."},
+    {"name": "collectivites", "type": "integer", "description": "Balance : nombre de collectivités (numéros Siren) ; vide pour les formules."}
+  ],
+  "primaryKey": ["fichier_id"],
+  "foreignKeys": [
+    {"fields": ["fichier_id"], "reference": {"resource": "fichiers", "fields": ["id"]}},
+    {"fields": ["source_id"], "reference": {"resource": "sources", "fields": ["id"]}}
+  ]
+}
