@@ -19,8 +19,11 @@ commune, groupement à fiscalité propre, département et région que publie la 
 tables comptes_individuels et fiches_individuelles. Les balances des comptes de l'État que publie la DGFiP y
 sont lues dans les copies archivées de leurs exports, et le plan comptable de l'État dans celle de son classeur :
 tables balances_etat et plan_comptable_etat. Les balances comptables des départements et des régions que publie la DGFiP
-y sont lues dans les copies archivées de leurs fichiers : tables balances_collectivites et budgets_balances. La vue v_organismes donne les organismes que nomment les listes
-officielles, avec les libellés de leur sous-secteur et de leur fonction.
+y sont lues dans les copies archivées de leurs fichiers : tables balances_collectivites et budgets_balances. Les
+subventions d'investissement que l'État accorde à chaque collectivité au titre de la DETR, de la DSIL, de la DPV et de
+la DSID, projet par projet, y sont lues dans les copies archivées des listes de la DGCL : table
+subventions_investissement. La vue v_organismes donne les organismes que nomment les listes officielles, avec les
+libellés de leur sous-secteur et de leur fonction.
 """
 
 import concurrent.futures
@@ -36,6 +39,7 @@ import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_rei as rei
+import importer_subventions as subventions
 import versements_rei as versements
 from commun import BASE, RELEASES, lire, paquet
 
@@ -173,6 +177,16 @@ LEFT JOIN variables_versements_rei r ON r.versement = p.versement AND r.niveau =
      AND f.exercice BETWEEN r.premier_exercice AND r.dernier_exercice
 LEFT JOIN communes_rei c ON p.niveau = 'commune' AND c.lot = x.lot AND c.commune = x.collectivite
 WHERE f.version = (SELECT MAX(g.version) FROM fichiers_rei g WHERE g.exercice = f.exercice);
+
+-- Les subventions d'investissement que l'État accorde aux collectivités, projet par projet, d'après la copie la plus
+-- récente de chaque exercice de la liste de la DGCL, avec le libellé de la dotation.
+CREATE VIEW v_subventions_investissement AS
+SELECT f.exercice, f.version, f.fichier_id, s.dispositif, d.libelle AS dispositif_libelle, d.programme,
+       s.beneficiaire, s.type, s.siren, s.departement, s.nom, s.commune, s.intitule, s.cout_ht, s.subvention, s.taux
+FROM subventions_investissement s
+JOIN fichiers_subventions f ON f.rowid = s.lot
+JOIN dispositifs_subventions d ON d.dispositif = s.dispositif
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_subventions g WHERE g.exercice = f.exercice);
 
 -- Les comptes individuels que publie la DGFiP, dans la version la plus récente de chaque exercice de chaque niveau, avec
 -- le libellé de chaque variable dans la maquette, sa grandeur (montant, base et réduction en milliers d'euros, taux en
@@ -325,6 +339,13 @@ TRACES_REI = [("lot", "INTEGER"), ("rang", "INTEGER"), ("code", "TEXT"), ("titre
 VERSEMENTS_COLLECTIVITES = [("lot", "INTEGER"), ("collectivite", "TEXT"), ("poste", "INTEGER"), ("montant", "REAL"),
                             ("communes", "INTEGER")]
 POSTES_VERSEMENTS = [("versement", "TEXT"), ("niveau", "TEXT"), ("grandeur", "TEXT")]
+# Les subventions d'investissement de l'État, d'après les listes de la DGCL : une ligne par projet, avec le numéro de sa
+# copie (`lot`, la ligne de fichiers_subventions), la dotation, le bénéficiaire (`beneficiaire` : le code Insee d'une
+# commune, sinon le numéro Siren ; vide si la source ne donne ni l'un ni l'autre), les champs de la source tels qu'elle
+# les donne, et les montants en euros (vides s'ils sont absents ou illisibles ; le taux, aussi s'il est infini).
+SUBVENTIONS = [("lot", "INTEGER"), ("dispositif", "TEXT"), ("beneficiaire", "TEXT"), ("type", "TEXT"), ("siren", "TEXT"),
+               ("departement", "TEXT"), ("nom", "TEXT"), ("commune", "TEXT"), ("intitule", "TEXT"), ("cout_ht", "REAL"),
+               ("subvention", "REAL"), ("taux", "REAL")]
 # Les comptes individuels de la DGFiP : une ligne par collectivité et par variable que retient
 # tables/variables_comptes_individuels.csv, une valeur absente n'ayant pas de ligne. Une ligne ne porte que le numéro de
 # sa copie (`lot`, la ligne de fichiers_comptes_individuels) et celui de sa variable (`variable`, la ligne de
@@ -435,6 +456,26 @@ def lignes_rei(lots, postes, postes_versements):
     return [(lot_rei, (inscrit, fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]], postes, referentiel,
                        postes_versements, referentiel_versements))
             for inscrit in lire("tables/fichiers_rei.csv")]
+
+
+def lot_subventions(fichier, lot):
+    """Les projets d'une copie d'une liste de subventions ; `lot` est le numéro de ligne de la copie inscrite."""
+    _, lignes = subventions.projets(fichier)
+    def reel(texte):
+        m = subventions.montant(texte)
+        return None if m is None else float(m)
+    return [("subventions_investissement",
+             [[lot, l["dispositif"], l["cle"] or None, l["beneficiaire_type"] or None, l["beneficiaire_siren"] or None,
+               l["beneficiaire_dep"] or None, l["beneficiaire_nom"] or None, l["beneficiaire_code_insee"] or None,
+               l["intitule"] or None, reel(l["cout_ht"]), reel(l["subvention"]), reel(l["taux"])] for l in lignes])]
+
+
+def lignes_subventions(lots):
+    """Les lectures (fonction, arguments) des listes de subventions, une par copie ; `lots` donne le numéro de ligne de
+    chaque copie inscrite."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    return [(lot_subventions, (fichiers[i["fichier_id"]], lots[i["fichier_id"]]))
+            for i in lire("tables/fichiers_subventions.csv")]
 
 
 def lot_individuel(inscrit, fichier, lot, variables, referentiel):
@@ -590,7 +631,7 @@ def main():
                  "versements_collectivites": VERSEMENTS_COLLECTIVITES, "comptes_individuels": COMPTES_INDIVIDUELS,
                  "fiches_individuelles": FICHES_INDIVIDUELLES, "balances_etat": BALANCES_ETAT,
                  "plan_comptable_etat": PLAN_COMPTABLE_ETAT, "balances_collectivites": BALANCES_COLLECTIVITES,
-                 "budgets_balances": BUDGETS_BALANCES}
+                 "budgets_balances": BUDGETS_BALANCES, "subventions_investissement": SUBVENTIONS}
     for table, colonnes in nouvelles.items():
         connexion.execute(f"CREATE TABLE {table} ({', '.join(f'{c} {t}' for c, t in colonnes)})")
     lots = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_collectivites")}
@@ -619,7 +660,9 @@ def main():
                    connexion.execute("SELECT rowid, indicateur, premier_exercice FROM indicateurs_balances_etat")}
     lots_balances_collectivites = {f: r for r, f in
                                    connexion.execute("SELECT rowid, fichier_id FROM fichiers_balances_collectivites")}
+    lots_subventions = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_subventions")}
     for table, lues, texte in lots_lus(lignes_collectivites(lots, concepts) + lignes_rei(lots_rei, postes, postes_versements)
+                                       + lignes_subventions(lots_subventions)
                                        + lignes_individuelles(lots_individuels, variables)
                                        + lignes_balances(lots_balances, indicateurs)
                                        + lignes_balances_collectivites(lots_balances_collectivites)):
@@ -658,6 +701,8 @@ def main():
     connexion.execute("CREATE INDEX balances_collectivites_compte ON balances_collectivites (compte)")
     connexion.execute("CREATE INDEX budgets_balances_cle ON budgets_balances (lot, budget)")
     connexion.execute("CREATE INDEX budgets_balances_siren ON budgets_balances (siren)")
+    connexion.execute("CREATE INDEX subventions_investissement_lot ON subventions_investissement (lot, dispositif)")
+    connexion.execute("CREATE INDEX subventions_investissement_beneficiaire ON subventions_investissement (beneficiaire)")
     empreintes += [{"table": t, "lignes": n, "sha256": h.hexdigest()} for t, (h, n) in hachages.items()]
     connexion.executescript(VUES)
     # Les statistiques des tables et de leurs index, pour que SQLite choisisse son chemin : sans elles, une requête sur la

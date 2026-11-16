@@ -33,7 +33,10 @@ vérifie ce que disent les sources elles-mêmes :
    commune, le produit de chaque taxe et de chaque niveau qui perçoit, et la taxe d'enlèvement des ordures
    ménagères recensée de chaque niveau contre celle de ses comptes ; ce que l'État verse à chaque collectivité
    d'après le même recensement : l'équilibre du fonds de garantie des ressources, les fractions de TVA d'une année à
-   l'autre, et chaque collectivité contre les comptes de gestion que publie la DGCL et ses comptes individuels ;
+   l'autre, et chaque collectivité contre les comptes de gestion que publie la DGCL et ses comptes individuels ; la TVA
+   de chaque région, d'après l'OFGL et ses comptes individuels, et la part qui remplace sa dotation globale de
+   fonctionnement ; les subventions d'investissement de l'État (DETR, DSIL, DPV, DSID), projet par projet, d'après la
+   DGCL ;
 12. les organismes publics : les listes et décomptes officiels des unités publiques, de l'Insee et de la DGCL, contre
    les unités dont la base a les comptes une à une ;
 13. les comptes individuels de la DGFiP : les identités que leurs maquettes énoncent, collectivité par collectivité, et
@@ -93,6 +96,7 @@ import importer_lois_rectificatives as rectificatives
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
+import importer_subventions as subventions
 import versements_rei
 from commun import RACINE, en_parallele, lire, ressources_chiffres
 
@@ -2271,7 +2275,8 @@ def partie_collectivites(derniers, listes):
                           f"{ecart_lisible(e[4], 'euros')} en {e[3]} |")
         lignes.append("")
     return (lignes + partie_fiches_dgcl(listes, fiches) + partie_flux(listes, flux) + partie_fonctions(listes)
-            + partie_fiscalite(listes, teom) + partie_rei(teom) + partie_versements(derniers))
+            + partie_fiscalite(listes, teom) + partie_rei(teom) + partie_versements(derniers)
+            + partie_subventions())
 
 
 def concepts_lisibles(concepts):
@@ -2974,6 +2979,128 @@ def versements_individuels(detail_par_annee):
     return resultat
 
 
+REGIONS_OFGL = "ofgl.base-regions-consolidee"
+PREMIER_EXERCICE_TVA_REGIONS = 2017  # l'année avant la fraction de TVA, que les régions reçoivent depuis 2018
+
+
+def tva_regions(detail_par_annee):
+    """La TVA de chaque région, chaque année depuis 2017, d'après ses comptes : l'agrégat « TVA » de son budget
+    principal que publie l'OFGL, la fraction de TVA qu'inscrivent ses comptes individuels (depuis 2019), et la fraction
+    compensant la CVAE que donne le REI (depuis 2021) : {exercice: [régions, OFGL, comptes individuels, régions
+    comparées aux comptes individuels, proches, REI]}. Les collectivités territoriales uniques, qui reçoivent aussi les
+    fractions de leur part départementale, n'y sont pas."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    agregats = {a["agregat"]: a for a in lire("tables/agregats_ofgl.csv")}
+    listes = {(i["source_id"], i["exercice"]): i for i in lire("tables/fichiers_collectivites.csv")
+              if i["contenu"] == "collectivites"}
+    individuelles = comptes_individuels_retenus()
+    referentiel = lire("tables/variables_comptes_individuels.csv")
+    resultat = {}
+    for (jeu, exercice), inscrit in sorted(montants_retenus().items()):
+        if jeu != REGIONS_OFGL or int(exercice) < PREMIER_EXERCICE_TVA_REGIONS or (jeu, exercice) not in listes:
+            continue
+        fiches, _ = ofgl.collectivites(fichiers[listes[(jeu, exercice)]["fichier_id"]])
+        regions = {s: f["reg_code"] for s, f in fiches.items() if f.get("categ") != "CTU"}
+        tva = {regions[s]: bp for s, agregat, bp, *_ in ofgl.montants(fichiers[inscrit["fichier_id"]], agregats)
+               if s in regions and agregats[agregat]["concept_id"] == "COMPTES_LOCAUX.TVA"}
+        entree = resultat[exercice] = [len(regions), sum(tva.values()), 0.0, 0, 0, 0.0]
+        recense = collections.defaultdict(float)
+        for (versement, niveau, grandeur, qui), montant in detail_par_annee.get(exercice, {}).items():
+            if versement.startswith("TVA") and niveau == "region" and grandeur == "montant":
+                recense[qui] += montant
+        entree[5] = sum(recense.values())
+        lue = individuelles.get((individuels.REGIONS, exercice))
+        if lue is None:
+            continue
+        _, comptes, _, _ = individuels.comptes(fichiers[lue["fichier_id"]], referentiel)
+        for code, _, valeurs in comptes:
+            qui = OUTRE_MER_INSEE[code][1] if code in OUTRE_MER_INSEE else code[1:]
+            if "f1rftva" not in valeurs or qui not in tva:
+                continue
+            inscrite = valeurs["f1rftva"] * 1000
+            entree[2] += inscrite
+            entree[3] += 1
+            entree[4] += abs(inscrite - tva[qui]) < SEUIL_TVA * abs(tva[qui]) if tva[qui] else inscrite == 0
+    return resultat
+
+
+def subventions_par_annee():
+    """Les subventions d'investissement de l'État, d'après la copie la plus récente de chaque exercice de la liste de la
+    DGCL : ({exercice: {dotation: [projets, bénéficiaires, montant]}}, {exercice: inscription},
+    {exercice: {type de bénéficiaire: [projets, montant]}})."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    retenues = {}
+    for i in lire("tables/fichiers_subventions.csv"):
+        if i["exercice"] not in retenues or i["version"] > retenues[i["exercice"]]["version"]:
+            retenues[i["exercice"]] = i
+    par_dotation, par_type = {}, {}
+    referentiel = lire("tables/dispositifs_subventions.csv")
+    for exercice, inscrit in sorted(retenues.items()):
+        _, lignes = subventions.projets(fichiers[inscrit["fichier_id"]], referentiel)
+        dotations = collections.defaultdict(lambda: [0, set(), decimal.Decimal(0)])
+        types = collections.defaultdict(lambda: [0, decimal.Decimal(0)])
+        for l in lignes:
+            montant = l["montant"] or decimal.Decimal(0)
+            entree = dotations[l["dispositif"]]
+            entree[0] += 1
+            if l["cle"]:
+                entree[1].add(l["cle"])
+            entree[2] += montant
+            genre = types[l["beneficiaire_type"] or "non précisé"]
+            genre[0] += 1
+            genre[1] += montant
+        par_dotation[exercice] = {d: [n, len(b), float(m)] for d, (n, b, m) in dotations.items()}
+        par_type[exercice] = {g: [n, float(m)] for g, (n, m) in types.items()}
+    return par_dotation, retenues, par_type
+
+
+def partie_subventions():
+    """Les subventions d'investissement que l'État accorde aux collectivités au titre de la DETR, de la DSIL, de la DPV
+    et de la DSID, projet par projet, d'après la DGCL."""
+    par_dotation, retenues, par_type = subventions_par_annee()
+    if not par_dotation:
+        return []
+    libelles = {d["dispositif"]: d["libelle"] for d in lire("tables/dispositifs_subventions.csv")}
+    dotations = sorted({d for e in par_dotation.values() for d in e}, key=lambda d: (d.split()[0], d))
+    exercices = sorted(par_dotation)
+    lignes = ["### Les subventions d'investissement de l'État", "",
+              "L'État subventionne aussi les investissements des collectivités, projet par projet : la dotation "
+              "d'équipement des territoires ruraux (DETR), la dotation de soutien à l'investissement local (DSIL), avec "
+              "ses enveloppes exceptionnelle (2020 et 2021) et de rénovation thermique (2021), la dotation politique "
+              "de la ville (DPV) et la dotation de soutien à l'investissement des départements (DSID), toutes du "
+              "programme 119. La DGCL publie chaque année la liste des projets subventionnés, depuis 2018 : le "
+              "bénéficiaire, l'intitulé du projet, son coût hors taxe et la subvention accordée. Ce sont des "
+              "engagements : l'exercice est celui de l'engagement de la subvention, que l'État paie ensuite au fil des "
+              "travaux, si bien que les comptes des collectivités ne la reçoivent pas la même année. La base lit ces "
+              "listes dans leurs copies (outils/importer_subventions.py, table subventions_investissement).", "",
+              "Subventions accordées chaque année, en millions d'euros :", "",
+              "| Exercice | " + " | ".join(dotations) + " | Total | Projets | Bénéficiaires |",
+              "|---|" + "---|" * (len(dotations) + 3)]
+    for e in exercices:
+        cellules = [fr(par_dotation[e][d][2] / 1e6, 1) if d in par_dotation[e] else "—" for d in dotations]
+        total = sum(v[2] for v in par_dotation[e].values())
+        lignes.append(f"| {e} | " + " | ".join(cellules) + f" | {fr(total / 1e6, 1)} | {fr(int(retenues[e]['projets']), 0)} "
+                      f"| {fr(int(retenues[e]['beneficiaires']), 0)} |")
+    lignes += ["", "Les dotations : " + " ; ".join(f"{d}, {libelles[d][0].lower() + libelles[d][1:]}" for d in dotations)
+               + ". Un bénéficiaire est désigné par le code Insee d'une commune, sinon par son numéro Siren.", "",
+               "Ce que la source donne mal, que l'import compte sans le corriger : un bénéficiaire qu'aucun code ne "
+               "désigne, une subvention ou un coût absent ou illisible (le projet compte alors pour zéro dans les "
+               "totaux s'il n'a pas de subvention lisible), une subvention qui dépasse le coût du projet.", "",
+               "| Exercice | Version | Projets | Sans bénéficiaire désigné | Montant illisible | Subvention supérieure "
+               "au coût |", "|---|---|---|---|---|---|"]
+    for e in exercices:
+        r = retenues[e]
+        lignes.append(f"| {e} | {r['version']} | {fr(int(r['projets']), 0)} | {fr(int(r['sans_beneficiaire']), 0)} | "
+                      f"{fr(int(r['montants_illisibles']), 0)} | {fr(int(r['depassements']), 0)} |")
+    dernier = exercices[-1]
+    lignes += ["", f"Les bénéficiaires de {dernier}, selon leur type dans la source :", "",
+               "| Type | Projets | Subventions |", "|---|---|---|"]
+    for genre, (n, m) in sorted(par_type[dernier].items(), key=lambda e: -e[1][1]):
+        lignes.append(f"| {genre} | {fr(n, 0)} | {millions(m)} |")
+    lignes.append("")
+    return lignes
+
+
 def partie_versements(derniers):
     """Ce que l'État verse à chaque collectivité, d'après le REI : les montants de chaque année, l'équilibre du FNGIR,
     les fractions de TVA d'une année à l'autre, et chaque collectivité contre les comptes de gestion de la DGCL et
@@ -3091,6 +3218,23 @@ def partie_versements(derniers):
         for (source, e), (n, proches, notifiee, inscrite) in sorted(individuelles.items()):
             lignes.append(f"| {NIVEAUX_INDIVIDUELS[source]} | {e} | {fr(n, 0)} | {fr(proches, 0)} | {millions(notifiee)} | "
                           f"{millions(inscrite)} | {pour_cent((inscrite - notifiee) / notifiee) if notifiee else '—'} |")
+    # La TVA des régions.
+    regions = tva_regions(detail)
+    if regions:
+        lignes += ["", "Depuis 2018, les régions reçoivent une fraction de TVA à la place de leur dotation globale de "
+                   "fonctionnement, et depuis 2021 une autre, à la place de leur part de CVAE. Le REI ne donne que la "
+                   "seconde : la première se lit dans les comptes de chaque région, l'agrégat « TVA » de son budget "
+                   "principal que publie l'OFGL (section 7) et la fraction de TVA de ses comptes individuels (section "
+                   "13, depuis 2019). Ce qui reste de l'agrégat de l'OFGL une fois ôtée la fraction compensant la CVAE "
+                   "est, pour l'essentiel, la fraction qui remplace la dotation globale de fonctionnement. Régions "
+                   "seules, hors collectivités territoriales uniques ; sont dites proches les fractions des comptes "
+                   f"individuels à moins de {fr(100 * SEUIL_TVA, 0)} % de l'agrégat de l'OFGL.", "",
+                   "| Exercice | Régions | TVA (OFGL) | Comptes individuels | Régions comparées | Proches | "
+                   "Dont compensation de la CVAE (REI) | Reste : à la place de la DGF |", "|---|---|---|---|---|---|---|---|"]
+        for e, (n, publie, inscrite, comparees, proches, recense) in sorted(regions.items()):
+            lignes.append(f"| {e} | {fr(n, 0)} | {millions(publie)} | {millions(inscrite) if comparees else '—'} | "
+                          f"{fr(comparees, 0) if comparees else '—'} | {fr(proches, 0) if comparees else '—'} | "
+                          f"{millions(recense) if recense else '—'} | {millions(publie - recense)} |")
     lignes.append("")
     return lignes
 

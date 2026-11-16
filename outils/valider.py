@@ -23,6 +23,7 @@ import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
+import importer_subventions as subventions
 from commun import (BASE, cellule_nombre_pdf, copie_presente, empreinte_et_taille, en_parallele, identifiant, lire,
                     lire_export_ofgl, lire_jsonstat, lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xls,
                     lire_xlsx, lire_xlsx_dans_zip, montant_colonne_pdf, montant_pdf, montants_de_case, montants_lies_pdf,
@@ -30,7 +31,7 @@ from commun import (BASE, cellule_nombre_pdf, copie_presente, empreinte_et_taill
 
 # Les lecteurs des copies qu'une table inscrit après contrôle : chacun redonne, d'une copie, son inscription.
 LECTEURS = {"collectivites": ofgl, "comptes_individuels": individuels, "balances_etat": balances, "rei": rei,
-            "balances_collectivites": balances_collectivites}
+            "balances_collectivites": balances_collectivites, "subventions": subventions}
 
 
 def erreur_de_type(type_, texte):
@@ -477,6 +478,22 @@ def controler_rei(tables, erreurs):
     return relues, communes
 
 
+def controler_subventions(tables, erreurs):
+    """Relit chaque copie inscrite dans fichiers_subventions.csv : son contenu doit donner son inscription. Renvoie le
+    nombre de copies relues et celui de leurs projets."""
+    fichiers = {f["id"]: f for f in tables["fichiers"]}
+    inscrits = tables["fichiers_subventions"]
+    vues = {}
+    for n, inscrit in enumerate(inscrits, start=2):
+        if (inscrit["exercice"], inscrit["version"]) in vues:
+            erreurs.append(f"tables/fichiers_subventions.csv, ligne {n} : une copie de même exercice et de même version "
+                           f"est inscrite ligne {vues[(inscrit['exercice'], inscrit['version'])]}")
+        vues[(inscrit["exercice"], inscrit["version"])] = n
+    groupes = [[k] for k, inscrit in enumerate(inscrits) if inscrit["fichier_id"] in fichiers]  # sinon, déjà signalée
+    relire("subventions", "fichiers_subventions", inscrits, fichiers, groupes, (), erreurs, seuls=True)
+    return len(groupes), sum(int(inscrits[g[0]]["projets"]) for g in groupes)
+
+
 def controler_organismes(tables, erreurs):
     """Relit chaque liste inscrite dans organismes.csv dans sa copie archivée : elle doit donner son inscription.
     Renvoie le nombre de listes relues et celui de leurs organismes."""
@@ -528,6 +545,7 @@ def main():
     copies_balances, lignes_balances = controler_balances_etat(tables, erreurs)
     copies_rei, communes_rei = controler_rei(tables, erreurs)
     copies_locales, lignes_locales = controler_balances_collectivites(tables, erreurs)
+    copies_subventions, projets = controler_subventions(tables, erreurs)
     listes, nombre_organismes = controler_organismes(tables, erreurs)
     for e in erreurs:
         print(e)
@@ -544,6 +562,8 @@ def main():
           + (f" ; {copies_rei} fichiers du REI relus, soit {communes_rei} lignes de communes" if copies_rei else "")
           + (f" ; {copies_locales} balances comptables de collectivités relues, soit {lignes_locales} lignes de comptes"
              if copies_locales else "")
+          + (f" ; {copies_subventions} listes de subventions d'investissement de l'État relues, soit {projets} projets"
+             if copies_subventions else "")
           + (f" ; {listes} liste{'s' if listes > 1 else ''} d'organismes relue{'s' if listes > 1 else ''}, soit "
              f"{nombre_organismes} organismes." if listes else "."))
 

@@ -1,0 +1,10 @@
+{
+  "description": "Dotations de l'État au titre desquelles la DGCL publie, projet par projet, les subventions d'investissement accordées aux collectivités (source dgcl.subventions-investissement), sous le nom que leur donne la source, avec le programme budgétaire qui en porte les crédits.",
+  "fields": [
+    {"name": "dispositif", "type": "string", "description": "Nom de la dotation dans la colonne « dispositif » de la source.", "constraints": {"required": true}},
+    {"name": "libelle", "type": "string", "constraints": {"required": true}},
+    {"name": "programme", "type": "string", "description": "Numéro du programme budgétaire de l'État qui porte les crédits, tel que le donne chaque ligne de la source.", "constraints": {"required": true, "pattern": "[0-9]{3}"}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["dispositif"]
+}

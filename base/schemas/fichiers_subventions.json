@@ -1,0 +1,18 @@
+{
+  "description": "Copies archivées des listes des subventions d'investissement que l'État accorde aux collectivités au titre de la DETR, de la DSIL, de la DPV et de la DSID, projet par projet, que publie la DGCL, une par exercice. L'import les contrôle et les inscrit ici ; la base lit leurs chiffres dans ces copies, sans les recopier.",
+  "fields": [
+    {"name": "fichier_id", "type": "string", "constraints": {"required": true}},
+    {"name": "exercice", "type": "string", "description": "Exercice de l'engagement budgétaire des subventions.", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "version", "type": "date", "description": "Date de dépôt du fichier sur data.gouv.fr.", "constraints": {"required": true}},
+    {"name": "projets", "type": "integer", "description": "Nombre de projets subventionnés, une ligne chacun.", "constraints": {"required": true}},
+    {"name": "beneficiaires", "type": "integer", "description": "Nombre de bénéficiaires distincts, désignés par le code Insee d'une commune ou par un numéro Siren.", "constraints": {"required": true}},
+    {"name": "sans_beneficiaire", "type": "integer", "description": "Nombre de projets dont le bénéficiaire n'est désigné ni par le code Insee d'une commune ni par un numéro Siren de neuf chiffres.", "constraints": {"required": true}},
+    {"name": "montants_illisibles", "type": "integer", "description": "Nombre de projets dont la subvention ou le coût est absent ou n'est pas un nombre.", "constraints": {"required": true}},
+    {"name": "depassements", "type": "integer", "description": "Nombre de projets dont la subvention dépasse le coût hors taxe.", "constraints": {"required": true}},
+    {"name": "subventions", "type": "number", "description": "Total des subventions lisibles, en euros.", "constraints": {"required": true}}
+  ],
+  "primaryKey": ["fichier_id"],
+  "foreignKeys": [
+    {"fields": ["fichier_id"], "reference": {"resource": "fichiers", "fields": ["id"]}}
+  ]
+}
