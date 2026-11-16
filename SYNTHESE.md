@@ -254,7 +254,7 @@ Source : Rapport annuel sur l'état de la fonction publique, édition 2026 : don
 
 ## Ce que contient la base
 
-301 558 chiffres enregistrés un par un, chacun avec sa fiche d'identité et l'endroit exact où le relire dans la copie archivée de sa source :
+314 167 chiffres enregistrés un par un, chacun avec sa fiche d'identité et l'endroit exact où le relire dans la copie archivée de sa source :
 
 | Producteur | Publications | Chiffres | Années couvertes |
 |---|---:|---:|---|
@@ -264,9 +264,9 @@ Source : Rapport annuel sur l'état de la fonction publique, édition 2026 : don
 | Assemblée nationale (textes de loi) | 29 | 21 839 | 2006-2026 |
 | DREES | 1 | 16 844 | 1959-2024 |
 | OFGL | 4 | 12 880 | 2017-2025 |
-| Direction du budget | 7 | 3 957 | 2018-2023 |
+| Direction de la sécurité sociale | 21 | 10 645 | 2006-2030 |
+| Direction du budget | 12 | 8 726 | 2017-2027 |
 | Eurostat | 3 | 2 880 | 1975-2025 |
-| Direction de la sécurité sociale | 7 | 2 805 | 2021-2030 |
 | Cour des comptes | 18 | 820 | 2008-2025 |
 | DGAFP | 10 | 708 | 1996-2025 |
 
@@ -279,4 +279,4 @@ S'y ajoutent, lus dans les copies archivées quand la base se construit :
 - 165 550 825 lignes des balances comptables des communes, des groupements à fiscalité propre, des syndicats et des établissements publics locaux, que la base ne reprend pas mais qu'elle lit et contrôle dans leurs copies, rangées dans les « Releases » de GitHub ;
 - 499 080 lignes de communes dans le recensement des éléments d'imposition (REI).
 
-Le tout repose sur 774 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).
+Le tout repose sur 793 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).
