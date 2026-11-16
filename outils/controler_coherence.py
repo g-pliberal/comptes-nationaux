@@ -1643,6 +1643,11 @@ ORDRE_NIVEAUX = ["communes", "syndicats", "groupements", "départements", "régi
 NIVEAUX_COMPTES_TEOM = [("communes", COMMUNES), ("groupements", GFP), ("syndicats", SYNDICATS)]
 
 
+# Le taux fixe de conversion du franc en euro : le rapport donne en euros les produits du REI des années où le fichier
+# est en francs (jusqu'aux impositions de 2001).
+FRANCS_PAR_EURO = 6.55957
+
+
 def niveau_rei(destinataire, teom_niveau):
     for motif, niveau in NIVEAUX_REI:
         if re.match(motif, destinataire):
@@ -1669,9 +1674,11 @@ def recensement_exercice(exercice, inscrit, inscrit_ofgl):
     par_niveau, teom = collections.defaultdict(float), collections.defaultdict(float)
     _, variables, _, lignes = rei.lignes_communes(fichiers[inscrit["fichier_id"]])
     retenus = rei.postes(exercice, variables, referentiel, inscrit["fichier_id"])
+    # Les produits se comparent dans la monnaie du fichier, et se rapportent en euros.
+    en_euros = 1 / FRANCS_PAR_EURO if inscrit["monnaie"] == "FRF" else 1
     recenses, noms, nombre = {}, {}, 0  # (commune, taxe, destinataire) → produit ; commune → nom
     for commune, valeurs in lignes:
-        noms[commune] = valeurs["LIBCOM"].strip()
+        noms[commune] = valeurs.get("LIBCOM", "").strip()
         teom_niveau = valeurs.get("F71", "").strip()
         for taxe, destinataire, base, net, _, produit, m_base, m_net, _, m_produit in rei.impositions(
                 valeurs, retenus, marges=True):
@@ -1680,11 +1687,11 @@ def recensement_exercice(exercice, inscrit, inscrit_ofgl):
                 continue
             recenses[(commune, taxe, destinataire)] = produit
             niveau = niveau_rei(destinataire, teom_niveau)
-            par_taxe[(taxe, exercice)] += produit
+            par_taxe[(taxe, exercice)] += produit * en_euros
             communes_taxe[(taxe, exercice)].add(commune)
-            par_niveau[(niveau, exercice)] += produit
+            par_niveau[(niveau, exercice)] += produit * en_euros
             if taxe == "TEOM":
-                teom[(niveau, exercice)] += produit
+                teom[(niveau, exercice)] += produit * en_euros
             if base is None or net is None:
                 continue
             calcule = base * net / 100
@@ -1697,8 +1704,8 @@ def recensement_exercice(exercice, inscrit, inscrit_ofgl):
                 entree[2] += 1
             else:
                 entree[3] += 1
-                if entree[4] is None or abs(ecart) > abs(entree[4][0]):
-                    entree[4] = (ecart, calcule, exercice, commune, noms[commune])
+                if entree[4] is None or abs(ecart * en_euros) > abs(entree[4][0]):
+                    entree[4] = (ecart * en_euros, calcule * en_euros, exercice, commune, noms[commune])
     if inscrit_ofgl:
         publies = {(c, taxe, b): produit for c, taxe, b, _, _, _, produit, _
                    in ofgl.montants_fiscalite(fichiers[inscrit_ofgl["fichier_id"]])}
@@ -2771,21 +2778,31 @@ def partie_rei(teom_comptes):
               "pour le territoire de chaque commune, les bases, les taux et les produits de toutes les impositions "
               "directes locales et de leurs taxes annexes, pour chacun de leurs destinataires : collectivités, "
               "organismes (établissements publics fonciers, chambres consulaires, caisse d'assurance accidents "
-              "agricoles, Société du grand projet du Sud-Ouest) et État, qui perçoit des frais sur les impositions et, en "
+              "agricoles, Société du grand projet du Sud-Ouest) et État, qui perçoit des frais sur les impositions, la "
+              "cotisation de péréquation de la taxe professionnelle et la cotisation au BAPSA jusqu'en 1997, et, en "
               "2021 et 2022, la taxe d'habitation sur les résidences principales. Ce sont les impositions du rôle "
               "général de l'année, sans les rôles supplémentaires. La base en retient les variables que décrit "
               "tables/variables_rei.csv : chacune figure au tracé de chacune de ses années, son titre y dit sa "
               "grandeur, et aucune ne donne le montant d'une collectivité répété sur chacune de ses communes, ce que "
-              "l'import vérifie. Une imposition sans base ni produit n'est pas retenue.", "",
-              "| Exercice | Version | Communes | Variables | Titres de l'en-tête différents du tracé | Valeurs illisibles "
-              "| Lignes rétablies | Impositions retenues |", "|---|---|---|---|---|---|---|---|"]
+              "l'import vérifie, sauf en 1998, dont l'archive n'a pas de tracé. Une imposition sans base ni produit "
+              "n'est pas retenue. Les fichiers sont en francs jusqu'aux impositions de 2001 : ce rapport en donne les "
+              f"produits en euros, au taux fixe de {fr(FRANCS_PAR_EURO, 5)} francs pour un euro.", "",
+              "| Exercice | Version | Monnaie | Communes | Variables | Titres de l'en-tête différents du tracé | "
+              "Variables absentes du tracé | Valeurs illisibles | Lignes rétablies | Communes en plusieurs lignes | "
+              "Impositions retenues |", "|---|---|---|---|---|---|---|---|---|---|---|"]
     for inscrit, nombre in annees:
-        lignes.append(f"| {inscrit['exercice']} | {inscrit['version']} | {fr(int(inscrit['communes']), 0)} | "
-                      f"{fr(int(inscrit['variables']), 0)} | {fr(int(inscrit['titres_differents']), 0)} | "
-                      f"{fr(int(inscrit['illisibles']), 0)} | {fr(int(inscrit['lignes_realignees']), 0)} | {fr(nombre, 0)} |")
-    lignes += ["", "Les valeurs illisibles sont les marques d'une valeur manquante (« , » en 2012, « . » de 2013 à "
-               "2015), et quelques textes dans une colonne numérique ; les lignes rétablies sont celles des communes de "
-               "Franche-Comté en 2012, où l'export a fondu deux champs en un.", ""]
+        lignes.append(f"| {inscrit['exercice']} | {inscrit['version']} | {inscrit['monnaie']} | "
+                      f"{fr(int(inscrit['communes']), 0)} | {fr(int(inscrit['variables']), 0)} | "
+                      f"{fr(int(inscrit['titres_differents']), 0)} | {fr(int(inscrit['hors_trace']), 0)} | "
+                      f"{fr(int(inscrit['illisibles']), 0)} | {fr(int(inscrit['lignes_realignees']), 0)} | "
+                      f"{fr(int(inscrit['communes_reunies']), 0)} | {fr(nombre, 0)} |")
+    lignes += ["", "Les valeurs illisibles sont les marques d'une valeur manquante (« , » en 2011 et 2012, « . » en 2009, "
+               "en 2010 et de 2013 à 2015), et quelques textes dans une colonne numérique ; les lignes rétablies sont "
+               "celles des communes de Franche-Comté en 2012, où l'export a fondu deux champs en un. Les variables "
+               "absentes du tracé n'ont pas de titre : A03 et A04 en 1995, toutes en 1998. En 1988, les 32 communes des "
+               "villes nouvelles ont deux lignes, une par sous-rôle (la partie de la commune dans le périmètre du "
+               "syndicat d'agglomération nouvelle, et le reste), que l'import réunit : leurs bases et leurs produits "
+               "s'additionnent, et un taux reste vide si les deux lignes en donnent de différents.", ""]
     comparees = sum(e[0] for e in produits.values())
     lignes += [f"Produit contre base multipliée par le taux net : {fr(comparees, 0)} impositions comparées, "
                f"{fr(sum(e[1] for e in produits.values()), 0)} égales à l'arrondi près, "
