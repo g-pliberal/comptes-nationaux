@@ -27,6 +27,8 @@
     {"name": "variables_rei", "path": "tables/variables_rei.csv", "schema": "schemas/variables_rei.json"},
     {"name": "versements_rei", "path": "tables/versements_rei.csv", "schema": "schemas/versements_rei.json"},
     {"name": "variables_versements_rei", "path": "tables/variables_versements_rei.csv", "schema": "schemas/variables_versements_rei.json"},
+    {"name": "dispositifs_subventions", "path": "tables/dispositifs_subventions.csv", "schema": "schemas/dispositifs_subventions.json"},
+    {"name": "fichiers_subventions", "path": "tables/fichiers_subventions.csv", "schema": "schemas/fichiers_subventions.json"},
     {"name": "organismes", "path": "tables/organismes.csv", "schema": "schemas/organismes.json"},
     {"name": "variables_comptes_individuels", "path": "tables/variables_comptes_individuels.csv", "schema": "schemas/variables_comptes_individuels.json"},
     {"name": "fichiers_comptes_individuels", "path": "tables/fichiers_comptes_individuels.csv", "schema": "schemas/fichiers_comptes_individuels.json"},

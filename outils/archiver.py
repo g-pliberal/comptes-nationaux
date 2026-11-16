@@ -103,8 +103,12 @@ def date_annoncee(serveur, fiche):
 
 
 def date_piece_jointe(url):
-    """Pour une pièce jointe d'un jeu de données d'un portail, la date de modification du jeu ; rien pour une autre
-    adresse."""
+    """Pour une pièce jointe d'un jeu de données d'un portail, la date de modification du jeu ; pour un fichier déposé
+    sur data.gouv.fr, la date de son dépôt, que porte son adresse ; rien pour une autre adresse."""
+    depot_ = re.match(r"https://static\.data\.gouv\.fr/resources/[^/]+/([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})"
+                      r"([0-9]{2})/", url)
+    if depot_:
+        return "{}-{}-{}T{}:{}:{}".format(*depot_.groups())
     jeu = re.match(r"https://(data\.ofgl\.fr|data\.economie\.gouv\.fr|data\.drees\.solidarites-sante\.gouv\.fr)"
                    r"/api/(?:explore/v2\.1|v2)/catalog/datasets/([^/]+)/attachments/", url)
     if jeu is None:
@@ -213,8 +217,8 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     # archive zip, date de modification inscrite dans un classeur ods ; pour un PDF, la date que porte le texte d'un
     # document du Sénat ou de l'Assemblée nationale, comme pour leurs pages, à défaut sa date de modification ; pour une
     # pièce jointe d'un jeu de données d'un portail qui ne porte pas de date (un fichier csv), ou pour un classeur xls,
-    # la date de modification du jeu ; pour un autre classeur xls, la date de son dernier enregistrement qu'inscrivent
-    # ses propriétés.
+    # la date de modification du jeu ; pour un fichier csv déposé sur data.gouv.fr, la date de son dépôt ; pour un autre
+    # classeur xls, la date de son dernier enregistrement qu'inscrivent ses propriétés.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(decoder_html(contenu))),

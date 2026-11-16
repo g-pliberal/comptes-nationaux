@@ -2180,6 +2180,64 @@ Les fractions de TVA que le REI donne pour l'année (le montant actualisé depui
 | régions | 2024 | 14 | 14 | 10 882,1 M€ | 10 787,2 M€ | −0,9 % |
 | régions | 2025 | 14 | 14 | 10 911,3 M€ | 10 940,5 M€ | +0,3 % |
 
+Depuis 2018, les régions reçoivent une fraction de TVA à la place de leur dotation globale de fonctionnement, et depuis 2021 une autre, à la place de leur part de CVAE. Le REI ne donne que la seconde : la première se lit dans les comptes de chaque région, l'agrégat « TVA » de son budget principal que publie l'OFGL (section 7) et la fraction de TVA de ses comptes individuels (section 13, depuis 2019). Ce qui reste de l'agrégat de l'OFGL une fois ôtée la fraction compensant la CVAE est, pour l'essentiel, la fraction qui remplace la dotation globale de fonctionnement. Régions seules, hors collectivités territoriales uniques ; sont dites proches les fractions des comptes individuels à moins de 1 % de l'agrégat de l'OFGL.
+
+| Exercice | Régions | TVA (OFGL) | Comptes individuels | Régions comparées | Proches | Dont compensation de la CVAE (REI) | Reste : à la place de la DGF |
+|---|---|---|---|---|---|---|---|
+| 2017 | 15 | 0,0 M€ | — | — | — | — | 0,0 M€ |
+| 2018 | 14 | 4 065,9 M€ | — | — | — | — | 4 065,9 M€ |
+| 2019 | 14 | 4 156,9 M€ | 4 156,9 M€ | 14 | 14 | — | 4 156,9 M€ |
+| 2020 | 14 | 3 897,9 M€ | 3 897,9 M€ | 14 | 14 | — | 3 897,9 M€ |
+| 2021 | 14 | 14 228,6 M€ | 14 228,6 M€ | 14 | 14 | 9 679,3 M€ | 4 549,3 M€ |
+| 2022 | 14 | 15 401,6 M€ | 15 401,6 M€ | 14 | 14 | 10 596,0 M€ | 4 805,6 M€ |
+| 2023 | 14 | 15 839,1 M€ | 15 839,1 M€ | 14 | 14 | 10 885,3 M€ | 4 953,8 M€ |
+| 2024 | 14 | 15 893,0 M€ | 15 816,3 M€ | 14 | 14 | 10 882,1 M€ | 5 010,9 M€ |
+| 2025 | 14 | 15 948,0 M€ | 15 948,0 M€ | 14 | 14 | 10 911,3 M€ | 5 036,7 M€ |
+
+### Les subventions d'investissement de l'État
+
+L'État subventionne aussi les investissements des collectivités, projet par projet : la dotation d'équipement des territoires ruraux (DETR), la dotation de soutien à l'investissement local (DSIL), avec ses enveloppes exceptionnelle (2020 et 2021) et de rénovation thermique (2021), la dotation politique de la ville (DPV) et la dotation de soutien à l'investissement des départements (DSID), toutes du programme 119. La DGCL publie chaque année la liste des projets subventionnés, depuis 2018 : le bénéficiaire, l'intitulé du projet, son coût hors taxe et la subvention accordée. Ce sont des engagements : l'exercice est celui de l'engagement de la subvention, que l'État paie ensuite au fil des travaux, si bien que les comptes des collectivités ne la reçoivent pas la même année. La base lit ces listes dans leurs copies (outils/importer_subventions.py, table subventions_investissement).
+
+Subventions accordées chaque année, en millions d'euros :
+
+| Exercice | DETR | DPV | DSID | DSID RT | DSIL | DSIL Exceptionnelle | DSIL RT | Total | Projets | Bénéficiaires |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2018 | 1 004,6 | — | — | — | 621,9 | — | — | 1 626,5 | 26 296 | 14 513 |
+| 2019 | 1 021,5 | 149,8 | 121,4 | — | 572,3 | — | — | 1 864,9 | 26 604 | 17 005 |
+| 2020 | 1 008,6 | 143,6 | 155,4 | — | 541,8 | 574,8 | — | 2 424,2 | 28 561 | 16 352 |
+| 2021 | 1 013,0 | 149,7 | 102,1 | 300,9 | 531,5 | 375,4 | 643,4 | 3 115,9 | 37 558 | 20 779 |
+| 2022 | 1 009,5 | 150,0 | 201,9 | — | 828,5 | — | — | 2 190,0 | 28 605 | 18 410 |
+| 2023 | 1 003,1 | 150,0 | 201,9 | — | 537,3 | — | — | 1 892,3 | 24 012 | 16 615 |
+| 2024 | 1 014,7 | 150,0 | 200,0 | — | 503,7 | — | — | 1 868,3 | 22 114 | 15 952 |
+| 2025 | 999,8 | 150,0 | 157,0 | — | 419,2 | — | — | 1 726,0 | 20 281 | 15 278 |
+
+Les dotations : DETR, dotation d'équipement des territoires ruraux ; DPV, dotation politique de la ville ; DSID, dotation de soutien à l'investissement des départements ; DSID RT, dotation de soutien à l'investissement des départements, rénovation thermique ; DSIL, dotation de soutien à l'investissement local ; DSIL Exceptionnelle, dotation de soutien à l'investissement local, part exceptionnelle ; DSIL RT, dotation de soutien à l'investissement local, rénovation thermique. Un bénéficiaire est désigné par le code Insee d'une commune, sinon par son numéro Siren.
+
+Ce que la source donne mal, que l'import compte sans le corriger : un bénéficiaire qu'aucun code ne désigne, une subvention ou un coût absent ou illisible (le projet compte alors pour zéro dans les totaux s'il n'a pas de subvention lisible), une subvention qui dépasse le coût du projet.
+
+| Exercice | Version | Projets | Sans bénéficiaire désigné | Montant illisible | Subvention supérieure au coût |
+|---|---|---|---|---|---|
+| 2018 | 2024-06-25 | 26 296 | 3 901 | 5 | 2 |
+| 2019 | 2024-06-25 | 26 604 | 293 | 18 | 4 |
+| 2020 | 2024-06-25 | 28 561 | 548 | 64 | 14 |
+| 2021 | 2024-06-25 | 37 558 | 941 | 18 | 71 |
+| 2022 | 2024-06-25 | 28 605 | 385 | 3 | 12 |
+| 2023 | 2024-06-25 | 24 012 | 290 | 0 | 18 |
+| 2024 | 2025-07-21 | 22 114 | 300 | 3 | 12 |
+| 2025 | 2026-07-24 | 20 281 | 262 | 0 | 0 |
+
+Les bénéficiaires de 2025, selon leur type dans la source :
+
+| Type | Projets | Subventions |
+|---|---|---|
+| commune | 17 801 | 1 228,1 M€ |
+| epci | 1 559 | 267,0 M€ |
+| departement | 265 | 158,8 M€ |
+| syndicat | 612 | 53,6 M€ |
+| autre maître d'ouvrage | 38 | 9,4 M€ |
+| collectivité à statut particulier | 5 | 9,1 M€ |
+| petr | 1 | 0,0 M€ |
+
 ## 12. Organismes publics : ce que la base couvre
 
 Le secteur des administrations publiques, unité par unité, d'après les listes et décomptes officiels : la liste des organismes divers d'administration centrale (ODAC) et le nombre d'organismes divers d'administration locale (ODAL) par catégorie, que l'Insee établit pour les comptes nationaux, le nombre de collectivités territoriales et de groupements au 1er janvier que publie la DGCL. Ils se comparent aux unités dont la base a les comptes une à une, d'après les listes des jeux de l'OFGL (numéros Siren distincts). Un écart n'est pas une erreur : un décompte à une date et la liste des comptes d'un exercice ne retiennent pas toujours les mêmes unités.
