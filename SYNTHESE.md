@@ -276,7 +276,7 @@ S'y ajoutent, lus dans les copies archivées quand la base se construit :
 - 975 872 lignes de collectivités dans les comptes individuels de la DGFiP ;
 - 517 489 lignes des balances des comptes de l'État ;
 - 1 436 292 lignes des balances comptables des départements et des régions, budget par budget et compte par compte, d'après la DGFiP ;
-- 162 290 274 lignes des balances comptables des communes, des groupements à fiscalité propre, des syndicats et des établissements publics locaux, que la base ne reprend pas mais qu'elle lit et contrôle dans leurs copies, rangées dans les « Releases » de GitHub ;
+- 165 550 825 lignes des balances comptables des communes, des groupements à fiscalité propre, des syndicats et des établissements publics locaux, que la base ne reprend pas mais qu'elle lit et contrôle dans leurs copies, rangées dans les « Releases » de GitHub ;
 - 499 080 lignes de communes dans le recensement des éléments d'imposition (REI).
 
 Le tout repose sur 764 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).
