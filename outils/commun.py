@@ -179,11 +179,17 @@ def empreinte(chemin):
 
 def lire_export_ofgl(chemin):
     """Les lignes d'un export csv d'un portail Opendatasoft, data.ofgl.fr, data.economie.gouv.fr ou data.drees
-    (point-virgule, marque d'ordre des octets en tête) : (en-tête, lignes)."""
+    (point-virgule, marque d'ordre des octets en tête) : (en-tête, lignes). Une pièce jointe d'un jeu de
+    data.economie.gouv.fr peut être encodée en Windows-1252 : un fichier qui n'est pas de l'UTF-8 se lit ainsi."""
     with ouvrir_copie(chemin) as f:
-        lecteur = csv.reader(io.TextIOWrapper(f, encoding="utf-8-sig", newline=""), delimiter=";")
-        entete = next(lecteur, [])
-        return entete, list(lecteur)
+        contenu = f.read()
+    try:
+        texte = contenu.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        texte = contenu.decode("cp1252")
+    lecteur = csv.reader(io.StringIO(texte, newline=""), delimiter=";")
+    entete = next(lecteur, [])
+    return entete, list(lecteur)
 
 
 def en_parallele(fonction, appels, poids=None):

@@ -39,18 +39,15 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 1079 |
 | an.ta17-0017 | Projet de loi de finances de fin de gestion pour 2024 (loi n° 2024-1167), texte adopté n° 17 (17e législature), adopté définitivement par l'Assemblée nationale le 4 décembre 2024 | 2024-12-04 | 767 |
 | an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 1057 |
-| budget.depenses-fiscales-plf2019 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2019 | 2018-10-02 | 860 |
 | budget.depenses-fiscales-plf2020 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2020 | 2019-10-04 | 853 |
 | budget.depenses-fiscales-plf2021 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2021 | 2020-10-06 | 888 |
 | budget.depenses-fiscales-plf2022 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2022 | 2021-10-07 | 908 |
 | budget.depenses-fiscales-plf2023 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2023 | 2022-10-03 | 951 |
-| budget.depenses-fiscales-plf2024 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2024 | 2023-10-03 | 950 |
-| budget.depenses-fiscales-plf2025 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2025 | 2024-10-11 | 975 |
-| budget.depenses-fiscales-plf2026 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2026 | 2025-10-12 | 991 |
-| budget.depenses-fiscales-plf2027 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2027 | 2026-10-03 | 993 |
 | budget.emplois-plr2018 | Crédits et emplois consommés en 2018 par mission et par programme, données du projet de loi de règlement pour 2018 (PLR 2018) | 2019-06-27 | 51 |
 | budget.emplois-plr2019 | Emplois consommés en 2019 par programme et synthèse des rapports annuels de performances, données du projet de loi de règlement pour 2019 (PLR 2019) | 2020-09-09 | 150 |
 | budget.emplois-plr2020 | Emplois consommés en 2020 par programme et synthèse des rapports annuels de performances, données du projet de loi de règlement pour 2020 (PLR 2020) | 2021-04-15 | 156 |
+| budget.operateurs-plf2012 | Comptes des opérateurs de l'État en 2010, budget primitif et compte financier, données de l'annexe « Opérateurs de l'État » au projet de loi de finances pour 2012 | 2018-12-13 | 2527 |
+| budget.operateurs-plf2019 | Budgets initiaux 2018 des opérateurs de l'État, données des projets annuels de performances annexés au projet de loi de finances pour 2019 | 2018-12-13 | 6942 |
 | ccomptes.certification-2016 | Certification des comptes de l'État, exercice 2016 (mai 2017) | 2017-05-24 | 76 |
 | ccomptes.certification-2017 | Certification des comptes de l'État, exercice 2017 (mai 2018) | 2018-05-24 | 80 |
 | ccomptes.certification-2018 | Certification des comptes de l'État, exercice 2018 (mai 2019) | 2019-05-13 | 92 |
@@ -134,20 +131,6 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | ofgl.annexe-2d | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2D : niveaux consolidés, bloc communal et ensemble des collectivités locales | 2026-04-29 | 566 |
 | secu.placss2023-annexe2 | Annexe 2 du projet de loi d'approbation des comptes de la sécurité sociale de 2023 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2024-06-10 | 288 |
 | secu.placss2024-annexe2 | Annexe 2 du projet de loi d'approbation des comptes de la sécurité sociale de 2024 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2025-06-13 | 353 |
-| secu.plfss2008-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2008 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2007-10-12 | 670 |
-| secu.plfss2010-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2010 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2009-10-13 | 664 |
-| secu.plfss2011-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2011 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2010-10-13 | 674 |
-| secu.plfss2012-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2012 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2011-10-14 | 599 |
-| secu.plfss2013-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2013 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2012-10-12 | 586 |
-| secu.plfss2014-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2014 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2013-10-11 | 476 |
-| secu.plfss2015-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2015 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2014-10-13 | 508 |
-| secu.plfss2016-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2016 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2015-10-17 | 468 |
-| secu.plfss2017-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2017 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2016-11-08 | 431 |
-| secu.plfss2018-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2018 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2017-10-09 | 537 |
-| secu.plfss2019-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2019 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2018-10-12 | 666 |
-| secu.plfss2020-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2020 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2019-10-10 | 490 |
-| secu.plfss2021-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2021 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2020-10-01 | 515 |
-| secu.plfss2022-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2022 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2021-10-12 | 556 |
 | secu.plfss2023-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2023 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2022-11-10 | 375 |
 | secu.plfss2024-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2024 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2023-10-19 | 414 |
 | secu.plfss2025-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2025 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2024-11-20 | 399 |
@@ -229,10 +212,20 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-35495 sommes vérifiées avec toutes leurs composantes : 35378 justes, 117 en écart.
+38121 sommes vérifiées avec toutes leurs composantes : 37994 justes, 127 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
+| budget.operateurs-plf2019 | OPERATEUR_AFB | ensemble | 2018 | OPERATEURS.EF_ABONDEMENT_TRESORERIE_BI | 0,0000 Md€ | 0,0022 Md€ | −2,2 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_CNRS | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0154 Md€ | +15,4 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_IFSTTAR | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0048 Md€ | +4,8 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_INED | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0032 Md€ | +3,2 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_INRA | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0057 Md€ | +5,7 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_INRIA | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0067 Md€ | +6,7 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_INSERM | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0387 Md€ | +38,8 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_IRD | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | 0,0044 Md€ | −4,4 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_IRSTEA | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0027 Md€ | +2,7 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_OFPRA | ensemble | 2018 | OPERATEURS.EF_ABONDEMENT_TRESORERIE_BI | 0,0000 Md€ | −0,0002 Md€ | +0,2 M€ |
 | dgcl.finances-departements | DEPARTEMENTS_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 59,5032 Md€ | 60,2187 Md€ | −715,5 M€ |
 | dgcl.finances-departements | DEPARTEMENTS_BP | ensemble | 2022 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 71,4088 Md€ | 71,4338 Md€ | −25,0 M€ |
 | dgcl.finances-departements | DEPARTEMENTS_CTU_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 70,7601 Md€ | 71,4756 Md€ | −715,5 M€ |
@@ -568,21 +561,11 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 
 | Source A | Source B | Comparaisons | Écarts | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (A − B) | Plus grand écart (A − B) |
 |---|---|---|---|---|---|---|
-| budget.depenses-fiscales-plf2019 | budget.depenses-fiscales-plf2020 | 488 | 282 | 0 | aucun | +1 500,0 M€ en 2018 |
-| budget.depenses-fiscales-plf2019 | budget.depenses-fiscales-plf2021 | 214 | 153 | 0 | aucun | +1 260,0 M€ en 2019 |
 | budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2021 | 496 | 282 | 0 | aucun | +895,0 M€ en 2020 |
 | budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2022 | 235 | 160 | 0 | aucun | −960,0 M€ en 2020 |
 | budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2022 | 537 | 309 | 0 | aucun | +992,0 M€ en 2021 |
 | budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2023 | 262 | 182 | 0 | aucun | +1 107,0 M€ en 2021 |
 | budget.depenses-fiscales-plf2022 | budget.depenses-fiscales-plf2023 | 574 | 339 | 0 | aucun | +1 156,0 M€ en 2022 |
-| budget.depenses-fiscales-plf2022 | budget.depenses-fiscales-plf2024 | 278 | 192 | 0 | aucun | +1 891,0 M€ en 2022 |
-| budget.depenses-fiscales-plf2023 | budget.depenses-fiscales-plf2024 | 599 | 341 | 0 | aucun | +2 750,0 M€ en 2023 |
-| budget.depenses-fiscales-plf2023 | budget.depenses-fiscales-plf2025 | 281 | 177 | 0 | aucun | +2 390,0 M€ en 2023 |
-| budget.depenses-fiscales-plf2024 | budget.depenses-fiscales-plf2025 | 595 | 344 | 0 | aucun | +864,0 M€ en 2023 |
-| budget.depenses-fiscales-plf2024 | budget.depenses-fiscales-plf2026 | 289 | 205 | 0 | aucun | −4 500,0 M€ en 2024 |
-| budget.depenses-fiscales-plf2025 | budget.depenses-fiscales-plf2026 | 637 | 364 | 0 | aucun | −4 200,0 M€ en 2024 |
-| budget.depenses-fiscales-plf2025 | budget.depenses-fiscales-plf2027 | 281 | 189 | 0 | aucun | −3 000,0 M€ en 2025 |
-| budget.depenses-fiscales-plf2026 | budget.depenses-fiscales-plf2027 | 582 | 336 | 0 | aucun | +974,0 M€ en 2026 |
 | budget.emplois-plr2019 | budget.emplois-plr2020 | 2 | 1 | 1 | −19 ETPT en 2019 | −19 ETPT en 2019 |
 | ccomptes.rbde-2021 | dgafp.raefp-2022 | 1 | 0 | 0 | aucun | aucun |
 | ccomptes.rbde-2022 | dgafp.raefp-2023 | 1 | 1 | 1 | +4,45 ETPT en 2022 | +4,45 ETPT en 2022 |
@@ -750,30 +733,6 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | secu.placss2024-annexe2 | secu.plfss2025-annexe4 | 270 | 51 | 3 | −26,0 M€ en 2023 | −974,3 M€ en 2024 |
 | secu.placss2024-annexe2 | secu.plfss2026-annexe4 | 152 | 51 | 22 | +114,0 M€ en 2024 | −2 600,0 M€ en 2023 |
 | secu.placss2024-annexe2 | secu.plfss2027-annexe4 | 54 | 25 | 0 | aucun | +1 400,0 M€ en 2024 |
-| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | 44 | 36 | 0 | aucun | −2 245,0 M€ en 2008 |
-| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | 311 | 217 | 0 | aucun | −520,0 M€ en 2010 |
-| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | 70 | 57 | 0 | aucun | +9 035,0 M€ en 2010 |
-| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | 151 | 90 | 0 | aucun | +9 652,0 M€ en 2011 |
-| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | 125 | 88 | 0 | aucun | +9 601,9 M€ en 2011 |
-| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | 167 | 114 | 0 | aucun | +2 594,8 M€ en 2012 |
-| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | 92 | 60 | 0 | aucun | +2 589,0 M€ en 2012 |
-| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | 167 | 126 | 0 | aucun | −216,7 M€ en 2013 |
-| secu.plfss2013-annexe5 | secu.plfss2015-annexe5 | 50 | 34 | 0 | aucun | −24,3 M€ en 2013 |
-| secu.plfss2014-annexe5 | secu.plfss2015-annexe5 | 144 | 39 | 0 | aucun | +72,0 M€ en 2013 |
-| secu.plfss2014-annexe5 | secu.plfss2016-annexe5 | 56 | 29 | 0 | aucun | +83,0 M€ en 2014 |
-| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | 230 | 131 | 0 | aucun | −4 498,0 M€ en 2015 |
-| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | 82 | 58 | 0 | aucun | −8 395,0 M€ en 2015 |
-| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | 226 | 144 | 0 | aucun | −8 111,0 M€ en 2015 |
-| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | 89 | 69 | 0 | aucun | +966,8 M€ en 2016 |
-| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | 200 | 146 | 0 | aucun | +924,8 M€ en 2016 |
-| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | 74 | 60 | 0 | aucun | +1 456,3 M€ en 2017 |
-| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | 210 | 145 | 0 | aucun | +2 694,0 M€ en 2018 |
-| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | 66 | 62 | 0 | aucun | +1 499,5 M€ en 2018 |
-| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | 229 | 188 | 0 | aucun | −740,1 M€ en 2019 |
-| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | 109 | 103 | 0 | aucun | −866,0 M€ en 2019 |
-| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | 274 | 265 | 0 | aucun | +1 379,7 M€ en 2020 |
-| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | 124 | 123 | 0 | aucun | +1 254,8 M€ en 2020 |
-| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | 319 | 306 | 0 | aucun | +775,0 M€ en 2021 |
 | secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | 271 | 191 | 33 | −4 400,0 M€ en 2021 | −8 950,0 M€ en 2023 |
 | secu.plfss2023-annexe4 | secu.plfss2025-annexe4 | 153 | 115 | 0 | aucun | −9 000,0 M€ en 2023 |
 | secu.plfss2023-annexe4 | secu.plfss2026-annexe4 | 51 | 40 | 0 | aucun | −11 900,0 M€ en 2023 |
@@ -870,21 +829,11 @@ Détail des grandeurs en écart :
 
 | Source A | Source B | Grandeur | Fonctions en écart | Années en écart | dont hors chiffres révisables | Plus grand écart (A − B) |
 |---|---|---|---|---|---|---|
-| budget.depenses-fiscales-plf2019 | budget.depenses-fiscales-plf2020 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 168 groupes | 2018 et 2019 | aucune | +1 500,0 M€ en 2018 (LOLF.DEPENSE_FISCALE.730210) |
-| budget.depenses-fiscales-plf2019 | budget.depenses-fiscales-plf2021 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 153 groupes | 2019 | aucune | +1 260,0 M€ en 2019 (LOLF.DEPENSE_FISCALE.730210) |
 | budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2021 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 168 groupes | 2019 et 2020 | aucune | +895,0 M€ en 2020 (LOLF.DEPENSE_FISCALE.800210) |
 | budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2022 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 160 groupes | 2020 | aucune | −960,0 M€ en 2020 (LOLF.DEPENSE_FISCALE.200302) |
 | budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2022 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 182 groupes | 2020 et 2021 | aucune | +992,0 M€ en 2021 (LOLF.DEPENSE_FISCALE.210324) |
 | budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2023 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 182 groupes | 2021 | aucune | +1 107,0 M€ en 2021 (LOLF.DEPENSE_FISCALE.210324) |
 | budget.depenses-fiscales-plf2022 | budget.depenses-fiscales-plf2023 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 191 groupes | 2021 et 2022 | aucune | +1 156,0 M€ en 2022 (LOLF.DEPENSE_FISCALE.820203) |
-| budget.depenses-fiscales-plf2022 | budget.depenses-fiscales-plf2024 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 192 groupes | 2022 | aucune | +1 891,0 M€ en 2022 (LOLF.DEPENSE_FISCALE.730221) |
-| budget.depenses-fiscales-plf2023 | budget.depenses-fiscales-plf2024 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 200 groupes | 2022 et 2023 | aucune | +2 750,0 M€ en 2023 (LOLF.DEPENSE_FISCALE.730221) |
-| budget.depenses-fiscales-plf2023 | budget.depenses-fiscales-plf2025 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 177 groupes | 2023 | aucune | +2 390,0 M€ en 2023 (LOLF.DEPENSE_FISCALE.730213) |
-| budget.depenses-fiscales-plf2024 | budget.depenses-fiscales-plf2025 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 211 groupes | 2023 et 2024 | aucune | +864,0 M€ en 2023 (LOLF.DEPENSE_FISCALE.800401) |
-| budget.depenses-fiscales-plf2024 | budget.depenses-fiscales-plf2026 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 205 groupes | 2024 | aucune | −4 500,0 M€ en 2024 (LOLF.DEPENSE_FISCALE.520110) |
-| budget.depenses-fiscales-plf2025 | budget.depenses-fiscales-plf2026 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 220 groupes | 2024 et 2025 | aucune | −4 200,0 M€ en 2024 (LOLF.DEPENSE_FISCALE.520110) |
-| budget.depenses-fiscales-plf2025 | budget.depenses-fiscales-plf2027 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 189 groupes | 2025 | aucune | −3 000,0 M€ en 2025 (LOLF.DEPENSE_FISCALE.520110) |
-| budget.depenses-fiscales-plf2026 | budget.depenses-fiscales-plf2027 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 207 groupes | 2025 et 2026 | aucune | +974,0 M€ en 2026 (LOLF.DEPENSE_FISCALE.200302) |
 | budget.emplois-plr2019 | budget.emplois-plr2020 | FR ETAT_LF LOLF.BG_EMPLOIS_CONSOMMES | ensemble | 2019 | 2019 | −19 ETPT en 2019 |
 | ccomptes.rbde-2022 | dgafp.raefp-2023 | FR ETAT_LF LOLF.BG_EMPLOIS_CONSOMMES | ensemble | 2022 | 2022 | +4,45 ETPT en 2022 |
 | ccomptes.rbde-2023 | dgafp.raefp-2024 | FR ETAT_LF LOLF.BG_EMPLOIS_CONSOMMES | ensemble | 2023 | 2023 | −332,25 ETPT en 2023 |
@@ -1093,100 +1042,6 @@ Détail des grandeurs en écart :
 | secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 12 groupes | 2024 | aucune | +1 400,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_AVANTAGES_ACCORDES_PAR_LES_COMITES_D_ENTREPRISES) |
 | secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 6 groupes | 2024 | aucune | +900,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
 | secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 7 groupes | 2024 | aucune | −700,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
-| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2008 | aucune | −135,0 M€ en 2008 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
-| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 9 groupes | 2008 | aucune | −140,0 M€ en 2008 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
-| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 15 groupes | 2008 | aucune | −421,0 M€ en 2008 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
-| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 8 groupes | 2008 | aucune | −2 245,0 M€ en 2008 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
-| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 25 groupes | 2009 et 2010 | aucune | +65,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
-| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 32 groupes | 2009 et 2010 | aucune | −108,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_CIBLEES) |
-| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 36 groupes | 2009 et 2010 | aucune | −207,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_CIBLEES) |
-| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 35 groupes | 2009 et 2010 | aucune | −520,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_COMPENSEES_ET_NON_COMPENSEES) |
-| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 7 groupes | 2010 | aucune | +1 951,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 14 groupes | 2010 | aucune | +3 914,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 21 groupes | 2010 | aucune | +9 035,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 15 groupes | 2010 | aucune | +6 469,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2010 et 2011 | aucune | +1 917,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 14 groupes | 2010 et 2011 | aucune | +4 179,0 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 18 groupes | 2010 et 2011 | aucune | +9 652,0 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 15 groupes | 2010 et 2011 | aucune | +7 072,0 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 8 groupes | 2011 | aucune | +193,3 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 26 groupes | 2011 | aucune | +4 150,8 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 28 groupes | 2011 | aucune | +9 601,9 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 26 groupes | 2011 | aucune | +7 109,9 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 9 groupes | 2011 et 2012 | aucune | −75,7 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 21 groupes | 2011 et 2012 | aucune | +2 594,8 M€ en 2012 (COMPTES_SECU.EXO_EXONERATIONS_DES_HEURES_SUPPLEMENTAIRES_ET_COMPLEMENTAIRES) |
-| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 20 groupes | 2011 et 2012 | aucune | −301,5 M€ en 2012 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_REDUCTION_FILLON) |
-| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 19 groupes | 2011 et 2012 | aucune | +547,5 M€ en 2012 (COMPTES_SECU.EXO_EXONERATIONS_DES_HEURES_SUPPLEMENTAIRES_ET_COMPLEMENTAIRES) |
-| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2012 | aucune | −68,0 M€ en 2012 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 20 groupes | 2012 | aucune | +2 589,0 M€ en 2012 (COMPTES_SECU.EXO_EXONERATIONS_DES_HEURES_SUPPLEMENTAIRES_ET_COMPLEMENTAIRES) |
-| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 19 groupes | 2012 | aucune | −252,1 M€ en 2012 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_REDUCTION_FILLON) |
-| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 17 groupes | 2012 | aucune | +557,0 M€ en 2012 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 6 groupes | 2012 et 2013 | aucune | +27,8 M€ en 2012 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_REDUCTION_FILLON) |
-| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 21 groupes | 2012 et 2013 | aucune | +53,2 M€ en 2012 (COMPTES_SECU.EXO_SOUS_TOTAL_EXONERATIONS_CIBLEES_SUR_DES_PUBLICS_PARTICULIERS) |
-| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 29 groupes | 2012 et 2013 | aucune | −216,7 M€ en 2013 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 18 groupes | 2012 et 2013 | aucune | −191,5 M€ en 2013 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
-| secu.plfss2013-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 11 groupes | 2013 | aucune | −4,6 M€ en 2013 (COMPTES_SECU.EXO_JEUNES_ENTREPRISES_INNOVANTES) |
-| secu.plfss2013-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 14 groupes | 2013 | aucune | −24,3 M€ en 2013 (COMPTES_SECU.EXO_CONTRAT_DE_SECURISATION_PROFESSIONNELLE) |
-| secu.plfss2013-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 9 groupes | 2013 | aucune | +7,9 M€ en 2013 (COMPTES_SECU.EXO_ZONES_DE_RESTRUCTURATION_DE_LA_DEFENSE_ZRD) |
-| secu.plfss2014-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 8 groupes | 2013 et 2014 | aucune | +23,0 M€ en 2013 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
-| secu.plfss2014-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 9 groupes | 2013 et 2014 | aucune | +58,0 M€ en 2013 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
-| secu.plfss2014-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 8 groupes | 2013 et 2014 | aucune | +72,0 M€ en 2013 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
-| secu.plfss2014-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 9 groupes | 2014 | aucune | +35,0 M€ en 2014 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
-| secu.plfss2014-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 11 groupes | 2014 | aucune | +78,0 M€ en 2014 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
-| secu.plfss2014-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 9 groupes | 2014 | aucune | +83,0 M€ en 2014 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
-| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2014 et 2015 | aucune | +921,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 21 groupes | 2014 et 2015 | aucune | −4 498,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 25 groupes | 2014 et 2015 | aucune | +631,0 M€ en 2015 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_GEOPGRAPHIQUES) |
-| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 24 groupes | 2014 et 2015 | aucune | +532,0 M€ en 2015 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_GEOPGRAPHIQUES) |
-| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX, COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES et COMPTES_SECU.EXO_MESURES_CIBLEES_COMPENSEES | 2015 | aucune | +921,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 17 groupes | 2015 | aucune | −4 685,8 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 19 groupes | 2015 | aucune | −226,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 19 groupes | 2015 | aucune | −8 395,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 7 groupes | 2015 et 2016 | aucune | −28,0 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES) |
-| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 28 groupes | 2015 et 2016 | aucune | −235,0 M€ en 2016 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE) |
-| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 29 groupes | 2015 et 2016 | aucune | +170,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 28 groupes | 2015 et 2016 | aucune | −8 111,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2016 | aucune | −26,1 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_GEOGRAPHIQUES) |
-| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 20 groupes | 2016 | aucune | +318,5 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
-| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 23 groupes | 2016 | aucune | +966,8 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
-| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 22 groupes | 2016 | aucune | +825,2 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
-| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 5 groupes | 2016 et 2017 | aucune | −30,0 M€ en 2017 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_GEOGRAPHIQUES) |
-| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 31 groupes | 2016 et 2017 | aucune | +307,6 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
-| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 29 groupes | 2016 et 2017 | aucune | +924,8 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
-| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 30 groupes | 2016 et 2017 | aucune | +804,2 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
-| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | COMPTES_SECU.EXO_ARBITRES_SPORTIFS, COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES_ENTREPRISES_DE_MOINS_20_SALARIES et COMPTES_SECU.EXO_EXONERATION_TRAVAILLEURS_OCCASIONNELS_DEMANDEURS_D_EMPLOI | 2017 | aucune | +61,1 M€ en 2017 (COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES_ENTREPRISES_DE_MOINS_20_SALARIES) |
-| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 20 groupes | 2017 | aucune | +1 456,3 M€ en 2017 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 19 groupes | 2017 | aucune | −787,0 M€ en 2017 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 18 groupes | 2017 | aucune | −536,0 M€ en 2017 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 5 groupes | 2017 et 2018 | aucune | +103,3 M€ en 2017 (COMPTES_SECU.EXO_EXONERATIONS_COMPENSEES) |
-| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 26 groupes | 2017 et 2018 | aucune | +2 694,0 M€ en 2018 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
-| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 25 groupes | 2017 et 2018 | aucune | +545,0 M€ en 2017 (COMPTES_SECU.EXO_EXONERATIONS_COMPENSEES) |
-| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 24 groupes | 2017 et 2018 | aucune | +629,1 M€ en 2017 (COMPTES_SECU.EXO_EXONERATIONS_COMPENSEES) |
-| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2018 | aucune | +30,8 M€ en 2018 (COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES_ENTREPRISES_DE_MOINS_20_SALARIES) |
-| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 19 groupes | 2018 | aucune | +1 499,5 M€ en 2018 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES_TRAVAILLEURS_INDEPENDANTS) |
-| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 20 groupes | 2018 | aucune | −409,2 M€ en 2018 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
-| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 19 groupes | 2018 | aucune | −323,6 M€ en 2018 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
-| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 10 groupes | 2018 et 2019 | aucune | −53,1 M€ en 2019 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
-| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 34 groupes | 2018 et 2019 | aucune | −740,1 M€ en 2019 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES_TRAVAILLEURS_INDEPENDANTS) |
-| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 33 groupes | 2018 et 2019 | aucune | +265,4 M€ en 2019 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
-| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 34 groupes | 2018 et 2019 | aucune | −181,3 M€ en 2019 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
-| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 11 groupes | 2019 | aucune | −50,4 M€ en 2019 (COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES_ENTREPRISES_DE_MOINS_20_SALARIES) |
-| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 32 groupes | 2019 | aucune | −866,0 M€ en 2019 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES_TRAVAILLEURS_INDEPENDANTS) |
-| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 31 groupes | 2019 | aucune | +218,4 M€ en 2019 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
-| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 29 groupes | 2019 | aucune | −629,2 M€ en 2019 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
-| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 15 groupes | 2019 et 2020 | aucune | +23,3 M€ en 2020 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
-| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 42 groupes | 2019 et 2020 | aucune | +801,2 M€ en 2020 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES) |
-| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 48 groupes | 2019 et 2020 | aucune | +925,9 M€ en 2020 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
-| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 38 groupes | 2019 et 2020 | aucune | +1 379,7 M€ en 2020 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
-| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 12 groupes | 2020 | aucune | +28,9 M€ en 2020 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
-| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 36 groupes | 2020 | aucune | +687,2 M€ en 2020 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES) |
-| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 40 groupes | 2020 | aucune | +852,7 M€ en 2020 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
-| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 35 groupes | 2020 | aucune | +1 254,8 M€ en 2020 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
-| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 18 groupes | 2020 et 2021 | aucune | −10,1 M€ en 2021 (COMPTES_SECU.EXO_EXONERATIONS_CIBLEES_COMPENSEES_ET_NON_COMPENSEES) |
-| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_AUTONOMIE LFSS.EXONERATION_COUT | 11 groupes | 2021 | aucune | −45,4 M€ en 2021 (COMPTES_SECU.EXO_EXONERATIONS_CIBLEES_COMPENSEES_ET_NON_COMPENSEES) |
-| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 43 groupes | 2020 et 2021 | aucune | +775,0 M€ en 2021 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES_TRAVAILLEURS_INDEPENDANTS) |
-| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 51 groupes | 2020 et 2021 | aucune | −495,5 M€ en 2020 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
-| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 44 groupes | 2020 et 2021 | aucune | −517,8 M€ en 2021 (COMPTES_SECU.EXO_EXONERATIONS_CIBLEES_COMPENSEES_ET_NON_COMPENSEES) |
 | secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 15 groupes | 2021, 2022 et 2023 | 2021 | −8 950,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
 | secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 14 groupes | 2021, 2022 et 2023 | 2021 | −3 480,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
 | secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 13 groupes | 2021, 2022 et 2023 | 2021 | −1 890,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
@@ -2345,11 +2200,11 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 
 | Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
 |---|---|---|---|
-| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; budget : depenses-fiscales-plf2019, depenses-fiscales-plf2020, depenses-fiscales-plf2021, depenses-fiscales-plf2022, depenses-fiscales-plf2023, depenses-fiscales-plf2024, depenses-fiscales-plf2025, depenses-fiscales-plf2026, depenses-fiscales-plf2027, emplois-plr2018, emplois-plr2019, emplois-plr2020 ; ccomptes : 18 sources (certification-2016 … rbde-2025) ; dgafp : raefp-2007-2008, raefp-2010-2011, raefp-2012, raefp-2017, raefp-2018, raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
-| Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
+| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; budget : depenses-fiscales-plf2020, depenses-fiscales-plf2021, depenses-fiscales-plf2022, depenses-fiscales-plf2023, emplois-plr2018, emplois-plr2019, emplois-plr2020 ; ccomptes : 18 sources (certification-2016 … rbde-2025) ; dgafp : raefp-2007-2008, raefp-2010-2011, raefp-2012, raefp-2017, raefp-2018, raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
+| Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun pour 2024 ; 237 opérateurs de l'État ou catégories d'opérateurs, la plupart des ODAC, en 2010 et en 2018, d'après les annexes budgétaires | budget : operateurs-plf2012, operateurs-plf2019 ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
-| Administrations de sécurité sociale (S1314) | pas de liste dans la documentation des comptes nationaux de l'Insee | aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, CADES, FRR | eurostat : gov_10a_main ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3108, t3212 à t3216, t3306, t3307, t7306 ; secu : 21 sources (placss2023-annexe2 … plfss2027-annexe4) ; senat : 22 sources (pjl06-051 … tas22-018) |
+| Administrations de sécurité sociale (S1314) | pas de liste dans la documentation des comptes nationaux de l'Insee | aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, CADES, FRR | eurostat : gov_10a_main ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3108, t3212 à t3216, t3306, t3307, t7306 ; secu : placss2023-annexe2, placss2024-annexe2, plfss2023-annexe4, plfss2024-annexe4, plfss2025-annexe4, plfss2026-annexe4, plfss2027-annexe4 ; senat : 22 sources (pjl06-051 … tas22-018) |
 
 ### Collectivités territoriales et groupements
 
@@ -2415,7 +2270,7 @@ Unités retenues dans la base :
 
 ### Organismes divers d'administration centrale en 2024
 
-La liste de l'Insee, que la table des organismes reprend organisme par organisme : 701 organismes, par fonction (premier niveau de la COFOG). La base n'a les comptes d'aucun d'eux un à un.
+La liste de l'Insee, que la table des organismes reprend organisme par organisme : 701 organismes, par fonction (premier niveau de la COFOG). La base n'a les comptes d'aucun d'eux un à un pour 2024 ; 237 opérateurs de l'État ou catégories d'opérateurs, la plupart des ODAC, en 2010 et en 2018, d'après les annexes budgétaires.
 
 | Fonction | Organismes |
 |---|---|
@@ -3543,13 +3398,10 @@ Ministères dont la consommation dépasse le plafond voté de l'année, celui de
 
 ## 24. Dépenses fiscales
 
-Le coût de chaque dépense fiscale, en millions d'euros, tel que le chiffre le tome II de l'annexe « Évaluations des voies et moyens » des projets de loi de finances pour 2019 à 2027 : pour chaque dépense, l'avant-dernière année (« réalisation », une estimation), la dernière et celle du projet de loi (prévisions). Les tomes des projets de loi pour 2020 à 2023 sont lus dans les classeurs de data.economie.gouv.fr, les autres dans leur PDF (budget.gouv.fr, qui refuse les robots, ou l'Assemblée nationale) ; budget.gouv.fr ne publie plus les tomes d'avant le projet de loi pour 2019. Un tome ne chiffre pas toutes les dépenses qu'il recense (« nc », non chiffré ; « ε », moins de 0,5 million d'euros ; « - », sans effet budgétaire) : la somme ci-dessous est celle des seules dépenses chiffrées, année par année. Elle est inférieure au total que le tome annonce pour les années de prévision, où il reprend le dernier montant connu d'une dépense qu'il ne chiffre pas ; ce total annoncé n'est pas lu. Les recettes fiscales nettes du budget général sont celles que constate la loi d'approbation des comptes de l'année (section 18) : le rapport des deux n'est qu'un ordre de grandeur, une dépense fiscale n'étant pas une recette perdue à comportement inchangé, et certaines portant sur des impôts locaux ou affectés.
+Le coût de chaque dépense fiscale, en millions d'euros, tel que le chiffre le tome II de l'annexe « Évaluations des voies et moyens » des projets de loi de finances pour 2020 à 2023 : pour chaque dépense, l'avant-dernière année (« réalisation », une estimation), la dernière et celle du projet de loi (prévisions). La base n'a pas les tomes des autres projets de loi : ils ne sont publiés qu'en PDF sur budget.gouv.fr, qui refuse les robots, et le jeu de données du projet de loi de finances pour 2024 ne porte que les libellés, sans les montants. Un tome ne chiffre pas toutes les dépenses qu'il recense (« nc », non chiffré ; « ε », moins de 0,5 million d'euros ; « - », sans effet budgétaire) : la somme ci-dessous est celle des seules dépenses chiffrées, année par année. Elle est inférieure au total que le tome annonce pour les années de prévision, où il reprend le dernier montant connu d'une dépense qu'il ne chiffre pas ; ce total annoncé n'est pas dans le classeur. Les recettes fiscales nettes du budget général sont celles que constate la loi d'approbation des comptes de l'année (section 18) : le rapport des deux n'est qu'un ordre de grandeur, une dépense fiscale n'étant pas une recette perdue à comportement inchangé, et certaines portant sur des impôts locaux ou affectés.
 
 | Projet de loi de finances | Année | Statut | Dépenses chiffrées | Somme (Md€) | Recettes fiscales nettes constatées (Md€) | Somme / recettes |
 |---|---|---|---|---|---|---|
-| 2019 | 2017 | réalisation | 325 | 93,4 | 295,6 | 31,6 % |
-| 2019 | 2018 | prévision | 287 | 94,9 | 295,4 | 32,1 % |
-| 2019 | 2019 | prévision | 248 | 91,1 | 281,3 | 32,4 % |
 | 2020 | 2018 | réalisation | 317 | 99,0 | 295,4 | 33,5 % |
 | 2020 | 2019 | prévision | 278 | 91,8 | 281,3 | 32,6 % |
 | 2020 | 2020 | prévision | 258 | 79,8 | 256,0 | 31,2 % |
@@ -3562,75 +3414,53 @@ Le coût de chaque dépense fiscale, en millions d'euros, tel que le chiffre le 
 | 2023 | 2021 | réalisation | 333 | 89,6 | 295,7 | 30,3 % |
 | 2023 | 2022 | prévision | 318 | 88,3 | 323,3 | 27,3 % |
 | 2023 | 2023 | prévision | 300 | 75,9 | 322,9 | 23,5 % |
-| 2024 | 2022 | réalisation | 333 | 85,6 | 323,3 | 26,5 % |
-| 2024 | 2023 | prévision | 317 | 77,7 | 322,9 | 24,1 % |
-| 2024 | 2024 | prévision | 300 | 71,9 | 325,7 | 22,1 % |
-| 2025 | 2023 | réalisation | 334 | 82,9 | 322,9 | 25,7 % |
-| 2025 | 2024 | prévision | 330 | 80,8 | 325,7 | 24,8 % |
-| 2025 | 2025 | prévision | 311 | 76,6 | 356,4 | 21,5 % |
-| 2026 | 2024 | réalisation | 343 | 89,4 | 325,7 | 27,5 % |
-| 2026 | 2025 | prévision | 343 | 88,9 | 356,4 | 25,0 % |
-| 2026 | 2026 | prévision | 305 | 79,6 | — | — |
-| 2027 | 2025 | réalisation | 350 | 91,7 | 356,4 | 25,7 % |
-| 2027 | 2026 | prévision | 333 | 92,0 | — | — |
-| 2027 | 2027 | prévision | 310 | 83,9 | — | — |
 
 D'un tome au suivant, le chiffrage d'une même année change : la prévision devient une réalisation, et des dépenses entrent dans le chiffrage ou en sortent. Sur les seules dépenses que deux tomes successifs chiffrent tous deux pour une année, en milliards d'euros :
 
 | Année | Tome | Tome suivant | Dépenses chiffrées par les deux | Somme, premier tome | Somme, tome suivant | Révision | Dépenses révisées |
 |---|---|---|---|---|---|---|---|
-| 2018 | 2019 | 2020 | 268 | 89,2 | 91,1 | +2,0 | 170 |
-| 2019 | 2019 | 2020 | 220 | 81,6 | 83,8 | +2,2 | 164 |
 | 2019 | 2020 | 2021 | 257 | 88,5 | 88,0 | −0,5 | 167 |
 | 2020 | 2020 | 2021 | 239 | 78,1 | 75,6 | −2,5 | 175 |
 | 2020 | 2021 | 2022 | 280 | 81,3 | 83,2 | +1,9 | 187 |
 | 2021 | 2021 | 2022 | 257 | 74,0 | 76,1 | +2,1 | 182 |
 | 2021 | 2022 | 2023 | 295 | 80,7 | 80,6 | −0,1 | 197 |
 | 2022 | 2022 | 2023 | 279 | 80,4 | 80,9 | +0,6 | 205 |
-| 2022 | 2023 | 2024 | 313 | 88,3 | 80,4 | −7,9 | 208 |
-| 2023 | 2023 | 2024 | 286 | 75,9 | 66,1 | −9,9 | 217 |
-| 2023 | 2024 | 2025 | 306 | 77,7 | 78,0 | +0,4 | 202 |
-| 2024 | 2024 | 2025 | 289 | 71,8 | 73,4 | +1,6 | 215 |
-| 2024 | 2025 | 2026 | 327 | 80,7 | 86,3 | +5,7 | 204 |
-| 2025 | 2025 | 2026 | 310 | 76,6 | 82,8 | +6,2 | 238 |
-| 2025 | 2026 | 2027 | 311 | 79,9 | 80,0 | +0,1 | 208 |
-| 2026 | 2026 | 2027 | 271 | 69,8 | 71,6 | +1,7 | 214 |
 
 Par impôt, pour l'année de réalisation de chaque tome, sous le nom que le tome donne à l'impôt (la taxe intérieure de consommation sur les produits énergétiques devient « Taxes intérieures de consommation », puis « Accise sur les énergies »), en milliards d'euros :
 
-| Impôt | 2017 (tome 2019) | 2018 (tome 2020) | 2019 (tome 2021) | 2020 (tome 2022) | 2021 (tome 2023) | 2022 (tome 2024) | 2023 (tome 2025) | 2024 (tome 2026) | 2025 (tome 2027) |
-|---|---|---|---|---|---|---|---|---|---|
-| Impôt sur le revenu | 33,0 | 36,1 | 35,2 | 37,3 | 34,7 | 36,6 | 38,7 | 42,1 | 44,5 |
-| Impôt sur le revenu et impôt sur les sociétés | 25,3 | 29,5 | 29,9 | 21,5 | 21,0 | 20,9 | 14,0 | 14,1 | 13,9 |
-| Taxe sur la valeur ajoutée | 20,0 | 17,4 | 17,2 | 16,5 | 19,0 | 10,3 | 11,1 | 10,9 | 10,9 |
-| Accise sur les énergies | — | — | — | — | 8,1 | 8,0 | 6,2 | 7,9 | 9,3 |
-| Impôt sur les sociétés | 3,7 | 3,8 | 4,4 | 4,4 | 3,9 | 7,4 | 9,2 | 3,9 | 4,4 |
-| Taxes intérieures de consommation | — | — | 8,8 | 8,3 | — | — | — | — | — |
-| Taxe intérieure de consommation sur les produits énergétiques | 6,3 | 8,0 | — | — | — | — | — | — | — |
-| Droits d'enregistrement et de timbre | 0,9 | 0,9 | 0,9 | 0,9 | 0,9 | 0,9 | 1,3 | 5,5 | — |
-| Autres impôts directs | 1,3 | 0,1 | 0,1 | 0,2 | 0,2 | 0,2 | 0,2 | 0,2 | 4,5 |
-| Autres droits | 0,6 | 0,6 | 0,6 | 0,6 | 0,7 | 0,1 | 1,0 | 3,4 | 2,6 |
-| Impôts locaux | 2,3 | 2,5 | 2,8 | 3,1 | 1,0 | 1,1 | 1,2 | 1,4 | 1,4 |
-| Ensemble | 93,4 | 99,0 | 99,9 | 92,7 | 89,6 | 85,6 | 82,9 | 89,4 | 91,7 |
+| Impôt | 2018 (tome 2020) | 2019 (tome 2021) | 2020 (tome 2022) | 2021 (tome 2023) |
+|---|---|---|---|---|
+| Impôt sur le revenu | 36,1 | 35,2 | 37,3 | 34,7 |
+| Impôt sur le revenu et impôt sur les sociétés | 29,5 | 29,9 | 21,5 | 21,0 |
+| Taxe sur la valeur ajoutée | 17,4 | 17,2 | 16,5 | 19,0 |
+| Taxes intérieures de consommation | — | 8,8 | 8,3 | — |
+| Accise sur les énergies | — | — | — | 8,1 |
+| Taxe intérieure de consommation sur les produits énergétiques | 8,0 | — | — | — |
+| Impôt sur les sociétés | 3,8 | 4,4 | 4,4 | 3,9 |
+| Impôts locaux | 2,5 | 2,8 | 3,1 | 1,0 |
+| Droits d'enregistrement et de timbre | 0,9 | 0,9 | 0,9 | 0,9 |
+| Autres droits | 0,6 | 0,6 | 0,6 | 0,7 |
+| Autres impôts directs | 0,1 | 0,1 | 0,2 | 0,2 |
+| Ensemble | 99,0 | 99,9 | 92,7 | 89,6 |
 
-Les dix dépenses fiscales les plus coûteuses en 2025, d'après le tome du projet de loi de finances pour 2027 : elles font 41,1 % de la somme des dépenses chiffrées.
+Les dix dépenses fiscales les plus coûteuses en 2021, d'après le tome du projet de loi de finances pour 2023 : elles font 44,4 % de la somme des dépenses chiffrées.
 
 | Numéro | Dépense fiscale | Coût (M€) |
 |---|---|---|
-| 200302 | Crédit d'impôt en faveur de la recherche | 7 273 |
-| 110246 | Crédit d'impôt au titre de l'emploi d'un salarié à domicile (jusqu'en 2017: pour les contribuables exerçant une activité professionnelle ou demandeurs d'emploi depuis au moins trois mois) | 6 879 |
-| 120401 | Abattement de 10 % sur le montant des pensions (y compris les pensions alimentaires) et des retraites | 5 347 |
-| 520110 | Exonération partielle, sous certaines conditions, de droits de mutation à titre gratuit lors de la transmission d'entreprises exploitées sous la forme individuelle ou détenues sous forme sociale | 3 800 |
-| 120108 | Exonération des sommes versées au titre de la participation, de l'intéressement et de l'abondement, volontaire ou par défaut, aux plans d'épargne salariale | 3 077 |
-| 730602 | Taux de 10 % applicable aux services de restauration y compris ceux fournis dans les cantines d’entreprises et d’administrations | 2 335 |
-| 800229 | Tarif réduit (remboursement) pour le gazole non routier, le fioul lourd et les gaz de pétrole liquéfié utilisés pour les travaux agricoles et forestiers | 2 288 |
-| 730502 | Taux de 10 % pour les travaux légers (autre que de rénovation énergétique) sur un logement qui n’est pas neuf | 2 250 |
-| 120146 | Exonération de l’impôt sur le revenu dans une limite annuelle égale à 5 000 € des rémunérations versées à raison des heures supplémentaires et complémentaires réalisées à compter du 1er janvier 2019 | 2 212 |
-| 110201 | Réduction d'impôt au titre des dons | 2 171 |
+| 210324 | Crédit d'impôt en faveur de la compétitivité et de l'emploi | 6 920 |
+| 200302 | Crédit d'impôt en faveur de la recherche | 6 383 |
+| 110246 | Crédit d'impôt au titre de l'emploi d'un salarié à domicile (jusqu'en 2017: pour les contribuables exerçant une activité professionnelle ou demandeurs d'emploi depuis au moins trois mois) | 4 734 |
+| 120401 | Abattement de 10 % sur le montant des pensions (y compris les pensions alimentaires) et des retraites | 4 339 |
+| 730213 | Taux de 10 % pour les travaux d’amélioration, de transformation, d’aménagement et d’entretien, autres que les travaux de rénovation énergétiques soumis au taux de 5,5 % en application de l’article 278-0 bis A, portant sur les logements achevés depuis plus de deux ans | 3 990 |
+| 730221 | Taux de 10% applicable aux ventes à consommer sur place, à l'exception des ventes de boissons alcooliques | 3 605 |
+| 710103 | Régime des départements de la Guadeloupe, de la Martinique et de la Réunion. Fixation des taux à : - 8,5 % pour le taux normal ; - 2,1 % pour le taux réduit | 3 100 |
+| 220107 | Exonération des aides versées par le fonds de solidarité institué par l'ordonnance n° 2020-317 du 25 mars 2020, d’impôt sur le revenu, d’impôt sur les sociétés et de toutes les contributions et cotisations sociales d'origine légale ou conventionnelle | 2 560 |
+| 120146 | Exonération de l’impôt sur le revenu dans une limite annuelle égale à 5 000 € des rémunérations versées à raison des heures supplémentaires et complémentaires réalisées à compter du 1er janvier 2019 | 2 091 |
+| 120108 | Exonération des sommes versées au titre de la participation, de l'intéressement et de l'abondement, volontaire ou par défaut, aux plans d'épargne salariale | 2 060 |
 
 ## 25. Niches sociales
 
-Le coût des mesures de réduction et d'exonération de cotisations et de contributions de sécurité sociale, d'après les classeurs de l'annexe 4 des projets de loi de financement de la sécurité sociale (PLFSS) et de l'annexe 2 des projets de loi d'approbation des comptes (PLACSS) : PLFSS 2023, PLACSS 2023, PLFSS 2024, PLACSS 2024, PLFSS 2025, PLFSS 2026, PLFSS 2027 ; les annexes 5 des PLFSS pour 2008 à 2022, publiées en PDF, sont lues branche par branche (voir plus bas) ; le classeur de l'annexe 2 du PLACSS de 2025 ne donne pas le coût des mesures. Les allègements généraux et les exonérations ciblées sont en millions d'euros, en droits constatés, sur le champ des régimes obligatoires de base ; les exemptions d'assiette en milliards d'euros.
+Le coût des mesures de réduction et d'exonération de cotisations et de contributions de sécurité sociale, d'après les classeurs de l'annexe 4 des projets de loi de financement de la sécurité sociale (PLFSS) et de l'annexe 2 des projets de loi d'approbation des comptes (PLACSS) : PLFSS 2023, PLACSS 2023, PLFSS 2024, PLACSS 2024, PLFSS 2025, PLFSS 2026, PLFSS 2027. Les annexes 5 des PLFSS pour 2007 à 2022 ne sont publiées qu'en PDF et ne sont pas lues ; le classeur de l'annexe 2 du PLACSS de 2025 ne donne pas le coût des mesures. Les allègements généraux et les exonérations ciblées sont en millions d'euros, en droits constatés, sur le champ des régimes obligatoires de base ; les exemptions d'assiette en milliards d'euros.
 
 Dans chaque tableau des coûts, une ligne de titre porte la somme des mesures rangées sous elle (les lignes « Dont… » précisent une mesure et ne s'y ajoutent pas), le titre des exonérations ciblées compensées celle des missions du budget de l'État qui le suivent, et le total, quand le tableau en a un, celle des trois rubriques. Un titre est comparé à sa somme à la demi-unité près de chaque montant en jeu.
 
@@ -3727,25 +3557,6 @@ Une édition contre l'autre : le coût de chaque rubrique pour une année, tel q
 | 2030 | Exonérations ciblées compensées | — | — | — | — | — | — | 9,3 p |
 | 2030 | Exonérations non compensées | — | — | — | — | — | — | 0,0 p |
 | 2030 | Total | — | — | — | — | — | — | 62,5 p |
-
-Annexes 5 des PLFSS pour 2008 à 2022, en PDF (outils/importer_niches_sociales_pdf.py) : leurs tableaux donnent le coût de chaque mesure branche par branche, tous régimes de base confondus, et rangent leurs titres et sous-totaux tantôt avant, tantôt après les mesures qu'ils somment ; les sommes n'en sont pas encore comparées ici. Nombre de chiffres lus, par édition et par branche :
-
-| Édition | Maladie | AT-MP | Vieillesse | Famille | Autonomie |
-|---|---|---|---|---|---|
-| PLFSS 2008 | 184 | 130 | 177 | 179 | — |
-| PLFSS 2010 | 184 | 130 | 172 | 178 | — |
-| PLFSS 2011 | 194 | 107 | 185 | 188 | — |
-| PLFSS 2012 | 180 | 88 | 163 | 168 | — |
-| PLFSS 2013 | 175 | 85 | 160 | 166 | — |
-| PLFSS 2014 | 157 | 47 | 135 | 137 | — |
-| PLFSS 2015 | 159 | 48 | 149 | 152 | — |
-| PLFSS 2016 | 144 | 45 | 135 | 144 | — |
-| PLFSS 2017 | 127 | 46 | 127 | 131 | — |
-| PLFSS 2018 | 156 | 56 | 161 | 164 | — |
-| PLFSS 2019 | 181 | 154 | 155 | 176 | — |
-| PLFSS 2020 | 155 | 54 | 140 | 141 | — |
-| PLFSS 2021 | 165 | 60 | 138 | 140 | 12 |
-| PLFSS 2022 | 159 | 63 | 142 | 144 | 48 |
 
 Exemptions d'assiette : le total de chaque tableau est comparé à la somme de ses groupes (les lignes numérotées en chiffres romains), au dixième ou au centième près de chaque montant selon l'édition ; puis, pour chaque année, l'assiette exemptée et les cotisations équivalentes nettes au total, en milliards d'euros, d'après chaque édition (« p » : prévision).
 
