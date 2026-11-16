@@ -16,6 +16,13 @@ annexes », « Total » ; son titre et ses en-têtes doivent nommer l'année, et
 case vide ou « / » ne donne pas de chiffre), sinon l'import s'arrête. Ses sommes ne sont pas vérifiées ici : le rapport
 de cohérence les refait.
 
+Les éditions 2017 et 2018, que garde l'archive de l'ancien portail de la fonction publique, n'ont pas d'archive zip :
+la copie est le classeur xls de leur fiche thématique 1.4, dont le tableau 1.4-7 (feuille « Figure 1.4-7 ») donne de
+même la consommation des emplois de l'année précédente, colonne E, présentée dans le même ordre (« Total budget
+général » pour « Total Budget général »), et son écart, colonne F, au plafond de la loi de finances initiale de l'année
+corrigé des transferts de gestion, « ( c ) - [(a)+(b)] », et non au plafond rectifié : ses concepts sont
+LOLF.<…>_EMPLOIS_ECART_PLAFOND_LFI. Les en-têtes de ses colonnes doivent nommer l'année.
+
 L'édition 2026 donne aussi, dans le classeur de l'ensemble de la fonction publique (« …donnees_comp_FP.xlsx »), les
 effectifs physiques au 31 décembre, en milliers de personnes : de 1996 à 2024, hors bénéficiaires de contrats aidés,
 pour l'ensemble, chaque versant et leurs parties (figure 5) ; de 2011 à 2024, avec les contrats aidés, pour l'ensemble
@@ -35,8 +42,8 @@ import re
 import sys
 import zipfile
 
-from commun import (BASE, aujourdhui, champs, champs_chiffres, ecrire, fusionner, identifiant, lire, lire_xlsx_dans_zip,
-                    nombre, ouvrir_copie, table_des_chiffres)
+from commun import (BASE, aujourdhui, champs, champs_chiffres, ecrire, feuilles_xls, fusionner, identifiant, lire,
+                    lire_xls, lire_xlsx_dans_zip, nombre, ouvrir_copie, table_des_chiffres)
 from importer_lois_resultats import code_lolf
 
 CLASSEUR_FPE = re.compile(r"(?:.*/)?[^/~]*donnees_comp_FPE\.xlsx", re.I)
@@ -48,6 +55,15 @@ AVEC_EFFECTIFS = {"dgafp.raefp-2026"}
 CONCEPTS_EMPLOIS = {"BG": ("LOLF.BG_EMPLOIS_CONSOMMES", "LOLF.BG_EMPLOIS_ECART_PLAFOND"),
                     "BA": ("LOLF.BA_EMPLOIS_CONSOMMES", "LOLF.BA_EMPLOIS_ECART_PLAFOND"),
                     "ETAT": ("LOLF.EMPLOIS_CONSOMMES", "LOLF.EMPLOIS_ECART_PLAFOND")}
+# Éditions 2017 et 2018 : le classeur xls de la fiche thématique 1.4 (« Fonction publique de l'État : périmètres de
+# décompte des effectifs dans les ministères et emplois en loi de finances »), tableau 1.4-7, dont l'écart se compare au
+# plafond de la loi de finances initiale, et non de la loi rectificative, corrigé des transferts de gestion.
+ANCIENNES = {"dgafp.raefp-2017", "dgafp.raefp-2018"}
+FEUILLE_ANCIENNE = "Figure 1.4-7"
+TITRE_ANCIEN = "Tableau 1.4-7: Consommation des emplois par ministère"
+CONCEPTS_EMPLOIS_ANCIENS = {"BG": ("LOLF.BG_EMPLOIS_CONSOMMES", "LOLF.BG_EMPLOIS_ECART_PLAFOND_LFI"),
+                            "BA": ("LOLF.BA_EMPLOIS_CONSOMMES", "LOLF.BA_EMPLOIS_ECART_PLAFOND_LFI"),
+                            "ETAT": ("LOLF.EMPLOIS_CONSOMMES", "LOLF.EMPLOIS_ECART_PLAFOND_LFI")}
 TOTAUX = {"Total Budget général": ("BG", "BA"), "Total budgets annexes": ("BA", "ETAT"), "Total": ("ETAT", None)}
 # Une case vide, ou « / », ne donne pas de chiffre : la Transformation et la fonction publiques en 2021 (consommation
 # « / »), la Cohésion des territoires et les relations avec les collectivités territoriales en 2023 (consommation vide,
@@ -115,20 +131,55 @@ def consommation(fichier, annee, fonctions):
     for cellule, texte in attendus.items():
         if propre(c.get(cellule)) != texte:
             sys.exit(f"{fichier['id']}, {nom}, figure 4, {cellule} : « {propre(c.get(cellule))} », attendu « {texte} »")
+    yield from lignes_emplois(fichier, f"classeur={nom};feuille=Figure 4", f"{nom}, figure 4", c, annee, "B", "C",
+                              CONCEPTS_EMPLOIS, fonctions)
+
+
+def consommation_ancienne(fichier, annee, fonctions):
+    """Les chiffres du tableau 1.4-7 du classeur de la fiche thématique 1.4 des éditions 2017 et 2018 : consommation
+    des emplois et écart au plafond de la loi de finances initiale corrigé des transferts de gestion, par ministère, par
+    budget annexe et au total."""
+    feuille = next((f for f in feuilles_xls(BASE / fichier["chemin"]) if f.strip() == FEUILLE_ANCIENNE), None)
+    if feuille is None:
+        sys.exit(f"{fichier['id']} : pas de feuille « {FEUILLE_ANCIENNE} »")
+    _, c = lire_xls(BASE / fichier["chemin"], feuille)
+    titre = propre(c.get("A1"))
+    if titre not in (TITRE_ANCIEN, f"{TITRE_ANCIEN} en {annee}"):
+        sys.exit(f"{fichier['id']}, {FEUILLE_ANCIENNE}, A1 : « {titre} », attendu « {TITRE_ANCIEN} [en {annee}] »")
+    attendus = {"A2": "Ministères", "B2": f"Consommation d'ETPT en {annee - 1}",
+                "C2": f"Plafond d'autorisation d'emplois LFI {annee} (a)",
+                "D2": f"Transferts en cours de gestion {annee} (b)",
+                "E2": f"Consommation des emplois {annee} en ETPT (c)",
+                "F2": f"Écart constaté entre consommation {annee} et plafond LFI {annee} corrigé des transferts en "
+                      f"cours de gestion (en ETPT) ( c ) - [(a)+(b)]"}
+    for cellule, texte in attendus.items():
+        if propre(c.get(cellule)) != texte:
+            sys.exit(f"{fichier['id']}, {FEUILLE_ANCIENNE}, {cellule} : « {propre(c.get(cellule))} », attendu "
+                     f"« {texte} »")
+    # Le total du budget général y est écrit « Total budget général ».
+    c = {k: ("Total Budget général" if k[0] == "A" and propre(v) == "Total budget général" else v)
+         for k, v in c.items()}
+    yield from lignes_emplois(fichier, f"feuille={feuille}", FEUILLE_ANCIENNE, c, annee, "E", "F",
+                              CONCEPTS_EMPLOIS_ANCIENS, fonctions)
+
+
+def lignes_emplois(fichier, lieu, nom, c, annee, colonne_conso, colonne_ecart, concepts, fonctions):
+    """Les chiffres d'un tableau de la consommation des emplois, dont la première ligne est la ligne 3 : ses
+    ministères, « Total Budget général », ses budgets annexes, « Total budgets annexes », « Total », puis sa source.
+    `lieu` commence l'emplacement des chiffres, `nom` désigne le tableau dans un message d'erreur."""
     partie, r = "BG", 3
     while partie is not None:
-        libelle, conso, ecart = propre(c.get(f"A{r}")), c.get(f"B{r}"), c.get(f"C{r}")
+        libelle, conso, ecart = propre(c.get(f"A{r}")), c.get(f"{colonne_conso}{r}"), c.get(f"{colonne_ecart}{r}")
         if not libelle or any(not isinstance(v, float) and propre(v) not in SANS_CHIFFRE for v in (conso, ecart)) \
                 or not any(isinstance(v, float) for v in (conso, ecart)):
-            sys.exit(f"{fichier['id']}, {nom}, figure 4, ligne {r} : « {libelle} », « {propre(conso)} », "
+            sys.exit(f"{fichier['id']}, {nom}, ligne {r} : « {libelle} », « {propre(conso)} », "
                      f"« {propre(ecart)} » : une ligne sans libellé, ou sans nombre, avant la ligne « Total »")
         if libelle in TOTAUX:
             if TOTAUX[libelle][0] != partie:
-                sys.exit(f"{fichier['id']}, {nom}, figure 4, ligne {r} : « {libelle} » à sa place inattendue")
+                sys.exit(f"{fichier['id']}, {nom}, ligne {r} : « {libelle} » à sa place inattendue")
             fonction, suivante = "", TOTAUX[libelle][1]
         elif partie == "ETAT":
-            sys.exit(f"{fichier['id']}, {nom}, figure 4, ligne {r} : « {libelle} » entre « Total budgets annexes » et "
-                     f"« Total »")
+            sys.exit(f"{fichier['id']}, {nom}, ligne {r} : « {libelle} » entre « Total budgets annexes » et « Total »")
         elif partie == "BG":
             fonction, suivante = f"LOLF.EMPLOIS.{code_lolf(libelle)}", partie
             if fonction not in fonctions:
@@ -136,17 +187,17 @@ def consommation(fichier, annee, fonctions):
         else:
             fonction, suivante = f"LOLF.{code_lolf(libelle)}", partie
             if fonction not in fonctions:
-                sys.exit(f"{fichier['id']}, {nom}, figure 4, ligne {r} : budget annexe inconnu « {libelle} »")
-        for colonne, valeur, concept_ in (("B", conso, CONCEPTS_EMPLOIS[partie][0]),
-                                          ("C", ecart, CONCEPTS_EMPLOIS[partie][1])):
+                sys.exit(f"{fichier['id']}, {nom}, ligne {r} : budget annexe inconnu « {libelle} »")
+        for colonne, valeur, concept_ in ((colonne_conso, conso, concepts[partie][0]),
+                                          (colonne_ecart, ecart, concepts[partie][1])):
             if not isinstance(valeur, float):
                 continue
-            yield chiffre(fichier, f"classeur={nom};feuille=Figure 4;cellule={colonne}{r}", "ETAT_LF", concept_,
-                          fonction, "ETPT", annee, valeur, "definitif", "non_consolide", precision((conso, ecart)))
+            yield chiffre(fichier, f"{lieu};cellule={colonne}{r}", "ETAT_LF", concept_, fonction, "ETPT", annee, valeur,
+                          "definitif", "non_consolide", precision((conso, ecart)))
         partie, r = suivante, r + 1
     if not propre(c.get(f"A{r}")).startswith("Source"):
-        sys.exit(f"{fichier['id']}, {nom}, figure 4, ligne {r} : « {propre(c.get(f'A{r}'))} » après la ligne "
-                 f"« Total », où la source était attendue")
+        sys.exit(f"{fichier['id']}, {nom}, ligne {r} : « {propre(c.get(f'A{r}'))} » après la ligne « Total », où la "
+                 f"source était attendue")
 
 
 def ligne_a(cellule):
@@ -235,7 +286,14 @@ def effectifs(fichier):
 def lignes_du_fichier(fichier, fonctions):
     """Les chiffres d'une archive d'une édition."""
     edition = EDITION.fullmatch(fichier["source_id"])
-    if edition is None or not fichier["chemin"].endswith(".zip"):
+    if edition is None:
+        sys.exit(f"{fichier['id']} : copie qui n'est pas d'une édition du rapport annuel")
+    if fichier["source_id"] in ANCIENNES:
+        if not fichier["chemin"].endswith(".xls"):
+            sys.exit(f"{fichier['id']} : copie qui n'est pas le classeur xls de la fiche thématique 1.4")
+        yield from consommation_ancienne(fichier, int(edition.group(1)) - 1, fonctions)
+        return
+    if not fichier["chemin"].endswith(".zip"):
         sys.exit(f"{fichier['id']} : copie qui n'est pas l'archive zip d'une édition du rapport annuel")
     yield from consommation(fichier, int(edition.group(1)) - 1, fonctions)
     if fichier["source_id"] in AVEC_EFFECTIFS:
