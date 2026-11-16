@@ -69,6 +69,8 @@
     {"name": "chiffres-budget-emplois-plr2018", "path": "tables/chiffres/budget/emplois-plr2018.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-budget-emplois-plr2019", "path": "tables/chiffres/budget/emplois-plr2019.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-budget-emplois-plr2020", "path": "tables/chiffres/budget/emplois-plr2020.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-budget-operateurs-plf2012", "path": "tables/chiffres/budget/operateurs-plf2012.csv", "schema": "schemas/chiffres.json"},
+    {"name": "chiffres-budget-operateurs-plf2019", "path": "tables/chiffres/budget/operateurs-plf2019.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-ccomptes-certification-2016", "path": "tables/chiffres/ccomptes/certification-2016.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-ccomptes-certification-2017", "path": "tables/chiffres/ccomptes/certification-2017.csv", "schema": "schemas/chiffres.json"},
     {"name": "chiffres-ccomptes-certification-2018", "path": "tables/chiffres/ccomptes/certification-2018.csv", "schema": "schemas/chiffres.json"},
