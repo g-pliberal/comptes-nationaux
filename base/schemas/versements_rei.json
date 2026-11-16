@@ -1,0 +1,10 @@
+{
+  "description": "Natures des versements entre l'État et les collectivités que le fichier de recensement des éléments d'imposition (REI) de la DGFiP donne collectivité par collectivité, sous le code que leur donne la base : allocations compensatrices, dotation de compensation de la réforme de la taxe professionnelle, fonds national de garantie individuelle des ressources, fractions de TVA, effet du coefficient correcteur.",
+  "fields": [
+    {"name": "versement", "type": "string", "constraints": {"required": true, "pattern": "[A-Z][A-Z_]*"}},
+    {"name": "libelle", "type": "string", "constraints": {"required": true}},
+    {"name": "payeur", "type": "string", "description": "Qui verse le montant : l'État, le FNGIR (que financent les prélèvements sur d'autres collectivités), ou la collectivité elle-même pour un prélèvement.", "constraints": {"required": true, "enum": ["État", "FNGIR", "collectivité"]}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["versement"]
+}

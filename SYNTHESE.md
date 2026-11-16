@@ -254,13 +254,13 @@ Source : Rapport annuel sur l'état de la fonction publique, édition 2026 : don
 
 ## Ce que contient la base
 
-296 951 chiffres enregistrés un par un, chacun avec sa fiche d'identité et l'endroit exact où le relire dans la copie archivée de sa source :
+301 558 chiffres enregistrés un par un, chacun avec sa fiche d'identité et l'endroit exact où le relire dans la copie archivée de sa source :
 
 | Producteur | Publications | Chiffres | Années couvertes |
 |---|---:|---:|---|
 | Insee | 42 | 169 302 | 1949-2026 |
 | Sénat (textes de loi) | 71 | 40 898 | 2004-2025 |
-| DGCL | 3 | 24 018 | 2020-2026 |
+| DGCL | 3 | 28 625 | 2020-2026 |
 | Assemblée nationale (textes de loi) | 29 | 21 839 | 2006-2026 |
 | DREES | 1 | 16 844 | 1959-2024 |
 | OFGL | 4 | 12 880 | 2017-2025 |
