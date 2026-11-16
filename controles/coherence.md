@@ -129,6 +129,20 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | ofgl.annexe-2d | Rapport de l'Observatoire des finances et de la gestion publique locales, annexe 2D : niveaux consolidés, bloc communal et ensemble des collectivités locales | 2026-04-29 | 566 |
 | secu.placss2023-annexe2 | Annexe 2 du projet de loi d'approbation des comptes de la sécurité sociale de 2023 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2024-06-10 | 288 |
 | secu.placss2024-annexe2 | Annexe 2 du projet de loi d'approbation des comptes de la sécurité sociale de 2024 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2025-06-13 | 353 |
+| secu.plfss2008-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2008 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2007-10-12 | 670 |
+| secu.plfss2010-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2010 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2009-10-13 | 664 |
+| secu.plfss2011-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2011 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2010-10-13 | 674 |
+| secu.plfss2012-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2012 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2011-10-14 | 599 |
+| secu.plfss2013-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2013 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2012-10-12 | 586 |
+| secu.plfss2014-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2014 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2013-10-11 | 476 |
+| secu.plfss2015-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2015 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2014-10-13 | 508 |
+| secu.plfss2016-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2016 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2015-10-17 | 468 |
+| secu.plfss2017-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2017 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2016-11-08 | 431 |
+| secu.plfss2018-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2018 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2017-10-09 | 537 |
+| secu.plfss2019-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2019 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2018-10-12 | 666 |
+| secu.plfss2020-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2020 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2019-10-10 | 490 |
+| secu.plfss2021-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2021 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2020-10-01 | 515 |
+| secu.plfss2022-annexe5 | Annexe 5 du projet de loi de financement de la sécurité sociale pour 2022 : présentation des mesures d'exonération de cotisations et contributions et de leurs mesures de compensation | 2021-10-12 | 556 |
 | secu.plfss2023-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2023 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2022-11-10 | 375 |
 | secu.plfss2024-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2024 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2023-10-19 | 414 |
 | secu.plfss2025-annexe4 | Annexe 4 du projet de loi de financement de la sécurité sociale pour 2025 : données chiffrées de la présentation des mesures de réduction et d'exonération de cotisations et de contributions | 2024-11-20 | 399 |
@@ -720,6 +734,30 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | secu.placss2024-annexe2 | secu.plfss2025-annexe4 | 270 | 51 | 3 | −26,0 M€ en 2023 | −974,3 M€ en 2024 |
 | secu.placss2024-annexe2 | secu.plfss2026-annexe4 | 152 | 51 | 22 | +114,0 M€ en 2024 | −2 600,0 M€ en 2023 |
 | secu.placss2024-annexe2 | secu.plfss2027-annexe4 | 54 | 25 | 0 | aucun | +1 400,0 M€ en 2024 |
+| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | 44 | 36 | 0 | aucun | −2 245,0 M€ en 2008 |
+| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | 311 | 217 | 0 | aucun | −520,0 M€ en 2010 |
+| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | 70 | 57 | 0 | aucun | +9 035,0 M€ en 2010 |
+| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | 151 | 90 | 0 | aucun | +9 652,0 M€ en 2011 |
+| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | 125 | 88 | 0 | aucun | +9 601,9 M€ en 2011 |
+| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | 167 | 114 | 0 | aucun | +2 594,8 M€ en 2012 |
+| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | 92 | 60 | 0 | aucun | +2 589,0 M€ en 2012 |
+| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | 167 | 126 | 0 | aucun | −216,7 M€ en 2013 |
+| secu.plfss2013-annexe5 | secu.plfss2015-annexe5 | 50 | 34 | 0 | aucun | −24,3 M€ en 2013 |
+| secu.plfss2014-annexe5 | secu.plfss2015-annexe5 | 144 | 39 | 0 | aucun | +72,0 M€ en 2013 |
+| secu.plfss2014-annexe5 | secu.plfss2016-annexe5 | 56 | 29 | 0 | aucun | +83,0 M€ en 2014 |
+| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | 230 | 131 | 0 | aucun | −4 498,0 M€ en 2015 |
+| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | 82 | 58 | 0 | aucun | −8 395,0 M€ en 2015 |
+| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | 226 | 144 | 0 | aucun | −8 111,0 M€ en 2015 |
+| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | 89 | 69 | 0 | aucun | +966,8 M€ en 2016 |
+| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | 200 | 146 | 0 | aucun | +924,8 M€ en 2016 |
+| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | 74 | 60 | 0 | aucun | +1 456,3 M€ en 2017 |
+| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | 210 | 145 | 0 | aucun | +2 694,0 M€ en 2018 |
+| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | 66 | 62 | 0 | aucun | +1 499,5 M€ en 2018 |
+| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | 229 | 188 | 0 | aucun | −740,1 M€ en 2019 |
+| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | 109 | 103 | 0 | aucun | −866,0 M€ en 2019 |
+| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | 274 | 265 | 0 | aucun | +1 379,7 M€ en 2020 |
+| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | 124 | 123 | 0 | aucun | +1 254,8 M€ en 2020 |
+| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | 319 | 306 | 0 | aucun | +775,0 M€ en 2021 |
 | secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | 271 | 191 | 33 | −4 400,0 M€ en 2021 | −8 950,0 M€ en 2023 |
 | secu.plfss2023-annexe4 | secu.plfss2025-annexe4 | 153 | 115 | 0 | aucun | −9 000,0 M€ en 2023 |
 | secu.plfss2023-annexe4 | secu.plfss2026-annexe4 | 51 | 40 | 0 | aucun | −11 900,0 M€ en 2023 |
@@ -1029,6 +1067,100 @@ Détail des grandeurs en écart :
 | secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 12 groupes | 2024 | aucune | +1 400,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_AVANTAGES_ACCORDES_PAR_LES_COMITES_D_ENTREPRISES) |
 | secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 6 groupes | 2024 | aucune | +900,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_I_PARTICIPATION_FINANCIERE_ET_ACTIONNARIAT_SALARIE) |
 | secu.placss2024-annexe2 | secu.plfss2027-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 7 groupes | 2024 | aucune | −700,0 M€ en 2024 (COMPTES_SECU.EXEMPTION_III_AIDES_DIRECTES_CONSENTIES_AUX_SALARIES) |
+| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2008 | aucune | −135,0 M€ en 2008 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
+| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 9 groupes | 2008 | aucune | −140,0 M€ en 2008 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
+| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 15 groupes | 2008 | aucune | −421,0 M€ en 2008 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
+| secu.plfss2008-annexe5 | secu.plfss2010-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 8 groupes | 2008 | aucune | −2 245,0 M€ en 2008 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
+| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 25 groupes | 2009 et 2010 | aucune | +65,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_A_VOCATION_GENERALE) |
+| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 32 groupes | 2009 et 2010 | aucune | −108,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_CIBLEES) |
+| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 36 groupes | 2009 et 2010 | aucune | −207,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_CIBLEES) |
+| secu.plfss2010-annexe5 | secu.plfss2011-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 35 groupes | 2009 et 2010 | aucune | −520,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_EXONERATIONS_COMPENSEES_ET_NON_COMPENSEES) |
+| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 7 groupes | 2010 | aucune | +1 951,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 14 groupes | 2010 | aucune | +3 914,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 21 groupes | 2010 | aucune | +9 035,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2010-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 15 groupes | 2010 | aucune | +6 469,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2010 et 2011 | aucune | +1 917,0 M€ en 2010 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 14 groupes | 2010 et 2011 | aucune | +4 179,0 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 18 groupes | 2010 et 2011 | aucune | +9 652,0 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2011-annexe5 | secu.plfss2012-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 15 groupes | 2010 et 2011 | aucune | +7 072,0 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 8 groupes | 2011 | aucune | +193,3 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 26 groupes | 2011 | aucune | +4 150,8 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 28 groupes | 2011 | aucune | +9 601,9 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2011-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 26 groupes | 2011 | aucune | +7 109,9 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 9 groupes | 2011 et 2012 | aucune | −75,7 M€ en 2011 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 21 groupes | 2011 et 2012 | aucune | +2 594,8 M€ en 2012 (COMPTES_SECU.EXO_EXONERATIONS_DES_HEURES_SUPPLEMENTAIRES_ET_COMPLEMENTAIRES) |
+| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 20 groupes | 2011 et 2012 | aucune | −301,5 M€ en 2012 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_REDUCTION_FILLON) |
+| secu.plfss2012-annexe5 | secu.plfss2013-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 19 groupes | 2011 et 2012 | aucune | +547,5 M€ en 2012 (COMPTES_SECU.EXO_EXONERATIONS_DES_HEURES_SUPPLEMENTAIRES_ET_COMPLEMENTAIRES) |
+| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2012 | aucune | −68,0 M€ en 2012 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 20 groupes | 2012 | aucune | +2 589,0 M€ en 2012 (COMPTES_SECU.EXO_EXONERATIONS_DES_HEURES_SUPPLEMENTAIRES_ET_COMPLEMENTAIRES) |
+| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 19 groupes | 2012 | aucune | −252,1 M€ en 2012 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_REDUCTION_FILLON) |
+| secu.plfss2012-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 17 groupes | 2012 | aucune | +557,0 M€ en 2012 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 6 groupes | 2012 et 2013 | aucune | +27,8 M€ en 2012 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_REDUCTION_FILLON) |
+| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 21 groupes | 2012 et 2013 | aucune | +53,2 M€ en 2012 (COMPTES_SECU.EXO_SOUS_TOTAL_EXONERATIONS_CIBLEES_SUR_DES_PUBLICS_PARTICULIERS) |
+| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 29 groupes | 2012 et 2013 | aucune | −216,7 M€ en 2013 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2013-annexe5 | secu.plfss2014-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 18 groupes | 2012 et 2013 | aucune | −191,5 M€ en 2013 (COMPTES_SECU.EXO_TOTAL_MESURES_COMPENSEES) |
+| secu.plfss2013-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 11 groupes | 2013 | aucune | −4,6 M€ en 2013 (COMPTES_SECU.EXO_JEUNES_ENTREPRISES_INNOVANTES) |
+| secu.plfss2013-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 14 groupes | 2013 | aucune | −24,3 M€ en 2013 (COMPTES_SECU.EXO_CONTRAT_DE_SECURISATION_PROFESSIONNELLE) |
+| secu.plfss2013-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 9 groupes | 2013 | aucune | +7,9 M€ en 2013 (COMPTES_SECU.EXO_ZONES_DE_RESTRUCTURATION_DE_LA_DEFENSE_ZRD) |
+| secu.plfss2014-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 8 groupes | 2013 et 2014 | aucune | +23,0 M€ en 2013 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
+| secu.plfss2014-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 9 groupes | 2013 et 2014 | aucune | +58,0 M€ en 2013 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
+| secu.plfss2014-annexe5 | secu.plfss2015-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 8 groupes | 2013 et 2014 | aucune | +72,0 M€ en 2013 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
+| secu.plfss2014-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 9 groupes | 2014 | aucune | +35,0 M€ en 2014 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
+| secu.plfss2014-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 11 groupes | 2014 | aucune | +78,0 M€ en 2014 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
+| secu.plfss2014-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 9 groupes | 2014 | aucune | +83,0 M€ en 2014 (COMPTES_SECU.EXO_CONTRAT_D_APPRENTISSAGE) |
+| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2014 et 2015 | aucune | +921,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 21 groupes | 2014 et 2015 | aucune | −4 498,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 25 groupes | 2014 et 2015 | aucune | +631,0 M€ en 2015 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_GEOPGRAPHIQUES) |
+| secu.plfss2015-annexe5 | secu.plfss2016-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 24 groupes | 2014 et 2015 | aucune | +532,0 M€ en 2015 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_GEOPGRAPHIQUES) |
+| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX, COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES et COMPTES_SECU.EXO_MESURES_CIBLEES_COMPENSEES | 2015 | aucune | +921,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 17 groupes | 2015 | aucune | −4 685,8 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 19 groupes | 2015 | aucune | −226,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2015-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 19 groupes | 2015 | aucune | −8 395,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 7 groupes | 2015 et 2016 | aucune | −28,0 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES) |
+| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 28 groupes | 2015 et 2016 | aucune | −235,0 M€ en 2016 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE) |
+| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 29 groupes | 2015 et 2016 | aucune | +170,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2016-annexe5 | secu.plfss2017-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 28 groupes | 2015 et 2016 | aucune | −8 111,0 M€ en 2015 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2016 | aucune | −26,1 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_GEOGRAPHIQUES) |
+| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 20 groupes | 2016 | aucune | +318,5 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
+| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 23 groupes | 2016 | aucune | +966,8 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
+| secu.plfss2016-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 22 groupes | 2016 | aucune | +825,2 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
+| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 5 groupes | 2016 et 2017 | aucune | −30,0 M€ en 2017 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_GEOGRAPHIQUES) |
+| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 31 groupes | 2016 et 2017 | aucune | +307,6 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
+| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 29 groupes | 2016 et 2017 | aucune | +924,8 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
+| secu.plfss2017-annexe5 | secu.plfss2018-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 30 groupes | 2016 et 2017 | aucune | +804,2 M€ en 2016 (COMPTES_SECU.EXO_MESURES_CIBLEES_SUR_CERTAINS_SECTEURS_ECONOMIQUES_MESURES_CIBLEES_SUR_CERTAINS_PUBLICS) |
+| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | COMPTES_SECU.EXO_ARBITRES_SPORTIFS, COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES_ENTREPRISES_DE_MOINS_20_SALARIES et COMPTES_SECU.EXO_EXONERATION_TRAVAILLEURS_OCCASIONNELS_DEMANDEURS_D_EMPLOI | 2017 | aucune | +61,1 M€ en 2017 (COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES_ENTREPRISES_DE_MOINS_20_SALARIES) |
+| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 20 groupes | 2017 | aucune | +1 456,3 M€ en 2017 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 19 groupes | 2017 | aucune | −787,0 M€ en 2017 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2017-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 18 groupes | 2017 | aucune | −536,0 M€ en 2017 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 5 groupes | 2017 et 2018 | aucune | +103,3 M€ en 2017 (COMPTES_SECU.EXO_EXONERATIONS_COMPENSEES) |
+| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 26 groupes | 2017 et 2018 | aucune | +2 694,0 M€ en 2018 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX) |
+| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 25 groupes | 2017 et 2018 | aucune | +545,0 M€ en 2017 (COMPTES_SECU.EXO_EXONERATIONS_COMPENSEES) |
+| secu.plfss2018-annexe5 | secu.plfss2019-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 24 groupes | 2017 et 2018 | aucune | +629,1 M€ en 2017 (COMPTES_SECU.EXO_EXONERATIONS_COMPENSEES) |
+| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 4 groupes | 2018 | aucune | +30,8 M€ en 2018 (COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES_ENTREPRISES_DE_MOINS_20_SALARIES) |
+| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 19 groupes | 2018 | aucune | +1 499,5 M€ en 2018 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES_TRAVAILLEURS_INDEPENDANTS) |
+| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 20 groupes | 2018 | aucune | −409,2 M€ en 2018 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
+| secu.plfss2018-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 19 groupes | 2018 | aucune | −323,6 M€ en 2018 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
+| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 10 groupes | 2018 et 2019 | aucune | −53,1 M€ en 2019 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
+| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 34 groupes | 2018 et 2019 | aucune | −740,1 M€ en 2019 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES_TRAVAILLEURS_INDEPENDANTS) |
+| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 33 groupes | 2018 et 2019 | aucune | +265,4 M€ en 2019 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
+| secu.plfss2019-annexe5 | secu.plfss2020-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 34 groupes | 2018 et 2019 | aucune | −181,3 M€ en 2019 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
+| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 11 groupes | 2019 | aucune | −50,4 M€ en 2019 (COMPTES_SECU.EXO_DEDUCTIONS_SUR_LES_HEURES_SUPPLEMENTAIRES_ENTREPRISES_DE_MOINS_20_SALARIES) |
+| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 32 groupes | 2019 | aucune | −866,0 M€ en 2019 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES_TRAVAILLEURS_INDEPENDANTS) |
+| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 31 groupes | 2019 | aucune | +218,4 M€ en 2019 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
+| secu.plfss2019-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 29 groupes | 2019 | aucune | −629,2 M€ en 2019 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
+| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 15 groupes | 2019 et 2020 | aucune | +23,3 M€ en 2020 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
+| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 42 groupes | 2019 et 2020 | aucune | +801,2 M€ en 2020 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES) |
+| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 48 groupes | 2019 et 2020 | aucune | +925,9 M€ en 2020 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
+| secu.plfss2020-annexe5 | secu.plfss2021-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 38 groupes | 2019 et 2020 | aucune | +1 379,7 M€ en 2020 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
+| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 12 groupes | 2020 | aucune | +28,9 M€ en 2020 (COMPTES_SECU.EXO_MISSION_TRAVAIL_EMPLOI) |
+| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 36 groupes | 2020 | aucune | +687,2 M€ en 2020 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES) |
+| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 40 groupes | 2020 | aucune | +852,7 M€ en 2020 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
+| secu.plfss2020-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 35 groupes | 2020 | aucune | +1 254,8 M€ en 2020 (COMPTES_SECU.EXO_REDUCTION_GENERALE_DES_COTISATIONS_PATRONALES_DE_SECURITE_SOCIALE_AG) |
+| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_ATMP LFSS.EXONERATION_COUT | 18 groupes | 2020 et 2021 | aucune | −10,1 M€ en 2021 (COMPTES_SECU.EXO_EXONERATIONS_CIBLEES_COMPENSEES_ET_NON_COMPENSEES) |
+| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_AUTONOMIE LFSS.EXONERATION_COUT | 11 groupes | 2021 | aucune | −45,4 M€ en 2021 (COMPTES_SECU.EXO_EXONERATIONS_CIBLEES_COMPENSEES_ET_NON_COMPENSEES) |
+| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_FAMILLE LFSS.EXONERATION_COUT | 43 groupes | 2020 et 2021 | aucune | +775,0 M€ en 2021 (COMPTES_SECU.EXO_BAISSE_DU_TAUX_DE_COTISATIONS_D_ALLOCATIONS_FAMILIALES_TRAVAILLEURS_INDEPENDANTS) |
+| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_MALADIE LFSS.EXONERATION_COUT | 51 groupes | 2020 et 2021 | aucune | −495,5 M€ en 2020 (COMPTES_SECU.EXO_ALLEGEMENTS_GENERAUX_ET_MESURES_DE_MODULATION_DES_TAUX) |
+| secu.plfss2021-annexe5 | secu.plfss2022-annexe5 | FR ROBSS_VIEILLESSE LFSS.EXONERATION_COUT | 44 groupes | 2020 et 2021 | aucune | −517,8 M€ en 2021 (COMPTES_SECU.EXO_EXONERATIONS_CIBLEES_COMPENSEES_ET_NON_COMPENSEES) |
 | secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_ASSIETTE | 15 groupes | 2021, 2022 et 2023 | 2021 | −8 950,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
 | secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_BRUTES | 14 groupes | 2021, 2022 et 2023 | 2021 | −3 480,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
 | secu.plfss2023-annexe4 | secu.plfss2024-annexe4 | FR ROBSS LFSS.EXEMPTION_COTISATIONS_NETTES | 13 groupes | 2021, 2022 et 2023 | 2021 | −1 890,0 M€ en 2023 (COMPTES_SECU.EXEMPTION_TOTAL_EXEMPTIONS_D_ASSIETTE) |
@@ -2034,7 +2166,7 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 | Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
-| Administrations de sécurité sociale (S1314) | pas de liste dans la documentation des comptes nationaux de l'Insee | aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, CADES, FRR | eurostat : gov_10a_main ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3108, t3212 à t3216, t3306, t3307, t7306 ; secu : placss2023-annexe2, placss2024-annexe2, plfss2023-annexe4, plfss2024-annexe4, plfss2025-annexe4, plfss2026-annexe4, plfss2027-annexe4 ; senat : 22 sources (pjl06-051 … tas22-018) |
+| Administrations de sécurité sociale (S1314) | pas de liste dans la documentation des comptes nationaux de l'Insee | aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, CADES, FRR | eurostat : gov_10a_main ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3108, t3212 à t3216, t3306, t3307, t7306 ; secu : 21 sources (placss2023-annexe2 … plfss2027-annexe4) ; senat : 22 sources (pjl06-051 … tas22-018) |
 
 ### Collectivités territoriales et groupements
 
@@ -3290,7 +3422,7 @@ Les dix dépenses fiscales les plus coûteuses en 2021, d'après le tome du proj
 
 ## 25. Niches sociales
 
-Le coût des mesures de réduction et d'exonération de cotisations et de contributions de sécurité sociale, d'après les classeurs de l'annexe 4 des projets de loi de financement de la sécurité sociale (PLFSS) et de l'annexe 2 des projets de loi d'approbation des comptes (PLACSS) : PLFSS 2023, PLACSS 2023, PLFSS 2024, PLACSS 2024, PLFSS 2025, PLFSS 2026, PLFSS 2027. Les annexes 5 des PLFSS pour 2007 à 2022 ne sont publiées qu'en PDF et ne sont pas lues ; le classeur de l'annexe 2 du PLACSS de 2025 ne donne pas le coût des mesures. Les allègements généraux et les exonérations ciblées sont en millions d'euros, en droits constatés, sur le champ des régimes obligatoires de base ; les exemptions d'assiette en milliards d'euros.
+Le coût des mesures de réduction et d'exonération de cotisations et de contributions de sécurité sociale, d'après les classeurs de l'annexe 4 des projets de loi de financement de la sécurité sociale (PLFSS) et de l'annexe 2 des projets de loi d'approbation des comptes (PLACSS) : PLFSS 2023, PLACSS 2023, PLFSS 2024, PLACSS 2024, PLFSS 2025, PLFSS 2026, PLFSS 2027 ; les annexes 5 des PLFSS pour 2008 à 2022, publiées en PDF, sont lues branche par branche (voir plus bas) ; le classeur de l'annexe 2 du PLACSS de 2025 ne donne pas le coût des mesures. Les allègements généraux et les exonérations ciblées sont en millions d'euros, en droits constatés, sur le champ des régimes obligatoires de base ; les exemptions d'assiette en milliards d'euros.
 
 Dans chaque tableau des coûts, une ligne de titre porte la somme des mesures rangées sous elle (les lignes « Dont… » précisent une mesure et ne s'y ajoutent pas), le titre des exonérations ciblées compensées celle des missions du budget de l'État qui le suivent, et le total, quand le tableau en a un, celle des trois rubriques. Un titre est comparé à sa somme à la demi-unité près de chaque montant en jeu.
 
@@ -3387,6 +3519,25 @@ Une édition contre l'autre : le coût de chaque rubrique pour une année, tel q
 | 2030 | Exonérations ciblées compensées | — | — | — | — | — | — | 9,3 p |
 | 2030 | Exonérations non compensées | — | — | — | — | — | — | 0,0 p |
 | 2030 | Total | — | — | — | — | — | — | 62,5 p |
+
+Annexes 5 des PLFSS pour 2008 à 2022, en PDF (outils/importer_niches_sociales_pdf.py) : leurs tableaux donnent le coût de chaque mesure branche par branche, tous régimes de base confondus, et rangent leurs titres et sous-totaux tantôt avant, tantôt après les mesures qu'ils somment ; les sommes n'en sont pas encore comparées ici. Nombre de chiffres lus, par édition et par branche :
+
+| Édition | Maladie | AT-MP | Vieillesse | Famille | Autonomie |
+|---|---|---|---|---|---|
+| PLFSS 2008 | 184 | 130 | 177 | 179 | — |
+| PLFSS 2010 | 184 | 130 | 172 | 178 | — |
+| PLFSS 2011 | 194 | 107 | 185 | 188 | — |
+| PLFSS 2012 | 180 | 88 | 163 | 168 | — |
+| PLFSS 2013 | 175 | 85 | 160 | 166 | — |
+| PLFSS 2014 | 157 | 47 | 135 | 137 | — |
+| PLFSS 2015 | 159 | 48 | 149 | 152 | — |
+| PLFSS 2016 | 144 | 45 | 135 | 144 | — |
+| PLFSS 2017 | 127 | 46 | 127 | 131 | — |
+| PLFSS 2018 | 156 | 56 | 161 | 164 | — |
+| PLFSS 2019 | 181 | 154 | 155 | 176 | — |
+| PLFSS 2020 | 155 | 54 | 140 | 141 | — |
+| PLFSS 2021 | 165 | 60 | 138 | 140 | 12 |
+| PLFSS 2022 | 159 | 63 | 142 | 144 | 48 |
 
 Exemptions d'assiette : le total de chaque tableau est comparé à la somme de ses groupes (les lignes numérotées en chiffres romains), au dixième ou au centième près de chaque montant selon l'édition ; puis, pour chaque année, l'assiette exemptée et les cotisations équivalentes nettes au total, en milliards d'euros, d'après chaque édition (« p » : prévision).
 

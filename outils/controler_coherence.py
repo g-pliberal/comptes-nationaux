@@ -4988,10 +4988,14 @@ def rang_edition(source):
 
 def partie_niches_sociales(derniers):
     couts, exemptions = collections.defaultdict(list), collections.defaultdict(dict)
+    pdf = collections.Counter()  # (source, branche) → chiffres lus dans une annexe 5 en PDF
     for l in derniers.values():
         if not SOURCE_NICHES.fullmatch(l["source_id"]):
             continue
         trouve = re.fullmatch(r"feuille=([^;]+);cellule=([A-Z]+)([0-9]+)", l["emplacement"])
+        if trouve is None:
+            pdf[(l["source_id"], l["perimetre_id"])] += 1
+            continue
         if l["concept_id"] == "LFSS.EXONERATION_COUT":
             couts[(l["source_id"], trouve.group(1), int(l["periode"]))].append((int(trouve.group(3)), l))
         elif l["concept_id"].startswith("LFSS.EXEMPTION_"):
@@ -5004,8 +5008,8 @@ def partie_niches_sociales(derniers):
               "Le coût des mesures de réduction et d'exonération de cotisations et de contributions de sécurité sociale, "
               "d'après les classeurs de l'annexe 4 des projets de loi de financement de la sécurité sociale (PLFSS) et de "
               "l'annexe 2 des projets de loi d'approbation des comptes (PLACSS) : "
-              f"{', '.join(edition_niches(s) for s in sources)}. Les annexes 5 des PLFSS pour 2007 à 2022 ne sont "
-              "publiées qu'en PDF et ne sont pas lues ; le classeur de l'annexe 2 du PLACSS de 2025 ne donne pas le coût "
+              f"{', '.join(edition_niches(s) for s in sources)} ; les annexes 5 des PLFSS pour 2008 à 2022, publiées "
+              "en PDF, sont lues branche par branche (voir plus bas) ; le classeur de l'annexe 2 du PLACSS de 2025 ne donne pas le coût "
               "des mesures. Les allègements généraux et les exonérations ciblées sont en millions d'euros, en droits "
               "constatés, sur le champ des régimes obligatoires de base ; les exemptions d'assiette en milliards "
               "d'euros.", "",
@@ -5092,6 +5096,19 @@ def partie_niches_sociales(derniers):
                 if rubrique == "Total" and l["statut"] != "prevision":
                     realises.setdefault(annee, (float(l["valeur"]), s))
             lignes.append(f"| {annee} | {rubrique} | " + " | ".join(cases) + " |")
+    if pdf:
+        editions = sorted({s for s, _ in pdf}, key=rang_edition)
+        branches = [b for b in ("ROBSS_MALADIE", "ROBSS_ATMP", "ROBSS_VIEILLESSE", "ROBSS_FAMILLE", "ROBSS_AUTONOMIE")
+                    if any(b == p for _, p in pdf)]
+        lignes += ["", "Annexes 5 des PLFSS pour 2008 à 2022, en PDF (outils/importer_niches_sociales_pdf.py) : leurs "
+                   "tableaux donnent le coût de chaque mesure branche par branche, tous régimes de base confondus, et "
+                   "rangent leurs titres et sous-totaux tantôt avant, tantôt après les mesures qu'ils somment ; les "
+                   "sommes n'en sont pas encore comparées ici. Nombre de chiffres lus, par édition et par branche :", "",
+                   "| Édition | " + " | ".join(b.removeprefix("ROBSS_").capitalize().replace("Atmp", "AT-MP")
+                                             for b in branches) + " |", "|---|" + "---|" * len(branches)]
+        for s in editions:
+            lignes.append(f"| {edition_niches(s)} | " + " | ".join(str(pdf[(s, b)]) if pdf[(s, b)] else "—"
+                                                                     for b in branches) + " |")
     # Exemptions d'assiette : le total contre ses groupes, et le total de chaque édition.
     lignes += ["", "Exemptions d'assiette : le total de chaque tableau est comparé à la somme de ses groupes (les lignes "
                "numérotées en chiffres romains), au dixième ou au centième près de chaque montant selon l'édition ; "
