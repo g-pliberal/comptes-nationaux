@@ -134,6 +134,67 @@ IDENTITES = [
     ("LOLF.RESULTAT_EXECUTION", ["LOLF.SOLDE_BUDGET_GENERAL", "LOLF.SOLDE_COMPTES_SPECIAUX"]),
     ("SEC2010.B9", ["COMPTES_SECU.RESULTAT_COMPTABLE", "INSEE_PASSAGES.SECU_CORRECTIONS"]),
 ]
+# Comptes de chaque opérateur de l'État (importer_operateurs.py) : une case vide y vaut zéro, d'où des composantes
+# toutes facultatives. Le solde des autorisations budgétaires se retrouve aussi dans l'équilibre financier.
+IDENTITES += [(f"OPERATEURS.{total}_{document}", [f"?OPERATEURS.{c}_{document}" if c[0] != "-" else
+                                                  f"?-OPERATEURS.{c[1:]}_{document}" for c in composantes])
+              for documents, total, composantes in [
+                  (("BP", "CF"), "CR_DEPENSES", ["CR_PERSONNEL", "CR_FONCTIONNEMENT", "CR_INTERVENTIONS"]),
+                  (("BP", "CF"), "CR_RECETTES", ["CR_SUBVENTIONS_ETAT", "CR_RESSOURCES_FISCALES", "CR_AUTRES_SUBVENTIONS",
+                                                 "CR_RESSOURCES_PROPRES"]),
+                  (("BP", "CF"), "EPST_PERSONNEL", ["EPST_PERSONNEL_UNITES", "EPST_PERSONNEL_COMMUNES",
+                                                    "EPST_PERSONNEL_SUPPORT"]),
+                  (("BP", "CF"), "EPST_FONCTIONNEMENT", ["EPST_FONCTIONNEMENT_UNITES", "EPST_FONCTIONNEMENT_COMMUNES",
+                                                         "EPST_FONCTIONNEMENT_SUPPORT"]),
+                  (("BP", "CF"), "EPST_INVESTISSEMENT", ["EPST_INVESTISSEMENT_COMMUNES", "EPST_INVESTISSEMENT_SUPPORT"]),
+                  (("BP", "CF"), "EPST_RECETTES", ["EPST_SCSP", "EPST_CONTRATS", "EPST_PRODUITS_VALORISES", "EPST_AUTRES"]),
+                  (("BI",), "EPST_PERSONNEL", ["EPST_PERSONNEL_UNITES", "EPST_PERSONNEL_COMMUNES",
+                                              "EPST_PERSONNEL_SUPPORT", "EPST_PERSONNEL_HORS_AGREGATS"]),
+                  (("BI",), "EPST_FONCTIONNEMENT_AE", ["EPST_FONCTIONNEMENT_UNITES_AE", "EPST_FONCTIONNEMENT_COMMUNES_AE",
+                                                      "EPST_FONCTIONNEMENT_SUPPORT_AE",
+                                                      "EPST_FONCTIONNEMENT_HORS_AGREGATS_AE"]),
+                  (("BI",), "EPST_FONCTIONNEMENT_CP", ["EPST_FONCTIONNEMENT_UNITES_CP", "EPST_FONCTIONNEMENT_COMMUNES_CP",
+                                                      "EPST_FONCTIONNEMENT_SUPPORT_CP",
+                                                      "EPST_FONCTIONNEMENT_HORS_AGREGATS_CP"]),
+                  (("BI",), "EPST_INVESTISSEMENT_AE", ["EPST_INVESTISSEMENT_COMMUNES_AE", "EPST_INVESTISSEMENT_SUPPORT_AE",
+                                                      "EPST_INVESTISSEMENT_HORS_AGREGATS_AE"]),
+                  (("BI",), "EPST_INVESTISSEMENT_CP", ["EPST_INVESTISSEMENT_COMMUNES_CP", "EPST_INVESTISSEMENT_SUPPORT_CP",
+                                                      "EPST_INVESTISSEMENT_HORS_AGREGATS_CP"]),
+                  (("BI",), "EPST_DEPENSES_AE", ["EPST_PERSONNEL", "EPST_FONCTIONNEMENT_AE", "EPST_INVESTISSEMENT_AE"]),
+                  (("BI",), "EPST_DEPENSES_CP", ["EPST_PERSONNEL", "EPST_FONCTIONNEMENT_CP", "EPST_INVESTISSEMENT_CP"]),
+                  (("BI",), "EPST_RECETTES", ["EPST_SCSP", "EPST_CONTRATS", "EPST_PRODUITS_VALORISES", "EPST_AUTRES"]),
+                  (("BI",), "AB_RECHERCHE_AE", ["AB_RECHERCHE_PERSONNEL", "AB_RECHERCHE_FONCTIONNEMENT_AE",
+                                               "AB_RECHERCHE_INVESTISSEMENT_AE"]),
+                  (("BI",), "AB_RECHERCHE_CP", ["AB_RECHERCHE_PERSONNEL", "AB_RECHERCHE_FONCTIONNEMENT_CP",
+                                               "AB_RECHERCHE_INVESTISSEMENT_CP"]),
+                  (("BI",), "AB_DEPENSES_AE", ["AB_PERSONNEL", "AB_FONCTIONNEMENT_AE", "AB_INTERVENTION_AE",
+                                              "AB_INVESTISSEMENT_AE", "AB_RECHERCHE_AE"]),
+                  (("BI",), "AB_DEPENSES_CP", ["AB_PERSONNEL", "AB_FONCTIONNEMENT_CP", "AB_INTERVENTION_CP",
+                                              "AB_INVESTISSEMENT_CP", "AB_RECHERCHE_CP"]),
+                  (("BI",), "AB_RECETTES_GLOBALISEES", ["AB_SCSP", "AB_AUTRES_FINANCEMENTS_ETAT", "AB_FISCALITE_AFFECTEE",
+                                                       "AB_AUTRES_FINANCEMENTS_PUBLICS", "AB_RECETTES_PROPRES"]),
+                  (("BI",), "AB_RECETTES_FLECHEES", ["AB_FINANCEMENTS_ETAT_FLECHES",
+                                                    "AB_AUTRES_FINANCEMENTS_PUBLICS_FLECHES",
+                                                    "AB_RECETTES_PROPRES_FLECHEES"]),
+                  (("BI",), "AB_RECETTES", ["AB_RECETTES_GLOBALISEES", "AB_RECETTES_FLECHEES"]),
+                  (("BI",), "AB_SOLDE_BUDGETAIRE", ["AB_RECETTES", "-AB_DEPENSES_CP"]),
+                  (("BI",), "AB_SOLDE_BUDGETAIRE", ["EF_EXCEDENT_BUDGETAIRE", "-EF_DEFICIT_BUDGETAIRE"]),
+                  (("BI",), "EF_SOUS_TOTAL_BESOINS", ["EF_DEFICIT_BUDGETAIRE", "EF_REMBOURSEMENTS", "EF_TIERS_DECAISSEMENTS",
+                                                     "EF_AUTRES_DECAISSEMENTS"]),
+                  # L'abondement et le prélèvement sont nets ; leurs parts fléchée et non fléchée, chacune de son côté.
+                  (("BI",), "EF_ABONDEMENT_TRESORERIE", ["EF_PRELEVEMENT_TRESORERIE", "EF_ABONDEMENT_FLECHE",
+                                                        "EF_ABONDEMENT_NON_FLECHE", "-EF_PRELEVEMENT_FLECHE",
+                                                        "-EF_PRELEVEMENT_NON_FLECHE"]),
+                  (("BI",), "EF_TOTAL_BESOINS", ["EF_SOUS_TOTAL_BESOINS", "EF_ABONDEMENT_TRESORERIE"]),
+                  (("BI",), "EF_SOUS_TOTAL_FINANCEMENTS", ["EF_EXCEDENT_BUDGETAIRE", "EF_EMPRUNTS",
+                                                          "EF_TIERS_ENCAISSEMENTS", "EF_AUTRES_ENCAISSEMENTS"]),
+                  (("BI",), "EF_TOTAL_FINANCEMENTS", ["EF_SOUS_TOTAL_FINANCEMENTS", "EF_PRELEVEMENT_TRESORERIE"]),
+                  (("BI",), "EF_TOTAL_BESOINS", ["EF_TOTAL_FINANCEMENTS"]),
+              ] for document in documents]
+# Les EPST, dont le tableau des autorisations budgétaires ne donne qu'un solde nul : leurs recettes moins leurs dépenses
+# contre l'excédent ou le déficit de leur équilibre financier.
+IDENTITES.append(("OPERATEURS.EF_EXCEDENT_BUDGETAIRE_BI", ["OPERATEURS.EPST_RECETTES_BI", "-OPERATEURS.EPST_DEPENSES_CP_BI",
+                                                           "?OPERATEURS.EF_DEFICIT_BUDGETAIRE_BI"]))
 
 
 def _rubrique(total, code_norme):
@@ -2803,7 +2864,8 @@ COUVERTURE_ODAL = {
 EPL_HORS_MDPH = [(EPL, lambda f: f.get("categorie_epl_abr") != MDPH_EPL)]
 # Les périmètres des autres normes qui décrivent un sous-secteur sans être rangés sous lui : l'État des lois de finances et
 # de ses comptes annuels, les ensembles des lois de financement de la sécurité sociale.
-AUTRES_PERIMETRES = {"S13111": ("ETAT_LF", "ETAT_CGE"), "S1314": ("ROBSS", "ROBSS_FSV", "SECU_LFSS")}
+AUTRES_PERIMETRES = {"S13111": ("ETAT_LF", "ETAT_CGE"), "S13112": ("OPERATEURS_ETAT",),
+                     "S1314": ("ROBSS", "ROBSS_FSV", "SECU_LFSS")}
 
 
 def sirens(listes, exercice, jeux):
@@ -2893,12 +2955,18 @@ def partie_organismes(derniers, listes):
     odal = nombre_officiel(derniers, UNITES_ODAL, NOMBRE_DANS_LE_CHAMP, "S13132", annee)
     base_collectivites, base_odal = sirens(listes, annee, jeux_dgcl), sirens(listes, annee, jeux_odal)
     selon_ofgl = f"jeux de l'OFGL, exercice {annee}"
+    # Les opérateurs de l'État, dont la plupart sont des ODAC, ont leurs comptes d'autres années (importer_operateurs.py).
+    annees_operateurs = sorted({k[7] for k in derniers if k[2].startswith("OPERATEUR_")})
+    nombre_operateurs = len({k[2] for k in derniers if k[2].startswith("OPERATEUR_")})
+    operateurs = (f" pour {annee} ; {fr(nombre_operateurs, 0)} opérateurs de l'État ou catégories d'opérateurs, la "
+                  f"plupart des ODAC, en {' et en '.join(annees_operateurs)}, d'après les annexes budgétaires"
+                  if annees_operateurs else "")
     sous_secteurs = [
         ("État (S13111)", "S13111", "l'État",
          "l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois "
          "de règlement et de résultats)"),
         ("Organismes divers d'administration centrale (S13112)", "S13112",
-         f"{fr(len(odac), 0)} (liste des ODAC, {annee_odac})" if odac else "—", "aucun"),
+         f"{fr(len(odac), 0)} (liste des ODAC, {annee_odac})" if odac else "—", f"aucun{operateurs}"),
         ("Collectivités locales (S13131)", "S13131",
          "—" if collectivites is None else f"{fr(collectivites, 0)} au 1er janvier (DGCL)",
          "—" if base_collectivites is None else f"{fr(len(base_collectivites), 0)} ({selon_ofgl})"),
@@ -2961,7 +3029,7 @@ def partie_organismes(derniers, listes):
         lignes += [f"### Organismes divers d'administration centrale en {annee_odac}", "",
                    f"La liste de l'Insee, que la table des organismes reprend organisme par organisme : "
                    f"{fr(len(odac), 0)} organismes, par fonction (premier niveau de la COFOG). La base n'a les comptes "
-                   "d'aucun d'eux un à un.", "", "| Fonction | Organismes |", "|---|---|"]
+                   f"d'aucun d'eux un à un{operateurs}.", "", "| Fonction | Organismes |", "|---|---|"]
         lignes += [f"| {f} {fonctions.get(f, '')} | {fr(n, 0)} |" for f, n in sorted(par_fonction.items())]
         lignes += [f"| Ensemble | {fr(len(odac), 0)} |", ""]
     return lignes

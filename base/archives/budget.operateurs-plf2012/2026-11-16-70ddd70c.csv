@@ -1,0 +1,135 @@
+﻿type_de_mission;mission;code_du_programme;programme;operateur;cr_depenses_personnel_cf_2010;cr_depenses_fonctionnement_cf_2010;cr_depenses_interventions_cf_2010;cr_depenses_cf_2010;cr_recettes_subventions_de_l_etat_cf_2010;cr_recettes_ressources_fiscales_cf_2010;cr_recettes_autres_subventions_cf_2010;cr_recettes_ressources_propres_et_autres_cf_2010;cr_recettes_cf_2010;pour_information_tfa_depenses_investissement_cf_2010
+Budget général;Travail et emploi;P102;Accès et retour à l'emploi;Fonds de solidarité;942;503;2748616;2750061;1260111;129467;;1357845;2747423;3961
+Budget général;Travail et emploi;P102;Accès et retour à l'emploi;Pôle emploi;2789756;1480240;989027;5259023;1360000;;3281048;432816;5073864;392305
+Budget général;Immigration, asile et intégration;P104;Intégration et accès à la nationalité française;OFII - Office français de l'immigration et de l'intégration;48400;13869;95667;157936;18610;92232;12661;51377;174880;1
+Budget général;Justice;P107;Administration pénitentiaire;ENAP - Ecole nationale de l'administration pénitentiaire;13140;14376;;27516;25906;;14;557;26477;1927
+Budget général;Travail et emploi;P111;Amélioration de la qualité de l'emploi et des relations du travail;ANACT - Agence nationale pour l'amélioration des conditions de travail;5545;15102;;20647;12490;;2118;6041;20649;239
+Budget général;Écologie, développement et aménagement durables;P113;Urbanisme, paysages, eau et biodiversité;Agence des aires marines protégées;5713;12198;;17911;18620;;53;605;19278;965
+Budget général;Écologie, développement et aménagement durables;P113;Urbanisme, paysages, eau et biodiversité;Agences de l'eau;122653;94028;1790316;2006997;;1775084;;26604;1801688;95944
+Budget général;Écologie, développement et aménagement durables;P113;Urbanisme, paysages, eau et biodiversité;CELRL - Conservatoire de l'espace littoral et des rivages lacustres;7072;15735;;22807;50;38820;989;1826;41685;5
+Budget général;Écologie, développement et aménagement durables;P113;Urbanisme, paysages, eau et biodiversité;ONCFS - Office national de la chasse et de la faune sauvage;88882;25705;;114587;25335;77194;;6642;109171;6244
+Budget général;Écologie, développement et aménagement durables;P113;Urbanisme, paysages, eau et biodiversité;ONEMA - Office national de l'eau et des milieux aquatiques;52051;21670;51872;125593;;;149649;2244;151893;12667
+Budget général;Écologie, développement et aménagement durables;P113;Urbanisme, paysages, eau et biodiversité;Parcs nationaux;41537;26795;1384;69716;66995;1549;5546;;74090;
+Budget général;Solidarité, insertion et égalité des chances;P124;Conduite et soutien des politiques sanitaires et sociales;Agences régionales de santé;441998;92459;249295;783752;559563;;131515;11207;702285;7680
+Budget général;Sécurité civile;P128;Coordination des moyens de secours;ENSOSP - Ecole nationale supérieure des officiers de sapeurs-pompiers;11835;13496;;25331;4286;;10798;10347;25431;5820
+Budget général;Direction de l'action du Gouvernement;P129;Coordination du travail gouvernemental;Chancellerie de l'Ordre de la Libération;626;433;;1059;1358;;;1;1359;855
+Budget général;Direction de l'action du Gouvernement;P129;Coordination du travail gouvernemental;CIFAD - Centre Interministériel de Formation Anti Drogue;;96;371;467;492;;11;10;513;67572
+Budget général;Direction de l'action du Gouvernement;P129;Coordination du travail gouvernemental;Grande Chancellerie de la Légion d'Honneur;19264;4358;;23622;22189;;;1576;23765;84723
+Budget général;Direction de l'action du Gouvernement;P129;Coordination du travail gouvernemental;IHEDN - Institut des hautes études de Défense nationale;7241;2913;;10154;9676;80;0;834;10590;353400
+Budget général;Direction de l'action du Gouvernement;P129;Coordination du travail gouvernemental;INHES-J - Institut national des hautes études de la sécurité et de la justice;5056;5101;;10157;8767;;;1778;10545;976413
+Budget général;Direction de l'action du Gouvernement;P129;Coordination du travail gouvernemental;OFDT - Observatoire Français des Drogues et des Toxicomanies;1880;1895;;3775;3437;;383;59;3879;355
+Budget général;Culture;P131;Création;Cité de la musique;15981;20107;;36088;23919;;529;14190;38638;4761
+Budget général;Culture;P131;Création;EPPGHV - Etablissement public du parc et de la grande halle de la Villette;12005;27100;;39105;21167;;;20510;41677;159
+Budget général;Culture;P131;Création;Opéra national de Paris;93192;95844;;189036;105834;;0;85929;191763;4119
+Budget général;Culture;P131;Création;Théâtres nationaux;50779;45229;;96008;67515;;1911;27064;96490;1597
+Budget général;Économie;P134;Développement des entreprises et de l'emploi;AFII - Agence française pour les investissements internationaux;12537;18059;;30596;23235;;1555;1341;26131;219
+Budget général;Économie;P134;Développement des entreprises et de l'emploi;AFNOR - Association française de normalisation;33511;44805;;78316;14259;;;66943;81202;28874
+Budget général;Économie;P134;Développement des entreprises et de l'emploi;ANFR - Agence nationale des fréquences;24597;12880;;37477;31662;;1300;5160;38122;7332
+Budget général;Économie;P134;Développement des entreprises et de l'emploi;ANSP - Agence nationale des services à la personne;1904;2910;10792;15606;18800;;;154;18954;3528
+Budget général;Économie;P134;Développement des entreprises et de l'emploi;INPI - Institut national de la propriété industrielle;41732;135480;;177212;;;495;195306;195801;
+Budget général;Économie;P134;Développement des entreprises et de l'emploi;LNE - Laboratoire national de métrologie et d'essais;47035;32451;7993;87479;26766;;;53779;80545;527
+Budget général;Économie;P134;Développement des entreprises et de l'emploi;UBIFRANCE - Agence française pour le développement international des entreprises;68931;33788;60052;162771;90379;;;62891;153270;114
+Budget général;Ville et logement;P135;Développement et amélioration de l'offre de logement;ANAH - Agence nationale de l'habitat;8737;8129;499059;515925;0;19849;;562812;582661;732
+Budget général;Ville et logement;P135;Développement et amélioration de l'offre de logement;CGLLS - Caisse de garantie du logement locatif social;2096;16126;257014;275236;;135864;;143661;279525;12861
+Budget général;Recherche et enseignement supérieur;P142;Enseignement supérieur et recherche agricoles;Associations de coordination technique agricole et des industries agroalimentaires;2993;3116;3590;9699;7089;0;276;2339;9704;118828
+Budget général;Recherche et enseignement supérieur;P142;Enseignement supérieur et recherche agricoles;Ecoles d'enseignement supérieur agricole et vétérinaire;52746;119731;5367;177844;51987;3762;17611;105981;179341;4956
+Budget général;Défense;P144;Environnement et prospective de la politique de défense;ONERA - Office national d'études et de reherche aérospatiales;;;;0;;;;;0;5015
+Budget général;Ville et logement;P147;Politique de la ville;ACSE - Agence nationale pour la cohésion sociale et l'égalité des chances;9703;7085;478389;495177;451515;;737;46917;499169;153
+Budget général;Ville et logement;P147;Politique de la ville;ANRU - Agence nationale pour la rénovation urbaine;7347;15250;1409379;1431976;156361;;35102;3114;194577;2842
+Budget général;Gestion des finances publiques et des ressources humaines;P148;Fonction publique;ENA - Ecole nationale d'administration;30205;10769;;40974;35265;;1527;5180;41972;4411
+Budget général;Gestion des finances publiques et des ressources humaines;P148;Fonction publique;Instituts régionaux d'administration;35102;5826;;40928;40428;;864;1198;42490;25499
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P149;Forêt;Centres de la propriété forestière;27324;11015;665;39004;17055;9255;8565;4034;38909;24000
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P149;Forêt;ONF - Office national des forêts;477590;268335;;745925;181635;16411;35650;497548;731244;100
+Budget général;Recherche et enseignement supérieur;P150;Formations supérieures et recherche universitaire;Autres établissements  à vocation d'enseignement supérieur et de recherche;70109;90638;;160747;73778;;14266;81769;169813;4458
+Budget général;Recherche et enseignement supérieur;P150;Formations supérieures et recherche universitaire;Autres établissements à vocation principale de recherche;35448;66367;;101815;62660;;14374;34819;111853;
+Budget général;Recherche et enseignement supérieur;P150;Formations supérieures et recherche universitaire;Ecoles et formations d'ingénieurs;429144;337868;;767012;432931;;86255;299601;818787;26509
+Budget général;Recherche et enseignement supérieur;P150;Formations supérieures et recherche universitaire;Ecoles françaises à l'étranger;24917;10932;;35849;30983;;1994;-2281;30696;6495
+Budget général;Recherche et enseignement supérieur;P150;Formations supérieures et recherche universitaire;Ecoles normales supérieures;150423;49126;;199549;160901;;13623;21442;195966;116
+Budget général;Recherche et enseignement supérieur;P150;Formations supérieures et recherche universitaire;EPCJ - Etablissement public du campus de Jussieu;3693;54502;;58195;64845;;;2761;67606;1420
+Budget général;Recherche et enseignement supérieur;P150;Formations supérieures et recherche universitaire;Instituts d'études politiques;87302;65423;;152725;76363;;11128;67018;154509;116
+Budget général;Recherche et enseignement supérieur;P150;Formations supérieures et recherche universitaire;Universités et assimilés;6823837;2429871;;9253708;7199955;;540727;1478367;9219049;727
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P154;Économie et développement durable de l'agriculture, de la pêche et des territoires;ASP - Agence de services et de paiement;140952;89553;19429616;19660121;9321757;;10235056;75991;19632804;3535
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P154;Économie et développement durable de l'agriculture, de la pêche et des territoires;France Agri Mer;81942;49180;1402411;1533533;546003;32604;668754;278558;1525919;18458
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P154;Économie et développement durable de l'agriculture, de la pêche et des territoires;IFCE - Institut français du cheval et de l'équitation (fusion EPHN-ENE);50994;35710;9896;96600;59156;;3089;34916;97161;10782
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P154;Économie et développement durable de l'agriculture, de la pêche et des territoires;INAO - Institut national de l'origine et de la qualité;15216;5840;;21056;15540;4270;33;1166;21009;4077
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P154;Économie et développement durable de l'agriculture, de la pêche et des territoires;ODEADOM - Office de développement de l'économie agricole d'Outre-mer;2448;1701;254714;258863;10046;;248876;740;259662;409
+Budget général;Travail et emploi;P155;Conception, gestion et évaluation des politiques de l'emploi et du travail;CEE - Centre d'étude de l'emploi;4999;2275;;7274;5660;;390;4187;10237;106
+Budget général;Travail et emploi;P155;Conception, gestion et évaluation des politiques de l'emploi et du travail;INTEFP - Institut national du travail, de l'emploi et de la formation professionnelle;5638;9356;;14994;15500;;5;632;16137;2854
+Budget général;Écologie, développement et aménagement durables;P159;Information géographique et cartographique;IGN - Institut géographique national;102487;46571;;149058;77783;;1595;76268;155646;70
+Budget général;Sport, jeunesse et vie associative;P163;Jeunesse et vie associative;INJEP - Institut national de la jeunesse et de l'éducation populaire;3904;1901;8563;14368;3528;;10054;621;14203;49305
+Budget général;Justice;P166;Justice judiciaire;ENM - Ecole nationale de la magistrature;15285;8247;;23532;18648;;574;668;19890;4173
+Budget général;Justice;P166;Justice judiciaire;EPPJP - Etablissement Public du Palais de Justice de Paris;1555;914;;2469;2438;;;50;2488;
+Budget général;Anciens combattants, mémoire et liens avec la nation;P169;Mémoire, reconnaissance et réparation en faveur du monde combattant;ONAC - Office national des anciens combattants;80781;38682;22243;141706;81061;0;1378;61204;143643;983
+Budget général;Écologie, développement et aménagement durables;P170;Météorologie;Météo-France;254176;125390;;379566;224870;;;153344;378214;252
+Budget général;Santé;P171;Offre de soins et qualité du système de soins;ATIH - Agence technique de l'information et de l'hospitalisation;7429;3347;;10776;3343;;7640;2006;12989;1866
+Budget général;Santé;P171;Offre de soins et qualité du système de soins;CNG - Centre national de gestion des praticiens hospitaliers et des personnels de direction de la fonction publique hospitalière;25175;11475;;36650;4700;;25802;3726;34228;3028
+Budget général;Recherche et enseignement supérieur;P172;Recherches scientifiques et technologiques pluridisciplinaires;ANR - Agence nationale de la recherche (ANR);8158;10574;863806;882538;642180;1650;;71409;715239;11016
+Budget général;Recherche et enseignement supérieur;P172;Recherches scientifiques et technologiques pluridisciplinaires;ANRS - Agence nationale de recherches sur le SIDA;950;1518;50806;53274;40589;;1102;11588;53279;12277
+Budget général;Recherche et enseignement supérieur;P172;Recherches scientifiques et technologiques pluridisciplinaires;CEA - Commissariat à l'énergie atomique;973800;1093700;45200;2112700;1101500;;287800;777900;2167200;54
+Budget général;Recherche et enseignement supérieur;P172;Recherches scientifiques et technologiques pluridisciplinaires;IPEV - Institut polaire français Paul-Emile Victor;3736;23536;;27272;18842;;591;7817;27250;45
+Budget général;Écologie, développement et aménagement durables;P174;Énergie et après-mines;ANDRA - Agence nationale pour la gestion des déchets radioactifs;41328;131778;;173106;13080;120187;;88709;221976;34
+Budget général;Écologie, développement et aménagement durables;P174;Énergie et après-mines;ANGDM - Agence nationale pour la garantie des droits des mineurs;12057;5483;741717;759257;663612;;5;86085;749702;35688
+Budget général;Écologie, développement et aménagement durables;P174;Énergie et après-mines;CITEPA - Centre interprofessionnel technique d'études de la pollution atmosphérique;1495;985;0;2480;1250;;;1537;2787;6637
+Budget général;Culture;P175;Patrimoines;BNF - Bibliothèque nationale de France;132847;89032;;221879;186085;;570;43534;230189;248
+Budget général;Culture;P175;Patrimoines;CMN - Centre des monuments nationaux;38097;37412;;75509;19333;;1396;61408;82137;8569
+Budget général;Culture;P175;Patrimoines;CNAC-GP - Centre national d'art et de culture - Georges Pompidou;57890;61365;;119255;78728;;10;45648;124386;7724
+Budget général;Culture;P175;Patrimoines;INRAP - Institut national de recherches archéologiques préventives;87929;71974;;159903;17246;43535;130;92845;153756;20120
+Budget général;Culture;P175;Patrimoines;Musée du Louvre;102080;89999;;192079;114312;;930;88118;203360;3092
+Budget général;Sécurité;P176;Police nationale;ENSPolice - Ecole nationale supérieure de la police;7546;2151;0;9697;8859;0;;939;9798;1406
+Budget général;Sécurité;P176;Police nationale;INPS - Institut national de police scientifique;4;10968;0;10972;8169;0;;3537;11706;11417
+Budget général;Écologie, développement et aménagement durables;P181;Prévention des risques;ADEME - Agence de l'environnement et de la maîtrise de l'énergie;73730;130969;431665;636364;132170;488812;104586;24117;749685;23206
+Budget général;Écologie, développement et aménagement durables;P181;Prévention des risques;INERIS - Institut national de l'environnement industriel et des risques;38555;30379;;68934;38430;;6448;24259;69137;6457
+Budget général;Santé;P183;Protection maladie;Fonds CMU - Fonds de financement de la protection complémentaire de la couverture universelle du risque maladie - fonds CMUC;740;225;1920208;1921173;0;1856179;0;93098;1949277;114336
+Budget général;Action extérieure de l'État;P185;Rayonnement culturel et scientifique;AEFE - Agence pour l'enseignement français à l'étranger;613014;230860;107897;951771;563356;;6086;429202;998644;6913
+Budget général;Action extérieure de l'État;P185;Rayonnement culturel et scientifique;CAMPUSFRANCE - Agence de promotion des formations et des échanges éducatifs et scientifiques;1897;5165;;7062;4279;;4;2545;6828;3507
+Budget général;Action extérieure de l'État;P185;Rayonnement culturel et scientifique;CulturesFrance;6844;40496;;47340;29671;;;17669;47340;585
+Budget général;Recherche et enseignement supérieur;P186;Recherche culturelle et culture scientifique;Universcience (fusion de la CSI et du Palais de la découverte);65571;84245;;149816;100428;;420;44350;145198;654
+Budget général;Recherche et enseignement supérieur;P187;Recherche dans le domaine de la gestion des milieux et des ressources;BRGM;66450;76785;;143235;80263;;8898;54834;143995;53
+Budget général;Recherche et enseignement supérieur;P187;Recherche dans le domaine de la gestion des milieux et des ressources;CIRAD - Centre de coopération internationale en recherche agronomique pour le développement (CIRAD);130402;80910;;211312;126301;;40301;44870;211472;3161
+Budget général;Recherche et enseignement supérieur;P187;Recherche dans le domaine de la gestion des milieux et des ressources;IFREMER - Institut français de recherche pour l'exploitation de la mer (IFREMER);109139;114760;;223899;143136;;22278;59423;224837;697
+Budget général;Recherche et enseignement supérieur;P190;Recherche dans les domaines de l'énergie, du développement et de l'aménagement durables;IFP - Institut français du pétrole;236554;79427;;315981;169028;;15861;141324;326213;239538
+Budget général;Recherche et enseignement supérieur;P190;Recherche dans les domaines de l'énergie, du développement et de l'aménagement durables;IRSN - Institut de radioprotection et de sûreté nucléaire;124213;183079;;307292;229162;;1415;58785;289362;11131
+Budget général;Recherche et enseignement supérieur;P192;Recherche et enseignement supérieur en matière économique et industrielle;Ecoles des mines;48694;63903;;112597;58902;;6266;47458;112626;25
+Budget général;Recherche et enseignement supérieur;P192;Recherche et enseignement supérieur en matière économique et industrielle;ENSCI - Ecole nationale supérieure de création industrielle;4442;2139;;6581;5302;;17;1309;6628;660
+Budget général;Recherche et enseignement supérieur;P192;Recherche et enseignement supérieur en matière économique et industrielle;Institut Télécom;101856;72838;964;175658;105789;;3910;67661;177360;13047
+Budget général;Recherche et enseignement supérieur;P192;Recherche et enseignement supérieur en matière économique et industrielle;OSEO Innovation;;;;0;;;;;0;17
+Budget général;Recherche et enseignement supérieur;P192;Recherche et enseignement supérieur en matière économique et industrielle;SUPELEC - Ecole supérieure d'électricité;27505;11751;;39256;18406;;;21038;39444;1039
+Budget général;Recherche et enseignement supérieur;P193;Recherche spatiale;CNES - Centre national d'études spatiales;223048;1115833;;1338881;508056;;;844599;1352655;12
+Budget général;Régimes sociaux et de retraite;P197;Régimes de retraite et de sécurité sociale des marins;ENIM - Etablissement national des invalides de la marine;23506;12099;1614678;1650283;767418;;671927;211229;1650574;5608
+Budget général;Écologie, développement et aménagement durables;P203;Infrastructures et services de transports;AFITF - Agence de financement des infrastructures de transport de France;170;2486;2133145;2135801;1245653;851990;;165;2097808;34792
+Budget général;Écologie, développement et aménagement durables;P203;Infrastructures et services de transports;EPSF - Etablissement public de sécurité ferroviaire;9651;2206;0;11857;;12924;;645;13569;19253
+Budget général;Écologie, développement et aménagement durables;P203;Infrastructures et services de transports;VNF - Voies navigables de France;23495;191305;0;214800;4635;124660;1920;116046;247261;10345
+Budget général;Santé;P204;Prévention et sécurité sanitaire;ABM - Agence de biomédecine;20640;49685;;70325;13094;0;29400;26163;68657;36460
+Budget général;Santé;P204;Prévention et sécurité sanitaire;ADALIS - Addictions Drogues Alcool Info Service;3404;1023;;4427;;;3941;197;4138;225
+Budget général;Santé;P204;Prévention et sécurité sanitaire;AFSSAPS - Agence française de sécurité sanitaire des produits de santé;72897;41298;;114195;9788;95665;182;12072;117707;110
+Budget général;Santé;P204;Prévention et sécurité sanitaire;EPRUS - Etablissement de préparation et de réponse aux urgences sanitaires;2812;482587;;485399;334;0;-46300;92251;46285;806940
+Budget général;Santé;P204;Prévention et sécurité sanitaire;INCa - Institut National du Cancer;13650;21200;66600;101450;79190;0;5140;3080;87410;7600
+Budget général;Santé;P204;Prévention et sécurité sanitaire;INPES - Institut national de prévention et d'éducation pour la santé;9953;16929;92406;119288;33313;4709;69868;1446;109336;34701
+Budget général;Santé;P204;Prévention et sécurité sanitaire;InVS - Institut de veille sanitaire;30990;7213;26270;64473;60617;0;5415;768;66800;1741
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P206;Sécurité et qualité sanitaires de l'alimentation;ANSéS - Agence nationale de sécurité sanitaire, de l'alimentation, de l'environnement et du travail (fusion AFSSA-AFSSET);77737;49589;0;127326;85800;14316;11194;9369;120679;39360
+Budget général;Aide publique au développement;P209;Solidarité à l'égard des pays en développement;EGIDE - Centre français pour l'accueil et les échanges internationaux;12434;5950;;18384;;;;16519;16519;268
+Budget général;Aide publique au développement;P209;Solidarité à l'égard des pays en développement;ESTHER - GIP - Ensemble pour une Solidarité Thérapeutique en Réseau;1763;820;7167;9750;7677;;955;203;8835;28481
+Budget général;Enseignement scolaire;P214;Soutien de la politique de l'éducation nationale;CEREQ - Centre d'Etudes et de Recherches sur les Qualifications;7780;3229;;11009;9689;;60;1300;11049;231601
+Budget général;Enseignement scolaire;P214;Soutien de la politique de l'éducation nationale;CIEP - Centre international d'études pédagogiques (CIEP);12940;8468;;21408;7984;;2385;11011;21380;342881
+Budget général;Enseignement scolaire;P214;Soutien de la politique de l'éducation nationale;CNED - Centre national d'enseignement à distance (CNED);98888;31578;;130466;71429;;168;69696;141293;24260
+Budget général;Enseignement scolaire;P214;Soutien de la politique de l'éducation nationale;INRP - Institut national de la recherche pédagogique (INRP);12117;5431;;17548;13988;;293;1140;15421;670
+Budget général;Enseignement scolaire;P214;Soutien de la politique de l'éducation nationale;ONISEP - Office national d'information sur les enseignements et les professions (ONISEP);27327;13141;;40468;29770;;3111;7536;40417;282
+Budget général;Enseignement scolaire;P214;Soutien de la politique de l'éducation nationale;SCEREN - Service culture, éditions, ressources pour l'éducation nationale;93526;46295;;139821;94554;;11404;34317;140275;86
+Budget général;Agriculture, pêche, alimentation, forêt et affaires rurales;P215;Conduite et pilotage des politiques de l'agriculture;INFOMA - Institut national de formation des personnels du ministère de l'agriculture;303;1459;;1762;1700;;150;115;1965;24089
+Budget général;Écologie, développement et aménagement durables;P217;Conduite et pilotage des politiques de l'écologie, de l'énergie, du développement durable et de la mer;ENPC - Ecole nationale des Ponts et Chaussées;30227;11369;;41596;28466;0;0;13117;41583;1115
+Budget général;Écologie, développement et aménagement durables;P217;Conduite et pilotage des politiques de l'écologie, de l'énergie, du développement durable et de la mer;ENTPE - Ecole nationale des travaux publics de l'Etat;13773;7069;;20842;20929;;;2326;23255;
+Budget général;Sport, jeunesse et vie associative;P219;Sport;Centres d'éducation populaire et de sport;13499;35248;;48747;9479;;4839;34967;49285;427
+Budget général;Sport, jeunesse et vie associative;P219;Sport;CNDS - Centre national pour le développement du sport;1499;1393;250100;252992;5000;224900;;280;230180;23463
+Budget général;Sport, jeunesse et vie associative;P219;Sport;Ecoles nationales des sports;738;5437;;6175;834;;576;5313;6723;8790
+Budget général;Sport, jeunesse et vie associative;P219;Sport;INSEP - Institut national du sport et de l'éducation physique;16957;11520;;28477;19770;;1023;8834;29627;3365
+Budget général;Économie;P223;Tourisme;Atout-France;23894;9923;43414;77231;33571;;8008;36167;77746;6041
+Budget général;Culture;P224;Transmission des savoirs et démocratisation de la culture;CNC - Centre national de la cinématographie;27851;14427;575051;617329;9011;764077;11663;32477;817228;8640
+Budget général;Culture;P224;Transmission des savoirs et démocratisation de la culture;Conservatoires nationaux supérieurs de musique, de danse et d'art dramatique;31237;14129;;45366;40273;;809;5086;46168;4431
+Budget général;Culture;P224;Transmission des savoirs et démocratisation de la culture;Ecoles d'architecture - Ecoles nationales supérieures d'architecture;24090;34131;412;58633;44175;544;4486;12666;61871;6986
+Budget général;Culture;P224;Transmission des savoirs et démocratisation de la culture;Ecoles nationales supérieures d'art et de design;17142;14865;;32007;24883;;460;6934;32277;
+Budget général;Recherche et enseignement supérieur;P231;Vie étudiante;Réseau des oeuvres universitaires et scolaires;412200;697644;;1109844;430352;;4513;689954;1124819;468
+Budget général;Immigration, asile et intégration;P303;Immigration et asile;OFPRA - Office français de protection des réfugiés et apatrides;21451;12412;;33863;32300;;;1158;33458;312
+Budget général;Administration générale et territoriale de l'État;P307;Administration territoriale;ANTS - Agence nationale des titres sécurisés;5424;133679;0;139103;;180842;;0;180842;3111
+Budget général;Justice;P310;Conduite et pilotage de la politique de la justice;APIJ - Agence publique pour l'immobilier de la Justice;7475;3587;;11062;8128;;;2234;10362;11344
+Budget général;Justice;P310;Conduite et pilotage de la politique de la justice;"Mission de recherche ""Droit et Justice""";40;698;;738;660;;0;78;738;815
+Budgets annexes;Contrôle et exploitation aériens;P611;Formation aéronautique;ENAC - Ecole nationale de l'aviation civile;47131;23348;0;70479;49762;0;3;21213;70978;466
