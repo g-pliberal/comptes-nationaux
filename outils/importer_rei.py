@@ -16,8 +16,9 @@ vides. Dans le fichier de 2012, l'export a fondu deux champs en un sur les ligne
 décalant d'un rang les champs suivants : ces lignes sont rétablies, et le code de la commune qui les termine alors le
 confirme. L'import inscrit la copie dans tables/fichiers_rei.csv, avec l'exercice, la version, le nombre de communes,
 celui des variables, celui des titres de l'en-tête différents du tracé, celui des valeurs illisibles et celui des lignes
-rétablies. La version est la date la plus récente des fichiers que porte l'archive. Ces copies sont les chiffres
-eux-mêmes : la base ne les recopie pas, elle les lit.
+rétablies. Il vérifie aussi ce qu'en retient le référentiel des versements de l'État (outils/versements_rei.py). La
+version est la date la plus récente des fichiers que porte l'archive. Ces copies sont les chiffres eux-mêmes : la base
+ne les recopie pas, elle les lit.
 """
 
 import collections
@@ -318,14 +319,17 @@ def inscription(fichier):
     version = fichier["mis_a_jour_source"][:10]
     if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", version):
         sys.exit(f"{fichier['id']} : la copie ne dit pas la date de ses fichiers")
+    import versements_rei  # qui importe ce module-ci
     illisibles, realignees = collections.Counter(), []
     exercice, variables, differents, lignes = lignes_communes(fichier, illisibles, realignees)
     retenues = {c for grandeurs in postes(exercice, variables, lire("tables/variables_rei.csv"), fichier["id"]).values()
                 for g, codes in grandeurs.items() if g in ADDITIVES for c in codes}
+    versements = versements_rei.Collecte(exercice, variables, lire("tables/variables_versements_rei.csv"), fichier["id"])
     montants = collections.defaultdict(lambda: [set(), 0])
     communes = 0
-    for _, valeurs in lignes:
+    for commune, valeurs in lignes:
         communes += 1
+        versements.ajouter(commune, valeurs)
         groupes = [("département", complete("DEP", valeurs["DEP"])),
                    ("groupement", complete("Q02", valeurs.get("Q02", "")))]
         for c in retenues:
@@ -337,6 +341,7 @@ def inscription(fichier):
                     entree[1] += 1
     if not communes:
         sys.exit(f"{fichier['id']} : aucune commune")
+    versements.resultat()
     if repetes := repetees(montants):
         sys.exit(f"{fichier['id']} : les variables {', '.join(repetes)} donnent un même montant à toutes les communes "
                  "de presque chaque département ou de presque chaque groupement : c'est celui d'une collectivité, qu'il "

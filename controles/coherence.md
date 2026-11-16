@@ -80,8 +80,8 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | dgafp.raefp-2025 | Rapport annuel sur l'état de la fonction publique, édition 2025 : données de « L'évolution des effectifs de la fonction publique en 2023 » | 2025-10-13 | 40 |
 | dgafp.raefp-2026 | Rapport annuel sur l'état de la fonction publique, édition 2026 : données de « L'évolution des effectifs de la fonction publique en 2024 » | 2026-10-06 | 334 |
 | dgcl.collectivites-locales-en-chiffres | Les collectivités locales en chiffres : annuaire statistique de la DGCL | 2026-07-30 | 150 |
-| dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 19798 |
-| dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4070 |
+| dgcl.finances-departements | Les finances des départements : comptes de gestion de chaque département, de la métropole de Lyon, de la Ville de Paris et des collectivités territoriales uniques | 2025-12-29 | 23965 |
+| dgcl.finances-regions | Les finances des régions : comptes de gestion de chaque région et des collectivités territoriales uniques | 2025-12-29 | 4510 |
 | drees.cps | Les comptes de la protection sociale : prestations sociales de chaque régime, par risque et par prestation, et emplois et ressources de la protection sociale (data.drees, jeu 305_les-comptes-de-la-protection-sociale, et son classeur « La protection sociale en France de 1959 à 2024 ») | 2026-10-23 | 16844 |
 | eurostat.gov_10a_exp | Dépenses des administrations publiques par fonction (COFOG) | 2026-10-21 | 1290 |
 | eurostat.gov_10a_main | Recettes, dépenses et principaux agrégats des administrations publiques | 2026-10-21 | 1488 |
@@ -384,11 +384,12 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 
 Le solde d'un ensemble, ses prélèvements obligatoires, ou sa dépense consolidée au niveau de l'ensemble des administrations publiques (tableau 3.307 de l'Insee), contre la somme de ceux de ses parties ; de même sa dette au sens de Maastricht, ses instruments et sa dette nette, celles d'un sous-secteur étant sa contribution à la dette consolidée de l'ensemble (tableaux 3.101 à 3.104 et dette trimestrielle), et chaque montant de ses comptes complets, qui ne sont pas consolidés (tableaux 7.301 à 7.306) ; pour la sécurité sociale, le résultat du régime général et celui des régimes de base, Fonds de solidarité vieillesse compris, contre la somme des leurs et de celui du FSV, et chaque poste de la situation patrimoniale (annexe A des lois de financement) contre la somme de ses lignes par entité ; pour les collectivités locales, dont la source ne consolide pas les montants entre niveaux, chaque montant d'un niveau contre la somme de ceux des niveaux qui le composent, et celui des groupements à fiscalité propre contre la somme de leurs types (annexes 2A et 2B des rapports de l'OFGL, budgets principaux et budgets annexes), le nombre de budgets de l'ensemble des collectivités contre la somme de ceux de ses niveaux, chaque total des publications de la DGCL contre la somme de ses départements ou de ses régions ; pour les décomptes d'organismes et de collectivités, chaque catégorie contre la somme de ses sous-catégories (organismes divers d'administration locale de l'Insee, collectivités et groupements de la DGCL).
 
-23306 additions vérifiées : 23217 justes, 89 en écart.
+23566 additions vérifiées : 23476 justes, 90 en écart.
 
 | Tableaux | Grandeur | Ensemble | Parties | Fonctions | Années en écart | Plus grand écart |
 |---|---|---|---|---|---|---|
 | dgcl.finances-departements | COMPTES_LOCAUX.REMBOURSEMENTS_DETTE | DEPARTEMENTS_METROPOLE_BP | ses 92 parties (CEA_BP … DEP_95_BP) | ensemble | 2022 | +5,8 M€ en 2022 |
+| dgcl.finances-departements | COMPTES_LOCAUX.REVERSEMENTS_FNGIR | DEPARTEMENTS_METROPOLE_BP | ses 91 parties (CEA_BP … DEP_95_BP) | ensemble | 2021 | +6,1 M€ en 2021 |
 | drees.cps | CPS.PRESTATIONS | CPS_S12_FP | CPS_FONDS_DE_PENSION | CPS.E11_2, ensemble | 9 années entre 1981 et 1989 | +1 282,3 M€ en 1989 |
 | eurostat.gov_10a_main | SEC2010.B9 | S13 | S1311 + S1313 + S1314 | ensemble | 2011 | −0,4 M€ en 2011 |
 | insee.t3101 | PDE.GD | S13 | S1311 + S1313 + S1314 | ensemble | 13 années entre 1996 et 2012 | −1,5 M€ en 2010 |
@@ -588,7 +589,7 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | ccomptes.rbde-2023 | dgafp.raefp-2024 | 2 | 2 | 2 | −332,25 ETPT en 2023 | −332,25 ETPT en 2023 |
 | ccomptes.rbde-2024 | dgafp.raefp-2025 | 2 | 2 | 2 | −1,36 ETPT en 2024 | −1,36 ETPT en 2024 |
 | ccomptes.rbde-2025 | dgafp.raefp-2026 | 1 | 0 | 0 | aucun | aucun |
-| dgcl.finances-departements | dgcl.finances-regions | 540 | 0 | 0 | aucun | aucun |
+| dgcl.finances-departements | dgcl.finances-regions | 570 | 0 | 0 | aucun | aucun |
 | dgcl.finances-departements | ofgl.annexe-2a | 170 | 8 | 8 | +715,5 M€ en 2022 | +715,5 M€ en 2022 |
 | dgcl.finances-departements | ofgl.annexe-2b | 10 | 9 | 0 | aucun | −703,9 M€ en 2022 |
 | dgcl.finances-regions | ofgl.annexe-2a | 165 | 7 | 7 | +9 933 € en 2023 | +9 933 € en 2023 |
@@ -1571,10 +1572,11 @@ Somme des collectivités contre les totaux des annexes : 4 271 comparaisons, 2 9
 | ofgl.base-syndicats-consolidee | consolidé | COMPTES_LOCAUX.VARIATION_FONDS_ROULEMENT | 7 années entre 2018 et 2024 | +11,0 M€ en 2019 |
 | ofgl.base-syndicats-consolidee | consolidé | COMPTES_LOCAUX.VENTES_BIENS_SERVICES | 7 années entre 2018 et 2024 | −15,2 M€ en 2023 |
 
-Budget principal de chaque département et de chaque région contre sa fiche dans les publications de la DGCL (« Les finances des départements », « Les finances des régions ») : 19 329 comparaisons, 19 272 justes, 57 en écart.
+Budget principal de chaque département et de chaque région contre sa fiche dans les publications de la DGCL (« Les finances des départements », « Les finances des régions ») : 20 301 comparaisons, 20 058 justes, 243 en écart.
 
 | Jeu de données | Grandeur | Comparaisons | En écart | Années en écart | Plus grand écart (OFGL − DGCL) |
 |---|---|---|---|---|---|
+| ofgl.base-departements-consolidee | COMPTES_LOCAUX.ATTRIBUTIONS_PEREQUATION_DMTO | 486 | 186 | 5 années entre 2020 et 2024 | +131,8 M€ : DEP SEINE-SAINT-DENIS (229300082), 2024 |
 | ofgl.base-departements-consolidee | COMPTES_LOCAUX.AUTRES_DEP_FONCTIONNEMENT | 486 | 33 | 2022 | −50,0 M€ : DEP HAUTE-GARONNE (223100017), 2022 |
 | ofgl.base-departements-consolidee | COMPTES_LOCAUX.AUTRES_IMPOTS_TAXES | 486 | 1 | 2024 | +8,4 M€ : MET DE LYON (200046977), 2024 |
 | ofgl.base-departements-consolidee | COMPTES_LOCAUX.AUTRES_REC_FONCTIONNEMENT | 486 | 2 | 2022 et 2024 | −25,0 M€ : DEP CORREZE (221927205), 2022 |
@@ -2178,6 +2180,162 @@ TEOM recensée de chaque niveau, part fixe et part incitative, contre celle de s
 | 2023 | 550,3 M€ | 546,5 M€ | 7 922,9 M€ | 7 924,2 M€ | 66,2 M€ | 255,7 M€ | −187,0 M€ (−2,1 %) |
 | 2024 | 563,3 M€ | 559,6 M€ | 8 359,9 M€ | 8 362,2 M€ | 68,9 M€ | 259,1 M€ | −188,6 M€ (−2,1 %) |
 | 2025 | 577,1 M€ | 571,6 M€ | 8 582,5 M€ | 8 586,3 M€ | 70,7 M€ | 266,8 M€ | −194,4 M€ (−2,1 %) |
+
+### Ce que l'État verse à chaque collectivité
+
+Le REI donne aussi, chaque année, des montants qui ne sont pas des impôts : les allocations compensatrices que l'État verse pour les exonérations et abattements qu'il décide, la dotation de compensation de la réforme de la taxe professionnelle (DCRTP), les reversements et prélèvements du fonds national de garantie individuelle des ressources (FNGIR), les fractions de TVA que l'État verse depuis 2021 en compensation de la taxe d'habitation, de la taxe foncière des départements et de la CVAE, et l'effet du coefficient correcteur, qui compense aux communes la perte de leur taxe d'habitation. Ce sont les montants d'une collectivité : la base les lit collectivité par collectivité, d'après tables/variables_versements_rei.csv, et l'import vérifie que le montant d'un groupement, d'un département ou d'une région est le même sur chacune de ses communes qui le donnent (outils/versements_rei.py). Dans la métropole du Grand Paris, la DCRTP, le FNGIR et les allocations compensatrices de CFE sont ceux de chaque établissement public territorial. Le REI ne donne pas les allocations compensatrices en 2012, ni la fraction de TVA que les régions reçoivent depuis 2018 à la place de leur dotation globale de fonctionnement.
+
+Montants de chaque année, en millions d'euros (fractions de TVA : le montant de l'année, actualisé depuis 2023 ; prélèvements du coefficient correcteur : négatifs, comme au REI) :
+
+| Exercice | Allocations compensatrices | DCRTP | Fractions de TVA | Coefficient correcteur : versements | Coefficient correcteur : prélèvements | FNGIR : reversements | FNGIR : prélèvements | Collectivités |
+|---|---|---|---|---|---|---|---|---|
+| 2012 | — | 3 428,8 | — | — | — | 4 051,5 | 4 057,4 | 28 393 |
+| 2013 | 2 991,6 | 3 324,1 | — | — | — | 4 092,1 | 4 091,3 | 177 138 |
+| 2014 | 2 785,0 | 3 324,4 | — | — | — | 4 064,7 | 4 064,3 | 175 787 |
+| 2015 | 2 678,9 | 3 324,4 | — | — | — | 4 063,2 | 4 062,8 | 175 423 |
+| 2016 | 2 372,1 | 3 324,4 | — | — | — | 4 048,3 | 4 047,9 | 174 241 |
+| 2017 | 2 513,4 | 3 099,3 | — | — | — | 3 997,7 | 3 997,1 | 165 429 |
+| 2018 | 2 534,0 | 3 057,0 | — | — | — | 3 993,3 | 3 994,5 | 137 388 |
+| 2019 | 2 790,8 | 2 977,0 | — | — | — | 3 991,5 | 3 991,0 | 138 594 |
+| 2020 | 2 875,8 | 2 918,0 | — | — | — | 3 987,5 | 3 986,9 | 137 526 |
+| 2021 | 4 439,8 | 2 907,9 | 32 578,7 | 3 705,9 | −3 124,8 | 3 986,9 | 3 986,4 | 132 301 |
+| 2022 | 4 708,2 | 2 882,9 | 36 475,6 | 3 939,5 | −3 242,2 | 3 311,2 | 3 310,7 | 132 169 |
+| 2023 | 5 108,9 | 2 877,9 | 47 050,2 | 4 212,4 | −3 483,0 | 3 310,5 | 3 310,0 | 137 734 |
+| 2024 | 5 445,7 | 2 843,9 | 47 036,7 | 4 408,0 | −3 644,7 | 3 311,1 | 3 310,6 | 138 019 |
+| 2025 | 5 835,6 | 2 414,0 | 47 165,3 | 4 518,4 | −3 748,5 | 3 311,1 | 3 310,6 | 141 790 |
+
+La dernière colonne compte les montants non nuls de l'année : une collectivité en a autant que de versements qu'elle reçoit.
+
+Détail de 2025, par nature, niveau et grandeur :
+
+| Versement | Niveau | Grandeur | Collectivités | Montant |
+|---|---|---|---|---|
+| Allocations compensatrices de cotisation foncière des entreprises | communes | montant de l'année | 4 153 | 144,8 M€ |
+| Allocations compensatrices de cotisation foncière des entreprises | groupements et EPT | montant de l'année | 1 265 | 2 333,7 M€ |
+| Allocations compensatrices de taxe foncière sur les propriétés bâties | communes | montant de l'année | 34 220 | 2 551,5 M€ |
+| Allocations compensatrices de taxe foncière sur les propriétés bâties | groupements | montant de l'année | 1 154 | 164,8 M€ |
+| Allocations compensatrices de taxe foncière sur les propriétés bâties | régions | montant de l'année | 8 | 0,7 M€ |
+| Allocations compensatrices de taxe foncière sur les propriétés non bâties | communes | montant de l'année | 34 840 | 113,4 M€ |
+| Allocations compensatrices de taxe foncière sur les propriétés non bâties | départements | montant de l'année | 76 | 38,2 M€ |
+| Allocations compensatrices de taxe foncière sur les propriétés non bâties | groupements | montant de l'année | 1 002 | 1,3 M€ |
+| Allocations compensatrices de taxe foncière sur les propriétés non bâties | régions | montant de l'année | 7 | 1,3 M€ |
+| Allocations compensatrices de taxe d'habitation | communes | montant de l'année | 3 906 | 119,6 M€ |
+| Allocations compensatrices de taxe d'habitation | départements | montant de l'année | 95 | 267,9 M€ |
+| Allocations compensatrices de taxe d'habitation | groupements | montant de l'année | 984 | 28,5 M€ |
+| Allocations compensatrices de taxe d'habitation | métropole de Lyon | montant de l'année | 1 | 1,4 M€ |
+| Allocations compensatrices de taxe d'habitation | régions | montant de l'année | 8 | 12,1 M€ |
+| Dotations de compensation de l'ancienne taxe professionnelle | départements | montant de l'année | 95 | 54,2 M€ |
+| Dotations de compensation de l'ancienne taxe professionnelle | métropole de Lyon | montant de l'année | 1 | 0,5 M€ |
+| Dotations de compensation de l'ancienne taxe professionnelle | régions | montant de l'année | 8 | 1,7 M€ |
+| Effet du coefficient correcteur : prélèvement | communes | montant de l'année | 17 551 | −3 748,5 M€ |
+| Effet du coefficient correcteur : versement | communes | montant de l'année | 10 625 | 4 518,4 M€ |
+| Dotation de compensation de la réforme de la taxe professionnelle | communes | montant de l'année | 1 456 | 167,8 M€ |
+| Dotation de compensation de la réforme de la taxe professionnelle | départements | montant de l'année | 94 | 1 197,8 M€ |
+| Dotation de compensation de la réforme de la taxe professionnelle | groupements et EPT | montant de l'année | 331 | 760,8 M€ |
+| Dotation de compensation de la réforme de la taxe professionnelle | métropole de Lyon | montant de l'année | 1 | 9,2 M€ |
+| Dotation de compensation de la réforme de la taxe professionnelle | régions | montant de l'année | 11 | 278,5 M€ |
+| Prélèvement au profit du fonds national de garantie individuelle des ressources | communes | montant de l'année | 14 219 | 901,2 M€ |
+| Prélèvement au profit du fonds national de garantie individuelle des ressources | départements | montant de l'année | 3 | 1 055,7 M€ |
+| Prélèvement au profit du fonds national de garantie individuelle des ressources | groupements et EPT | montant de l'année | 878 | 1 353,7 M€ |
+| Reversement du fonds national de garantie individuelle des ressources | communes | montant de l'année | 7 287 | 544,0 M€ |
+| Reversement du fonds national de garantie individuelle des ressources | départements | montant de l'année | 95 | 1 132,9 M€ |
+| Reversement du fonds national de garantie individuelle des ressources | groupements et EPT | montant de l'année | 367 | 1 622,9 M€ |
+| Reversement du fonds national de garantie individuelle des ressources | métropole de Lyon | montant de l'année | 1 | 11,4 M€ |
+| Fraction de TVA compensant la CVAE | collectivités uniques | définitif de l'année précédente | 4 | 107,0 M€ |
+| Fraction de TVA compensant la CVAE | collectivités uniques | montant de l'année | 4 | 107,0 M€ |
+| Fraction de TVA compensant la CVAE | collectivités uniques | solde de l'année précédente | 4 | 0,3 M€ |
+| Fraction de TVA compensant la CVAE | communes | définitif de l'année précédente | 4 228 | 658,6 M€ |
+| Fraction de TVA compensant la CVAE | communes | montant de l'année | 4 342 | 661,4 M€ |
+| Fraction de TVA compensant la CVAE | communes | solde de l'année précédente | 3 577 | 1,8 M€ |
+| Fraction de TVA compensant la CVAE | départements | définitif de l'année précédente | 98 | 4 174,7 M€ |
+| Fraction de TVA compensant la CVAE | départements | montant de l'année | 98 | 4 174,7 M€ |
+| Fraction de TVA compensant la CVAE | départements | solde de l'année précédente | 98 | 11,2 M€ |
+| Fraction de TVA compensant la CVAE | groupements | définitif de l'année précédente | 1 239 | 5 411,1 M€ |
+| Fraction de TVA compensant la CVAE | groupements | montant de l'année | 1 239 | 5 408,4 M€ |
+| Fraction de TVA compensant la CVAE | groupements | solde de l'année précédente | 1 239 | 14,5 M€ |
+| Fraction de TVA compensant la CVAE | métropole de Lyon | définitif de l'année précédente | 1 | 156,1 M€ |
+| Fraction de TVA compensant la CVAE | métropole de Lyon | montant de l'année | 1 | 156,1 M€ |
+| Fraction de TVA compensant la CVAE | métropole de Lyon | solde de l'année précédente | 1 | 0,4 M€ |
+| Fraction de TVA compensant la CVAE | régions | définitif de l'année précédente | 14 | 10 911,3 M€ |
+| Fraction de TVA compensant la CVAE | régions | montant de l'année | 14 | 10 911,3 M€ |
+| Fraction de TVA compensant la CVAE | régions | solde de l'année précédente | 14 | 29,2 M€ |
+| Fraction de TVA compensant la taxe foncière des départements | départements | définitif de l'année précédente | 98 | 16 515,8 M€ |
+| Fraction de TVA compensant la taxe foncière des départements | départements | montant de l'année | 98 | 16 515,8 M€ |
+| Fraction de TVA compensant la taxe foncière des départements | départements | solde de l'année précédente | 98 | 46,5 M€ |
+| Fraction de TVA compensant la taxe foncière des départements | métropole de Lyon | définitif de l'année précédente | 1 | 295,0 M€ |
+| Fraction de TVA compensant la taxe foncière des départements | métropole de Lyon | montant de l'année | 1 | 295,0 M€ |
+| Fraction de TVA compensant la taxe foncière des départements | métropole de Lyon | solde de l'année précédente | 1 | 0,8 M€ |
+| Fraction de TVA compensant la taxe d'habitation | communes | définitif de l'année précédente | 1 | 766,8 M€ |
+| Fraction de TVA compensant la taxe d'habitation | communes | montant de l'année | 1 | 766,8 M€ |
+| Fraction de TVA compensant la taxe d'habitation | communes | solde de l'année précédente | 1 | 2,1 M€ |
+| Fraction de TVA compensant la taxe d'habitation | groupements | définitif de l'année précédente | 1 250 | 8 168,9 M€ |
+| Fraction de TVA compensant la taxe d'habitation | groupements | montant de l'année | 1 250 | 8 168,9 M€ |
+| Fraction de TVA compensant la taxe d'habitation | groupements | solde de l'année précédente | 1 250 | 21,9 M€ |
+
+Le FNGIR reverse aux collectivités que la réforme de la taxe professionnelle a appauvries ce qu'il prélève sur celles qu'elle a enrichies : chaque année, ses prélèvements doivent égaler ses reversements.
+
+| Exercice | Prélèvements | Reversements | Écart (reversements − prélèvements) |
+|---|---|---|---|
+| 2012 | 4 057,4 M€ | 4 051,5 M€ | −5,9 M€ |
+| 2013 | 4 091,3 M€ | 4 092,1 M€ | +0,8 M€ |
+| 2014 | 4 064,3 M€ | 4 064,7 M€ | +0,4 M€ |
+| 2015 | 4 062,8 M€ | 4 063,2 M€ | +0,4 M€ |
+| 2016 | 4 047,9 M€ | 4 048,3 M€ | +0,5 M€ |
+| 2017 | 3 997,1 M€ | 3 997,7 M€ | +0,5 M€ |
+| 2018 | 3 994,5 M€ | 3 993,3 M€ | −1,2 M€ |
+| 2019 | 3 991,0 M€ | 3 991,5 M€ | +0,5 M€ |
+| 2020 | 3 986,9 M€ | 3 987,5 M€ | +0,6 M€ |
+| 2021 | 3 986,4 M€ | 3 986,9 M€ | +0,5 M€ |
+| 2022 | 3 310,7 M€ | 3 311,2 M€ | +0,5 M€ |
+| 2023 | 3 310,0 M€ | 3 310,5 M€ | +0,5 M€ |
+| 2024 | 3 310,6 M€ | 3 311,1 M€ | +0,5 M€ |
+| 2025 | 3 310,6 M€ | 3 311,1 M€ | +0,5 M€ |
+
+Depuis 2023, le REI donne pour chaque fraction de TVA le montant actualisé de l'année, le montant définitif de l'année précédente et le solde qui en résulte : le montant définitif doit égaler le montant actualisé que donnait le REI de l'année précédente, plus le solde, à l'euro près (chacun des trois montants est arrondi à l'euro). Pour 2022, le montant de l'année est la fraction de TVA de la collectivité, dont le REI ne disait pas ce qu'elle compensait.
+
+| Versement | Niveau | Exercices | Égaux | En écart | Plus grand écart (définitif − actualisé − solde) |
+|---|---|---|---|---|---|
+| Fraction de TVA compensant la CVAE | collectivités uniques | 2023, 2024 et 2025 | 11 | 1 | +6 € : 94, 2023 |
+| Fraction de TVA compensant la CVAE | communes | 2024 et 2025 | 8 541 | 0 | aucun |
+| Fraction de TVA compensant la CVAE | départements | 2024 et 2025 | 196 | 0 | aucun |
+| Fraction de TVA compensant la CVAE | groupements | 2024 et 2025 | 2 475 | 3 | +139 € : 200072676, 2025 |
+| Fraction de TVA compensant la CVAE | métropole de Lyon | 2024 et 2025 | 2 | 0 | aucun |
+| Fraction de TVA compensant la CVAE | régions | 2023, 2024 et 2025 | 42 | 0 | aucun |
+| Fraction de TVA compensant la taxe foncière des départements | départements | 2023, 2024 et 2025 | 290 | 4 | −42,9 M€ : 972, 2023 |
+| Fraction de TVA compensant la taxe foncière des départements | métropole de Lyon | 2023, 2024 et 2025 | 3 | 0 | aucun |
+| Fraction de TVA compensant la taxe d'habitation | communes | 2023, 2024 et 2025 | 3 | 0 | aucun |
+| Fraction de TVA compensant la taxe d'habitation | groupements | 2023, 2024 et 2025 | 3 659 | 91 | −286,5 M€ : 200046977, 2023 |
+
+Les comptes de gestion de chaque département et de chaque région que publie la DGCL (« Les finances des départements », « Les finances des régions », 5 années entre 2020 et 2024) donnent, collectivité par collectivité, les prélèvements et reversements du FNGIR (tableau T07) et les péréquations et compensations fiscales des concours de l'État (tableau T04.2), que forment pour l'essentiel la DCRTP et les allocations compensatrices. Ils se comparent au REI de la même année, à l'arrondi près ; la DGCL réunit ce que le REI distingue : la Ville de Paris, commune et département, la métropole de Lyon, groupement et département, les deux départements alsaciens dans la Collectivité européenne d'Alsace, et, dans les collectivités de Corse, de Martinique et de Guyane, les parts du département et de la région. Les péréquations et compensations fiscales comprennent d'autres dotations que celles du REI : un écart y est attendu.
+
+| Comparaison | Publication | Collectivités comparées | Égales | Écart de moins de 1 % | Au-delà | DGCL | REI | Plus grand écart (REI − DGCL) |
+|---|---|---|---|---|---|---|---|---|
+| Reversements du FNGIR | départements | 500 | 499 | 0 | 1 | 6 211,0 M€ | 6 211,9 M€ | +0,9 M€ : DEP_50_BP, 2022 |
+| Reversements du FNGIR | régions | 85 | 85 | 0 | 0 | 1 441,1 M€ | 1 441,1 M€ | aucun |
+| Prélèvements au profit du FNGIR | départements | 501 | 501 | 0 | 0 | 5 721,3 M€ | 5 721,3 M€ | aucun |
+| Prélèvements au profit du FNGIR | régions | 85 | 85 | 0 | 0 | 1 349,6 M€ | 1 349,6 M€ | aucun |
+| Péréquations et compensations fiscales | départements | 501 | 151 | 246 | 104 | 9 704,1 M€ | 8 891,0 M€ | −111,5 M€ : DEP_976_BP, 2024 |
+| Péréquations et compensations fiscales | régions | 85 | 5 | 11 | 69 | 3 957,2 M€ | 2 681,8 M€ | −66,8 M€ : REG_11_BP, 2023 |
+
+Les fractions de TVA que le REI donne pour l'année (le montant actualisé depuis 2023) contre celles que chaque collectivité inscrit à ses comptes, d'après ses comptes individuels (section 13) : l'État verse chaque mois un douzième du montant prévu, puis régularise l'année suivante ; un écart de quelques pour cent est donc attendu. Sont dites proches les fractions à moins de 1 % l'une de l'autre.
+
+| Niveau | Exercice | Collectivités comparées | Proches | REI | Comptes | Écart (comptes − REI) |
+|---|---|---|---|---|---|---|
+| départements et collectivités territoriales uniques | 2021 | 97 | 97 | 14 387,4 M€ | 14 387,4 M€ | moins de 0,1 % |
+| départements et collectivités territoriales uniques | 2022 | 97 | 97 | 15 776,5 M€ | 15 776,5 M€ | moins de 0,1 % |
+| départements et collectivités territoriales uniques | 2023 | 97 | 93 | 20 125,3 M€ | 20 087,0 M€ | −0,2 % |
+| départements et collectivités territoriales uniques | 2024 | 97 | 93 | 20 119,4 M€ | 20 084,5 M€ | −0,2 % |
+| départements et collectivités territoriales uniques | 2025 | 97 | 93 | 20 175,7 M€ | 20 328,6 M€ | +0,8 % |
+| groupements à fiscalité propre | 2021 | 1 249 | 1 247 | 7 500,3 M€ | 7 500,3 M€ | moins de 0,1 % |
+| groupements à fiscalité propre | 2022 | 1 250 | 1 248 | 8 218,9 M€ | 8 218,8 M€ | moins de 0,1 % |
+| groupements à fiscalité propre | 2023 | 1 255 | 1 247 | 13 536,3 M€ | 13 755,0 M€ | +1,6 % |
+| groupements à fiscalité propre | 2024 | 1 255 | 1 237 | 13 543,6 M€ | 13 871,9 M€ | +2,4 % |
+| groupements à fiscalité propre | 2025 | 1 255 | 1 253 | 13 577,2 M€ | 14 056,5 M€ | +3,5 % |
+| régions | 2021 | 14 | 14 | 9 679,3 M€ | 9 679,3 M€ | moins de 0,1 % |
+| régions | 2022 | 14 | 14 | 10 596,0 M€ | 10 596,0 M€ | moins de 0,1 % |
+| régions | 2023 | 14 | 14 | 10 885,3 M€ | 10 787,8 M€ | −0,9 % |
+| régions | 2024 | 14 | 14 | 10 882,1 M€ | 10 787,2 M€ | −0,9 % |
+| régions | 2025 | 14 | 14 | 10 911,3 M€ | 10 940,5 M€ | +0,3 % |
 
 ## 12. Organismes publics : ce que la base couvre
 
