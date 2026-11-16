@@ -134,9 +134,10 @@ WHERE f.version = (SELECT MAX(g.version) FROM fichiers_collectivites g
 
 -- Les impositions que recense la DGFiP (REI) sur le territoire de chaque commune, d'après la copie la plus récente de
 -- chaque année, avec le libellé de la taxe et la fiche de la commune. Le produit d'une part intercommunale,
--- départementale ou régionale, ou d'un organisme, est ce que paient les contribuables de la commune.
+-- départementale ou régionale, ou d'un organisme, est ce que paient les contribuables de la commune. La base et le
+-- produit sont dans la monnaie du fichier : en francs jusqu'en 2001 (monnaie « FRF »), en euros depuis 2002.
 CREATE VIEW v_impositions_rei AS
-SELECT f.exercice, f.version, f.fichier_id, x.commune, c.nom, c.departement, c.region, c.groupement, c.nom_groupement,
+SELECT f.exercice, f.version, f.fichier_id, f.monnaie, x.commune, c.nom, c.departement, c.region, c.groupement, c.nom_groupement,
        c.siren_groupement, c.regime_groupement, p.taxe, t.libelle AS taxe_libelle, p.destinataire, x.base, x.taux_net,
        x.taux_vote, x.produit
 FROM impositions_rei x
