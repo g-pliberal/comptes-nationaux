@@ -31,7 +31,9 @@ vérifie ce que disent les sources elles-mêmes :
 11. le recensement des éléments d'imposition de la DGFiP : le produit de chaque imposition contre sa base
    multipliée par son taux, la base simplifiée de l'OFGL contre le recensement dont elle est tirée, commune par
    commune, le produit de chaque taxe et de chaque niveau qui perçoit, et la taxe d'enlèvement des ordures
-   ménagères recensée de chaque niveau contre celle de ses comptes ;
+   ménagères recensée de chaque niveau contre celle de ses comptes ; ce que l'État verse à chaque collectivité
+   d'après le même recensement : l'équilibre du fonds de garantie des ressources, les fractions de TVA d'une année à
+   l'autre, et chaque collectivité contre les comptes de gestion que publie la DGCL et ses comptes individuels ;
 12. les organismes publics : les listes et décomptes officiels des unités publiques, de l'Insee et de la DGCL, contre
    les unités dont la base a les comptes une à une ;
 13. les comptes individuels de la DGFiP : les identités que leurs maquettes énoncent, collectivité par collectivité, et
@@ -91,6 +93,7 @@ import importer_lois_rectificatives as rectificatives
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
+import versements_rei
 from commun import RACINE, en_parallele, lire, ressources_chiffres
 
 RAPPORT = RACINE / "controles" / "coherence.md"
@@ -1767,6 +1770,65 @@ def recensement(par_exercice=None):
     return annees, produits, comparaisons, par_taxe, communes_taxe, par_niveau, teom
 
 
+# Ce que l'État verse à chaque collectivité, d'après le REI (outils/versements_rei.py). Les familles de versements du
+# tableau d'ensemble, dans leur ordre.
+FAMILLES_VERSEMENTS = [("Allocations compensatrices", r"ALLOCATIONS_"), ("DCRTP", r"DCRTP$"),
+                       ("Fractions de TVA", r"TVA"), ("Coefficient correcteur : versements", r"COCO_VERSEMENT$"),
+                       ("Coefficient correcteur : prélèvements", r"COCO_PRELEVEMENT$"),
+                       ("FNGIR : reversements", r"FNGIR_REVERSEMENT$"), ("FNGIR : prélèvements", r"FNGIR_PRELEVEMENT$")]
+# Les collectivités des comptes de gestion de la DGCL (« Les finances des départements », « Les finances des régions »),
+# sous leur périmètre, et ce qui leur correspond au REI : [(niveaux, collectivité)]. La DGCL réunit ce que le REI
+# distingue : la Ville de Paris, commune et département ; la métropole de Lyon, groupement et département ; les deux
+# départements alsaciens dans la Collectivité européenne d'Alsace ; les deux départements de Corse et la région dans la
+# collectivité de Corse, le département et la région dans les collectivités territoriales uniques de Martinique et de
+# Guyane. Le département du Rhône (« 69D ») est, au REI, le département 69.
+SIREN_METROPOLE_LYON = "200046977"
+GROUPEMENTS_REI = ("groupement", "ept_ou_groupement", "metropole_lyon")
+PERIMETRES_VERSEMENTS = {
+    "CEA_BP": [(("departement",), "67"), (("departement",), "68")],
+    "COLLECTIVITE_DE_CORSE_BP": [(("departement",), "2A"), (("departement",), "2B"), (("region",), "94")],
+    "CTU_MARTINIQUE_BP": [(("departement",), "972"), (("region",), "02")],
+    "CTU_GUYANE_BP": [(("departement",), "973"), (("region",), "03")],
+    "METROPOLE_LYON_BP": [(GROUPEMENTS_REI, SIREN_METROPOLE_LYON)],
+    "VILLE_DE_PARIS_BP": [(("departement",), "75"), (("commune",), "75056")]}
+# Ce que la DGCL donne collectivité par collectivité, et les versements du REI qui s'y comparent : les prélèvements et
+# reversements du FNGIR (tableau T07), à l'euro ; les péréquations et compensations fiscales des concours de l'État
+# (tableau T04.2), que forment, pour l'essentiel, la DCRTP et les allocations compensatrices.
+COMPARAISONS_DGCL = [("Reversements du FNGIR", "COMPTES_LOCAUX.REVERSEMENTS_FNGIR", r"FNGIR_REVERSEMENT$"),
+                     ("Prélèvements au profit du FNGIR", "COMPTES_LOCAUX.PRELEVEMENTS_FNGIR", r"FNGIR_PRELEVEMENT$"),
+                     ("Péréquations et compensations fiscales", "COMPTES_LOCAUX.PEREQUATIONS_COMPENSATIONS",
+                      r"DCRTP$|ALLOCATIONS_")]
+SOURCES_DGCL = {"dgcl.finances-departements": "départements", "dgcl.finances-regions": "régions"}
+# Les fractions de TVA que la collectivité inscrit à ses comptes, d'après les comptes individuels de la DGFiP, en
+# milliers d'euros : (niveau des comptes individuels, variable, niveaux du REI dont les fractions s'y comparent).
+TVA_INDIVIDUELLES = [(individuels.DEPARTEMENTS, "tvad", ("departement",)), (individuels.REGIONS, "tvar", ("region",)),
+                     (individuels.GFP, "tvag", ("groupement",))]
+SEUIL_TVA = 0.01  # écart relatif en deçà duquel la fraction inscrite est dite proche de la fraction notifiée
+
+
+def versements_exercice(exercice, inscrit):
+    """Les versements d'une année du REI, dans sa copie `inscrit` : (exercice, {(versement, niveau, grandeur): [nombre
+    de collectivités, montant]}, {(versement, niveau, grandeur, collectivité): montant} pour les fractions de TVA et pour
+    les collectivités autres que les communes et les groupements, avec Paris et la métropole de Lyon)."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    fichier = fichiers[inscrit["fichier_id"]]
+    exercice_, variables, _, lignes = rei.lignes_communes(fichier)
+    totaux, detail = collections.defaultdict(lambda: [0, 0.0]), {}
+    for versement, niveau, grandeur, qui, montant, _ in versements_rei.collecter(
+            exercice_, variables, lignes, lire("tables/variables_versements_rei.csv"), fichier["id"]):
+        totaux[(versement, niveau, grandeur)][0] += 1
+        totaux[(versement, niveau, grandeur)][1] += montant
+        if (versement.startswith("TVA") or niveau not in ("commune",) + GROUPEMENTS_REI or qui == "75056"
+                or qui == SIREN_METROPOLE_LYON):
+            detail[(versement, niveau, grandeur, qui)] = montant
+    return exercice, dict(totaux), detail
+
+
+def versements_par_annee():
+    """[(exercice, totaux, détail)] de `versements_exercice`, une par année du REI, dans l'ordre des années."""
+    return [versements_exercice(exercice, inscrit) for exercice, inscrit in sorted(copies_rei().items())]
+
+
 # --- Le rapport ----------------------------------------------------------------------------------------
 
 def fr(x, decimales, signe=False):
@@ -2202,7 +2264,7 @@ def partie_collectivites(derniers, listes):
                           f"{ecart_lisible(e[4], 'euros')} en {e[3]} |")
         lignes.append("")
     return (lignes + partie_fiches_dgcl(listes, fiches) + partie_flux(listes, flux) + partie_fonctions(listes)
-            + partie_fiscalite(listes, teom) + partie_rei(teom))
+            + partie_fiscalite(listes, teom) + partie_rei(teom) + partie_versements(derniers))
 
 
 def concepts_lisibles(concepts):
@@ -2812,6 +2874,207 @@ def partie_rei(teom_comptes):
             lignes.append(f"| {e} | " + " | ".join(f"{millions(r)} | {millions(c)}" for r, c in zip(recensee, comptes))
                           + f" | {ecart_lisible(ecart, 'euros')} ({pour_cent(ecart / sum(comptes)) if sum(comptes) else '—'}) |")
         lignes.append("")
+    return lignes
+
+
+NIVEAUX_LISIBLES = {"commune": "communes", "groupement": "groupements", "ept_ou_groupement": "groupements et EPT",
+                    "departement": "départements", "region": "régions", "metropole_lyon": "métropole de Lyon",
+                    "collectivite_unique": "collectivités uniques"}
+GRANDEURS_LISIBLES = {"montant": "montant de l'année", "definitif_precedent": "définitif de l'année précédente",
+                      "solde_precedent": "solde de l'année précédente"}
+
+
+def versements_dgcl(derniers, detail_par_annee):
+    """Chaque collectivité des comptes de gestion de la DGCL contre le REI, chaque année que les deux donnent : pour
+    chaque comparaison de COMPARAISONS_DGCL et chaque publication, [collectivités comparées, égales à l'arrondi près,
+    en écart de moins de 1 %, au-delà, montant DGCL, montant REI, pire écart (écart, collectivité, exercice)]."""
+    resultat = collections.defaultdict(lambda: [0, 0, 0, 0, 0.0, 0.0, None])
+    retenus = sorted(((k, l) for k, l in derniers.items()
+                     if k[0] in SOURCES_DGCL and k[7] in detail_par_annee and k[6] == "MIO_EUR"), key=lambda e: e[0])
+    for (source, _, perimetre, concept, _, _, unite, periode), ligne in retenus:
+        comparaison = next((c for c in COMPARAISONS_DGCL if c[1] == concept), None)
+        if comparaison is None:
+            continue
+        if perimetre in PERIMETRES_VERSEMENTS:
+            correspondants = PERIMETRES_VERSEMENTS[perimetre]
+        elif re.fullmatch(r"(DEP|REG)_[0-9AB]{2,3}_BP", perimetre):
+            niveau = "departement" if perimetre.startswith("DEP_") else "region"
+            correspondants = [((niveau,), perimetre.split("_")[1])]
+        else:
+            continue  # un total
+        detail = detail_par_annee[periode]
+        recense = sum(m for (v, n, g, qui), m in detail.items() if g == "montant" and re.match(comparaison[2], v)
+                      and any(n in niveaux and qui == code for niveaux, code in correspondants))
+        publie, marge, _ = valeur(ligne)
+        entree = resultat[(comparaison[0], SOURCES_DGCL[source])]
+        entree[0] += 1
+        entree[4] += publie
+        entree[5] += recense
+        ecart = recense - publie
+        if not depasse(ecart, marge + 0.5):
+            entree[1] += 1
+            continue
+        entree[2 if publie and abs(ecart) < 0.01 * abs(publie) else 3] += 1
+        if entree[6] is None or abs(ecart) > abs(entree[6][0]):
+            entree[6] = (ecart, perimetre, periode)
+    return resultat
+
+
+def versements_individuels(detail_par_annee):
+    """Les fractions de TVA du REI contre celles qu'inscrit chaque collectivité à ses comptes, d'après les comptes
+    individuels de la DGFiP, chaque année que les deux donnent : {(niveau des comptes individuels, exercice):
+    [collectivités comparées, proches (écart de moins de SEUIL_TVA), fractions du REI, fractions des comptes]}."""
+    fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
+    referentiel = lire("tables/variables_comptes_individuels.csv")
+    resultat = {}
+    for (source, exercice), inscrit in sorted(comptes_individuels_retenus().items()):
+        lue = next((t for t in TVA_INDIVIDUELLES if t[0] == source), None)
+        if lue is None or exercice not in detail_par_annee:
+            continue
+        _, variable, niveaux = lue
+        recenses = collections.defaultdict(float)
+        for (versement, niveau, grandeur, qui), montant in detail_par_annee[exercice].items():
+            if versement.startswith("TVA") and grandeur == "montant" and niveau in niveaux:
+                recenses[qui] += montant
+        if not recenses:
+            continue
+        _, lues, _, _ = individuels.comptes(fichiers[inscrit["fichier_id"]], referentiel)
+        entree = resultat.setdefault((source, exercice), [0, 0, 0.0, 0.0])
+        for code, _, valeurs in lues:
+            if source == individuels.GFP:
+                qui = code
+            elif code in OUTRE_MER_INSEE:
+                qui = OUTRE_MER_INSEE[code][0 if source == individuels.DEPARTEMENTS else 1]
+            else:
+                qui = code[1:]
+            if variable not in valeurs or qui not in recenses:
+                continue
+            inscrite, notifiee = valeurs[variable] * 1000, recenses[qui]
+            entree[0] += 1
+            entree[1] += abs(inscrite - notifiee) < SEUIL_TVA * abs(notifiee)
+            entree[2] += notifiee
+            entree[3] += inscrite
+    return resultat
+
+
+def partie_versements(derniers):
+    """Ce que l'État verse à chaque collectivité, d'après le REI : les montants de chaque année, l'équilibre du FNGIR,
+    les fractions de TVA d'une année à l'autre, et chaque collectivité contre les comptes de gestion de la DGCL et
+    contre ses comptes individuels."""
+    par_annee = deja_calcule("versements_par_annee")
+    if not par_annee:
+        return []
+    exercices = [e for e, _, _ in par_annee]
+    totaux = {e: t for e, t, _ in par_annee}
+    detail = {e: d for e, _, d in par_annee}
+    libelles = {v["versement"]: v["libelle"] for v in lire("tables/versements_rei.csv")}
+    lignes = ["### Ce que l'État verse à chaque collectivité", "",
+              "Le REI donne aussi, chaque année, des montants qui ne sont pas des impôts : les allocations "
+              "compensatrices que l'État verse pour les exonérations et abattements qu'il décide, la dotation de "
+              "compensation de la réforme de la taxe professionnelle (DCRTP), les reversements et prélèvements du "
+              "fonds national de garantie individuelle des ressources (FNGIR), les fractions de TVA que l'État verse "
+              "depuis 2021 en compensation de la taxe d'habitation, de la taxe foncière des départements et de la CVAE, "
+              "et l'effet du coefficient correcteur, qui compense aux communes la perte de leur taxe d'habitation. Ce "
+              "sont les montants d'une collectivité : la base les lit collectivité par collectivité, d'après "
+              "tables/variables_versements_rei.csv, et l'import vérifie que le montant d'un groupement, d'un "
+              "département ou d'une région est le même sur chacune de ses communes qui le donnent "
+              "(outils/versements_rei.py). Dans la métropole du Grand Paris, la DCRTP, le FNGIR et les allocations "
+              "compensatrices de CFE sont ceux de chaque établissement public territorial. Le REI ne donne pas les "
+              "allocations compensatrices en 2012, ni la fraction de TVA que les régions reçoivent depuis 2018 à la "
+              "place de leur dotation globale de fonctionnement.", "",
+              "Montants de chaque année, en millions d'euros (fractions de TVA : le montant de l'année, actualisé "
+              "depuis 2023 ; prélèvements du coefficient correcteur : négatifs, comme au REI) :", "",
+              "| Exercice | " + " | ".join(f for f, _ in FAMILLES_VERSEMENTS) + " | Collectivités |",
+              "|---|" + "---|" * (len(FAMILLES_VERSEMENTS) + 1)]
+    for e in exercices:
+        cellules = []
+        for _, motif in FAMILLES_VERSEMENTS:
+            montants = [m for (v, _, g), (_, m) in totaux[e].items() if g == "montant" and re.match(motif, v)]
+            cellules.append(fr(sum(montants) / 1e6, 1) if montants else "—")
+        nombre = sum(n for (_, _, g), (n, _) in totaux[e].items() if g == "montant")
+        lignes.append(f"| {e} | " + " | ".join(cellules) + f" | {fr(nombre, 0)} |")
+    lignes += ["", "La dernière colonne compte les montants non nuls de l'année : une collectivité en a autant que de "
+               "versements qu'elle reçoit.", "",
+               f"Détail de {exercices[-1]}, par nature, niveau et grandeur :", "",
+               "| Versement | Niveau | Grandeur | Collectivités | Montant |", "|---|---|---|---|---|"]
+    for (v, n, g), (nombre, montant) in sorted(totaux[exercices[-1]].items()):
+        lignes.append(f"| {libelles.get(v, v)} | {NIVEAUX_LISIBLES[n]} | {GRANDEURS_LISIBLES[g]} | {fr(nombre, 0)} | "
+                      f"{millions(montant)} |")
+    # Le FNGIR reverse ce qu'il prélève.
+    lignes += ["", "Le FNGIR reverse aux collectivités que la réforme de la taxe professionnelle a appauvries ce qu'il "
+               "prélève sur celles qu'elle a enrichies : chaque année, ses prélèvements doivent égaler ses "
+               "reversements.", "", "| Exercice | Prélèvements | Reversements | Écart (reversements − prélèvements) |",
+               "|---|---|---|---|"]
+    for e in exercices:
+        prel, rev = (sum(m for (v, _, g), (_, m) in totaux[e].items() if v == f"FNGIR_{x}" and g == "montant")
+                     for x in ("PRELEVEMENT", "REVERSEMENT"))
+        lignes.append(f"| {e} | {millions(prel)} | {millions(rev)} | {ecart_lisible(rev - prel, 'euros')} |")
+    # Les fractions de TVA d'une année à l'autre.
+    identites = collections.defaultdict(lambda: [set(), 0, 0, None])
+    for precedente, e in zip(exercices, exercices[1:]):
+        for (v, n, g, qui), definitif in detail[e].items():
+            if g != "definitif_precedent":
+                continue
+            # En 2022, le REI ne disait pas ce que compensait la fraction de TVA d'un département, d'un groupement,
+            # d'une région ou de la Ville de Paris : chacun n'en recevait qu'une.
+            verse = detail[precedente].get((v, n, "montant", qui), detail[precedente].get(("TVA", n, "montant", qui), 0.0))
+            solde = detail[e].get((v, n, "solde_precedent", qui), 0.0)
+            entree = identites[(v, n)]
+            entree[0].add(e)
+            ecart = definitif - verse - solde
+            if depasse(ecart, 1.5):
+                entree[2] += 1
+                if entree[3] is None or abs(ecart) > abs(entree[3][0]):
+                    entree[3] = (ecart, qui, e)
+            else:
+                entree[1] += 1
+    if identites:
+        lignes += ["", "Depuis 2023, le REI donne pour chaque fraction de TVA le montant actualisé de l'année, le "
+                   "montant définitif de l'année précédente et le solde qui en résulte : le montant définitif doit "
+                   "égaler le montant actualisé que donnait le REI de l'année précédente, plus le solde, à l'euro "
+                   "près (chacun des trois montants est arrondi à l'euro). Pour 2022, le montant de l'année est la "
+                   "fraction de TVA de la collectivité, dont le REI ne disait pas ce qu'elle compensait.", "",
+                   "| Versement | Niveau | Exercices | Égaux | En écart | Plus grand écart (définitif − actualisé − solde) |",
+                   "|---|---|---|---|---|---|"]
+        for (v, n), (annees, egaux, ecarts, pire) in sorted(identites.items()):
+            texte = f"{ecart_lisible(pire[0], 'euros')} : {pire[1]}, {pire[2]}" if pire else "aucun"
+            lignes.append(f"| {libelles.get(v, v)} | {NIVEAUX_LISIBLES[n]} | {plage(annees)} | {fr(egaux, 0)} | "
+                          f"{fr(ecarts, 0)} | {texte} |")
+    # Les comptes de gestion de la DGCL.
+    dgcl = versements_dgcl(derniers, detail)
+    if dgcl:
+        annees_dgcl = sorted({k[7] for k in derniers if k[0] in SOURCES_DGCL and k[7] in detail})
+        lignes += ["", "Les comptes de gestion de chaque département et de chaque région que publie la DGCL (« Les "
+                   f"finances des départements », « Les finances des régions », {plage(annees_dgcl)}) donnent, "
+                   "collectivité par collectivité, les prélèvements et reversements du FNGIR (tableau T07) et les "
+                   "péréquations et compensations fiscales des concours de l'État (tableau T04.2), que forment pour "
+                   "l'essentiel la DCRTP et les allocations compensatrices. Ils se comparent au REI de la même année, "
+                   "à l'arrondi près ; la DGCL réunit ce que le REI distingue : la Ville de Paris, commune et "
+                   "département, la métropole de Lyon, groupement et département, les deux départements alsaciens "
+                   "dans la Collectivité européenne d'Alsace, et, dans les collectivités de Corse, de Martinique et de "
+                   "Guyane, les parts du département et de la région. Les péréquations et compensations fiscales "
+                   "comprennent d'autres dotations que celles du REI : un écart y est attendu.", "",
+                   "| Comparaison | Publication | Collectivités comparées | Égales | Écart de moins de 1 % | Au-delà | "
+                   "DGCL | REI | Plus grand écart (REI − DGCL) |", "|---|---|---|---|---|---|---|---|---|"]
+        for (nom, publication), (n, egales, proches, loin, publie, recense, pire) in sorted(
+                dgcl.items(), key=lambda e: ([c[0] for c in COMPARAISONS_DGCL].index(e[0][0]), e[0][1])):
+            texte = f"{ecart_lisible(pire[0], 'euros')} : {pire[1]}, {pire[2]}" if pire else "aucun"
+            lignes.append(f"| {nom} | {publication} | {fr(n, 0)} | {fr(egales, 0)} | {fr(proches, 0)} | {fr(loin, 0)} | "
+                          f"{millions(publie)} | {millions(recense)} | {texte} |")
+    # Les comptes individuels de la DGFiP.
+    individuelles = versements_individuels(detail)
+    if individuelles:
+        lignes += ["", "Les fractions de TVA que le REI donne pour l'année (le montant actualisé depuis 2023) contre "
+                   "celles que chaque collectivité inscrit à ses comptes, d'après ses comptes individuels (section "
+                   "13) : l'État verse chaque mois un douzième du montant prévu, puis régularise l'année suivante ; un "
+                   f"écart de quelques pour cent est donc attendu. Sont dites proches les fractions à moins de "
+                   f"{fr(100 * SEUIL_TVA, 0)} % l'une de l'autre.", "",
+                   "| Niveau | Exercice | Collectivités comparées | Proches | REI | Comptes | Écart (comptes − REI) |",
+                   "|---|---|---|---|---|---|---|"]
+        for (source, e), (n, proches, notifiee, inscrite) in sorted(individuelles.items()):
+            lignes.append(f"| {NIVEAUX_INDIVIDUELS[source]} | {e} | {fr(n, 0)} | {fr(proches, 0)} | {millions(notifiee)} | "
+                          f"{millions(inscrite)} | {pour_cent((inscrite - notifiee) / notifiee) if notifiee else '—'} |")
+    lignes.append("")
     return lignes
 
 
@@ -5682,6 +5945,8 @@ def deja_calcule(nom, *arguments):
         return globals()[nom](*arguments)
     if nom == "recensement":
         return recensement([deballe(tache.result()) for tache in TACHES[nom]])
+    if nom == "versements_par_annee":
+        return [deballe(tache.result()) for tache in TACHES[nom]]
     if nom == "balances_collectivites_recalculees":
         taches, retenues = TACHES[nom]
         resultat = [(e, deballe(tache.result())) for e, tache in taches]
@@ -5697,6 +5962,8 @@ def lancer_calculs(bassin):
     recenses = {a[0]: None for a in annees}
     lourds = [(nom, poids * 1e12) for nom, (_, poids) in D_AVANCE.items()]
     lourds += [(a, 3e12 + int(fichiers[a[1]["fichier_id"]]["octets"])) for a in annees]
+    lourds += [(("versements",) + a[:2], 3e12 + int(fichiers[a[1]["fichier_id"]]["octets"]) - 1) for a in annees]
+    verses = {a[0]: None for a in annees}
     # Le recalcul des balances des collectivités, exercice par exercice, part le premier : c'est le plus lourd, les
     # exercices les plus récents d'abord, qui ont les montants de l'OFGL de toutes les catégories.
     exercices, retenues = exercices_recalcules()
@@ -5706,9 +5973,12 @@ def lancer_calculs(bassin):
     for calcul, _ in sorted(lourds, key=lambda c: -c[1]):
         if isinstance(calcul, str):
             TACHES[calcul] = bassin.submit(calcul_d_avance, calcul)
+        elif calcul[0] == "versements":
+            verses[calcul[1]] = bassin.submit(calcul_d_avance, "versements_exercice", *calcul[1:])
         else:
             recenses[calcul[0]] = bassin.submit(calcul_d_avance, "recensement_exercice", *calcul)
     TACHES["recensement"] = list(recenses.values())
+    TACHES["versements_par_annee"] = list(verses.values())
 
 
 def ecrire_rapport(derniers):

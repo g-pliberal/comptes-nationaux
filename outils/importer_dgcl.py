@@ -7,11 +7,13 @@ copie archivée d'un classeur xlsx annuel.
 
 Chaque classeur donne, pour une année, les comptes de gestion de chaque collectivité, budget principal, en opérations
 réelles et hors gestion active de la dette, en millions d'euros à leur précision d'origine (le centime), et leurs
-totaux. L'import lit les tableaux T01 à T06, T09 et T10.1 : dépenses et recettes de fonctionnement et d'investissement,
-leur détail par nature, emprunts, remboursements, intérêts et encours de la dette, soldes de gestion. Il ne lit pas les
-prélèvements et reversements de fiscalité (T07, T08), les dépenses par fonction (T11, T12), ni les ratios et les données
-de contexte (T10.2, T13 et suivants). Dans les tableaux lus, les montants par habitant, les parts et les évolutions, que
-la source calcule à partir des montants, ne sont pas enregistrés.
+totaux. L'import lit les tableaux T01 à T07, T09 et T10.1 : dépenses et recettes de fonctionnement et d'investissement,
+leur détail par nature, prélèvements et reversements de fiscalité (fonds national de garantie individuelle des
+ressources et fonds de péréquation), emprunts, remboursements, intérêts et encours de la dette, soldes de gestion. Il ne
+lit pas la synthèse des recettes fiscales (T08), qui reprend les soldes des fonds du tableau T07, les dépenses par
+fonction (T11, T12), ni les ratios et les données de contexte (T10.2, T13 et suivants). Dans les tableaux lus, les
+montants par habitant, les parts et les évolutions, que la source calcule à partir des montants, ne sont pas
+enregistrés.
 
 Chaque titre de tableau, en-tête de colonne et ligne doit avoir une correspondance ci-dessous, et chaque collectivité
 le nom de son code : un inconnu arrête l'import. Les recettes de fonctionnement, charges financières et remboursements
@@ -92,11 +94,12 @@ TABLEAUX = {"T01": "T01 - Les dépenses des {} (1)", "T02": "T02 - Les recettes 
             "T04.1": "T04.1 - Ventilation des recettes de fonctionnement par nature (1/2)",
             "T04.2": "T04.2 - Ventilation des recettes de fonctionnement par nature (2/2)",
             "T05": "T05 - Ventilation des dépenses d'investissement par nature",
+            "T07": "T07 - Les prélèvements et reversements de fiscalité (1)",
             "T06": "T06 - Ventilation des recettes d'investissement par nature",
             "T09": "T09 - Emprunts et endettement", "T10.1": "T10.1 - Soldes de gestion et indicateurs (1/2)"}
 # Colonnes en millions d'euros : (tableau, intitulé du groupe de colonnes, sous-titre) → concept de la norme
 # COMPTES_LOCAUX, ou None pour un montant repris d'un autre tableau. Le sous-titre est vide pour le montant de l'année,
-# « dont … » pour une de ses parties.
+# « dont … » pour une de ses parties, « Prélèvement » ou « Reversement » pour un fonds du tableau T07.
 COLONNES = {(t, forme(g), forme(s)): c for (t, g, s), c in {
     ("T01", "Dépenses totales", ""): "DEP_TOTALES_HORS_REMBOURSEMENTS",
     ("T01", "Dépenses réelles totales", ""): "DEP_TOTALES_HORS_REMBOURSEMENTS",
@@ -125,6 +128,20 @@ COLONNES = {(t, forme(g), forme(s)): c for (t, g, s), c in {
     ("T04.2", "Ventes de biens et services (3)", ""): "VENTES_BIENS_SERVICES",
     ("T04.2", "Autres (4)", ""): "AUTRES_REC_FONCTIONNEMENT",
     ("T05", "Dépenses d'équipement (1)", ""): "DEPENSES_EQUIPEMENT",
+    ("T07", "FNGIR", "Prélèvement"): "PRELEVEMENTS_FNGIR",
+    ("T07", "FNGIR", "Reversement"): "REVERSEMENTS_FNGIR",
+    ("T07", "Fonds National de Garantie Individuelle de Ressources", "Prélèvement"): "PRELEVEMENTS_FNGIR",
+    ("T07", "Fonds National de Garantie Individuelle de Ressources", "Reversement"): "REVERSEMENTS_FNGIR",
+    ("T07", "Fonds CVAE", "Prélèvement"): "PRELEVEMENTS_PEREQUATION_CVAE",
+    ("T07", "Fonds CVAE", "Reversement"): "ATTRIBUTIONS_PEREQUATION_CVAE",
+    ("T07", "FSDRIF", "Prélèvement"): "PRELEVEMENTS_FSDRIF",
+    ("T07", "FSDRIF", "Reversement"): "ATTRIBUTIONS_FSDRIF",
+    ("T07", "Fonds DMTO", "Prélèvement"): "PRELEVEMENTS_PEREQUATION_DMTO",
+    ("T07", "Fonds DMTO", "Reversement"): "ATTRIBUTIONS_PEREQUATION_DMTO",
+    ("T07", "Fonds de péréquation des ressources perçues par les régions", "Prélèvement"):
+        "PRELEVEMENTS_PEREQUATION_REGIONS",
+    ("T07", "Fonds de péréquation des ressources perçues par les régions", "Reversement"):
+        "ATTRIBUTIONS_PEREQUATION_REGIONS",
     ("T05", "Subventions d'équipement (2)", ""): "SUBVENTIONS_EQUIPEMENT_VERSEES",
     ("T05", "Autres (3)", ""): "AUTRES_DEP_INVESTISSEMENT",
     ("T06", "Dotations, subventions et fonds divers (1)", ""): "DOTATIONS_SUBVENTIONS_INVESTISSEMENT",
@@ -150,6 +167,7 @@ COLONNES = {(t, forme(g), forme(s)): c for (t, g, s), c in {
     ("T10.1", "Epargne nette (e) - (f)", ""): "EPARGNE_NETTE",
 }.items()}
 NON_LUES = {"€/h", "%", "(%)"}  # montants par habitant et parts
+SENS_DES_FONDS = {"prelevement", "reversement"}  # sous-titres des colonnes du tableau T07
 
 
 def grille(cellules):
@@ -175,7 +193,8 @@ def texte(valeur):
 
 def colonnes(nom, lignes, annee):
     """Les colonnes de montants d'un tableau : {colonne: (concept, intitulé, note)}. L'intitulé d'un groupe de colonnes
-    (ligne 3) vaut pour les colonnes vides qui le suivent ; la ligne 4 donne l'année ou « dont … », la ligne 5 l'unité."""
+    (ligne 3) vaut pour les colonnes vides qui le suivent ; la ligne 4 donne l'année ou « dont … » (au tableau T07,
+    « Prélèvement » ou « Reversement »), la ligne 5 l'unité."""
     resultat, groupe = {}, ""
     for colonne in sorted({c for n in (3, 4, 5) for c in lignes.get(n, {})} - {"A"}, key=rang):
         if lignes.get(3, {}).get(colonne) not in (None, ""):
@@ -188,7 +207,7 @@ def colonnes(nom, lignes, annee):
             continue  # colonne vide
         if unite != "m€":
             sys.exit(f"{nom} : colonne {colonne} d'unité inconnue (« {unite} »)")
-        if sous not in ("", annee) and not forme(sous).startswith("dont"):
+        if sous not in ("", annee) and not forme(sous).startswith("dont") and forme(sous) not in SENS_DES_FONDS:
             sys.exit(f"{nom} : colonne {colonne} d'une autre année que {annee} (« {sous} »)")
         # L'intitulé de la colonne de la dette peut porter une autre année que celle du classeur : la ligne des années
         # et les montants sont ceux de l'année du classeur.
@@ -205,6 +224,8 @@ def colonnes(nom, lignes, annee):
         if COLONNES[cle] is None:
             continue
         resultat[colonne] = (COLONNES[cle], f"{groupe}{' / ' + sous if sous and sous != annee else ''}", note)
+    if nom == "T07" and len(resultat) != len(set(c for c, _, _ in resultat.values())):
+        sys.exit(f"{nom} : deux colonnes donnent le même fonds")
     return resultat
 
 
