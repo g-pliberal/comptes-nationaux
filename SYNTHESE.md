@@ -254,7 +254,7 @@ Source : Rapport annuel sur l'état de la fonction publique, édition 2026 : don
 
 ## Ce que contient la base
 
-301 558 chiffres enregistrés un par un, chacun avec sa fiche d'identité et l'endroit exact où le relire dans la copie archivée de sa source :
+311 027 chiffres enregistrés un par un, chacun avec sa fiche d'identité et l'endroit exact où le relire dans la copie archivée de sa source :
 
 | Producteur | Publications | Chiffres | Années couvertes |
 |---|---:|---:|---|
@@ -263,8 +263,8 @@ Source : Rapport annuel sur l'état de la fonction publique, édition 2026 : don
 | DGCL | 3 | 28 625 | 2020-2026 |
 | Assemblée nationale (textes de loi) | 29 | 21 839 | 2006-2026 |
 | DREES | 1 | 16 844 | 1959-2024 |
+| Direction du budget | 9 | 13 426 | 2010-2023 |
 | OFGL | 4 | 12 880 | 2017-2025 |
-| Direction du budget | 7 | 3 957 | 2018-2023 |
 | Eurostat | 3 | 2 880 | 1975-2025 |
 | Direction de la sécurité sociale | 7 | 2 805 | 2021-2030 |
 | Cour des comptes | 18 | 820 | 2008-2025 |

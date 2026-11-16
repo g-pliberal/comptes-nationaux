@@ -46,6 +46,8 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | budget.emplois-plr2018 | Crédits et emplois consommés en 2018 par mission et par programme, données du projet de loi de règlement pour 2018 (PLR 2018) | 2019-06-27 | 51 |
 | budget.emplois-plr2019 | Emplois consommés en 2019 par programme et synthèse des rapports annuels de performances, données du projet de loi de règlement pour 2019 (PLR 2019) | 2020-09-09 | 150 |
 | budget.emplois-plr2020 | Emplois consommés en 2020 par programme et synthèse des rapports annuels de performances, données du projet de loi de règlement pour 2020 (PLR 2020) | 2021-04-15 | 156 |
+| budget.operateurs-plf2012 | Comptes des opérateurs de l'État en 2010, budget primitif et compte financier, données de l'annexe « Opérateurs de l'État » au projet de loi de finances pour 2012 | 2018-12-13 | 2527 |
+| budget.operateurs-plf2019 | Budgets initiaux 2018 des opérateurs de l'État, données des projets annuels de performances annexés au projet de loi de finances pour 2019 | 2018-12-13 | 6942 |
 | ccomptes.certification-2016 | Certification des comptes de l'État, exercice 2016 (mai 2017) | 2017-05-24 | 76 |
 | ccomptes.certification-2017 | Certification des comptes de l'État, exercice 2017 (mai 2018) | 2018-05-24 | 80 |
 | ccomptes.certification-2018 | Certification des comptes de l'État, exercice 2018 (mai 2019) | 2019-05-13 | 92 |
@@ -210,10 +212,20 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 
 Un total contre la somme de ses composantes, pour chaque source, périmètre, fonction et année : en montant, ou en % du PIB quand la source y donne aussi ses composantes. Les tableaux des lois d'approbation des comptes changent de lignes d'une année à l'autre, et une case vide y vaut « rien » : une composante qu'ils ne présentent pas une année y compte pour zéro.
 
-35495 sommes vérifiées avec toutes leurs composantes : 35378 justes, 117 en écart.
+38121 sommes vérifiées avec toutes leurs composantes : 37994 justes, 127 en écart.
 
 | Source | Périmètre | Fonction | Année | Total | Total publié | Somme des composantes | Écart |
 |---|---|---|---|---|---|---|---|
+| budget.operateurs-plf2019 | OPERATEUR_AFB | ensemble | 2018 | OPERATEURS.EF_ABONDEMENT_TRESORERIE_BI | 0,0000 Md€ | 0,0022 Md€ | −2,2 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_CNRS | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0154 Md€ | +15,4 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_IFSTTAR | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0048 Md€ | +4,8 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_INED | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0032 Md€ | +3,2 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_INRA | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0057 Md€ | +5,7 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_INRIA | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0067 Md€ | +6,7 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_INSERM | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0387 Md€ | +38,8 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_IRD | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | 0,0044 Md€ | −4,4 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_IRSTEA | ensemble | 2018 | OPERATEURS.AB_SOLDE_BUDGETAIRE_BI | 0,0000 Md€ | −0,0027 Md€ | +2,7 M€ |
+| budget.operateurs-plf2019 | OPERATEUR_OFPRA | ensemble | 2018 | OPERATEURS.EF_ABONDEMENT_TRESORERIE_BI | 0,0000 Md€ | −0,0002 Md€ | +0,2 M€ |
 | dgcl.finances-departements | DEPARTEMENTS_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 59,5032 Md€ | 60,2187 Md€ | −715,5 M€ |
 | dgcl.finances-departements | DEPARTEMENTS_BP | ensemble | 2022 | COMPTES_LOCAUX.REC_FONCTIONNEMENT | 71,4088 Md€ | 71,4338 Md€ | −25,0 M€ |
 | dgcl.finances-departements | DEPARTEMENTS_CTU_BP | ensemble | 2022 | COMPTES_LOCAUX.DEP_FONCTIONNEMENT | 70,7601 Md€ | 71,4756 Md€ | −715,5 M€ |
@@ -2247,7 +2259,7 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 | Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
 |---|---|---|---|
 | État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; budget : depenses-fiscales-plf2020, depenses-fiscales-plf2021, depenses-fiscales-plf2022, depenses-fiscales-plf2023, emplois-plr2018, emplois-plr2019, emplois-plr2020 ; ccomptes : 18 sources (certification-2016 … rbde-2025) ; dgafp : raefp-2007-2008, raefp-2010-2011, raefp-2012, raefp-2017, raefp-2018, raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
-| Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
+| Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun pour 2024 ; 237 opérateurs de l'État ou catégories d'opérateurs, la plupart des ODAC, en 2010 et en 2018, d'après les annexes budgétaires | budget : operateurs-plf2012, operateurs-plf2019 ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
 | Administrations de sécurité sociale (S1314) | pas de liste dans la documentation des comptes nationaux de l'Insee | aucune ; leurs ensembles d'après les lois de financement : régime général, régimes obligatoires de base, FSV, CADES, FRR | eurostat : gov_10a_main ; insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3108, t3212 à t3216, t3306, t3307, t7306 ; secu : placss2023-annexe2, placss2024-annexe2, plfss2023-annexe4, plfss2024-annexe4, plfss2025-annexe4, plfss2026-annexe4, plfss2027-annexe4 ; senat : 22 sources (pjl06-051 … tas22-018) |
@@ -2316,7 +2328,7 @@ Unités retenues dans la base :
 
 ### Organismes divers d'administration centrale en 2024
 
-La liste de l'Insee, que la table des organismes reprend organisme par organisme : 701 organismes, par fonction (premier niveau de la COFOG). La base n'a les comptes d'aucun d'eux un à un.
+La liste de l'Insee, que la table des organismes reprend organisme par organisme : 701 organismes, par fonction (premier niveau de la COFOG). La base n'a les comptes d'aucun d'eux un à un pour 2024 ; 237 opérateurs de l'État ou catégories d'opérateurs, la plupart des ODAC, en 2010 et en 2018, d'après les annexes budgétaires.
 
 | Fonction | Organismes |
 |---|---|
