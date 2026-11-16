@@ -4624,13 +4624,16 @@ def partie_lfr_emplois(derniers):
 
 
 # 22. Emplois consommés : ceux de l'État budgets annexes compris, du budget général et des budgets annexes, tels que
-# les donnent la Cour des comptes et la DGAFP, contre le plafond de même champ que fixent la loi de finances initiale de
+# les donnent la Cour des comptes, la direction du budget et la DGAFP, contre le plafond de même champ que fixent la loi de finances initiale de
 # l'année (l'article d'équilibre, ou la ligne « I. Budget général » ou « II. Budgets annexes » du tableau qui le
 # répartit) et, s'il y a lieu, la dernière loi rectificative de l'année qui le change.
 EMPLOIS_CONSOMMES = {"LOLF.EMPLOIS_CONSOMMES": ("État, budgets annexes compris", "LOLF.PLAFOND_EMPLOIS"),
                      "LOLF.BG_EMPLOIS_CONSOMMES": ("budget général", "LOLF.BG_PLAFOND_EMPLOIS"),
                      "LOLF.BA_EMPLOIS_CONSOMMES": ("budgets annexes", "LOLF.BA_PLAFOND_EMPLOIS")}
-PRODUCTEURS_EMPLOIS = {"ccomptes": "Cour des comptes", "dgafp": "DGAFP"}
+PRODUCTEURS_EMPLOIS = {"ccomptes": "Cour des comptes", "budget": "Direction du budget", "dgafp": "DGAFP"}
+# Les données d'un projet de loi de règlement de la direction du budget (budget.emplois-plr<année>) reprennent les
+# emplois de l'année précédente : ceux de l'année que porte la source l'emportent, à défaut ce rappel.
+SOURCE_EMPLOIS_BUDGET = re.compile(r"budget\.emplois-plr([0-9]{4})")
 
 
 def suite_annees(annees):
@@ -4653,13 +4656,17 @@ def etpt(x):
 
 
 def partie_emplois_consommes(derniers):
-    consommes, initiaux, revises = collections.defaultdict(dict), {}, {}
-    for l in derniers.values():
+    consommes, initiaux, revises, rappels = collections.defaultdict(dict), {}, {}, set()
+    for l in sorted(derniers.values(), key=lambda l: l["source_id"], reverse=True):
         if l["perimetre_id"] != "ETAT_LF" or l["fonction_id"] or l["unite_id"] != "ETPT":
             continue
         c, a = l["concept_id"], l["periode"]
-        if c in EMPLOIS_CONSOMMES:
+        budget = SOURCE_EMPLOIS_BUDGET.fullmatch(l["source_id"])
+        if c in EMPLOIS_CONSOMMES and (budget is None or budget.group(1) == a
+                                       or "budget" not in consommes[(a, c)]):
             consommes[(a, c)][l["source_id"].split(".")[0]] = float(l["valeur"])
+            if budget is not None:
+                (rappels.add if budget.group(1) != a else rappels.discard)((a, c))
         for consomme, (_, plafond) in EMPLOIS_CONSOMMES.items():
             if c == plafond + "_LFI":
                 initiaux[(a, consomme)] = int(float(l["valeur"]))
@@ -4671,26 +4678,31 @@ def partie_emplois_consommes(derniers):
     lignes = ["## 22. Emplois consommés", "",
               "Les emplois de l'État consommés dans l'année, en équivalents temps plein travaillé (ETPT) : tels que les "
               "donne le rapport de la Cour des comptes sur le budget de l'année (sur l'année suivante pour 2008), pour "
-              "l'État budgets annexes compris ou pour le budget général seul, selon ce que dit le rapport ; et tels que "
-              "la DGAFP les reprend des lois de règlement et des rapports annuels de performances dans son rapport "
-              "annuel de l'année suivante, depuis 2021, pour l'État, le budget général et les budgets annexes. Chacun se "
+              "l'État budgets annexes compris ou pour le budget général seul, selon ce que dit le rapport ; tels que "
+              "la direction du budget les publie avec les données des projets de loi de règlement pour 2019 et 2020 "
+              "(synthèse des rapports annuels de performances), pour le budget général et les budgets annexes, et pour "
+              "2018 tels que les reprend la synthèse de 2019 (marqués « rappel ») ; et tels que la DGAFP les reprend "
+              "des lois de règlement et des rapports annuels de performances dans son rapport annuel de l'année "
+              "suivante, depuis 2021, pour l'État, le budget général et les budgets annexes. Chacun se "
               "compare au plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » ou "
               "« II. Budgets annexes » du tableau qui le répartit, que fixe la loi de finances initiale (section 20) et "
               "que peut changer une loi rectificative (section 21) : le plafond de l'année est celui de la dernière loi "
-              "qui le fixe ; l'écart se calcule sur le chiffre de la Cour, à défaut sur celui de la DGAFP. L'import "
+              "qui le fixe ; l'écart se calcule sur le chiffre de la Cour, à défaut sur celui de la direction du budget, "
+              "à défaut sur celui de la DGAFP. L'import "
               "vérifie que chaque plafond que cite la Cour est celui que la base lit dans ces lois ; la section 6 "
               "compare les deux sources.", "",
-              "| Année | Emplois | Cour des comptes | DGAFP | Plafond initial | Plafond rectifié | "
-              "Consommés − plafond de l'année |", "|---|---|---|---|---|---|---|"]
+              "| Année | Emplois | Cour des comptes | Direction du budget | DGAFP | Plafond initial | Plafond rectifié | "
+              "Consommés − plafond de l'année |", "|---|---|---|---|---|---|---|---|"]
     ecarts, rang = [], lambda x: (x[0][0], list(EMPLOIS_CONSOMMES).index(x[0][1]))
     for (a, c), valeurs in sorted(consommes.items(), key=rang):
         initial, revise = initiaux.get((a, c)), revises.get((a, c), (None, None))[1]
         plafond = revise if revise is not None else initial
-        v = valeurs.get("ccomptes", valeurs.get("dgafp"))
+        v = next(valeurs[p] for p in PRODUCTEURS_EMPLOIS if p in valeurs)
         if plafond is not None:
             ecarts.append((a, c, v - plafond))
         lignes.append(f"| {a} | {EMPLOIS_CONSOMMES[c][0]} | "
-                      + " | ".join(etpt(valeurs[p]) if p in valeurs else "—" for p in PRODUCTEURS_EMPLOIS) + " | "
+                      + " | ".join(etpt(valeurs[p]) + (" (rappel)" if p == "budget" and (a, c) in rappels else "")
+                                   if p in valeurs else "—" for p in PRODUCTEURS_EMPLOIS) + " | "
                       f"{fr(initial, 0) if initial is not None else '—'} | "
                       f"{fr(revise, 0) if revise is not None else '—'} | "
                       f"{fr(v - plafond, decimales_utiles(v - plafond), True) if plafond is not None else '—'} |")
@@ -4713,8 +4725,9 @@ def partie_emplois_consommes(derniers):
     manquantes = set(range(min(votees), max(int(a) for a, _ in consommes) + 1)) - {int(a) for a, _ in consommes}
     if manquantes:
         lignes += [f"La base n'a pas d'emplois consommés pour {suite_annees(manquantes)}, faute d'un chiffre qu'elle "
-                   f"sache lire dans les rapports de la Cour, et la DGAFP ne les donne que depuis 2021 : "
-                   f"outils/importer_cour_comptes.py dit pourquoi, année par année.", ""]
+                   f"sache lire dans les rapports de la Cour ; la direction du budget ne les donne en données ouvertes "
+                   f"que de 2018 à 2020, et la DGAFP que depuis 2021 : outils/importer_cour_comptes.py dit pourquoi, "
+                   f"année par année.", ""]
     return lignes
 
 

@@ -14,6 +14,7 @@ import math
 import os
 import pathlib
 import re
+import struct
 import sys
 import unicodedata
 import xml.etree.ElementTree as ET
@@ -439,6 +440,223 @@ def date_xlsx(chemin):
         if date is not None and date.text:
             return date.text
     return ""
+
+
+# --- Classeurs Excel 97-2003 (xls), lus sans bibliothèque extérieure ----------------------------------------------
+#
+# Un classeur xls est un « fichier composé » (Compound File Binary Format) : un petit système de fichiers découpé en
+# secteurs, dont un flux, « Workbook », porte le classeur au format BIFF8, une suite d'enregistrements (type, longueur,
+# données). Seuls les enregistrements qui donnent la valeur d'une cellule sont lus : nombres (NUMBER, RK, MULRK),
+# textes (LABELSST, LABEL, RSTRING), résultats de formules (FORMULA, avec STRING pour un texte) et booléens ou erreurs
+# (BOOLERR). Un texte BIFF8 est en UTF-16 ou « compressé » (un octet par caractère, le premier octet de son UTF-16) ;
+# un enregistrement CONTINUE prolonge un enregistrement trop long, la table des textes partagés (SST) en particulier,
+# et y recommence un texte coupé par l'octet de ses options.
+
+_FIN_DE_CHAINE, _SECTEUR_LIBRE = 0xFFFFFFFE, 0xFFFFFFFF
+
+
+def _flux_cfb(donnees, nom):
+    """Le contenu d'un flux d'un fichier composé, désigné par son nom (« Workbook »)."""
+    if donnees[:8] != b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1":
+        raise ValueError("pas un fichier composé (xls)")
+    taille = 1 << int.from_bytes(donnees[0x1E:0x20], "little")
+    petite = 1 << int.from_bytes(donnees[0x20:0x22], "little")
+    (n_fat, premier_repertoire, _, seuil, premier_minifat, _, premier_difat,
+     n_difat) = struct.unpack_from("<IIIIIIII", donnees, 0x2C)
+    secteur = lambda s: donnees[512 + s * taille:512 + (s + 1) * taille]
+    difat = list(struct.unpack_from("<109I", donnees, 0x4C))
+    s = premier_difat
+    for _ in range(n_difat):
+        bloc = struct.unpack(f"<{taille // 4}I", secteur(s))
+        difat += bloc[:-1]
+        s = bloc[-1]
+    fat = []
+    for s in difat[:n_fat]:
+        fat += struct.unpack(f"<{taille // 4}I", secteur(s))
+
+    def chaine(depart, table, lire_secteur):
+        morceaux, s, vus = [], depart, set()
+        while s not in (_FIN_DE_CHAINE, _SECTEUR_LIBRE) and s < len(table) and s not in vus:
+            vus.add(s)
+            morceaux.append(lire_secteur(s))
+            s = table[s]
+        return b"".join(morceaux)
+
+    repertoire = chaine(premier_repertoire, fat, secteur)
+    entrees = []
+    for k in range(0, len(repertoire) - 127, 128):
+        e = repertoire[k:k + 128]
+        longueur = int.from_bytes(e[0x40:0x42], "little")
+        entrees.append((e[:max(longueur - 2, 0)].decode("utf-16-le"), e[0x42], int.from_bytes(e[0x74:0x78], "little"),
+                        int.from_bytes(e[0x78:0x7C], "little")))
+    racine = next(e for e in entrees if e[1] == 5)
+    for e_nom, type_, depart, octets in entrees:
+        if type_ != 2 or e_nom.lower() != nom.lower():
+            continue
+        if octets >= seuil:
+            return chaine(depart, fat, secteur)[:octets]
+        flux_petits = chaine(racine[2], fat, secteur)
+        minifat = struct.unpack(f"<{len(m) // 4}I", m) if (m := chaine(premier_minifat, fat, secteur)) else ()
+        return chaine(depart, minifat, lambda s: flux_petits[s * petite:(s + 1) * petite])[:octets]
+    raise KeyError(nom)
+
+
+def _enregistrements_biff(flux, debut=0):
+    """(type, données) des enregistrements BIFF à partir d'une position du flux, jusqu'à la fin de la feuille (EOF)."""
+    i = debut
+    while i + 4 <= len(flux):
+        type_, longueur = struct.unpack_from("<HH", flux, i)
+        yield type_, flux[i + 4:i + 4 + longueur]
+        i += 4 + longueur
+        if type_ == 0x000A:  # EOF
+            return
+
+
+def _texte_biff(octets, i, nombre, options):
+    """(texte, position après lui) de `nombre` caractères, en UTF-16 si le bit 0 des options est mis, compressés sinon."""
+    if options & 1:
+        return octets[i:i + 2 * nombre].decode("utf-16-le"), i + 2 * nombre
+    return octets[i:i + nombre].decode("latin-1"), i + nombre
+
+
+def _chaine_biff(octets, i=0, octet_longueur=False):
+    """(texte, position après lui) d'une chaîne BIFF8 simple (LABEL, STRING, nom de feuille), sans mise en forme."""
+    if octet_longueur:
+        nombre, i = octets[i], i + 1
+    else:
+        nombre, i = int.from_bytes(octets[i:i + 2], "little"), i + 2
+    options, i = octets[i], i + 1
+    if options & 0x08:
+        i += 2
+    if options & 0x04:
+        i += 4
+    return _texte_biff(octets, i, nombre, options)
+
+
+def _textes_partages(morceaux):
+    """Les textes de la table SST, dont le contenu est réparti entre l'enregistrement SST (sans ses 8 premiers octets)
+    et ses enregistrements CONTINUE : `morceaux`, la liste de leurs données. Un texte coupé reprend, au début du morceau
+    suivant, par un octet qui dit si la suite est en UTF-16."""
+    textes, k, i = [], 0, 8
+    total = int.from_bytes(morceaux[0][4:8], "little")
+
+    def avancer(n):  # passe n octets, d'un morceau au suivant s'il le faut (mise en forme et extensions)
+        nonlocal k, i
+        while n > 0:
+            reste = len(morceaux[k]) - i
+            if n < reste:
+                i += n
+                return
+            n -= reste
+            k, i = k + 1, 0
+
+    def lire_octets(n):
+        nonlocal k, i
+        if i >= len(morceaux[k]):
+            k, i = k + 1, 0
+        valeur = morceaux[k][i:i + n]
+        i += n
+        return valeur
+
+    while len(textes) < total:
+        nombre = int.from_bytes(lire_octets(2), "little")
+        options = lire_octets(1)[0]
+        n_formes = int.from_bytes(lire_octets(2), "little") if options & 0x08 else 0
+        n_extension = int.from_bytes(lire_octets(4), "little") if options & 0x04 else 0
+        parties, restants = [], nombre
+        while True:
+            if i >= len(morceaux[k]):
+                k, i = k + 1, 0
+                options = (options & ~1) | (morceaux[k][0] & 1)
+                i = 1
+            largeur = 2 if options & 1 else 1
+            dispo = min(restants, (len(morceaux[k]) - i) // largeur)
+            texte, i = _texte_biff(morceaux[k], i, dispo, options)
+            parties.append(texte)
+            restants -= dispo
+            if restants == 0:
+                break
+        textes.append("".join(parties))
+        avancer(4 * n_formes + n_extension)
+    return textes
+
+
+def _valeur_rk(rk):
+    if rk & 2:
+        valeur = float(rk >> 2 if rk < 1 << 31 else (rk >> 2) - (1 << 30))
+    else:
+        valeur = struct.unpack("<d", b"\0\0\0\0" + struct.pack("<I", rk & 0xFFFFFFFC))[0]
+    return valeur / 100 if rk & 1 else valeur
+
+
+def reference(ligne, colonne):
+    """(0, 0) → « A1 » : la référence d'une cellule désignée par ses rangs, comptés depuis 0."""
+    lettres, n = "", colonne + 1
+    while n:
+        n, r = divmod(n - 1, 26)
+        lettres = chr(65 + r) + lettres
+    return f"{lettres}{ligne + 1}"
+
+
+def feuilles_xls(chemin):
+    """{nom de la feuille: position de son début dans le flux} d'un classeur xls."""
+    with ouvrir_copie(chemin) as f:
+        flux = _flux_cfb(f.read(), "Workbook")
+    feuilles = {}
+    for type_, d in _enregistrements_biff(flux):
+        if type_ == 0x0085:  # BOUNDSHEET
+            feuilles[_chaine_biff(d, 6, octet_longueur=True)[0]] = int.from_bytes(d[:4], "little")
+    return feuilles
+
+
+def lire_xls(chemin, feuille=None):
+    """Renvoie (nom de la feuille, {référence de cellule: valeur}) pour une feuille d'un classeur xls (BIFF8), comme
+    lire_xlsx : nombres en float, textes en str ; un booléen ou une erreur reste son code, en texte."""
+    with ouvrir_copie(chemin) as f:
+        flux = _flux_cfb(f.read(), "Workbook")
+    feuilles, sst, morceaux_sst = {}, [], None
+    for type_, d in _enregistrements_biff(flux):
+        if type_ == 0x0085:
+            feuilles[_chaine_biff(d, 6, octet_longueur=True)[0]] = int.from_bytes(d[:4], "little")
+        elif type_ == 0x00FC:  # SST
+            morceaux_sst = [d]
+        elif type_ == 0x003C and morceaux_sst is not None:  # CONTINUE de la SST
+            morceaux_sst.append(d)
+        elif morceaux_sst is not None:
+            sst, morceaux_sst = _textes_partages(morceaux_sst), None
+    if morceaux_sst is not None:
+        sst = _textes_partages(morceaux_sst)
+    nom = feuille or next(iter(feuilles))
+    cellules, formule = {}, None
+    for type_, d in _enregistrements_biff(flux, feuilles[nom]):
+        if type_ in (0x0203, 0x027E, 0x00FD, 0x0204, 0x00D6, 0x0006, 0x0205):
+            ligne, colonne = struct.unpack_from("<HH", d)
+            ref = reference(ligne, colonne)
+        if type_ == 0x0203:  # NUMBER
+            cellules[ref] = struct.unpack_from("<d", d, 6)[0]
+        elif type_ == 0x027E:  # RK
+            cellules[ref] = _valeur_rk(int.from_bytes(d[6:10], "little"))
+        elif type_ == 0x00BD:  # MULRK
+            ligne, premiere = struct.unpack_from("<HH", d)
+            for n in range((len(d) - 6) // 6):
+                cellules[reference(ligne, premiere + n)] = _valeur_rk(int.from_bytes(d[6 + 6 * n:10 + 6 * n], "little"))
+        elif type_ == 0x00FD:  # LABELSST
+            cellules[ref] = sst[int.from_bytes(d[6:10], "little")]
+        elif type_ in (0x0204, 0x00D6):  # LABEL, RSTRING
+            cellules[ref] = _chaine_biff(d, 6)[0]
+        elif type_ == 0x0205:  # BOOLERR
+            cellules[ref] = str(d[6])
+        elif type_ == 0x0006:  # FORMULA : un nombre, sauf si ses deux derniers octets de résultat valent 0xFFFF
+            resultat = d[6:14]
+            if resultat[6:8] != b"\xff\xff":
+                cellules[ref] = struct.unpack("<d", resultat)[0]
+            elif resultat[0] == 0:
+                formule = ref  # le texte suit, dans l'enregistrement STRING
+            elif resultat[0] in (1, 2):
+                cellules[ref] = str(resultat[2])
+        elif type_ == 0x0207 and formule:  # STRING
+            cellules[formule], formule = _chaine_biff(d)[0], None
+    return nom, cellules
 
 
 # --- Classeurs OpenDocument (ods), lus sans bibliothèque extérieure -------------------------------------

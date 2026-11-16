@@ -24,7 +24,7 @@ import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
 from commun import (BASE, copie_presente, empreinte_et_taille, en_parallele, identifiant, lire, lire_export_ofgl,
-                    lire_jsonstat, lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xlsx,
+                    lire_jsonstat, lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xls, lire_xlsx,
                     lire_xlsx_dans_zip, montant_pdf, montants_de_case, montants_lies_pdf, nombre_de_phrase,
                     nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres, texte_html, texte_pdf)
 
@@ -141,13 +141,14 @@ def valeur_archivee(fichier, emplacement, copies):
         dims, valeurs = copies[fichier["id"]]
         coordonnees = dict(p.split("=", 1) for p in emplacement.split(";"))
         return valeurs.get(tuple(coordonnees.get(d) for d in dims))
-    if fichier["chemin"].endswith(".xlsx"):
+    if fichier["chemin"].endswith((".xlsx", ".xls")):
         trouve = re.match(r"feuille=([^;]+);cellule=([A-Z]+[0-9]+)", emplacement)
         if trouve is None:
             return None
         feuille, cellule = trouve.groups()
         if (fichier["id"], feuille) not in copies:
-            copies[(fichier["id"], feuille)] = lire_xlsx(chemin, feuille)[1]
+            lecteur = lire_xlsx if fichier["chemin"].endswith(".xlsx") else lire_xls
+            copies[(fichier["id"], feuille)] = lecteur(chemin, feuille)[1]
         valeur = copies[(fichier["id"], feuille)].get(cellule)
         return (valeur, "") if isinstance(valeur, float) else None
     if fichier["chemin"].endswith(".html") and emplacement.startswith("phrase="):
