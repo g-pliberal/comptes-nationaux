@@ -39,6 +39,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | an.ta16-0223 | Projet de loi de finances pour 2024, texte adopté n° 223 (16e législature), considéré comme adopté définitivement par l'Assemblée nationale le 21 décembre 2023 | 2023-12-21 | 1079 |
 | an.ta17-0017 | Projet de loi de finances de fin de gestion pour 2024 (loi n° 2024-1167), texte adopté n° 17 (17e législature), adopté définitivement par l'Assemblée nationale le 4 décembre 2024 | 2024-12-04 | 767 |
 | an.ta17-0227 | Projet de loi de finances pour 2026, texte adopté n° 227 (17e législature), considéré comme adopté définitivement par l'Assemblée nationale le 2 février 2026 | 2026-02-02 | 1057 |
+| budget.depenses-fiscales-plf2019 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2019 | 2018-10-02 | 860 |
 | budget.depenses-fiscales-plf2020 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2020 | 2019-10-04 | 853 |
 | budget.depenses-fiscales-plf2021 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2021 | 2020-10-06 | 888 |
 | budget.depenses-fiscales-plf2022 | Liste des dépenses fiscales de l'annexe « Évaluations des voies et moyens », tome II, du projet de loi de finances pour 2022 | 2021-10-07 | 908 |
@@ -46,6 +47,7 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | budget.depenses-fiscales-plf2024 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2024 | 2023-10-03 | 950 |
 | budget.depenses-fiscales-plf2025 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2025 | 2024-10-11 | 975 |
 | budget.depenses-fiscales-plf2026 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2026 | 2025-10-12 | 991 |
+| budget.depenses-fiscales-plf2027 | Annexe « Évaluations des voies et moyens », tome II (dépenses fiscales), du projet de loi de finances pour 2027 | 2026-10-03 | 993 |
 | budget.emplois-plr2018 | Crédits et emplois consommés en 2018 par mission et par programme, données du projet de loi de règlement pour 2018 (PLR 2018) | 2019-06-27 | 51 |
 | budget.emplois-plr2019 | Emplois consommés en 2019 par programme et synthèse des rapports annuels de performances, données du projet de loi de règlement pour 2019 (PLR 2019) | 2020-09-09 | 150 |
 | budget.emplois-plr2020 | Emplois consommés en 2020 par programme et synthèse des rapports annuels de performances, données du projet de loi de règlement pour 2020 (PLR 2020) | 2021-04-15 | 156 |
@@ -565,6 +567,8 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 
 | Source A | Source B | Comparaisons | Écarts | dont hors chiffres révisables | Plus grand écart hors chiffres révisables (A − B) | Plus grand écart (A − B) |
 |---|---|---|---|---|---|---|
+| budget.depenses-fiscales-plf2019 | budget.depenses-fiscales-plf2020 | 488 | 282 | 0 | aucun | +1 500,0 M€ en 2018 |
+| budget.depenses-fiscales-plf2019 | budget.depenses-fiscales-plf2021 | 214 | 153 | 0 | aucun | +1 260,0 M€ en 2019 |
 | budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2021 | 496 | 282 | 0 | aucun | +895,0 M€ en 2020 |
 | budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2022 | 235 | 160 | 0 | aucun | −960,0 M€ en 2020 |
 | budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2022 | 537 | 309 | 0 | aucun | +992,0 M€ en 2021 |
@@ -576,6 +580,8 @@ Un chiffre que sa source présente comme provisoire, semi-définitif, estimé ou
 | budget.depenses-fiscales-plf2024 | budget.depenses-fiscales-plf2025 | 595 | 344 | 0 | aucun | +864,0 M€ en 2023 |
 | budget.depenses-fiscales-plf2024 | budget.depenses-fiscales-plf2026 | 289 | 205 | 0 | aucun | −4 500,0 M€ en 2024 |
 | budget.depenses-fiscales-plf2025 | budget.depenses-fiscales-plf2026 | 637 | 364 | 0 | aucun | −4 200,0 M€ en 2024 |
+| budget.depenses-fiscales-plf2025 | budget.depenses-fiscales-plf2027 | 281 | 189 | 0 | aucun | −3 000,0 M€ en 2025 |
+| budget.depenses-fiscales-plf2026 | budget.depenses-fiscales-plf2027 | 582 | 336 | 0 | aucun | +974,0 M€ en 2026 |
 | budget.emplois-plr2019 | budget.emplois-plr2020 | 2 | 1 | 1 | −19 ETPT en 2019 | −19 ETPT en 2019 |
 | ccomptes.rbde-2021 | dgafp.raefp-2022 | 1 | 0 | 0 | aucun | aucun |
 | ccomptes.rbde-2022 | dgafp.raefp-2023 | 1 | 1 | 1 | +4,45 ETPT en 2022 | +4,45 ETPT en 2022 |
@@ -863,6 +869,8 @@ Détail des grandeurs en écart :
 
 | Source A | Source B | Grandeur | Fonctions en écart | Années en écart | dont hors chiffres révisables | Plus grand écart (A − B) |
 |---|---|---|---|---|---|---|
+| budget.depenses-fiscales-plf2019 | budget.depenses-fiscales-plf2020 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 168 groupes | 2018 et 2019 | aucune | +1 500,0 M€ en 2018 (LOLF.DEPENSE_FISCALE.730210) |
+| budget.depenses-fiscales-plf2019 | budget.depenses-fiscales-plf2021 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 153 groupes | 2019 | aucune | +1 260,0 M€ en 2019 (LOLF.DEPENSE_FISCALE.730210) |
 | budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2021 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 168 groupes | 2019 et 2020 | aucune | +895,0 M€ en 2020 (LOLF.DEPENSE_FISCALE.800210) |
 | budget.depenses-fiscales-plf2020 | budget.depenses-fiscales-plf2022 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 160 groupes | 2020 | aucune | −960,0 M€ en 2020 (LOLF.DEPENSE_FISCALE.200302) |
 | budget.depenses-fiscales-plf2021 | budget.depenses-fiscales-plf2022 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 182 groupes | 2020 et 2021 | aucune | +992,0 M€ en 2021 (LOLF.DEPENSE_FISCALE.210324) |
@@ -874,6 +882,8 @@ Détail des grandeurs en écart :
 | budget.depenses-fiscales-plf2024 | budget.depenses-fiscales-plf2025 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 211 groupes | 2023 et 2024 | aucune | +864,0 M€ en 2023 (LOLF.DEPENSE_FISCALE.800401) |
 | budget.depenses-fiscales-plf2024 | budget.depenses-fiscales-plf2026 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 205 groupes | 2024 | aucune | −4 500,0 M€ en 2024 (LOLF.DEPENSE_FISCALE.520110) |
 | budget.depenses-fiscales-plf2025 | budget.depenses-fiscales-plf2026 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 220 groupes | 2024 et 2025 | aucune | −4 200,0 M€ en 2024 (LOLF.DEPENSE_FISCALE.520110) |
+| budget.depenses-fiscales-plf2025 | budget.depenses-fiscales-plf2027 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 189 groupes | 2025 | aucune | −3 000,0 M€ en 2025 (LOLF.DEPENSE_FISCALE.520110) |
+| budget.depenses-fiscales-plf2026 | budget.depenses-fiscales-plf2027 | FR ETAT_LF LOLF.DEPENSE_FISCALE | 207 groupes | 2025 et 2026 | aucune | +974,0 M€ en 2026 (LOLF.DEPENSE_FISCALE.200302) |
 | budget.emplois-plr2019 | budget.emplois-plr2020 | FR ETAT_LF LOLF.BG_EMPLOIS_CONSOMMES | ensemble | 2019 | 2019 | −19 ETPT en 2019 |
 | ccomptes.rbde-2022 | dgafp.raefp-2023 | FR ETAT_LF LOLF.BG_EMPLOIS_CONSOMMES | ensemble | 2022 | 2022 | +4,45 ETPT en 2022 |
 | ccomptes.rbde-2023 | dgafp.raefp-2024 | FR ETAT_LF LOLF.BG_EMPLOIS_CONSOMMES | ensemble | 2023 | 2023 | −332,25 ETPT en 2023 |
@@ -2177,7 +2187,7 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 
 | Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
 |---|---|---|---|
-| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; budget : depenses-fiscales-plf2020, depenses-fiscales-plf2021, depenses-fiscales-plf2022, depenses-fiscales-plf2023, depenses-fiscales-plf2024, depenses-fiscales-plf2025, depenses-fiscales-plf2026, emplois-plr2018, emplois-plr2019, emplois-plr2020 ; ccomptes : 18 sources (certification-2016 … rbde-2025) ; dgafp : raefp-2007-2008, raefp-2010-2011, raefp-2012, raefp-2017, raefp-2018, raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
+| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; budget : depenses-fiscales-plf2019, depenses-fiscales-plf2020, depenses-fiscales-plf2021, depenses-fiscales-plf2022, depenses-fiscales-plf2023, depenses-fiscales-plf2024, depenses-fiscales-plf2025, depenses-fiscales-plf2026, depenses-fiscales-plf2027, emplois-plr2018, emplois-plr2019, emplois-plr2020 ; ccomptes : 18 sources (certification-2016 … rbde-2025) ; dgafp : raefp-2007-2008, raefp-2010-2011, raefp-2012, raefp-2017, raefp-2018, raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
 | Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
@@ -3375,10 +3385,13 @@ Ministères dont la consommation dépasse le plafond voté de l'année, celui de
 
 ## 24. Dépenses fiscales
 
-Le coût de chaque dépense fiscale, en millions d'euros, tel que le chiffre le tome II de l'annexe « Évaluations des voies et moyens » des projets de loi de finances pour 2020 à 2026 : pour chaque dépense, l'avant-dernière année (« réalisation », une estimation), la dernière et celle du projet de loi (prévisions). Les tomes des projets de loi pour 2020 à 2023 sont lus dans les classeurs de data.economie.gouv.fr, ceux pour 2024 à 2026 dans leur PDF, tel que l'Assemblée nationale le publie ; la base n'a pas les tomes des projets de loi antérieurs, qui ne sont qu'en PDF sur budget.gouv.fr, qui refuse les robots. Un tome ne chiffre pas toutes les dépenses qu'il recense (« nc », non chiffré ; « ε », moins de 0,5 million d'euros ; « - », sans effet budgétaire) : la somme ci-dessous est celle des seules dépenses chiffrées, année par année. Elle est inférieure au total que le tome annonce pour les années de prévision, où il reprend le dernier montant connu d'une dépense qu'il ne chiffre pas ; ce total annoncé n'est pas lu. Les recettes fiscales nettes du budget général sont celles que constate la loi d'approbation des comptes de l'année (section 18) : le rapport des deux n'est qu'un ordre de grandeur, une dépense fiscale n'étant pas une recette perdue à comportement inchangé, et certaines portant sur des impôts locaux ou affectés.
+Le coût de chaque dépense fiscale, en millions d'euros, tel que le chiffre le tome II de l'annexe « Évaluations des voies et moyens » des projets de loi de finances pour 2019 à 2027 : pour chaque dépense, l'avant-dernière année (« réalisation », une estimation), la dernière et celle du projet de loi (prévisions). Les tomes des projets de loi pour 2020 à 2023 sont lus dans les classeurs de data.economie.gouv.fr, les autres dans leur PDF (budget.gouv.fr, qui refuse les robots, ou l'Assemblée nationale) ; budget.gouv.fr ne publie plus les tomes d'avant le projet de loi pour 2019. Un tome ne chiffre pas toutes les dépenses qu'il recense (« nc », non chiffré ; « ε », moins de 0,5 million d'euros ; « - », sans effet budgétaire) : la somme ci-dessous est celle des seules dépenses chiffrées, année par année. Elle est inférieure au total que le tome annonce pour les années de prévision, où il reprend le dernier montant connu d'une dépense qu'il ne chiffre pas ; ce total annoncé n'est pas lu. Les recettes fiscales nettes du budget général sont celles que constate la loi d'approbation des comptes de l'année (section 18) : le rapport des deux n'est qu'un ordre de grandeur, une dépense fiscale n'étant pas une recette perdue à comportement inchangé, et certaines portant sur des impôts locaux ou affectés.
 
 | Projet de loi de finances | Année | Statut | Dépenses chiffrées | Somme (Md€) | Recettes fiscales nettes constatées (Md€) | Somme / recettes |
 |---|---|---|---|---|---|---|
+| 2019 | 2017 | réalisation | 325 | 93,4 | 295,6 | 31,6 % |
+| 2019 | 2018 | prévision | 287 | 94,9 | 295,4 | 32,1 % |
+| 2019 | 2019 | prévision | 248 | 91,1 | 281,3 | 32,4 % |
 | 2020 | 2018 | réalisation | 317 | 99,0 | 295,4 | 33,5 % |
 | 2020 | 2019 | prévision | 278 | 91,8 | 281,3 | 32,6 % |
 | 2020 | 2020 | prévision | 258 | 79,8 | 256,0 | 31,2 % |
@@ -3400,11 +3413,16 @@ Le coût de chaque dépense fiscale, en millions d'euros, tel que le chiffre le 
 | 2026 | 2024 | réalisation | 343 | 89,4 | 325,7 | 27,5 % |
 | 2026 | 2025 | prévision | 343 | 88,9 | 356,4 | 25,0 % |
 | 2026 | 2026 | prévision | 305 | 79,6 | — | — |
+| 2027 | 2025 | réalisation | 350 | 91,7 | 356,4 | 25,7 % |
+| 2027 | 2026 | prévision | 333 | 92,0 | — | — |
+| 2027 | 2027 | prévision | 310 | 83,9 | — | — |
 
 D'un tome au suivant, le chiffrage d'une même année change : la prévision devient une réalisation, et des dépenses entrent dans le chiffrage ou en sortent. Sur les seules dépenses que deux tomes successifs chiffrent tous deux pour une année, en milliards d'euros :
 
 | Année | Tome | Tome suivant | Dépenses chiffrées par les deux | Somme, premier tome | Somme, tome suivant | Révision | Dépenses révisées |
 |---|---|---|---|---|---|---|---|
+| 2018 | 2019 | 2020 | 268 | 89,2 | 91,1 | +2,0 | 170 |
+| 2019 | 2019 | 2020 | 220 | 81,6 | 83,8 | +2,2 | 164 |
 | 2019 | 2020 | 2021 | 257 | 88,5 | 88,0 | −0,5 | 167 |
 | 2020 | 2020 | 2021 | 239 | 78,1 | 75,6 | −2,5 | 175 |
 | 2020 | 2021 | 2022 | 280 | 81,3 | 83,2 | +1,9 | 187 |
@@ -3417,38 +3435,40 @@ D'un tome au suivant, le chiffrage d'une même année change : la prévision dev
 | 2024 | 2024 | 2025 | 289 | 71,8 | 73,4 | +1,6 | 215 |
 | 2024 | 2025 | 2026 | 327 | 80,7 | 86,3 | +5,7 | 204 |
 | 2025 | 2025 | 2026 | 310 | 76,6 | 82,8 | +6,2 | 238 |
+| 2025 | 2026 | 2027 | 311 | 79,9 | 80,0 | +0,1 | 208 |
+| 2026 | 2026 | 2027 | 271 | 69,8 | 71,6 | +1,7 | 214 |
 
 Par impôt, pour l'année de réalisation de chaque tome, sous le nom que le tome donne à l'impôt (la taxe intérieure de consommation sur les produits énergétiques devient « Taxes intérieures de consommation », puis « Accise sur les énergies »), en milliards d'euros :
 
-| Impôt | 2018 (tome 2020) | 2019 (tome 2021) | 2020 (tome 2022) | 2021 (tome 2023) | 2022 (tome 2024) | 2023 (tome 2025) | 2024 (tome 2026) |
-|---|---|---|---|---|---|---|---|
-| Impôt sur le revenu | 36,1 | 35,2 | 37,3 | 34,7 | 36,6 | 38,7 | 42,1 |
-| Impôt sur le revenu et impôt sur les sociétés | 29,5 | 29,9 | 21,5 | 21,0 | 20,9 | 14,0 | 14,1 |
-| Taxe sur la valeur ajoutée | 17,4 | 17,2 | 16,5 | 19,0 | 10,3 | 11,1 | 10,9 |
-| Impôt sur les sociétés | 3,8 | 4,4 | 4,4 | 3,9 | 7,4 | 9,2 | 3,9 |
-| Taxes intérieures de consommation | — | 8,8 | 8,3 | — | — | — | — |
-| Accise sur les énergies | — | — | — | 8,1 | 8,0 | 6,2 | 7,9 |
-| Taxe intérieure de consommation sur les produits énergétiques | 8,0 | — | — | — | — | — | — |
-| Droits d'enregistrement et de timbre | 0,9 | 0,9 | 0,9 | 0,9 | 0,9 | 1,3 | 5,5 |
-| Autres droits | 0,6 | 0,6 | 0,6 | 0,7 | 0,1 | 1,0 | 3,4 |
-| Impôts locaux | 2,5 | 2,8 | 3,1 | 1,0 | 1,1 | 1,2 | 1,4 |
-| Autres impôts directs | 0,1 | 0,1 | 0,2 | 0,2 | 0,2 | 0,2 | 0,2 |
-| Ensemble | 99,0 | 99,9 | 92,7 | 89,6 | 85,6 | 82,9 | 89,4 |
+| Impôt | 2017 (tome 2019) | 2018 (tome 2020) | 2019 (tome 2021) | 2020 (tome 2022) | 2021 (tome 2023) | 2022 (tome 2024) | 2023 (tome 2025) | 2024 (tome 2026) | 2025 (tome 2027) |
+|---|---|---|---|---|---|---|---|---|---|
+| Impôt sur le revenu | 33,0 | 36,1 | 35,2 | 37,3 | 34,7 | 36,6 | 38,7 | 42,1 | 44,5 |
+| Impôt sur le revenu et impôt sur les sociétés | 25,3 | 29,5 | 29,9 | 21,5 | 21,0 | 20,9 | 14,0 | 14,1 | 13,9 |
+| Taxe sur la valeur ajoutée | 20,0 | 17,4 | 17,2 | 16,5 | 19,0 | 10,3 | 11,1 | 10,9 | 10,9 |
+| Accise sur les énergies | — | — | — | — | 8,1 | 8,0 | 6,2 | 7,9 | 9,3 |
+| Impôt sur les sociétés | 3,7 | 3,8 | 4,4 | 4,4 | 3,9 | 7,4 | 9,2 | 3,9 | 4,4 |
+| Taxes intérieures de consommation | — | — | 8,8 | 8,3 | — | — | — | — | — |
+| Taxe intérieure de consommation sur les produits énergétiques | 6,3 | 8,0 | — | — | — | — | — | — | — |
+| Droits d'enregistrement et de timbre | 0,9 | 0,9 | 0,9 | 0,9 | 0,9 | 0,9 | 1,3 | 5,5 | — |
+| Autres impôts directs | 1,3 | 0,1 | 0,1 | 0,2 | 0,2 | 0,2 | 0,2 | 0,2 | 4,5 |
+| Autres droits | 0,6 | 0,6 | 0,6 | 0,6 | 0,7 | 0,1 | 1,0 | 3,4 | 2,6 |
+| Impôts locaux | 2,3 | 2,5 | 2,8 | 3,1 | 1,0 | 1,1 | 1,2 | 1,4 | 1,4 |
+| Ensemble | 93,4 | 99,0 | 99,9 | 92,7 | 89,6 | 85,6 | 82,9 | 89,4 | 91,7 |
 
-Les dix dépenses fiscales les plus coûteuses en 2024, d'après le tome du projet de loi de finances pour 2026 : elles font 41,7 % de la somme des dépenses chiffrées.
+Les dix dépenses fiscales les plus coûteuses en 2025, d'après le tome du projet de loi de finances pour 2027 : elles font 41,1 % de la somme des dépenses chiffrées.
 
 | Numéro | Dépense fiscale | Coût (M€) |
 |---|---|---|
-| 200302 | Crédit d'impôt en faveur de la recherche | 7 800 |
-| 110246 | Crédit d'impôt au titre de l'emploi d'un salarié à domicile (jusqu'en 2017: pour les contribuables exerçant une activité professionnelle ou demandeurs d'emploi depuis au moins trois mois) | 6 420 |
-| 520110 | Exonération partielle, sous certaines conditions, de droits de mutation à titre gratuit lors de la transmission d'entreprises exploitées sous la forme individuelle ou détenues sous forme sociale | 5 000 |
-| 120401 | Abattement de 10 % sur le montant des pensions (y compris les pensions alimentaires) et des retraites | 4 803 |
-| 120108 | Exonération des sommes versées au titre de la participation, de l'intéressement et de l'abondement, volontaire ou par défaut, aux plans d'épargne salariale | 2 890 |
-| 730213 | Taux de 10 % pour les travaux d’amélioration, de transformation, d’aménagement et d’entretien, autres que les travaux de rénovation énergétiques soumis au taux de 5,5 % en application de l’article 278-0 bis A, portant sur les logements achevés depuis plus de deux ans | 2 195 |
-| 120146 | Exonération de l’impôt sur le revenu dans une limite annuelle égale à 5 000 € des rémunérations versées à raison des heures supplémentaires et complémentaires réalisées à compter du 1er janvier 2019 | 2 144 |
-| 730221 | Taux de 10% applicable aux ventes à consommer sur place, à l'exception des ventes de boissons alcooliques | 2 025 |
-| 130201 | Déduction des dépenses de réparations et d'amélioration | 1 990 |
-| 110201 | Réduction d'impôt au titre des dons | 1 990 |
+| 200302 | Crédit d'impôt en faveur de la recherche | 7 273 |
+| 110246 | Crédit d'impôt au titre de l'emploi d'un salarié à domicile (jusqu'en 2017: pour les contribuables exerçant une activité professionnelle ou demandeurs d'emploi depuis au moins trois mois) | 6 879 |
+| 120401 | Abattement de 10 % sur le montant des pensions (y compris les pensions alimentaires) et des retraites | 5 347 |
+| 520110 | Exonération partielle, sous certaines conditions, de droits de mutation à titre gratuit lors de la transmission d'entreprises exploitées sous la forme individuelle ou détenues sous forme sociale | 3 800 |
+| 120108 | Exonération des sommes versées au titre de la participation, de l'intéressement et de l'abondement, volontaire ou par défaut, aux plans d'épargne salariale | 3 077 |
+| 730602 | Taux de 10 % applicable aux services de restauration y compris ceux fournis dans les cantines d’entreprises et d’administrations | 2 335 |
+| 800229 | Tarif réduit (remboursement) pour le gazole non routier, le fioul lourd et les gaz de pétrole liquéfié utilisés pour les travaux agricoles et forestiers | 2 288 |
+| 730502 | Taux de 10 % pour les travaux légers (autre que de rénovation énergétique) sur un logement qui n’est pas neuf | 2 250 |
+| 120146 | Exonération de l’impôt sur le revenu dans une limite annuelle égale à 5 000 € des rémunérations versées à raison des heures supplémentaires et complémentaires réalisées à compter du 1er janvier 2019 | 2 212 |
+| 110201 | Réduction d'impôt au titre des dons | 2 171 |
 
 ## 25. Niches sociales
 

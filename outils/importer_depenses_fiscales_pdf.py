@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Enregistre dans la base le coût de chaque dépense fiscale (« niche fiscale »), tel que le chiffre le tome II de
 l'annexe « Évaluations des voies et moyens » d'un projet de loi de finances, lu dans le PDF du tome quand la direction du
-budget n'en publie pas la liste en classeur avec ses montants (projets de loi pour 2024 à 2026). Les classeurs des
+budget n'en publie pas la liste en classeur avec ses montants (projets de loi pour 2019 et pour 2024 à 2027). Les classeurs des
 projets de loi pour 2020 à 2023 sont lus par outils/importer_depenses_fiscales.py, avec les mêmes conventions.
 
     python3 outils/importer_depenses_fiscales_pdf.py <fichier_id>
@@ -19,7 +19,7 @@ ne se lit pas comme prévu arrête l'import :
   certaines pages dessinent à part (« 1 » et « 836 »), sont recollés. Un montant que la page dessine sur une autre ligne
   que ses voisins (« ε », d'une autre police) est lu sur la sienne ;
 - une case sans montant doit être l'une de celles que le tome explique : « - » (aucun effet budgétaire), « ε » (moins de
-  0,5 million d'euros), « nc » (non chiffré) ;
+  0,5 million d'euros), « nc » (non chiffré), en capitales ou non ;
 - un numéro ne doit pas revenir deux fois, et chaque fiche doit avoir son cadre.
 
 Une dépense fiscale est la fonction LOLF.DEPENSE_FISCALE.<numéro>, créée s'il le faut avec le libellé du premier tome
@@ -41,7 +41,18 @@ RACINE = CONCEPT = "LOLF.DEPENSE_FISCALE"
 CATEGORIES = {"Impôt sur le revenu", "Impôt sur le revenu et impôt sur les sociétés", "Impôt sur les sociétés",
               "Autres impôts directs", "Droits d'enregistrement et de timbre", "Taxe sur la valeur ajoutée",
               "Accise sur les énergies", "Autres droits", "Impôts locaux"}
-SANS_MONTANT = {"-", "ε", "nc"}
+# Projets de loi dont le tome range ses dépenses en tableaux (lignes_en_tableau), et l'impôt que nomme le titre courant
+# de ses pages, sous le nom que lui donnent les listes des projets de loi suivants.
+EN_TABLEAU = {2019}
+TITRES_COURANTS = {"IMPÔT SUR LE REVENU": "Impôt sur le revenu",
+                   "IMPÔT SUR LE REVENU ET IMPÔT SUR LES SOCIÉTÉS": "Impôt sur le revenu et impôt sur les sociétés",
+                   "IMPÔT SUR LES SOCIÉTÉS": "Impôt sur les sociétés", "AUTRES IMPÔTS DIRECTS": "Autres impôts directs",
+                   "DROITS D'ENREGISTREMENT ET DE TIMBRE": "Droits d'enregistrement et de timbre",
+                   "TAXE SUR LA VALEUR AJOUTÉE": "Taxe sur la valeur ajoutée",
+                   "TAXE INTÉRIEURE DE CONSOMMATION SUR LES PRODUITS":
+                       "Taxe intérieure de consommation sur les produits énergétiques",
+                   "AUTRES DROITS": "Autres droits", "IMPÔTS LOCAUX": "Impôts locaux"}
+SANS_MONTANT = {"-", "ε", "nc"}  # sans égard à la casse : le tome pour 2027 écrit aussi « Ε » et « Nc »
 STATUTS = ("estimation", "prevision", "prevision")
 FICHE = re.compile(r"([0-9]{6}) – (.+)")
 MONTANT = re.compile(r"-?[0-9]{1,3}( [0-9]{3})*")
@@ -97,6 +108,9 @@ def lignes_du_fichier(fichier, fonctions):
         sys.exit(f"{fichier['id']} : la source n'est pas une liste des dépenses fiscales")
     plf = int(trouve.group(1))
     pages = lire_pdf(BASE / fichier["chemin"], fins=True)
+    if plf in EN_TABLEAU:
+        yield from lignes_en_tableau(fichier, pages, plf, fonctions)
+        return
     categorie, fiche, vus = None, None, set()
     for page, lignes in enumerate(pages, 1):
         for n, (_, morceaux) in enumerate(lignes):
@@ -126,6 +140,64 @@ def lignes_du_fichier(fichier, fonctions):
         sys.exit(f"{fichier['id']} : aucune dépense fiscale")
 
 
+def lignes_en_tableau(fichier, pages, plf, fonctions):
+    """Les tomes d'avant 2020 (EN_TABLEAU) : des pages « Chiffrages des dépenses fiscales », dont le titre courant nomme
+    l'impôt, et des tableaux dont l'en-tête nomme les trois années, une ligne par dépense : son numéro en marge, son
+    libellé, sur une ou plusieurs lignes, et ses montants à droite, sous leurs années, sur la ligne du numéro ; puis les
+    rubriques de la fiche (« Mission et programme : », « Bénéficiaires »…), qui ne sont pas lues."""
+    vus, colonnes = set(), None
+    for page, lignes in enumerate(pages, 1):
+        tete = [texte(m) for _, m in lignes[:5]]
+        if "Chiffrages des dépenses fiscales" not in tete:
+            continue
+        impot = next((t.replace("Voies et Moyens II", "").strip() for t in tete if "Voies et Moyens II" in t), "")
+        if impot not in TITRES_COURANTS:
+            continue  # les mesures que le tome ne compte pas comme des dépenses fiscales (« Norme fiscale de référence »)
+        fiche = None
+        for n, (_, morceaux) in enumerate(lignes):
+            lieu = f"{fichier['id']}, page {page}, ligne {n + 1}"
+            pleins = [m for m in sorted(morceaux) if m[1].strip()]
+            if len(pleins) >= 3 and all(re.fullmatch(r"(19|20)[0-9]{2}", m[1].strip()) for m in pleins[-3:]):
+                annees = [int(m[1]) for m in pleins[-3:]]
+                if annees != list(range(plf - 2, plf + 1)):
+                    sys.exit(f"{lieu} : années {annees}, attendues {plf - 2}, {plf - 1} et {plf}")
+                colonnes = pleins[-3:]
+                continue
+            if pleins and re.fullmatch(r"[0-9]{6}", pleins[0][1].strip()) and pleins[0][0] < 100:
+                if colonnes is None:
+                    sys.exit(f"{lieu} : dépense fiscale avant l'en-tête de son tableau")
+                numero = pleins[0][1].strip()
+                if numero in vus:
+                    sys.exit(f"{lieu} : la dépense fiscale {numero} revient deux fois")
+                vus.add(numero)
+                limite = colonnes[0][0] - 25
+                libelle = [texte([m for m in pleins[1:] if m[0] < limite])]
+                centres = [(m[0] + m[2]) / 2 for m in colonnes]
+                cases, precedent = [[] for _ in centres], None
+                for m in [m for m in pleins[1:] if m[0] >= limite]:
+                    if precedent and re.fullmatch(r"[0-9]{3}", m[1].strip()) and m[0] - precedent[2] < 4:
+                        cases[i][-1][1].append(m)  # le millier d'un nombre que la page dessine à part
+                    else:
+                        i = min(range(3), key=lambda j: abs(centres[j] - (m[0] + m[2]) / 2))
+                        cases[i].append((n + 1, [m]))
+                    precedent = m
+                if any(len(c) > 1 for c in cases) or not any(cases):
+                    sys.exit(f"{lieu} : montants {[len(c) for c in cases]} sous les trois années")
+                fiche = {"numero": numero, "libelle": libelle, "categorie": TITRES_COURANTS[impot],
+                         "cases": [(a, statut, c[0]) for a, statut, c in zip(annees, STATUTS, cases) if c]}
+                continue
+            if fiche and pleins and pleins[0][0] > 100 and texte(morceaux) and not fiche.get("complet"):
+                fiche["libelle"].append(texte(morceaux))
+            elif fiche:
+                fiche["complet"] = True
+                yield from chiffres(fichier, fiche, page, fiche["cases"], lignes, fonctions)
+                fiche = None
+        if fiche:
+            yield from chiffres(fichier, fiche, page, fiche["cases"], lignes, fonctions)
+    if not vus:
+        sys.exit(f"{fichier['id']} : aucune dépense fiscale")
+
+
 def chiffres(fichier, fiche, page, cases, lignes, fonctions):
     fonction = f"{RACINE}.{fiche['numero']}"
     if fonction not in fonctions:
@@ -134,7 +206,7 @@ def chiffres(fichier, fiche, page, cases, lignes, fonctions):
     for annee, statut, (n, morceaux) in cases:
         contenu = " ".join(m[1].strip() for m in morceaux)
         lieu = f"{fichier['id']}, page {page}, ligne {n}"
-        if contenu in SANS_MONTANT:
+        if contenu.lower() in SANS_MONTANT:
             continue
         if not MONTANT.fullmatch(contenu):
             sys.exit(f"{lieu} : « {contenu} » n'est pas un montant")
