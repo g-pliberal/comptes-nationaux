@@ -172,12 +172,13 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
         return f"déjà archivé : {deja['id']}" + verifier(deja, annoncee)
     extension = ("json" if "json" in type_contenu else "xlsx" if "spreadsheetml" in type_contenu
                  else "ods" if "opendocument.spreadsheet" in type_contenu
+                 else "xls" if type_contenu == "application/vnd.ms-excel"
                  else "csv" if "csv" in type_contenu else "html" if "html" in type_contenu
                  else "xml" if "xml" in type_contenu else "zip" if "zip" in type_contenu
                  else "pdf" if "pdf" in type_contenu else "rar" if "rar" in type_contenu else "bin")
     # Un serveur qui envoie un type générique (« application/octet-stream ») : l'extension est celle de l'adresse,
     # quand c'est l'une des précédentes.
-    connue = re.search(r"[._](json|xlsx|ods|csv|html|xml|zip|pdf|rar)$", url.split("?")[0])
+    connue = re.search(r"[._](json|xlsx|xls|ods|csv|html|xml|zip|pdf|rar)$", url.split("?")[0])
     if extension == "bin" and type_contenu == "application/octet-stream" and connue:
         extension = connue.group(1)
     if compresser and extension != "csv":
@@ -201,8 +202,8 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     # (date du dernier traitement de ses données pour data.drees), date la plus récente des fichiers que porte une
     # archive zip, date de modification inscrite dans un classeur ods ; pour un PDF, la date que porte le texte d'un
     # document du Sénat ou de l'Assemblée nationale, comme pour leurs pages, à défaut sa date de modification ; pour une
-    # pièce jointe d'un jeu de données d'un portail qui ne porte pas de date (un fichier csv), la date de modification du
-    # jeu.
+    # pièce jointe d'un jeu de données d'un portail qui ne porte pas de date (un fichier csv) ou dont la base ne lit pas
+    # la date (un classeur xls), la date de modification du jeu.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(decoder_html(contenu))),
