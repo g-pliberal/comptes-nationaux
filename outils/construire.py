@@ -13,8 +13,9 @@ les tables comptes_fonctions et budgets, la fiscalité directe locale de chaque 
 tables fiscalite et communes_fiscalite, et les dotations que l'État notifie à chaque collectivité
 dans les tables dotations et beneficiaires. Les impositions que recense la DGFiP sur le territoire de
 chaque commune (REI) y sont lues dans les copies archivées de ses fichiers : tables impositions_rei,
-postes_rei, communes_rei et traces_rei. Les comptes individuels de chaque commune, groupement à fiscalité
-propre, département et région que publie la DGFiP y sont lus dans les copies archivées de leurs exports :
+postes_rei, communes_rei et traces_rei, et ce que l'État verse à chaque collectivité, ou lui prélève, que le
+REI donne aussi : tables versements_collectivites et postes_versements. Les comptes individuels de chaque
+commune, groupement à fiscalité propre, département et région que publie la DGFiP y sont lus dans les copies archivées de leurs exports :
 tables comptes_individuels et fiches_individuelles. Les balances des comptes de l'État que publie la DGFiP y
 sont lues dans les copies archivées de leurs exports, et le plan comptable de l'État dans celle de son classeur :
 tables balances_etat et plan_comptable_etat. Les balances comptables des départements et des régions que publie la DGFiP
@@ -35,6 +36,7 @@ import importer_balances_etat as balances
 import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_rei as rei
+import versements_rei as versements
 from commun import BASE, RELEASES, lire, paquet
 
 SORTIE = BASE / "construite"
@@ -156,6 +158,21 @@ SELECT f.exercice, f.version, f.fichier_id, v.rang, v.code, v.titre, v.titre_tra
 FROM traces_rei v
 JOIN fichiers_rei f ON f.rowid = v.lot
 LEFT JOIN variables_rei r ON r.code = v.code AND f.exercice BETWEEN r.premier_exercice AND r.dernier_exercice;
+
+-- Ce que l'État verse à chaque collectivité, ou lui prélève, d'après la copie la plus récente de chaque année du REI,
+-- avec le libellé du versement, qui le verse, et la variable qui le donne. Le nom d'une commune est celui de sa fiche ;
+-- un groupement, un département ou une région se retrouve dans les fiches des communes (communes_rei).
+CREATE VIEW v_versements_collectivites AS
+SELECT f.exercice, f.version, f.fichier_id, p.versement, v.libelle AS versement_libelle, v.payeur, p.niveau,
+       x.collectivite, c.nom AS commune_nom, p.grandeur, r.code, x.montant, x.communes
+FROM versements_collectivites x
+JOIN fichiers_rei f ON f.rowid = x.lot
+JOIN postes_versements p ON p.rowid = x.poste
+JOIN versements_rei v ON v.versement = p.versement
+LEFT JOIN variables_versements_rei r ON r.versement = p.versement AND r.niveau = p.niveau AND r.grandeur = p.grandeur
+     AND f.exercice BETWEEN r.premier_exercice AND r.dernier_exercice
+LEFT JOIN communes_rei c ON p.niveau = 'commune' AND c.lot = x.lot AND c.commune = x.collectivite
+WHERE f.version = (SELECT MAX(g.version) FROM fichiers_rei g WHERE g.exercice = f.exercice);
 
 -- Les comptes individuels que publie la DGFiP, dans la version la plus récente de chaque exercice de chaque niveau, avec
 -- le libellé de chaque variable dans la maquette, sa grandeur (montant, base et réduction en milliers d'euros, taux en
@@ -300,6 +317,14 @@ POSTES_REI = [("taxe", "TEXT"), ("destinataire", "TEXT")]
 COMMUNES_REI = [("lot", "INTEGER"), ("commune", "TEXT")] + [(c, "TEXT") for c in rei.FICHE]
 TRACES_REI = [("lot", "INTEGER"), ("rang", "INTEGER"), ("code", "TEXT"), ("titre", "TEXT"), ("titre_trace", "TEXT"),
               ("format", "TEXT")]
+# Ce que l'État verse à chaque collectivité, ou lui prélève, d'après le REI : une ligne par collectivité et par poste
+# (nature du versement, niveau de la collectivité, grandeur, la ligne de postes_versements), avec le montant en euros et
+# le nombre de communes dont la ligne le donne ; un montant nul n'a pas de ligne. La collectivité est désignée par son
+# code Insee pour une commune, son numéro Siren pour un groupement, un établissement public territorial ou la métropole
+# de Lyon, son code pour un département, une région ou une collectivité territoriale unique (outils/versements_rei.py).
+VERSEMENTS_COLLECTIVITES = [("lot", "INTEGER"), ("collectivite", "TEXT"), ("poste", "INTEGER"), ("montant", "REAL"),
+                            ("communes", "INTEGER")]
+POSTES_VERSEMENTS = [("versement", "TEXT"), ("niveau", "TEXT"), ("grandeur", "TEXT")]
 # Les comptes individuels de la DGFiP : une ligne par collectivité et par variable que retient
 # tables/variables_comptes_individuels.csv, une valeur absente n'ayant pas de ligne. Une ligne ne porte que le numéro de
 # sa copie (`lot`, la ligne de fichiers_comptes_individuels) et celui de sa variable (`variable`, la ligne de
@@ -381,26 +406,34 @@ def lignes_collectivites(lots, concepts):
                                  agregats)) for inscrit in lire("tables/fichiers_collectivites.csv")]
 
 
-def lot_rei(inscrit, fichier, lot, postes, referentiel):
-    """Les lignes d'une copie du REI : son tracé, la fiche de chaque commune et ses impositions ; `lot` est le numéro de
-    ligne de la copie inscrite, `postes` donne celui de chaque imposition (taxe, destinataire)."""
+def lot_rei(inscrit, fichier, lot, postes, referentiel, postes_versements, referentiel_versements):
+    """Les lignes d'une copie du REI : son tracé, la fiche de chaque commune, ses impositions et ce que l'État verse à
+    chaque collectivité ; `lot` est le numéro de ligne de la copie inscrite, `postes` donne celui de chaque imposition
+    (taxe, destinataire), `postes_versements` celui de chaque versement (nature, niveau, grandeur)."""
     exercice, variables, _, lignes = rei.lignes_communes(fichier)
     retenus = rei.postes(exercice, variables, referentiel, inscrit["fichier_id"])
+    collecte = versements.Collecte(exercice, variables, referentiel_versements, inscrit["fichier_id"])
     communes, impositions = [], []
     for commune, valeurs in lignes:
         fiche = rei.fiche(valeurs)
         communes.append([lot, commune] + [fiche[c] or None for c in rei.FICHE])
         impositions += [[lot, commune, postes[(t, d)], *g] for t, d, *g in rei.impositions(valeurs, retenus)]
+        collecte.ajouter(commune, valeurs)
     return [("traces_rei", [[lot, rang, *v] for rang, v in enumerate(variables, start=1)]),
-            ("communes_rei", communes), ("impositions_rei", impositions)]
+            ("communes_rei", communes), ("impositions_rei", impositions),
+            ("versements_collectivites", [[lot, qui, postes_versements[(v, n, g)], m, c]
+                                          for v, n, g, qui, m, c in collecte.resultat()])]
 
 
-def lignes_rei(lots, postes):
-    """Les lectures (fonction, arguments) du REI, une par copie ; `lots` et `postes` donnent le numéro de ligne de
-    chaque copie inscrite et de chaque imposition (taxe, destinataire)."""
+def lignes_rei(lots, postes, postes_versements):
+    """Les lectures (fonction, arguments) du REI, une par copie ; `lots`, `postes` et `postes_versements` donnent le
+    numéro de ligne de chaque copie inscrite, de chaque imposition (taxe, destinataire) et de chaque versement (nature,
+    niveau, grandeur)."""
     fichiers = {f["id"]: f for f in lire("tables/fichiers.csv")}
     referentiel = lire("tables/variables_rei.csv")
-    return [(lot_rei, (inscrit, fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]], postes, referentiel))
+    referentiel_versements = lire("tables/variables_versements_rei.csv")
+    return [(lot_rei, (inscrit, fichiers[inscrit["fichier_id"]], lots[inscrit["fichier_id"]], postes, referentiel,
+                       postes_versements, referentiel_versements))
             for inscrit in lire("tables/fichiers_rei.csv")]
 
 
@@ -553,7 +586,8 @@ def main():
                  "budgets": BUDGETS, "comptes_fonctions": COMPTES_FONCTIONS, "fiscalite": FISCALITE,
                  "communes_fiscalite": COMMUNES_FISCALITE, "dotations": DOTATIONS, "beneficiaires": BENEFICIAIRES,
                  "postes_rei": POSTES_REI, "impositions_rei": IMPOSITIONS_REI, "communes_rei": COMMUNES_REI,
-                 "traces_rei": TRACES_REI, "comptes_individuels": COMPTES_INDIVIDUELS,
+                 "traces_rei": TRACES_REI, "postes_versements": POSTES_VERSEMENTS,
+                 "versements_collectivites": VERSEMENTS_COLLECTIVITES, "comptes_individuels": COMPTES_INDIVIDUELS,
                  "fiches_individuelles": FICHES_INDIVIDUELLES, "balances_etat": BALANCES_ETAT,
                  "plan_comptable_etat": PLAN_COMPTABLE_ETAT, "balances_collectivites": BALANCES_COLLECTIVITES,
                  "budgets_balances": BUDGETS_BALANCES}
@@ -569,6 +603,14 @@ def main():
     texte = io.StringIO()
     csv.writer(texte, lineterminator="\n").writerows(lues_postes)
     hachages["postes_rei"] = [hashlib.sha256(texte.getvalue().encode("utf-8")), len(lues_postes)]
+    lus_versements = [list(p) for p in sorted({(v["versement"], v["niveau"], v["grandeur"])
+                                               for v in lire("tables/variables_versements_rei.csv")})]
+    connexion.executemany("INSERT INTO postes_versements VALUES (?, ?, ?)", lus_versements)
+    postes_versements = {(v, n, g): r for r, v, n, g in
+                         connexion.execute("SELECT rowid, versement, niveau, grandeur FROM postes_versements")}
+    texte = io.StringIO()
+    csv.writer(texte, lineterminator="\n").writerows(lus_versements)
+    hachages["postes_versements"] = [hashlib.sha256(texte.getvalue().encode("utf-8")), len(lus_versements)]
     lots_individuels = {f: r for r, f in connexion.execute("SELECT rowid, fichier_id FROM fichiers_comptes_individuels")}
     variables = {(s, v, p): r for r, s, v, p in
                  connexion.execute("SELECT rowid, source_id, variable, premier_exercice FROM variables_comptes_individuels")}
@@ -577,7 +619,7 @@ def main():
                    connexion.execute("SELECT rowid, indicateur, premier_exercice FROM indicateurs_balances_etat")}
     lots_balances_collectivites = {f: r for r, f in
                                    connexion.execute("SELECT rowid, fichier_id FROM fichiers_balances_collectivites")}
-    for table, lues, texte in lots_lus(lignes_collectivites(lots, concepts) + lignes_rei(lots_rei, postes)
+    for table, lues, texte in lots_lus(lignes_collectivites(lots, concepts) + lignes_rei(lots_rei, postes, postes_versements)
                                        + lignes_individuelles(lots_individuels, variables)
                                        + lignes_balances(lots_balances, indicateurs)
                                        + lignes_balances_collectivites(lots_balances_collectivites)):
@@ -604,6 +646,8 @@ def main():
     connexion.execute("CREATE INDEX impositions_rei_commune ON impositions_rei (commune)")
     connexion.execute("CREATE INDEX communes_rei_cle ON communes_rei (lot, commune)")
     connexion.execute("CREATE INDEX traces_rei_cle ON traces_rei (lot, code)")
+    connexion.execute("CREATE INDEX versements_collectivites_lot ON versements_collectivites (lot, poste)")
+    connexion.execute("CREATE INDEX versements_collectivites_collectivite ON versements_collectivites (collectivite)")
     connexion.execute("CREATE INDEX comptes_individuels_lot ON comptes_individuels (lot, variable)")
     connexion.execute("CREATE INDEX comptes_individuels_collectivite ON comptes_individuels (collectivite)")
     connexion.execute("CREATE INDEX fiches_individuelles_cle ON fiches_individuelles (lot, collectivite)")
