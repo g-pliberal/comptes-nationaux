@@ -1,0 +1,16 @@
+{
+  "description": "Variables du REI qui donnent ce que l'État verse à chaque collectivité, ou lui prélève : pour chaque nature de versement, chaque niveau de collectivité et chaque grandeur, le code de la variable, de son premier à son dernier exercice. Le montant d'une collectivité figure sur la ligne de chacune de ses communes ; l'import vérifie qu'il y est le même (outils/versements_rei.py). Le titre de chaque variable, chaque année, est dans la table traces_rei de la base construite.",
+  "fields": [
+    {"name": "versement", "type": "string", "constraints": {"required": true}},
+    {"name": "niveau", "type": "string", "description": "commune (désignée par son code Insee) ; groupement (le numéro Siren du groupement à fiscalité propre de la commune) ; ept_ou_groupement (dans la métropole du Grand Paris, l'établissement public territorial de la commune, que le REI nomme depuis 2016, sinon le groupement) ; departement (le code du département) ; region (le code de la région) ; metropole_lyon (la métropole de Lyon, pour ce qu'elle perçoit au titre du département, désignée par son numéro Siren) ; collectivite_unique (Corse, Martinique, Guyane et Mayotte, désignées par le code de leur région).", "constraints": {"required": true, "enum": ["commune", "groupement", "ept_ou_groupement", "departement", "region", "metropole_lyon", "collectivite_unique"]}},
+    {"name": "grandeur", "type": "string", "description": "montant : le montant de l'année, en euros (pour une fraction de TVA depuis 2023, le montant actualisé de l'année) ; definitif_precedent : le montant définitif de l'année précédente ; solde_precedent : l'écart entre ce montant définitif et ce qui a été versé l'année précédente, que l'État verse ou reprend dans l'année.", "constraints": {"required": true, "enum": ["montant", "definitif_precedent", "solde_precedent"]}},
+    {"name": "code", "type": "string", "description": "Code de la variable, tel qu'il figure au tracé du fichier.", "constraints": {"required": true}},
+    {"name": "premier_exercice", "type": "string", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "dernier_exercice", "type": "string", "constraints": {"required": true, "pattern": "[0-9]{4}"}},
+    {"name": "notes", "type": "string"}
+  ],
+  "primaryKey": ["versement", "niveau", "grandeur", "premier_exercice"],
+  "foreignKeys": [
+    {"fields": ["versement"], "reference": {"resource": "versements_rei", "fields": ["versement"]}}
+  ]
+}
