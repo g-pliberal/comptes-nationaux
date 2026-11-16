@@ -164,6 +164,15 @@ def verifier(copie, mis_a_jour):
     return f", vérifié à jour au {mis_a_jour}"
 
 
+def date_texte_pdf(chemin):
+    """La date que porte le texte d'un PDF (date_html) ; rien pour un PDF que le lecteur ne sait pas lire en entier (un
+    long rapport, dont certaines pages ont des polices qu'il ne connaît pas)."""
+    try:
+        return date_html(" ".join(texte_pdf(m) for page in lire_pdf(chemin) for _, m in page))
+    except ValueError:
+        return ""
+
+
 def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, decouper, annoncee="", telecharge_le=None,
              release=False):
     sha256 = hashlib.sha256(contenu).hexdigest()
@@ -211,8 +220,7 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
                                 "html": lambda: date_html(texte_html(decoder_html(contenu))),
                                 "xml": lambda: max(a.get("LAST_UPDATE", "") for a, _ in lire_sdmx(BASE / chemin).values()),
                                 "zip": lambda: date_zip(contenu),
-                                "pdf": lambda: date_html(" ".join(texte_pdf(m) for page in lire_pdf(BASE / chemin)
-                                                                  for _, m in page)) or date_pdf(contenu),
+                                "pdf": lambda: date_texte_pdf(BASE / chemin) or date_pdf(contenu),
                                 "ods": lambda: date_ods(BASE / chemin),
                                 "xls": lambda: annoncee or date_xls(BASE / chemin)
                                 }.get(extension, lambda: "")()
