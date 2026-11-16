@@ -279,4 +279,4 @@ S'y ajoutent, lus dans les copies archivées quand la base se construit :
 - 165 550 825 lignes des balances comptables des communes, des groupements à fiscalité propre, des syndicats et des établissements publics locaux, que la base ne reprend pas mais qu'elle lit et contrôle dans leurs copies, rangées dans les « Releases » de GitHub ;
 - 499 080 lignes de communes dans le recensement des éléments d'imposition (REI).
 
-Le tout repose sur 782 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).
+Le tout repose sur 790 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).
