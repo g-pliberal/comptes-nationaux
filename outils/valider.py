@@ -25,8 +25,8 @@ import importer_organismes as organismes
 import importer_rei as rei
 from commun import (BASE, cellule_nombre_pdf, copie_presente, empreinte_et_taille, en_parallele, identifiant, lire,
                     lire_export_ofgl, lire_jsonstat, lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xls,
-                    lire_xlsx, lire_xlsx_dans_zip, montant_pdf, montants_de_case, montants_lies_pdf, nombre_de_phrase,
-                    nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres, texte_html, texte_pdf)
+                    lire_xlsx, lire_xlsx_dans_zip, montant_colonne_pdf, montant_pdf, montants_de_case, montants_lies_pdf,
+                    nombre_de_phrase, nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres, texte_html, texte_pdf)
 
 # Les lecteurs des copies qu'une table inscrit après contrôle : chacun redonne, d'une copie, son inscription.
 LECTEURS = {"collectivites": ofgl, "comptes_individuels": individuels, "balances_etat": balances, "rei": rei,
@@ -210,6 +210,20 @@ def valeur_archivee(fichier, emplacement, copies):
             if not 1 <= ligne <= len(lignes):
                 return None
             nombre = cellule_nombre_pdf(lignes[ligne - 1][1], int(trouve.group(3)))
+            return (float(nombre[0]), "") if nombre else None
+        # Une cellule d'un tableau désignée par sa page, le rang de sa ligne dans la page et l'étendue des abscisses de
+        # sa colonne : les morceaux de la ligne dans cette étendue, mis bout à bout (montant_colonne_pdf), la page lue
+        # avec la fin de chaque morceau (lire_pdf(…, fins=True)). Seule la page est lue : d'autres pages du document
+        # peuvent avoir des polices que le lecteur ne sait pas lire.
+        trouve = re.fullmatch(r"page=([0-9]+);ligne=([0-9]+);colonne=([0-9.]+)-([0-9.]+)", emplacement)
+        if trouve:
+            page, ligne = int(trouve.group(1)), int(trouve.group(2))
+            if (fichier["id"], "page", page) not in copies:
+                copies[(fichier["id"], "page", page)] = lire_pdf(chemin, {page}, fins=True)[page - 1]
+            lignes = copies[(fichier["id"], "page", page)]
+            if not 1 <= ligne <= len(lignes):
+                return None
+            nombre = montant_colonne_pdf(lignes[ligne - 1][1], float(trouve.group(3)), float(trouve.group(4)))
             return (float(nombre[0]), "") if nombre else None
         if fichier["id"] not in copies:
             copies[fichier["id"]] = lire_pdf(chemin)

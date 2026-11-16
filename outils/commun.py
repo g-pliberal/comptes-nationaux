@@ -981,8 +981,8 @@ def lire_sdmx(chemin):
 #
 # Le lecteur suffit aux PDF qu'écrivent les traitements de texte et les logiciels de mise en page, comme les listes
 # d'organismes de l'Insee ou les rapports de la Cour des comptes : flux compressés (FlateDecode), objets rangés dans des
-# flux d'objets, toute police munie d'une table ToUnicode, polices simples à l'encodage WinAnsi ou standard, ou que
-# leurs « Differences » décrivent par des noms de glyphes, polices de symboles, polices composites (Identity-H) dont la
+# flux d'objets, PDF chiffrés sans mot de passe d'ouverture (RC4), toute police munie d'une table ToUnicode, polices
+# simples à l'encodage WinAnsi, MacRoman ou standard, ou que leurs « Differences » décrivent par des noms de glyphes, polices de symboles, polices composites (Identity-H) dont la
 # police TrueType embarquée donne ses caractères. Il rend le texte tel que la page le dessine, morceau par morceau, à la
 # position où commence chacun ; ce qu'il ne sait pas lire l'arrête, plutôt que de lui faire rendre un texte faux, et un
 # signe qu'il ne sait pas lire dans une police de symboles (une puce) se lit « � ». Le texte d'une page faite d'images
@@ -1112,6 +1112,7 @@ def _objets_pdf(donnees):
                                             else 0)]
         objets[int(entete.group(1))] = (valeur, brut)
         positions[int(entete.group(1))] = entete.start()
+    _dechiffrer_pdf(donnees, objets)
     for numero, (valeur, brut) in list(objets.items()):
         if isinstance(valeur, dict) and valeur.get("Type") == "ObjStm":
             contenu, premier, n = _flux_pdf(objets, (numero,)), *(_resoudre_pdf(objets, valeur[c]) for c in ("First", "N"))
@@ -1121,6 +1122,65 @@ def _objets_pdf(donnees):
                     objets[numero_contenu] = (_objet_pdf(contenu, premier + decalage)[0], None)
                     positions[numero_contenu] = positions[numero]
     return objets
+
+
+def _rc4(cle, octets):
+    """Les octets chiffrés ou déchiffrés par RC4 avec cette clé (l'opération est la même dans les deux sens)."""
+    s, j = list(range(256)), 0
+    for i in range(256):
+        j = (j + s[i] + cle[i % len(cle)]) & 0xFF
+        s[i], s[j] = s[j], s[i]
+    sortie, i, j = bytearray(len(octets)), 0, 0
+    for k, octet in enumerate(octets):
+        i = (i + 1) & 0xFF
+        j = (j + s[i]) & 0xFF
+        s[i], s[j] = s[j], s[i]
+        sortie[k] = octet ^ s[(s[i] + s[j]) & 0xFF]
+    return bytes(sortie)
+
+
+# Remplissage du mot de passe d'un PDF chiffré (norme PDF, 7.6.3.3, algorithme 2).
+_REMPLISSAGE_PDF = bytes.fromhex("28BF4E5E4E758A4164004E56FFFA01082E2E00B6D0683E802F0CA9FE6453697A")
+
+
+def _dechiffrer_pdf(donnees, objets):
+    """Déchiffre en place les flux et les chaînes des objets d'un PDF chiffré par le gestionnaire de sécurité standard
+    (RC4, révisions 2 et 3) sans mot de passe d'ouverture : celui des PDF qui ne restreignent que la copie ou la
+    modification, et que tout lecteur ouvre. Un autre chiffrement arrête la lecture ; un PDF non chiffré est laissé tel
+    quel."""
+    references = re.findall(rb"/Encrypt\s+([0-9]+)\s+[0-9]+\s+R", donnees)
+    if not references:
+        return
+    numero_chiffrement = int(references[-1])
+    chiffrement = _resoudre_pdf(objets, (numero_chiffrement,))
+    identifiants = re.findall(rb"/ID\s*\[\s*<([0-9A-Fa-f]+)>", donnees)
+    if not isinstance(chiffrement, dict) or chiffrement.get("Filter") != "Standard" or chiffrement.get("V") not in (1, 2) \
+            or chiffrement.get("R") not in (2, 3) or not identifiants:
+        raise ValueError("PDF chiffré d'une façon que le lecteur ne connaît pas")
+    longueur = (chiffrement.get("Length") or 40) // 8
+    empreinte = hashlib.md5(_REMPLISSAGE_PDF + chiffrement["O"] + struct.pack("<i", chiffrement["P"])
+                            + bytes.fromhex(identifiants[-1].decode("ascii"))).digest()
+    if chiffrement["R"] == 3:
+        for _ in range(50):
+            empreinte = hashlib.md5(empreinte[:longueur]).digest()
+    cle = empreinte[:longueur]
+
+    def dechiffrer(valeur, cle_objet):
+        if isinstance(valeur, bytes) and not isinstance(valeur, _OperateurPdf):
+            return _rc4(cle_objet, valeur)
+        if isinstance(valeur, dict):
+            return {k: dechiffrer(v, cle_objet) for k, v in valeur.items()}
+        if isinstance(valeur, list):
+            return [dechiffrer(v, cle_objet) for v in valeur]
+        return valeur
+
+    generations = {int(n): int(g) for n, g in re.findall(rb"(?<![0-9])([0-9]+)\s+([0-9]+)\s+obj\b", donnees)}
+    for numero, (valeur, brut) in list(objets.items()):
+        if numero == numero_chiffrement:
+            continue
+        cle_objet = hashlib.md5(cle + numero.to_bytes(3, "little")
+                                + generations.get(numero, 0).to_bytes(2, "little")).digest()[:min(longueur + 5, 16)]
+        objets[numero] = (dechiffrer(valeur, cle_objet), None if brut is None else _rc4(cle_objet, brut))
 
 
 def _resoudre_pdf(objets, valeur):
@@ -1266,6 +1326,8 @@ def _table_simple(objets, police):
                 table[c] = bytes([c]).decode("cp1252")
             except UnicodeDecodeError:
                 pass
+    elif base == "MacRomanEncoding":
+        table = {c: bytes([c]).decode("mac_roman") for c in range(0x20, 256) if c != 0x7F}
     elif base == "StandardEncoding" or base is None and not embarquee and _POLICES_STANDARD.match(nom):
         table = {c: _unicode_glyphe(g) for c, g in _STANDARD_PDF.items()}
     elif base is None and symboles:
@@ -1405,11 +1467,41 @@ def _produit_pdf(m, n):
     return (a * a2 + b * c2, a * b2 + b * d2, c * a2 + d * c2, c * b2 + d * d2, e * a2 + f * c2 + e2, e * b2 + f * d2 + f2)
 
 
-def _morceaux_pdf(objets, contenu, ressources, matrice, morceaux, cellules=False):
+def _chasses_pdf(objets, ressources):
+    """{nom: (octets par code, {code: chasse}, chasse par défaut)} des polices de ressources : la chasse de chaque
+    caractère, en millièmes de la taille de la police, d'après les « Widths » d'une police simple ou les « W » de la
+    police descendante d'une police composite ; un code qu'elles ne donnent pas a la chasse par défaut (« DW », ou une
+    demi-taille pour une police simple, dont les quatorze polices standard ne déclarent pas leurs chasses)."""
+    chasses = {}
+    for nom, reference in (_resoudre_pdf(objets, ressources.get("Font")) or {}).items():
+        police = _resoudre_pdf(objets, reference)
+        if police.get("Subtype") == "Type0":
+            descendante = _resoudre_pdf(objets, (_resoudre_pdf(objets, police.get("DescendantFonts")) or [None])[0]) or {}
+            table, w, k = {}, _resoudre_pdf(objets, descendante.get("W")) or [], 0
+            while k < len(w):
+                premier, suivant = _resoudre_pdf(objets, w[k]), _resoudre_pdf(objets, w[k + 1])
+                if isinstance(suivant, list):
+                    table.update({premier + j: _resoudre_pdf(objets, c) for j, c in enumerate(suivant)})
+                    k += 2
+                else:
+                    table.update({c: _resoudre_pdf(objets, w[k + 2]) for c in range(premier, suivant + 1)})
+                    k += 3
+            chasses[nom] = (2, table, _resoudre_pdf(objets, descendante.get("DW")) or 1000)
+        else:
+            largeurs = _resoudre_pdf(objets, police.get("Widths")) or []
+            premier = _resoudre_pdf(objets, police.get("FirstChar")) or 0
+            chasses[nom] = (1, {premier + j: _resoudre_pdf(objets, c) for j, c in enumerate(largeurs)}, 500)
+    return chasses
+
+
+def _morceaux_pdf(objets, contenu, ressources, matrice, morceaux, cellules=False, fins=False):
     """Ajoute à `morceaux` ceux d'un flux de contenu : (x, y, texte), à la position où commence chacun, dans l'espace de
-    la page ; un formulaire (XObject) que dessine le flux y ajoute les siens. Avec `cellules`, voir lire_pdf."""
+    la page ; un formulaire (XObject) que dessine le flux y ajoute les siens. Avec `cellules` ou `fins`, voir
+    lire_pdf."""
     polices, pile, etats = _polices_pdf(objets, ressources), [], []
+    chasses = _chasses_pdf(objets, ressources) if fins else {}
     police, taille, tm, tlm, interligne, i = None, 1, _IDENTITE_PDF, _IDENTITE_PDF, 0, 0
+    nom_police, espacement, espacement_mots, echelle = None, 0, 0, 1
     while (i := _blancs_pdf(contenu, i)) < len(contenu):
         element, i = _objet_pdf(contenu, i)
         if not isinstance(element, _OperateurPdf):
@@ -1429,7 +1521,13 @@ def _morceaux_pdf(objets, contenu, ressources, matrice, morceaux, cellules=False
         elif operateur == b"Tf":
             if pile[-2] not in polices:
                 raise ValueError(f"police {pile[-2]} absente des ressources de la page")
-            police, taille = polices[pile[-2]], pile[-1]
+            police, taille, nom_police = polices[pile[-2]], pile[-1], pile[-2]
+        elif operateur == b"Tc":
+            espacement = pile[-1]
+        elif operateur == b"Tw":
+            espacement_mots = pile[-1]
+        elif operateur == b"Tz":
+            echelle = pile[-1] / 100
         elif operateur == b"TL":
             interligne = pile[-1]
         elif operateur == b"Tm":
@@ -1443,7 +1541,39 @@ def _morceaux_pdf(objets, contenu, ressources, matrice, morceaux, cellules=False
             if police is None:
                 raise ValueError("texte PDF dessiné sans police")
             chaines = pile[-1] if operateur == b"TJ" else [pile[-1]]
-            if not cellules:
+            if fins:
+                # Chaque morceau va de son début à sa fin, que donnent la chasse de ses caractères et les écarts. Un
+                # écart d'au moins un cadratin dans un TJ, ou un blanc d'au moins trois points sur la page entre deux
+                # caractères que les seuls écarts ajoutés aux chasses (TJ, espacement des caractères ou des mots)
+                # séparent, commence un nouveau morceau.
+                largeur, table, defaut = chasses[nom_police]
+                vers_page = math.hypot(*_produit_pdf(tm, matrice)[:2])
+                avance, ecart, pieces = 0.0, 0.0, [[0.0, "", 0.0]]
+                for c in chaines:
+                    if isinstance(c, bytes):
+                        for k in range(0, len(c) - largeur + 1, largeur):
+                            code, caractere = int.from_bytes(c[k:k + largeur], "big"), _decoder_pdf(c[k:k + largeur], police)
+                            if caractere.strip() and pieces[-1][1].strip() and ecart * vers_page >= 3:
+                                pieces.append([avance, "", avance])
+                            pieces[-1][1] += caractere
+                            avance += table.get(code, defaut) / 1000 * taille * echelle
+                            if caractere.strip():  # la fin du texte, blancs exclus
+                                pieces[-1][2], ecart = avance, 0.0
+                            mots = espacement_mots if largeur == 1 and code == 32 else 0
+                            avance += (espacement + mots) * echelle
+                            ecart += (espacement + mots) * echelle
+                    elif isinstance(c, (int, float)):
+                        avance -= c / 1000 * taille * echelle
+                        ecart -= c / 1000 * taille * echelle
+                        if c <= -1000:
+                            pieces.append([avance, "", avance])
+                for debut, texte, fin in pieces:
+                    if texte:
+                        x, y = _produit_pdf(_produit_pdf((1, 0, 0, 1, debut, 0), tm), matrice)[4:]
+                        morceaux.append((x, y, texte, _produit_pdf(_produit_pdf((1, 0, 0, 1, fin, 0), tm), matrice)[4]))
+                # Le texte suivant commence où finit celui-ci, s'il n'est pas placé ailleurs.
+                tm = _produit_pdf((1, 0, 0, 1, avance, 0), tm)
+            elif not cellules:
                 x, y = _produit_pdf(tm, matrice)[4:]
                 morceaux.append((x, y, "".join(_decoder_pdf(c, police) for c in chaines if isinstance(c, bytes))))
             else:
@@ -1472,7 +1602,7 @@ def _morceaux_pdf(objets, contenu, ressources, matrice, morceaux, cellules=False
             if isinstance(formulaire, dict) and formulaire.get("Subtype") == "Form":
                 _morceaux_pdf(objets, _flux_pdf(objets, reference),
                               _resoudre_pdf(objets, formulaire.get("Resources")) or ressources,
-                              _produit_pdf(formulaire.get("Matrix", _IDENTITE_PDF), matrice), morceaux, cellules)
+                              _produit_pdf(formulaire.get("Matrix", _IDENTITE_PDF), matrice), morceaux, cellules, fins)
         pile = []
     return morceaux
 
@@ -1498,17 +1628,18 @@ def _pages_pdf(donnees, objets):
 
 def lignes_pdf(morceaux, tolerance=1.0):
     """Les morceaux d'une page en lignes, de haut en bas : (ordonnée, [(abscisse, texte)…]), de gauche à droite ; deux
-    morceaux sont sur une même ligne si leurs ordonnées diffèrent d'au plus `tolerance` points."""
+    morceaux sont sur une même ligne si leurs ordonnées diffèrent d'au plus `tolerance` points. Un morceau qui dit où il
+    finit (lire_pdf(…, fins=True)) garde cette abscisse : (abscisse, texte, fin)."""
     lignes = []
-    for x, y, texte in sorted(morceaux, key=lambda m: -m[1]):
+    for x, y, texte, *fin in sorted(morceaux, key=lambda m: -m[1]):
         if lignes and lignes[-1][0] - y <= tolerance:
-            lignes[-1][1].append((x, texte))
+            lignes[-1][1].append((x, texte, *fin))
         else:
-            lignes.append((y, [(x, texte)]))
+            lignes.append((y, [(x, texte, *fin)]))
     return [(y, sorted(ligne, key=lambda m: m[0])) for y, ligne in lignes]
 
 
-def lire_pdf(chemin, seules=None, cellules=False):
+def lire_pdf(chemin, seules=None, cellules=False, fins=False):
     """Le texte d'un PDF, page par page : pour chaque page, ses lignes de haut en bas (voir lignes_pdf). Avec `seules`,
     un ensemble de numéros de pages (depuis 1), les autres pages restent vides : un long rapport peut avoir des polices
     que le lecteur ne sait pas lire hors des pages qu'on lit.
@@ -1516,7 +1647,13 @@ def lire_pdf(chemin, seules=None, cellules=False):
     Avec `cellules`, pour un tableau dont chaque ligne est une seule chaîne où des écarts séparent les cellules
     (« [(16 664)-3710(16 463)]TJ »), un écart d'au moins un cadratin commence un nouveau morceau, et un texte d'une
     police que le lecteur ne sait pas lire se lit « � » au lieu d'arrêter la lecture (un en-tête ou un numéro de page,
-    dans les tableaux lus ainsi : les nombres qu'on y lit doivent, eux, se lire)."""
+    dans les tableaux lus ainsi : les nombres qu'on y lit doivent, eux, se lire).
+
+    Avec `fins`, chaque morceau dit aussi l'abscisse où finit son texte, blancs exclus, d'après la chasse de ses
+    caractères : (abscisse, texte, fin) ; comme avec `cellules`, un écart d'au moins un cadratin dans une chaîne commence un nouveau morceau, placé
+    cette fois à sa vraie position, et un texte que la page dessine à la suite d'un autre commence où celui-ci finit.
+    Les lignes sont celles de la lecture sans `fins`. Un tableau aux montants alignés à
+    droite range ainsi chacun dans sa colonne."""
     with ouvrir_copie(chemin) as f:
         donnees = f.read()
     objets, pages = _objets_pdf(donnees), []
@@ -1529,13 +1666,13 @@ def lire_pdf(chemin, seules=None, cellules=False):
             contenus = _resoudre_pdf(objets, contenus)
         references = contenus if isinstance(contenus, list) else [contenus] if contenus is not None else []
         contenu = b"\n".join(_flux_pdf(objets, r) for r in references)
-        pages.append(lignes_pdf(_morceaux_pdf(objets, contenu, ressources, _IDENTITE_PDF, [], cellules)))
+        pages.append(lignes_pdf(_morceaux_pdf(objets, contenu, ressources, _IDENTITE_PDF, [], cellules, fins)))
     return pages
 
 
 def texte_pdf(morceaux):
     """Le texte de morceaux d'une ligne, (abscisse, texte) : mis bout à bout, ses blancs réduits à une espace."""
-    return " ".join("".join(t for _, t in morceaux).split())
+    return " ".join("".join(m[1] for m in morceaux).split())
 
 
 def texte_page_pdf(page):
@@ -1579,6 +1716,14 @@ def montant_pdf(morceaux, debut, fin):
     « 000 »), ou qu'elle écrit dans le morceau de son libellé, se lit en entier."""
     trouve = NOMBRE_FINAL.search(texte_pdf([(x, t) for x, t in sorted(morceaux) if debut <= x < fin]))
     return nombre_texte(trouve.group(0)) if trouve else None
+
+
+def montant_colonne_pdf(morceaux, debut, fin):
+    """Le montant d'une cellule de tableau de PDF lu avec lire_pdf(…, fins=True) : les morceaux de la ligne dont
+    l'abscisse est dans [debut, fin[, mis
+    bout à bout, lus comme par nombre_texte ; None s'ils ne font pas un nombre (une cellule vide, un tiret). Une page
+    qui dessine chaque chiffre à part (« 1 », « 9 », « 4 ») et sans l'espace des milliers se lit ainsi en entier."""
+    return nombre_texte("".join(t for x, t, *_ in sorted(morceaux) if debut <= x < fin))
 
 
 # Un nombre entier d'un tableau : chiffres groupés par trois, signe moins compris.
