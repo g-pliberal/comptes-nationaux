@@ -30,12 +30,15 @@ eux-mêmes : la base ne les recopie pas, elle les lit. La version d'une copie es
 données qu'annonce le portail, ou, pour une archive zip, la date la plus récente des fichiers qu'elle porte. Les balances
 des communes, des groupements à fiscalité propre, des syndicats et des établissements publics locaux sont rangées dans
 la Release « archives » du dépôt GitHub (archiver.py --release) ; celles de 2016 des trois dernières sont des archives
-RAR, que l'import ne sait pas lire.
+RAR, que l'import décompresse lui-même (outils/rar.py), après contrôle de leur taille et de leur CRC-32.
 """
 
+import io
 import re
 import sys
 import zipfile
+
+import rar
 
 import formules_ofgl
 from commun import BASE, champs, ecrire, lire, ouvrir_copie
@@ -176,9 +179,9 @@ def vite(texte):
 
 
 def lignes_copie(chemin):
-    """Les lignes de texte d'une copie de balance : celles du fichier csv, ou du seul fichier csv d'une archive zip. Les
-    fichiers de la DGFiP sont en UTF-8 ou, pour certains exercices, en Latin-1 : une ligne qui ne se lit pas en UTF-8
-    se lit en Latin-1."""
+    """Les lignes de texte d'une copie de balance : celles du fichier csv, ou du seul fichier csv d'une archive zip ou
+    RAR. Les fichiers de la DGFiP sont en UTF-8 ou, pour certains exercices, en Latin-1 : une ligne qui ne se lit pas en
+    UTF-8 se lit en Latin-1."""
     with ouvrir_copie(chemin) as f:
         if str(chemin).endswith(".zip"):
             archive = zipfile.ZipFile(f)
@@ -188,7 +191,13 @@ def lignes_copie(chemin):
                          f"{[m.filename for m in membres]}")
             flux = archive.open(membres[0])
         elif str(chemin).endswith(".rar"):
-            sys.exit(f"{chemin} : archive RAR, que la base ne sait pas lire sans outil extérieur")
+            try:
+                nom, contenu = rar.extraire(chemin)
+            except rar.ErreurRar as e:
+                sys.exit(f"{chemin} : {e}")
+            if not nom.lower().endswith(".csv"):
+                sys.exit(f"{chemin} : l'archive devait porter un fichier csv, elle porte {nom}")
+            flux = io.BytesIO(contenu)
         else:
             flux = f
         with flux:

@@ -5451,7 +5451,8 @@ def partie_balances_collectivites():
               "opérations budgétaires et non budgétaires de l'exercice, et compte les budgets qui ne s'équilibrent pas : "
               "ceux dont la somme des soldes débiteurs n'est pas celle des soldes créditeurs, tels que les publie la "
               "DGFiP. Les balances de 2016 des groupements, des syndicats et des établissements publics locaux sont des "
-              "archives RAR, que la base garde sans les lire.", "",
+              "archives RAR, que la base décompresse elle-même (`outils/rar.py`) après contrôle de leur taille et de leur "
+              "empreinte CRC-32.", "",
               "| Niveau | Exercices | Lignes | Budgets au dernier exercice | Collectivités au dernier exercice | "
               "Budgets déséquilibrés |",
               "|---|---|---|---|---|---|"]
@@ -5480,7 +5481,7 @@ def partie_balances_collectivites():
                "métropole de Lyon, les collectivités territoriales uniques. Les balances des communes, des groupements, "
                "des syndicats et des établissements publics locaux ne sont recalculées que pour les exercices que "
                "l'OFGL publie pour eux, depuis 2018. Les collectivités de l'OFGL sans balance sont celles qu'aucune "
-               "balance lue ne porte (celles des fichiers RAR de 2016, ou que la DGFiP range ailleurs). Un montant non recalculé est un montant publié non nul que ne donne "
+               "balance lue ne porte (que la DGFiP range ailleurs). Un montant non recalculé est un montant publié non nul que ne donne "
                "aucune formule pour la nomenclature du budget ; un agrégat absent du jeu est un agrégat que le jeu "
                "publie pour d'autres collectivités de l'exercice, pas pour celle-ci, et que les balances donnent non "
                "nul.", "",
