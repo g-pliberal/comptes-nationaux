@@ -64,6 +64,9 @@ Pour chaque chiffre, la version la plus récente enregistrée chez sa source.
 | ccomptes.rbde-2023 | Le budget de l'État en 2023 : résultats et gestion (avril 2024) | 2024-04-18 | 2 |
 | ccomptes.rbde-2024 | Le budget de l'État en 2024 : résultats et gestion (avril 2025) | 2025-04-15 | 2 |
 | ccomptes.rbde-2025 | Le budget de l'État en 2025 : résultats et gestion (avril 2026) | 2026-04-28 | 1 |
+| dgafp.raefp-2007-2008 | Rapport annuel sur l'état de la fonction publique, Faits et chiffres 2007-2008 : consommation des emplois de l'État en 2007 (et rappel de 2006) | 2008-09-26 | 61 |
+| dgafp.raefp-2010-2011 | Rapport annuel sur l'état de la fonction publique, édition 2010-2011 : consommation des emplois de l'État en 2010 | 2012-12-18 | 36 |
+| dgafp.raefp-2012 | Rapport annuel sur l'état de la fonction publique, édition 2012 : consommation des emplois de l'État en 2011 | 2013-01-31 | 36 |
 | dgafp.raefp-2017 | Rapport annuel sur l'état de la fonction publique, édition 2017 : fiche thématique 1.4, emplois en loi de finances | 2017-11-07 | 39 |
 | dgafp.raefp-2018 | Rapport annuel sur l'état de la fonction publique, édition 2018 : fiche thématique 1.4, emplois en loi de finances | 2018-07-30 | 38 |
 | dgafp.raefp-2022 | Rapport annuel sur l'état de la fonction publique, édition 2022 : données de « L'évolution des effectifs de la fonction publique en 2020 » | 2022-09-22 | 41 |
@@ -341,7 +344,7 @@ Un total contre la somme de ses composantes, pour chaque source, périmètre, fo
 
 Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions de la COFOG, des missions du budget général de l'État ou de ses comptes (budgets annexes, comptes spéciaux), ou des branches de la sécurité sociale, chaque division contre la somme de ses groupes, chaque mission ou compte contre celle de ses programmes. Pour les branches, seul le solde s'additionne : les recettes et les dépenses de l'ensemble des branches excluent les transferts entre elles, que comptent celles de chaque branche.
 
-32263 ventilations vérifiées avec toutes leurs parties : 32252 justes, 11 en écart.
+32276 ventilations vérifiées avec toutes leurs parties : 32265 justes, 11 en écart.
 
 | Source | Périmètre | Grandeur | Fonction | Années en écart | Plus grand écart (total − somme) |
 |---|---|---|---|---|---|
@@ -356,7 +359,7 @@ Pour une même grandeur, l'ensemble des fonctions contre la somme des divisions 
 | senat.pjl16-643 | ETAT_LF | LOLF.BA_RECETTES | ensemble | 2016 | +0,6 M€ en 2016 |
 | senat.tas06-037 | ETAT_LF | LOLF.BG_RECETTES_NON_FISCALES_LFR | LOLF.RECETTES.28_DIVERS | 2006 | −0,1 M€ en 2006 |
 
-1571 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
+1572 ventilations ont des parties que la source ne diffuse pas (cellule vide ou marquée non disponible). Pour toutes, les parties diffusées suffisent à retrouver le total à l'arrondi près : les parties absentes y sont nulles ou négligeables.
 
 ## 3. Additivité des sous-secteurs
 
@@ -2027,7 +2030,7 @@ Le secteur des administrations publiques, unité par unité, d'après les listes
 
 | Sous-secteur | Unités selon les décomptes officiels | Unités dont la base a les comptes, une à une | Sources de la base sur le sous-secteur ou ses parties |
 |---|---|---|---|
-| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; budget : depenses-fiscales-plf2020, depenses-fiscales-plf2021, depenses-fiscales-plf2022, depenses-fiscales-plf2023, emplois-plr2018, emplois-plr2019, emplois-plr2020 ; ccomptes : 18 sources (certification-2016 … rbde-2025) ; dgafp : raefp-2017, raefp-2018, raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
+| État (S13111) | l'État | l'État, d'après son budget voté (lois de finances initiales), son budget exécuté et ses comptes annuels (lois de règlement et de résultats) | an : 29 sources (ta12-0525 … ta17-0227) ; budget : depenses-fiscales-plf2020, depenses-fiscales-plf2021, depenses-fiscales-plf2022, depenses-fiscales-plf2023, emplois-plr2018, emplois-plr2019, emplois-plr2020 ; ccomptes : 18 sources (certification-2016 … rbde-2025) ; dgafp : raefp-2007-2008, raefp-2010-2011, raefp-2012, raefp-2017, raefp-2018, raefp-2022, raefp-2023, raefp-2024, raefp-2025, raefp-2026 ; insee : bdm-comptes-etat, bdm-dette-trim-apu, t3101 à t3104, t3106, t3107, t3203, t3215, t3216, t3303, t3307, t7303 ; senat : 49 sources (pjl06-389 … tas25-024) |
 | Organismes divers d'administration centrale (S13112) | 701 (liste des ODAC, 2024) | aucun | insee : bdm-dette-trim-apu, t3101 à t3104, t3106, t3204, t3215, t3216, t3304, t3307, t7304 |
 | Collectivités locales (S13131) | 44 932 au 1er janvier (DGCL) | 44 951 (jeux de l'OFGL, exercice 2024) | dgcl : finances-departements, finances-regions ; insee : t3206 à t3210, t3217 ; ofgl : annexe-2a, annexe-2b, annexe-2c, annexe-2d |
 | Organismes divers d'administration locale (S13132) | 22 697 (liste des ODAL) | 12 704 : SDIS, centres d'action sociale, établissements publics locaux (jeux de l'OFGL, exercice 2024) | insee : t3211 |
@@ -3104,12 +3107,24 @@ Les notes des chiffres disent ce que la loi fait d'autre que changer le nombre d
 
 ## 22. Emplois consommés
 
-Les emplois de l'État consommés dans l'année, en équivalents temps plein travaillé (ETPT) : tels que les donne le rapport de la Cour des comptes sur le budget de l'année (sur l'année suivante pour 2008), pour l'État budgets annexes compris ou pour le budget général seul, selon ce que dit le rapport ; tels que la direction du budget les publie avec les données des projets de loi de règlement pour 2019 et 2020 (synthèse des rapports annuels de performances), pour le budget général et les budgets annexes, et pour 2018 tels que les reprend la synthèse de 2019 (marqués « rappel ») ; et tels que la DGAFP les reprend des lois de règlement et des rapports annuels de performances dans son rapport annuel de l'année suivante, pour 2016, 2017 et depuis 2021, pour l'État, le budget général et les budgets annexes. Chacun se compare au plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » ou « II. Budgets annexes » du tableau qui le répartit, que fixe la loi de finances initiale (section 20) et que peut changer une loi rectificative (section 21) : le plafond de l'année est celui de la dernière loi qui le fixe ; l'écart se calcule sur le chiffre de la Cour, à défaut sur celui de la direction du budget, à défaut sur celui de la DGAFP. L'import vérifie que chaque plafond que cite la Cour est celui que la base lit dans ces lois ; la section 6 compare les deux sources.
+Les emplois de l'État consommés dans l'année, en équivalents temps plein travaillé (ETPT) : tels que les donne le rapport de la Cour des comptes sur le budget de l'année (sur l'année suivante pour 2008), pour l'État budgets annexes compris ou pour le budget général seul, selon ce que dit le rapport ; tels que la direction du budget les publie avec les données des projets de loi de règlement pour 2019 et 2020 (synthèse des rapports annuels de performances), pour le budget général et les budgets annexes, et pour 2018 tels que les reprend la synthèse de 2019 (marqués « rappel ») ; et tels que la DGAFP les reprend des lois de règlement et des rapports annuels de performances dans son rapport annuel de l'année suivante, pour 2006, 2007, 2010, 2011, 2016, 2017 et depuis 2021, pour l'État, le budget général et les budgets annexes (2006 : le rappel qu'en donne l'édition 2007-2008). Chacun se compare au plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » ou « II. Budgets annexes » du tableau qui le répartit, que fixe la loi de finances initiale (section 20) et que peut changer une loi rectificative (section 21) : le plafond de l'année est celui de la dernière loi qui le fixe ; l'écart se calcule sur le chiffre de la Cour, à défaut sur celui de la direction du budget, à défaut sur celui de la DGAFP. L'import vérifie que chaque plafond que cite la Cour est celui que la base lit dans ces lois ; la section 6 compare les deux sources.
 
 | Année | Emplois | Cour des comptes | Direction du budget | DGAFP | Plafond initial | Plafond rectifié | Consommés − plafond de l'année |
 |---|---|---|---|---|---|---|---|
+| 2006 | État, budgets annexes compris | — | — | 2 321 240 | 2 351 034 | — | −29 794 |
+| 2006 | budget général | — | — | 2 308 839 | 2 338 472 | — | −29 633 |
+| 2006 | budgets annexes | — | — | 12 401 | 12 562 | — | −161 |
+| 2007 | État, budgets annexes compris | — | — | 2 257 402 | 2 283 159 | — | −25 757 |
+| 2007 | budget général | — | — | 2 245 101 | 2 270 840 | — | −25 739 |
+| 2007 | budgets annexes | — | — | 12 301 | 12 319 | — | −18 |
 | 2008 | budget général | 2 166 900 | — | — | 2 188 626 | — | −21 726 |
 | 2009 | budget général | 2 088 767 | — | — | 2 108 123 | — | −19 356 |
+| 2010 | État, budgets annexes compris | — | — | 2 010 576 | 2 019 798 | 2 028 724 | −18 148 |
+| 2010 | budget général | — | — | 1 998 298 | 2 007 291 | 2 016 217 | −17 919 |
+| 2010 | budgets annexes | — | — | 12 278 | 12 507 | — | −229 |
+| 2011 | État, budgets annexes compris | — | — | 1 949 577 | 1 974 461 | 1 974 451 | −24 874 |
+| 2011 | budget général | — | — | 1 937 696 | 1 962 343 | 1 962 333 | −24 637 |
+| 2011 | budgets annexes | — | — | 11 881 | 12 118 | — | −237 |
 | 2012 | État, budgets annexes compris | 1 908 739 | — | — | 1 934 490 | 1 936 014 | −27 275 |
 | 2013 | État, budgets annexes compris | 1 883 713 | — | — | 1 914 921 | 1 914 920 | −31 207 |
 | 2014 | État, budgets annexes compris | 1 877 359 | — | — | 1 906 424 | — | −29 065 |
@@ -3142,9 +3157,7 @@ Les emplois de l'État consommés dans l'année, en équivalents temps plein tra
 | 2025 | budget général | 1 974 568 | — | 1 974 567,6 | 1 997 194 | — | −22 626 |
 | 2025 | budgets annexes | — | — | 10 761,5 | 11 006 | — | −244,5 |
 
-Chaque année, les emplois consommés restent sous le plafond de l'année : État, budgets annexes compris, de 19 678 ETPT de moins (2024) à 37 151 (2023) ; budget général, de 19 356 ETPT de moins (2009) à 36 921 (2023) ; budgets annexes, de 214,91 ETPT de moins (2022) à 355 (2017).
-
-La base n'a pas d'emplois consommés pour 2006, 2007, 2010 et 2011, faute d'un chiffre qu'elle sache lire dans les rapports de la Cour ; la direction du budget ne les donne en données ouvertes que de 2018 à 2020, et la DGAFP que pour 2016, 2017 et depuis 2021 : outils/importer_cour_comptes.py dit pourquoi, année par année.
+Chaque année, les emplois consommés restent sous le plafond de l'année : État, budgets annexes compris, de 18 148 ETPT de moins (2010) à 37 151 (2023) ; budget général, de 17 919 ETPT de moins (2010) à 36 921 (2023) ; budgets annexes, de 18 ETPT de moins (2007) à 355 (2017).
 
 ## 23. Fonction publique : effectifs et emplois de l'État par ministère
 
@@ -3193,10 +3206,14 @@ Chaque total contre la somme de ses parties, à l'arrondi de leurs décimales pr
 
 La DGAFP rétropole chaque ligne de ces tableaux à part : un total ne fait pas toujours la somme de ses parties, ce que montre ce tableau sans le corriger.
 
-La consommation des emplois de l'État par ministère et par budget annexe, en ETPT, et son écart au plafond de la loi de finances rectificative « corrigé des transferts d'emplois intervenus en cours de gestion » (pour 2016 et 2017, au plafond de la loi de finances initiale corrigé de ces transferts), tels que les donne la DGAFP (section 22 pour les totaux). Chaque somme du tableau, à l'arrondi de ses lignes près ; et les ministères qui ont une ligne du même nom dans la loi de finances initiale de l'année, seuls à pouvoir se comparer à leur plafond.
+La consommation des emplois de l'État par ministère et par budget annexe, en ETPT, et son écart au plafond de la loi de finances rectificative « corrigé des transferts d'emplois intervenus en cours de gestion » (pour 2007, 2016 et 2017, au plafond de la loi de finances initiale corrigé de ces transferts ; pour 2006, la consommation seule, que rappelle l'édition 2007-2008), tels que les donne la DGAFP (section 22 pour les totaux). Chaque somme du tableau, à l'arrondi de ses lignes près ; et les ministères qui ont une ligne du même nom dans la loi de finances initiale de l'année, seuls à pouvoir se comparer à leur plafond.
 
 | Année | Ministères | avec une ligne du même nom dans la loi de l'année | Ministères − budget général | Budgets annexes − leur total | Budget général + budgets annexes − total | Écarts au plafond : ministères − budget général |
 |---|---|---|---|---|---|---|
+| 2006 | 15 | 9 | juste | juste | juste | — |
+| 2007 | 15 | 9 | juste | juste | juste | juste |
+| 2010 | 13 | 5 | juste | juste | juste | juste |
+| 2011 | 13 | 12 | juste | juste | juste | juste |
 | 2016 | 15 | 15 | juste | juste | juste | juste |
 | 2017 | 14 | 14 | juste | juste | juste | juste |
 | 2021 | 16 | 14 | juste | juste | juste | juste |
@@ -3205,7 +3222,7 @@ La consommation des emplois de l'État par ministère et par budget annexe, en E
 | 2024 | 15 | 14 | juste | juste | juste | juste |
 | 2025 | 18 | 7 | juste | juste | juste | juste |
 
-Ministères sans ligne du même nom dans la loi de finances initiale de l'année, qui ne se comparent donc pas à un plafond : 2021 : Transformation et fonction publiques ; 2021 : Travail, de l'emploi et de l'insertion ; 2022 : Travail, de l'emploi et de l'insertion ; 2023 : Agriculture et alimentation ; 2023 : Cohésion des territoires et relations avec les collectivités territoriales ; 2023 : Économie, finances et relance ; 2023 : Éducation nationale, jeunesse et sports ; 2023 : Enseignement supérieur, recherche et innovation ; 2023 : Intérieur ; 2023 : Outre-mer ; 2023 : Solidarités et santé ; 2023 : Transition écologique ; 2023 : Travail, de l'emploi et de l'insertion ; 2024 : Solidarités, autonomie et personnes handicapées ; 2025 : Agriculture, souveraineté alimentaire et forêt ; 2025 : Armées et anciens combattants ; 2025 : Budget et comptes publics ; 2025 : Economie, finances et industrie ; 2025 : Éducation nationale ; 2025 : Enseignement supérieur et recherche ; 2025 : Fonction publique, simplification et transformation de l'action publique ; 2025 : Logement et rénovation urbaine ; 2025 : Partenariat avec les territoires et décentralisation ; 2025 : Transition écologique, énergie, climat et prévention des risques ; 2025 : Travail et emploi.
+Ministères sans ligne du même nom dans la loi de finances initiale de l'année, qui ne se comparent donc pas à un plafond : 2006 : Agriculture et pêche ; 2006 : Culture et communication ; 2006 : Défense ; 2006 : Écologie et développement durable ; 2006 : Équipement, transports ; 2006 : Intérieur et aménagement du territoire ; 2007 : Agriculture et pêche ; 2007 : Culture et communication ; 2007 : Défense ; 2007 : Écologie et développement durable ; 2007 : Équipement, transports ; 2007 : Intérieur et aménagement du territoire ; 2010 : Agriculture, alimentation, pêche, ruralité et aménagement du territoire ; 2010 : Budget, Comptes publics, Fonction publique et Réforme de l'État ; 2010 : Défense et anciens combattants ; 2010 : Écologie, développement durable, transports et logement ; 2010 : Economie, finances et industrie ; 2010 : Éducation nationale, jeunesse et vie associative ; 2010 : Intérieur, outre-mer, collectivités territoriales et immigration ; 2010 : Travail, emploi et santé ; 2011 : Budget, Comptes publics, Fonction publique et Réforme de l'État ; 2021 : Transformation et fonction publiques ; 2021 : Travail, de l'emploi et de l'insertion ; 2022 : Travail, de l'emploi et de l'insertion ; 2023 : Agriculture et alimentation ; 2023 : Cohésion des territoires et relations avec les collectivités territoriales ; 2023 : Économie, finances et relance ; 2023 : Éducation nationale, jeunesse et sports ; 2023 : Enseignement supérieur, recherche et innovation ; 2023 : Intérieur ; 2023 : Outre-mer ; 2023 : Solidarités et santé ; 2023 : Transition écologique ; 2023 : Travail, de l'emploi et de l'insertion ; 2024 : Solidarités, autonomie et personnes handicapées ; 2025 : Agriculture, souveraineté alimentaire et forêt ; 2025 : Armées et anciens combattants ; 2025 : Budget et comptes publics ; 2025 : Economie, finances et industrie ; 2025 : Éducation nationale ; 2025 : Enseignement supérieur et recherche ; 2025 : Fonction publique, simplification et transformation de l'action publique ; 2025 : Logement et rénovation urbaine ; 2025 : Partenariat avec les territoires et décentralisation ; 2025 : Transition écologique, énergie, climat et prévention des risques ; 2025 : Travail et emploi.
 
 Ministères dont la consommation dépasse le plafond voté de l'année, celui de la dernière loi rectificative qui change leur ligne, à défaut de la loi de finances initiale : 2016 : Écologie, développement durable et énergie (42 257 contre 29 911) ; 2017 : Environnement, énergie et mer (41 088 contre 29 103) ; 2021 : Solidarités et santé (5 083 contre 5 080) ; 2021 : Transition écologique (36 289 contre 36 203) ; 2022 : Solidarités et santé (5 029,25 contre 5 005). La DGAFP compare la consommation à un plafond corrigé des transferts d'emplois de la gestion, qui peut être plus haut.
 

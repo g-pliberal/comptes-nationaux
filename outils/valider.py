@@ -23,9 +23,9 @@ import importer_comptes_individuels as individuels
 import importer_ofgl_collectivites as ofgl
 import importer_organismes as organismes
 import importer_rei as rei
-from commun import (BASE, copie_presente, empreinte_et_taille, en_parallele, identifiant, lire, lire_export_ofgl,
-                    lire_jsonstat, lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xls, lire_xlsx,
-                    lire_xlsx_dans_zip, montant_pdf, montants_de_case, montants_lies_pdf, nombre_de_phrase,
+from commun import (BASE, cellule_nombre_pdf, copie_presente, empreinte_et_taille, en_parallele, identifiant, lire,
+                    lire_export_ofgl, lire_jsonstat, lire_pdf, lire_sdmx, lire_tableaux_html, lire_texte_html, lire_xls,
+                    lire_xlsx, lire_xlsx_dans_zip, montant_pdf, montants_de_case, montants_lies_pdf, nombre_de_phrase,
                     nombre_phrase_pdf, nombre_texte, paquet, ressources_chiffres, texte_html, texte_pdf)
 
 # Les lecteurs des copies qu'une table inscrit après contrôle : chacun redonne, d'une copie, son inscription.
@@ -198,6 +198,19 @@ def valeur_archivee(fichier, emplacement, copies):
             return None
         return float(observation["OBS_VALUE"]), observation.get("OBS_QUAL", "")
     if fichier["chemin"].endswith(".pdf"):
+        # Une cellule d'un tableau dont chaque ligne est une chaîne aux cellules séparées par des écarts, lu page par page
+        # (lire_pdf(…, cellules=True)) : sa page, le rang de sa ligne dans la page et son rang parmi les cellules de nombres
+        # de la ligne (cellule_nombre_pdf).
+        trouve = re.fullmatch(r"page=([0-9]+);ligne=([0-9]+);cellule=([0-9]+)", emplacement)
+        if trouve:
+            page, ligne = int(trouve.group(1)), int(trouve.group(2))
+            if (fichier["id"], "cellules", page) not in copies:
+                copies[(fichier["id"], "cellules", page)] = lire_pdf(chemin, {page}, cellules=True)[page - 1]
+            lignes = copies[(fichier["id"], "cellules", page)]
+            if not 1 <= ligne <= len(lignes):
+                return None
+            nombre = cellule_nombre_pdf(lignes[ligne - 1][1], int(trouve.group(3)))
+            return (float(nombre[0]), "") if nombre else None
         if fichier["id"] not in copies:
             copies[fichier["id"]] = lire_pdf(chemin)
         # Un nombre que la page énonce dans son texte : l'extrait de la phrase qui le donne, une seule fois dans la page

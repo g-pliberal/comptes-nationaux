@@ -4684,7 +4684,8 @@ def partie_emplois_consommes(derniers):
               "(synthèse des rapports annuels de performances), pour le budget général et les budgets annexes, et pour "
               "2018 tels que les reprend la synthèse de 2019 (marqués « rappel ») ; et tels que la DGAFP les reprend "
               "des lois de règlement et des rapports annuels de performances dans son rapport annuel de l'année "
-              "suivante, pour 2016, 2017 et depuis 2021, pour l'État, le budget général et les budgets annexes. Chacun se "
+              "suivante, pour 2006, 2007, 2010, 2011, 2016, 2017 et depuis 2021, pour l'État, le budget général et "
+              "les budgets annexes (2006 : le rappel qu'en donne l'édition 2007-2008). Chacun se "
               "compare au plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » ou "
               "« II. Budgets annexes » du tableau qui le répartit, que fixe la loi de finances initiale (section 20) et "
               "que peut changer une loi rectificative (section 21) : le plafond de l'année est celui de la dernière loi "
@@ -4727,7 +4728,8 @@ def partie_emplois_consommes(derniers):
     if manquantes:
         lignes += [f"La base n'a pas d'emplois consommés pour {suite_annees(manquantes)}, faute d'un chiffre qu'elle "
                    f"sache lire dans les rapports de la Cour ; la direction du budget ne les donne en données ouvertes "
-                   f"que de 2018 à 2020, et la DGAFP que pour 2016, 2017 et depuis 2021 : outils/importer_cour_comptes.py dit pourquoi, "
+                   f"que de 2018 à 2020, et la DGAFP que pour 2006, 2007, 2010, 2011, 2016, 2017 et depuis 2021 : "
+                   f"outils/importer_cour_comptes.py dit pourquoi, "
                    f"année par année.", ""]
     return lignes
 
@@ -4813,7 +4815,8 @@ def partie_fonction_publique(derniers):
                     plafonds[cle]["revise"] = (l["version"], float(l["valeur"]))
         lignes += ["La consommation des emplois de l'État par ministère et par budget annexe, en ETPT, et son écart au "
                    "plafond de la loi de finances rectificative « corrigé des transferts d'emplois intervenus en cours de "
-                   "gestion » (pour 2016 et 2017, au plafond de la loi de finances initiale corrigé de ces transferts), "
+                   "gestion » (pour 2007, 2016 et 2017, au plafond de la loi de finances initiale corrigé de ces transferts ; "
+                   "pour 2006, la consommation seule, que rappelle l'édition 2007-2008), "
                    "tels que les donne la DGAFP (section 22 pour les totaux). Chaque somme du tableau, à "
                    "l'arrondi de ses lignes près ; et les ministères qui ont une ligne du même nom dans la loi de "
                    "finances initiale de l'année, seuls à pouvoir se comparer à leur plafond.", "",
