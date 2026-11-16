@@ -100,7 +100,7 @@ def collectivite(niveau, commune, valeurs):
     if niveau == "ept_ou_groupement":
         return valeurs.get("SIREPT", "").strip() or valeurs.get("SIREPCI", "").strip()
     if niveau == "departement":
-        return rei.complete("DEP", valeurs["DEP"])
+        return rei.complete("DEP", rei.valeur(valeurs, "DEP"))
     return rei.complete("REG", valeurs["REG"])  # région, collectivité territoriale unique
 
 

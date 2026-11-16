@@ -254,7 +254,7 @@ Source : Rapport annuel sur l'état de la fonction publique, édition 2026 : don
 
 ## Ce que contient la base
 
-323 636 chiffres enregistrés un par un, chacun avec sa fiche d'identité et l'endroit exact où le relire dans la copie archivée de sa source :
+311 027 chiffres enregistrés un par un, chacun avec sa fiche d'identité et l'endroit exact où le relire dans la copie archivée de sa source :
 
 | Producteur | Publications | Chiffres | Années couvertes |
 |---|---:|---:|---|
@@ -262,11 +262,11 @@ Source : Rapport annuel sur l'état de la fonction publique, édition 2026 : don
 | Sénat (textes de loi) | 71 | 40 898 | 2004-2025 |
 | DGCL | 3 | 28 625 | 2020-2026 |
 | Assemblée nationale (textes de loi) | 29 | 21 839 | 2006-2026 |
-| Direction du budget | 14 | 18 195 | 2010-2027 |
 | DREES | 1 | 16 844 | 1959-2024 |
+| Direction du budget | 9 | 13 426 | 2010-2023 |
 | OFGL | 4 | 12 880 | 2017-2025 |
-| Direction de la sécurité sociale | 21 | 10 645 | 2006-2030 |
 | Eurostat | 3 | 2 880 | 1975-2025 |
+| Direction de la sécurité sociale | 7 | 2 805 | 2021-2030 |
 | Cour des comptes | 18 | 820 | 2008-2025 |
 | DGAFP | 10 | 708 | 1996-2025 |
 
@@ -277,6 +277,6 @@ S'y ajoutent, lus dans les copies archivées quand la base se construit :
 - 517 489 lignes des balances des comptes de l'État ;
 - 1 436 292 lignes des balances comptables des départements et des régions, budget par budget et compte par compte, d'après la DGFiP ;
 - 165 550 825 lignes des balances comptables des communes, des groupements à fiscalité propre, des syndicats et des établissements publics locaux, que la base ne reprend pas mais qu'elle lit et contrôle dans leurs copies, rangées dans les « Releases » de GitHub ;
-- 499 080 lignes de communes dans le recensement des éléments d'imposition (REI).
+- 1 598 719 lignes de communes dans le recensement des éléments d'imposition (REI).
 
-Le tout repose sur 801 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).
+Le tout repose sur 812 copies archivées des sources, dont l'empreinte prouve qu'elles sont intactes. Le détail de chaque table est dans [base/README.md](base/README.md), les contrôles de cohérence dans [controles/coherence.md](controles/coherence.md).

@@ -19,6 +19,14 @@ celui des variables, celui des titres de l'en-tête différents du tracé, celui
 rétablies. Il vérifie aussi ce qu'en retient le référentiel des versements de l'État (outils/versements_rei.py). La
 version est la date la plus récente des fichiers que porte l'archive. Ces copies sont les chiffres eux-mêmes : la base
 ne les recopie pas, elle les lit.
+
+Les impositions de 1982 à 2011, à l'époque de la taxe professionnelle, ont leurs particularités : le tracé est la
+feuille « Notice » du classeur (de 1982 à 2008, sans le format des variables, que la lecture prend alors telles
+quelles) ou « variables_2009 » à « variables_2011 » ; le classeur de 1998 n'a pas de tracé, et ses variables n'ont que
+leur code ; celui de 1995 porte deux variables absentes du tracé, et ceux de 2009 et 2010 écrivent quelques codes dans
+une autre casse que leur tracé ; le département est « dep » de 1982 à 1999. En 1988, les communes des villes nouvelles
+ont une ligne par sous-rôle, que l'import réunit (`reunies`). Les montants sont en francs jusqu'en 2001 : l'inscription
+le dit (monnaie FRF), sans les convertir.
 """
 
 import collections
@@ -33,12 +41,18 @@ import zipfile
 from commun import BASE, champs, ecrire, feuilles_xlsx, lignes_xlsx, lire, lire_xlsx, ouvrir_copie, texte_xlsx
 
 SOURCE = "dgfip.rei"
-DONNEES = re.compile(r"(?:.*/)?REI(?:_COMPLET)?_([0-9]{4})(?:_V[0-9]+)?\.(csv|xlsx)", re.I)
+DONNEES = re.compile(r"(?:.*/)?REI(?:_COMPLET)?[_-]([0-9]{4})(?:_V[0-9]+)?\.(csv|xlsx)", re.I)
 TRACE = re.compile(r"(?:.*/)?TRACE_REI(?:_COMPLET)?_([0-9]{4})(?:_V[0-9]+)?\.xlsx", re.I)
-FEUILLE_TRACE = re.compile(r"variables_([0-9]{4})", re.I)
-# Les colonnes du tracé, sous leurs noms d'une année à l'autre (« NOM_DE_LA_VARIABLE », « NOM DE VARIABLE », « NOM »…).
-COLONNES_TRACE = {"code": r"NOM(_(DE_)?(LA_)?VARIABLE)?", "titre": r"TITRE|LIBELLE(_DE_(LA_)?VARIABLE)?",
-                  "format": r"FORMAT"}
+# La feuille du tracé dans le classeur : « variables_2012 » de 2009 à 2016, « Notice » de 1982 à 2008.
+FEUILLE_TRACE = re.compile(r"variables_[0-9]{4}|notice", re.I)
+# Les colonnes du tracé, sous leurs noms d'une année à l'autre (« NOM_DE_LA_VARIABLE », « NOM DE VARIABLE », « NOM », « NAME » en 2002…).
+# Le format (« FORMAT », ou « TYPE » : « char » ou « num ») manque aux tracés de 1982 à 2008, qui ne donnent que le code
+# et le titre de chaque variable.
+COLONNES_TRACE = {"code": r"NOM(_(DE_)?(LA_)?VARIABLE)?|NAME", "titre": r"TITRE|LABEL|LIBELLE(_DE_(LA_)?VARIABLE)?",
+                  "format": (r"FORMAT", r"TYPE")}
+FACULTATIVES = {"format"}
+# Les impositions sont en francs jusqu'à celles de 2001, en euros depuis celles de 2002.
+PREMIER_EXERCICE_EN_EUROS = "2002"
 COMMUNE = r"[0-9][0-9AB][0-9]{3}"  # code de la commune, formé du département et du numéro
 # Un en-tête qui porte les titres des variables plutôt que leurs codes s'associe au tracé rang par rang, s'il en a autant
 # de colonnes et qu'au moins cette part de ses titres sont ceux du tracé : un fichier peut reformuler un titre.
@@ -54,8 +68,9 @@ LONGUEURS = {"DEP": 2, "REG": 2, "Q02": 6}
 GRANDEURS = ["base", "taux_net", "taux_vote", "produit"]
 ADDITIVES = {"base", "produit"}  # les grandeurs que plusieurs variables peuvent donner ensemble, par leur somme
 # Ce que doit dire le titre au tracé d'une variable que le référentiel retient, selon la grandeur qu'elle donne.
-TITRES_GRANDEURS = {"base": r"\bBASES?\b|VALEUR LOCATIVE", "taux_net": r"\bTAUX\b", "taux_vote": r"\bTAUX VOTE",
-                    "produit": r"MONTANT|PRODUIT|COTISATION|DROIT FIXE|TASCOM|CVAE|FONDS|PRELEVEMENT|FRAIS"}
+# Les tracés de 1982 à 1997 abrègent parfois leurs titres (« ofp/san-prod. », « ofp-syn aglo nouvel-tau » en 1988).
+TITRES_GRANDEURS = {"base": r"\bBASES?\b|\bBAS\b|VALEUR LOCATIVE", "taux_net": r"\bTAUX?\b", "taux_vote": r"\bTAUX VOTE",
+                    "produit": r"MONTANT|PRODUIT|\bPROD?\b|COTISATION|DROIT FIXE|TASCOM|CVAE|FONDS|PRELEVEMENT|FRAIS"}
 # Une variable dont le montant est celui d'une collectivité, répété sur chacune de ses communes, ne doit pas être
 # retenue : on la reconnaît à ce qu'elle donne un même montant non nul à toutes les communes de presque chaque
 # département, ou de presque chaque groupement (cette part au moins de ceux de plusieurs communes, et ceux-ci au moins
@@ -71,8 +86,20 @@ def normaliser(texte):
     return re.sub(r"\s+", " ", sans_accents).strip().upper()
 
 
+def valeur(valeurs, code):
+    """La valeur d'une variable, sous son code ou sous ce code en minuscules (« dep » pour le département de 1982 à
+    1999) ; vide si l'année ne l'a pas."""
+    return valeurs.get(code, valeurs.get(code.lower(), ""))
+
+
+def monnaie(exercice):
+    """La monnaie des montants d'une année d'imposition : FRF jusqu'en 2001, EUR depuis 2002."""
+    return "EUR" if exercice >= PREMIER_EXERCICE_EN_EUROS else "FRF"
+
+
 def membres(archive, fichier):
-    """(exercice, membre du fichier, son format, membre du tracé ou None si le tracé est une feuille du classeur)."""
+    """(exercice, membre du fichier, son format, membre du tracé ou None si le tracé est une feuille du classeur ou
+    manque)."""
     donnees = [(m.group(1), n, m.group(2).lower()) for n in archive.namelist() if (m := DONNEES.fullmatch(n))]
     traces = [n for n in archive.namelist() if TRACE.fullmatch(n)]
     if len(donnees) != 1 or len(traces) > 1:
@@ -94,15 +121,20 @@ def lignes_feuille(cellules):
 
 
 def lire_trace(feuille, lieu):
-    """[(code, titre, format)] d'un tracé, dans l'ordre de ses lignes."""
+    """[(code, titre, format)] d'un tracé, dans l'ordre de ses lignes ; le format est vide si le tracé ne le donne
+    pas."""
     entete, *lignes = lignes_feuille(feuille)
     colonnes = {}
-    for nom, motif in COLONNES_TRACE.items():
-        trouvees = [c for c, v in entete.items() if re.fullmatch(motif, normaliser(v).replace(" ", "_"))]
-        if len(trouvees) != 1:
+    for nom, motifs in COLONNES_TRACE.items():
+        # Plusieurs noms possibles d'une colonne : le premier qu'a le tracé (« FORMAT » avant « TYPE » en 2012).
+        trouvees = next((t for motif in ([motifs] if isinstance(motifs, str) else motifs)
+                         if (t := [c for c, v in entete.items() if re.fullmatch(motif, normaliser(v).replace(" ", "_"))])),
+                        [])
+        if len(trouvees) > 1 or not trouvees and nom not in FACULTATIVES:
             sys.exit(f"{lieu} : colonne « {nom} » du tracé introuvable ({sorted(map(str, entete.values()))})")
-        colonnes[nom] = trouvees[0]
-    trace = [tuple(str(l.get(colonnes[k], "")).strip() for k in ("code", "titre", "format")) for l in lignes
+        colonnes[nom] = trouvees[0] if trouvees else None
+    trace = [(str(l.get(colonnes["code"], "")).strip(), str(l.get(colonnes["titre"], "")).strip(),
+              str(l.get(colonnes["format"], "")).strip() if colonnes["format"] else "") for l in lignes
              if str(l.get(colonnes["code"], "")).strip()]
     codes = [c for c, _, _ in trace]
     if len(set(codes)) != len(codes):
@@ -121,21 +153,26 @@ def indice(colonne):
 
 def contenu(fichier):
     """(exercice, variables [(code, titre, titre du tracé, format)] dans l'ordre des colonnes, titres de l'en-tête
-    différents de ceux du tracé, lignes) d'une copie archivée : le titre d'une variable est celui de l'en-tête du fichier
-    quand il porte les titres, sinon celui du tracé ; les lignes, lues en flux, sont des listes de textes dans l'ordre
-    des colonnes, l'en-tête retiré."""
+    différents de ceux du tracé, variables de l'en-tête absentes du tracé, lignes) d'une copie archivée : le titre d'une
+    variable est celui de l'en-tête du fichier quand il porte les titres, sinon celui du tracé ; les lignes, lues en
+    flux, sont des listes de textes dans l'ordre des colonnes, l'en-tête retiré. Un en-tête qui porte les codes peut les
+    écrire dans une autre casse que le tracé (« P32_1vote » en 2009 et 2010) : la variable garde le code du fichier. Il
+    peut aussi porter des variables que le tracé ne donne pas (A03 et A04 en 1995), sans titre alors ; le classeur de
+    1998 n'a pas de tracé du tout, sa seule feuille étant celle des données : ses variables n'ont que leur code."""
     archive = zipfile.ZipFile(ouvrir_copie(BASE / fichier["chemin"]))
     exercice, nom, format_, nom_trace = membres(archive, fichier)
     octets = archive.read(nom) if format_ == "xlsx" else None
     classeur = zipfile.ZipFile(io.BytesIO(octets)) if octets else None
     noms = feuilles_xlsx(io.BytesIO(octets)) if octets else []
+    trace = None
     if nom_trace:
         _, feuille = lire_xlsx(io.BytesIO(archive.read(nom_trace)))
-    else:
+        trace = lire_trace(feuille, fichier["id"])
+    elif any(FEUILLE_TRACE.fullmatch(n) for n in noms) or len(noms) != 1:
         if len([n for n in noms if FEUILLE_TRACE.fullmatch(n)]) != 1:
             sys.exit(f"{fichier['id']} : ni tracé, ni feuille du tracé dans le classeur")
         _, feuille = lire_xlsx(io.BytesIO(octets), next(n for n in noms if FEUILLE_TRACE.fullmatch(n)))
-    trace = lire_trace(feuille, fichier["id"])
+        trace = lire_trace(feuille, fichier["id"])
 
     def rangees():
         if classeur is None:
@@ -145,8 +182,10 @@ def contenu(fichier):
         donnees = [n for n in noms if not FEUILLE_TRACE.fullmatch(n)]
         if len(donnees) != 1:
             sys.exit(f"{fichier['id']} : le classeur porte {len(donnees)} feuilles de données")
-        largeur = len(trace)
+        largeur = len(trace) if trace is not None else None  # sans tracé, celle de l'en-tête
         for valeurs in lignes_xlsx(classeur, donnees[0]):
+            if largeur is None:
+                largeur = max(map(indice, valeurs), default=-1) + 1
             ligne = [""] * largeur
             for c, v in valeurs.items():
                 k = indice(c)
@@ -159,14 +198,24 @@ def contenu(fichier):
     entete = [str(e).strip() for e in next(lecteur, [])]
     while entete and not entete[-1]:
         entete.pop()
+    if trace is None:
+        if len(set(entete)) != len(entete):
+            sys.exit(f"{fichier['id']} : l'en-tête du fichier donne deux fois une même variable")
+        return exercice, [(e, "", "", "") for e in entete], 0, len(entete), lecteur
     if sorted(entete) == sorted(c for c, _, _ in trace):
         par_code = {c: (c, t, t, f) for c, t, f in trace}
-        return exercice, [par_code[c] for c in entete], 0, lecteur
+        return exercice, [par_code[c] for c in entete], 0, 0, lecteur
+    par_code = {c.upper(): (t, f) for c, t, f in trace}
+    majuscules = {e.upper() for e in entete}
+    if len(par_code) == len(trace) and len(majuscules) == len(entete) and set(par_code) <= majuscules:
+        variables = [(e, *par_code[e.upper()][:1], *par_code[e.upper()]) if e.upper() in par_code else (e, "", "", "")
+                     for e in entete]
+        return exercice, variables, 0, sum(e.upper() not in par_code for e in entete), lecteur
     egaux = sum(normaliser(e) == normaliser(t) for e, (_, t, _) in zip(entete, trace))
     if len(entete) != len(trace) or egaux < SEUIL_TITRES * len(trace):
         sys.exit(f"{fichier['id']} : l'en-tête du fichier ({len(entete)} colonnes) n'est ni les codes ni les titres du "
                  f"tracé ({len(trace)} variables, {egaux} titres identiques)")
-    return exercice, [(c, e, t, f) for e, (c, t, f) in zip(entete, trace)], len(trace) - egaux, lecteur
+    return exercice, [(c, e, t, f) for e, (c, t, f) in zip(entete, trace)], len(trace) - egaux, 0, lecteur
 
 
 def complete(variable, texte):
@@ -180,7 +229,7 @@ def commune(valeurs, lieu):
     complétés de leurs zéros (un classeur les donne parfois en nombres, « 1 » et « 1 » pour 01001) ; trois chiffres
     pour la commune, deux dans les départements d'outre-mer, dont le code en a trois. Le code concaténé que donne le
     fichier (IDCOM), quand il a ses cinq caractères, doit être le même."""
-    departement, numero = complete("DEP", valeurs["DEP"]), valeurs["COM"].strip()
+    departement, numero = complete("DEP", valeur(valeurs, "DEP")), valeurs["COM"].strip()
     code = departement + numero.zfill(2 if len(departement) == 3 else 3)
     if not re.fullmatch(COMMUNE, code):
         sys.exit(f"{lieu} : commune illisible « {code} »")
@@ -208,19 +257,61 @@ def realignee(ligne, codes, lieu):
     return ligne[:k] + [avant.strip('"'), apres.strip('"')] + ligne[k + 1:len(codes) - 1]
 
 
-def lignes_communes(fichier, illisibles=None, realignees=None):
+def numerique(format_):
+    """Vrai pour le format d'une variable numérique (« 8. », « num »), faux pour celui d'un texte (« $3. », « char ») ou
+    un format que le tracé ne donne pas (de 1982 à 2008) : les valeurs d'une variable sans format sont lues telles
+    quelles, et une valeur retenue qui n'est pas un nombre arrête la lecture (`impositions`)."""
+    return bool(format_) and not format_.startswith("$") and format_.lower() != "char"
+
+
+def reunies(lignes_, additives, taux):
+    """Les valeurs d'une commune que le fichier donne en plusieurs lignes, une par sous-rôle (le REI de 1988, pour les
+    32 communes des villes nouvelles : une ligne pour la partie de la commune dans le périmètre du syndicat
+    d'agglomération nouvelle, une pour le reste). La base et le produit de chaque imposition que retient le référentiel
+    (`additives`) s'additionnent ; un taux (`taux`) est celui des lignes qui en donnent un non nul, et reste vide si
+    elles en donnent de différents ; toute autre variable garde la valeur de la première ligne, ou celle d'une ligne
+    suivante si elle est vide ou nulle ; le sous-rôle (SR) énumère ceux des lignes (« A+B »)."""
+    valeurs = dict(lignes_[0])
+    for autre in lignes_[1:]:
+        for c, v in autre.items():
+            a, b = valeurs.get(c, "").strip(), v.strip()
+            nombres = bool(NOMBRE.fullmatch(a) and NOMBRE.fullmatch(b))
+            if c == "SR":
+                valeurs[c] = f"{a}+{b}"
+            elif not b or nombres and float(b) == 0:
+                continue
+            elif not a or nombres and float(a) == 0:
+                valeurs[c] = b
+            elif not nombres:
+                continue
+            elif c in additives:
+                valeurs[c] = str(int(a) + int(b)) if a.isdigit() and b.isdigit() else repr(float(a) + float(b))
+            elif c in taux and float(a) != float(b):
+                valeurs[c] = ""
+    return valeurs
+
+
+def lignes_communes(fichier, illisibles=None, realignees=None, hors_trace=None, sous_roles=None):
     """(exercice, variables, titres différents, lignes) d'une copie, chaque ligne étant (code de la commune, {code de
-    variable: texte}) ; vérifie qu'une commune n'a qu'une ligne. Une variable numérique qui n'est pas un nombre est
-    comptée dans `illisibles` (Counter : (variable, texte) → nombre) et vaut alors vide ; une ligne dont l'export a
-    fondu deux champs est rétablie, et son code de commune ajouté à `realignees`."""
-    exercice, variables, differents, lecteur = contenu(fichier)
+    variable: texte}) ; vérifie qu'une commune n'a qu'une ligne, ou des lignes qui se suivent, une par sous-rôle
+    (variable SR), que l'import réunit (`reunies`). Une variable numérique qui n'est pas un nombre est comptée dans
+    `illisibles` (Counter : (variable, texte) → nombre) et vaut alors vide ; une ligne dont l'export a fondu deux champs
+    est rétablie, et son code de commune ajouté à `realignees` ; `hors_trace`, une liste, reçoit le nombre de variables
+    de l'en-tête que le tracé ne donne pas ; `sous_roles`, une liste, le code de chaque commune dont les lignes sont
+    réunies."""
+    exercice, variables, differents, absentes, lecteur = contenu(fichier)
+    if hors_trace is not None:
+        hors_trace.append(absentes)
     illisibles = collections.Counter() if illisibles is None else illisibles
     realignees = [] if realignees is None else realignees
+    sous_roles = [] if sous_roles is None else sous_roles
     codes = [c for c, _, _, _ in variables]
-    numeriques = {c for c, _, _, f in variables if not f.startswith("$")}
+    numeriques = {c for c, _, _, f in variables if numerique(f)}
+    referentiel = [v for v in lire("tables/variables_rei.csv") if v["premier_exercice"] <= exercice <= v["dernier_exercice"]]
+    taux = {v["code"] for v in referentiel if v["grandeur"] not in ADDITIVES}
+    additives = {v["code"] for v in referentiel if v["grandeur"] in ADDITIVES}
 
-    def lignes():
-        vues = set()
+    def lues():
         for n, ligne in enumerate(lecteur, start=2):
             lieu = f"{fichier['id']}, ligne {n}"
             if not any(v.strip() for v in ligne):
@@ -234,28 +325,50 @@ def lignes_communes(fichier, illisibles=None, realignees=None):
                 if valeurs["IDCOM"].strip() != code:
                     sys.exit(f"{lieu} : la ligne rétablie ne finit pas par le code de la commune {code}")
                 realignees.append(code)
-            if code in vues:
-                sys.exit(f"{lieu} : deuxième ligne pour la commune {code}")
-            vues.add(code)
             for c in numeriques:
                 v = valeurs[c].strip()
                 if v and not v.isdigit() and not NOMBRE.fullmatch(v):
                     illisibles[(c, v)] += 1
                     valeurs[c] = ""
-            yield code, valeurs
+            yield lieu, code, valeurs
+
+    def lignes():
+        vues, groupe = set(), []
+
+        def sortie():
+            code = groupe[0][1]
+            if len(groupe) == 1:
+                return code, groupe[0][2]
+            roles = [v.get("SR", "").strip() for _, _, v in groupe]
+            if not all(roles) or len(set(roles)) != len(roles):
+                sys.exit(f"{groupe[1][0]} : deuxième ligne pour la commune {code}")
+            sous_roles.append(code)
+            return code, reunies([v for _, _, v in groupe], additives, taux)
+
+        for lieu, code, valeurs in lues():
+            if groupe and code != groupe[0][1]:
+                yield sortie()
+                groupe = []
+            if not groupe and code in vues:
+                sys.exit(f"{lieu} : deuxième ligne pour la commune {code}")
+            vues.add(code)
+            groupe.append((lieu, code, valeurs))
+        if groupe:
+            yield sortie()
 
     return exercice, variables, differents, lignes()
 
 
 def fiche(valeurs):
     """La fiche d'une commune : {colonne de la table communes_rei: texte}, vide pour une variable que l'année n'a pas."""
-    return {colonne: complete(variable, valeurs.get(variable, "")) for colonne, variable in FICHE.items()}
+    return {colonne: complete(variable, valeur(valeurs, variable)) for colonne, variable in FICHE.items()}
 
 
 def postes(exercice, variables, referentiel, lieu):
     """Les impositions qu'une année du REI permet de lire, d'après le référentiel (tables/variables_rei.csv) :
     {(taxe, destinataire): {grandeur: [codes de variables]}}. Chaque variable doit figurer au tracé de l'année, et
-    seules la base et le produit peuvent être donnés par plusieurs variables, qui s'additionnent."""
+    seules la base et le produit peuvent être donnés par plusieurs variables, qui s'additionnent. Le titre d'une
+    variable doit dire sa grandeur, sauf l'année où le fichier n'a pas de tracé (1998)."""
     titres = {c: titre for c, _, titre, _ in variables}
     resultat = collections.defaultdict(lambda: collections.defaultdict(list))
     for v in referentiel:
@@ -264,7 +377,7 @@ def postes(exercice, variables, referentiel, lieu):
         if v["code"] not in titres:
             sys.exit(f"{lieu} : la variable {v['code']} ({v['taxe']}, {v['destinataire']}, {v['grandeur']}) n'est pas "
                      f"au tracé de {exercice}")
-        if not re.search(TITRES_GRANDEURS[v["grandeur"]], normaliser(titres[v["code"]])):
+        if titres[v["code"]] and not re.search(TITRES_GRANDEURS[v["grandeur"]], normaliser(titres[v["code"]])):
             sys.exit(f"{lieu} : le titre de la variable {v['code']} au tracé de {exercice}, « {titres[v['code']]} », ne "
                      f"dit pas sa grandeur ({v['grandeur']})")
         grandeurs = resultat[(v["taxe"], v["destinataire"])]
@@ -293,7 +406,10 @@ def impositions(valeurs, postes_, marges=False):
         ligne, ecarts = [], []
         for g in GRANDEURS:
             textes = [t for t in (valeurs[c].strip() for c in grandeurs.get(g, [])) if t]
-            ligne.append(sum(float(t) for t in textes) if textes else None)
+            try:
+                ligne.append(sum(float(t) for t in textes) if textes else None)
+            except ValueError:
+                sys.exit(f"{taxe}, {destinataire}, {g} : valeur qui n'est pas un nombre ({textes})")
             ecarts.append(sum(marge(t) for t in textes) if textes else None)
         if ligne[0] or ligne[3]:
             resultat.append((taxe, destinataire, *ligne) + (tuple(ecarts) if marges else ()))
@@ -320,20 +436,22 @@ def inscription(fichier):
     if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", version):
         sys.exit(f"{fichier['id']} : la copie ne dit pas la date de ses fichiers")
     import versements_rei  # qui importe ce module-ci
-    illisibles, realignees = collections.Counter(), []
-    exercice, variables, differents, lignes = lignes_communes(fichier, illisibles, realignees)
+    illisibles, realignees, hors_trace, sous_roles = collections.Counter(), [], [], []
+    exercice, variables, differents, lignes = lignes_communes(fichier, illisibles, realignees, hors_trace, sous_roles)
     retenues = {c for grandeurs in postes(exercice, variables, lire("tables/variables_rei.csv"), fichier["id"]).values()
                 for g, codes in grandeurs.items() if g in ADDITIVES for c in codes}
     versements = versements_rei.Collecte(exercice, variables, lire("tables/variables_versements_rei.csv"), fichier["id"])
     montants = collections.defaultdict(lambda: [set(), 0])
     communes = 0
-    for commune, valeurs in lignes:
+    for code, valeurs in lignes:
         communes += 1
-        versements.ajouter(commune, valeurs)
-        groupes = [("département", complete("DEP", valeurs["DEP"])),
+        versements.ajouter(code, valeurs)
+        groupes = [("département", complete("DEP", valeur(valeurs, "DEP"))),
                    ("groupement", complete("Q02", valeurs.get("Q02", "")))]
         for c in retenues:
             texte = valeurs[c].strip()
+            if texte and not NOMBRE.fullmatch(texte):
+                sys.exit(f"{fichier['id']}, commune {code} : la variable {c} vaut « {texte} », qui n'est pas un nombre")
             if texte and float(texte):
                 for groupe in groupes:
                     entree = montants[(c, groupe)]
@@ -347,8 +465,9 @@ def inscription(fichier):
                  "de presque chaque département ou de presque chaque groupement : c'est celui d'une collectivité, qu'il "
                  "ne faut pas retenir commune par commune")
     return {"fichier_id": fichier["id"], "exercice": exercice, "version": version, "communes": str(communes),
-            "variables": str(len(variables)), "titres_differents": str(differents),
-            "illisibles": str(sum(illisibles.values())), "lignes_realignees": str(len(realignees))}
+            "variables": str(len(variables)), "titres_differents": str(differents), "hors_trace": str(hors_trace[0]),
+            "illisibles": str(sum(illisibles.values())), "lignes_realignees": str(len(realignees)),
+            "communes_reunies": str(len(sous_roles)), "monnaie": monnaie(exercice)}
 
 
 def main():
@@ -363,8 +482,10 @@ def main():
         sys.exit(f"{sys.argv[1]} : une copie de {ligne['exercice']} de même version est déjà inscrite")
     ecrire("tables/fichiers_rei.csv", champs("fichiers_rei"), inscrits + [ligne], cle="fichier_id")
     print(f"{ligne['fichier_id']} : impositions de {ligne['exercice']} ({ligne['version']}), {ligne['communes']} communes, "
-          f"{ligne['variables']} variables ({ligne['titres_differents']} titres différents du tracé), "
-          f"{ligne['illisibles']} valeurs illisibles, {ligne['lignes_realignees']} lignes rétablies")
+          f"{ligne['variables']} variables ({ligne['titres_differents']} titres différents du tracé, "
+          f"{ligne['hors_trace']} absentes du tracé), montants en {ligne['monnaie']}, "
+          f"{ligne['illisibles']} valeurs illisibles, {ligne['lignes_realignees']} lignes rétablies, "
+          f"{ligne['communes_reunies']} communes en plusieurs lignes réunies")
 
 
 if __name__ == "__main__":

@@ -84,7 +84,8 @@ def rapatrier(chemin):
     import urllib.error
     import urllib.request
     chemin.parent.mkdir(parents=True, exist_ok=True)
-    provisoire = chemin.with_name(chemin.name + ".telechargement")
+    # Un nom provisoire propre au processus : des contrôles menés en parallèle peuvent rapatrier la même copie.
+    provisoire = chemin.with_name(f"{chemin.name}.{os.getpid()}.telechargement")
     for essai in range(1, 6):
         try:
             with urllib.request.urlopen(urllib.request.Request(adresse, headers={"User-Agent": AGENT}),
