@@ -1847,87 +1847,135 @@ Lignes dont le taux net diffère du taux voté : CFE, Commune : 381 ; CFE, GFP /
 
 ## 11. Recensement des éléments d'imposition
 
-Le fichier de recensement des éléments d'imposition à la fiscalité directe locale (REI) de la DGFiP donne, pour le territoire de chaque commune, les bases, les taux et les produits de toutes les impositions directes locales et de leurs taxes annexes, pour chacun de leurs destinataires : collectivités, organismes (établissements publics fonciers, chambres consulaires, caisse d'assurance accidents agricoles, Société du grand projet du Sud-Ouest) et État, qui perçoit des frais sur les impositions et, en 2021 et 2022, la taxe d'habitation sur les résidences principales. Ce sont les impositions du rôle général de l'année, sans les rôles supplémentaires. La base en retient les variables que décrit tables/variables_rei.csv : chacune figure au tracé de chacune de ses années, son titre y dit sa grandeur, et aucune ne donne le montant d'une collectivité répété sur chacune de ses communes, ce que l'import vérifie. Une imposition sans base ni produit n'est pas retenue.
+Le fichier de recensement des éléments d'imposition à la fiscalité directe locale (REI) de la DGFiP donne, pour le territoire de chaque commune, les bases, les taux et les produits de toutes les impositions directes locales et de leurs taxes annexes, pour chacun de leurs destinataires : collectivités, organismes (établissements publics fonciers, chambres consulaires, caisse d'assurance accidents agricoles, Société du grand projet du Sud-Ouest) et État, qui perçoit des frais sur les impositions, la cotisation de péréquation de la taxe professionnelle et la cotisation au BAPSA jusqu'en 1997, et, en 2021 et 2022, la taxe d'habitation sur les résidences principales. Ce sont les impositions du rôle général de l'année, sans les rôles supplémentaires. La base en retient les variables que décrit tables/variables_rei.csv : chacune figure au tracé de chacune de ses années, son titre y dit sa grandeur, et aucune ne donne le montant d'une collectivité répété sur chacune de ses communes, ce que l'import vérifie, sauf en 1998, dont l'archive n'a pas de tracé. Une imposition sans base ni produit n'est pas retenue. Les fichiers sont en francs jusqu'aux impositions de 2001 : ce rapport en donne les produits en euros, au taux fixe de 6,55957 francs pour un euro.
 
-| Exercice | Version | Communes | Variables | Titres de l'en-tête différents du tracé | Valeurs illisibles | Lignes rétablies | Impositions retenues |
-|---|---|---|---|---|---|---|---|
-| 2012 | 2021-12-28 | 36 681 | 452 | 0 | 1 026 145 | 1 785 | 895 889 |
-| 2013 | 2021-12-28 | 36 672 | 785 | 0 | 1 236 295 | 0 | 904 814 |
-| 2014 | 2021-12-28 | 36 682 | 778 | 0 | 1 276 710 | 0 | 908 112 |
-| 2015 | 2021-12-28 | 36 674 | 807 | 0 | 1 266 448 | 0 | 912 488 |
-| 2016 | 2021-12-28 | 36 538 | 864 | 0 | 0 | 0 | 909 258 |
-| 2017 | 2021-12-28 | 35 518 | 871 | 0 | 0 | 0 | 885 567 |
-| 2018 | 2021-12-28 | 35 389 | 951 | 0 | 0 | 0 | 892 832 |
-| 2019 | 2021-12-28 | 35 230 | 1 060 | 0 | 0 | 0 | 896 959 |
-| 2020 | 2021-12-29 | 34 969 | 1 114 | 101 | 0 | 0 | 896 901 |
-| 2021 | 2025-10-16 | 34 969 | 1 149 | 0 | 0 | 0 | 876 017 |
-| 2022 | 2023-06-21 | 34 960 | 1 180 | 0 | 0 | 0 | 886 321 |
-| 2023 | 2025-03-13 | 34 951 | 1 104 | 0 | 0 | 0 | 647 277 |
-| 2024 | 2025-06-16 | 34 940 | 1 101 | 0 | 0 | 0 | 791 362 |
-| 2025 | 2026-08-20 | 34 907 | 1 043 | 0 | 0 | 0 | 789 653 |
+| Exercice | Version | Monnaie | Communes | Variables | Titres de l'en-tête différents du tracé | Variables absentes du tracé | Valeurs illisibles | Lignes rétablies | Communes en plusieurs lignes | Impositions retenues |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1982 | 2025-07-09 | FRF | 36 533 | 71 | 0 | 0 | 0 | 0 | 0 | 837 041 |
+| 1983 | 2025-07-10 | FRF | 36 555 | 72 | 0 | 0 | 0 | 0 | 0 | 821 728 |
+| 1984 | 2025-07-10 | FRF | 36 586 | 80 | 0 | 0 | 0 | 0 | 0 | 823 367 |
+| 1985 | 2025-07-10 | FRF | 36 601 | 80 | 0 | 0 | 0 | 0 | 0 | 825 213 |
+| 1986 | 2025-07-10 | FRF | 36 620 | 79 | 0 | 0 | 0 | 0 | 0 | 825 798 |
+| 1987 | 2025-07-10 | FRF | 36 629 | 80 | 0 | 0 | 0 | 0 | 0 | 826 379 |
+| 1988 | 2025-07-10 | FRF | 36 640 | 275 | 0 | 0 | 0 | 0 | 32 | 828 498 |
+| 1989 | 2025-07-10 | FRF | 36 648 | 295 | 0 | 0 | 0 | 0 | 0 | 828 163 |
+| 1990 | 2025-07-10 | FRF | 36 653 | 317 | 0 | 0 | 0 | 0 | 0 | 842 803 |
+| 1991 | 2025-07-10 | FRF | 36 656 | 335 | 0 | 0 | 0 | 0 | 0 | 848 139 |
+| 1992 | 2025-07-10 | FRF | 36 671 | 358 | 0 | 0 | 0 | 0 | 0 | 852 591 |
+| 1993 | 2025-07-10 | FRF | 36 671 | 384 | 0 | 0 | 0 | 0 | 0 | 858 418 |
+| 1994 | 2025-07-10 | FRF | 36 670 | 412 | 0 | 0 | 0 | 0 | 0 | 873 419 |
+| 1995 | 2025-07-10 | FRF | 36 670 | 445 | 0 | 2 | 0 | 0 | 0 | 883 697 |
+| 1996 | 2025-07-10 | FRF | 36 666 | 475 | 0 | 0 | 0 | 0 | 0 | 882 355 |
+| 1997 | 2025-07-10 | FRF | 36 668 | 540 | 0 | 0 | 0 | 0 | 0 | 953 931 |
+| 1998 | 2025-07-10 | FRF | 36 677 | 574 | 0 | 574 | 0 | 0 | 0 | 933 828 |
+| 1999 | 2025-07-10 | FRF | 36 676 | 591 | 0 | 0 | 0 | 0 | 0 | 938 968 |
+| 2000 | 2025-07-10 | FRF | 36 677 | 597 | 0 | 0 | 0 | 0 | 0 | 942 427 |
+| 2001 | 2025-07-10 | FRF | 36 674 | 610 | 0 | 0 | 0 | 0 | 0 | 913 095 |
+| 2002 | 2025-07-10 | EUR | 36 677 | 634 | 0 | 0 | 0 | 0 | 0 | 917 509 |
+| 2003 | 2025-07-10 | EUR | 36 676 | 652 | 0 | 0 | 0 | 0 | 0 | 836 432 |
+| 2004 | 2025-07-10 | EUR | 36 679 | 734 | 0 | 0 | 0 | 0 | 0 | 832 920 |
+| 2005 | 2025-07-10 | EUR | 36 681 | 765 | 0 | 0 | 0 | 0 | 0 | 843 422 |
+| 2006 | 2025-07-10 | EUR | 36 682 | 832 | 0 | 0 | 0 | 0 | 0 | 848 403 |
+| 2007 | 2025-07-10 | EUR | 36 680 | 848 | 0 | 0 | 0 | 0 | 0 | 861 307 |
+| 2008 | 2025-07-10 | EUR | 36 680 | 888 | 0 | 0 | 0 | 0 | 0 | 865 734 |
+| 2009 | 2025-07-09 | EUR | 36 681 | 380 | 0 | 0 | 1 087 246 | 0 | 0 | 886 281 |
+| 2010 | 2025-07-10 | EUR | 36 681 | 363 | 0 | 0 | 878 179 | 0 | 0 | 810 252 |
+| 2011 | 2021-12-28 | EUR | 36 681 | 421 | 0 | 0 | 999 242 | 0 | 0 | 890 762 |
+| 2012 | 2021-12-28 | EUR | 36 681 | 452 | 0 | 0 | 1 026 145 | 1 785 | 0 | 895 889 |
+| 2013 | 2021-12-28 | EUR | 36 672 | 785 | 0 | 0 | 1 236 295 | 0 | 0 | 904 814 |
+| 2014 | 2021-12-28 | EUR | 36 682 | 778 | 0 | 0 | 1 276 710 | 0 | 0 | 908 112 |
+| 2015 | 2021-12-28 | EUR | 36 674 | 807 | 0 | 0 | 1 266 448 | 0 | 0 | 912 488 |
+| 2016 | 2021-12-28 | EUR | 36 538 | 864 | 0 | 0 | 0 | 0 | 0 | 909 258 |
+| 2017 | 2021-12-28 | EUR | 35 518 | 871 | 0 | 0 | 0 | 0 | 0 | 885 567 |
+| 2018 | 2021-12-28 | EUR | 35 389 | 951 | 0 | 0 | 0 | 0 | 0 | 892 832 |
+| 2019 | 2021-12-28 | EUR | 35 230 | 1 060 | 0 | 0 | 0 | 0 | 0 | 896 959 |
+| 2020 | 2021-12-29 | EUR | 34 969 | 1 114 | 101 | 0 | 0 | 0 | 0 | 896 901 |
+| 2021 | 2025-10-16 | EUR | 34 969 | 1 149 | 0 | 0 | 0 | 0 | 0 | 876 017 |
+| 2022 | 2023-06-21 | EUR | 34 960 | 1 180 | 0 | 0 | 0 | 0 | 0 | 886 321 |
+| 2023 | 2025-03-13 | EUR | 34 951 | 1 104 | 0 | 0 | 0 | 0 | 0 | 647 277 |
+| 2024 | 2025-06-16 | EUR | 34 940 | 1 101 | 0 | 0 | 0 | 0 | 0 | 791 362 |
+| 2025 | 2026-08-20 | EUR | 34 907 | 1 043 | 0 | 0 | 0 | 0 | 0 | 789 653 |
 
-Les valeurs illisibles sont les marques d'une valeur manquante (« , » en 2012, « . » de 2013 à 2015), et quelques textes dans une colonne numérique ; les lignes rétablies sont celles des communes de Franche-Comté en 2012, où l'export a fondu deux champs en un.
+Les valeurs illisibles sont les marques d'une valeur manquante (« , » en 2011 et 2012, « . » en 2009, en 2010 et de 2013 à 2015), et quelques textes dans une colonne numérique ; les lignes rétablies sont celles des communes de Franche-Comté en 2012, où l'export a fondu deux champs en un. Les variables absentes du tracé n'ont pas de titre : A03 et A04 en 1995, toutes en 1998. En 1988, les 32 communes des villes nouvelles ont deux lignes, une par sous-rôle (la partie de la commune dans le périmètre du syndicat d'agglomération nouvelle, et le reste), que l'import réunit : leurs bases et leurs produits s'additionnent, et un taux reste vide si les deux lignes en donnent de différents.
 
-Produit contre base multipliée par le taux net : 7 660 345 impositions comparées, 3 227 853 égales à l'arrondi près, 3 110 866 en écart de moins de 1 %, 1 321 626 au-delà. La source prévient qu'un produit peut différer de sa base multipliée par son taux, du fait du lissage de la révision des valeurs locatives des locaux professionnels, des taux moyens d'une commune où plusieurs taux s'appliquent, ou du secret statistique.
+Produit contre base multipliée par le taux net : 22 813 869 impositions comparées, 11 146 938 égales à l'arrondi près, 9 613 577 en écart de moins de 1 %, 2 053 354 au-delà. La source prévient qu'un produit peut différer de sa base multipliée par son taux, du fait du lissage de la révision des valeurs locatives des locaux professionnels, des taux moyens d'une commune où plusieurs taux s'appliquent, ou du secret statistique.
 
 | Taxe | Destinataire | Impositions comparées | Égales à l'arrondi près | Écart de moins de 1 % | Au-delà | Plus grand écart au-delà (produit − base × taux) |
 |---|---|---|---|---|---|---|
 | CFE | Société du grand projet du Sud-Ouest (TSC) | 4 398 | 3 175 | 482 | 741 | −204 € (−1,6 %) : LE TEICH (33527), 2025 |
-| CFE | TSE | 294 450 | 89 333 | 107 125 | 97 992 | −37 644 € (−3,8 %) : LE MESNIL AMELOT (77291), 2021 |
-| CFE | chambre de commerce et d'industrie | 405 858 | 198 460 | 101 380 | 106 018 | +0,1 M€ (base nulle) : MONT DE LANS (38253), 2016 |
-| CFE | chambre de métiers, droit additionnel | 316 615 | 126 041 | 103 471 | 87 103 | −0,2 M€ (−7,9 %) : PARIS (75056), 2017 |
-| CFE | commune | 96 728 | 47 061 | 42 991 | 6 676 | −0,2 M€ (−26,3 %) : MODANE (73157), 2019 |
+| CFE | TSE | 323 064 | 103 004 | 114 231 | 105 829 | −37 644 € (−3,8 %) : LE MESNIL AMELOT (77291), 2021 |
+| CFE | chambre de commerce et d'industrie | 465 256 | 220 544 | 106 746 | 137 966 | −178,5 M€ (−95,4 %) : TOULOUSE (31555), 2010 |
+| CFE | chambre de métiers, droit additionnel | 363 864 | 153 591 | 121 072 | 89 201 | −0,2 M€ (−7,9 %) : PARIS (75056), 2017 |
+| CFE | commune | 126 601 | 65 259 | 54 600 | 6 742 | −0,2 M€ (−26,3 %) : MODANE (73157), 2019 |
 | CFE | groupement (GEMAPI) | 75 075 | 30 183 | 19 545 | 25 347 | +46 746 € (+1,2 %) : VILLE DE PARIS (75056), 2025 |
-| CFE | groupement, fiscalité additionnelle ou de zone, hors zone | 94 800 | 44 494 | 38 689 | 11 617 | −0,5 M€ (−32,0 %) : MODANE (73157), 2019 |
-| CFE | groupement, fiscalité unique ou zone d'activités | 347 160 | 129 447 | 184 024 | 33 689 | +0,7 M€ (+7,5 %) : SAINT PIERRE (97416), 2019 |
-| CFE | groupement, zone éolienne | 1 027 | 686 | 341 | 0 | aucun |
+| CFE | groupement, fiscalité additionnelle ou de zone, hors zone | 121 689 | 59 885 | 47 957 | 13 847 | −0,5 M€ (−32,0 %) : MODANE (73157), 2019 |
+| CFE | groupement, fiscalité unique ou zone d'activités | 380 619 | 150 559 | 196 371 | 33 689 | +0,7 M€ (+7,5 %) : SAINT PIERRE (97416), 2019 |
+| CFE | groupement, zone éolienne | 1 076 | 735 | 341 | 0 | aucun |
 | CFE | région Île-de-France (TASA) | 13 517 | 3 616 | 4 435 | 5 466 | −9 097 € (−3,5 %) : LE MESNIL AMELOT (77291), 2021 |
-| CFE | syndicats | 5 456 | 2 643 | 1 665 | 1 148 | +10 546 € (+20,3 %) : GENOS (65195), 2020 |
-| TAFNB | commune | 100 187 | 56 863 | 35 943 | 7 381 | +210 € (+1,9 %) : BESSE SUR ISSOLE (83018), 2013 |
-| TAFNB | groupement | 348 926 | 147 928 | 179 920 | 21 078 | −538 € (−1,2 %) : LORGUES (83072), 2023 |
+| CFE | syndicats | 7 949 | 4 097 | 2 273 | 1 579 | +10 546 € (+20,3 %) : GENOS (65195), 2020 |
+| TAFNB | commune | 115 987 | 65 671 | 41 730 | 8 586 | −257 € (−1,3 %) : FAYENCE (83055), 2011 |
+| TAFNB | groupement | 366 019 | 155 334 | 188 542 | 22 143 | −538 € (−1,2 %) : LORGUES (83072), 2023 |
 | TAFNB | métropole du Grand Paris | 1 308 | 546 | 762 | 0 | aucun |
-| TEOM | zone à taux plein | 343 403 | 280 766 | 60 663 | 1 974 | +0,3 M€ (base nulle) : GENNES-VAL DE LOIRE (49261), 2019 |
-| TEOM | zone à taux réduit A | 12 487 | 12 404 | 28 | 55 | +0,1 M€ (base nulle) : TORIGNY-LES-VILLES (50601), 2016 |
-| TEOM | zone à taux réduit B | 1 797 | 1 782 | 6 | 9 | +0,1 M€ (base nulle) : MONCOUTANT-SUR-SEVRE (79179), 2021 |
-| TEOM | zone à taux réduit C | 175 | 174 | 0 | 1 | +29 146 € (base nulle) : SABLONS SUR HUISNE (61116), 2016 |
-| TEOM | zone à taux réduit D | 9 | 9 | 0 | 0 | aucun |
-| TFPB | TSE | 324 048 | 85 436 | 141 297 | 97 315 | +0,3 M€ (+7 329,3 %) : PLOUVORN (29210), 2018 |
+| TEOM | zone à taux plein | 810 236 | 747 194 | 60 998 | 2 044 | −0,4 M€ (−64,7 %) : AUTUN (71014), 1992 |
+| TEOM | zone à taux réduit A | 38 199 | 37 991 | 143 | 65 | −0,5 M€ (−64,7 %) : AUTUN (71014), 1992 |
+| TEOM | zone à taux réduit B | 4 456 | 4 419 | 23 | 14 | +0,1 M€ (base nulle) : MONCOUTANT-SUR-SEVRE (79179), 2021 |
+| TEOM | zone à taux réduit C | 342 | 339 | 2 | 1 | +29 146 € (base nulle) : SABLONS SUR HUISNE (61116), 2016 |
+| TEOM | zone à taux réduit D | 14 | 14 | 0 | 0 | aucun |
+| TFPB | TSE | 469 420 | 120 525 | 192 090 | 156 805 | +0,3 M€ (+94,3 %) : PERPIGNAN (66136), 2009 |
 | TFPB | TSE autres | 25 542 | 9 554 | 13 863 | 2 125 | +0,1 M€ (+19,6 %) : SAINT DENIS (93066), 2018 |
-| TFPB | commune | 497 722 | 237 837 | 252 108 | 7 777 | −1,6 M€ (−8,6 %) : CHESSY (77111), 2021 |
-| TFPB | département | 323 052 | 183 324 | 101 625 | 38 103 | −2,9 M€ (−34,3 %) : CHESSY (77111), 2017 |
-| TFPB | groupement | 419 833 | 240 367 | 167 443 | 12 023 | +0,3 M€ (+1,2 %) : VILLEURBANNE (69266), 2017 |
+| TFPB | commune | 1 376 141 | 717 292 | 650 641 | 8 208 | −1,6 M€ (−8,6 %) : CHESSY (77111), 2021 |
+| TFPB | département | 1 202 261 | 631 544 | 532 599 | 38 118 | +3,9 M€ (base nulle) : CHERBOURG OCTEVILLE (50129), 2003 |
+| TFPB | groupement | 755 510 | 363 517 | 376 987 | 15 006 | +4,0 M€ (base nulle) : CHERBOURG OCTEVILLE (50129), 2003 |
 | TFPB | groupement (GEMAPI) | 169 683 | 50 950 | 89 325 | 29 408 | +0,3 M€ (+6 308,1 %) : PLOUVORN (29210), 2018 |
+| TFPB | région | 841 425 | 404 726 | 435 930 | 769 | +1,5 M€ (base nulle) : CHERBOURG OCTEVILLE (50129), 2003 |
 | TFPB | région Île-de-France (TASA) | 13 935 | 4 164 | 8 863 | 908 | +0,1 M€ (+16,0 %) : SAINT DENIS (93066), 2018 |
-| TFPB | syndicats | 30 985 | 13 455 | 14 055 | 3 475 | +22 503 € (+70,7 %) : VILLENEUVE LOUBET (06161), 2022 |
-| TFPNB | TSE | 235 524 | 13 592 | 2 345 | 219 587 | +4 847 € (+11,4 %) : VILLE DE PARIS (75056), 2018 |
+| TFPB | syndicats | 141 585 | 66 018 | 63 261 | 12 306 | +22 503 € (+70,7 %) : VILLENEUVE LOUBET (06161), 2022 |
+| TFPNB | TSE | 360 442 | 26 422 | 7 818 | 326 202 | +5 398 € (+100,0 %) : PERPIGNAN (66136), 2009 |
 | TFPNB | TSE autres | 24 008 | 1 296 | 1 356 | 21 356 | −306 € (−19,1 %) : MONTAUBAN (82121), 2023 |
-| TFPNB | caisse d'assurance accidents agricoles, droit proportionnel | 20 050 | 20 050 | 0 | 0 | aucun |
-| TFPNB | chambre d'agriculture | 497 600 | 220 622 | 253 725 | 23 253 | +642 € (+1,2 %) : LEGE-CAP-FERRET (33236), 2024 |
-| TFPNB | commune | 495 100 | 119 972 | 367 624 | 7 504 | −11 199 € (−22,0 %) : CLEFS-VAL D'ANJOU (49101), 2014 |
-| TFPNB | groupement | 489 043 | 66 917 | 233 671 | 188 455 | +12 179 € (+90,9 %) : VAL-D'OIRE-ET-GARTEMPE (87028), 2019 |
+| TFPNB | caisse d'assurance accidents agricoles, droit proportionnel | 54 306 | 51 369 | 2 413 | 524 | +14 726 € (base nulle) : FAULQUEMONT (57209), 1993 |
+| TFPNB | chambre d'agriculture | 1 376 785 | 636 314 | 695 800 | 44 671 | −4,2 M€ (−90,0 %) : PARIS (75056), 1998 |
+| TFPNB | commune | 1 370 890 | 429 085 | 927 100 | 14 705 | −11 199 € (−22,0 %) : CLEFS-VAL D'ANJOU (49101), 2014 |
+| TFPNB | département | 772 926 | 390 412 | 338 535 | 43 979 | +28 357 € (base nulle) : PALAISEAU (91477), 1993 |
+| TFPNB | groupement | 835 541 | 119 715 | 452 326 | 263 500 | +27 141 € (base nulle) : CHERBOURG OCTEVILLE (50129), 2004 |
 | TFPNB | groupement (GEMAPI) | 168 548 | 4 299 | 7 114 | 157 135 | −771 € (−29,3 %) : ROQUEBRUNE-SUR-ARGENS (83107), 2020 |
-| TFPNB | syndicats | 30 733 | 4 201 | 7 997 | 18 535 | −705 € (−43,2 %) : ROQUEBRUNE-SUR-ARGENS (83107), 2025 |
-| TH | TSE | 221 770 | 64 745 | 105 567 | 51 458 | −2 052 € (−1,3 %) : CLERMONT-FERRAND (63113), 2012 |
+| TFPNB | région | 759 699 | 377 678 | 213 386 | 168 635 | +3 708 € (base nulle) : CHERBOURG OCTEVILLE (50129), 2002 |
+| TFPNB | syndicats | 140 834 | 41 943 | 48 331 | 50 560 | −705 € (−43,2 %) : ROQUEBRUNE-SUR-ARGENS (83107), 2025 |
+| TFPNB | État (BAPSA) | 36 615 | 25 241 | 10 359 | 1 015 | −54 € (−1,0 %) : ANDERNOS-LES-BAINS (33005), 1988 |
+| TH | TSE | 367 174 | 106 633 | 157 601 | 102 940 | −20 628 € (−12,1 %) : MARSEILLE (13055), 2004 |
 | TH | TSE autres | 14 172 | 6 093 | 7 670 | 409 | +937 € (+1,1 %) : LE PECQ (78481), 2020 |
-| TH | commune | 372 634 | 223 857 | 148 055 | 722 | +1,2 M€ (+5,1 %) : DUNKERQUE (59183), 2013 |
+| TH | commune | 1 251 646 | 718 267 | 532 466 | 913 | +1,2 M€ (+5,1 %) : DUNKERQUE (59183), 2013 |
 | TH | commune (GEMAPI) | 8 | 1 | 6 | 1 | −84 € (−1,2 %) : OUISTREHAM (14488), 2016 |
-| TH | groupement | 369 497 | 213 690 | 155 343 | 464 | +0,2 M€ (+6,8 %) : BORDEAUX (33063), 2021 |
+| TH | département | 842 414 | 413 827 | 428 232 | 355 | +55,6 M€ (base nulle) : PARIS (75056), 1992 |
+| TH | groupement | 720 028 | 358 764 | 359 041 | 2 223 | +2,7 M€ (base nulle) : CHERBOURG OCTEVILLE (50129), 2004 |
 | TH | groupement (GEMAPI) | 82 784 | 44 859 | 28 101 | 9 824 | −0,1 M€ (−17,9 %) : VILLE DE PARIS (75056), 2022 |
-| TH | syndicats | 24 634 | 10 383 | 12 063 | 2 188 | −0,1 M€ (−5,4 %) : SAINT-GERMAIN-EN-LAYE (78551), 2020 |
+| TH | région | 475 232 | 299 185 | 175 999 | 48 | +0,3 M€ (base nulle) : PALAISEAU (91477), 1993 |
+| TH | syndicats | 135 212 | 64 250 | 61 487 | 9 475 | −0,1 M€ (−5,4 %) : SAINT-GERMAIN-EN-LAYE (78551), 2020 |
 | TH | État (part communale) | 49 130 | 13 844 | 34 824 | 462 | −0,1 M€ (−1,2 %) : ANNECY (74010), 2022 |
 | TH | État (part intercommunale) | 48 862 | 12 521 | 36 228 | 113 | +12 216 € (+4,2 %) : MELLE (79174), 2021 |
 | THLV | TSE | 9 482 | 5 085 | 1 135 | 3 262 | −27 € (−1,2 %) : AGEN (47001), 2025 |
 | THLV | TSE autres | 875 | 474 | 169 | 232 | −8 € (−1,7 %) : COUTRAS (33138), 2023 |
-| THLV | commune | 27 425 | 18 256 | 8 804 | 365 | +6 757 € (+8,2 %) : VALSERHONE (01033), 2020 |
+| THLV | commune | 29 659 | 20 081 | 9 213 | 365 | +6 757 € (+8,2 %) : VALSERHONE (01033), 2020 |
 | THLV | groupement | 3 120 | 2 394 | 726 | 0 | aucun |
 | THLV | groupement (GEMAPI) | 10 525 | 6 305 | 2 491 | 1 729 | +15 € (+1,4 %) : SAINT-LOUIS (68297), 2023 |
-| THLV | syndicats | 3 217 | 1 847 | 655 | 715 | −11 € (−2,8 %) : GRUISSAN (11170), 2023 |
+| THLV | syndicats | 4 048 | 2 419 | 713 | 916 | −11 € (−2,8 %) : GRUISSAN (11170), 2023 |
 | THRS | TSE | 42 602 | 23 949 | 7 007 | 11 646 | −921 € (−2,8 %) : LEUCATE (11202), 2023 |
 | THRS | TSE autres | 5 597 | 3 349 | 1 454 | 794 | −138 € (−6,7 %) : SAVIGNY LE TEMPLE (77445), 2023 |
 | THRS | commune | 50 704 | 49 115 | 1 534 | 55 | −22 089 € (−6,8 %) : VALSERHONE (01033), 2023 |
 | THRS | groupement | 50 311 | 48 729 | 1 492 | 90 | +7 244 € (+3,7 %) : TOUROUVRE AU PERCHE (61491), 2024 |
 | THRS | groupement (GEMAPI) | 41 135 | 24 480 | 13 184 | 3 471 | −372 € (−2,3 %) : VILLERS SUR MER (14754), 2025 |
 | THRS | syndicats | 3 079 | 2 230 | 477 | 372 | −572 € (−5,8 %) : GRUISSAN (11170), 2025 |
+| TP | TSE | 101 054 | 34 293 | 37 762 | 28 999 | +5 821 € (+1,6 %) : MARSEILLE (13055), 2004 |
+| TP | chambre de commerce et d'industrie | 736 640 | 435 202 | 283 271 | 18 167 | +0,7 M€ (base nulle) : CERGY (95127), 1992 |
+| TP | chambre de métiers, droit additionnel | 612 677 | 387 749 | 203 077 | 21 851 | +8 900 € (base nulle) : CERGY (95127), 1992 |
+| TP | commune | 608 073 | 406 446 | 200 527 | 1 100 | +1,0 M€ (base nulle) : PRADES (66149), 2004 |
+| TP | département | 745 778 | 440 352 | 304 917 | 509 | −10,5 M€ (−89,9 %) : ASSEVENT (59021), 1995 |
+| TP | groupement | 143 165 | 70 005 | 71 754 | 1 406 | +23,8 M€ (+3 558,5 %) : ROISSY EN FRANCE (95527), 2000 |
+| TP | groupement, fiscalité additionnelle ou de zone, hors zone | 112 060 | 43 715 | 63 717 | 4 628 | −161 € (−3,0 %) : LA CELLE-SAINT-CLOUD (78126), 2009 |
+| TP | groupement, fiscalité unique ou zone d'activités | 104 725 | 38 898 | 65 787 | 40 | −3 € (−1,5 %) : CHENAILLERS MASCHEIX (19054), 2003 |
+| TP | groupement, zone éolienne | 7 | 7 | 0 | 0 | aucun |
+| TP | région | 744 521 | 425 355 | 313 135 | 6 031 | +0,1 M€ (base nulle) : SURVILLIERS (95604), 2004 |
+| TP | syndicats | 87 388 | 54 149 | 30 102 | 3 137 | −2 888 € (−1,4 %) : LYON (69123), 1991 |
+| TP | État (cotisation de péréquation) | 464 217 | 305 693 | 149 928 | 8 596 | −0,2 M€ (−9,9 %) : GOLBEY (88209), 2009 |
 
 La base simplifiée de la fiscalité directe locale de l'OFGL (section 10) est tirée du REI : son produit, pour chaque commune, chaque taxe et chaque bénéficiaire, se compare à celui des destinataires du REI dont il vient, à l'euro près. La part intercommunale de la CFE se compare toutes zones réunies ; l'effet du coefficient correcteur, que l'OFGL range dans la TFPB des communes depuis 2021, n'est pas un impôt et n'a pas d'équivalent ici. Saint-Martin, collectivité d'outre-mer, figure au REI (sous le code 97808, que forment son département et son numéro) mais pas dans la base simplifiée. Pour les communes de la métropole de Lyon, de 2015 à 2020, le REI range dans la part du groupement la TFPB que perçoit la métropole au titre du département, l'OFGL dans celle du département : les deux écarts se compensent.
 
@@ -1956,58 +2004,90 @@ La base simplifiée de la fiscalité directe locale de l'OFGL (section 10) est t
 
 Produit de chaque taxe, toutes parts réunies, chaque année (en millions d'euros) :
 
-| Taxe | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| CFE (Cotisation foncière des entreprises) | 7 736,8 | 8 042,1 | 8 109,7 | 8 396,7 | 8 606,2 | 8 944,1 | 9 151,0 | 9 214,2 | 9 386,5 | 7 906,1 | 8 082,2 | 8 675,2 | 9 089,6 | 9 477,3 |
-| CVAE (Cotisation sur la valeur ajoutée des entreprises) | 14 875,8 | 16 035,9 | 15 622,3 | 16 326,9 | 16 556,0 | 17 317,4 | 17 405,6 | 18 661,1 | 19 228,9 | 9 568,0 | 9 264,3 | — | — | — |
-| IFER_BAR (Imposition forfaitaire sur les entreprises de réseaux : centrales hydrauliques) | 20,1 | 22,1 | 22,1 | 22,7 | 23,4 | 24,7 | 25,1 | 25,5 | 27,5 | 28,1 | 27,5 | 28,4 | 29,7 | 30,3 |
-| IFER_EOL (Imposition forfaitaire sur les entreprises de réseaux : éoliennes terrestres) | 35,8 | 41,9 | 46,2 | 52,0 | 57,0 | 65,3 | 76,8 | 88,9 | 96,3 | 105,6 | 116,8 | 132,3 | 145,7 | 156,4 |
-| IFER_GAZ (Imposition forfaitaire sur les entreprises de réseaux : installations gazières) | 10,0 | 9,9 | 11,1 | 11,6 | 11,7 | 12,1 | 14,9 | 15,1 | 13,4 | 13,6 | 13,8 | 14,5 | 17,7 | 18,0 |
-| IFER_GEO (Imposition forfaitaire sur les entreprises de réseaux : centrales géothermiques) | — | — | — | — | — | — | — | — | 0,3 | — | — | — | — | — |
-| IFER_HYD (Imposition forfaitaire sur les entreprises de réseaux : hydroliennes) | 0,1 | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| IFER_NUC (Imposition forfaitaire sur les entreprises de réseaux : centrales nucléaires et thermiques à flamme) | 4,1 | — | 3,2 | 3,2 | 4,7 | 3,2 | 3,2 | 3,2 | 3,2 | 5,7 | 5,7 | 5,9 | 6,1 | 6,3 |
-| IFER_PV (Imposition forfaitaire sur les entreprises de réseaux : centrales photovoltaïques) | 1,5 | 4,0 | 5,2 | 7,0 | 10,8 | 12,8 | 14,9 | 18,1 | 18,6 | 20,6 | 24,8 | 31,0 | 36,6 | 45,3 |
-| IFER_RAD (Imposition forfaitaire sur les entreprises de réseaux : stations radioélectriques) | 119,4 | 126,8 | 137,1 | 150,2 | 159,4 | 181,5 | 187,1 | 197,7 | 213,6 | 242,0 | 270,1 | 305,0 | 337,4 | 378,0 |
-| IFER_TRA (Imposition forfaitaire sur les entreprises de réseaux : transformateurs électriques) | 6,1 | 1,3 | 1,4 | 1,3 | 4,7 | 4,9 | 5,1 | 5,6 | 5,2 | 5,6 | 5,6 | 6,0 | 6,8 | 7,0 |
-| TAFNB (Taxe additionnelle à la taxe foncière sur les propriétés non bâties) | 76,0 | 77,4 | 78,2 | 79,7 | 79,9 | 80,6 | 81,6 | 84,6 | 85,4 | 86,0 | 89,4 | 95,2 | 99,2 | 99,5 |
-| TASCOM (Taxe sur les surfaces commerciales) | 561,4 | 611,7 | 618,0 | 641,2 | 661,1 | 828,6 | 676,4 | 695,5 | 697,3 | 686,0 | 734,6 | 808,4 | 902,7 | 842,7 |
-| TEOM (Taxe d'enlèvement des ordures ménagères) | 6 089,9 | 6 256,2 | 6 357,6 | 6 555,6 | 6 690,3 | 6 793,9 | 6 920,9 | 7 014,0 | 7 139,7 | 7 434,9 | 7 921,0 | 8 539,5 | 8 992,3 | 9 230,4 |
-| TFPB (Taxe foncière sur les propriétés bâties) | 28 586,1 | 29 818,7 | 30 622,8 | 31 863,2 | 33 443,0 | 34 290,1 | 35 289,3 | 36 227,3 | 37 008,4 | 36 230,2 | 38 308,3 | 42 188,6 | 44 484,5 | 45 738,9 |
-| TFPNB (Taxe foncière sur les propriétés non bâties) | 1 266,3 | 1 285,1 | 1 297,8 | 1 317,3 | 1 323,8 | 1 331,6 | 1 347,5 | 1 370,8 | 1 385,2 | 1 398,2 | 1 442,7 | 1 543,7 | 1 622,3 | 1 523,9 |
-| TH (Taxe d'habitation) | 20 032,3 | 20 774,8 | 21 105,8 | 22 296,2 | 22 382,8 | 22 826,6 | 23 378,2 | 24 161,8 | 24 513,0 | 8 492,8 | 5 902,2 | — | — | — |
-| THLV (Taxe d'habitation sur les logements vacants) | 21,4 | 66,4 | 62,8 | 63,6 | 72,9 | 67,0 | 74,7 | 79,0 | 89,3 | 86,7 | 88,6 | 115,2 | 194,8 | 138,7 |
-| THRS (Taxe d'habitation sur les résidences secondaires et autres locaux meublés non affectés à l'habitation principale) | — | — | — | — | — | — | — | — | — | — | — | 2 510,1 | 3 905,8 | 3 151,2 |
+| Taxe | 1982 | 1983 | 1984 | 1985 | 1986 | 1987 | 1988 | 1989 | 1990 | 1991 | 1992 | 1993 | 1994 | 1995 | 1996 | 1997 | 1998 | 1999 | 2000 | 2001 | 2002 | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CFE (Cotisation foncière des entreprises) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 7 637,3 | 7 207,1 | 7 736,8 | 8 042,1 | 8 109,7 | 8 396,7 | 8 606,2 | 8 944,1 | 9 151,0 | 9 214,2 | 9 386,5 | 7 906,1 | 8 082,2 | 8 675,2 | 9 089,6 | 9 477,3 |
+| CVAE (Cotisation sur la valeur ajoutée des entreprises) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 14 350,7 | 14 875,8 | 16 035,9 | 15 622,3 | 16 326,9 | 16 556,0 | 17 317,4 | 17 405,6 | 18 661,1 | 19 228,9 | 9 568,0 | 9 264,3 | — | — | — |
+| IFER_BAR (Imposition forfaitaire sur les entreprises de réseaux : centrales hydrauliques) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 20,1 | 22,1 | 22,1 | 22,7 | 23,4 | 24,7 | 25,1 | 25,5 | 27,5 | 28,1 | 27,5 | 28,4 | 29,7 | 30,3 |
+| IFER_EOL (Imposition forfaitaire sur les entreprises de réseaux : éoliennes terrestres) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 29,2 | 35,8 | 41,9 | 46,2 | 52,0 | 57,0 | 65,3 | 76,8 | 88,9 | 96,3 | 105,6 | 116,8 | 132,3 | 145,7 | 156,4 |
+| IFER_GAZ (Imposition forfaitaire sur les entreprises de réseaux : installations gazières) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 8,3 | 10,0 | 9,9 | 11,1 | 11,6 | 11,7 | 12,1 | 14,9 | 15,1 | 13,4 | 13,6 | 13,8 | 14,5 | 17,7 | 18,0 |
+| IFER_GEO (Imposition forfaitaire sur les entreprises de réseaux : centrales géothermiques) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 0,3 | — | — | — | — | — |
+| IFER_HYD (Imposition forfaitaire sur les entreprises de réseaux : hydroliennes) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 0,1 | 0,1 | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| IFER_NUC (Imposition forfaitaire sur les entreprises de réseaux : centrales nucléaires et thermiques à flamme) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 4,1 | — | 3,2 | 3,2 | 4,7 | 3,2 | 3,2 | 3,2 | 3,2 | 5,7 | 5,7 | 5,9 | 6,1 | 6,3 |
+| IFER_PV (Imposition forfaitaire sur les entreprises de réseaux : centrales photovoltaïques) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 21,7 | 1,5 | 4,0 | 5,2 | 7,0 | 10,8 | 12,8 | 14,9 | 18,1 | 18,6 | 20,6 | 24,8 | 31,0 | 36,6 | 45,3 |
+| IFER_RAD (Imposition forfaitaire sur les entreprises de réseaux : stations radioélectriques) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 99,5 | 119,4 | 126,8 | 137,1 | 150,2 | 159,4 | 181,5 | 187,1 | 197,7 | 213,6 | 242,0 | 270,1 | 305,0 | 337,4 | 378,0 |
+| IFER_TRA (Imposition forfaitaire sur les entreprises de réseaux : transformateurs électriques) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 5,5 | 6,1 | 1,3 | 1,4 | 1,3 | 4,7 | 4,9 | 5,1 | 5,6 | 5,2 | 5,6 | 5,6 | 6,0 | 6,8 | 7,0 |
+| TAFNB (Taxe additionnelle à la taxe foncière sur les propriétés non bâties) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 74,5 | 76,0 | 77,4 | 78,2 | 79,7 | 79,9 | 80,6 | 81,6 | 84,6 | 85,4 | 86,0 | 89,4 | 95,2 | 99,2 | 99,5 |
+| TASCOM (Taxe sur les surfaces commerciales) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 529,6 | 561,4 | 611,7 | 618,0 | 641,2 | 661,1 | 828,6 | 676,4 | 695,5 | 697,3 | 686,0 | 734,6 | 808,4 | 902,7 | 842,7 |
+| TEOM (Taxe d'enlèvement des ordures ménagères) | 642,6 | 739,3 | 856,0 | 946,7 | 1 026,1 | 1 088,3 | 1 143,4 | 1 219,1 | 1 316,9 | 1 439,4 | 1 589,5 | 1 784,6 | 1 975,9 | 2 152,0 | 2 380,1 | 2 543,1 | 2 682,3 | 2 824,0 | 2 915,2 | 3 090,7 | 3 387,5 | 3 739,5 | 4 028,2 | 4 334,6 | 4 599,7 | 4 807,0 | 5 043,5 | 5 403,2 | 5 688,1 | 5 897,9 | 6 089,9 | 6 256,2 | 6 357,6 | 6 555,6 | 6 690,3 | 6 793,9 | 6 920,9 | 7 014,0 | 7 139,7 | 7 434,9 | 7 921,0 | 8 539,5 | 8 992,3 | 9 230,4 |
+| TFPB (Taxe foncière sur les propriétés bâties) | 2 650,4 | 3 210,9 | 4 355,0 | 4 962,8 | 5 526,4 | 6 043,5 | 6 590,3 | 7 043,4 | 7 675,9 | 8 443,2 | 9 204,8 | 10 141,5 | 11 094,7 | 11 843,0 | 12 783,1 | 13 463,3 | 14 143,6 | 14 673,3 | 15 125,1 | 15 520,3 | 16 364,7 | 17 254,8 | 18 031,9 | 19 359,2 | 20 604,2 | 21 536,7 | 22 490,7 | 24 569,3 | 25 875,0 | 27 225,3 | 28 586,1 | 29 818,7 | 30 622,8 | 31 863,2 | 33 443,0 | 34 290,1 | 35 289,3 | 36 227,3 | 37 008,4 | 36 230,2 | 38 308,3 | 42 188,6 | 44 484,5 | 45 738,9 |
+| TFPNB (Taxe foncière sur les propriétés non bâties) | 1 006,4 | 1 139,4 | 1 258,9 | 1 369,1 | 1 457,6 | 1 487,1 | 1 493,1 | 1 475,6 | 1 488,1 | 1 527,3 | 1 546,6 | 1 343,7 | 1 265,4 | 1 185,9 | 1 113,3 | 1 126,5 | 1 128,4 | 1 151,6 | 1 170,6 | 1 189,0 | 1 221,3 | 1 254,9 | 1 284,4 | 1 322,4 | 1 186,2 | 1 212,7 | 1 241,3 | 1 275,4 | 1 292,5 | 1 240,8 | 1 266,3 | 1 285,1 | 1 297,8 | 1 317,3 | 1 323,8 | 1 331,6 | 1 347,5 | 1 370,8 | 1 385,2 | 1 398,2 | 1 442,7 | 1 543,7 | 1 622,3 | 1 523,9 |
+| TH (Taxe d'habitation) | 3 465,2 | 4 125,2 | 4 810,7 | 5 356,6 | 5 843,9 | 6 274,0 | 6 579,6 | 7 032,0 | 7 603,5 | 8 264,0 | 7 841,8 | 8 560,3 | 9 182,8 | 9 656,1 | 10 340,2 | 10 779,6 | 11 159,7 | 11 546,3 | 11 941,6 | 11 319,1 | 11 969,0 | 12 650,0 | 13 264,8 | 14 041,6 | 14 865,8 | 15 527,4 | 16 220,3 | 17 417,7 | 18 289,2 | 19 144,4 | 20 032,3 | 20 774,8 | 21 105,8 | 22 296,2 | 22 382,8 | 22 826,6 | 23 378,2 | 24 161,8 | 24 513,0 | 8 492,8 | 5 902,2 | — | — | — |
+| THLV (Taxe d'habitation sur les logements vacants) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 9,1 | 9,1 | 13,3 | 14,1 | 17,3 | 21,4 | 66,4 | 62,8 | 63,6 | 72,9 | 67,0 | 74,7 | 79,0 | 89,3 | 86,7 | 88,6 | 115,2 | 194,8 | 138,7 |
+| THRS (Taxe d'habitation sur les résidences secondaires et autres locaux meublés non affectés à l'habitation principale) | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 2 510,1 | 3 905,8 | 3 151,2 |
+| TP (Taxe professionnelle) | 8 415,2 | 9 048,4 | 10 427,0 | 11 644,9 | 12 606,1 | 11 715,3 | 12 421,9 | 13 500,2 | 15 363,5 | 17 122,7 | 18 869,4 | 20 886,2 | 22 688,3 | 23 810,7 | 25 027,6 | 26 255,8 | 27 319,7 | 27 053,5 | 27 082,3 | 26 623,4 | 26 002,7 | 25 402,3 | 26 206,6 | 27 784,5 | 29 543,8 | 30 793,5 | 32 159,7 | 34 697,0 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 
 Communes où le REI donne un produit de chaque taxe, chaque année :
 
-| Taxe | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| CFE | 32 064 | 32 445 | 32 642 | 32 882 | 32 917 | 32 036 | 32 066 | 30 759 | 30 651 | 31 611 | 31 658 | 31 925 | 32 067 | 32 152 |
-| CVAE | 30 527 | 31 045 | 31 180 | 31 337 | 31 379 | 30 705 | 30 762 | 29 798 | 29 689 | 30 328 | 30 372 | — | — | — |
-| IFER_BAR | 204 | 227 | 233 | 240 | 246 | 257 | 261 | 257 | 257 | 263 | 261 | 256 | 260 | 268 |
-| IFER_EOL | 448 | 513 | 559 | 615 | 670 | 741 | 825 | 914 | 975 | 1 076 | 1 094 | 1 155 | 1 205 | 1 258 |
-| IFER_GAZ | 95 | 82 | 143 | 135 | 127 | 134 | 131 | 132 | 131 | 135 | 137 | 138 | 137 | 143 |
-| IFER_GEO | — | — | — | — | — | — | — | — | 1 | — | — | — | — | — |
-| IFER_HYD | 1 | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| IFER_NUC | 1 | — | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 55 | 53 | 55 | 55 | 54 |
-| IFER_PV | 68 | 191 | 229 | 276 | 315 | 354 | 398 | 436 | 488 | 546 | 637 | 791 | 1 611 | 3 517 |
-| IFER_RAD | 6 950 | 7 386 | 6 937 | 7 301 | 7 712 | 8 859 | 9 763 | 10 234 | 10 713 | 11 238 | 11 521 | 12 028 | 12 665 | 13 482 |
-| IFER_TRA | 10 | 6 | 6 | 6 | 8 | 8 | 9 | 10 | 9 | 10 | 10 | 10 | 12 | 13 |
-| TAFNB | 32 946 | 32 979 | 33 034 | 33 056 | 32 917 | 32 005 | 31 894 | 31 773 | 31 561 | 31 593 | 31 619 | 31 660 | 31 696 | 31 688 |
-| TASCOM | 2 464 | 2 632 | 2 587 | 2 524 | 2 654 | 2 618 | 2 616 | 2 573 | 2 592 | 2 565 | 2 608 | 2 529 | 2 610 | 2 586 |
-| TEOM | 24 601 | 24 594 | 24 439 | 24 492 | 24 484 | 24 360 | 24 660 | 24 726 | 24 437 | 24 638 | 24 857 | 24 373 | 24 369 | 24 381 |
-| TFPB | 36 601 | 36 589 | 36 596 | 36 587 | 36 416 | 35 397 | 35 268 | 35 114 | 34 856 | 34 886 | 34 879 | 34 868 | 34 856 | 34 821 |
-| TFPNB | 36 589 | 36 578 | 36 593 | 36 588 | 36 398 | 35 380 | 35 250 | 35 089 | 34 828 | 34 884 | 34 873 | 34 869 | 34 860 | 34 821 |
-| TH | 36 601 | 36 598 | 36 607 | 36 601 | 36 462 | 35 442 | 35 306 | 35 155 | 34 891 | 32 314 | 30 497 | — | — | — |
-| THLV | 3 157 | 3 627 | 3 838 | 3 991 | 4 231 | 4 215 | 4 547 | 4 732 | 4 711 | 3 607 | 3 754 | 770 | 6 374 | 6 676 |
-| THRS | — | — | — | — | — | — | — | — | — | — | — | 1 955 | 25 449 | 23 300 |
+| Taxe | 1982 | 1983 | 1984 | 1985 | 1986 | 1987 | 1988 | 1989 | 1990 | 1991 | 1992 | 1993 | 1994 | 1995 | 1996 | 1997 | 1998 | 1999 | 2000 | 2001 | 2002 | 2003 | 2004 | 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CFE | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 31 651 | 32 079 | 32 064 | 32 445 | 32 642 | 32 882 | 32 917 | 32 036 | 32 066 | 30 759 | 30 651 | 31 611 | 31 658 | 31 925 | 32 067 | 32 152 |
+| CVAE | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 30 435 | 30 527 | 31 045 | 31 180 | 31 337 | 31 379 | 30 705 | 30 762 | 29 798 | 29 689 | 30 328 | 30 372 | — | — | — |
+| IFER_BAR | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 204 | 227 | 233 | 240 | 246 | 257 | 261 | 257 | 257 | 263 | 261 | 256 | 260 | 268 |
+| IFER_EOL | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 361 | 448 | 513 | 559 | 615 | 670 | 741 | 825 | 914 | 975 | 1 076 | 1 094 | 1 155 | 1 205 | 1 258 |
+| IFER_GAZ | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 149 | 95 | 82 | 143 | 135 | 127 | 134 | 131 | 132 | 131 | 135 | 137 | 138 | 137 | 143 |
+| IFER_GEO | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 1 | — | — | — | — | — |
+| IFER_HYD | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 1 | 1 | — | — | — | — | — | — | — | — | — | — | — | — | — |
+| IFER_NUC | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 1 | — | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 55 | 53 | 55 | 55 | 54 |
+| IFER_PV | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 210 | 68 | 191 | 229 | 276 | 315 | 354 | 398 | 436 | 488 | 546 | 637 | 791 | 1 611 | 3 517 |
+| IFER_RAD | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 6 711 | 6 950 | 7 386 | 6 937 | 7 301 | 7 712 | 8 859 | 9 763 | 10 234 | 10 713 | 11 238 | 11 521 | 12 028 | 12 665 | 13 482 |
+| IFER_TRA | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 7 | 10 | 6 | 6 | 6 | 8 | 8 | 9 | 10 | 9 | 10 | 10 | 10 | 12 | 13 |
+| TAFNB | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 32 893 | 32 946 | 32 979 | 33 034 | 33 056 | 32 917 | 32 005 | 31 894 | 31 773 | 31 561 | 31 593 | 31 619 | 31 660 | 31 696 | 31 688 |
+| TASCOM | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 3 118 | 2 464 | 2 632 | 2 587 | 2 524 | 2 654 | 2 618 | 2 616 | 2 573 | 2 592 | 2 565 | 2 608 | 2 529 | 2 610 | 2 586 |
+| TEOM | 13 458 | 13 627 | 13 882 | 14 300 | 14 491 | 14 708 | 14 808 | 14 925 | 15 127 | 15 408 | 15 681 | 15 890 | 15 968 | 16 128 | 16 501 | 16 898 | 17 450 | 17 907 | 18 075 | 18 683 | 20 219 | 22 871 | 23 441 | 23 886 | 24 285 | 24 373 | 24 513 | 24 643 | 24 710 | 24 702 | 24 601 | 24 594 | 24 439 | 24 492 | 24 484 | 24 360 | 24 660 | 24 726 | 24 437 | 24 638 | 24 857 | 24 373 | 24 369 | 24 381 |
+| TFPB | 36 531 | 36 553 | 36 584 | 36 599 | 36 618 | 36 627 | 36 638 | 36 646 | 36 651 | 36 654 | 36 661 | 36 660 | 36 662 | 36 662 | 36 659 | 36 662 | 36 668 | 36 669 | 36 672 | 36 669 | 36 673 | 36 577 | 36 585 | 36 593 | 36 594 | 36 592 | 36 592 | 36 599 | 36 675 | 36 602 | 36 601 | 36 589 | 36 596 | 36 587 | 36 416 | 35 397 | 35 268 | 35 114 | 34 856 | 34 886 | 34 879 | 34 868 | 34 856 | 34 821 |
+| TFPNB | 36 532 | 36 554 | 36 585 | 36 600 | 36 619 | 36 628 | 36 639 | 36 647 | 36 652 | 36 655 | 36 662 | 36 661 | 36 663 | 36 664 | 36 661 | 36 664 | 36 670 | 36 672 | 36 673 | 36 670 | 36 672 | 36 576 | 36 577 | 36 583 | 36 582 | 36 581 | 36 589 | 36 591 | 36 589 | 36 593 | 36 589 | 36 578 | 36 593 | 36 588 | 36 398 | 35 380 | 35 250 | 35 089 | 34 828 | 34 884 | 34 873 | 34 869 | 34 860 | 34 821 |
+| TH | 36 530 | 36 552 | 36 583 | 36 598 | 36 617 | 36 626 | 36 637 | 36 643 | 36 648 | 36 652 | 36 659 | 36 657 | 36 656 | 36 657 | 36 654 | 36 656 | 36 663 | 36 665 | 36 666 | 36 662 | 36 667 | 36 546 | 36 564 | 36 576 | 36 573 | 36 577 | 36 591 | 36 589 | 36 591 | 36 591 | 36 601 | 36 598 | 36 607 | 36 601 | 36 462 | 35 442 | 35 306 | 35 155 | 34 891 | 32 314 | 30 497 | — | — | — |
+| THLV | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 1 501 | 1 941 | 2 274 | 2 460 | 2 726 | 3 157 | 3 627 | 3 838 | 3 991 | 4 231 | 4 215 | 4 547 | 4 732 | 4 711 | 3 607 | 3 754 | 770 | 6 374 | 6 676 |
+| THRS | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 1 955 | 25 449 | 23 300 |
+| TP | 35 929 | 35 944 | 35 991 | 36 004 | 36 016 | 36 018 | 36 033 | 36 035 | 36 034 | 36 053 | 36 076 | 36 026 | 35 999 | 36 024 | 36 025 | 36 024 | 36 022 | 36 010 | 36 005 | 36 030 | 36 060 | 30 373 | 30 365 | 30 461 | 30 599 | 30 839 | 31 007 | 31 221 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 
-Un fichier peut ne pas donner une taxe pour toutes les communes, ses valeurs restant vides : TH en 2023 : 1 955 communes, contre 30 497 en 2022 et 25 449 en 2024 ; THLV en 2023 : 770 communes, contre 3 754 en 2022 et 6 374 en 2024 (pour la taxe d'habitation, celle sur les résidences secondaires depuis 2023). Le produit de ces années est partiel.
+Un fichier peut ne pas donner une taxe pour toutes les communes, ses valeurs restant vides : IFER_PV en 2012 : 68 communes, contre 210 en 2011 et 191 en 2013 ; TH en 2023 : 1 955 communes, contre 30 497 en 2022 et 25 449 en 2024 ; THLV en 2023 : 770 communes, contre 3 754 en 2022 et 6 374 en 2024 (pour la taxe d'habitation, celle sur les résidences secondaires depuis 2023). Le produit de ces années est partiel.
 
 Produit de chaque niveau qui perçoit, chaque année (en millions d'euros) ; la part fixe de la TEOM est rapportée au niveau que la fiche de la commune dit la percevoir :
 
 | Exercice | communes | syndicats | groupements | départements | régions | organismes | État | non dit | Ensemble |
 |---|---|---|---|---|---|---|---|---|---|
+| 1982 | 8 975,4 | 104,1 | 498,0 | 3 864,8 | 198,6 | 652,7 | 1 243,5 | 642,6 | 16 179,8 |
+| 1983 | 10 003,1 | 126,6 | 554,0 | 4 379,5 | 335,3 | 752,3 | 1 373,1 | 739,3 | 18 263,3 |
+| 1984 | 11 954,7 | 150,2 | 656,4 | 5 157,3 | 482,4 | 826,3 | 1 624,2 | 856,0 | 21 707,6 |
+| 1985 | 13 227,0 | 164,0 | 896,1 | 5 782,6 | 567,3 | 883,6 | 1 812,8 | 946,7 | 24 280,1 |
+| 1986 | 14 371,4 | 175,6 | 989,8 | 6 343,4 | 645,6 | 948,6 | 1 959,7 | 1 026,1 | 26 460,2 |
+| 1987 | 14 201,3 | 194,2 | 977,9 | 6 299,7 | 900,3 | 1 010,8 | 1 935,8 | 1 088,3 | 26 608,3 |
+| 1988 | 15 969,4 | 390,0 | 1 039,3 | 6 679,4 | 1 006,1 | 1 082,2 | 2 061,9 | 0,0 | 28 228,3 |
+| 1989 | 16 908,5 | 420,2 | 1 135,3 | 7 133,7 | 1 530,3 | 960,5 | 2 181,7 | 0,0 | 30 270,3 |
+| 1990 | 18 456,7 | 491,6 | 1 308,2 | 7 816,8 | 1 837,7 | 1 017,0 | 2 520,0 | 0,0 | 33 448,0 |
+| 1991 | 20 037,2 | 564,2 | 1 536,0 | 8 566,6 | 2 088,3 | 1 068,6 | 2 935,5 | 0,0 | 36 796,4 |
+| 1992 | 21 167,5 | 628,3 | 1 757,6 | 9 031,9 | 2 215,8 | 1 122,3 | 3 128,7 | 0,0 | 39 052,1 |
+| 1993 | 22 622,1 | 669,8 | 2 275,9 | 9 905,7 | 2 656,3 | 1 180,2 | 3 403,9 | 2,3 | 42 716,3 |
+| 1994 | 24 077,3 | 658,3 | 2 750,6 | 10 720,1 | 3 095,0 | 1 229,3 | 3 676,4 | 0,0 | 46 207,1 |
+| 1995 | 25 011,9 | 729,6 | 3 071,4 | 11 376,5 | 3 307,1 | 1 275,4 | 3 875,9 | 0,0 | 48 647,8 |
+| 1996 | 26 357,1 | 762,2 | 3 443,8 | 12 108,3 | 3 555,3 | 1 315,3 | 4 102,3 | 0,2 | 51 644,4 |
+| 1997 | 27 399,2 | 847,3 | 3 856,4 | 12 738,4 | 3 650,2 | 1 351,0 | 4 325,6 | 0,0 | 54 168,2 |
+| 1998 | 28 390,2 | 935,5 | 4 203,7 | 13 272,9 | 3 759,3 | 1 376,1 | 4 495,8 | 0,0 | 56 433,5 |
+| 1999 | 28 511,6 | 1 001,8 | 4 377,6 | 13 418,9 | 3 786,4 | 1 386,5 | 4 765,8 | 0,0 | 57 248,6 |
+| 2000 | 27 107,6 | 1 050,6 | 6 284,9 | 13 618,2 | 3 945,6 | 1 401,0 | 4 826,9 | 0,0 | 58 234,8 |
+| 2001 | 25 824,0 | 395,6 | 8 602,0 | 13 573,2 | 3 046,9 | 1 412,7 | 4 888,1 | 0,0 | 57 742,6 |
+| 2002 | 24 958,6 | 473,8 | 10 115,6 | 13 995,1 | 3 003,3 | 1 452,0 | 4 943,7 | 3,2 | 58 945,2 |
+| 2003 | 24 361,1 | 595,9 | 11 699,8 | 14 348,2 | 2 905,2 | 1 490,7 | 4 896,9 | 3,6 | 60 301,4 |
+| 2004 | 24 691,0 | 545,5 | 12 968,4 | 14 983,2 | 2 999,6 | 1 511,5 | 5 113,0 | 3,6 | 62 815,9 |
+| 2005 | 25 463,4 | 519,6 | 14 040,0 | 16 169,6 | 3 752,6 | 1 577,4 | 5 319,7 | 0,0 | 66 842,2 |
+| 2006 | 26 132,1 | 532,6 | 15 072,1 | 17 595,6 | 4 175,7 | 1 665,3 | 5 626,2 | 0,0 | 70 799,7 |
+| 2007 | 26 885,8 | 521,2 | 15 862,1 | 18 441,1 | 4 411,2 | 1 854,6 | 5 910,4 | 0,0 | 73 886,3 |
+| 2008 | 27 924,0 | 514,6 | 16 657,7 | 19 330,9 | 4 641,5 | 1 956,8 | 6 139,1 | 0,0 | 77 164,6 |
+| 2009 | 29 591,1 | 509,6 | 18 134,2 | 21 492,4 | 4 896,9 | 2 078,4 | 6 673,4 | 0,0 | 83 375,9 |
+| 2010 | 27 823,6 | 456,2 | 9 860,0 | 13 035,8 | 1 933,2 | 2 050,4 | 3 637,0 | 0,0 | 58 796,2 |
+| 2011 | 31 431,8 | 446,4 | 19 240,7 | 17 841,8 | 3 587,7 | 1 378,9 | 1 924,7 | 0,0 | 75 851,9 |
 | 2012 | 32 496,0 | 436,1 | 20 339,6 | 18 726,5 | 3 718,4 | 1 673,4 | 2 053,0 | 0,0 | 79 443,0 |
 | 2013 | 33 294,8 | 387,9 | 21 744,7 | 19 899,4 | 4 008,7 | 1 704,4 | 2 134,0 | 0,0 | 83 174,0 |
 | 2014 | 33 322,9 | 339,4 | 22 586,9 | 20 002,7 | 3 905,2 | 1 763,2 | 2 180,8 | 0,0 | 84 101,2 |
@@ -2044,6 +2124,36 @@ Montants de chaque année, en millions d'euros (fractions de TVA : le montant de
 
 | Exercice | Allocations compensatrices | DCRTP | Fractions de TVA | Coefficient correcteur : versements | Coefficient correcteur : prélèvements | FNGIR : reversements | FNGIR : prélèvements | Collectivités |
 |---|---|---|---|---|---|---|---|---|
+| 1982 | — | — | — | — | — | — | — | 0 |
+| 1983 | — | — | — | — | — | — | — | 0 |
+| 1984 | — | — | — | — | — | — | — | 0 |
+| 1985 | — | — | — | — | — | — | — | 0 |
+| 1986 | — | — | — | — | — | — | — | 0 |
+| 1987 | — | — | — | — | — | — | — | 0 |
+| 1988 | — | — | — | — | — | — | — | 0 |
+| 1989 | — | — | — | — | — | — | — | 0 |
+| 1990 | — | — | — | — | — | — | — | 0 |
+| 1991 | — | — | — | — | — | — | — | 0 |
+| 1992 | — | — | — | — | — | — | — | 0 |
+| 1993 | — | — | — | — | — | — | — | 0 |
+| 1994 | — | — | — | — | — | — | — | 0 |
+| 1995 | — | — | — | — | — | — | — | 0 |
+| 1996 | — | — | — | — | — | — | — | 0 |
+| 1997 | — | — | — | — | — | — | — | 0 |
+| 1998 | — | — | — | — | — | — | — | 0 |
+| 1999 | — | — | — | — | — | — | — | 0 |
+| 2000 | — | — | — | — | — | — | — | 0 |
+| 2001 | — | — | — | — | — | — | — | 0 |
+| 2002 | — | — | — | — | — | — | — | 0 |
+| 2003 | — | — | — | — | — | — | — | 0 |
+| 2004 | — | — | — | — | — | — | — | 0 |
+| 2005 | — | — | — | — | — | — | — | 0 |
+| 2006 | — | — | — | — | — | — | — | 0 |
+| 2007 | — | — | — | — | — | — | — | 0 |
+| 2008 | — | — | — | — | — | — | — | 0 |
+| 2009 | — | — | — | — | — | — | — | 0 |
+| 2010 | — | — | — | — | — | — | — | 0 |
+| 2011 | — | — | — | — | — | — | — | 0 |
 | 2012 | — | 3 428,8 | — | — | — | 4 051,5 | 4 057,4 | 28 393 |
 | 2013 | 2 991,6 | 3 324,1 | — | — | — | 4 092,1 | 4 091,3 | 177 138 |
 | 2014 | 2 785,0 | 3 324,4 | — | — | — | 4 064,7 | 4 064,3 | 175 787 |
@@ -2131,6 +2241,36 @@ Le FNGIR reverse aux collectivités que la réforme de la taxe professionnelle a
 
 | Exercice | Prélèvements | Reversements | Écart (reversements − prélèvements) |
 |---|---|---|---|
+| 1982 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1983 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1984 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1985 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1986 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1987 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1988 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1989 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1990 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1991 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1992 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1993 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1994 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1995 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1996 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1997 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1998 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 1999 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2000 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2001 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2002 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2003 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2004 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2005 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2006 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2007 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2008 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2009 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2010 | 0,0 M€ | 0,0 M€ | +0,00 € |
+| 2011 | 0,0 M€ | 0,0 M€ | +0,00 € |
 | 2012 | 4 057,4 M€ | 4 051,5 M€ | −5,9 M€ |
 | 2013 | 4 091,3 M€ | 4 092,1 M€ | +0,8 M€ |
 | 2014 | 4 064,3 M€ | 4 064,7 M€ | +0,4 M€ |
