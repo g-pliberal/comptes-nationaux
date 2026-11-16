@@ -598,6 +598,27 @@ def reference(ligne, colonne):
     return f"{lettres}{ligne + 1}"
 
 
+def date_xls(chemin):
+    """Date du dernier enregistrement inscrite par le producteur dans les propriétés du classeur xls (flux
+    « SummaryInformation », propriété 13), à défaut date de création (propriété 12) ; vide pour un classeur sans
+    propriétés."""
+    with ouvrir_copie(chemin) as f:
+        try:
+            flux = _flux_cfb(f.read(), "\x05SummaryInformation")
+        except KeyError:
+            return ""
+    section = int.from_bytes(flux[44:48], "little")  # la première section, après l'en-tête et son identifiant
+    dates = {}
+    for k in range(int.from_bytes(flux[section + 4:section + 8], "little")):
+        propriete, position = struct.unpack_from("<II", flux, section + 8 + 8 * k)
+        if int.from_bytes(flux[section + position:section + position + 4], "little") == 0x40:  # VT_FILETIME
+            centaines_ns = int.from_bytes(flux[section + position + 4:section + position + 12], "little")
+            if centaines_ns:
+                dates[propriete] = datetime.datetime(1601, 1, 1) + datetime.timedelta(microseconds=centaines_ns // 10)
+    date = dates.get(13) or dates.get(12)
+    return date.strftime("%Y-%m-%dT%H:%M:%S") if date else ""
+
+
 def feuilles_xls(chemin):
     """{nom de la feuille: position de son début dans le flux} d'un classeur xls."""
     with ouvrir_copie(chemin) as f:

@@ -703,6 +703,7 @@ DENOMBREMENTS = {u["id"] for u in lire("tables/unites.csv") if u["type"] == "nom
 # exacts.
 MESURES = {"LOLF.EMPLOIS_CONSOMMES", "LOLF.BG_EMPLOIS_CONSOMMES", "LOLF.BA_EMPLOIS_CONSOMMES",
            "LOLF.EMPLOIS_ECART_PLAFOND", "LOLF.BG_EMPLOIS_ECART_PLAFOND", "LOLF.BA_EMPLOIS_ECART_PLAFOND",
+           "LOLF.EMPLOIS_ECART_PLAFOND_LFI", "LOLF.BG_EMPLOIS_ECART_PLAFOND_LFI", "LOLF.BA_EMPLOIS_ECART_PLAFOND_LFI",
            "FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES_YC_CONTRATS_AIDES"}
 # Unités comparables entre elles une fois converties ; les autres ne se comparent qu'à elles-mêmes. Seules ces familles
 # se ventilent par fonction : les montants, et les emplois des plafonds votés.
@@ -4683,7 +4684,7 @@ def partie_emplois_consommes(derniers):
               "(synthèse des rapports annuels de performances), pour le budget général et les budgets annexes, et pour "
               "2018 tels que les reprend la synthèse de 2019 (marqués « rappel ») ; et tels que la DGAFP les reprend "
               "des lois de règlement et des rapports annuels de performances dans son rapport annuel de l'année "
-              "suivante, depuis 2021, pour l'État, le budget général et les budgets annexes. Chacun se "
+              "suivante, pour 2016, 2017 et depuis 2021, pour l'État, le budget général et les budgets annexes. Chacun se "
               "compare au plafond de même champ, celui de l'article d'équilibre ou la ligne « I. Budget général » ou "
               "« II. Budgets annexes » du tableau qui le répartit, que fixe la loi de finances initiale (section 20) et "
               "que peut changer une loi rectificative (section 21) : le plafond de l'année est celui de la dernière loi "
@@ -4726,7 +4727,7 @@ def partie_emplois_consommes(derniers):
     if manquantes:
         lignes += [f"La base n'a pas d'emplois consommés pour {suite_annees(manquantes)}, faute d'un chiffre qu'elle "
                    f"sache lire dans les rapports de la Cour ; la direction du budget ne les donne en données ouvertes "
-                   f"que de 2018 à 2020, et la DGAFP que depuis 2021 : outils/importer_cour_comptes.py dit pourquoi, "
+                   f"que de 2018 à 2020, et la DGAFP que pour 2016, 2017 et depuis 2021 : outils/importer_cour_comptes.py dit pourquoi, "
                    f"année par année.", ""]
     return lignes
 
@@ -4747,7 +4748,9 @@ NOMS_SOMMES = {("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES", "FPE"): "État : minist
                ("FONCTION_PUBLIQUE.EFFECTIFS_PHYSIQUES_YC_CONTRATS_AIDES", "FP"): "ensemble avec contrats aidés : trois "
                                                                                  "versants avec contrats aidés"}
 CONSOMMATION_DGAFP = {"LOLF.BG_EMPLOIS_CONSOMMES", "LOLF.BA_EMPLOIS_CONSOMMES", "LOLF.EMPLOIS_CONSOMMES",
-                      "LOLF.BG_EMPLOIS_ECART_PLAFOND", "LOLF.BA_EMPLOIS_ECART_PLAFOND", "LOLF.EMPLOIS_ECART_PLAFOND"}
+                      "LOLF.BG_EMPLOIS_ECART_PLAFOND", "LOLF.BA_EMPLOIS_ECART_PLAFOND", "LOLF.EMPLOIS_ECART_PLAFOND",
+                      "LOLF.BG_EMPLOIS_ECART_PLAFOND_LFI", "LOLF.BA_EMPLOIS_ECART_PLAFOND_LFI",
+                      "LOLF.EMPLOIS_ECART_PLAFOND_LFI"}
 
 
 def demi_unite(decimales):
@@ -4810,7 +4813,8 @@ def partie_fonction_publique(derniers):
                     plafonds[cle]["revise"] = (l["version"], float(l["valeur"]))
         lignes += ["La consommation des emplois de l'État par ministère et par budget annexe, en ETPT, et son écart au "
                    "plafond de la loi de finances rectificative « corrigé des transferts d'emplois intervenus en cours de "
-                   "gestion », tels que les donne la DGAFP (section 22 pour les totaux). Chaque somme du tableau, à "
+                   "gestion » (pour 2016 et 2017, au plafond de la loi de finances initiale corrigé de ces transferts), "
+                   "tels que les donne la DGAFP (section 22 pour les totaux). Chaque somme du tableau, à "
                    "l'arrondi de ses lignes près ; et les ministères qui ont une ligne du même nom dans la loi de "
                    "finances initiale de l'année, seuls à pouvoir se comparer à leur plafond.", "",
                    "| Année | Ministères | avec une ligne du même nom dans la loi de l'année | Ministères − budget général | "
@@ -4840,6 +4844,8 @@ def partie_fonction_publique(derniers):
             ba = sorted({f for c, f in table if c.startswith("LOLF.BA_") and f})
             bg, ba_, etat, ecart_bg = ("LOLF.BG_EMPLOIS_CONSOMMES", "LOLF.BA_EMPLOIS_CONSOMMES", "LOLF.EMPLOIS_CONSOMMES",
                                        "LOLF.BG_EMPLOIS_ECART_PLAFOND")
+            if ("LOLF.BG_EMPLOIS_ECART_PLAFOND_LFI", "") in table:  # éditions 2017 et 2018 : écart au plafond initial
+                ecart_bg = "LOLF.BG_EMPLOIS_ECART_PLAFOND_LFI"
             sommes_ = [ecart_somme(table, bg, [(bg, f) for f in ministeres]),
                        ecart_somme(table, ba_, [(ba_, f) for f in ba]),
                        ecart_somme(table, etat, [(bg, ""), (ba_, "")]),

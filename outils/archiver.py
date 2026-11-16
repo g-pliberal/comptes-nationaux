@@ -46,7 +46,8 @@ import urllib.parse
 import urllib.request
 
 from commun import (AGENT, ARCHIVES, BASE, RELEASES, TAILLE_MORCEAU, aujourdhui, champs, date_html, date_ods, date_pdf,
-                    date_xlsx, date_zip, decoder_html, ecrire, lire, lire_pdf, lire_sdmx, maintenant, texte_html, texte_pdf)
+                    date_xls, date_xlsx, date_zip, decoder_html, ecrire, lire, lire_pdf, lire_sdmx, maintenant, texte_html,
+                    texte_pdf)
 
 ESSAIS = 80  # certains portails ne répondent qu'à une tentative de connexion sur plusieurs
 # Serveurs qui ne proposent que des suites de chiffrement que Python écarte par défaut : la connexion les accepte pour
@@ -202,8 +203,9 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
     # (date du dernier traitement de ses données pour data.drees), date la plus récente des fichiers que porte une
     # archive zip, date de modification inscrite dans un classeur ods ; pour un PDF, la date que porte le texte d'un
     # document du Sénat ou de l'Assemblée nationale, comme pour leurs pages, à défaut sa date de modification ; pour une
-    # pièce jointe d'un jeu de données d'un portail qui ne porte pas de date (un fichier csv) ou dont la base ne lit pas
-    # la date (un classeur xls), la date de modification du jeu.
+    # pièce jointe d'un jeu de données d'un portail qui ne porte pas de date (un fichier csv), ou pour un classeur xls,
+    # la date de modification du jeu ; pour un autre classeur xls, la date de son dernier enregistrement qu'inscrivent
+    # ses propriétés.
     mis_a_jour = mis_a_jour or {"json": lambda: json.loads(contenu).get("updated", ""),
                                 "xlsx": lambda: date_xlsx(BASE / chemin),
                                 "html": lambda: date_html(texte_html(decoder_html(contenu))),
@@ -211,7 +213,8 @@ def inscrire(source_id, url, contenu, type_contenu, mis_a_jour, compresser, deco
                                 "zip": lambda: date_zip(contenu),
                                 "pdf": lambda: date_html(" ".join(texte_pdf(m) for page in lire_pdf(BASE / chemin)
                                                                   for _, m in page)) or date_pdf(contenu),
-                                "ods": lambda: date_ods(BASE / chemin)
+                                "ods": lambda: date_ods(BASE / chemin),
+                                "xls": lambda: annoncee or date_xls(BASE / chemin)
                                 }.get(extension, lambda: "")()
     mis_a_jour = mis_a_jour or annoncee
     identifiant = f"{source_id}@{date}-{sha256[:8]}"
